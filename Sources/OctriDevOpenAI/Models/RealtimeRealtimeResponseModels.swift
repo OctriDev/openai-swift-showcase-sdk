@@ -3,7 +3,7 @@
 
 import Foundation
 
-// RealtimeRealtimeResponse domain models
+/// RealtimeRealtimeResponse domain models
 public indirect enum RealtimeResponseCreateParamsToolChoice {
     case toolChoiceOptions(ToolChoiceOptions)
     case toolChoiceFunction(ToolChoiceFunction)
@@ -13,7 +13,6 @@ public indirect enum RealtimeResponseCreateParamsToolChoice {
 }
 
 extension RealtimeResponseCreateParamsToolChoice: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,20 +20,29 @@ extension RealtimeResponseCreateParamsToolChoice: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeResponseCreateParamsToolChoice")
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RealtimeResponseCreateParamsToolChoice"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -45,18 +53,24 @@ extension RealtimeResponseCreateParamsToolChoice: Codable {
 extension RealtimeResponseCreateParamsToolChoice {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": return .toolChoiceFunction(try ToolChoiceFunction(from: decoder))
-        case "mcp": return .toolChoiceMcp(try ToolChoiceMCP(from: decoder))
-        default: return nil
+        case "function": try .toolChoiceFunction(ToolChoiceFunction(from: decoder))
+        case "mcp": try .toolChoiceMcp(ToolChoiceMCP(from: decoder))
+        default: nil
         }
     }
 }
 
 extension RealtimeResponseCreateParamsToolChoice {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(ToolChoiceOptions.self) { return .toolChoiceOptions(value) }
-        if let value = try? container.decode(ToolChoiceFunction.self) { return .toolChoiceFunction(value) }
-        if let value = try? container.decode(ToolChoiceMCP.self) { return .toolChoiceMcp(value) }
+        if let value = try? container.decode(ToolChoiceOptions.self) {
+            return .toolChoiceOptions(value)
+        }
+        if let value = try? container.decode(ToolChoiceFunction.self) {
+            return .toolChoiceFunction(value)
+        }
+        if let value = try? container.decode(ToolChoiceMCP.self) {
+            return .toolChoiceMcp(value)
+        }
         return nil
     }
 }
@@ -79,22 +93,32 @@ public indirect enum RealtimeResponseCreateParamsToolsItem {
 }
 
 extension RealtimeResponseCreateParamsToolsItem: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeResponseCreateParamsToolsItem")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RealtimeResponseCreateParamsToolsItem"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension RealtimeResponseCreateParamsToolsItem {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(RealtimeFunctionTool.self) { return .realtimeFunctionTool(value) }
-        if let value = try? container.decode(MCPTool.self) { return .mCpTool(value) }
+        if let value = try? container.decode(RealtimeFunctionTool.self) {
+            return .realtimeFunctionTool(value)
+        }
+        if let value = try? container.decode(MCPTool.self) {
+            return .mCpTool(value)
+        }
         return nil
     }
 }
@@ -169,32 +193,45 @@ public struct RealtimeResponseCreateParams: Codable {
     }
 
     init() {
-        (self.outputModalities, self.instructions, self.audio, self.tools, self.toolChoice) = (nil, nil, nil, nil, nil)
-        (self.parallelToolCalls, self.reasoning, self.maxOutputTokens, self.conversation, self.metadata) = (nil, nil, nil, nil, nil)
-        (self.prompt, self.input) = (nil, nil)
+        (outputModalities, instructions, audio, tools, toolChoice) = (nil, nil, nil, nil, nil)
+        (parallelToolCalls, reasoning, maxOutputTokens, conversation, metadata) = (nil, nil, nil, nil, nil)
+        (prompt, input) = (nil, nil)
     }
 }
 
-extension RealtimeResponseCreateParams {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponseCreateParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        self.conversation = try container.sdkDecodeIfPresent(.conversation)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.prompt = try container.sdkDecodeIfPresent(.prompt)
-        self.input = try container.sdkDecodeIfPresent(.input)
+        outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        conversation = try container.sdkDecodeIfPresent(.conversation)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        prompt = try container.sdkDecodeIfPresent(.prompt)
+        input = try container.sdkDecodeIfPresent(.input)
     }
 }
 
-extension RealtimeResponseCreateParams {
-    public init(outputModalities: [RealtimeResponseCreateParamsOutputModalitiesItem]? = nil, instructions: String? = nil, audio: RealtimeResponseCreateParamsAudio? = nil, tools: [RealtimeResponseCreateParamsToolsItem]? = nil, toolChoice: RealtimeResponseCreateParamsToolChoice? = nil, parallelToolCalls: Bool? = nil, reasoning: RealtimeReasoning? = nil, maxOutputTokens: RealtimeResponseCreateParamsMaxOutputTokens? = nil, conversation: RealtimeResponseCreateParamsConversation? = nil, metadata: Metadata? = nil, prompt: Prompt? = nil, input: [RealtimeConversationItem]? = nil) {
+public extension RealtimeResponseCreateParams {
+    init(
+        outputModalities: [RealtimeResponseCreateParamsOutputModalitiesItem]? = nil,
+        instructions: String? = nil,
+        audio: RealtimeResponseCreateParamsAudio? = nil,
+        tools: [RealtimeResponseCreateParamsToolsItem]? = nil,
+        toolChoice: RealtimeResponseCreateParamsToolChoice? = nil,
+        parallelToolCalls: Bool? = nil,
+        reasoning: RealtimeReasoning? = nil,
+        maxOutputTokens: RealtimeResponseCreateParamsMaxOutputTokens? = nil,
+        conversation: RealtimeResponseCreateParamsConversation? = nil,
+        metadata: Metadata? = nil,
+        prompt: Prompt? = nil,
+        input: [RealtimeConversationItem]? = nil
+    ) {
         self.init()
         (self.outputModalities, self.instructions) = (outputModalities, instructions)
         (self.audio, self.tools) = (audio, tools)
@@ -221,20 +258,20 @@ public struct RealtimeResponseAudioOutput: Codable {
     }
 
     init() {
-        (self.format, self.voice) = (nil, nil)
+        (format, voice) = (nil, nil)
     }
 }
 
-extension RealtimeResponseAudioOutput {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponseAudioOutput {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.format = try container.sdkDecodeIfPresent(.format)
-        self.voice = try container.sdkDecodeIfPresent(.voice)
+        format = try container.sdkDecodeIfPresent(.format)
+        voice = try container.sdkDecodeIfPresent(.voice)
     }
 }
 
-extension RealtimeResponseAudioOutput {
-    public init(format: RealtimeAudioFormats? = nil, voice: VoiceIdsShared? = nil) {
+public extension RealtimeResponseAudioOutput {
+    init(format: RealtimeAudioFormats? = nil, voice: VoiceIdsShared? = nil) {
         self.init()
         (self.format, self.voice) = (format, voice)
     }
@@ -250,19 +287,19 @@ public struct RealtimeResponseAudio: Codable {
     }
 
     init() {
-        self.output = nil
+        output = nil
     }
 }
 
-extension RealtimeResponseAudio {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponseAudio {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.output = try container.sdkDecodeIfPresent(.output)
+        output = try container.sdkDecodeIfPresent(.output)
     }
 }
 
-extension RealtimeResponseAudio {
-    public init(output: RealtimeResponseAudioOutput? = nil) {
+public extension RealtimeResponseAudio {
+    init(output: RealtimeResponseAudioOutput? = nil) {
         self.init()
         self.output = output
     }
@@ -288,21 +325,25 @@ public struct RealtimeResponseStatusDetails: Codable {
     }
 
     init() {
-        (self.type, self.reason, self.error) = (nil, nil, nil)
+        (type, reason, error) = (nil, nil, nil)
     }
 }
 
-extension RealtimeResponseStatusDetails {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponseStatusDetails {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.reason = try container.sdkDecodeIfPresent(.reason)
-        self.error = try container.sdkDecodeIfPresent(.error)
+        type = try container.sdkDecodeIfPresent(.type)
+        reason = try container.sdkDecodeIfPresent(.reason)
+        error = try container.sdkDecodeIfPresent(.error)
     }
 }
 
-extension RealtimeResponseStatusDetails {
-    public init(type: RealtimeResponseStatusDetailsType? = nil, reason: RealtimeResponseStatusDetailsReason? = nil, error: RealtimeResponseStatusDetailsError? = nil) {
+public extension RealtimeResponseStatusDetails {
+    init(
+        type: RealtimeResponseStatusDetailsType? = nil,
+        reason: RealtimeResponseStatusDetailsReason? = nil,
+        error: RealtimeResponseStatusDetailsError? = nil
+    ) {
         self.init()
         (self.type, self.reason) = (type, reason)
         self.error = error
@@ -315,22 +356,32 @@ public indirect enum RealtimeResponseMaxOutputTokens {
 }
 
 extension RealtimeResponseMaxOutputTokens: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeResponseMaxOutputTokens")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RealtimeResponseMaxOutputTokens"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension RealtimeResponseMaxOutputTokens {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) { return .intValue(value) }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) {
+            return .intValue(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         return nil
     }
 }
@@ -371,20 +422,20 @@ public struct RealtimeResponseCreateParamsAudioOutput: Codable {
     }
 
     init() {
-        (self.format, self.voice) = (nil, nil)
+        (format, voice) = (nil, nil)
     }
 }
 
-extension RealtimeResponseCreateParamsAudioOutput {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponseCreateParamsAudioOutput {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.format = try container.sdkDecodeIfPresent(.format)
-        self.voice = try container.sdkDecodeIfPresent(.voice)
+        format = try container.sdkDecodeIfPresent(.format)
+        voice = try container.sdkDecodeIfPresent(.voice)
     }
 }
 
-extension RealtimeResponseCreateParamsAudioOutput {
-    public init(format: RealtimeAudioFormats? = nil, voice: VoiceIdsOrCustomVoice? = nil) {
+public extension RealtimeResponseCreateParamsAudioOutput {
+    init(format: RealtimeAudioFormats? = nil, voice: VoiceIdsOrCustomVoice? = nil) {
         self.init()
         (self.format, self.voice) = (format, voice)
     }
@@ -406,21 +457,21 @@ public struct RealtimeResponseStatusDetailsError: Codable {
     }
 
     init() {
-        (self.type, self.code, self.message) = (nil, nil, nil)
+        (type, code, message) = (nil, nil, nil)
     }
 }
 
-extension RealtimeResponseStatusDetailsError {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponseStatusDetailsError {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.code = try container.sdkDecodeIfPresent(.code)
-        self.message = try container.sdkDecodeIfPresent(.message)
+        type = try container.sdkDecodeIfPresent(.type)
+        code = try container.sdkDecodeIfPresent(.code)
+        message = try container.sdkDecodeIfPresent(.message)
     }
 }
 
-extension RealtimeResponseStatusDetailsError {
-    public init(type: String? = nil, code: String? = nil, message: String? = nil) {
+public extension RealtimeResponseStatusDetailsError {
+    init(type: String? = nil, code: String? = nil, message: String? = nil) {
         self.init()
         (self.type, self.code) = (type, code)
         self.message = message
@@ -433,22 +484,32 @@ public indirect enum RealtimeResponseCreateParamsMaxOutputTokens {
 }
 
 extension RealtimeResponseCreateParamsMaxOutputTokens: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeResponseCreateParamsMaxOutputTokens")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RealtimeResponseCreateParamsMaxOutputTokens"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension RealtimeResponseCreateParamsMaxOutputTokens {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) { return .intValue(value) }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) {
+            return .intValue(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         return nil
     }
 }
@@ -524,25 +585,25 @@ public struct RealtimeResponse: Codable {
     }
 
     init() {
-        (self.id, self.object, self.status, self.statusDetails, self.output) = (nil, nil, nil, nil, nil)
-        (self.metadata, self.audio, self.usage, self.conversationId, self.outputModalities) = (nil, nil, nil, nil, nil)
-        self.maxOutputTokens = nil
+        (id, object, status, statusDetails, output) = (nil, nil, nil, nil, nil)
+        (metadata, audio, usage, conversationId, outputModalities) = (nil, nil, nil, nil, nil)
+        maxOutputTokens = nil
     }
 }
 
-extension RealtimeResponse {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.object = try container.sdkDecodeIfPresent(.object)
-        self.status = try container.sdkDecodeIfPresent(.status)
-        self.statusDetails = try container.sdkDecodeIfPresent(.statusDetails)
-        self.output = try container.sdkDecodeIfPresent(.output)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.usage = try container.sdkDecodeIfPresent(.usage)
-        self.conversationId = try container.sdkDecodeIfPresent(.conversationId)
-        self.outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
-        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        id = try container.sdkDecodeIfPresent(.id)
+        object = try container.sdkDecodeIfPresent(.object)
+        status = try container.sdkDecodeIfPresent(.status)
+        statusDetails = try container.sdkDecodeIfPresent(.statusDetails)
+        output = try container.sdkDecodeIfPresent(.output)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        usage = try container.sdkDecodeIfPresent(.usage)
+        conversationId = try container.sdkDecodeIfPresent(.conversationId)
+        outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
+        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
     }
 }

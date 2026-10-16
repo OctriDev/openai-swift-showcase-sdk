@@ -3,14 +3,21 @@
 
 import Foundation
 
-// DecisionsDecision domain models
-extension DecisionRequest {
-    public init(model: String, input: DecisionInput, questions: [QuestionParam], safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheOptions: DecisionRequestPromptCacheOptions? = nil) throws {
+/// DecisionsDecision domain models
+public extension DecisionRequest {
+    init(
+        model: String,
+        input: DecisionInput,
+        questions: [QuestionParam],
+        safetyIdentifier: String? = nil,
+        promptCacheKey: String? = nil,
+        promptCacheOptions: DecisionRequestPromptCacheOptions? = nil
+    ) throws {
         (self.model, self.input) = (model, input)
         (self.questions, self.safetyIdentifier) = (questions, safetyIdentifier)
         (self.promptCacheKey, self.promptCacheOptions) = (promptCacheKey, promptCacheOptions)
-            try validateLength("model", self.model, min: 0, max: 1048576)
-            try validateItems("questions", self.questions, min: 1, max: 200)
+        try validateLength("model", self.model, min: 0, max: 1_048_576)
+        try validateItems("questions", self.questions, min: 1, max: 200)
         if let value = self.safetyIdentifier {
             try validateLength("safety_identifier", value, min: 0, max: 128)
         }
@@ -32,30 +39,40 @@ public struct DecisionInputRefusal: Codable {
         case refusal
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionInputRefusal {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.refusal) else {
-            throw SdkValidationError(field: "refusal", code: "required", message: "Validation failed for 'refusal': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.refusal = try container.sdkDecodeRequired(.refusal)
-            try sdkValidateRawEnum("type", self.type, DecisionInputRefusalType.allCases.map(\.rawValue))
-            try validateLength("refusal", self.refusal, min: 0, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionInputRefusal {
-    public init(type: DecisionInputRefusalType, refusal: String) throws {
+public extension DecisionInputRefusal {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.refusal) else {
+            throw SdkValidationError(
+                field: "refusal",
+                code: "required",
+                message: "Validation failed for 'refusal': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        refusal = try container.sdkDecodeRequired(.refusal)
+        try sdkValidateRawEnum("type", type, DecisionInputRefusalType.allCases.map(\.rawValue))
+        try validateLength("refusal", refusal, min: 0, max: 10_485_760)
+    }
+}
+
+public extension DecisionInputRefusal {
+    init(type: DecisionInputRefusalType, refusal: String) throws {
         (self.type, self.refusal) = (type, refusal)
-            try sdkValidateRawEnum("type", self.type, DecisionInputRefusalType.allCases.map(\.rawValue))
-            try validateLength("refusal", self.refusal, min: 0, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, DecisionInputRefusalType.allCases.map(\.rawValue))
+        try validateLength("refusal", self.refusal, min: 0, max: 10_485_760)
     }
 }
 
@@ -71,30 +88,40 @@ public struct DecisionInputOutputText: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionInputOutputText {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, DecisionInputOutputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionInputOutputText {
-    public init(type: DecisionInputOutputTextType, text: String) throws {
+public extension DecisionInputOutputText {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        try sdkValidateRawEnum("type", type, DecisionInputOutputTextType.allCases.map(\.rawValue))
+        try validateLength("text", text, min: 0, max: 10_485_760)
+    }
+}
+
+public extension DecisionInputOutputText {
+    init(type: DecisionInputOutputTextType, text: String) throws {
         (self.type, self.text) = (type, text)
-            try sdkValidateRawEnum("type", self.type, DecisionInputOutputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, DecisionInputOutputTextType.allCases.map(\.rawValue))
+        try validateLength("text", self.text, min: 0, max: 10_485_760)
     }
 }
 
@@ -114,35 +141,49 @@ public struct DecisionResponse: Codable {
         case usage
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        guard container.contains(.answers) else {
-            throw SdkValidationError(field: "answers", code: "required", message: "Validation failed for 'answers': value is required")
-        }
-        guard container.contains(.usage) else {
-            throw SdkValidationError(field: "usage", code: "required", message: "Validation failed for 'usage': value is required")
-        }
-        self.model = try container.sdkDecodeRequired(.model)
-        self.answers = try container.sdkDecodeRequired(.answers)
-        self.usage = try container.sdkDecodeRequired(.usage)
-            try validateLength("model", self.model, min: 0, max: nil)
-            try validateItems("answers", self.answers, min: 0, max: 2000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionResponse {
-    public init(model: String, answers: [AnswerResource], usage: ResponseUsageResource) throws {
+public extension DecisionResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        guard container.contains(.answers) else {
+            throw SdkValidationError(
+                field: "answers",
+                code: "required",
+                message: "Validation failed for 'answers': value is required"
+            )
+        }
+        guard container.contains(.usage) else {
+            throw SdkValidationError(
+                field: "usage",
+                code: "required",
+                message: "Validation failed for 'usage': value is required"
+            )
+        }
+        model = try container.sdkDecodeRequired(.model)
+        answers = try container.sdkDecodeRequired(.answers)
+        usage = try container.sdkDecodeRequired(.usage)
+        try validateLength("model", model, min: 0, max: nil)
+        try validateItems("answers", answers, min: 0, max: 2000)
+    }
+}
+
+public extension DecisionResponse {
+    init(model: String, answers: [AnswerResource], usage: ResponseUsageResource) throws {
         (self.model, self.answers) = (model, answers)
         self.usage = usage
-            try validateLength("model", self.model, min: 0, max: nil)
-            try validateItems("answers", self.answers, min: 0, max: 2000)
+        try validateLength("model", self.model, min: 0, max: nil)
+        try validateItems("answers", self.answers, min: 0, max: 2000)
     }
 }
 
@@ -173,59 +214,85 @@ public struct DecisionInputCustomToolCall: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension DecisionInputCustomToolCall {
-    public init(from decoder: Decoder) throws {
+public extension DecisionInputCustomToolCall {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
         guard container.contains(.input) else {
-            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
+            throw SdkValidationError(
+                field: "input",
+                code: "required",
+                message: "Validation failed for 'input': value is required"
+            )
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.input = try container.sdkDecodeRequired(.input)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.namespace = try container.sdkDecodeIfPresent(.namespace)
-        self.status = try container.sdkDecodeIfPresent(.status)
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("name", self.name, min: 1, max: 64)
-            try sdkValidatePattern("name", self.name, sdkPatterna828669d9fe5)
-            try validateLength("input", self.input, min: 0, max: 1048576)
-            try sdkValidateRawEnum("type", self.type, DecisionInputCustomToolCallType.allCases.map(\.rawValue))
-        if let value = self.id {
-            try validateLength("id", value, min: 0, max: 1048576)
+        callId = try container.sdkDecodeRequired(.callId)
+        name = try container.sdkDecodeRequired(.name)
+        input = try container.sdkDecodeRequired(.input)
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeIfPresent(.id)
+        namespace = try container.sdkDecodeIfPresent(.namespace)
+        status = try container.sdkDecodeIfPresent(.status)
+        try validateLength("call_id", callId, min: 1, max: 64)
+        try validateLength("name", name, min: 1, max: 64)
+        try sdkValidatePattern("name", name, sdkPatterna828669d9fe5)
+        try validateLength("input", input, min: 0, max: 1_048_576)
+        try sdkValidateRawEnum("type", type, DecisionInputCustomToolCallType.allCases.map(\.rawValue))
+        if let value = id {
+            try validateLength("id", value, min: 0, max: 1_048_576)
         }
-        if let value = self.namespace {
+        if let value = namespace {
             try validateLength("namespace", value, min: 1, max: 64)
             try sdkValidatePattern("namespace", value, sdkPatterna828669d9fe5)
         }
     }
 }
 
-extension DecisionInputCustomToolCall {
-    public init(callId: String, name: String, input: String, type: DecisionInputCustomToolCallType, id: String? = nil, namespace: String? = nil, status: FunctionCallStatusParam? = nil) throws {
+public extension DecisionInputCustomToolCall {
+    init(
+        callId: String,
+        name: String,
+        input: String,
+        type: DecisionInputCustomToolCallType,
+        id: String? = nil,
+        namespace: String? = nil,
+        status: FunctionCallStatusParam? = nil
+    ) throws {
         (self.callId, self.name) = (callId, name)
         (self.input, self.type) = (input, type)
         (self.id, self.namespace) = (id, namespace)
         self.status = status
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("name", self.name, min: 1, max: 64)
-            try sdkValidatePattern("name", self.name, sdkPatterna828669d9fe5)
-            try validateLength("input", self.input, min: 0, max: 1048576)
-            try sdkValidateRawEnum("type", self.type, DecisionInputCustomToolCallType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try validateLength("name", self.name, min: 1, max: 64)
+        try sdkValidatePattern("name", self.name, sdkPatterna828669d9fe5)
+        try validateLength("input", self.input, min: 0, max: 1_048_576)
+        try sdkValidateRawEnum("type", self.type, DecisionInputCustomToolCallType.allCases.map(\.rawValue))
         if let value = self.id {
-            try validateLength("id", value, min: 0, max: 1048576)
+            try validateLength("id", value, min: 0, max: 1_048_576)
         }
         if let value = self.namespace {
             try validateLength("namespace", value, min: 1, max: 64)
@@ -244,21 +311,27 @@ public struct DecisionInputImagePromptCacheBreakpoint: Codable {
         case mode
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionInputImagePromptCacheBreakpoint {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.mode) else {
-            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
-        }
-        self.mode = try container.sdkDecodeRequired(.mode)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionInputImagePromptCacheBreakpoint {
-    public init(mode: DecisionInputImagePromptCacheBreakpointMode) {
+public extension DecisionInputImagePromptCacheBreakpoint {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.mode) else {
+            throw SdkValidationError(
+                field: "mode",
+                code: "required",
+                message: "Validation failed for 'mode': value is required"
+            )
+        }
+        mode = try container.sdkDecodeRequired(.mode)
+    }
+}
+
+public extension DecisionInputImagePromptCacheBreakpoint {
+    init(mode: DecisionInputImagePromptCacheBreakpointMode) {
         self.mode = mode
     }
 }
@@ -282,35 +355,50 @@ public struct DecisionInputImage: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionInputImage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.imageUrl) else {
-            throw SdkValidationError(field: "image_url", code: "required", message: "Validation failed for 'image_url': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.imageUrl = try container.sdkDecodeRequired(.imageUrl)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.detail = try container.sdkDecodeIfPresent(.detail)
-        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-            try validateLength("image_url", self.imageUrl, min: 0, max: 1073741824)
-            try sdkValidatePattern("image_url", self.imageUrl, sdkPattern641661f20055)
-            try sdkValidateRawEnum("type", self.type, DecisionInputImageType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionInputImage {
-    public init(imageUrl: String, type: DecisionInputImageType, detail: ImageDetailParam? = nil, promptCacheBreakpoint: DecisionInputImagePromptCacheBreakpoint? = nil) throws {
+public extension DecisionInputImage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.imageUrl) else {
+            throw SdkValidationError(
+                field: "image_url",
+                code: "required",
+                message: "Validation failed for 'image_url': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        imageUrl = try container.sdkDecodeRequired(.imageUrl)
+        type = try container.sdkDecodeRequired(.type)
+        detail = try container.sdkDecodeIfPresent(.detail)
+        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+        try validateLength("image_url", imageUrl, min: 0, max: 1_073_741_824)
+        try sdkValidatePattern("image_url", imageUrl, sdkPattern641661f20055)
+        try sdkValidateRawEnum("type", type, DecisionInputImageType.allCases.map(\.rawValue))
+    }
+}
+
+public extension DecisionInputImage {
+    init(
+        imageUrl: String,
+        type: DecisionInputImageType,
+        detail: ImageDetailParam? = nil,
+        promptCacheBreakpoint: DecisionInputImagePromptCacheBreakpoint? = nil
+    ) throws {
         (self.imageUrl, self.type) = (imageUrl, type)
         (self.detail, self.promptCacheBreakpoint) = (detail, promptCacheBreakpoint)
-            try validateLength("image_url", self.imageUrl, min: 0, max: 1073741824)
-            try sdkValidatePattern("image_url", self.imageUrl, sdkPattern641661f20055)
-            try sdkValidateRawEnum("type", self.type, DecisionInputImageType.allCases.map(\.rawValue))
+        try validateLength("image_url", self.imageUrl, min: 0, max: 1_073_741_824)
+        try sdkValidatePattern("image_url", self.imageUrl, sdkPattern641661f20055)
+        try sdkValidateRawEnum("type", self.type, DecisionInputImageType.allCases.map(\.rawValue))
     }
 }
 
@@ -336,20 +424,20 @@ public struct DecisionRequestPromptCacheOptions: Codable {
     }
 
     init() {
-        (self.ttl, self.mode) = (nil, nil)
+        (ttl, mode) = (nil, nil)
     }
 }
 
-extension DecisionRequestPromptCacheOptions {
-    public init(from decoder: Decoder) throws {
+public extension DecisionRequestPromptCacheOptions {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.ttl = try container.sdkDecodeIfPresent(.ttl)
-        self.mode = try container.sdkDecodeIfPresent(.mode)
+        ttl = try container.sdkDecodeIfPresent(.ttl)
+        mode = try container.sdkDecodeIfPresent(.mode)
     }
 }
 
-extension DecisionRequestPromptCacheOptions {
-    public init(ttl: DecisionRequestPromptCacheOptionsTtl? = nil, mode: DecisionRequestPromptCacheOptionsMode? = nil) {
+public extension DecisionRequestPromptCacheOptions {
+    init(ttl: DecisionRequestPromptCacheOptionsTtl? = nil, mode: DecisionRequestPromptCacheOptionsMode? = nil) {
         self.init()
         (self.ttl, self.mode) = (ttl, mode)
     }
@@ -365,21 +453,27 @@ public struct DecisionInputTextPromptCacheBreakpoint: Codable {
         case mode
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionInputTextPromptCacheBreakpoint {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.mode) else {
-            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
-        }
-        self.mode = try container.sdkDecodeRequired(.mode)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionInputTextPromptCacheBreakpoint {
-    public init(mode: DecisionInputTextPromptCacheBreakpointMode) {
+public extension DecisionInputTextPromptCacheBreakpoint {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.mode) else {
+            throw SdkValidationError(
+                field: "mode",
+                code: "required",
+                message: "Validation failed for 'mode': value is required"
+            )
+        }
+        mode = try container.sdkDecodeRequired(.mode)
+    }
+}
+
+public extension DecisionInputTextPromptCacheBreakpoint {
+    init(mode: DecisionInputTextPromptCacheBreakpointMode) {
         self.mode = mode
     }
 }
@@ -403,30 +497,45 @@ public struct DecisionInputMessage: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension DecisionInputMessage {
-    public init(from decoder: Decoder) throws {
+public extension DecisionInputMessage {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
         }
-        self.role = try container.sdkDecodeRequired(.role)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.phase = try container.sdkDecodeIfPresent(.phase)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        if let value = self.type {
+        role = try container.sdkDecodeRequired(.role)
+        content = try container.sdkDecodeRequired(.content)
+        phase = try container.sdkDecodeIfPresent(.phase)
+        type = try container.sdkDecodeIfPresent(.type)
+        if let value = type {
             try sdkValidateRawEnum("type", value, DecisionInputMessageType.allCases.map(\.rawValue))
         }
     }
 }
 
-extension DecisionInputMessage {
-    public init(role: DecisionInputMessageRole, content: DecisionInputContent, phase: MessagePhaseParam? = nil, type: DecisionInputMessageType? = nil) throws {
+public extension DecisionInputMessage {
+    init(
+        role: DecisionInputMessageRole,
+        content: DecisionInputContent,
+        phase: MessagePhaseParam? = nil,
+        type: DecisionInputMessageType? = nil
+    ) throws {
         (self.role, self.content) = (role, content)
         (self.phase, self.type) = (phase, type)
         if let value = self.type {
@@ -462,40 +571,58 @@ public struct DecisionInputFunctionCall: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension DecisionInputFunctionCall {
-    public init(from decoder: Decoder) throws {
+public extension DecisionInputFunctionCall {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
         guard container.contains(.arguments) else {
-            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
+            throw SdkValidationError(
+                field: "arguments",
+                code: "required",
+                message: "Validation failed for 'arguments': value is required"
+            )
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.arguments = try container.sdkDecodeRequired(.arguments)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.namespace = try container.sdkDecodeIfPresent(.namespace)
-        self.status = try container.sdkDecodeIfPresent(.status)
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("name", self.name, min: 1, max: 128)
-            try sdkValidatePattern("name", self.name, sdkPatterneb0f36186b1b)
-            try validateLength("arguments", self.arguments, min: 0, max: 1048576)
-            try sdkValidateRawEnum("type", self.type, DecisionInputFunctionCallType.allCases.map(\.rawValue))
-        if let value = self.id {
-            try validateLength("id", value, min: 0, max: 1048576)
+        callId = try container.sdkDecodeRequired(.callId)
+        name = try container.sdkDecodeRequired(.name)
+        arguments = try container.sdkDecodeRequired(.arguments)
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeIfPresent(.id)
+        namespace = try container.sdkDecodeIfPresent(.namespace)
+        status = try container.sdkDecodeIfPresent(.status)
+        try validateLength("call_id", callId, min: 1, max: 64)
+        try validateLength("name", name, min: 1, max: 128)
+        try sdkValidatePattern("name", name, sdkPatterneb0f36186b1b)
+        try validateLength("arguments", arguments, min: 0, max: 1_048_576)
+        try sdkValidateRawEnum("type", type, DecisionInputFunctionCallType.allCases.map(\.rawValue))
+        if let value = id {
+            try validateLength("id", value, min: 0, max: 1_048_576)
         }
-        if let value = self.namespace {
+        if let value = namespace {
             try validateLength("namespace", value, min: 1, max: 64)
             try sdkValidatePattern("namespace", value, sdkPatterna828669d9fe5)
         }

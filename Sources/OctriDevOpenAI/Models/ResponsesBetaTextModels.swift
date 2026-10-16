@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaText domain models
+/// ResponsesBetaText domain models
 public indirect enum BetaTextResponseFormatConfiguration {
     case betaResponseFormatText(BetaResponseFormatText)
     case betaTextResponseFormatJsonSchema(BetaTextResponseFormatJsonSchema)
@@ -13,7 +13,6 @@ public indirect enum BetaTextResponseFormatConfiguration {
 }
 
 extension BetaTextResponseFormatConfiguration: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension BetaTextResponseFormatConfiguration: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension BetaTextResponseFormatConfiguration: Codable {
 extension BetaTextResponseFormatConfiguration {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "text": return .betaResponseFormatText(try BetaResponseFormatText(from: decoder))
-        case "json_schema": return .betaTextResponseFormatJsonSchema(try BetaTextResponseFormatJsonSchema(from: decoder))
-        case "json_object": return .betaResponseFormatJsonObject(try BetaResponseFormatJsonObject(from: decoder))
-        default: return nil
+        case "text": try .betaResponseFormatText(BetaResponseFormatText(from: decoder))
+        case "json_schema": try .betaTextResponseFormatJsonSchema(BetaTextResponseFormatJsonSchema(from: decoder))
+        case "json_object": try .betaResponseFormatJsonObject(BetaResponseFormatJsonObject(from: decoder))
+        default: nil
         }
     }
 }
@@ -80,36 +83,56 @@ public struct BetaTextResponseFormatJsonSchema: Codable {
         case strict
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaTextResponseFormatJsonSchema {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.schema) else {
-            throw SdkValidationError(field: "schema", code: "required", message: "Validation failed for 'schema': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.schema = try container.sdkDecodeRequired(.schema)
-        self.description = try container.sdkDecodeIfPresent(.description)
-        self.strict = try container.sdkDecodeIfPresent(.strict)
-            try sdkValidateRawEnum("type", self.type, BetaTextResponseFormatJsonSchemaType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaTextResponseFormatJsonSchema {
-    public init(type: BetaTextResponseFormatJsonSchemaType, name: String, schema: BetaResponseFormatJsonSchemaSchema, description: String? = nil, strict: Bool? = nil) throws {
+public extension BetaTextResponseFormatJsonSchema {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.schema) else {
+            throw SdkValidationError(
+                field: "schema",
+                code: "required",
+                message: "Validation failed for 'schema': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        schema = try container.sdkDecodeRequired(.schema)
+        description = try container.sdkDecodeIfPresent(.description)
+        strict = try container.sdkDecodeIfPresent(.strict)
+        try sdkValidateRawEnum("type", type, BetaTextResponseFormatJsonSchemaType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaTextResponseFormatJsonSchema {
+    init(
+        type: BetaTextResponseFormatJsonSchemaType,
+        name: String,
+        schema: BetaResponseFormatJsonSchemaSchema,
+        description: String? = nil,
+        strict: Bool? = nil
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.schema, self.description) = (schema, description)
         self.strict = strict
-            try sdkValidateRawEnum("type", self.type, BetaTextResponseFormatJsonSchemaType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaTextResponseFormatJsonSchemaType.allCases.map(\.rawValue))
     }
 }
 
@@ -125,28 +148,38 @@ public struct BetaTextContent: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaTextContent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, BetaTextContentType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaTextContent {
-    public init(type: BetaTextContentType, text: String) throws {
+public extension BetaTextContent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        try sdkValidateRawEnum("type", type, BetaTextContentType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaTextContent {
+    init(type: BetaTextContentType, text: String) throws {
         (self.type, self.text) = (type, text)
-            try sdkValidateRawEnum("type", self.type, BetaTextContentType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaTextContentType.allCases.map(\.rawValue))
     }
 }
 

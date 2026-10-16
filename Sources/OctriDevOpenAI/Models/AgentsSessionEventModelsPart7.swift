@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsSessionEvent domain models
+/// AgentsSessionEvent domain models
 /// The type of the object. Always `agent.session.environment.expired`.
 public enum SessionEventAgentSessionEnvironmentExpiredType: String, CaseIterable, Codable {
     case agentSessionEnvironmentExpired = "agent.session.environment.expired"

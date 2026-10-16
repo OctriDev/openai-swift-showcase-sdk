@@ -3,9 +3,17 @@
 
 import Foundation
 
-// EvalsCreate domain models
-extension CreateEvalCompletionsRunDataSourceSamplingParams {
-    public init(reasoningEffort: ReasoningEffortVariant0? = nil, temperature: Double? = nil, maxCompletionTokens: Int? = nil, topP: Double? = nil, seed: Int? = nil, responseFormat: CreateEvalCompletionsRunDataSourceSamplingParamsResponseFormat? = nil, tools: [ChatCompletionTool]? = nil) {
+/// EvalsCreate domain models
+public extension CreateEvalCompletionsRunDataSourceSamplingParams {
+    init(
+        reasoningEffort: ReasoningEffortVariant0? = nil,
+        temperature: Double? = nil,
+        maxCompletionTokens: Int? = nil,
+        topP: Double? = nil,
+        seed: Int? = nil,
+        responseFormat: CreateEvalCompletionsRunDataSourceSamplingParamsResponseFormat? = nil,
+        tools: [ChatCompletionTool]? = nil
+    ) {
         self.init()
         (self.reasoningEffort, self.temperature) = (reasoningEffort, temperature)
         (self.maxCompletionTokens, self.topP) = (maxCompletionTokens, topP)
@@ -26,28 +34,46 @@ public struct CreateEvalResponsesRunDataSourceInputMessagesVariant1: Codable {
         case itemReference = "item_reference"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateEvalResponsesRunDataSourceInputMessagesVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.itemReference) else {
-            throw SdkValidationError(field: "item_reference", code: "required", message: "Validation failed for 'item_reference': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.itemReference = try container.sdkDecodeRequired(.itemReference)
-            try sdkValidateRawEnum("type", self.type, CreateEvalResponsesRunDataSourceInputMessagesVariant1Type.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateEvalResponsesRunDataSourceInputMessagesVariant1 {
-    public init(type: CreateEvalResponsesRunDataSourceInputMessagesVariant1Type, itemReference: String) throws {
+public extension CreateEvalResponsesRunDataSourceInputMessagesVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.itemReference) else {
+            throw SdkValidationError(
+                field: "item_reference",
+                code: "required",
+                message: "Validation failed for 'item_reference': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        itemReference = try container.sdkDecodeRequired(.itemReference)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            CreateEvalResponsesRunDataSourceInputMessagesVariant1Type.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension CreateEvalResponsesRunDataSourceInputMessagesVariant1 {
+    init(type: CreateEvalResponsesRunDataSourceInputMessagesVariant1Type, itemReference: String) throws {
         (self.type, self.itemReference) = (type, itemReference)
-            try sdkValidateRawEnum("type", self.type, CreateEvalResponsesRunDataSourceInputMessagesVariant1Type.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            CreateEvalResponsesRunDataSourceInputMessagesVariant1Type.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -66,19 +92,19 @@ public struct CreateEvalResponsesRunDataSourceSamplingParamsText: Codable {
     }
 
     init() {
-        self.format = nil
+        format = nil
     }
 }
 
-extension CreateEvalResponsesRunDataSourceSamplingParamsText {
-    public init(from decoder: Decoder) throws {
+public extension CreateEvalResponsesRunDataSourceSamplingParamsText {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.format = try container.sdkDecodeIfPresent(.format)
+        format = try container.sdkDecodeIfPresent(.format)
     }
 }
 
-extension CreateEvalResponsesRunDataSourceSamplingParamsText {
-    public init(format: TextResponseFormatConfiguration? = nil) {
+public extension CreateEvalResponsesRunDataSourceSamplingParamsText {
+    init(format: TextResponseFormatConfiguration? = nil) {
         self.init()
         self.format = format
     }
@@ -107,33 +133,49 @@ public struct CreateEvalResponsesRunDataSource: Codable {
         case model
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateEvalResponsesRunDataSource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.source) else {
-            throw SdkValidationError(field: "source", code: "required", message: "Validation failed for 'source': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.source = try container.sdkDecodeRequired(.source)
-        self.inputMessages = try container.sdkDecodeIfPresent(.inputMessages)
-        self.samplingParams = try container.sdkDecodeIfPresent(.samplingParams)
-        self.model = try container.sdkDecodeIfPresent(.model)
-            try sdkValidateRawEnum("type", self.type, CreateEvalResponsesRunDataSourceType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateEvalResponsesRunDataSource {
-    public init(type: CreateEvalResponsesRunDataSourceType, source: CreateEvalResponsesRunDataSourceSource, inputMessages: CreateEvalResponsesRunDataSourceInputMessages? = nil, samplingParams: CreateEvalResponsesRunDataSourceSamplingParams? = nil, model: String? = nil) throws {
+public extension CreateEvalResponsesRunDataSource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.source) else {
+            throw SdkValidationError(
+                field: "source",
+                code: "required",
+                message: "Validation failed for 'source': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        source = try container.sdkDecodeRequired(.source)
+        inputMessages = try container.sdkDecodeIfPresent(.inputMessages)
+        samplingParams = try container.sdkDecodeIfPresent(.samplingParams)
+        model = try container.sdkDecodeIfPresent(.model)
+        try sdkValidateRawEnum("type", type, CreateEvalResponsesRunDataSourceType.allCases.map(\.rawValue))
+    }
+}
+
+public extension CreateEvalResponsesRunDataSource {
+    init(
+        type: CreateEvalResponsesRunDataSourceType,
+        source: CreateEvalResponsesRunDataSourceSource,
+        inputMessages: CreateEvalResponsesRunDataSourceInputMessages? = nil,
+        samplingParams: CreateEvalResponsesRunDataSourceSamplingParams? = nil,
+        model: String? = nil
+    ) throws {
         (self.type, self.source) = (type, source)
         (self.inputMessages, self.samplingParams) = (inputMessages, samplingParams)
         self.model = model
-            try sdkValidateRawEnum("type", self.type, CreateEvalResponsesRunDataSourceType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, CreateEvalResponsesRunDataSourceType.allCases.map(\.rawValue))
     }
 }
 
@@ -155,23 +197,29 @@ public struct CreateEvalRunRequest: Codable {
         case metadata
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateEvalRunRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.dataSource) else {
-            throw SdkValidationError(field: "data_source", code: "required", message: "Validation failed for 'data_source': value is required")
-        }
-        self.dataSource = try container.sdkDecodeRequired(.dataSource)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateEvalRunRequest {
-    public init(dataSource: CreateEvalRunRequestDataSource, name: String? = nil, metadata: Metadata? = nil) {
+public extension CreateEvalRunRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.dataSource) else {
+            throw SdkValidationError(
+                field: "data_source",
+                code: "required",
+                message: "Validation failed for 'data_source': value is required"
+            )
+        }
+        dataSource = try container.sdkDecodeRequired(.dataSource)
+        name = try container.sdkDecodeIfPresent(.name)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+    }
+}
+
+public extension CreateEvalRunRequest {
+    init(dataSource: CreateEvalRunRequestDataSource, name: String? = nil, metadata: Metadata? = nil) {
         (self.dataSource, self.name) = (dataSource, name)
         self.metadata = metadata
     }
@@ -190,25 +238,35 @@ public struct CreateEvalStoredCompletionsDataSourceConfig: Codable {
         case metadata
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateEvalStoredCompletionsDataSourceConfig {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-            try sdkValidateRawEnum("type", self.type, CreateEvalStoredCompletionsDataSourceConfigType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateEvalStoredCompletionsDataSourceConfig {
-    public init(type: CreateEvalStoredCompletionsDataSourceConfigType, metadata: [String: JSONValue]? = nil) throws {
+public extension CreateEvalStoredCompletionsDataSourceConfig {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        try sdkValidateRawEnum("type", type, CreateEvalStoredCompletionsDataSourceConfigType.allCases.map(\.rawValue))
+    }
+}
+
+public extension CreateEvalStoredCompletionsDataSourceConfig {
+    init(type: CreateEvalStoredCompletionsDataSourceConfigType, metadata: [String: JSONValue]? = nil) throws {
         (self.type, self.metadata) = (type, metadata)
-            try sdkValidateRawEnum("type", self.type, CreateEvalStoredCompletionsDataSourceConfigType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            CreateEvalStoredCompletionsDataSourceConfigType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -224,28 +282,46 @@ public struct CreateEvalCompletionsRunDataSourceInputMessagesVariant1: Codable {
         case itemReference = "item_reference"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateEvalCompletionsRunDataSourceInputMessagesVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.itemReference) else {
-            throw SdkValidationError(field: "item_reference", code: "required", message: "Validation failed for 'item_reference': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.itemReference = try container.sdkDecodeRequired(.itemReference)
-            try sdkValidateRawEnum("type", self.type, CreateEvalCompletionsRunDataSourceInputMessagesVariant1Type.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateEvalCompletionsRunDataSourceInputMessagesVariant1 {
-    public init(type: CreateEvalCompletionsRunDataSourceInputMessagesVariant1Type, itemReference: String) throws {
+public extension CreateEvalCompletionsRunDataSourceInputMessagesVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.itemReference) else {
+            throw SdkValidationError(
+                field: "item_reference",
+                code: "required",
+                message: "Validation failed for 'item_reference': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        itemReference = try container.sdkDecodeRequired(.itemReference)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            CreateEvalCompletionsRunDataSourceInputMessagesVariant1Type.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension CreateEvalCompletionsRunDataSourceInputMessagesVariant1 {
+    init(type: CreateEvalCompletionsRunDataSourceInputMessagesVariant1Type, itemReference: String) throws {
         (self.type, self.itemReference) = (type, itemReference)
-            try sdkValidateRawEnum("type", self.type, CreateEvalCompletionsRunDataSourceInputMessagesVariant1Type.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            CreateEvalCompletionsRunDataSourceInputMessagesVariant1Type.allCases.map(\.rawValue)
+        )
     }
 }
 

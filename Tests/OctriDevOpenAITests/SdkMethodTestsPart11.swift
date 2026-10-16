@@ -58,8 +58,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.decisions(
-            options: options
-        )
+                options: options
+            )
             XCTFail("decisionsUsage did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -106,8 +106,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.adminApiKeys.delete(
-            keyId: decoded("\"key-1\"")
-        )
+                keyId: decoded("\"key-1\"")
+            )
             XCTFail("deleteAdminApiKeys did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -154,8 +154,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.delete(
-            agentId: decoded("\"agent-1\"")
-        )
+                agentId: decoded("\"agent-1\"")
+            )
             XCTFail("deleteAgent did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -191,7 +191,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testDeleteAgentEnvironmentTemplateDeleteAgentEnvironmentTemplate400ReachesMockAndDecodesResponse() async throws {
+    func testDeleteAgentEnvironmentTemplateDeleteAgentEnvironmentTemplate400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -202,8 +203,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.deleteEnvironmentTemplate(
-            environmentTemplateId: decoded("\"environment_template-1\"")
-        )
+                environmentTemplateId: decoded("\"environment_template-1\"")
+            )
             XCTFail("deleteAgentEnvironmentTemplate did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -250,8 +251,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.deleteSession(
-            sessionId: decoded("\"session-1\"")
-        )
+                sessionId: decoded("\"session-1\"")
+            )
             XCTFail("deleteAgentSession did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -299,9 +300,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.deleteSessionArtifact(
-            sessionId: decoded("\"session-1\""),
-            artifactId: decoded("\"artifact-1\"")
-        )
+                sessionId: decoded("\"session-1\""),
+                artifactId: decoded("\"artifact-1\"")
+            )
             XCTFail("deleteAgentSessionArtifact did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -367,8 +368,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.certificates.delete(
-            certificateId: decoded("\"certificate-1\"")
-        )
+                certificateId: decoded("\"certificate-1\"")
+            )
             XCTFail("deleteCertificate did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -415,8 +416,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.chat.deleteCompletion(
-            completionId: decoded("\"completion-1\"")
-        )
+                completionId: decoded("\"completion-1\"")
+            )
             XCTFail("deleteChatCompletion did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -463,8 +464,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.chatkit.deleteThread(
-            threadId: decoded("\"cthr_123\"")
-        )
+                threadId: decoded("\"cthr_123\"")
+            )
             XCTFail("deleteChatkitThread did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -511,8 +512,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.containers.delete(
-            containerId: decoded("\"container-1\"")
-        )
+                containerId: decoded("\"container-1\"")
+            )
             XCTFail("deleteContainer did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -560,9 +561,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.containers.deleteFile(
-            containerId: decoded("\"container-1\""),
-            fileId: decoded("\"file-1\"")
-        )
+                containerId: decoded("\"container-1\""),
+                fileId: decoded("\"file-1\"")
+            )
             XCTFail("deleteContainerFile did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)

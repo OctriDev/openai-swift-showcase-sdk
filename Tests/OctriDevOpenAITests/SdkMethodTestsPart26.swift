@@ -17,8 +17,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.files.retrieve(
-            fileId: decoded("\"file-1\"")
-        )
+                fileId: decoded("\"file-1\"")
+            )
             XCTFail("retrieveFile did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -65,8 +65,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.retrieveJob(
-            fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\"")
-        )
+                fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\"")
+            )
             XCTFail("retrieveFineTuningJob did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -113,8 +113,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.groups.retrieve(
-            groupId: decoded("\"group-1\"")
-        )
+                groupId: decoded("\"group-1\"")
+            )
             XCTFail("retrieveGroup did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -162,9 +162,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.groupOrganizationRoleAssignments.retrieveGroupRole(
-            groupId: decoded("\"group-1\""),
-            roleId: decoded("\"role-1\"")
-        )
+                groupId: decoded("\"group-1\""),
+                roleId: decoded("\"role-1\"")
+            )
             XCTFail("retrieveGroupRole did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -212,9 +212,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.groupUsers.retrieve(
-            groupId: decoded("\"group-1\""),
-            userId: decoded("\"user-1\"")
-        )
+                groupId: decoded("\"group-1\""),
+                userId: decoded("\"user-1\"")
+            )
             XCTFail("retrieveGroupUser did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -261,8 +261,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.invites.retrieve(
-            inviteId: decoded("\"invite-1\"")
-        )
+                inviteId: decoded("\"invite-1\"")
+            )
             XCTFail("retrieveInvite did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -309,8 +309,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.models.retrieve(
-            model: decoded("\"gpt-6-astra\"")
-        )
+                model: decoded("\"gpt-6-astra\"")
+            )
             XCTFail("retrieveModel did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -327,7 +327,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testRetrieveOrganizationDataRetentionRetrieveOrganizationDataRetentionReachesMockAndDecodesResponse() async throws {
+    func testRetrieveOrganizationDataRetentionRetrieveOrganizationDataRetentionReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -344,7 +345,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testRetrieveOrganizationDataRetentionRetrieveOrganizationDataRetention403ReachesMockAndDecodesResponse() async throws {
+    func testRetrieveOrganizationDataRetentionRetrieveOrganizationDataRetention403ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/403") else {
             return
         }
@@ -390,7 +392,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testRetrieveOrganizationSpendAlertRetrieveOrganizationSpendAlert403ReachesMockAndDecodesResponse() async throws {
+    func testRetrieveOrganizationSpendAlertRetrieveOrganizationSpendAlert403ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/403") else {
             return
         }
@@ -401,8 +404,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.spendAlerts.retrieveOrganization(
-            alertId: decoded("\"alert-1\"")
-        )
+                alertId: decoded("\"alert-1\"")
+            )
             XCTFail("retrieveOrganizationSpendAlert did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -449,8 +452,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.retrieve(
-            projectId: decoded("\"project-1\"")
-        )
+                projectId: decoded("\"project-1\"")
+            )
             XCTFail("retrieveProject did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -498,9 +501,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.retrieveApiKey(
-            projectId: decoded("\"project-1\""),
-            apiKeyId: decoded("\"api_key-1\"")
-        )
+                projectId: decoded("\"project-1\""),
+                apiKeyId: decoded("\"api_key-1\"")
+            )
             XCTFail("retrieveProjectApiKey did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -547,8 +550,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.dataRetention.retrieve(
-            projectId: decoded("\"project-1\"")
-        )
+                projectId: decoded("\"project-1\"")
+            )
             XCTFail("retrieveProjectDataRetention did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

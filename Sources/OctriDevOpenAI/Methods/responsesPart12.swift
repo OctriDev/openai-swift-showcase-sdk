@@ -6,30 +6,62 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ResponsesMethods {
-    /// Deletes a model response by its identifier. Use this operation when you no longer need the response to remain available. The response identifies the deleted object and indicates that deletion occurred.
+public extension ResponsesMethods {
+    /// Deletes a model response by its identifier. Use this operation when you no longer need the response to remain
+    /// available. The response identifies the deleted object and indicates that deletion occurred.
     ///
     /// Deletes a model response with the given ID.
     ///
     /// - Parameters:
     /// - responseId: The ID of the response to delete.
     /// - openaiBeta: Optional beta features to enable for this request.
-    public static func betaDeleteResponse(config: ClientConfig, responseId: String, openaiBeta: [BetaDeleteResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> BetaDeleteResponseResponse {
-        return try (await sdkRequest("DELETE", ["/responses/", sdkEncodePathSegment(sdkWireString(responseId)), "?beta=true"].joined(), config: config, decoder: .json, operationId: "beta_deleteResponse", extraHeaders: sdkHeaders([
-            ("openai-beta", sdkHeaderValue(openaiBeta)),
-        ]), options: requestOptions, errors: ["404": BetaErrorResponse.self, "429": ErrorResponse.self])).data
+    static func betaDeleteResponse(
+        config: ClientConfig,
+        responseId: String,
+        openaiBeta: [BetaDeleteResponseParameterItem]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BetaDeleteResponseResponse {
+        try await (sdkRequest(
+            "DELETE",
+            ["/responses/", sdkEncodePathSegment(sdkWireString(responseId)), "?beta=true"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "beta_deleteResponse",
+            extraHeaders: sdkHeaders([
+                ("openai-beta", sdkHeaderValue(openaiBeta)),
+            ]),
+            options: requestOptions,
+            errors: ["404": BetaErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Cancels a background model response by its identifier. Use this operation only for responses created with `background` set to true; responses created without background processing cannot be cancelled. The response includes the model response object and its current status.
+    /// Cancels a background model response by its identifier. Use this operation only for responses created with
+    /// `background` set to true; responses created without background processing cannot be cancelled. The response
+    /// includes the model response object and its current status.
     ///
-    /// Cancels a model response with the given ID. Only responses created with the `background` parameter set to `true` can be cancelled. [Learn more](https://developers.openai.com/api/docs/guides/background).
+    /// Cancels a model response with the given ID. Only responses created with the `background` parameter set to `true`
+    /// can be cancelled. [Learn more](https://developers.openai.com/api/docs/guides/background).
     ///
     /// - Parameters:
     /// - responseId: The ID of the response to cancel.
     /// - openaiBeta: Optional beta features to enable for this request.
-    public static func betaCancelResponse(config: ClientConfig, responseId: String, openaiBeta: [BetaCancelResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> BetaResponse {
-        return try (await sdkRequest("POST", ["/responses/", sdkEncodePathSegment(sdkWireString(responseId)), "/cancel?beta=true"].joined(), config: config, decoder: .json, operationId: "beta_cancelResponse", extraHeaders: sdkHeaders([
-            ("openai-beta", sdkHeaderValue(openaiBeta)),
-        ]), options: requestOptions, errors: ["404": BetaErrorResponse.self, "429": ErrorResponse.self])).data
+    static func betaCancelResponse(
+        config: ClientConfig,
+        responseId: String,
+        openaiBeta: [BetaCancelResponseParameterItem]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BetaResponse {
+        try await (sdkRequest(
+            "POST",
+            ["/responses/", sdkEncodePathSegment(sdkWireString(responseId)), "/cancel?beta=true"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "beta_cancelResponse",
+            extraHeaders: sdkHeaders([
+                ("openai-beta", sdkHeaderValue(openaiBeta)),
+            ]),
+            options: requestOptions,
+            errors: ["404": BetaErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

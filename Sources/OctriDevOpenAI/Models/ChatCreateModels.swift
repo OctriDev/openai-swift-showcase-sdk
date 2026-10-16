@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ChatCreate domain models
+/// ChatCreate domain models
 public struct CreateChatCompletionRequestVariant1: Codable {
     /// A list of messages comprising the conversation so far. Depending on the model you use, different message
     /// types (modalities) are supported, like text, images, and audio.
@@ -134,53 +134,93 @@ public struct CreateChatCompletionRequestVariant1: Codable {
         case functions
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateChatCompletionRequestVariant1 {
-    public init(from decoder: Decoder) throws {
+public extension CreateChatCompletionRequestVariant1 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.messages) else {
-            throw SdkValidationError(field: "messages", code: "required", message: "Validation failed for 'messages': value is required")
+            throw SdkValidationError(
+                field: "messages",
+                code: "required",
+                message: "Validation failed for 'messages': value is required"
+            )
         }
         guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
         }
-        self.messages = try container.sdkDecodeRequired(.messages)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        self.modalities = try container.sdkDecodeIfPresent(.modalities)
-        self.verbosity = try container.sdkDecodeIfPresent(.verbosity)
-        self.reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
-        self.maxCompletionTokens = try container.sdkDecodeIfPresent(.maxCompletionTokens)
-        self.frequencyPenalty = try container.sdkDecodeIfPresent(.frequencyPenalty)
-        self.presencePenalty = try container.sdkDecodeIfPresent(.presencePenalty)
-        self.webSearchOptions = try container.sdkDecodeIfPresent(.webSearchOptions)
-        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.store = try container.sdkDecodeIfPresent(.store)
-        self.moderation = try container.sdkDecodeIfPresent(.moderation)
-        self.stream = try container.sdkDecodeIfPresent(.stream)
-        self.stop = try container.sdkDecodeIfPresent(.stop)
-        self.logitBias = try container.sdkDecodeIfPresent(.logitBias)
-        self.logprobs = try container.sdkDecodeIfPresent(.logprobs)
-        self.maxTokens = try container.sdkDecodeIfPresent(.maxTokens)
-        self.n = try container.sdkDecodeIfPresent(.n)
-        self.prediction = try container.sdkDecodeIfPresent(.prediction)
-        self.seed = try container.sdkDecodeIfPresent(.seed)
-        self.streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        self.functionCall = try container.sdkDecodeIfPresent(.functionCall)
-        self.functions = try container.sdkDecodeIfPresent(.functions)
+        messages = try container.sdkDecodeRequired(.messages)
+        model = try container.sdkDecodeRequired(.model)
+        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        modalities = try container.sdkDecodeIfPresent(.modalities)
+        verbosity = try container.sdkDecodeIfPresent(.verbosity)
+        reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
+        maxCompletionTokens = try container.sdkDecodeIfPresent(.maxCompletionTokens)
+        frequencyPenalty = try container.sdkDecodeIfPresent(.frequencyPenalty)
+        presencePenalty = try container.sdkDecodeIfPresent(.presencePenalty)
+        webSearchOptions = try container.sdkDecodeIfPresent(.webSearchOptions)
+        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        store = try container.sdkDecodeIfPresent(.store)
+        moderation = try container.sdkDecodeIfPresent(.moderation)
+        stream = try container.sdkDecodeIfPresent(.stream)
+        stop = try container.sdkDecodeIfPresent(.stop)
+        logitBias = try container.sdkDecodeIfPresent(.logitBias)
+        logprobs = try container.sdkDecodeIfPresent(.logprobs)
+        maxTokens = try container.sdkDecodeIfPresent(.maxTokens)
+        n = try container.sdkDecodeIfPresent(.n)
+        prediction = try container.sdkDecodeIfPresent(.prediction)
+        seed = try container.sdkDecodeIfPresent(.seed)
+        streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        functionCall = try container.sdkDecodeIfPresent(.functionCall)
+        functions = try container.sdkDecodeIfPresent(.functions)
         try sdkValidateConstraints()
     }
 }
 
-extension CreateChatCompletionRequestVariant1 {
-    public init(messages: [ChatCompletionRequestMessage], model: ModelIdsShared, serviceTier: ServiceTierVariant0? = nil, modalities: ResponseModalities? = nil, verbosity: VerbosityVariant0? = nil, reasoningEffort: ReasoningEffortVariant0? = nil, maxCompletionTokens: Int? = nil, frequencyPenalty: Double? = nil, presencePenalty: Double? = nil, webSearchOptions: CreateChatCompletionRequestVariant1WebSearchOptions? = nil, topLogprobs: Int? = nil, responseFormat: ResponseFormat? = nil, audio: CreateChatCompletionRequestVariant1Audio? = nil, store: Bool? = nil, moderation: ModerationParam? = nil, stream: Bool? = nil, stop: StopConfiguration? = nil, logitBias: [String: Int]? = nil, logprobs: Bool? = nil, maxTokens: Int? = nil, n: Int? = nil, prediction: PredictionContent? = nil, seed: Int? = nil, streamOptions: ChatCompletionStreamOptions? = nil, tools: [ToolsItem]? = nil, toolChoice: ChatCompletionToolChoiceOption? = nil, parallelToolCalls: ParallelToolCalls? = nil, functionCall: CreateChatCompletionRequestVariant1FunctionCall? = nil, functions: [ChatCompletionFunctions]? = nil) throws {
+public extension CreateChatCompletionRequestVariant1 {
+    init(
+        messages: [ChatCompletionRequestMessage],
+        model: ModelIdsShared,
+        serviceTier: ServiceTierVariant0? = nil,
+        modalities: ResponseModalities? = nil,
+        verbosity: VerbosityVariant0? = nil,
+        reasoningEffort: ReasoningEffortVariant0? = nil,
+        maxCompletionTokens: Int? = nil,
+        frequencyPenalty: Double? = nil,
+        presencePenalty: Double? = nil,
+        webSearchOptions: CreateChatCompletionRequestVariant1WebSearchOptions? = nil,
+        topLogprobs: Int? = nil,
+        responseFormat: ResponseFormat? = nil,
+        audio: CreateChatCompletionRequestVariant1Audio? = nil,
+        store: Bool? = nil,
+        moderation: ModerationParam? = nil,
+        stream: Bool? = nil,
+        stop: StopConfiguration? = nil,
+        logitBias: [String: Int]? = nil,
+        logprobs: Bool? = nil,
+        maxTokens: Int? = nil,
+        n: Int? = nil,
+        prediction: PredictionContent? = nil,
+        seed: Int? = nil,
+        streamOptions: ChatCompletionStreamOptions? = nil,
+        tools: [ToolsItem]? = nil,
+        toolChoice: ChatCompletionToolChoiceOption? = nil,
+        parallelToolCalls: ParallelToolCalls? = nil,
+        functionCall: CreateChatCompletionRequestVariant1FunctionCall? = nil,
+        functions: [ChatCompletionFunctions]? = nil
+    ) throws {
         (self.messages, self.model) = (messages, model)
         (self.serviceTier, self.modalities) = (serviceTier, modalities)
         (self.verbosity, self.reasoningEffort) = (verbosity, reasoningEffort)
@@ -202,23 +242,63 @@ extension CreateChatCompletionRequestVariant1 {
 
 extension CreateChatCompletionRequestVariant1 {
     func sdkValidateConstraints() throws {
-            try validateItems("messages", self.messages, min: 1, max: nil)
-        if let value = self.frequencyPenalty {
-            try validateRange("frequency_penalty", Double(value), min: -2, max: 2, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateItems("messages", messages, min: 1, max: nil)
+        if let value = frequencyPenalty {
+            try validateRange(
+                "frequency_penalty",
+                Double(value),
+                min: -2,
+                max: 2,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.presencePenalty {
-            try validateRange("presence_penalty", Double(value), min: -2, max: 2, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = presencePenalty {
+            try validateRange(
+                "presence_penalty",
+                Double(value),
+                min: -2,
+                max: 2,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.topLogprobs {
-            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = topLogprobs {
+            try validateRange(
+                "top_logprobs",
+                Double(value),
+                min: 0,
+                max: 20,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.n {
-            try validateRange("n", Double(value), min: 1, max: 128, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = n {
+            try validateRange(
+                "n",
+                Double(value),
+                min: 1,
+                max: 128,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.seed {
-            try validateRange("seed", Double(value), min: -9223372036854775808, max: 9223372036854775808, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = seed {
+            try validateRange(
+                "seed",
+                Double(value),
+                min: -9_223_372_036_854_775_808,
+                max: 9_223_372_036_854_775_808,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.functions {
+        if let value = functions {
             try validateItems("functions", value, min: 1, max: 128)
         }
     }
@@ -236,25 +316,35 @@ public struct CreateChatCompletionResponseChoicesItemLogprobs: Codable {
         case refusal
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateChatCompletionResponseChoicesItemLogprobs {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        guard container.contains(.refusal) else {
-            throw SdkValidationError(field: "refusal", code: "required", message: "Validation failed for 'refusal': value is required")
-        }
-        self.content = try container.sdkDecodeNullable(.content)
-        self.refusal = try container.sdkDecodeNullable(.refusal)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateChatCompletionResponseChoicesItemLogprobs {
-    public init(content: [ChatCompletionTokenLogprob]?, refusal: [ChatCompletionTokenLogprob]?) {
+public extension CreateChatCompletionResponseChoicesItemLogprobs {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        guard container.contains(.refusal) else {
+            throw SdkValidationError(
+                field: "refusal",
+                code: "required",
+                message: "Validation failed for 'refusal': value is required"
+            )
+        }
+        content = try container.sdkDecodeNullable(.content)
+        refusal = try container.sdkDecodeNullable(.refusal)
+    }
+}
+
+public extension CreateChatCompletionResponseChoicesItemLogprobs {
+    init(content: [ChatCompletionTokenLogprob]?, refusal: [ChatCompletionTokenLogprob]?) {
         (self.content, self.refusal) = (content, refusal)
     }
 }
@@ -271,25 +361,35 @@ public struct CreateChatCompletionStreamResponseChoicesItemLogprobs: Codable {
         case refusal
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateChatCompletionStreamResponseChoicesItemLogprobs {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        guard container.contains(.refusal) else {
-            throw SdkValidationError(field: "refusal", code: "required", message: "Validation failed for 'refusal': value is required")
-        }
-        self.content = try container.sdkDecodeNullable(.content)
-        self.refusal = try container.sdkDecodeNullable(.refusal)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateChatCompletionStreamResponseChoicesItemLogprobs {
-    public init(content: [ChatCompletionTokenLogprob]?, refusal: [ChatCompletionTokenLogprob]?) {
+public extension CreateChatCompletionStreamResponseChoicesItemLogprobs {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        guard container.contains(.refusal) else {
+            throw SdkValidationError(
+                field: "refusal",
+                code: "required",
+                message: "Validation failed for 'refusal': value is required"
+            )
+        }
+        content = try container.sdkDecodeNullable(.content)
+        refusal = try container.sdkDecodeNullable(.refusal)
+    }
+}
+
+public extension CreateChatCompletionStreamResponseChoicesItemLogprobs {
+    init(content: [ChatCompletionTokenLogprob]?, refusal: [ChatCompletionTokenLogprob]?) {
         (self.content, self.refusal) = (content, refusal)
     }
 }
@@ -459,55 +559,65 @@ public struct CreateChatCompletionRequest: Codable {
         case functions
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateChatCompletionRequest {
-    public init(from decoder: Decoder) throws {
+public extension CreateChatCompletionRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.messages) else {
-            throw SdkValidationError(field: "messages", code: "required", message: "Validation failed for 'messages': value is required")
+            throw SdkValidationError(
+                field: "messages",
+                code: "required",
+                message: "Validation failed for 'messages': value is required"
+            )
         }
         guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
         }
-        self.messages = try container.sdkDecodeRequired(.messages)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        self.temperature = try container.sdkDecodeIfPresent(.temperature)
-        self.topP = try container.sdkDecodeIfPresent(.topP)
-        self.user = try container.sdkDecodeIfPresent(.user)
-        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
-        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        self.modalities = try container.sdkDecodeIfPresent(.modalities)
-        self.verbosity = try container.sdkDecodeIfPresent(.verbosity)
-        self.reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
-        self.maxCompletionTokens = try container.sdkDecodeIfPresent(.maxCompletionTokens)
-        self.frequencyPenalty = try container.sdkDecodeIfPresent(.frequencyPenalty)
-        self.presencePenalty = try container.sdkDecodeIfPresent(.presencePenalty)
-        self.webSearchOptions = try container.sdkDecodeIfPresent(.webSearchOptions)
-        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.store = try container.sdkDecodeIfPresent(.store)
-        self.moderation = try container.sdkDecodeIfPresent(.moderation)
-        self.stream = try container.sdkDecodeIfPresent(.stream)
-        self.stop = try container.sdkDecodeIfPresent(.stop)
-        self.logitBias = try container.sdkDecodeIfPresent(.logitBias)
-        self.logprobs = try container.sdkDecodeIfPresent(.logprobs)
-        self.maxTokens = try container.sdkDecodeIfPresent(.maxTokens)
-        self.n = try container.sdkDecodeIfPresent(.n)
-        self.prediction = try container.sdkDecodeIfPresent(.prediction)
-        self.seed = try container.sdkDecodeIfPresent(.seed)
-        self.streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        self.functionCall = try container.sdkDecodeIfPresent(.functionCall)
-        self.functions = try container.sdkDecodeIfPresent(.functions)
+        messages = try container.sdkDecodeRequired(.messages)
+        model = try container.sdkDecodeRequired(.model)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        temperature = try container.sdkDecodeIfPresent(.temperature)
+        topP = try container.sdkDecodeIfPresent(.topP)
+        user = try container.sdkDecodeIfPresent(.user)
+        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        modalities = try container.sdkDecodeIfPresent(.modalities)
+        verbosity = try container.sdkDecodeIfPresent(.verbosity)
+        reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
+        maxCompletionTokens = try container.sdkDecodeIfPresent(.maxCompletionTokens)
+        frequencyPenalty = try container.sdkDecodeIfPresent(.frequencyPenalty)
+        presencePenalty = try container.sdkDecodeIfPresent(.presencePenalty)
+        webSearchOptions = try container.sdkDecodeIfPresent(.webSearchOptions)
+        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        store = try container.sdkDecodeIfPresent(.store)
+        moderation = try container.sdkDecodeIfPresent(.moderation)
+        stream = try container.sdkDecodeIfPresent(.stream)
+        stop = try container.sdkDecodeIfPresent(.stop)
+        logitBias = try container.sdkDecodeIfPresent(.logitBias)
+        logprobs = try container.sdkDecodeIfPresent(.logprobs)
+        maxTokens = try container.sdkDecodeIfPresent(.maxTokens)
+        n = try container.sdkDecodeIfPresent(.n)
+        prediction = try container.sdkDecodeIfPresent(.prediction)
+        seed = try container.sdkDecodeIfPresent(.seed)
+        streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        functionCall = try container.sdkDecodeIfPresent(.functionCall)
+        functions = try container.sdkDecodeIfPresent(.functions)
         try sdkValidateConstraints()
     }
 }

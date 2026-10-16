@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Assistants domain models
+/// Assistants domain models
 /// Occurs when a stream ends.
 public struct DoneEvent: Codable {
     /// Required enumerated value serialized in the `event` wire field.
@@ -16,28 +16,38 @@ public struct DoneEvent: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DoneEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.event) else {
-            throw SdkValidationError(field: "event", code: "required", message: "Validation failed for 'event': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        self.event = try container.sdkDecodeRequired(.event)
-        self.data = try container.sdkDecodeRequired(.data)
-            try sdkValidateRawEnum("event", self.event, DoneEventEvent.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DoneEvent {
-    public init(event: DoneEventEvent, data: DoneEventData) throws {
+public extension DoneEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.event) else {
+            throw SdkValidationError(
+                field: "event",
+                code: "required",
+                message: "Validation failed for 'event': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        event = try container.sdkDecodeRequired(.event)
+        data = try container.sdkDecodeRequired(.data)
+        try sdkValidateRawEnum("event", event, DoneEventEvent.allCases.map(\.rawValue))
+    }
+}
+
+public extension DoneEvent {
+    init(event: DoneEventEvent, data: DoneEventData) throws {
         (self.event, self.data) = (event, data)
-            try sdkValidateRawEnum("event", self.event, DoneEventEvent.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("event", self.event, DoneEventEvent.allCases.map(\.rawValue))
     }
 }
 
@@ -56,22 +66,28 @@ public struct TruncationObject: Codable {
         case lastMessages = "last_messages"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TruncationObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.lastMessages = try container.sdkDecodeIfPresent(.lastMessages)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension TruncationObject {
-    public init(type: TruncationObjectType, lastMessages: Int? = nil) {
+public extension TruncationObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        lastMessages = try container.sdkDecodeIfPresent(.lastMessages)
+    }
+}
+
+public extension TruncationObject {
+    init(type: TruncationObjectType, lastMessages: Int? = nil) {
         (self.type, self.lastMessages) = (type, lastMessages)
     }
 }
@@ -88,22 +104,28 @@ public struct SubmitToolOutputsRunRequest: Codable {
         case stream
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SubmitToolOutputsRunRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.toolOutputs) else {
-            throw SdkValidationError(field: "tool_outputs", code: "required", message: "Validation failed for 'tool_outputs': value is required")
-        }
-        self.toolOutputs = try container.sdkDecodeRequired(.toolOutputs)
-        self.stream = try container.sdkDecodeIfPresent(.stream)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SubmitToolOutputsRunRequest {
-    public init(toolOutputs: [SubmitToolOutputsRunRequestToolOutputsItem], stream: Bool? = nil) {
+public extension SubmitToolOutputsRunRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.toolOutputs) else {
+            throw SdkValidationError(
+                field: "tool_outputs",
+                code: "required",
+                message: "Validation failed for 'tool_outputs': value is required"
+            )
+        }
+        toolOutputs = try container.sdkDecodeRequired(.toolOutputs)
+        stream = try container.sdkDecodeIfPresent(.stream)
+    }
+}
+
+public extension SubmitToolOutputsRunRequest {
+    init(toolOutputs: [SubmitToolOutputsRunRequestToolOutputsItem], stream: Bool? = nil) {
         (self.toolOutputs, self.stream) = (toolOutputs, stream)
     }
 }
@@ -120,28 +142,38 @@ public struct ErrorEvent: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ErrorEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.event) else {
-            throw SdkValidationError(field: "event", code: "required", message: "Validation failed for 'event': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        self.event = try container.sdkDecodeRequired(.event)
-        self.data = try container.sdkDecodeRequired(.data)
-            try sdkValidateRawEnum("event", self.event, ErrorEventEvent.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ErrorEvent {
-    public init(event: ErrorEventEvent, data: Error3) throws {
+public extension ErrorEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.event) else {
+            throw SdkValidationError(
+                field: "event",
+                code: "required",
+                message: "Validation failed for 'event': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        event = try container.sdkDecodeRequired(.event)
+        data = try container.sdkDecodeRequired(.data)
+        try sdkValidateRawEnum("event", event, ErrorEventEvent.allCases.map(\.rawValue))
+    }
+}
+
+public extension ErrorEvent {
+    init(event: ErrorEventEvent, data: Error3) throws {
         (self.event, self.data) = (event, data)
-            try sdkValidateRawEnum("event", self.event, ErrorEventEvent.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("event", self.event, ErrorEventEvent.allCases.map(\.rawValue))
     }
 }
 
@@ -159,20 +191,20 @@ public struct SubmitToolOutputsRunRequestToolOutputsItem: Codable {
     }
 
     init() {
-        (self.toolCallId, self.output) = (nil, nil)
+        (toolCallId, output) = (nil, nil)
     }
 }
 
-extension SubmitToolOutputsRunRequestToolOutputsItem {
-    public init(from decoder: Decoder) throws {
+public extension SubmitToolOutputsRunRequestToolOutputsItem {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.toolCallId = try container.sdkDecodeIfPresent(.toolCallId)
-        self.output = try container.sdkDecodeIfPresent(.output)
+        toolCallId = try container.sdkDecodeIfPresent(.toolCallId)
+        output = try container.sdkDecodeIfPresent(.output)
     }
 }
 
-extension SubmitToolOutputsRunRequestToolOutputsItem {
-    public init(toolCallId: String? = nil, output: String? = nil) {
+public extension SubmitToolOutputsRunRequestToolOutputsItem {
+    init(toolCallId: String? = nil, output: String? = nil) {
         self.init()
         (self.toolCallId, self.output) = (toolCallId, output)
     }
@@ -184,13 +216,16 @@ extension SubmitToolOutputsRunRequestToolOutputsItem {
 public struct TruncationObjectType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = TruncationObjectType(rawValue: "auto")
     public static let lastMessages = TruncationObjectType(rawValue: "last_messages")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -221,12 +256,15 @@ public enum DoneEventEvent: String, CaseIterable, Codable {
 public struct DoneEventData: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let done = DoneEventData(rawValue: "[DONE]")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -37,9 +37,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.certificates.get(
-            certificateId: decoded("\"certificate-1\""),
-            include: decoded("[\"content\"]")
-        )
+                certificateId: decoded("\"certificate-1\""),
+                include: decoded("[\"content\"]")
+            )
             XCTFail("getCertificate did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -86,8 +86,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.chat.getCompletion(
-            completionId: decoded("\"completion-1\"")
-        )
+                completionId: decoded("\"completion-1\"")
+            )
             XCTFail("getChatCompletion did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -137,11 +137,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.chat.getCompletionMessages(
-            completionId: decoded("\"completion-1\""),
-            after: decoded("\"after\""),
-            limit: decoded("20"),
-            order: decoded("\"asc\"")
-        )
+                completionId: decoded("\"completion-1\""),
+                after: decoded("\"after\""),
+                limit: decoded("20"),
+                order: decoded("\"asc\"")
+            )
             XCTFail("getChatCompletionMessages did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -188,8 +188,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.conversations.get(
-            conversationId: decoded("\"conv_123\"")
-        )
+                conversationId: decoded("\"conv_123\"")
+            )
             XCTFail("getConversation did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -238,10 +238,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.conversations.getItem(
-            conversationId: decoded("\"conv_123\""),
-            itemId: decoded("\"msg_abc\""),
-            include: decoded("[\"file_search_call.results\"]")
-        )
+                conversationId: decoded("\"conv_123\""),
+                itemId: decoded("\"msg_abc\""),
+                include: decoded("[\"file_search_call.results\"]")
+            )
             XCTFail("getConversationItem did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -288,8 +288,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.evals.get(
-            evalId: decoded("\"eval-1\"")
-        )
+                evalId: decoded("\"eval-1\"")
+            )
             XCTFail("getEval did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -337,9 +337,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.evals.getRun(
-            evalId: decoded("\"eval-1\""),
-            runId: decoded("\"run-1\"")
-        )
+                evalId: decoded("\"eval-1\""),
+                runId: decoded("\"run-1\"")
+            )
             XCTFail("getEvalRun did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -388,10 +388,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.evals.getRunOutputItem(
-            evalId: decoded("\"eval-1\""),
-            runId: decoded("\"run-1\""),
-            outputItemId: decoded("\"output_item-1\"")
-        )
+                evalId: decoded("\"eval-1\""),
+                runId: decoded("\"run-1\""),
+                outputItemId: decoded("\"output_item-1\"")
+            )
             XCTFail("getEvalRunOutputItem did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -443,13 +443,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.evals.getRunOutputItems(
-            evalId: decoded("\"eval-1\""),
-            runId: decoded("\"run-1\""),
-            after: decoded("\"after\""),
-            limit: decoded("20"),
-            status: decoded("\"fail\""),
-            order: decoded("\"asc\"")
-        )
+                evalId: decoded("\"eval-1\""),
+                runId: decoded("\"run-1\""),
+                after: decoded("\"after\""),
+                limit: decoded("20"),
+                status: decoded("\"fail\""),
+                order: decoded("\"asc\"")
+            )
             XCTFail("getEvalRunOutputItems did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -500,12 +500,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.evals.getRuns(
-            evalId: decoded("\"eval-1\""),
-            after: decoded("\"after\""),
-            limit: decoded("20"),
-            order: decoded("\"asc\""),
-            status: decoded("\"queued\"")
-        )
+                evalId: decoded("\"eval-1\""),
+                after: decoded("\"after\""),
+                limit: decoded("20"),
+                order: decoded("\"asc\""),
+                status: decoded("\"queued\"")
+            )
             XCTFail("getEvalRuns did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

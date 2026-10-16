@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension BatchMethods {
-    /// Lists batches created by your organization. Use `after` to continue from a batch ID and `limit` to set the number of results, from 1 to 100.
+public extension BatchMethods {
+    /// Lists batches created by your organization. Use `after` to continue from a batch ID and `limit` to set the
+    /// number of results, from 1 to 100.
     ///
     /// List your organization's batches.
     ///
@@ -18,14 +19,29 @@ extension BatchMethods {
     ///   after=obj_foo in order to fetch the next page of the list.
     /// - limit: A limit on the number of objects to be returned. Limit can range
     ///   between 1 and 100, and the default is 20.
-    public static func listBatch(config: ClientConfig, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListBatchesResponse {
-        return try (await sdkRequest("GET", "/batches", config: config, query: [
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("limit", value: limit),
-        ], decoder: .json, operationId: "listBatch", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func listBatch(
+        config: ClientConfig,
+        after: String? = nil,
+        limit: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListBatchesResponse {
+        try await (sdkRequest(
+            "GET",
+            "/batches",
+            config: config,
+            query: [
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("limit", value: limit),
+            ],
+            decoder: .json,
+            operationId: "listBatch",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Lists batches created by your organization. Use `after` to continue from a batch ID and `limit` to set the number of results, from 1 to 100.
+    /// Lists batches created by your organization. Use `after` to continue from a batch ID and `limit` to set the
+    /// number of results, from 1 to 100.
     ///
     /// List your organization's batches.
     ///
@@ -36,18 +52,39 @@ extension BatchMethods {
     ///   after=obj_foo in order to fetch the next page of the list.
     /// - limit: A limit on the number of objects to be returned. Limit can range
     ///   between 1 and 100, and the default is 20.
-    public static func listBatchPaginated(config: ClientConfig, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<Batch, Swift.Error> {
-        return AsyncThrowingStream<Batch, Swift.Error> { (continuation: AsyncThrowingStream<Batch, Swift.Error>.Continuation) in
+    static func listBatchPaginated(
+        config: ClientConfig,
+        after: String? = nil,
+        limit: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<Batch, Swift.Error> {
+        AsyncThrowingStream<Batch, Swift.Error> { (continuation: AsyncThrowingStream<
+            Batch,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listBatch(config: config, after: pageCursor, limit: limit, requestOptions: requestOptions)
+                        let pageResponse = try await listBatch(
+                            config: config,
+                            after: pageCursor,
+                            limit: limit,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -60,25 +97,44 @@ extension BatchMethods {
         }
     }
 
-    public struct ListBatchPage {
+    struct ListBatchPage {
         public let data: ListBatchesResponse
         public let items: [Batch]
         public let hasMore: Bool
     }
 
-    public static func listBatchPages(config: ClientConfig, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListBatchPage, Swift.Error> {
-        return AsyncThrowingStream<ListBatchPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListBatchPage, Swift.Error>.Continuation) in
+    static func listBatchPages(
+        config: ClientConfig,
+        after: String? = nil,
+        limit: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListBatchPage, Swift.Error> {
+        AsyncThrowingStream<ListBatchPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListBatchPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listBatch(config: config, after: pageCursor, limit: limit, requestOptions: requestOptions)
+                        let pageResponse = try await listBatch(
+                            config: config,
+                            after: pageCursor,
+                            limit: limit,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
                         pageContinuation.yield(ListBatchPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

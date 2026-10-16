@@ -17,14 +17,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.listFilesInBatch(
-            vectorStoreId: decoded("\"vector_store-1\""),
-            batchId: decoded("\"batch-1\""),
-            limit: decoded("20"),
-            order: decoded("\"desc\""),
-            after: decoded("\"after\""),
-            before: decoded("\"before\""),
-            filter: decoded("\"in_progress\"")
-        )
+                vectorStoreId: decoded("\"vector_store-1\""),
+                batchId: decoded("\"batch-1\""),
+                limit: decoded("20"),
+                order: decoded("\"desc\""),
+                after: decoded("\"after\""),
+                before: decoded("\"before\""),
+                filter: decoded("\"in_progress\"")
+            )
             XCTFail("listFilesInVectorStoreBatch did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -41,7 +41,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testListFineTuningCheckpointPermissionsListFineTuningCheckpointPermissionsReachesMockAndDecodesResponse() async throws {
+    func testListFineTuningCheckpointPermissionsListFineTuningCheckpointPermissionsReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -64,7 +65,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testListFineTuningCheckpointPermissionsListFineTuningCheckpointPeXedd63d7365ReachesMockAndDecodesResponse() async throws {
+    func testListFineTuningCheckpointPermissionsListFineTuningCheckpointPeXedd63d7365ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -75,12 +77,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.listCheckpointPermissions(
-            fineTunedModelCheckpoint: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\""),
-            projectId: decoded("\"project-1\""),
-            after: decoded("\"after\""),
-            limit: decoded("10"),
-            order: decoded("\"descending\"")
-        )
+                fineTunedModelCheckpoint: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\""),
+                projectId: decoded("\"project-1\""),
+                after: decoded("\"after\""),
+                limit: decoded("10"),
+                order: decoded("\"descending\"")
+            )
             XCTFail("listFineTuningCheckpointPermissions did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -129,10 +131,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.listEvents(
-            fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\""),
-            after: decoded("\"after\""),
-            limit: decoded("20")
-        )
+                fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\""),
+                after: decoded("\"after\""),
+                limit: decoded("20")
+            )
             XCTFail("listFineTuningEvents did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -181,10 +183,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.listJobCheckpoints(
-            fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\""),
-            after: decoded("\"after\""),
-            limit: decoded("10")
-        )
+                fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\""),
+                after: decoded("\"after\""),
+                limit: decoded("10")
+            )
             XCTFail("listFineTuningJobCheckpoints did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -233,10 +235,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.listJobs(
-            after: decoded("\"after\""),
-            limit: decoded("20"),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                after: decoded("\"after\""),
+                limit: decoded("20"),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("listFineTuningJobs did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -286,11 +288,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.groupOrganizationRoleAssignments.listGroupRoleAssignments(
-            groupId: decoded("\"group-1\""),
-            limit: decoded("0"),
-            after: decoded("\"after\""),
-            order: decoded("\"asc\"")
-        )
+                groupId: decoded("\"group-1\""),
+                limit: decoded("0"),
+                after: decoded("\"after\""),
+                order: decoded("\"asc\"")
+            )
             XCTFail("listGroupRoleAssignments did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -339,10 +341,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.groups.list(
-            limit: decoded("100"),
-            after: decoded("\"after\""),
-            order: decoded("\"asc\"")
-        )
+                limit: decoded("100"),
+                after: decoded("\"after\""),
+                order: decoded("\"asc\"")
+            )
             XCTFail("listGroups did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -392,11 +394,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.groupUsers.list(
-            groupId: decoded("\"group-1\""),
-            limit: decoded("100"),
-            after: decoded("\"after\""),
-            order: decoded("\"desc\"")
-        )
+                groupId: decoded("\"group-1\""),
+                limit: decoded("100"),
+                after: decoded("\"after\""),
+                order: decoded("\"desc\"")
+            )
             XCTFail("listGroupUsers did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -447,12 +449,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.listInputItems(
-            responseId: decoded("\"response-1\""),
-            limit: decoded("20"),
-            order: decoded("\"asc\""),
-            after: decoded("\"after\""),
-            include: decoded("[\"file_search_call.results\"]")
-        )
+                responseId: decoded("\"response-1\""),
+                limit: decoded("20"),
+                order: decoded("\"asc\""),
+                after: decoded("\"after\""),
+                include: decoded("[\"file_search_call.results\"]")
+            )
             XCTFail("listInputItems did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -500,9 +502,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.invites.list(
-            limit: decoded("20"),
-            after: decoded("\"after\"")
-        )
+                limit: decoded("20"),
+                after: decoded("\"after\"")
+            )
             XCTFail("listInvites did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

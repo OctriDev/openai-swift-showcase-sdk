@@ -3,29 +3,36 @@
 
 import Foundation
 
-// Beta domain models
+/// Beta domain models
 public indirect enum BetaContent {
     case betaInputContent(BetaInputContent)
     case betaOutputContent(BetaOutputContent)
 }
 
 extension BetaContent: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaContent")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension BetaContent {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(BetaInputContent.self) { return .betaInputContent(value) }
-        if let value = try? container.decode(BetaOutputContent.self) { return .betaOutputContent(value) }
+        if let value = try? container.decode(BetaInputContent.self) {
+            return .betaInputContent(value)
+        }
+        if let value = try? container.decode(BetaOutputContent.self) {
+            return .betaOutputContent(value)
+        }
         return nil
     }
 }
@@ -55,29 +62,43 @@ public struct BetaOutputAudio: Codable {
         case transcript
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaOutputAudio {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.transcript) else {
-            throw SdkValidationError(field: "transcript", code: "required", message: "Validation failed for 'transcript': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.transcript = try container.sdkDecodeRequired(.transcript)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaOutputAudio {
-    public init(type: BetaOutputAudioType, data: String, transcript: String) {
+public extension BetaOutputAudio {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.transcript) else {
+            throw SdkValidationError(
+                field: "transcript",
+                code: "required",
+                message: "Validation failed for 'transcript': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        data = try container.sdkDecodeRequired(.data)
+        transcript = try container.sdkDecodeRequired(.transcript)
+    }
+}
+
+public extension BetaOutputAudio {
+    init(type: BetaOutputAudioType, data: String, transcript: String) {
         (self.type, self.data) = (type, data)
         self.transcript = transcript
     }
@@ -95,25 +116,35 @@ public struct BetaInputAudio: Codable {
         case inputAudio = "input_audio"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaInputAudio {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.inputAudio) else {
-            throw SdkValidationError(field: "input_audio", code: "required", message: "Validation failed for 'input_audio': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.inputAudio = try container.sdkDecodeRequired(.inputAudio)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaInputAudio {
-    public init(type: BetaInputAudioType, inputAudio: BetaInputAudioInputAudio) {
+public extension BetaInputAudio {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.inputAudio) else {
+            throw SdkValidationError(
+                field: "input_audio",
+                code: "required",
+                message: "Validation failed for 'input_audio': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        inputAudio = try container.sdkDecodeRequired(.inputAudio)
+    }
+}
+
+public extension BetaInputAudio {
+    init(type: BetaInputAudioType, inputAudio: BetaInputAudioInputAudio) {
         (self.type, self.inputAudio) = (type, inputAudio)
     }
 }
@@ -130,25 +161,35 @@ public struct BetaInputAudioInputAudio: Codable {
         case format
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaInputAudioInputAudio {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.format) else {
-            throw SdkValidationError(field: "format", code: "required", message: "Validation failed for 'format': value is required")
-        }
-        self.data = try container.sdkDecodeRequired(.data)
-        self.format = try container.sdkDecodeRequired(.format)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaInputAudioInputAudio {
-    public init(data: String, format: BetaInputAudioInputAudioFormat) {
+public extension BetaInputAudioInputAudio {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.format) else {
+            throw SdkValidationError(
+                field: "format",
+                code: "required",
+                message: "Validation failed for 'format': value is required"
+            )
+        }
+        data = try container.sdkDecodeRequired(.data)
+        format = try container.sdkDecodeRequired(.format)
+    }
+}
+
+public extension BetaInputAudioInputAudio {
+    init(data: String, format: BetaInputAudioInputAudioFormat) {
         (self.data, self.format) = (data, format)
     }
 }
@@ -177,35 +218,60 @@ public struct BetaErrorPayload: Codable {
         case misalignment
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaErrorPayload {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        guard container.contains(.param) else {
-            throw SdkValidationError(field: "param", code: "required", message: "Validation failed for 'param': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.code = try container.sdkDecodeNullable(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.param = try container.sdkDecodeNullable(.param)
-        self.headers = try container.sdkDecodeIfPresent(.headers)
-        self.misalignment = try container.sdkDecodeIfPresent(.misalignment)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaErrorPayload {
-    public init(type: String, code: String?, message: String, param: String?, headers: [String: String]? = nil, misalignment: BetaMisalignmentErrorDetailsResource? = nil) {
+public extension BetaErrorPayload {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        guard container.contains(.param) else {
+            throw SdkValidationError(
+                field: "param",
+                code: "required",
+                message: "Validation failed for 'param': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        code = try container.sdkDecodeNullable(.code)
+        message = try container.sdkDecodeRequired(.message)
+        param = try container.sdkDecodeNullable(.param)
+        headers = try container.sdkDecodeIfPresent(.headers)
+        misalignment = try container.sdkDecodeIfPresent(.misalignment)
+    }
+}
+
+public extension BetaErrorPayload {
+    init(
+        type: String,
+        code: String?,
+        message: String,
+        param: String?,
+        headers: [String: String]? = nil,
+        misalignment: BetaMisalignmentErrorDetailsResource? = nil
+    ) {
         (self.type, self.code) = (type, code)
         (self.message, self.param) = (message, param)
         (self.headers, self.misalignment) = (headers, misalignment)
@@ -216,12 +282,15 @@ extension BetaErrorPayload {
 public struct BetaInputAudioType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inputAudio = BetaInputAudioType(rawValue: "input_audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -234,12 +303,15 @@ public struct BetaInputAudioType: RawRepresentable, Hashable, Codable, Sendable,
 public struct BetaOutputAudioType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let outputAudio = BetaOutputAudioType(rawValue: "output_audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -252,13 +324,16 @@ public struct BetaOutputAudioType: RawRepresentable, Hashable, Codable, Sendable
 public struct BetaInputAudioInputAudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let mp3 = BetaInputAudioInputAudioFormat(rawValue: "mp3")
     public static let wav = BetaInputAudioInputAudioFormat(rawValue: "wav")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

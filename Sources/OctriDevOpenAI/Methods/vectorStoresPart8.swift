@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VectorStoresMethods {
-    /// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor parameters to navigate through the batch's files.
+public extension VectorStoresMethods {
+    /// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor
+    /// parameters to navigate through the batch's files.
     ///
     /// Returns a list of vector store files in a batch.
     ///
@@ -28,13 +29,38 @@ extension VectorStoresMethods {
     ///   before=obj_foo in order to fetch the previous page of the list.
     /// - filter: Filter by file status. One of `in_progress`, `completed`,
     ///   `failed`, `cancelled`.
-    public static func listFilesInVectorStoreBatch(config: ClientConfig, vectorStoreId: String, batchId: String, limit: Int? = nil, order: ListFilesInVectorStoreBatchParameter? = nil, after: String? = nil, before: String? = nil, filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil, requestOptions: RequestOptions? = nil) async throws -> ListVectorStoreFilesResponse {
-        return try (await sdkRequest("GET", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/file_batches/", sdkEncodePathSegment(sdkWireString(batchId)), "/files"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("before", value: before),
-            SdkQueryParameter("filter", value: filter),
-        ], decoder: .json, operationId: "listFilesInVectorStoreBatch", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func listFilesInVectorStoreBatch(
+        config: ClientConfig,
+        vectorStoreId: String,
+        batchId: String,
+        limit: Int? = nil,
+        order: ListFilesInVectorStoreBatchParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListVectorStoreFilesResponse {
+        try await (sdkRequest(
+            "GET",
+            [
+                "/vector_stores/",
+                sdkEncodePathSegment(sdkWireString(vectorStoreId)),
+                "/file_batches/",
+                sdkEncodePathSegment(sdkWireString(batchId)),
+                "/files",
+            ].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("before", value: before),
+                SdkQueryParameter("filter", value: filter),
+            ],
+            decoder: .json,
+            operationId: "listFilesInVectorStoreBatch",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

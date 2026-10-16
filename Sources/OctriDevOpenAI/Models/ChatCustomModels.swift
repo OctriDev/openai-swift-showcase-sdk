@@ -3,22 +3,28 @@
 
 import Foundation
 
-// ChatCustom domain models
+/// ChatCustom domain models
 public indirect enum CustomToolChatCompletionsCustomFormat {
     case customToolChatCompletionsCustomFormatVariant0(CustomToolChatCompletionsCustomFormatVariant0)
     case customToolChatCompletionsCustomFormatVariant1(CustomToolChatCompletionsCustomFormatVariant1)
 }
 
 extension CustomToolChatCompletionsCustomFormat: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CustomToolChatCompletionsCustomFormat")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CustomToolChatCompletionsCustomFormat"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
@@ -27,12 +33,12 @@ extension CustomToolChatCompletionsCustomFormat {
         if let value = try? container.decode(
             CustomToolChatCompletionsCustomFormatVariant0.self
         ) {
-            return             .customToolChatCompletionsCustomFormatVariant0(value)
+            return .customToolChatCompletionsCustomFormatVariant0(value)
         }
         if let value = try? container.decode(
             CustomToolChatCompletionsCustomFormatVariant1.self
         ) {
-            return             .customToolChatCompletionsCustomFormatVariant1(value)
+            return .customToolChatCompletionsCustomFormatVariant1(value)
         }
         return nil
     }
@@ -60,28 +66,45 @@ public struct CustomToolChatCompletionsCustomFormatVariant1: Codable {
         case grammar
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CustomToolChatCompletionsCustomFormatVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.grammar) else {
-            throw SdkValidationError(field: "grammar", code: "required", message: "Validation failed for 'grammar': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.grammar = try container.sdkDecodeRequired(.grammar)
-            try sdkValidateRawEnum("type", self.type, CustomToolChatCompletionsCustomFormatVariant1Type.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CustomToolChatCompletionsCustomFormatVariant1 {
-    public init(type: CustomToolChatCompletionsCustomFormatVariant1Type, grammar: CustomToolChatCompletionsCustomFormatVariant1Grammar) throws {
+public extension CustomToolChatCompletionsCustomFormatVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.grammar) else {
+            throw SdkValidationError(
+                field: "grammar",
+                code: "required",
+                message: "Validation failed for 'grammar': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        grammar = try container.sdkDecodeRequired(.grammar)
+        try sdkValidateRawEnum("type", type, CustomToolChatCompletionsCustomFormatVariant1Type.allCases.map(\.rawValue))
+    }
+}
+
+public extension CustomToolChatCompletionsCustomFormatVariant1 {
+    init(
+        type: CustomToolChatCompletionsCustomFormatVariant1Type,
+        grammar: CustomToolChatCompletionsCustomFormatVariant1Grammar
+    ) throws {
         (self.type, self.grammar) = (type, grammar)
-            try sdkValidateRawEnum("type", self.type, CustomToolChatCompletionsCustomFormatVariant1Type.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            CustomToolChatCompletionsCustomFormatVariant1Type.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -100,23 +123,29 @@ public struct CustomToolChatCompletionsCustom: Codable {
         case format
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CustomToolChatCompletionsCustom {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeIfPresent(.description)
-        self.format = try container.sdkDecodeIfPresent(.format)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CustomToolChatCompletionsCustom {
-    public init(name: String, description: String? = nil, format: CustomToolChatCompletionsCustomFormat? = nil) {
+public extension CustomToolChatCompletionsCustom {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeIfPresent(.description)
+        format = try container.sdkDecodeIfPresent(.format)
+    }
+}
+
+public extension CustomToolChatCompletionsCustom {
+    init(name: String, description: String? = nil, format: CustomToolChatCompletionsCustomFormat? = nil) {
         (self.name, self.description) = (name, description)
         self.format = format
     }
@@ -131,24 +160,34 @@ public struct CustomToolChatCompletionsCustomFormatVariant0: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CustomToolChatCompletionsCustomFormatVariant0 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, CustomToolChatCompletionsCustomFormatVariant0Type.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CustomToolChatCompletionsCustomFormatVariant0 {
-    public init(type: CustomToolChatCompletionsCustomFormatVariant0Type) throws {
+public extension CustomToolChatCompletionsCustomFormatVariant0 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, CustomToolChatCompletionsCustomFormatVariant0Type.allCases.map(\.rawValue))
+    }
+}
+
+public extension CustomToolChatCompletionsCustomFormatVariant0 {
+    init(type: CustomToolChatCompletionsCustomFormatVariant0Type) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, CustomToolChatCompletionsCustomFormatVariant0Type.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            CustomToolChatCompletionsCustomFormatVariant0Type.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -164,28 +203,38 @@ public struct CustomToolChatCompletions: Codable {
         case custom
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CustomToolChatCompletions {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.custom) else {
-            throw SdkValidationError(field: "custom", code: "required", message: "Validation failed for 'custom': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.custom = try container.sdkDecodeRequired(.custom)
-            try sdkValidateRawEnum("type", self.type, CustomToolChatCompletionsType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CustomToolChatCompletions {
-    public init(type: CustomToolChatCompletionsType, custom: CustomToolChatCompletionsCustom) throws {
+public extension CustomToolChatCompletions {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.custom) else {
+            throw SdkValidationError(
+                field: "custom",
+                code: "required",
+                message: "Validation failed for 'custom': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        custom = try container.sdkDecodeRequired(.custom)
+        try sdkValidateRawEnum("type", type, CustomToolChatCompletionsType.allCases.map(\.rawValue))
+    }
+}
+
+public extension CustomToolChatCompletions {
+    init(type: CustomToolChatCompletionsType, custom: CustomToolChatCompletionsCustom) throws {
         (self.type, self.custom) = (type, custom)
-            try sdkValidateRawEnum("type", self.type, CustomToolChatCompletionsType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, CustomToolChatCompletionsType.allCases.map(\.rawValue))
     }
 }
 
@@ -201,25 +250,35 @@ public struct CustomToolChatCompletionsCustomFormatVariant1Grammar: Codable {
         case syntax
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CustomToolChatCompletionsCustomFormatVariant1Grammar {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.definition) else {
-            throw SdkValidationError(field: "definition", code: "required", message: "Validation failed for 'definition': value is required")
-        }
-        guard container.contains(.syntax) else {
-            throw SdkValidationError(field: "syntax", code: "required", message: "Validation failed for 'syntax': value is required")
-        }
-        self.definition = try container.sdkDecodeRequired(.definition)
-        self.syntax = try container.sdkDecodeRequired(.syntax)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CustomToolChatCompletionsCustomFormatVariant1Grammar {
-    public init(definition: String, syntax: CustomToolChatCompletionsCustomFormatVariant1GrammarSyntax) {
+public extension CustomToolChatCompletionsCustomFormatVariant1Grammar {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.definition) else {
+            throw SdkValidationError(
+                field: "definition",
+                code: "required",
+                message: "Validation failed for 'definition': value is required"
+            )
+        }
+        guard container.contains(.syntax) else {
+            throw SdkValidationError(
+                field: "syntax",
+                code: "required",
+                message: "Validation failed for 'syntax': value is required"
+            )
+        }
+        definition = try container.sdkDecodeRequired(.definition)
+        syntax = try container.sdkDecodeRequired(.syntax)
+    }
+}
+
+public extension CustomToolChatCompletionsCustomFormatVariant1Grammar {
+    init(definition: String, syntax: CustomToolChatCompletionsCustomFormatVariant1GrammarSyntax) {
         (self.definition, self.syntax) = (definition, syntax)
     }
 }
@@ -261,16 +320,20 @@ public enum CustomToolChatCompletionsCustomFormatVariant1Type: String, CaseItera
 }
 
 /// The syntax of the grammar definition. One of `lark` or `regex`.
-public struct CustomToolChatCompletionsCustomFormatVariant1GrammarSyntax: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CustomToolChatCompletionsCustomFormatVariant1GrammarSyntax: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let lark = CustomToolChatCompletionsCustomFormatVariant1GrammarSyntax(rawValue: "lark")
     public static let regex = CustomToolChatCompletionsCustomFormatVariant1GrammarSyntax(rawValue: "regex")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

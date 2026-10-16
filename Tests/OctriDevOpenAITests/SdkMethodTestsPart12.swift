@@ -36,8 +36,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.conversations.delete(
-            conversationId: decoded("\"conv_123\"")
-        )
+                conversationId: decoded("\"conv_123\"")
+            )
             XCTFail("deleteConversation did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -85,9 +85,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.conversations.deleteItem(
-            conversationId: decoded("\"conv_123\""),
-            itemId: decoded("\"msg_abc\"")
-        )
+                conversationId: decoded("\"conv_123\""),
+                itemId: decoded("\"msg_abc\"")
+            )
             XCTFail("deleteConversationItem did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -134,8 +134,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.evals.delete(
-            evalId: decoded("\"eval-1\"")
-        )
+                evalId: decoded("\"eval-1\"")
+            )
             XCTFail("deleteEval did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -183,9 +183,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.evals.deleteRun(
-            evalId: decoded("\"eval-1\""),
-            runId: decoded("\"run-1\"")
-        )
+                evalId: decoded("\"eval-1\""),
+                runId: decoded("\"run-1\"")
+            )
             XCTFail("deleteEvalRun did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -232,8 +232,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.externalStorage.delete(
-            externalStorageId: decoded("\"extstorage_123\"")
-        )
+                externalStorageId: decoded("\"extstorage_123\"")
+            )
             XCTFail("deleteExternalStorage did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -280,8 +280,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.files.delete(
-            fileId: decoded("\"file-1\"")
-        )
+                fileId: decoded("\"file-1\"")
+            )
             XCTFail("deleteFile did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -298,7 +298,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testDeleteFineTuningCheckpointPermissionDeleteFineTuningCheckpointPermissionReachesMockAndDecodesResponse() async throws {
+    func testDeleteFineTuningCheckpointPermissionDeleteFineTuningCheckpointPermissionReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -318,7 +319,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testDeleteFineTuningCheckpointPermissionDeleteFineTuningCheckpoinXd5bd44bf36ReachesMockAndDecodesResponse() async throws {
+    func testDeleteFineTuningCheckpointPermissionDeleteFineTuningCheckpoinXd5bd44bf36ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -329,9 +331,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.deleteCheckpointPermission(
-            fineTunedModelCheckpoint: decoded("\"ft:gpt-4o-mini-2024-07-18:org:weather:B7R9VjQd\""),
-            permissionId: decoded("\"cp_zc4Q7MP6XxulcVzj4MZdwsAB\"")
-        )
+                fineTunedModelCheckpoint: decoded("\"ft:gpt-4o-mini-2024-07-18:org:weather:B7R9VjQd\""),
+                permissionId: decoded("\"cp_zc4Q7MP6XxulcVzj4MZdwsAB\"")
+            )
             XCTFail("deleteFineTuningCheckpointPermission did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -378,8 +380,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.groups.delete(
-            groupId: decoded("\"group-1\"")
-        )
+                groupId: decoded("\"group-1\"")
+            )
             XCTFail("deleteGroup did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -426,8 +428,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.invites.delete(
-            inviteId: decoded("\"invite-1\"")
-        )
+                inviteId: decoded("\"invite-1\"")
+            )
             XCTFail("deleteInvite did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -494,8 +496,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.models.delete(
-            model: decoded("\"ft:gpt-4o-mini:acemeco:suffix:abc123\"")
-        )
+                model: decoded("\"ft:gpt-4o-mini:acemeco:suffix:abc123\"")
+            )
             XCTFail("deleteModel did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -542,8 +544,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.spendAlerts.deleteOrganization(
-            alertId: decoded("\"alert-1\"")
-        )
+                alertId: decoded("\"alert-1\"")
+            )
             XCTFail("deleteOrganizationSpendAlert did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)

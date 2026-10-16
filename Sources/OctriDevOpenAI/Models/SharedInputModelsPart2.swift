@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedInput domain models
+/// SharedInput domain models
 /// Required object value serialized in the `input_audio` wire field.
 public struct InputAudioInputAudio: Codable {
     /// Base64-encoded audio data.
@@ -16,25 +16,35 @@ public struct InputAudioInputAudio: Codable {
         case format
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension InputAudioInputAudio {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.format) else {
-            throw SdkValidationError(field: "format", code: "required", message: "Validation failed for 'format': value is required")
-        }
-        self.data = try container.sdkDecodeRequired(.data)
-        self.format = try container.sdkDecodeRequired(.format)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension InputAudioInputAudio {
-    public init(data: String, format: InputAudioInputAudioFormat) {
+public extension InputAudioInputAudio {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.format) else {
+            throw SdkValidationError(
+                field: "format",
+                code: "required",
+                message: "Validation failed for 'format': value is required"
+            )
+        }
+        data = try container.sdkDecodeRequired(.data)
+        format = try container.sdkDecodeRequired(.format)
+    }
+}
+
+public extension InputAudioInputAudio {
+    init(data: String, format: InputAudioInputAudioFormat) {
         (self.data, self.format) = (data, format)
     }
 }
@@ -45,13 +55,16 @@ extension InputAudioInputAudio {
 public struct InputFidelity: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let high = InputFidelity(rawValue: "high")
     public static let low = InputFidelity(rawValue: "low")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -100,13 +113,16 @@ public enum InputTextContentParamType: String, CaseIterable, Codable {
 public struct InputAudioInputAudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let mp3 = InputAudioInputAudioFormat(rawValue: "mp3")
     public static let wav = InputAudioInputAudioFormat(rawValue: "wav")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -174,14 +190,17 @@ public enum InputAudioType: String, CaseIterable, Codable {
 public struct InputMessageStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = InputMessageStatus(rawValue: "in_progress")
     public static let completed = InputMessageStatus(rawValue: "completed")
     public static let incomplete = InputMessageStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -194,14 +213,17 @@ public struct InputMessageStatus: RawRepresentable, Hashable, Codable, Sendable,
 public struct InputMessageRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = InputMessageRole(rawValue: "user")
     public static let system = InputMessageRole(rawValue: "system")
     public static let developer = InputMessageRole(rawValue: "developer")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

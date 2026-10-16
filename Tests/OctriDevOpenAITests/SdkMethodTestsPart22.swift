@@ -38,10 +38,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.roles.list(
-            limit: decoded("1000"),
-            after: decoded("\"after\""),
-            order: decoded("\"asc\"")
-        )
+                limit: decoded("1000"),
+                after: decoded("\"after\""),
+                order: decoded("\"asc\"")
+            )
             XCTFail("listRoles did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -91,11 +91,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.roles.listProjectRoles(
-            projectId: decoded("\"project-1\""),
-            limit: decoded("1000"),
-            after: decoded("\"after\""),
-            order: decoded("\"asc\"")
-        )
+                projectId: decoded("\"project-1\""),
+                limit: decoded("1000"),
+                after: decoded("\"after\""),
+                order: decoded("\"asc\"")
+            )
             XCTFail("listRolesProjectRoles did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -192,10 +192,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.list(
-            limit: decoded("0"),
-            order: decoded("\"asc\""),
-            after: decoded("\"after\"")
-        )
+                limit: decoded("0"),
+                order: decoded("\"asc\""),
+                after: decoded("\"after\"")
+            )
             XCTFail("listSkills did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -245,11 +245,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.listVersions(
-            skillId: decoded("\"skill_123\""),
-            limit: decoded("0"),
-            order: decoded("\"asc\""),
-            after: decoded("\"skillver_123\"")
-        )
+                skillId: decoded("\"skill_123\""),
+                limit: decoded("0"),
+                order: decoded("\"asc\""),
+                after: decoded("\"skillver_123\"")
+            )
             XCTFail("listSkillVersions did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -299,11 +299,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.userOrganizationRoleAssignments.listUserRoleAssignments(
-            userId: decoded("\"user-1\""),
-            limit: decoded("0"),
-            after: decoded("\"after\""),
-            order: decoded("\"asc\"")
-        )
+                userId: decoded("\"user-1\""),
+                limit: decoded("0"),
+                after: decoded("\"after\""),
+                order: decoded("\"asc\"")
+            )
             XCTFail("listUserRoleAssignments did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -352,10 +352,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.users.list(
-            limit: decoded("20"),
-            after: decoded("\"after\""),
-            emails: decoded("[\"user@example.com\"]")
-        )
+                limit: decoded("20"),
+                after: decoded("\"after\""),
+                emails: decoded("[\"user@example.com\"]")
+            )
             XCTFail("listUsers did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -407,13 +407,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vaults.listCredentials(
-            vaultId: decoded("\"vault-1\""),
-            limit: decoded("20"),
-            order: decoded("\"desc\""),
-            after: decoded("\"after\""),
-            metadata: decoded("{\"key\":\"key\"}"),
-            status: decoded("\"active\"")
-        )
+                vaultId: decoded("\"vault-1\""),
+                limit: decoded("20"),
+                order: decoded("\"desc\""),
+                after: decoded("\"after\""),
+                metadata: decoded("{\"key\":\"key\"}"),
+                status: decoded("\"active\"")
+            )
             XCTFail("listVaultCredentials did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -464,12 +464,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vaults.list(
-            limit: decoded("20"),
-            order: decoded("\"desc\""),
-            after: decoded("\"after\""),
-            metadata: decoded("{\"key\":\"key\"}"),
-            status: decoded("\"active\"")
-        )
+                limit: decoded("20"),
+                order: decoded("\"desc\""),
+                after: decoded("\"after\""),
+                metadata: decoded("{\"key\":\"key\"}"),
+                status: decoded("\"active\"")
+            )
             XCTFail("listVaults did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -521,13 +521,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.listFiles(
-            vectorStoreId: decoded("\"vector_store-1\""),
-            limit: decoded("20"),
-            order: decoded("\"desc\""),
-            after: decoded("\"after\""),
-            before: decoded("\"before\""),
-            filter: decoded("\"in_progress\"")
-        )
+                vectorStoreId: decoded("\"vector_store-1\""),
+                limit: decoded("20"),
+                order: decoded("\"desc\""),
+                after: decoded("\"after\""),
+                before: decoded("\"before\""),
+                filter: decoded("\"in_progress\"")
+            )
             XCTFail("listVectorStoreFiles did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

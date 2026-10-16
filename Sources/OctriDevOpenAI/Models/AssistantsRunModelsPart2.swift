@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AssistantsRun domain models
+/// AssistantsRun domain models
 /// Represents an execution run on a thread.
 public struct RunObject: Codable {
     /// The identifier, which can be referenced in API endpoints.
@@ -96,51 +96,97 @@ public struct RunObject: Codable {
         case topP = "top_p"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RunObject {
-    public init(from decoder: Decoder) throws {
+public extension RunObject {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.threadId = try container.sdkDecodeRequired(.threadId)
-        self.assistantId = try container.sdkDecodeRequired(.assistantId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.requiredAction = try container.sdkDecodeNullable(.requiredAction)
-        self.lastError = try container.sdkDecodeNullable(.lastError)
-        self.expiresAt = try container.sdkDecodeNullable(.expiresAt)
-        self.startedAt = try container.sdkDecodeNullable(.startedAt)
-        self.cancelledAt = try container.sdkDecodeNullable(.cancelledAt)
-        self.failedAt = try container.sdkDecodeNullable(.failedAt)
-        self.completedAt = try container.sdkDecodeNullable(.completedAt)
-        self.incompleteDetails = try container.sdkDecodeNullable(.incompleteDetails)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.instructions = try container.sdkDecodeRequired(.instructions)
-        self.tools = try container.sdkDecodeRequired(.tools)
-        self.metadata = try container.sdkDecodeNullable(.metadata)
-        self.usage = try container.sdkDecodeNullable(.usage)
-        self.maxPromptTokens = try container.sdkDecodeNullable(.maxPromptTokens)
-        self.maxCompletionTokens = try container.sdkDecodeNullable(.maxCompletionTokens)
-        self.truncationStrategy = try container.sdkDecodeNullable(.truncationStrategy)
-        self.toolChoice = try container.sdkDecodeNullable(.toolChoice)
-        self.parallelToolCalls = try container.sdkDecodeRequired(.parallelToolCalls)
-        self.responseFormat = try container.sdkDecodeNullable(.responseFormat)
-        self.temperature = try container.sdkDecodeIfPresent(.temperature)
-        self.topP = try container.sdkDecodeIfPresent(.topP)
-            try validateItems("tools", self.tools, min: nil, max: 20)
-        if let value = self.maxPromptTokens {
-            try validateRange("max_prompt_tokens", Double(value), min: 256, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        threadId = try container.sdkDecodeRequired(.threadId)
+        assistantId = try container.sdkDecodeRequired(.assistantId)
+        status = try container.sdkDecodeRequired(.status)
+        requiredAction = try container.sdkDecodeNullable(.requiredAction)
+        lastError = try container.sdkDecodeNullable(.lastError)
+        expiresAt = try container.sdkDecodeNullable(.expiresAt)
+        startedAt = try container.sdkDecodeNullable(.startedAt)
+        cancelledAt = try container.sdkDecodeNullable(.cancelledAt)
+        failedAt = try container.sdkDecodeNullable(.failedAt)
+        completedAt = try container.sdkDecodeNullable(.completedAt)
+        incompleteDetails = try container.sdkDecodeNullable(.incompleteDetails)
+        model = try container.sdkDecodeRequired(.model)
+        instructions = try container.sdkDecodeRequired(.instructions)
+        tools = try container.sdkDecodeRequired(.tools)
+        metadata = try container.sdkDecodeNullable(.metadata)
+        usage = try container.sdkDecodeNullable(.usage)
+        maxPromptTokens = try container.sdkDecodeNullable(.maxPromptTokens)
+        maxCompletionTokens = try container.sdkDecodeNullable(.maxCompletionTokens)
+        truncationStrategy = try container.sdkDecodeNullable(.truncationStrategy)
+        toolChoice = try container.sdkDecodeNullable(.toolChoice)
+        parallelToolCalls = try container.sdkDecodeRequired(.parallelToolCalls)
+        responseFormat = try container.sdkDecodeNullable(.responseFormat)
+        temperature = try container.sdkDecodeIfPresent(.temperature)
+        topP = try container.sdkDecodeIfPresent(.topP)
+        try validateItems("tools", tools, min: nil, max: 20)
+        if let value = maxPromptTokens {
+            try validateRange(
+                "max_prompt_tokens",
+                Double(value),
+                min: 256,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.maxCompletionTokens {
-            try validateRange("max_completion_tokens", Double(value), min: 256, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = maxCompletionTokens {
+            try validateRange(
+                "max_completion_tokens",
+                Double(value),
+                min: 256,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension RunObject {
-    public init(id: String, object: RunObjectObject, createdAt: Int, threadId: String, assistantId: String, status: RunObjectStatus, requiredAction: RunObjectRequiredAction?, lastError: RunObjectLastError?, expiresAt: Int?, startedAt: Int?, cancelledAt: Int?, failedAt: Int?, completedAt: Int?, incompleteDetails: RunObjectIncompleteDetails?, model: String, instructions: String, tools: [RunObjectToolsItem], metadata: Metadata?, usage: RunCompletionUsage?, maxPromptTokens: Int?, maxCompletionTokens: Int?, truncationStrategy: TruncationObject?, toolChoice: AssistantsApiToolChoiceOption?, parallelToolCalls: ParallelToolCalls, responseFormat: AssistantsApiResponseFormatOption?, temperature: Double? = nil, topP: Double? = nil) throws {
+public extension RunObject {
+    init(
+        id: String,
+        object: RunObjectObject,
+        createdAt: Int,
+        threadId: String,
+        assistantId: String,
+        status: RunObjectStatus,
+        requiredAction: RunObjectRequiredAction?,
+        lastError: RunObjectLastError?,
+        expiresAt: Int?,
+        startedAt: Int?,
+        cancelledAt: Int?,
+        failedAt: Int?,
+        completedAt: Int?,
+        incompleteDetails: RunObjectIncompleteDetails?,
+        model: String,
+        instructions: String,
+        tools: [RunObjectToolsItem],
+        metadata: Metadata?,
+        usage: RunCompletionUsage?,
+        maxPromptTokens: Int?,
+        maxCompletionTokens: Int?,
+        truncationStrategy: TruncationObject?,
+        toolChoice: AssistantsApiToolChoiceOption?,
+        parallelToolCalls: ParallelToolCalls,
+        responseFormat: AssistantsApiResponseFormatOption?,
+        temperature: Double? = nil,
+        topP: Double? = nil
+    ) throws {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.threadId) = (createdAt, threadId)
         (self.assistantId, self.status) = (assistantId, status)
@@ -155,12 +201,28 @@ extension RunObject {
         (self.toolChoice, self.parallelToolCalls) = (toolChoice, parallelToolCalls)
         (self.responseFormat, self.temperature) = (responseFormat, temperature)
         self.topP = topP
-            try validateItems("tools", self.tools, min: nil, max: 20)
+        try validateItems("tools", self.tools, min: nil, max: 20)
         if let value = self.maxPromptTokens {
-            try validateRange("max_prompt_tokens", Double(value), min: 256, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "max_prompt_tokens",
+                Double(value),
+                min: 256,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.maxCompletionTokens {
-            try validateRange("max_completion_tokens", Double(value), min: 256, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "max_completion_tokens",
+                Double(value),
+                min: 256,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -177,25 +239,35 @@ public struct RunStepObjectLastError: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunStepObjectLastError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        self.code = try container.sdkDecodeRequired(.code)
-        self.message = try container.sdkDecodeRequired(.message)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunStepObjectLastError {
-    public init(code: RunStepObjectLastErrorCode, message: String) {
+public extension RunStepObjectLastError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        code = try container.sdkDecodeRequired(.code)
+        message = try container.sdkDecodeRequired(.message)
+    }
+}
+
+public extension RunStepObjectLastError {
+    init(code: RunStepObjectLastErrorCode, message: String) {
         (self.code, self.message) = (code, message)
     }
 }
@@ -215,30 +287,52 @@ public struct RunStepDeltaStepDetailsToolCallsCodeOutputImageObject: Codable {
         case image
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunStepDeltaStepDetailsToolCallsCodeOutputImageObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.index) else {
-            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.index = try container.sdkDecodeRequired(.index)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.image = try container.sdkDecodeIfPresent(.image)
-            try sdkValidateRawEnum("type", self.type, RunStepDeltaStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunStepDeltaStepDetailsToolCallsCodeOutputImageObject {
-    public init(index: Int, type: RunStepDeltaStepDetailsToolCallsCodeOutputImageObjectType, image: RunStepDeltaStepDetailsToolCallsCodeOutputImageObjectImage? = nil) throws {
+public extension RunStepDeltaStepDetailsToolCallsCodeOutputImageObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.index) else {
+            throw SdkValidationError(
+                field: "index",
+                code: "required",
+                message: "Validation failed for 'index': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        index = try container.sdkDecodeRequired(.index)
+        type = try container.sdkDecodeRequired(.type)
+        image = try container.sdkDecodeIfPresent(.image)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            RunStepDeltaStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension RunStepDeltaStepDetailsToolCallsCodeOutputImageObject {
+    init(
+        index: Int,
+        type: RunStepDeltaStepDetailsToolCallsCodeOutputImageObjectType,
+        image: RunStepDeltaStepDetailsToolCallsCodeOutputImageObjectImage? = nil
+    ) throws {
         (self.index, self.type) = (index, type)
         self.image = image
-            try sdkValidateRawEnum("type", self.type, RunStepDeltaStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RunStepDeltaStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -257,30 +351,48 @@ public struct RunStepDeltaStepDetailsToolCallsCodeOutputLogsObject: Codable {
         case logs
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunStepDeltaStepDetailsToolCallsCodeOutputLogsObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.index) else {
-            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.index = try container.sdkDecodeRequired(.index)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.logs = try container.sdkDecodeIfPresent(.logs)
-            try sdkValidateRawEnum("type", self.type, RunStepDeltaStepDetailsToolCallsCodeOutputLogsObjectType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunStepDeltaStepDetailsToolCallsCodeOutputLogsObject {
-    public init(index: Int, type: RunStepDeltaStepDetailsToolCallsCodeOutputLogsObjectType, logs: String? = nil) throws {
+public extension RunStepDeltaStepDetailsToolCallsCodeOutputLogsObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.index) else {
+            throw SdkValidationError(
+                field: "index",
+                code: "required",
+                message: "Validation failed for 'index': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        index = try container.sdkDecodeRequired(.index)
+        type = try container.sdkDecodeRequired(.type)
+        logs = try container.sdkDecodeIfPresent(.logs)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            RunStepDeltaStepDetailsToolCallsCodeOutputLogsObjectType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension RunStepDeltaStepDetailsToolCallsCodeOutputLogsObject {
+    init(index: Int, type: RunStepDeltaStepDetailsToolCallsCodeOutputLogsObjectType, logs: String? = nil) throws {
         (self.index, self.type) = (index, type)
         self.logs = logs
-            try sdkValidateRawEnum("type", self.type, RunStepDeltaStepDetailsToolCallsCodeOutputLogsObjectType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RunStepDeltaStepDetailsToolCallsCodeOutputLogsObjectType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -295,28 +407,38 @@ public struct RunStreamEventVariant9: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunStreamEventVariant9 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.event) else {
-            throw SdkValidationError(field: "event", code: "required", message: "Validation failed for 'event': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        self.event = try container.sdkDecodeRequired(.event)
-        self.data = try container.sdkDecodeRequired(.data)
-            try sdkValidateRawEnum("event", self.event, RunStreamEventVariant9Event.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunStreamEventVariant9 {
-    public init(event: RunStreamEventVariant9Event, data: RunObject) throws {
+public extension RunStreamEventVariant9 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.event) else {
+            throw SdkValidationError(
+                field: "event",
+                code: "required",
+                message: "Validation failed for 'event': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        event = try container.sdkDecodeRequired(.event)
+        data = try container.sdkDecodeRequired(.data)
+        try sdkValidateRawEnum("event", event, RunStreamEventVariant9Event.allCases.map(\.rawValue))
+    }
+}
+
+public extension RunStreamEventVariant9 {
+    init(event: RunStreamEventVariant9Event, data: RunObject) throws {
         (self.event, self.data) = (event, data)
-            try sdkValidateRawEnum("event", self.event, RunStreamEventVariant9Event.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("event", self.event, RunStreamEventVariant9Event.allCases.map(\.rawValue))
     }
 }
 
@@ -335,29 +457,43 @@ public struct RunStepDetailsToolCallsFunctionObjectFunction: Codable {
         case output
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunStepDetailsToolCallsFunctionObjectFunction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.arguments) else {
-            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.arguments = try container.sdkDecodeRequired(.arguments)
-        self.output = try container.sdkDecodeNullable(.output)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunStepDetailsToolCallsFunctionObjectFunction {
-    public init(name: String, arguments: String, output: String?) {
+public extension RunStepDetailsToolCallsFunctionObjectFunction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.arguments) else {
+            throw SdkValidationError(
+                field: "arguments",
+                code: "required",
+                message: "Validation failed for 'arguments': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        arguments = try container.sdkDecodeRequired(.arguments)
+        output = try container.sdkDecodeNullable(.output)
+    }
+}
+
+public extension RunStepDetailsToolCallsFunctionObjectFunction {
+    init(name: String, arguments: String, output: String?) {
         (self.name, self.arguments) = (name, arguments)
         self.output = output
     }
@@ -374,28 +510,38 @@ public struct RunStreamEventVariant1: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunStreamEventVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.event) else {
-            throw SdkValidationError(field: "event", code: "required", message: "Validation failed for 'event': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        self.event = try container.sdkDecodeRequired(.event)
-        self.data = try container.sdkDecodeRequired(.data)
-            try sdkValidateRawEnum("event", self.event, RunStreamEventVariant1Event.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunStreamEventVariant1 {
-    public init(event: RunStreamEventVariant1Event, data: RunObject) throws {
+public extension RunStreamEventVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.event) else {
+            throw SdkValidationError(
+                field: "event",
+                code: "required",
+                message: "Validation failed for 'event': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        event = try container.sdkDecodeRequired(.event)
+        data = try container.sdkDecodeRequired(.data)
+        try sdkValidateRawEnum("event", event, RunStreamEventVariant1Event.allCases.map(\.rawValue))
+    }
+}
+
+public extension RunStreamEventVariant1 {
+    init(event: RunStreamEventVariant1Event, data: RunObject) throws {
         (self.event, self.data) = (event, data)
-            try sdkValidateRawEnum("event", self.event, RunStreamEventVariant1Event.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("event", self.event, RunStreamEventVariant1Event.allCases.map(\.rawValue))
     }
 }
 
@@ -411,28 +557,45 @@ public struct RunStepDetailsToolCallsCodeOutputImageObject: Codable {
         case image
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunStepDetailsToolCallsCodeOutputImageObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.image) else {
-            throw SdkValidationError(field: "image", code: "required", message: "Validation failed for 'image': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.image = try container.sdkDecodeRequired(.image)
-            try sdkValidateRawEnum("type", self.type, RunStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunStepDetailsToolCallsCodeOutputImageObject {
-    public init(type: RunStepDetailsToolCallsCodeOutputImageObjectType, image: RunStepDetailsToolCallsCodeOutputImageObjectImage) throws {
+public extension RunStepDetailsToolCallsCodeOutputImageObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.image) else {
+            throw SdkValidationError(
+                field: "image",
+                code: "required",
+                message: "Validation failed for 'image': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        image = try container.sdkDecodeRequired(.image)
+        try sdkValidateRawEnum("type", type, RunStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RunStepDetailsToolCallsCodeOutputImageObject {
+    init(
+        type: RunStepDetailsToolCallsCodeOutputImageObjectType,
+        image: RunStepDetailsToolCallsCodeOutputImageObjectImage
+    ) throws {
         (self.type, self.image) = (type, image)
-            try sdkValidateRawEnum("type", self.type, RunStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RunStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -448,5 +611,7 @@ public struct RunStepDeltaStepDetailsMessageCreationObject: Codable {
         case messageCreation = "message_creation"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

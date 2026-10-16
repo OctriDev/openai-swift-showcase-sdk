@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsBrowser domain models
+/// AgentsBrowser domain models
 public indirect enum BrowserAuthenticationHistoryRequestKindResource {
     case browserAuthenticationHistoryRequestKindResourceBrowserAuthentication(
         BrowserAuthenticationHistoryRequestKindResourceBrowserAuthentication
@@ -13,7 +13,6 @@ public indirect enum BrowserAuthenticationHistoryRequestKindResource {
 }
 
 extension BrowserAuthenticationHistoryRequestKindResource: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension BrowserAuthenticationHistoryRequestKindResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -38,10 +41,10 @@ extension BrowserAuthenticationHistoryRequestKindResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "browser_authentication":
-        return .browserAuthenticationHistoryRequestKindResourceBrowserAuthentication(
-            try BrowserAuthenticationHistoryRequestKindResourceBrowserAuthentication(from: decoder)
-        )
-        default: return nil
+            try .browserAuthenticationHistoryRequestKindResourceBrowserAuthentication(
+                BrowserAuthenticationHistoryRequestKindResourceBrowserAuthentication(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -50,7 +53,8 @@ extension BrowserAuthenticationHistoryRequestKindResource {
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .browserAuthenticationHistoryRequestKindResourceBrowserAuthentication(value): try container.encode(value); return true
+        case let .browserAuthenticationHistoryRequestKindResourceBrowserAuthentication(value): try container
+            .encode(value); return true
         default: return false
         }
     }
@@ -77,58 +81,94 @@ public struct BrowserAuthenticationHistoryRequestKindResourceBrowserAuthenticati
         case options
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BrowserAuthenticationHistoryRequestKindResourceBrowserAuthentication {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.reason) else {
-            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
-        }
-        guard container.contains(.credentialOrigin) else {
-            throw SdkValidationError(field: "credential_origin", code: "required", message: "Validation failed for 'credential_origin': value is required")
-        }
-        guard container.contains(.fields) else {
-            throw SdkValidationError(field: "fields", code: "required", message: "Validation failed for 'fields': value is required")
-        }
-        guard container.contains(.options) else {
-            throw SdkValidationError(field: "options", code: "required", message: "Validation failed for 'options': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.reason = try container.sdkDecodeNullable(.reason)
-        self.credentialOrigin = try container.sdkDecodeNullable(.credentialOrigin)
-        self.fields = try container.sdkDecodeRequired(.fields)
-        self.options = try container.sdkDecodeRequired(.options)
-            try sdkValidateRawEnum("type", self.type, BrowserAuthenticationHistoryRequestKindResourceBrowserAuthenticationType.allCases.map(\.rawValue))
-        if let value = self.reason {
-            try validateLength("reason", value, min: 0, max: nil)
-        }
-        if let value = self.credentialOrigin {
-            try validateLength("credential_origin", value, min: 0, max: nil)
-        }
-            try validateItems("fields", self.fields, min: 0, max: 2000)
-            try validateItems("options", self.options, min: 0, max: 2000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BrowserAuthenticationHistoryRequestKindResourceBrowserAuthentication {
-    public init(type: BrowserAuthenticationHistoryRequestKindResourceBrowserAuthenticationType, reason: String?, credentialOrigin: String?, fields: [BrowserAuthenticationFieldResource], options: [BrowserAuthenticationOptionResource]) throws {
+public extension BrowserAuthenticationHistoryRequestKindResourceBrowserAuthentication {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.reason) else {
+            throw SdkValidationError(
+                field: "reason",
+                code: "required",
+                message: "Validation failed for 'reason': value is required"
+            )
+        }
+        guard container.contains(.credentialOrigin) else {
+            throw SdkValidationError(
+                field: "credential_origin",
+                code: "required",
+                message: "Validation failed for 'credential_origin': value is required"
+            )
+        }
+        guard container.contains(.fields) else {
+            throw SdkValidationError(
+                field: "fields",
+                code: "required",
+                message: "Validation failed for 'fields': value is required"
+            )
+        }
+        guard container.contains(.options) else {
+            throw SdkValidationError(
+                field: "options",
+                code: "required",
+                message: "Validation failed for 'options': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        reason = try container.sdkDecodeNullable(.reason)
+        credentialOrigin = try container.sdkDecodeNullable(.credentialOrigin)
+        fields = try container.sdkDecodeRequired(.fields)
+        options = try container.sdkDecodeRequired(.options)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            BrowserAuthenticationHistoryRequestKindResourceBrowserAuthenticationType.allCases.map(\.rawValue)
+        )
+        if let value = reason {
+            try validateLength("reason", value, min: 0, max: nil)
+        }
+        if let value = credentialOrigin {
+            try validateLength("credential_origin", value, min: 0, max: nil)
+        }
+        try validateItems("fields", fields, min: 0, max: 2000)
+        try validateItems("options", options, min: 0, max: 2000)
+    }
+}
+
+public extension BrowserAuthenticationHistoryRequestKindResourceBrowserAuthentication {
+    init(
+        type: BrowserAuthenticationHistoryRequestKindResourceBrowserAuthenticationType,
+        reason: String?,
+        credentialOrigin: String?,
+        fields: [BrowserAuthenticationFieldResource],
+        options: [BrowserAuthenticationOptionResource]
+    ) throws {
         (self.type, self.reason) = (type, reason)
         (self.credentialOrigin, self.fields) = (credentialOrigin, fields)
         self.options = options
-            try sdkValidateRawEnum("type", self.type, BrowserAuthenticationHistoryRequestKindResourceBrowserAuthenticationType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            BrowserAuthenticationHistoryRequestKindResourceBrowserAuthenticationType.allCases.map(\.rawValue)
+        )
         if let value = self.reason {
             try validateLength("reason", value, min: 0, max: nil)
         }
         if let value = self.credentialOrigin {
             try validateLength("credential_origin", value, min: 0, max: nil)
         }
-            try validateItems("fields", self.fields, min: 0, max: 2000)
-            try validateItems("options", self.options, min: 0, max: 2000)
+        try validateItems("fields", self.fields, min: 0, max: 2000)
+        try validateItems("options", self.options, min: 0, max: 2000)
     }
 }
 
@@ -150,41 +190,59 @@ public struct BrowserAuthenticationFieldResource: Codable {
         case required
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BrowserAuthenticationFieldResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.label) else {
-            throw SdkValidationError(field: "label", code: "required", message: "Validation failed for 'label': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.required) else {
-            throw SdkValidationError(field: "required", code: "required", message: "Validation failed for 'required': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.label = try container.sdkDecodeRequired(.label)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.required = try container.sdkDecodeRequired(.required)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("label", self.label, min: 0, max: nil)
-            try validateLength("type", self.type, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BrowserAuthenticationFieldResource {
-    public init(id: String, label: String, type: String, required: Bool) throws {
+public extension BrowserAuthenticationFieldResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.label) else {
+            throw SdkValidationError(
+                field: "label",
+                code: "required",
+                message: "Validation failed for 'label': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.required) else {
+            throw SdkValidationError(
+                field: "required",
+                code: "required",
+                message: "Validation failed for 'required': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        label = try container.sdkDecodeRequired(.label)
+        type = try container.sdkDecodeRequired(.type)
+        required = try container.sdkDecodeRequired(.required)
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("label", label, min: 0, max: nil)
+        try validateLength("type", type, min: 0, max: nil)
+    }
+}
+
+public extension BrowserAuthenticationFieldResource {
+    init(id: String, label: String, type: String, required: Bool) throws {
         (self.id, self.label) = (id, label)
         (self.type, self.required) = (type, required)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("label", self.label, min: 0, max: nil)
-            try validateLength("type", self.type, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("label", self.label, min: 0, max: nil)
+        try validateLength("type", self.type, min: 0, max: nil)
     }
 }
 
@@ -203,37 +261,51 @@ public struct BrowserAuthenticationOptionResource: Codable {
         case fieldIds = "field_ids"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BrowserAuthenticationOptionResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.label) else {
-            throw SdkValidationError(field: "label", code: "required", message: "Validation failed for 'label': value is required")
-        }
-        guard container.contains(.fieldIds) else {
-            throw SdkValidationError(field: "field_ids", code: "required", message: "Validation failed for 'field_ids': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.label = try container.sdkDecodeRequired(.label)
-        self.fieldIds = try container.sdkDecodeRequired(.fieldIds)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("label", self.label, min: 0, max: nil)
-            try validateItems("field_ids", self.fieldIds, min: 0, max: 2000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BrowserAuthenticationOptionResource {
-    public init(id: String, label: String, fieldIds: [String]) throws {
+public extension BrowserAuthenticationOptionResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.label) else {
+            throw SdkValidationError(
+                field: "label",
+                code: "required",
+                message: "Validation failed for 'label': value is required"
+            )
+        }
+        guard container.contains(.fieldIds) else {
+            throw SdkValidationError(
+                field: "field_ids",
+                code: "required",
+                message: "Validation failed for 'field_ids': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        label = try container.sdkDecodeRequired(.label)
+        fieldIds = try container.sdkDecodeRequired(.fieldIds)
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("label", label, min: 0, max: nil)
+        try validateItems("field_ids", fieldIds, min: 0, max: 2000)
+    }
+}
+
+public extension BrowserAuthenticationOptionResource {
+    init(id: String, label: String, fieldIds: [String]) throws {
         (self.id, self.label) = (id, label)
         self.fieldIds = fieldIds
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("label", self.label, min: 0, max: nil)
-            try validateItems("field_ids", self.fieldIds, min: 0, max: 2000)
+        try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("label", self.label, min: 0, max: nil)
+        try validateItems("field_ids", self.fieldIds, min: 0, max: 2000)
     }
 }
 
@@ -258,48 +330,76 @@ public struct BrowserAuthenticationRequestItemResource: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BrowserAuthenticationRequestItemResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.turnId) else {
-            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
-        }
-        guard container.contains(.requestId) else {
-            throw SdkValidationError(field: "request_id", code: "required", message: "Validation failed for 'request_id': value is required")
-        }
-        guard container.contains(.request) else {
-            throw SdkValidationError(field: "request", code: "required", message: "Validation failed for 'request': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.turnId = try container.sdkDecodeRequired(.turnId)
-        self.requestId = try container.sdkDecodeRequired(.requestId)
-        self.request = try container.sdkDecodeRequired(.request)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-            try validateLength("turn_id", self.turnId, min: 0, max: nil)
-            try validateLength("request_id", self.requestId, min: 0, max: nil)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try sdkValidateRawEnum("type", self.type, BrowserAuthenticationRequestItemResourceType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BrowserAuthenticationRequestItemResource {
-    public init(turnId: String, requestId: String, request: BrowserAuthenticationHistoryRequestKindResource, id: String, type: BrowserAuthenticationRequestItemResourceType) throws {
+public extension BrowserAuthenticationRequestItemResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.turnId) else {
+            throw SdkValidationError(
+                field: "turn_id",
+                code: "required",
+                message: "Validation failed for 'turn_id': value is required"
+            )
+        }
+        guard container.contains(.requestId) else {
+            throw SdkValidationError(
+                field: "request_id",
+                code: "required",
+                message: "Validation failed for 'request_id': value is required"
+            )
+        }
+        guard container.contains(.request) else {
+            throw SdkValidationError(
+                field: "request",
+                code: "required",
+                message: "Validation failed for 'request': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        turnId = try container.sdkDecodeRequired(.turnId)
+        requestId = try container.sdkDecodeRequired(.requestId)
+        request = try container.sdkDecodeRequired(.request)
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        try validateLength("turn_id", turnId, min: 0, max: nil)
+        try validateLength("request_id", requestId, min: 0, max: nil)
+        try validateLength("id", id, min: 0, max: nil)
+        try sdkValidateRawEnum("type", type, BrowserAuthenticationRequestItemResourceType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BrowserAuthenticationRequestItemResource {
+    init(
+        turnId: String,
+        requestId: String,
+        request: BrowserAuthenticationHistoryRequestKindResource,
+        id: String,
+        type: BrowserAuthenticationRequestItemResourceType
+    ) throws {
         (self.turnId, self.requestId) = (turnId, requestId)
         (self.request, self.id) = (request, id)
         self.type = type
-            try validateLength("turn_id", self.turnId, min: 0, max: nil)
-            try validateLength("request_id", self.requestId, min: 0, max: nil)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try sdkValidateRawEnum("type", self.type, BrowserAuthenticationRequestItemResourceType.allCases.map(\.rawValue))
+        try validateLength("turn_id", self.turnId, min: 0, max: nil)
+        try validateLength("request_id", self.requestId, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, BrowserAuthenticationRequestItemResourceType.allCases.map(\.rawValue))
     }
 }
 
@@ -315,30 +415,40 @@ public struct BrowserAuthenticationFieldValueParam: Codable {
         case value
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BrowserAuthenticationFieldValueParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.fieldId) else {
-            throw SdkValidationError(field: "field_id", code: "required", message: "Validation failed for 'field_id': value is required")
-        }
-        guard container.contains(.value) else {
-            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
-        }
-        self.fieldId = try container.sdkDecodeRequired(.fieldId)
-        self.value = try container.sdkDecodeRequired(.value)
-            try validateLength("field_id", self.fieldId, min: 0, max: 1048576)
-            try validateLength("value", self.value, min: 0, max: 16384)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BrowserAuthenticationFieldValueParam {
-    public init(fieldId: String, value: String) throws {
+public extension BrowserAuthenticationFieldValueParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.fieldId) else {
+            throw SdkValidationError(
+                field: "field_id",
+                code: "required",
+                message: "Validation failed for 'field_id': value is required"
+            )
+        }
+        guard container.contains(.value) else {
+            throw SdkValidationError(
+                field: "value",
+                code: "required",
+                message: "Validation failed for 'value': value is required"
+            )
+        }
+        fieldId = try container.sdkDecodeRequired(.fieldId)
+        value = try container.sdkDecodeRequired(.value)
+        try validateLength("field_id", fieldId, min: 0, max: 1_048_576)
+        try validateLength("value", value, min: 0, max: 16384)
+    }
+}
+
+public extension BrowserAuthenticationFieldValueParam {
+    init(fieldId: String, value: String) throws {
         (self.fieldId, self.value) = (fieldId, value)
-            try validateLength("field_id", self.fieldId, min: 0, max: 1048576)
-            try validateLength("value", self.value, min: 0, max: 16384)
+        try validateLength("field_id", self.fieldId, min: 0, max: 1_048_576)
+        try validateLength("value", self.value, min: 0, max: 16384)
     }
 }
 
@@ -346,14 +456,17 @@ extension BrowserAuthenticationFieldValueParam {
 public struct BrowserOriginAccessDecisionParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let approve = BrowserOriginAccessDecisionParam(rawValue: "approve")
     public static let deny = BrowserOriginAccessDecisionParam(rawValue: "deny")
     public static let cancel = BrowserOriginAccessDecisionParam(rawValue: "cancel")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

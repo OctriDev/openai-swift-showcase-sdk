@@ -17,10 +17,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.videos.list(
-            limit: decoded("0"),
-            order: decoded("\"asc\""),
-            after: decoded("\"after\"")
-        )
+                limit: decoded("0"),
+                order: decoded("\"asc\""),
+                after: decoded("\"after\"")
+            )
             XCTFail("listVideos did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -68,9 +68,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.audio.listVoiceConsents(
-            after: decoded("\"after\""),
-            limit: decoded("20")
-        )
+                after: decoded("\"after\""),
+                limit: decoded("20")
+            )
             XCTFail("listVoiceConsents did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -118,9 +118,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.webhookEndpoints.list(
-            limit: decoded("1"),
-            after: decoded("\"after\"")
-        )
+                limit: decoded("1"),
+                after: decoded("\"after\"")
+            )
             XCTFail("listWebhookEndpoints did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -243,9 +243,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.certificates.modify(
-            certificateId: decoded("\"certificate-1\""),
-            name: decoded("\"Example Name\"")
-        )
+                certificateId: decoded("\"certificate-1\""),
+                name: decoded("\"Example Name\"")
+            )
             XCTFail("modifyCertificate did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -316,11 +316,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.modify(
-            projectId: decoded("\"project-1\""),
-            name: decoded("\"Example Name\""),
-            externalKeyId: decoded("\"external_key-1\""),
-            geography: decoded("\"geography\"")
-        )
+                projectId: decoded("\"project-1\""),
+                name: decoded("\"Example Name\""),
+                externalKeyId: decoded("\"external_key-1\""),
+                geography: decoded("\"geography\"")
+            )
             XCTFail("modifyProject did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -369,10 +369,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.modifyUser(
-            projectId: decoded("\"project-1\""),
-            userId: decoded("\"user-1\""),
-            role: decoded("\"role\"")
-        )
+                projectId: decoded("\"project-1\""),
+                userId: decoded("\"user-1\""),
+                role: decoded("\"role\"")
+            )
             XCTFail("modifyProjectUser did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -465,12 +465,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.users.modify(
-            userId: decoded("\"user-1\""),
-            role: decoded("\"role\""),
-            roleId: decoded("\"role-1\""),
-            technicalLevel: decoded("\"technical_level\""),
-            developerPersona: decoded("\"developer_persona\"")
-        )
+                userId: decoded("\"user-1\""),
+                role: decoded("\"role\""),
+                roleId: decoded("\"role-1\""),
+                technicalLevel: decoded("\"technical_level\""),
+                developerPersona: decoded("\"developer_persona\"")
+            )
             XCTFail("modifyUser did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -520,11 +520,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.modify(
-            vectorStoreId: decoded("\"vector_store-1\""),
-            name: decoded("\"Example Name\""),
-            expiresAfter: decoded("{\"anchor\":\"last_active_at\",\"days\":1}"),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                vectorStoreId: decoded("\"vector_store-1\""),
+                name: decoded("\"Example Name\""),
+                expiresAfter: decoded("{\"anchor\":\"last_active_at\",\"days\":1}"),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("modifyVectorStore did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -571,8 +571,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.pauseJob(
-            fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\"")
-        )
+                fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\"")
+            )
             XCTFail("pauseFineTuningJob did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

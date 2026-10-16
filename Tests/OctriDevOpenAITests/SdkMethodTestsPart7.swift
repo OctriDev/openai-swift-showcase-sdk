@@ -17,9 +17,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.live.create(
-            session: decoded(sdkMethodFixture127Value1),
-            transport: decoded("{\"type\":\"webrtc\",\"sdp\":\"x\"}")
-        )
+                session: decoded(sdkMethodFixture127Value1),
+                transport: decoded("{\"type\":\"webrtc\",\"sdp\":\"x\"}")
+            )
             XCTFail("createLive did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -90,9 +90,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.moderations.create(
-            input: decoded("\"I want to kill them.\""),
-            model: decoded("\"omni-moderation-2024-09-26\"")
-        )
+                input: decoded("\"I want to kill them.\""),
+                model: decoded("\"omni-moderation-2024-09-26\"")
+            )
             XCTFail("createModeration did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -142,11 +142,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.spendAlerts.createOrganization(
-            thresholdAmount: decoded("0"),
-            currency: decoded("\"USD\""),
-            interval: decoded("\"month\""),
-            notificationChannel: decoded(sdkMethodFixture132Value1)
-        )
+                thresholdAmount: decoded("0"),
+                currency: decoded("\"USD\""),
+                interval: decoded("\"month\""),
+                notificationChannel: decoded(sdkMethodFixture132Value1)
+            )
             XCTFail("createOrganizationSpendAlert did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -196,11 +196,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.create(
-            name: decoded("\"Example Name\""),
-            geography: decoded("\"geography\""),
-            residency: decoded("\"GLOBAL\""),
-            externalKeyId: decoded("\"external_key-1\"")
-        )
+                name: decoded("\"Example Name\""),
+                geography: decoded("\"geography\""),
+                residency: decoded("\"GLOBAL\""),
+                externalKeyId: decoded("\"external_key-1\"")
+            )
             XCTFail("createProject did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -250,11 +250,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.createServiceAccount(
-            projectId: decoded("\"project-1\""),
-            name: decoded("\"Example Name\""),
-            createServiceAccountOnly: decoded("false"),
-            expiresInSeconds: decoded("1")
-        )
+                projectId: decoded("\"project-1\""),
+                name: decoded("\"Example Name\""),
+                createServiceAccountOnly: decoded("false"),
+                expiresInSeconds: decoded("1")
+            )
             XCTFail("createProjectServiceAccount did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -305,12 +305,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.spendAlerts.create(
-            projectId: decoded("\"project-1\""),
-            thresholdAmount: decoded("0"),
-            currency: decoded("\"USD\""),
-            interval: decoded("\"month\""),
-            notificationChannel: decoded(sdkMethodFixture138Value1)
-        )
+                projectId: decoded("\"project-1\""),
+                thresholdAmount: decoded("0"),
+                currency: decoded("\"USD\""),
+                interval: decoded("\"month\""),
+                notificationChannel: decoded(sdkMethodFixture138Value1)
+            )
             XCTFail("createProjectSpendAlert did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -327,7 +327,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testCreateProjectsServiceAccountApiKeyCreateProjectsServiceAccountApiKeyReachesMockAndDecodesResponse() async throws {
+    func testCreateProjectsServiceAccountApiKeyCreateProjectsServiceAccountApiKeyReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -350,7 +351,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testCreateProjectsServiceAccountApiKeyCreateProjectsServiceAccountApiKey400ReachesMockAndDecodesResponse() async throws {
+    func testCreateProjectsServiceAccountApiKeyCreateProjectsServiceAccountApiKey400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -361,12 +363,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.createServiceAccountApiKey(
-            projectId: decoded("\"project-1\""),
-            serviceAccountId: decoded("\"service_account-1\""),
-            name: decoded("\"Example Name\""),
-            scopes: decoded("[\"scopes\"]"),
-            expiresInSeconds: decoded("1")
-        )
+                projectId: decoded("\"project-1\""),
+                serviceAccountId: decoded("\"service_account-1\""),
+                name: decoded("\"Example Name\""),
+                scopes: decoded("[\"scopes\"]"),
+                expiresInSeconds: decoded("1")
+            )
             XCTFail("createProjectsServiceAccountApiKey did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -416,11 +418,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.createUser(
-            projectId: decoded("\"project-1\""),
-            role: decoded("\"role\""),
-            userId: decoded("\"user-1\""),
-            email: decoded("\"user@example.com\"")
-        )
+                projectId: decoded("\"project-1\""),
+                role: decoded("\"role\""),
+                userId: decoded("\"user-1\""),
+                email: decoded("\"user@example.com\"")
+            )
             XCTFail("createProjectUser did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -506,9 +508,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.realtime.createClientSecret(
-            expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":600}"),
-            session: decoded(sdkMethodFixture146Value1)
-        )
+                expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":600}"),
+                session: decoded(sdkMethodFixture146Value1)
+            )
             XCTFail("createRealtimeClientSecret did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -530,7 +532,8 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try RealtimeMethods.CreateRealtimeSessionOptions(clientSecret: decoded("{\"value\":\"value\",\"expires_at\":1}"))
+        var options = try RealtimeMethods
+            .CreateRealtimeSessionOptions(clientSecret: decoded("{\"value\":\"value\",\"expires_at\":1}"))
         options.modalities = try decoded("[\"text\"]")
         options.instructions = try decoded("\"instructions\"")
         options.voice = try decoded("\"ash\"")

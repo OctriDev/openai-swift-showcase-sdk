@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension RealtimeMethods {
+public extension RealtimeMethods {
     /// Decline an incoming SIP call by returning a SIP status code to the caller.
     ///
     /// - Parameters:
@@ -15,13 +15,33 @@ extension RealtimeMethods {
     ///   rces/webhooks#realtime.call.incoming) webhook.
     /// - statusCode: SIP response code to send back to the caller. Defaults to
     ///   `603` (Decline) when omitted.
-    public static func rejectRealtimeCall(config: ClientConfig, callId: String, statusCode: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func rejectRealtimeCall(
+        config: ClientConfig,
+        callId: String,
+        statusCode: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         let requestBody = RejectRealtimeCallRequestBody(statusCode: statusCode)
 
-        return try (await sdkRequest("POST", ["/realtime/calls/", sdkEncodePathSegment(sdkWireString(callId)), "/reject"].joined(), config: config, body: requestBody, decoder: .empty, operationId: "rejectRealtimeCall", options: requestOptions, errors: ["404": ErrorResponse.self, "409": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/realtime/calls/", sdkEncodePathSegment(sdkWireString(callId)), "/reject"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .empty,
+            operationId: "rejectRealtimeCall",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self, "409": ErrorResponse.self]
+        )).data
     }
 
-    /// Create a Realtime client secret with an associated session configuration. Client secrets are short-lived tokens that can be passed to a client app, such as a web frontend or mobile client, which grants access to the Realtime API without leaking your main API key. You can configure a custom TTL for each client secret. You can also attach session configuration options to the client secret, which will be applied to any sessions created using that client secret, but these can also be overridden by the client connection. [Learn more about authentication with client secrets over WebRTC](https://developers.openai.com/api/docs/guides/realtime-webrtc). Returns the created client secret and the effective session object. The client secret is a string that looks like `ek_1234`.
+    /// Create a Realtime client secret with an associated session configuration. Client secrets are short-lived tokens
+    /// that can be passed to a client app, such as a web frontend or mobile client, which grants access to the Realtime
+    /// API without leaking your main API key. You can configure a custom TTL for each client secret. You can also
+    /// attach session configuration options to the client secret, which will be applied to any sessions created using
+    /// that client secret, but these can also be overridden by the client connection. [Learn more about authentication
+    /// with client secrets over WebRTC](https://developers.openai.com/api/docs/guides/realtime-webrtc). Returns the
+    /// created client secret and the effective session object. The client secret is a string that looks like `ek_1234`.
     ///
     /// - Parameters:
     /// - expiresAfter: Configuration for the client secret expiration. Expiration
@@ -30,9 +50,23 @@ extension RealtimeMethods {
     ///   started. A secret can be used to create multiple sessions until it expires.
     /// - session: Session configuration to use for the client secret. Choose either
     ///   a realtime session or a transcription session.
-    public static func createRealtimeClientSecret(config: ClientConfig, expiresAfter: RealtimeCreateClientSecretRequestExpiresAfter? = nil, session: RealtimeCreateClientSecretRequestSession? = nil, requestOptions: RequestOptions? = nil) async throws -> RealtimeCreateClientSecretResponse {
+    static func createRealtimeClientSecret(
+        config: ClientConfig,
+        expiresAfter: RealtimeCreateClientSecretRequestExpiresAfter? = nil,
+        session: RealtimeCreateClientSecretRequestSession? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> RealtimeCreateClientSecretResponse {
         let requestBody = CreateRealtimeClientSecretRequestBody(expiresAfter: expiresAfter, session: session)
 
-        return try (await sdkRequest("POST", "/realtime/client_secrets", config: config, body: requestBody, decoder: .json, operationId: "createRealtimeClientSecret", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/realtime/client_secrets",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createRealtimeClientSecret",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self]
+        )).data
     }
 }

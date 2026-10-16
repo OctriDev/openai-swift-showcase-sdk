@@ -47,7 +47,10 @@ extension SdkMethodTests {
         }
         _ = client
         let stream = try await client.assistants.createThreadAndRunStream(
-            options: AssistantsMethods.CreateThreadAndRunStreamOptions(assistantId: decoded("\"assistant-1\""), stream: decoded("false"))
+            options: AssistantsMethods.CreateThreadAndRunStreamOptions(
+                assistantId: decoded("\"assistant-1\""),
+                stream: decoded("false")
+            )
         )
         var events = stream.makeAsyncIterator()
         guard let actual = try await events.next() else {
@@ -70,7 +73,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try AudioMethods.CreateTranscriptionOptions(file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"), model: decoded("\"gpt-4o-transcribe\""))
+        var options = try AudioMethods.CreateTranscriptionOptions(
+            file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+            model: decoded("\"gpt-4o-transcribe\"")
+        )
         options.language = try decoded("\"language\"")
         options.languages = try decoded("[\"languages\"]")
         options.keywords = try decoded("[\"keywords\"]")
@@ -102,7 +108,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try AudioMethods.CreateTranscriptionOptions(file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"), model: decoded("\"gpt-4o-transcribe\""))
+        var options = try AudioMethods.CreateTranscriptionOptions(
+            file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+            model: decoded("\"gpt-4o-transcribe\"")
+        )
         options.language = try decoded("\"language\"")
         options.languages = try decoded("[\"languages\"]")
         options.keywords = try decoded("[\"keywords\"]")
@@ -121,8 +130,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.audio.createTranscription(
-            options: options
-        )
+                options: options
+            )
             XCTFail("createTranscription did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -145,7 +154,11 @@ extension SdkMethodTests {
         }
         _ = client
         let stream = try await client.audio.createTranscriptionStream(
-            options: AudioMethods.CreateTranscriptionStreamOptions(file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"), model: decoded("\"gpt-4o-transcribe\""), stream: decoded("false"))
+            options: AudioMethods.CreateTranscriptionStreamOptions(
+                file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+                model: decoded("\"gpt-4o-transcribe\""),
+                stream: decoded("false")
+            )
         )
         var events = stream.makeAsyncIterator()
         guard let actual = try await events.next() else {
@@ -197,12 +210,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.audio.createTranslation(
-            file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
-            model: decoded("\"whisper-1\""),
-            prompt: decoded("\"prompt\""),
-            responseFormat: decoded("\"json\""),
-            temperature: decoded("0")
-        )
+                file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+                model: decoded("\"whisper-1\""),
+                prompt: decoded("\"prompt\""),
+                responseFormat: decoded("\"json\""),
+                temperature: decoded("0")
+            )
             XCTFail("createTranslation did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -253,12 +266,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.uploads.create(
-            filename: decoded("\"Example Name\""),
-            purpose: decoded("\"assistants\""),
-            bytes: decoded("1"),
-            mimeType: decoded("\"mime_type\""),
-            expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":3600}")
-        )
+                filename: decoded("\"Example Name\""),
+                purpose: decoded("\"assistants\""),
+                bytes: decoded("1"),
+                mimeType: decoded("\"mime_type\""),
+                expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":3600}")
+            )
             XCTFail("createUpload did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -306,9 +319,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vaults.create(
-            name: decoded("\"Example Name\""),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                name: decoded("\"Example Name\""),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("createVault did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -358,11 +371,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vaults.createCredential(
-            vaultId: decoded("\"vault-1\""),
-            name: decoded("\"Example Name\""),
-            auth: decoded(sdkMethodFixture182Value1),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                vaultId: decoded("\"vault-1\""),
+                name: decoded("\"Example Name\""),
+                auth: decoded(sdkMethodFixture182Value1),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("createVaultCredential did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -414,13 +427,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.create(
-            fileIds: decoded("[\"file_ids\"]"),
-            name: decoded("\"Example Name\""),
-            description: decoded("\"example text\""),
-            expiresAfter: decoded("{\"anchor\":\"last_active_at\",\"days\":1}"),
-            chunkingStrategy: decoded("{\"type\":\"auto\"}"),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                fileIds: decoded("[\"file_ids\"]"),
+                name: decoded("\"Example Name\""),
+                description: decoded("\"example text\""),
+                expiresAfter: decoded("{\"anchor\":\"last_active_at\",\"days\":1}"),
+                chunkingStrategy: decoded("{\"type\":\"auto\"}"),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("createVectorStore did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -470,11 +483,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.createFile(
-            vectorStoreId: decoded("\"vs_abc123\""),
-            fileId: decoded("\"file-1\""),
-            chunkingStrategy: decoded("{\"type\":\"auto\"}"),
-            attributes: decoded("{\"key\":\"key\"}")
-        )
+                vectorStoreId: decoded("\"vs_abc123\""),
+                fileId: decoded("\"file-1\""),
+                chunkingStrategy: decoded("{\"type\":\"auto\"}"),
+                attributes: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("createVectorStoreFile did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -525,12 +538,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.createFileBatch(
-            vectorStoreId: decoded("\"vs_abc123\""),
-            fileIds: decoded("[\"file_ids\"]"),
-            files: decoded(sdkMethodFixture188Value1),
-            chunkingStrategy: decoded("{\"type\":\"auto\"}"),
-            attributes: decoded("{\"key\":\"key\"}")
-        )
+                vectorStoreId: decoded("\"vs_abc123\""),
+                fileIds: decoded("[\"file_ids\"]"),
+                files: decoded(sdkMethodFixture188Value1),
+                chunkingStrategy: decoded("{\"type\":\"auto\"}"),
+                attributes: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("createVectorStoreFileBatch did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

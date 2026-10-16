@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AssistantsRun domain models
+/// AssistantsRun domain models
 public indirect enum RunObjectToolsItem {
     case assistantToolsCode(AssistantToolsCode)
     case assistantToolsFileSearch(AssistantToolsFileSearch)
@@ -13,7 +13,6 @@ public indirect enum RunObjectToolsItem {
 }
 
 extension RunObjectToolsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension RunObjectToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension RunObjectToolsItem: Codable {
 extension RunObjectToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "code_interpreter": return .assistantToolsCode(try AssistantToolsCode(from: decoder))
-        case "file_search": return .assistantToolsFileSearch(try AssistantToolsFileSearch(from: decoder))
-        case "function": return .assistantToolsFunction(try AssistantToolsFunction(from: decoder))
-        default: return nil
+        case "code_interpreter": try .assistantToolsCode(AssistantToolsCode(from: decoder))
+        case "file_search": try .assistantToolsFileSearch(AssistantToolsFileSearch(from: decoder))
+        case "function": try .assistantToolsFunction(AssistantToolsFunction(from: decoder))
+        default: nil
         }
     }
 }
@@ -65,7 +68,6 @@ public indirect enum RunStepDeltaObjectDeltaStepDetails {
 }
 
 extension RunStepDeltaObjectDeltaStepDetails: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -73,12 +75,16 @@ extension RunStepDeltaObjectDeltaStepDetails: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -90,9 +96,13 @@ extension RunStepDeltaObjectDeltaStepDetails {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "message_creation":
-        return .runStepDeltaStepDetailsMessageCreationObject(try RunStepDeltaStepDetailsMessageCreationObject(from: decoder))
-        case "tool_calls": return .runStepDeltaStepDetailsToolCallsObject(try RunStepDeltaStepDetailsToolCallsObject(from: decoder))
-        default: return nil
+            try .runStepDeltaStepDetailsMessageCreationObject(
+                RunStepDeltaStepDetailsMessageCreationObject(from: decoder)
+            )
+        case "tool_calls": try .runStepDeltaStepDetailsToolCallsObject(
+                RunStepDeltaStepDetailsToolCallsObject(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -116,7 +126,6 @@ public indirect enum RunStepDeltaStepDetailsToolCallsCodeObjectCodeInterpreterOu
 }
 
 extension RunStepDeltaStepDetailsToolCallsCodeObjectCodeInterpreterOutputsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -124,12 +133,16 @@ extension RunStepDeltaStepDetailsToolCallsCodeObjectCodeInterpreterOutputsItem: 
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -141,14 +154,14 @@ extension RunStepDeltaStepDetailsToolCallsCodeObjectCodeInterpreterOutputsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "logs":
-        return .runStepDeltaStepDetailsToolCallsCodeOutputLogsObject(
-            try RunStepDeltaStepDetailsToolCallsCodeOutputLogsObject(from: decoder)
-        )
+            try .runStepDeltaStepDetailsToolCallsCodeOutputLogsObject(
+                RunStepDeltaStepDetailsToolCallsCodeOutputLogsObject(from: decoder)
+            )
         case "image":
-        return .runStepDeltaStepDetailsToolCallsCodeOutputImageObject(
-            try RunStepDeltaStepDetailsToolCallsCodeOutputImageObject(from: decoder)
-        )
-        default: return nil
+            try .runStepDeltaStepDetailsToolCallsCodeOutputImageObject(
+                RunStepDeltaStepDetailsToolCallsCodeOutputImageObject(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -173,7 +186,6 @@ public indirect enum RunStepDeltaStepDetailsToolCallsObjectToolCallsItem {
 }
 
 extension RunStepDeltaStepDetailsToolCallsObjectToolCallsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -181,12 +193,16 @@ extension RunStepDeltaStepDetailsToolCallsObjectToolCallsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -198,12 +214,16 @@ extension RunStepDeltaStepDetailsToolCallsObjectToolCallsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "code_interpreter":
-        return .runStepDeltaStepDetailsToolCallsCodeObject(try RunStepDeltaStepDetailsToolCallsCodeObject(from: decoder))
+            try .runStepDeltaStepDetailsToolCallsCodeObject(RunStepDeltaStepDetailsToolCallsCodeObject(from: decoder))
         case "file_search":
-        return .runStepDeltaStepDetailsToolCallsFileSearchObject(try RunStepDeltaStepDetailsToolCallsFileSearchObject(from: decoder))
+            try .runStepDeltaStepDetailsToolCallsFileSearchObject(
+                RunStepDeltaStepDetailsToolCallsFileSearchObject(from: decoder)
+            )
         case "function":
-        return .runStepDeltaStepDetailsToolCallsFunctionObject(try RunStepDeltaStepDetailsToolCallsFunctionObject(from: decoder))
-        default: return nil
+            try .runStepDeltaStepDetailsToolCallsFunctionObject(
+                RunStepDeltaStepDetailsToolCallsFunctionObject(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -228,7 +248,6 @@ public indirect enum RunStepDetailsToolCallsCodeObjectCodeInterpreterOutputsItem
 }
 
 extension RunStepDetailsToolCallsCodeObjectCodeInterpreterOutputsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -236,12 +255,16 @@ extension RunStepDetailsToolCallsCodeObjectCodeInterpreterOutputsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -252,9 +275,13 @@ extension RunStepDetailsToolCallsCodeObjectCodeInterpreterOutputsItem: Codable {
 extension RunStepDetailsToolCallsCodeObjectCodeInterpreterOutputsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "logs": return .runStepDetailsToolCallsCodeOutputLogsObject(try RunStepDetailsToolCallsCodeOutputLogsObject(from: decoder))
-        case "image": return .runStepDetailsToolCallsCodeOutputImageObject(try RunStepDetailsToolCallsCodeOutputImageObject(from: decoder))
-        default: return nil
+        case "logs": try .runStepDetailsToolCallsCodeOutputLogsObject(
+                RunStepDetailsToolCallsCodeOutputLogsObject(from: decoder)
+            )
+        case "image": try .runStepDetailsToolCallsCodeOutputImageObject(
+                RunStepDetailsToolCallsCodeOutputImageObject(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -279,7 +306,6 @@ public indirect enum RunStepDetailsToolCallsObjectToolCallsItem {
 }
 
 extension RunStepDetailsToolCallsObjectToolCallsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -287,12 +313,16 @@ extension RunStepDetailsToolCallsObjectToolCallsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -303,10 +333,16 @@ extension RunStepDetailsToolCallsObjectToolCallsItem: Codable {
 extension RunStepDetailsToolCallsObjectToolCallsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "code_interpreter": return .runStepDetailsToolCallsCodeObject(try RunStepDetailsToolCallsCodeObject(from: decoder))
-        case "file_search": return .runStepDetailsToolCallsFileSearchObject(try RunStepDetailsToolCallsFileSearchObject(from: decoder))
-        case "function": return .runStepDetailsToolCallsFunctionObject(try RunStepDetailsToolCallsFunctionObject(from: decoder))
-        default: return nil
+        case "code_interpreter": try .runStepDetailsToolCallsCodeObject(
+                RunStepDetailsToolCallsCodeObject(from: decoder)
+            )
+        case "file_search": try .runStepDetailsToolCallsFileSearchObject(
+                RunStepDetailsToolCallsFileSearchObject(from: decoder)
+            )
+        case "function": try .runStepDetailsToolCallsFunctionObject(
+                RunStepDetailsToolCallsFunctionObject(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -331,7 +367,6 @@ public indirect enum RunStepObjectStepDetails {
 }
 
 extension RunStepObjectStepDetails: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -339,12 +374,16 @@ extension RunStepObjectStepDetails: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -355,9 +394,11 @@ extension RunStepObjectStepDetails: Codable {
 extension RunStepObjectStepDetails {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "message_creation": return .runStepDetailsMessageCreationObject(try RunStepDetailsMessageCreationObject(from: decoder))
-        case "tool_calls": return .runStepDetailsToolCallsObject(try RunStepDetailsToolCallsObject(from: decoder))
-        default: return nil
+        case "message_creation": try .runStepDetailsMessageCreationObject(
+                RunStepDetailsMessageCreationObject(from: decoder)
+            )
+        case "tool_calls": try .runStepDetailsToolCallsObject(RunStepDetailsToolCallsObject(from: decoder))
+        default: nil
         }
     }
 }
@@ -384,27 +425,54 @@ public indirect enum RunStepStreamEvent {
 }
 
 extension RunStepStreamEvent: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RunStepStreamEvent")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RunStepStreamEvent"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension RunStepStreamEvent {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(RunStepStreamEventVariant0.self) { return .runStepStreamEventVariant0(value) }
-        if let value = try? container.decode(RunStepStreamEventVariant1.self) { return .runStepStreamEventVariant1(value) }
-        if let value = try? container.decode(RunStepStreamEventVariant2.self) { return .runStepStreamEventVariant2(value) }
-        if let value = try? container.decode(RunStepStreamEventVariant3.self) { return .runStepStreamEventVariant3(value) }
-        if let value = try? container.decode(RunStepStreamEventVariant4.self) { return .runStepStreamEventVariant4(value) }
-        if let value = try? container.decode(RunStepStreamEventVariant5.self) { return .runStepStreamEventVariant5(value) }
-        if let value = try? container.decode(RunStepStreamEventVariant6.self) { return .runStepStreamEventVariant6(value) }
+        if let value = try? container
+            .decode(RunStepStreamEventVariant0.self) {
+            return .runStepStreamEventVariant0(value)
+        }
+        if let value = try? container
+            .decode(RunStepStreamEventVariant1.self) {
+            return .runStepStreamEventVariant1(value)
+        }
+        if let value = try? container
+            .decode(RunStepStreamEventVariant2.self) {
+            return .runStepStreamEventVariant2(value)
+        }
+        if let value = try? container
+            .decode(RunStepStreamEventVariant3.self) {
+            return .runStepStreamEventVariant3(value)
+        }
+        if let value = try? container
+            .decode(RunStepStreamEventVariant4.self) {
+            return .runStepStreamEventVariant4(value)
+        }
+        if let value = try? container
+            .decode(RunStepStreamEventVariant5.self) {
+            return .runStepStreamEventVariant5(value)
+        }
+        if let value = try? container
+            .decode(RunStepStreamEventVariant6.self) {
+            return .runStepStreamEventVariant6(value)
+        }
         return nil
     }
 }
@@ -438,30 +506,53 @@ public indirect enum RunStreamEvent {
 }
 
 extension RunStreamEvent: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RunStreamEvent")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension RunStreamEvent {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(RunStreamEventVariant0.self) { return .runStreamEventVariant0(value) }
-        if let value = try? container.decode(RunStreamEventVariant1.self) { return .runStreamEventVariant1(value) }
-        if let value = try? container.decode(RunStreamEventVariant2.self) { return .runStreamEventVariant2(value) }
-        if let value = try? container.decode(RunStreamEventVariant3.self) { return .runStreamEventVariant3(value) }
-        if let value = try? container.decode(RunStreamEventVariant4.self) { return .runStreamEventVariant4(value) }
-        if let value = try? container.decode(RunStreamEventVariant5.self) { return .runStreamEventVariant5(value) }
-        if let value = try? container.decode(RunStreamEventVariant6.self) { return .runStreamEventVariant6(value) }
-        if let value = try? container.decode(RunStreamEventVariant7.self) { return .runStreamEventVariant7(value) }
-        if let value = try? container.decode(RunStreamEventVariant8.self) { return .runStreamEventVariant8(value) }
-        if let value = try? container.decode(RunStreamEventVariant9.self) { return .runStreamEventVariant9(value) }
+        if let value = try? container.decode(RunStreamEventVariant0.self) {
+            return .runStreamEventVariant0(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant1.self) {
+            return .runStreamEventVariant1(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant2.self) {
+            return .runStreamEventVariant2(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant3.self) {
+            return .runStreamEventVariant3(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant4.self) {
+            return .runStreamEventVariant4(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant5.self) {
+            return .runStreamEventVariant5(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant6.self) {
+            return .runStreamEventVariant6(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant7.self) {
+            return .runStreamEventVariant7(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant8.self) {
+            return .runStreamEventVariant8(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant9.self) {
+            return .runStreamEventVariant9(value)
+        }
         return nil
     }
 }

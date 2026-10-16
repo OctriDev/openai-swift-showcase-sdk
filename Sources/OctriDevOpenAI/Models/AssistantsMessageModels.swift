@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AssistantsMessage domain models
+/// AssistantsMessage domain models
 public indirect enum MessageContentTextObjectTextAnnotationsItem {
     case messageContentTextAnnotationsFileCitationObject(MessageContentTextAnnotationsFileCitationObject)
     case messageContentTextAnnotationsFilePathObject(MessageContentTextAnnotationsFilePathObject)
@@ -12,7 +12,6 @@ public indirect enum MessageContentTextObjectTextAnnotationsItem {
 }
 
 extension MessageContentTextObjectTextAnnotationsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension MessageContentTextObjectTextAnnotationsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,12 @@ extension MessageContentTextObjectTextAnnotationsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "file_citation":
-        return .messageContentTextAnnotationsFileCitationObject(try MessageContentTextAnnotationsFileCitationObject(from: decoder))
+            try .messageContentTextAnnotationsFileCitationObject(
+                MessageContentTextAnnotationsFileCitationObject(from: decoder)
+            )
         case "file_path":
-        return .messageContentTextAnnotationsFilePathObject(try MessageContentTextAnnotationsFilePathObject(from: decoder))
-        default: return nil
+            try .messageContentTextAnnotationsFilePathObject(MessageContentTextAnnotationsFilePathObject(from: decoder))
+        default: nil
         }
     }
 }
@@ -64,7 +69,6 @@ public indirect enum MessageDeltaContentTextObjectTextAnnotationsItem {
 }
 
 extension MessageDeltaContentTextObjectTextAnnotationsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -72,12 +76,16 @@ extension MessageDeltaContentTextObjectTextAnnotationsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -89,12 +97,14 @@ extension MessageDeltaContentTextObjectTextAnnotationsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "file_citation":
-        return .messageDeltaContentTextAnnotationsFileCitationObject(
-            try MessageDeltaContentTextAnnotationsFileCitationObject(from: decoder)
-        )
+            try .messageDeltaContentTextAnnotationsFileCitationObject(
+                MessageDeltaContentTextAnnotationsFileCitationObject(from: decoder)
+            )
         case "file_path":
-        return .messageDeltaContentTextAnnotationsFilePathObject(try MessageDeltaContentTextAnnotationsFilePathObject(from: decoder))
-        default: return nil
+            try .messageDeltaContentTextAnnotationsFilePathObject(
+                MessageDeltaContentTextAnnotationsFilePathObject(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -120,7 +130,6 @@ public indirect enum MessageDeltaObjectDeltaContentItem {
 }
 
 extension MessageDeltaObjectDeltaContentItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -128,12 +137,16 @@ extension MessageDeltaObjectDeltaContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -144,11 +157,11 @@ extension MessageDeltaObjectDeltaContentItem: Codable {
 extension MessageDeltaObjectDeltaContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "image_file": return .messageDeltaContentImageFileObject(try MessageDeltaContentImageFileObject(from: decoder))
-        case "text": return .messageDeltaContentTextObject(try MessageDeltaContentTextObject(from: decoder))
-        case "refusal": return .messageDeltaContentRefusalObject(try MessageDeltaContentRefusalObject(from: decoder))
-        case "image_url": return .messageDeltaContentImageUrlObject(try MessageDeltaContentImageUrlObject(from: decoder))
-        default: return nil
+        case "image_file": try .messageDeltaContentImageFileObject(MessageDeltaContentImageFileObject(from: decoder))
+        case "text": try .messageDeltaContentTextObject(MessageDeltaContentTextObject(from: decoder))
+        case "refusal": try .messageDeltaContentRefusalObject(MessageDeltaContentRefusalObject(from: decoder))
+        case "image_url": try .messageDeltaContentImageUrlObject(MessageDeltaContentImageUrlObject(from: decoder))
+        default: nil
         }
     }
 }
@@ -174,7 +187,6 @@ public indirect enum MessageObjectAttachmentsItemToolsItem {
 }
 
 extension MessageObjectAttachmentsItemToolsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -182,12 +194,16 @@ extension MessageObjectAttachmentsItemToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -198,9 +214,9 @@ extension MessageObjectAttachmentsItemToolsItem: Codable {
 extension MessageObjectAttachmentsItemToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "code_interpreter": return .assistantToolsCode(try AssistantToolsCode(from: decoder))
-        case "file_search": return .assistantToolsFileSearchTypeOnly(try AssistantToolsFileSearchTypeOnly(from: decoder))
-        default: return nil
+        case "code_interpreter": try .assistantToolsCode(AssistantToolsCode(from: decoder))
+        case "file_search": try .assistantToolsFileSearchTypeOnly(AssistantToolsFileSearchTypeOnly(from: decoder))
+        default: nil
         }
     }
 }
@@ -226,7 +242,6 @@ public indirect enum MessageObjectContentItem {
 }
 
 extension MessageObjectContentItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -234,12 +249,16 @@ extension MessageObjectContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -250,11 +269,11 @@ extension MessageObjectContentItem: Codable {
 extension MessageObjectContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "image_file": return .messageContentImageFileObject(try MessageContentImageFileObject(from: decoder))
-        case "image_url": return .messageContentImageUrlObject(try MessageContentImageUrlObject(from: decoder))
-        case "text": return .messageContentTextObject(try MessageContentTextObject(from: decoder))
-        case "refusal": return .messageContentRefusalObject(try MessageContentRefusalObject(from: decoder))
-        default: return nil
+        case "image_file": try .messageContentImageFileObject(MessageContentImageFileObject(from: decoder))
+        case "image_url": try .messageContentImageUrlObject(MessageContentImageUrlObject(from: decoder))
+        case "text": try .messageContentTextObject(MessageContentTextObject(from: decoder))
+        case "refusal": try .messageContentRefusalObject(MessageContentRefusalObject(from: decoder))
+        default: nil
         }
     }
 }
@@ -281,25 +300,46 @@ public indirect enum MessageStreamEvent {
 }
 
 extension MessageStreamEvent: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for MessageStreamEvent")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for MessageStreamEvent"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension MessageStreamEvent {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(MessageStreamEventVariant0.self) { return .messageStreamEventVariant0(value) }
-        if let value = try? container.decode(MessageStreamEventVariant1.self) { return .messageStreamEventVariant1(value) }
-        if let value = try? container.decode(MessageStreamEventVariant2.self) { return .messageStreamEventVariant2(value) }
-        if let value = try? container.decode(MessageStreamEventVariant3.self) { return .messageStreamEventVariant3(value) }
-        if let value = try? container.decode(MessageStreamEventVariant4.self) { return .messageStreamEventVariant4(value) }
+        if let value = try? container
+            .decode(MessageStreamEventVariant0.self) {
+            return .messageStreamEventVariant0(value)
+        }
+        if let value = try? container
+            .decode(MessageStreamEventVariant1.self) {
+            return .messageStreamEventVariant1(value)
+        }
+        if let value = try? container
+            .decode(MessageStreamEventVariant2.self) {
+            return .messageStreamEventVariant2(value)
+        }
+        if let value = try? container
+            .decode(MessageStreamEventVariant3.self) {
+            return .messageStreamEventVariant3(value)
+        }
+        if let value = try? container
+            .decode(MessageStreamEventVariant4.self) {
+            return .messageStreamEventVariant4(value)
+        }
         return nil
     }
 }
@@ -330,20 +370,20 @@ public struct MessageDeltaObjectDelta: Codable {
     }
 
     init() {
-        (self.role, self.content) = (nil, nil)
+        (role, content) = (nil, nil)
     }
 }
 
-extension MessageDeltaObjectDelta {
-    public init(from decoder: Decoder) throws {
+public extension MessageDeltaObjectDelta {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.role = try container.sdkDecodeIfPresent(.role)
-        self.content = try container.sdkDecodeIfPresent(.content)
+        role = try container.sdkDecodeIfPresent(.role)
+        content = try container.sdkDecodeIfPresent(.content)
     }
 }
 
-extension MessageDeltaObjectDelta {
-    public init(role: MessageDeltaObjectDeltaRole? = nil, content: [MessageDeltaObjectDeltaContentItem]? = nil) {
+public extension MessageDeltaObjectDelta {
+    init(role: MessageDeltaObjectDeltaRole? = nil, content: [MessageDeltaObjectDeltaContentItem]? = nil) {
         self.init()
         (self.role, self.content) = (role, content)
     }
@@ -363,22 +403,28 @@ public struct MessageContentImageFileObjectImageFile: Codable {
         case detail
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension MessageContentImageFileObjectImageFile {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.fileId) else {
-            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
-        }
-        self.fileId = try container.sdkDecodeRequired(.fileId)
-        self.detail = try container.sdkDecodeIfPresent(.detail)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension MessageContentImageFileObjectImageFile {
-    public init(fileId: String, detail: MessageContentImageFileObjectImageFileDetail? = nil) {
+public extension MessageContentImageFileObjectImageFile {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.fileId) else {
+            throw SdkValidationError(
+                field: "file_id",
+                code: "required",
+                message: "Validation failed for 'file_id': value is required"
+            )
+        }
+        fileId = try container.sdkDecodeRequired(.fileId)
+        detail = try container.sdkDecodeIfPresent(.detail)
+    }
+}
+
+public extension MessageContentImageFileObjectImageFile {
+    init(fileId: String, detail: MessageContentImageFileObjectImageFileDetail? = nil) {
         (self.fileId, self.detail) = (fileId, detail)
     }
 }
@@ -398,30 +444,40 @@ public struct MessageDeltaContentRefusalObject: Codable {
         case refusal
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension MessageDeltaContentRefusalObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.index) else {
-            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.index = try container.sdkDecodeRequired(.index)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.refusal = try container.sdkDecodeIfPresent(.refusal)
-            try sdkValidateRawEnum("type", self.type, MessageDeltaContentRefusalObjectType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension MessageDeltaContentRefusalObject {
-    public init(index: Int, type: MessageDeltaContentRefusalObjectType, refusal: String? = nil) throws {
+public extension MessageDeltaContentRefusalObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.index) else {
+            throw SdkValidationError(
+                field: "index",
+                code: "required",
+                message: "Validation failed for 'index': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        index = try container.sdkDecodeRequired(.index)
+        type = try container.sdkDecodeRequired(.type)
+        refusal = try container.sdkDecodeIfPresent(.refusal)
+        try sdkValidateRawEnum("type", type, MessageDeltaContentRefusalObjectType.allCases.map(\.rawValue))
+    }
+}
+
+public extension MessageDeltaContentRefusalObject {
+    init(index: Int, type: MessageDeltaContentRefusalObjectType, refusal: String? = nil) throws {
         (self.index, self.type) = (index, type)
         self.refusal = refusal
-            try sdkValidateRawEnum("type", self.type, MessageDeltaContentRefusalObjectType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, MessageDeltaContentRefusalObjectType.allCases.map(\.rawValue))
     }
 }
 
@@ -437,28 +493,38 @@ public struct MessageContentTextObject: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension MessageContentTextObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, MessageContentTextObjectType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension MessageContentTextObject {
-    public init(type: MessageContentTextObjectType, text: MessageContentTextObjectText) throws {
+public extension MessageContentTextObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        try sdkValidateRawEnum("type", type, MessageContentTextObjectType.allCases.map(\.rawValue))
+    }
+}
+
+public extension MessageContentTextObject {
+    init(type: MessageContentTextObjectType, text: MessageContentTextObjectText) throws {
         (self.type, self.text) = (type, text)
-            try sdkValidateRawEnum("type", self.type, MessageContentTextObjectType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, MessageContentTextObjectType.allCases.map(\.rawValue))
     }
 }
 
@@ -476,23 +542,23 @@ public struct MessageDeltaContentImageUrlObjectImageUrl: Codable {
     }
 
     init() {
-        (self.url, self.detail) = (nil, nil)
+        (url, detail) = (nil, nil)
     }
 }
 
-extension MessageDeltaContentImageUrlObjectImageUrl {
-    public init(from decoder: Decoder) throws {
+public extension MessageDeltaContentImageUrlObjectImageUrl {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.url = try container.sdkDecodeIfPresent(.url)
-        self.detail = try container.sdkDecodeIfPresent(.detail)
-        if let value = self.url {
+        url = try container.sdkDecodeIfPresent(.url)
+        detail = try container.sdkDecodeIfPresent(.detail)
+        if let value = url {
             try sdkValidateUri("url", value)
         }
     }
 }
 
-extension MessageDeltaContentImageUrlObjectImageUrl {
-    public init(url: String? = nil, detail: MessageDeltaContentImageUrlObjectImageUrlDetail? = nil) throws {
+public extension MessageDeltaContentImageUrlObjectImageUrl {
+    init(url: String? = nil, detail: MessageDeltaContentImageUrlObjectImageUrlDetail? = nil) throws {
         self.init()
         (self.url, self.detail) = (url, detail)
         if let value = self.url {
@@ -512,5 +578,7 @@ public struct MessageStreamEventVariant3: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

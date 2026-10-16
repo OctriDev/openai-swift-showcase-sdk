@@ -3,9 +3,18 @@
 
 import Foundation
 
-// AgentsSessionEvent domain models
-extension SessionEventAgentSessionTurnReasoningSummaryTextDelta {
-    public init(type: SessionEventAgentSessionTurnReasoningSummaryTextDeltaType, eventId: String, sessionId: String, turnId: String?, itemId: String, outputIndex: Int, summaryIndex: Int, delta: String) throws {
+/// AgentsSessionEvent domain models
+public extension SessionEventAgentSessionTurnReasoningSummaryTextDelta {
+    init(
+        type: SessionEventAgentSessionTurnReasoningSummaryTextDeltaType,
+        eventId: String,
+        sessionId: String,
+        turnId: String?,
+        itemId: String,
+        outputIndex: Int,
+        summaryIndex: Int,
+        delta: String
+    ) throws {
         (self.type, self.eventId) = (type, eventId)
         (self.sessionId, self.turnId) = (sessionId, turnId)
         (self.itemId, self.outputIndex) = (itemId, outputIndex)
@@ -16,16 +25,36 @@ extension SessionEventAgentSessionTurnReasoningSummaryTextDelta {
 
 extension SessionEventAgentSessionTurnReasoningSummaryTextDelta {
     func sdkValidateConstraints() throws {
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionTurnReasoningSummaryTextDeltaType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
-            try validateLength("session_id", self.sessionId, min: 0, max: nil)
-        if let value = self.turnId {
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            SessionEventAgentSessionTurnReasoningSummaryTextDeltaType.allCases.map(\.rawValue)
+        )
+        try validateLength("event_id", eventId, min: 0, max: nil)
+        try validateLength("session_id", sessionId, min: 0, max: nil)
+        if let value = turnId {
             try validateLength("turn_id", value, min: 0, max: nil)
         }
-            try validateLength("item_id", self.itemId, min: 0, max: nil)
-            try validateRange("output_index", Double(self.outputIndex), min: 0, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("summary_index", Double(self.summaryIndex), min: 0, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateLength("delta", self.delta, min: 0, max: nil)
+        try validateLength("item_id", itemId, min: 0, max: nil)
+        try validateRange(
+            "output_index",
+            Double(outputIndex),
+            min: 0,
+            max: 4_294_967_295,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "summary_index",
+            Double(summaryIndex),
+            min: 0,
+            max: 4_294_967_295,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateLength("delta", delta, min: 0, max: nil)
     }
 }
 
@@ -44,35 +73,49 @@ public struct SessionEventAgentSessionInProgress: Codable {
         case session
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SessionEventAgentSessionInProgress {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.session = try container.sdkDecodeRequired(.session)
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionInProgressType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SessionEventAgentSessionInProgress {
-    public init(type: SessionEventAgentSessionInProgressType, eventId: String, session: SessionResource) throws {
+public extension SessionEventAgentSessionInProgress {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeRequired(.eventId)
+        session = try container.sdkDecodeRequired(.session)
+        try sdkValidateRawEnum("type", type, SessionEventAgentSessionInProgressType.allCases.map(\.rawValue))
+        try validateLength("event_id", eventId, min: 0, max: nil)
+    }
+}
+
+public extension SessionEventAgentSessionInProgress {
+    init(type: SessionEventAgentSessionInProgressType, eventId: String, session: SessionResource) throws {
         (self.type, self.eventId) = (type, eventId)
         self.session = session
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionInProgressType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionInProgressType.allCases.map(\.rawValue))
+        try validateLength("event_id", self.eventId, min: 0, max: nil)
     }
 }
 
@@ -106,26 +149,37 @@ public struct SessionEventAgentSessionTurnReasoningSummaryPartAdded: Codable {
         case part
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension SessionEventAgentSessionTurnReasoningSummaryPartAdded {
-    public init(from decoder: Decoder) throws {
+public extension SessionEventAgentSessionTurnReasoningSummaryPartAdded {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.sessionId = try container.sdkDecodeRequired(.sessionId)
-        self.turnId = try container.sdkDecodeNullable(.turnId)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.summaryIndex = try container.sdkDecodeRequired(.summaryIndex)
-        self.part = try container.sdkDecodeRequired(.part)
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeRequired(.eventId)
+        sessionId = try container.sdkDecodeRequired(.sessionId)
+        turnId = try container.sdkDecodeNullable(.turnId)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        summaryIndex = try container.sdkDecodeRequired(.summaryIndex)
+        part = try container.sdkDecodeRequired(.part)
         try sdkValidateConstraints()
     }
 }
 
-extension SessionEventAgentSessionTurnReasoningSummaryPartAdded {
-    public init(type: SessionEventAgentSessionTurnReasoningSummaryPartAddedType, eventId: String, sessionId: String, turnId: String?, itemId: String, outputIndex: Int, summaryIndex: Int, part: SummaryTextResource) throws {
+public extension SessionEventAgentSessionTurnReasoningSummaryPartAdded {
+    init(
+        type: SessionEventAgentSessionTurnReasoningSummaryPartAddedType,
+        eventId: String,
+        sessionId: String,
+        turnId: String?,
+        itemId: String,
+        outputIndex: Int,
+        summaryIndex: Int,
+        part: SummaryTextResource
+    ) throws {
         (self.type, self.eventId) = (type, eventId)
         (self.sessionId, self.turnId) = (sessionId, turnId)
         (self.itemId, self.outputIndex) = (itemId, outputIndex)
@@ -136,15 +190,35 @@ extension SessionEventAgentSessionTurnReasoningSummaryPartAdded {
 
 extension SessionEventAgentSessionTurnReasoningSummaryPartAdded {
     func sdkValidateConstraints() throws {
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionTurnReasoningSummaryPartAddedType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
-            try validateLength("session_id", self.sessionId, min: 0, max: nil)
-        if let value = self.turnId {
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            SessionEventAgentSessionTurnReasoningSummaryPartAddedType.allCases.map(\.rawValue)
+        )
+        try validateLength("event_id", eventId, min: 0, max: nil)
+        try validateLength("session_id", sessionId, min: 0, max: nil)
+        if let value = turnId {
             try validateLength("turn_id", value, min: 0, max: nil)
         }
-            try validateLength("item_id", self.itemId, min: 0, max: nil)
-            try validateRange("output_index", Double(self.outputIndex), min: 0, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("summary_index", Double(self.summaryIndex), min: 0, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateLength("item_id", itemId, min: 0, max: nil)
+        try validateRange(
+            "output_index",
+            Double(outputIndex),
+            min: 0,
+            max: 4_294_967_295,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "summary_index",
+            Double(summaryIndex),
+            min: 0,
+            max: 4_294_967_295,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -163,35 +237,49 @@ public struct SessionEventAgentSessionCreated: Codable {
         case session
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SessionEventAgentSessionCreated {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.session = try container.sdkDecodeRequired(.session)
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionCreatedType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SessionEventAgentSessionCreated {
-    public init(type: SessionEventAgentSessionCreatedType, eventId: String, session: SessionResource) throws {
+public extension SessionEventAgentSessionCreated {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeRequired(.eventId)
+        session = try container.sdkDecodeRequired(.session)
+        try sdkValidateRawEnum("type", type, SessionEventAgentSessionCreatedType.allCases.map(\.rawValue))
+        try validateLength("event_id", eventId, min: 0, max: nil)
+    }
+}
+
+public extension SessionEventAgentSessionCreated {
+    init(type: SessionEventAgentSessionCreatedType, eventId: String, session: SessionResource) throws {
         (self.type, self.eventId) = (type, eventId)
         self.session = session
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionCreatedType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionCreatedType.allCases.map(\.rawValue))
+        try validateLength("event_id", self.eventId, min: 0, max: nil)
     }
 }
 
@@ -219,58 +307,107 @@ public struct SessionEventAgentSessionTurnItemDone: Codable {
         case item
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SessionEventAgentSessionTurnItemDone {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.sessionId) else {
-            throw SdkValidationError(field: "session_id", code: "required", message: "Validation failed for 'session_id': value is required")
-        }
-        guard container.contains(.turnId) else {
-            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.item) else {
-            throw SdkValidationError(field: "item", code: "required", message: "Validation failed for 'item': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.sessionId = try container.sdkDecodeRequired(.sessionId)
-        self.turnId = try container.sdkDecodeNullable(.turnId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.item = try container.sdkDecodeRequired(.item)
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionTurnItemDoneType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
-            try validateLength("session_id", self.sessionId, min: 0, max: nil)
-        if let value = self.turnId {
-            try validateLength("turn_id", value, min: 0, max: nil)
-        }
-            try validateRange("output_index", Double(self.outputIndex), min: 0, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SessionEventAgentSessionTurnItemDone {
-    public init(type: SessionEventAgentSessionTurnItemDoneType, eventId: String, sessionId: String, turnId: String?, outputIndex: Int, item: AgentOutputItemResource) throws {
+public extension SessionEventAgentSessionTurnItemDone {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.sessionId) else {
+            throw SdkValidationError(
+                field: "session_id",
+                code: "required",
+                message: "Validation failed for 'session_id': value is required"
+            )
+        }
+        guard container.contains(.turnId) else {
+            throw SdkValidationError(
+                field: "turn_id",
+                code: "required",
+                message: "Validation failed for 'turn_id': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.item) else {
+            throw SdkValidationError(
+                field: "item",
+                code: "required",
+                message: "Validation failed for 'item': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeRequired(.eventId)
+        sessionId = try container.sdkDecodeRequired(.sessionId)
+        turnId = try container.sdkDecodeNullable(.turnId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        item = try container.sdkDecodeRequired(.item)
+        try sdkValidateRawEnum("type", type, SessionEventAgentSessionTurnItemDoneType.allCases.map(\.rawValue))
+        try validateLength("event_id", eventId, min: 0, max: nil)
+        try validateLength("session_id", sessionId, min: 0, max: nil)
+        if let value = turnId {
+            try validateLength("turn_id", value, min: 0, max: nil)
+        }
+        try validateRange(
+            "output_index",
+            Double(outputIndex),
+            min: 0,
+            max: 4_294_967_295,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension SessionEventAgentSessionTurnItemDone {
+    init(
+        type: SessionEventAgentSessionTurnItemDoneType,
+        eventId: String,
+        sessionId: String,
+        turnId: String?,
+        outputIndex: Int,
+        item: AgentOutputItemResource
+    ) throws {
         (self.type, self.eventId) = (type, eventId)
         (self.sessionId, self.turnId) = (sessionId, turnId)
         (self.outputIndex, self.item) = (outputIndex, item)
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionTurnItemDoneType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
-            try validateLength("session_id", self.sessionId, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionTurnItemDoneType.allCases.map(\.rawValue))
+        try validateLength("event_id", self.eventId, min: 0, max: nil)
+        try validateLength("session_id", self.sessionId, min: 0, max: nil)
         if let value = self.turnId {
             try validateLength("turn_id", value, min: 0, max: nil)
         }
-            try validateRange("output_index", Double(self.outputIndex), min: 0, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "output_index",
+            Double(self.outputIndex),
+            min: 0,
+            max: 4_294_967_295,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -298,61 +435,110 @@ public struct SessionEventAgentSessionTurnItemAdded: Codable {
         case item
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension SessionEventAgentSessionTurnItemAdded {
-    public init(from decoder: Decoder) throws {
+public extension SessionEventAgentSessionTurnItemAdded {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
         }
         guard container.contains(.sessionId) else {
-            throw SdkValidationError(field: "session_id", code: "required", message: "Validation failed for 'session_id': value is required")
+            throw SdkValidationError(
+                field: "session_id",
+                code: "required",
+                message: "Validation failed for 'session_id': value is required"
+            )
         }
         guard container.contains(.turnId) else {
-            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
+            throw SdkValidationError(
+                field: "turn_id",
+                code: "required",
+                message: "Validation failed for 'turn_id': value is required"
+            )
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
         }
         guard container.contains(.item) else {
-            throw SdkValidationError(field: "item", code: "required", message: "Validation failed for 'item': value is required")
+            throw SdkValidationError(
+                field: "item",
+                code: "required",
+                message: "Validation failed for 'item': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.sessionId = try container.sdkDecodeRequired(.sessionId)
-        self.turnId = try container.sdkDecodeNullable(.turnId)
-        self.outputIndex = try container.sdkDecodeNullable(.outputIndex)
-        self.item = try container.sdkDecodeRequired(.item)
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionTurnItemAddedType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
-            try validateLength("session_id", self.sessionId, min: 0, max: nil)
-        if let value = self.turnId {
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeRequired(.eventId)
+        sessionId = try container.sdkDecodeRequired(.sessionId)
+        turnId = try container.sdkDecodeNullable(.turnId)
+        outputIndex = try container.sdkDecodeNullable(.outputIndex)
+        item = try container.sdkDecodeRequired(.item)
+        try sdkValidateRawEnum("type", type, SessionEventAgentSessionTurnItemAddedType.allCases.map(\.rawValue))
+        try validateLength("event_id", eventId, min: 0, max: nil)
+        try validateLength("session_id", sessionId, min: 0, max: nil)
+        if let value = turnId {
             try validateLength("turn_id", value, min: 0, max: nil)
         }
-        if let value = self.outputIndex {
-            try validateRange("output_index", Double(value), min: 0, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = outputIndex {
+            try validateRange(
+                "output_index",
+                Double(value),
+                min: 0,
+                max: 4_294_967_295,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension SessionEventAgentSessionTurnItemAdded {
-    public init(type: SessionEventAgentSessionTurnItemAddedType, eventId: String, sessionId: String, turnId: String?, outputIndex: Int?, item: SessionTurnItemResource) throws {
+public extension SessionEventAgentSessionTurnItemAdded {
+    init(
+        type: SessionEventAgentSessionTurnItemAddedType,
+        eventId: String,
+        sessionId: String,
+        turnId: String?,
+        outputIndex: Int?,
+        item: SessionTurnItemResource
+    ) throws {
         (self.type, self.eventId) = (type, eventId)
         (self.sessionId, self.turnId) = (sessionId, turnId)
         (self.outputIndex, self.item) = (outputIndex, item)
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionTurnItemAddedType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
-            try validateLength("session_id", self.sessionId, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionTurnItemAddedType.allCases.map(\.rawValue))
+        try validateLength("event_id", self.eventId, min: 0, max: nil)
+        try validateLength("session_id", self.sessionId, min: 0, max: nil)
         if let value = self.turnId {
             try validateLength("turn_id", value, min: 0, max: nil)
         }
         if let value = self.outputIndex {
-            try validateRange("output_index", Double(value), min: 0, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "output_index",
+                Double(value),
+                min: 0,
+                max: 4_294_967_295,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -372,34 +558,48 @@ public struct SessionEventAgentSessionFailed: Codable {
         case session
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SessionEventAgentSessionFailed {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.session = try container.sdkDecodeRequired(.session)
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionFailedType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SessionEventAgentSessionFailed {
-    public init(type: SessionEventAgentSessionFailedType, eventId: String, session: SessionResource) throws {
+public extension SessionEventAgentSessionFailed {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeRequired(.eventId)
+        session = try container.sdkDecodeRequired(.session)
+        try sdkValidateRawEnum("type", type, SessionEventAgentSessionFailedType.allCases.map(\.rawValue))
+        try validateLength("event_id", eventId, min: 0, max: nil)
+    }
+}
+
+public extension SessionEventAgentSessionFailed {
+    init(type: SessionEventAgentSessionFailedType, eventId: String, session: SessionResource) throws {
         (self.type, self.eventId) = (type, eventId)
         self.session = session
-            try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionFailedType.allCases.map(\.rawValue))
-            try validateLength("event_id", self.eventId, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, SessionEventAgentSessionFailedType.allCases.map(\.rawValue))
+        try validateLength("event_id", self.eventId, min: 0, max: nil)
     }
 }

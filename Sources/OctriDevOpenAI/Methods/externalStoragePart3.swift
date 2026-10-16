@@ -6,8 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ExternalStorageMethods {
-    /// Creates a customer-managed external storage configuration for a project. Supply `project_id` and a `provider` object containing the configuration fields required by the selected storage provider. The response includes the configuration's identifier, geography, and status.
+public extension ExternalStorageMethods {
+    /// Creates a customer-managed external storage configuration for a project. Supply `project_id` and a `provider`
+    /// object containing the configuration fields required by the selected storage provider. The response includes the
+    /// configuration's identifier, geography, and status.
     ///
     /// Register one customer-managed external storage configuration.
     ///
@@ -15,23 +17,71 @@ extension ExternalStorageMethods {
     /// - projectId: Required `string` value serialized in the `project_id` wire
     ///   field.
     /// - provider: Required API value serialized in the `provider` wire field.
-    public static func createExternalStorage(config: ClientConfig, projectId: String, provider: CreateExternalStorageBodyProvider, requestOptions: RequestOptions? = nil) async throws -> ExternalStorageResponse {
+    static func createExternalStorage(
+        config: ClientConfig,
+        projectId: String,
+        provider: CreateExternalStorageBodyProvider,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ExternalStorageResponse {
         let requestBody = CreateExternalStorageRequestBody(projectId: projectId, provider: provider)
 
-        return try (await sdkRequest("POST", "/organization/external_storage", config: config, body: requestBody, decoder: .json, operationId: "createExternalStorage", options: requestOptions, errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "404": ErrorResponse.self, "503": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/organization/external_storage",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createExternalStorage",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
+        )).data
     }
 
-    /// Retrieves one customer-managed external storage configuration. Use `external_storage_id` to identify the configuration you want to inspect.
+    /// Retrieves one customer-managed external storage configuration. Use `external_storage_id` to identify the
+    /// configuration you want to inspect.
     ///
     /// Get one customer-managed external storage configuration.
-    public static func retrieveExternalStorage(config: ClientConfig, externalStorageId: String, requestOptions: RequestOptions? = nil) async throws -> ExternalStorageResponse {
-        return try (await sdkRequest("GET", ["/organization/external_storage/", sdkEncodePathSegment(sdkWireString(externalStorageId))].joined(), config: config, decoder: .json, operationId: "retrieveExternalStorage", options: requestOptions, errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "404": ErrorResponse.self])).data
+    static func retrieveExternalStorage(
+        config: ClientConfig,
+        externalStorageId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ExternalStorageResponse {
+        try await (sdkRequest(
+            "GET",
+            ["/organization/external_storage/", sdkEncodePathSegment(sdkWireString(externalStorageId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "retrieveExternalStorage",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
-    /// Deletes a customer-managed external storage configuration. Use `external_storage_id` to identify the configuration to disconnect. Deleting a project's last configuration restores organization-default retention if customer-managed retention was active; cloud storage is unchanged.
+    /// Deletes a customer-managed external storage configuration. Use `external_storage_id` to identify the
+    /// configuration to disconnect. Deleting a project's last configuration restores organization-default retention if
+    /// customer-managed retention was active; cloud storage is unchanged.
     ///
-    /// Disconnect a customer-managed external storage configuration. Removing the project's last configuration restores organization-default retention if customer-managed retention was active. Repeating a deletion also completes any interrupted retention update. Cloud storage is unchanged.
-    public static func deleteExternalStorage(config: ClientConfig, externalStorageId: String, requestOptions: RequestOptions? = nil) async throws -> ExternalStorageDeletedResource {
-        return try (await sdkRequest("DELETE", ["/organization/external_storage/", sdkEncodePathSegment(sdkWireString(externalStorageId))].joined(), config: config, decoder: .json, operationId: "deleteExternalStorage", options: requestOptions, errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "404": ErrorResponse.self])).data
+    /// Disconnect a customer-managed external storage configuration. Removing the project's last configuration restores
+    /// organization-default retention if customer-managed retention was active. Repeating a deletion also completes any
+    /// interrupted retention update. Cloud storage is unchanged.
+    static func deleteExternalStorage(
+        config: ClientConfig,
+        externalStorageId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ExternalStorageDeletedResource {
+        try await (sdkRequest(
+            "DELETE",
+            ["/organization/external_storage/", sdkEncodePathSegment(sdkWireString(externalStorageId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteExternalStorage",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 }

@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ResponsesMethods {
-    public struct CompactResponsesOptions: Codable {
+public extension ResponsesMethods {
+    struct CompactResponsesOptions: Codable {
         public var model: ModelIdsCompaction?
         public var input: SdkOptional<CompactResponseMethodPublicBodyInput>?
         public var previousResponseId: SdkOptional<String>?
@@ -22,9 +22,15 @@ extension ResponsesMethods {
         }
     }
 
-    /// Compacts conversation input and returns a compacted response object with output items and token usage. Provide the required `model` and any input or conversation context to compact. Do not combine `previous_response_id` with `conversation`.
+    /// Compacts conversation input and returns a compacted response object with output items and token usage. Provide
+    /// the required `model` and any input or conversation context to compact. Do not combine `previous_response_id`
+    /// with `conversation`.
     ///
-    /// Compact a conversation. Returns a compacted response object. Learn when and how to compact long-running conversations in the [conversation state guide](https://developers.openai.com/api/docs/guides/conversation-state#managing-the-context-window). For ZDR-compatible compaction details, see [Compaction (advanced)](https://developers.openai.com/api/docs/guides/conversation-state#compaction-advanced).
+    /// Compact a conversation. Returns a compacted response object. Learn when and how to compact long-running
+    /// conversations in the [conversation state
+    /// guide](https://developers.openai.com/api/docs/guides/conversation-state#managing-the-context-window). For
+    /// ZDR-compatible compaction details, see [Compaction
+    /// (advanced)](https://developers.openai.com/api/docs/guides/conversation-state#compaction-advanced).
     ///
     /// - Parameters:
     /// - model: Model ID used to generate the response, like `gpt-6-astra`. OpenAI
@@ -46,9 +52,22 @@ extension ResponsesMethods {
     ///   `prompt_cache_options` wire field.
     /// - serviceTier: Optional API value serialized in the `service_tier` wire
     ///   field.
-    public static func compactResponses(config: ClientConfig, options: CompactResponsesOptions, requestOptions: RequestOptions? = nil) async throws -> CompactResource {
+    static func compactResponses(
+        config: ClientConfig,
+        options: CompactResponsesOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> CompactResource {
         let requestBody = CompactResponsesRequestBody(options: options)
 
-        return try (await sdkRequest("POST", "/responses/compact", config: config, body: requestBody, decoder: .json, operationId: "compactResponses", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self, "503": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/responses/compact",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "compactResponses",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self, "503": ErrorResponse.self]
+        )).data
     }
 }

@@ -17,9 +17,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.externalStorage.create(
-            projectId: decoded("\"proj_123\""),
-            provider: decoded("{\"type\":\"aws\",\"bucket\":\"bucket\",\"role_arn\":\"role_arn\"}")
-        )
+                projectId: decoded("\"proj_123\""),
+                provider: decoded("{\"type\":\"aws\",\"bucket\":\"bucket\",\"role_arn\":\"role_arn\"}")
+            )
             XCTFail("createExternalStorage did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -68,10 +68,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.files.create(
-            file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
-            purpose: decoded("\"assistants\""),
-            expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":3600}")
-        )
+                file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+                purpose: decoded("\"assistants\""),
+                expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":3600}")
+            )
             XCTFail("createFile did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -88,7 +88,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testCreateFineTuningCheckpointPermissionCreateFineTuningCheckpointPermissionReachesMockAndDecodesResponse() async throws {
+    func testCreateFineTuningCheckpointPermissionCreateFineTuningCheckpointPermissionReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -108,7 +109,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testCreateFineTuningCheckpointPermissionCreateFineTuningCheckpoinX369f6e9725ReachesMockAndDecodesResponse() async throws {
+    func testCreateFineTuningCheckpointPermissionCreateFineTuningCheckpoinX369f6e9725ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -119,9 +121,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.createCheckpointPermission(
-            fineTunedModelCheckpoint: decoded("\"ft:gpt-4o-mini-2024-07-18:org:weather:B7R9VjQd\""),
-            projectIds: decoded("[\"project_ids\"]")
-        )
+                fineTunedModelCheckpoint: decoded("\"ft:gpt-4o-mini-2024-07-18:org:weather:B7R9VjQd\""),
+                projectIds: decoded("[\"project_ids\"]")
+            )
             XCTFail("createFineTuningCheckpointPermission did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -143,7 +145,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try FineTuningMethods.CreateFineTuningJobOptions(model: decoded("\"gpt-4o-mini\""), trainingFile: decoded("\"file-abc123\""))
+        var options = try FineTuningMethods.CreateFineTuningJobOptions(
+            model: decoded("\"gpt-4o-mini\""),
+            trainingFile: decoded("\"file-abc123\"")
+        )
         options.hyperparameters = try decoded(sdkMethodFixture111Value1)
         options.suffix = try decoded("null")
         options.validationFile = try decoded("\"file-abc123\"")
@@ -170,7 +175,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try FineTuningMethods.CreateFineTuningJobOptions(model: decoded("\"gpt-4o-mini\""), trainingFile: decoded("\"file-abc123\""))
+        var options = try FineTuningMethods.CreateFineTuningJobOptions(
+            model: decoded("\"gpt-4o-mini\""),
+            trainingFile: decoded("\"file-abc123\"")
+        )
         options.hyperparameters = try decoded(sdkMethodFixture112Value1)
         options.suffix = try decoded("null")
         options.validationFile = try decoded("\"file-abc123\"")
@@ -184,8 +192,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.createJob(
-            options: options
-        )
+                options: options
+            )
             XCTFail("createFineTuningJob did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -232,8 +240,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.groups.create(
-            name: decoded("\"Example Name\"")
-        )
+                name: decoded("\"Example Name\"")
+            )
             XCTFail("createGroup did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -255,7 +263,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try ImagesMethods.CreateImageOptions(prompt: decoded("\"A cute baby sea otter\""), model: decoded("\"gpt-image-2.5-flare\""))
+        var options = try ImagesMethods.CreateImageOptions(
+            prompt: decoded("\"A cute baby sea otter\""),
+            model: decoded("\"gpt-image-2.5-flare\"")
+        )
         options.n = try decoded("1")
         options.quality = try decoded("\"medium\"")
         options.responseFormat = try decoded("\"url\"")
@@ -288,7 +299,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try ImagesMethods.CreateImageOptions(prompt: decoded("\"A cute baby sea otter\""), model: decoded("\"gpt-image-2.5-flare\""))
+        var options = try ImagesMethods.CreateImageOptions(
+            prompt: decoded("\"A cute baby sea otter\""),
+            model: decoded("\"gpt-image-2.5-flare\"")
+        )
         options.n = try decoded("1")
         options.quality = try decoded("\"medium\"")
         options.responseFormat = try decoded("\"url\"")
@@ -308,8 +322,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.images.create(
-            options: options
-        )
+                options: options
+            )
             XCTFail("createImage did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -356,8 +370,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.images.createEdit(
-            body: .editImageBodyJsonParam(decoded(sdkMethodFixture118Value1))
-        )
+                body: .editImageBodyJsonParam(decoded(sdkMethodFixture118Value1))
+            )
             XCTFail("createImageEdit did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -424,7 +438,11 @@ extension SdkMethodTests {
         }
         _ = client
         let stream = try await client.images.createStream(
-            options: ImagesMethods.CreateImageStreamOptions(prompt: decoded("\"A cute baby sea otter\""), model: decoded("\"gpt-image-2.5-flare\""), stream: decoded("false"))
+            options: ImagesMethods.CreateImageStreamOptions(
+                prompt: decoded("\"A cute baby sea otter\""),
+                model: decoded("\"gpt-image-2.5-flare\""),
+                stream: decoded("false")
+            )
         )
         var events = stream.makeAsyncIterator()
         guard let actual = try await events.next() else {
@@ -477,13 +495,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.images.createVariation(
-            image: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
-            model: decoded("\"dall-e-2\""),
-            n: decoded("1"),
-            responseFormat: decoded("\"url\""),
-            size: decoded("\"1024x1024\""),
-            user: decoded("\"user-1234\"")
-        )
+                image: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+                model: decoded("\"dall-e-2\""),
+                n: decoded("1"),
+                responseFormat: decoded("\"url\""),
+                size: decoded("\"1024x1024\""),
+                user: decoded("\"user-1234\"")
+            )
             XCTFail("createImageVariation did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -532,10 +550,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.invites.create(
-            email: decoded("\"user@example.com\""),
-            role: decoded("\"reader\""),
-            projects: decoded("[{\"id\":\"id-1\",\"role\":\"member\"}]")
-        )
+                email: decoded("\"user@example.com\""),
+                role: decoded("\"reader\""),
+                projects: decoded("[{\"id\":\"id-1\",\"role\":\"member\"}]")
+            )
             XCTFail("createInvites did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

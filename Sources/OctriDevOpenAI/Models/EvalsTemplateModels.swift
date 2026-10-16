@@ -3,29 +3,36 @@
 
 import Foundation
 
-// EvalsTemplate domain models
+/// EvalsTemplate domain models
 public indirect enum TemplateItem {
     case easyInputMessage(EasyInputMessage)
     case evalItem(EvalItem)
 }
 
 extension TemplateItem: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for TemplateItem")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension TemplateItem {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(EasyInputMessage.self) { return .easyInputMessage(value) }
-        if let value = try? container.decode(EvalItem.self) { return .evalItem(value) }
+        if let value = try? container.decode(EasyInputMessage.self) {
+            return .easyInputMessage(value)
+        }
+        if let value = try? container.decode(EvalItem.self) {
+            return .evalItem(value)
+        }
         return nil
     }
 }
@@ -46,22 +53,29 @@ public indirect enum TemplateItem2 {
 }
 
 extension TemplateItem2: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for TemplateItem2")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension TemplateItem2 {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(TemplateItem2Variant0.self) { return .templateItem2Variant0(value) }
-        if let value = try? container.decode(EvalItem.self) { return .evalItem(value) }
+        if let value = try? container.decode(TemplateItem2Variant0.self) {
+            return .templateItem2Variant0(value)
+        }
+        if let value = try? container.decode(EvalItem.self) {
+            return .evalItem(value)
+        }
         return nil
     }
 }
@@ -88,25 +102,35 @@ public struct TemplateItem2Variant0: Codable {
         case content
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TemplateItem2Variant0 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        self.role = try container.sdkDecodeRequired(.role)
-        self.content = try container.sdkDecodeRequired(.content)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension TemplateItem2Variant0 {
-    public init(role: String, content: String) {
+public extension TemplateItem2Variant0 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        role = try container.sdkDecodeRequired(.role)
+        content = try container.sdkDecodeRequired(.content)
+    }
+}
+
+public extension TemplateItem2Variant0 {
+    init(role: String, content: String) {
         (self.role, self.content) = (role, content)
     }
 }

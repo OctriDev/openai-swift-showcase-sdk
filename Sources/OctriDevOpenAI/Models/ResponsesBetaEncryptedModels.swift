@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaEncrypted domain models
+/// ResponsesBetaEncrypted domain models
 /// Opaque encrypted content that Responses API decrypts inside trusted model execution.
 public struct BetaEncryptedContent: Codable {
     /// The type of the input item. Always `encrypted_content`.
@@ -16,28 +16,38 @@ public struct BetaEncryptedContent: Codable {
         case encryptedContent = "encrypted_content"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaEncryptedContent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.encryptedContent) else {
-            throw SdkValidationError(field: "encrypted_content", code: "required", message: "Validation failed for 'encrypted_content': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.encryptedContent = try container.sdkDecodeRequired(.encryptedContent)
-            try sdkValidateRawEnum("type", self.type, BetaEncryptedContentType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaEncryptedContent {
-    public init(type: BetaEncryptedContentType, encryptedContent: String) throws {
+public extension BetaEncryptedContent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.encryptedContent) else {
+            throw SdkValidationError(
+                field: "encrypted_content",
+                code: "required",
+                message: "Validation failed for 'encrypted_content': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        encryptedContent = try container.sdkDecodeRequired(.encryptedContent)
+        try sdkValidateRawEnum("type", type, BetaEncryptedContentType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaEncryptedContent {
+    init(type: BetaEncryptedContentType, encryptedContent: String) throws {
         (self.type, self.encryptedContent) = (type, encryptedContent)
-            try sdkValidateRawEnum("type", self.type, BetaEncryptedContentType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaEncryptedContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -53,30 +63,40 @@ public struct BetaEncryptedContentParam: Codable {
         case encryptedContent = "encrypted_content"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaEncryptedContentParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.encryptedContent) else {
-            throw SdkValidationError(field: "encrypted_content", code: "required", message: "Validation failed for 'encrypted_content': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.encryptedContent = try container.sdkDecodeRequired(.encryptedContent)
-            try sdkValidateRawEnum("type", self.type, BetaEncryptedContentParamType.allCases.map(\.rawValue))
-            try validateLength("encrypted_content", self.encryptedContent, min: nil, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaEncryptedContentParam {
-    public init(type: BetaEncryptedContentParamType, encryptedContent: String) throws {
+public extension BetaEncryptedContentParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.encryptedContent) else {
+            throw SdkValidationError(
+                field: "encrypted_content",
+                code: "required",
+                message: "Validation failed for 'encrypted_content': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        encryptedContent = try container.sdkDecodeRequired(.encryptedContent)
+        try sdkValidateRawEnum("type", type, BetaEncryptedContentParamType.allCases.map(\.rawValue))
+        try validateLength("encrypted_content", encryptedContent, min: nil, max: 10_485_760)
+    }
+}
+
+public extension BetaEncryptedContentParam {
+    init(type: BetaEncryptedContentParamType, encryptedContent: String) throws {
         (self.type, self.encryptedContent) = (type, encryptedContent)
-            try sdkValidateRawEnum("type", self.type, BetaEncryptedContentParamType.allCases.map(\.rawValue))
-            try validateLength("encrypted_content", self.encryptedContent, min: nil, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, BetaEncryptedContentParamType.allCases.map(\.rawValue))
+        try validateLength("encrypted_content", self.encryptedContent, min: nil, max: 10_485_760)
     }
 }
 

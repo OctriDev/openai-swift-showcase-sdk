@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VectorStoresMethods {
-    /// Lists files attached to a vector store, with pagination and an optional status filter. Use `after` or `before` to navigate the list, and `filter` to select files by processing status.
+public extension VectorStoresMethods {
+    /// Lists files attached to a vector store, with pagination and an optional status filter. Use `after` or `before`
+    /// to navigate the list, and `filter` to select files by processing status.
     ///
     /// Returns a list of vector store files.
     ///
@@ -27,13 +28,31 @@ extension VectorStoresMethods {
     ///   before=obj_foo in order to fetch the previous page of the list.
     /// - filter: Filter by file status. One of `in_progress`, `completed`,
     ///   `failed`, `cancelled`.
-    public static func listVectorStoreFiles(config: ClientConfig, vectorStoreId: String, limit: Int? = nil, order: ListVectorStoreFilesParameter? = nil, after: String? = nil, before: String? = nil, filter: ListVectorStoreFilesParameterX63027327? = nil, requestOptions: RequestOptions? = nil) async throws -> ListVectorStoreFilesResponse {
-        return try (await sdkRequest("GET", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/files"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("before", value: before),
-            SdkQueryParameter("filter", value: filter),
-        ], decoder: .json, operationId: "listVectorStoreFiles", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func listVectorStoreFiles(
+        config: ClientConfig,
+        vectorStoreId: String,
+        limit: Int? = nil,
+        order: ListVectorStoreFilesParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        filter: ListVectorStoreFilesParameterX63027327? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListVectorStoreFilesResponse {
+        try await (sdkRequest(
+            "GET",
+            ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/files"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("before", value: before),
+                SdkQueryParameter("filter", value: filter),
+            ],
+            decoder: .json,
+            operationId: "listVectorStoreFiles",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

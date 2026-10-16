@@ -6,8 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectsMethods {
-    /// Creates an API key for a service account in a project. Use `name` and `scopes` to set the key's label and scopes, and `expires_in_seconds` to configure its lifetime. The response includes the unredacted key value and its identifier.
+public extension ProjectsMethods {
+    /// Creates an API key for a service account in a project. Use `name` and `scopes` to set the key's label and
+    /// scopes, and `expires_in_seconds` to configure its lifetime. The response includes the unredacted key value and
+    /// its identifier.
     ///
     /// Creates an API key for a service account in the project.
     ///
@@ -18,9 +20,42 @@ extension ProjectsMethods {
     /// - scopes: API key scopes.
     /// - expiresInSeconds: Optional API value serialized in the
     ///   `expires_in_seconds` wire field.
-    public static func createProjectsServiceAccountApiKey(config: ClientConfig, projectId: String, serviceAccountId: String, name: String? = nil, scopes: [String]? = nil, expiresInSeconds: SdkOptional<Int>? = nil, requestOptions: RequestOptions? = nil) async throws -> ServiceAccountApiKeyBody {
-        let requestBody = CreateProjectsServiceAccountApiKeyRequestBody(name: name, scopes: scopes, expiresInSeconds: expiresInSeconds)
+    static func createProjectsServiceAccountApiKey(
+        config: ClientConfig,
+        projectId: String,
+        serviceAccountId: String,
+        name: String? = nil,
+        scopes: [String]? = nil,
+        expiresInSeconds: SdkOptional<Int>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ServiceAccountApiKeyBody {
+        let requestBody = CreateProjectsServiceAccountApiKeyRequestBody(
+            name: name,
+            scopes: scopes,
+            expiresInSeconds: expiresInSeconds
+        )
 
-        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/service_accounts/", sdkEncodePathSegment(sdkWireString(serviceAccountId)), "/api_keys"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createProjectsServiceAccountApiKey", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/organization/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/service_accounts/",
+                sdkEncodePathSegment(sdkWireString(serviceAccountId)),
+                "/api_keys",
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createProjectsServiceAccountApiKey",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "409": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

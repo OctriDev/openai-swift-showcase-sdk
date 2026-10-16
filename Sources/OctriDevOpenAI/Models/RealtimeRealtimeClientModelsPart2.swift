@@ -3,31 +3,43 @@
 
 import Foundation
 
-// RealtimeRealtimeClient domain models
-extension RealtimeClientEventInputAudioBufferAppend {
-    public init(from decoder: Decoder) throws {
+/// RealtimeRealtimeClient domain models
+public extension RealtimeClientEventInputAudioBufferAppend {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.audio) else {
-            throw SdkValidationError(field: "audio", code: "required", message: "Validation failed for 'audio': value is required")
+            throw SdkValidationError(
+                field: "audio",
+                code: "required",
+                message: "Validation failed for 'audio': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.audio = try container.sdkDecodeRequired(.audio)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-            try sdkValidateRawEnum("type", self.type, RealtimeClientEventInputAudioBufferAppendType.allCases.map(\.rawValue))
-        if let value = self.eventId {
+        type = try container.sdkDecodeRequired(.type)
+        audio = try container.sdkDecodeRequired(.audio)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        try sdkValidateRawEnum("type", type, RealtimeClientEventInputAudioBufferAppendType.allCases.map(\.rawValue))
+        if let value = eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
     }
 }
 
-extension RealtimeClientEventInputAudioBufferAppend {
-    public init(type: RealtimeClientEventInputAudioBufferAppendType, audio: String, eventId: String? = nil) throws {
+public extension RealtimeClientEventInputAudioBufferAppend {
+    init(type: RealtimeClientEventInputAudioBufferAppendType, audio: String, eventId: String? = nil) throws {
         (self.type, self.audio) = (type, audio)
         self.eventId = eventId
-            try sdkValidateRawEnum("type", self.type, RealtimeClientEventInputAudioBufferAppendType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeClientEventInputAudioBufferAppendType.allCases.map(\.rawValue)
+        )
         if let value = self.eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
@@ -49,26 +61,40 @@ public struct RealtimeClientEventTranscriptionSessionUpdate: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeClientEventTranscriptionSessionUpdate {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.session = try container.sdkDecodeRequired(.session)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeClientEventTranscriptionSessionUpdate {
-    public init(type: RealtimeClientEventTranscriptionSessionUpdateType, session: RealtimeTranscriptionSessionCreateRequest, eventId: String? = nil) {
+public extension RealtimeClientEventTranscriptionSessionUpdate {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        session = try container.sdkDecodeRequired(.session)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+    }
+}
+
+public extension RealtimeClientEventTranscriptionSessionUpdate {
+    init(
+        type: RealtimeClientEventTranscriptionSessionUpdateType,
+        session: RealtimeTranscriptionSessionCreateRequest,
+        eventId: String? = nil
+    ) {
         (self.type, self.session) = (type, session)
         self.eventId = eventId
     }
@@ -100,42 +126,70 @@ public struct RealtimeClientEventConversationItemTruncate: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RealtimeClientEventConversationItemTruncate {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeClientEventConversationItemTruncate {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
         }
         guard container.contains(.contentIndex) else {
-            throw SdkValidationError(field: "content_index", code: "required", message: "Validation failed for 'content_index': value is required")
+            throw SdkValidationError(
+                field: "content_index",
+                code: "required",
+                message: "Validation failed for 'content_index': value is required"
+            )
         }
         guard container.contains(.audioEndMs) else {
-            throw SdkValidationError(field: "audio_end_ms", code: "required", message: "Validation failed for 'audio_end_ms': value is required")
+            throw SdkValidationError(
+                field: "audio_end_ms",
+                code: "required",
+                message: "Validation failed for 'audio_end_ms': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.contentIndex = try container.sdkDecodeRequired(.contentIndex)
-        self.audioEndMs = try container.sdkDecodeRequired(.audioEndMs)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-            try sdkValidateRawEnum("type", self.type, RealtimeClientEventConversationItemTruncateType.allCases.map(\.rawValue))
-        if let value = self.eventId {
+        type = try container.sdkDecodeRequired(.type)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        contentIndex = try container.sdkDecodeRequired(.contentIndex)
+        audioEndMs = try container.sdkDecodeRequired(.audioEndMs)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        try sdkValidateRawEnum("type", type, RealtimeClientEventConversationItemTruncateType.allCases.map(\.rawValue))
+        if let value = eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
     }
 }
 
-extension RealtimeClientEventConversationItemTruncate {
-    public init(type: RealtimeClientEventConversationItemTruncateType, itemId: String, contentIndex: Int, audioEndMs: Int, eventId: String? = nil) throws {
+public extension RealtimeClientEventConversationItemTruncate {
+    init(
+        type: RealtimeClientEventConversationItemTruncateType,
+        itemId: String,
+        contentIndex: Int,
+        audioEndMs: Int,
+        eventId: String? = nil
+    ) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.contentIndex, self.audioEndMs) = (contentIndex, audioEndMs)
         self.eventId = eventId
-            try sdkValidateRawEnum("type", self.type, RealtimeClientEventConversationItemTruncateType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeClientEventConversationItemTruncateType.allCases.map(\.rawValue)
+        )
         if let value = self.eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
@@ -158,28 +212,38 @@ public struct RealtimeClientEventInputAudioBufferCommit: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RealtimeClientEventInputAudioBufferCommit {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeClientEventInputAudioBufferCommit {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-            try sdkValidateRawEnum("type", self.type, RealtimeClientEventInputAudioBufferCommitType.allCases.map(\.rawValue))
-        if let value = self.eventId {
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        try sdkValidateRawEnum("type", type, RealtimeClientEventInputAudioBufferCommitType.allCases.map(\.rawValue))
+        if let value = eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
     }
 }
 
-extension RealtimeClientEventInputAudioBufferCommit {
-    public init(type: RealtimeClientEventInputAudioBufferCommitType, eventId: String? = nil) throws {
+public extension RealtimeClientEventInputAudioBufferCommit {
+    init(type: RealtimeClientEventInputAudioBufferCommitType, eventId: String? = nil) throws {
         (self.type, self.eventId) = (type, eventId)
-            try sdkValidateRawEnum("type", self.type, RealtimeClientEventInputAudioBufferCommitType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeClientEventInputAudioBufferCommitType.allCases.map(\.rawValue)
+        )
         if let value = self.eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
@@ -205,30 +269,40 @@ public struct RealtimeClientEventResponseCreate: Codable {
         case response
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RealtimeClientEventResponseCreate {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeClientEventResponseCreate {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-        self.response = try container.sdkDecodeIfPresent(.response)
-            try sdkValidateRawEnum("type", self.type, RealtimeClientEventResponseCreateType.allCases.map(\.rawValue))
-        if let value = self.eventId {
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        response = try container.sdkDecodeIfPresent(.response)
+        try sdkValidateRawEnum("type", type, RealtimeClientEventResponseCreateType.allCases.map(\.rawValue))
+        if let value = eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
     }
 }
 
-extension RealtimeClientEventResponseCreate {
-    public init(type: RealtimeClientEventResponseCreateType, eventId: String? = nil, response: RealtimeResponseCreateParams? = nil) throws {
+public extension RealtimeClientEventResponseCreate {
+    init(
+        type: RealtimeClientEventResponseCreateType,
+        eventId: String? = nil,
+        response: RealtimeResponseCreateParams? = nil
+    ) throws {
         (self.type, self.eventId) = (type, eventId)
         self.response = response
-            try sdkValidateRawEnum("type", self.type, RealtimeClientEventResponseCreateType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeClientEventResponseCreateType.allCases.map(\.rawValue))
         if let value = self.eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
@@ -272,15 +346,20 @@ public enum RealtimeClientEventConversationItemDeleteType: String, CaseIterable,
 }
 
 /// The event type, must be `transcription_session.update`.
-public struct RealtimeClientEventTranscriptionSessionUpdateType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeClientEventTranscriptionSessionUpdateType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let transcriptionSessionUpdate = RealtimeClientEventTranscriptionSessionUpdateType(rawValue: "transcription_session.update")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let transcriptionSessionUpdate =
+        RealtimeClientEventTranscriptionSessionUpdateType(rawValue: "transcription_session.update")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

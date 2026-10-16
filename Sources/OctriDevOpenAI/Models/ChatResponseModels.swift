@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ChatResponse domain models
+/// ChatResponse domain models
 public indirect enum ResponseFormat {
     case responseFormatText(ResponseFormatText)
     case responseFormatJsonSchema(ResponseFormatJsonSchema)
@@ -13,7 +13,6 @@ public indirect enum ResponseFormat {
 }
 
 extension ResponseFormat: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension ResponseFormat: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension ResponseFormat: Codable {
 extension ResponseFormat {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "text": return .responseFormatText(try ResponseFormatText(from: decoder))
-        case "json_schema": return .responseFormatJsonSchema(try ResponseFormatJsonSchema(from: decoder))
-        case "json_object": return .responseFormatJsonObject(try ResponseFormatJsonObject(from: decoder))
-        default: return nil
+        case "text": try .responseFormatText(ResponseFormatText(from: decoder))
+        case "json_schema": try .responseFormatJsonSchema(ResponseFormatJsonSchema(from: decoder))
+        case "json_object": try .responseFormatJsonObject(ResponseFormatJsonObject(from: decoder))
+        default: nil
         }
     }
 }
@@ -62,13 +65,16 @@ public typealias ResponseModalities = [String]
 public struct ResponseModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let text = ResponseModalitiesItem(rawValue: "text")
     public static let audio = ResponseModalitiesItem(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

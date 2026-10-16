@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ChatChatCompletionRequest domain models
+/// ChatChatCompletionRequest domain models
 extension ChatCompletionRequestSystemMessageContent {
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
@@ -31,30 +31,44 @@ public struct ChatCompletionRequestDeveloperMessage: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatCompletionRequestDeveloperMessage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        self.content = try container.sdkDecodeRequired(.content)
-        self.role = try container.sdkDecodeRequired(.role)
-        self.name = try container.sdkDecodeIfPresent(.name)
-            try sdkValidateRawEnum("role", self.role, ChatCompletionRequestDeveloperMessageRole.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatCompletionRequestDeveloperMessage {
-    public init(content: ChatCompletionRequestDeveloperMessageContent, role: ChatCompletionRequestDeveloperMessageRole, name: String? = nil) throws {
+public extension ChatCompletionRequestDeveloperMessage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        content = try container.sdkDecodeRequired(.content)
+        role = try container.sdkDecodeRequired(.role)
+        name = try container.sdkDecodeIfPresent(.name)
+        try sdkValidateRawEnum("role", role, ChatCompletionRequestDeveloperMessageRole.allCases.map(\.rawValue))
+    }
+}
+
+public extension ChatCompletionRequestDeveloperMessage {
+    init(
+        content: ChatCompletionRequestDeveloperMessageContent,
+        role: ChatCompletionRequestDeveloperMessageRole,
+        name: String? = nil
+    ) throws {
         (self.content, self.role) = (content, role)
         self.name = name
-            try sdkValidateRawEnum("role", self.role, ChatCompletionRequestDeveloperMessageRole.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("role", self.role, ChatCompletionRequestDeveloperMessageRole.allCases.map(\.rawValue))
     }
 }
 
@@ -64,25 +78,33 @@ public indirect enum ChatCompletionRequestUserMessageContent {
 }
 
 extension ChatCompletionRequestUserMessageContent: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ChatCompletionRequestUserMessageContent")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for ChatCompletionRequestUserMessageContent"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension ChatCompletionRequestUserMessageContent {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         if let value = try? container.decode(
             [ChatCompletionRequestUserMessageContentPart].self
         ) {
-            return             .chatCompletionRequestUserMessageContentPartList(value)
+            return .chatCompletionRequestUserMessageContentPartList(value)
         }
         return nil
     }
@@ -113,33 +135,51 @@ public struct ChatCompletionRequestToolMessage: Codable {
         case toolCallId = "tool_call_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatCompletionRequestToolMessage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        guard container.contains(.toolCallId) else {
-            throw SdkValidationError(field: "tool_call_id", code: "required", message: "Validation failed for 'tool_call_id': value is required")
-        }
-        self.role = try container.sdkDecodeRequired(.role)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.toolCallId = try container.sdkDecodeRequired(.toolCallId)
-            try sdkValidateRawEnum("role", self.role, ChatCompletionRequestToolMessageRole.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatCompletionRequestToolMessage {
-    public init(role: ChatCompletionRequestToolMessageRole, content: ChatCompletionRequestToolMessageContent, toolCallId: String) throws {
+public extension ChatCompletionRequestToolMessage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        guard container.contains(.toolCallId) else {
+            throw SdkValidationError(
+                field: "tool_call_id",
+                code: "required",
+                message: "Validation failed for 'tool_call_id': value is required"
+            )
+        }
+        role = try container.sdkDecodeRequired(.role)
+        content = try container.sdkDecodeRequired(.content)
+        toolCallId = try container.sdkDecodeRequired(.toolCallId)
+        try sdkValidateRawEnum("role", role, ChatCompletionRequestToolMessageRole.allCases.map(\.rawValue))
+    }
+}
+
+public extension ChatCompletionRequestToolMessage {
+    init(
+        role: ChatCompletionRequestToolMessageRole,
+        content: ChatCompletionRequestToolMessageContent,
+        toolCallId: String
+    ) throws {
         (self.role, self.content) = (role, content)
         self.toolCallId = toolCallId
-            try sdkValidateRawEnum("role", self.role, ChatCompletionRequestToolMessageRole.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("role", self.role, ChatCompletionRequestToolMessageRole.allCases.map(\.rawValue))
     }
 }
 
@@ -234,10 +274,14 @@ public enum ChatCompletionRequestUserMessageRole: String, CaseIterable, Codable 
 }
 
 /// Specifies the detail level of the image. Learn more in the Vision guide.
-public struct ChatCompletionRequestMessageContentPartImageImageUrlDetail: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ChatCompletionRequestMessageContentPartImageImageUrlDetail: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = ChatCompletionRequestMessageContentPartImageImageUrlDetail(rawValue: "auto")
     public static let low = ChatCompletionRequestMessageContentPartImageImageUrlDetail(rawValue: "low")
     public static let high = ChatCompletionRequestMessageContentPartImageImageUrlDetail(rawValue: "high")
@@ -245,7 +289,7 @@ public struct ChatCompletionRequestMessageContentPartImageImageUrlDetail: RawRep
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -345,16 +389,20 @@ public enum ChatCompletionRequestDeveloperMessageRole: String, CaseIterable, Cod
 }
 
 /// The format of the encoded audio data. Currently supports "wav" and "mp3".
-public struct ChatCompletionRequestMessageContentPartAudioInputAudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ChatCompletionRequestMessageContentPartAudioInputAudioFormat: RawRepresentable, Hashable, Codable,
+    Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let wav = ChatCompletionRequestMessageContentPartAudioInputAudioFormat(rawValue: "wav")
     public static let mp3 = ChatCompletionRequestMessageContentPartAudioInputAudioFormat(rawValue: "mp3")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

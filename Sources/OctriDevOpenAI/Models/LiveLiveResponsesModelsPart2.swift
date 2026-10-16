@@ -3,27 +3,41 @@
 
 import Foundation
 
-// LiveLiveResponses domain models
-extension LiveResponsesDelegationSettingsInputParam {
-    public init(from decoder: Decoder) throws {
+/// LiveLiveResponses domain models
+public extension LiveResponsesDelegationSettingsInputParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
         }
-        self.model = try container.sdkDecodeRequired(.model)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        self.text = try container.sdkDecodeIfPresent(.text)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        model = try container.sdkDecodeRequired(.model)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        text = try container.sdkDecodeIfPresent(.text)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
     }
 }
 
-extension LiveResponsesDelegationSettingsInputParam {
-    public init(model: String, instructions: String? = nil, maxOutputTokens: Int? = nil, serviceTier: LiveResponsesServiceTier? = nil, reasoning: LiveDelegationReasoningInputParam? = nil, text: LiveDelegationTextInputParam? = nil, tools: [LiveResponsesDelegationSettingsInputParamToolsItem]? = nil, toolChoice: LiveResponsesDelegationSettingsInputParamToolChoice? = nil, parallelToolCalls: Bool? = nil) {
+public extension LiveResponsesDelegationSettingsInputParam {
+    init(
+        model: String,
+        instructions: String? = nil,
+        maxOutputTokens: Int? = nil,
+        serviceTier: LiveResponsesServiceTier? = nil,
+        reasoning: LiveDelegationReasoningInputParam? = nil,
+        text: LiveDelegationTextInputParam? = nil,
+        tools: [LiveResponsesDelegationSettingsInputParamToolsItem]? = nil,
+        toolChoice: LiveResponsesDelegationSettingsInputParamToolChoice? = nil,
+        parallelToolCalls: Bool? = nil
+    ) {
         (self.model, self.instructions) = (model, instructions)
         (self.maxOutputTokens, self.serviceTier) = (maxOutputTokens, serviceTier)
         (self.reasoning, self.text) = (reasoning, text)
@@ -44,28 +58,38 @@ public struct LiveResponsesDelegationParam: Codable {
         case responses
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveResponsesDelegationParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.responses) else {
-            throw SdkValidationError(field: "responses", code: "required", message: "Validation failed for 'responses': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.responses = try container.sdkDecodeRequired(.responses)
-            try sdkValidateRawEnum("type", self.type, LiveResponsesDelegationParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveResponsesDelegationParam {
-    public init(type: LiveResponsesDelegationParamType, responses: LiveResponsesDelegationSettingsInputParam) throws {
+public extension LiveResponsesDelegationParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.responses) else {
+            throw SdkValidationError(
+                field: "responses",
+                code: "required",
+                message: "Validation failed for 'responses': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        responses = try container.sdkDecodeRequired(.responses)
+        try sdkValidateRawEnum("type", type, LiveResponsesDelegationParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveResponsesDelegationParam {
+    init(type: LiveResponsesDelegationParamType, responses: LiveResponsesDelegationSettingsInputParam) throws {
         (self.type, self.responses) = (type, responses)
-            try sdkValidateRawEnum("type", self.type, LiveResponsesDelegationParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveResponsesDelegationParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -104,28 +128,38 @@ public struct LiveResponsesDelegationSettingsUpdateInputParam: Codable {
     }
 
     init() {
-        (self.model, self.instructions, self.maxOutputTokens, self.serviceTier, self.reasoning) = (nil, nil, nil, nil, nil)
-        (self.text, self.tools, self.toolChoice, self.parallelToolCalls) = (nil, nil, nil, nil)
+        (model, instructions, maxOutputTokens, serviceTier, reasoning) = (nil, nil, nil, nil, nil)
+        (text, tools, toolChoice, parallelToolCalls) = (nil, nil, nil, nil)
     }
 }
 
-extension LiveResponsesDelegationSettingsUpdateInputParam {
-    public init(from decoder: Decoder) throws {
+public extension LiveResponsesDelegationSettingsUpdateInputParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        self.text = try container.sdkDecodeIfPresent(.text)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        model = try container.sdkDecodeIfPresent(.model)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        text = try container.sdkDecodeIfPresent(.text)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
     }
 }
 
-extension LiveResponsesDelegationSettingsUpdateInputParam {
-    public init(model: String? = nil, instructions: String? = nil, maxOutputTokens: Int? = nil, serviceTier: LiveResponsesServiceTier? = nil, reasoning: LiveDelegationReasoningInputParam? = nil, text: LiveDelegationTextInputParam? = nil, tools: [LiveResponsesDelegationSettingsUpdateInputParamToolsItem]? = nil, toolChoice: LiveResponsesDelegationSettingsUpdateInputParamToolChoice? = nil, parallelToolCalls: Bool? = nil) {
+public extension LiveResponsesDelegationSettingsUpdateInputParam {
+    init(
+        model: String? = nil,
+        instructions: String? = nil,
+        maxOutputTokens: Int? = nil,
+        serviceTier: LiveResponsesServiceTier? = nil,
+        reasoning: LiveDelegationReasoningInputParam? = nil,
+        text: LiveDelegationTextInputParam? = nil,
+        tools: [LiveResponsesDelegationSettingsUpdateInputParamToolsItem]? = nil,
+        toolChoice: LiveResponsesDelegationSettingsUpdateInputParamToolChoice? = nil,
+        parallelToolCalls: Bool? = nil
+    ) {
         self.init()
         (self.model, self.instructions) = (model, instructions)
         (self.maxOutputTokens, self.serviceTier) = (maxOutputTokens, serviceTier)
@@ -139,7 +173,10 @@ extension LiveResponsesDelegationSettingsUpdateInputParam {
 public struct LiveResponsesServiceTier: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = LiveResponsesServiceTier(rawValue: "auto")
     public static let `default` = LiveResponsesServiceTier(rawValue: "default")
     public static let fastTierTempPilot = LiveResponsesServiceTier(rawValue: "fast_tier_temp_pilot")
@@ -149,7 +186,7 @@ public struct LiveResponsesServiceTier: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

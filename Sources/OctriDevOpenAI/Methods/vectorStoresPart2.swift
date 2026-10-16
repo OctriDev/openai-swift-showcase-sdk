@@ -6,8 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VectorStoresMethods {
-    /// Lists vector stores, which are collections of processed files that you can use with the `file_search` tool. Use the cursor parameters to move forward or backward through the results, and set `order` to control sorting by creation time.
+public extension VectorStoresMethods {
+    /// Lists vector stores, which are collections of processed files that you can use with the `file_search` tool. Use
+    /// the cursor parameters to move forward or backward through the results, and set `order` to control sorting by
+    /// creation time.
     ///
     /// Returns a list of vector stores.
     ///
@@ -24,12 +26,28 @@ extension VectorStoresMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, starting with obj_foo, your subsequent call can include
     ///   before=obj_foo in order to fetch the previous page of the list.
-    public static func listVectorStores(config: ClientConfig, limit: Int? = nil, order: ListVectorStoresParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListVectorStoresResponse {
-        return try (await sdkRequest("GET", "/vector_stores", config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("before", value: before),
-        ], decoder: .json, operationId: "listVectorStores", options: requestOptions, errors: ["429": ErrorResponse.self, "503": ErrorResponse.self])).data
+    static func listVectorStores(
+        config: ClientConfig,
+        limit: Int? = nil,
+        order: ListVectorStoresParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListVectorStoresResponse {
+        try await (sdkRequest(
+            "GET",
+            "/vector_stores",
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("before", value: before),
+            ],
+            decoder: .json,
+            operationId: "listVectorStores",
+            options: requestOptions,
+            errors: ["429": ErrorResponse.self, "503": ErrorResponse.self]
+        )).data
     }
 }

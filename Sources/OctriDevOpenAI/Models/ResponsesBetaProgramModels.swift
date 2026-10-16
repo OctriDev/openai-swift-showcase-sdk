@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaProgram domain models
+/// ResponsesBetaProgram domain models
 /// Typed representation of the `BetaProgramToolCallCallerParam` API schema.
 public struct BetaProgramToolCallCallerParam: Codable {
     /// The caller type. Always `program`.
@@ -16,30 +16,40 @@ public struct BetaProgramToolCallCallerParam: Codable {
         case callerId = "caller_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaProgramToolCallCallerParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callerId) else {
-            throw SdkValidationError(field: "caller_id", code: "required", message: "Validation failed for 'caller_id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callerId = try container.sdkDecodeRequired(.callerId)
-            try sdkValidateRawEnum("type", self.type, BetaProgramToolCallCallerParamType.allCases.map(\.rawValue))
-            try validateLength("caller_id", self.callerId, min: 1, max: 64)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaProgramToolCallCallerParam {
-    public init(type: BetaProgramToolCallCallerParamType, callerId: String) throws {
+public extension BetaProgramToolCallCallerParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callerId) else {
+            throw SdkValidationError(
+                field: "caller_id",
+                code: "required",
+                message: "Validation failed for 'caller_id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        callerId = try container.sdkDecodeRequired(.callerId)
+        try sdkValidateRawEnum("type", type, BetaProgramToolCallCallerParamType.allCases.map(\.rawValue))
+        try validateLength("caller_id", callerId, min: 1, max: 64)
+    }
+}
+
+public extension BetaProgramToolCallCallerParam {
+    init(type: BetaProgramToolCallCallerParamType, callerId: String) throws {
         (self.type, self.callerId) = (type, callerId)
-            try sdkValidateRawEnum("type", self.type, BetaProgramToolCallCallerParamType.allCases.map(\.rawValue))
-            try validateLength("caller_id", self.callerId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, BetaProgramToolCallCallerParamType.allCases.map(\.rawValue))
+        try validateLength("caller_id", self.callerId, min: 1, max: 64)
     }
 }
 
@@ -68,49 +78,78 @@ public struct BetaProgramItemParam: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaProgramItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.fingerprint) else {
-            throw SdkValidationError(field: "fingerprint", code: "required", message: "Validation failed for 'fingerprint': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.code = try container.sdkDecodeRequired(.code)
-        self.fingerprint = try container.sdkDecodeRequired(.fingerprint)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaProgramItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("code", self.code, min: nil, max: 10485760)
-            try validateLength("fingerprint", self.fingerprint, min: nil, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaProgramItemParam {
-    public init(id: String, type: BetaProgramItemParamType, callId: String, code: String, fingerprint: String, agent: BetaAgentTagParam? = nil) throws {
+public extension BetaProgramItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.fingerprint) else {
+            throw SdkValidationError(
+                field: "fingerprint",
+                code: "required",
+                message: "Validation failed for 'fingerprint': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        code = try container.sdkDecodeRequired(.code)
+        fingerprint = try container.sdkDecodeRequired(.fingerprint)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaProgramItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", callId, min: 1, max: 64)
+        try validateLength("code", code, min: nil, max: 10_485_760)
+        try validateLength("fingerprint", fingerprint, min: nil, max: 10_485_760)
+    }
+}
+
+public extension BetaProgramItemParam {
+    init(
+        id: String,
+        type: BetaProgramItemParamType,
+        callId: String,
+        code: String,
+        fingerprint: String,
+        agent: BetaAgentTagParam? = nil
+    ) throws {
         (self.id, self.type) = (id, type)
         (self.callId, self.code) = (callId, code)
         (self.fingerprint, self.agent) = (fingerprint, agent)
-            try sdkValidateRawEnum("type", self.type, BetaProgramItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("code", self.code, min: nil, max: 10485760)
-            try validateLength("fingerprint", self.fingerprint, min: nil, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, BetaProgramItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try validateLength("code", self.code, min: nil, max: 10_485_760)
+        try validateLength("fingerprint", self.fingerprint, min: nil, max: 10_485_760)
     }
 }
 
@@ -139,47 +178,76 @@ public struct BetaProgramOutputItemParam: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaProgramOutputItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.result) else {
-            throw SdkValidationError(field: "result", code: "required", message: "Validation failed for 'result': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.result = try container.sdkDecodeRequired(.result)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaProgramOutputItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("result", self.result, min: nil, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaProgramOutputItemParam {
-    public init(id: String, type: BetaProgramOutputItemParamType, callId: String, result: String, status: BetaProgramOutputItemStatus, agent: BetaAgentTagParam? = nil) throws {
+public extension BetaProgramOutputItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.result) else {
+            throw SdkValidationError(
+                field: "result",
+                code: "required",
+                message: "Validation failed for 'result': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        result = try container.sdkDecodeRequired(.result)
+        status = try container.sdkDecodeRequired(.status)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaProgramOutputItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", callId, min: 1, max: 64)
+        try validateLength("result", result, min: nil, max: 10_485_760)
+    }
+}
+
+public extension BetaProgramOutputItemParam {
+    init(
+        id: String,
+        type: BetaProgramOutputItemParamType,
+        callId: String,
+        result: String,
+        status: BetaProgramOutputItemStatus,
+        agent: BetaAgentTagParam? = nil
+    ) throws {
         (self.id, self.type) = (id, type)
         (self.callId, self.result) = (callId, result)
         (self.status, self.agent) = (status, agent)
-            try sdkValidateRawEnum("type", self.type, BetaProgramOutputItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("result", self.result, min: nil, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, BetaProgramOutputItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try validateLength("result", self.result, min: nil, max: 10_485_760)
     }
 }
 
@@ -195,28 +263,38 @@ public struct BetaProgramToolCallCaller: Codable {
         case callerId = "caller_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaProgramToolCallCaller {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callerId) else {
-            throw SdkValidationError(field: "caller_id", code: "required", message: "Validation failed for 'caller_id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callerId = try container.sdkDecodeRequired(.callerId)
-            try sdkValidateRawEnum("type", self.type, BetaProgramToolCallCallerType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaProgramToolCallCaller {
-    public init(type: BetaProgramToolCallCallerType, callerId: String) throws {
+public extension BetaProgramToolCallCaller {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callerId) else {
+            throw SdkValidationError(
+                field: "caller_id",
+                code: "required",
+                message: "Validation failed for 'caller_id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        callerId = try container.sdkDecodeRequired(.callerId)
+        try sdkValidateRawEnum("type", type, BetaProgramToolCallCallerType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaProgramToolCallCaller {
+    init(type: BetaProgramToolCallCallerType, callerId: String) throws {
         (self.type, self.callerId) = (type, callerId)
-            try sdkValidateRawEnum("type", self.type, BetaProgramToolCallCallerType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaProgramToolCallCallerType.allCases.map(\.rawValue))
     }
 }
 
@@ -244,43 +322,72 @@ public struct BetaProgramOutput: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaProgramOutput {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.result) else {
-            throw SdkValidationError(field: "result", code: "required", message: "Validation failed for 'result': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.result = try container.sdkDecodeRequired(.result)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaProgramOutputType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaProgramOutput {
-    public init(type: BetaProgramOutputType, id: String, callId: String, result: String, status: BetaProgramOutputStatus, agent: BetaAgentTag? = nil) throws {
+public extension BetaProgramOutput {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.result) else {
+            throw SdkValidationError(
+                field: "result",
+                code: "required",
+                message: "Validation failed for 'result': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        callId = try container.sdkDecodeRequired(.callId)
+        result = try container.sdkDecodeRequired(.result)
+        status = try container.sdkDecodeRequired(.status)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaProgramOutputType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaProgramOutput {
+    init(
+        type: BetaProgramOutputType,
+        id: String,
+        callId: String,
+        result: String,
+        status: BetaProgramOutputStatus,
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.result) = (callId, result)
         (self.status, self.agent) = (status, agent)
-            try sdkValidateRawEnum("type", self.type, BetaProgramOutputType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaProgramOutputType.allCases.map(\.rawValue))
     }
 }
 
@@ -308,43 +415,72 @@ public struct BetaProgram: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaProgram {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.fingerprint) else {
-            throw SdkValidationError(field: "fingerprint", code: "required", message: "Validation failed for 'fingerprint': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.code = try container.sdkDecodeRequired(.code)
-        self.fingerprint = try container.sdkDecodeRequired(.fingerprint)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaProgramType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaProgram {
-    public init(type: BetaProgramType, id: String, callId: String, code: String, fingerprint: String, agent: BetaAgentTag? = nil) throws {
+public extension BetaProgram {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.fingerprint) else {
+            throw SdkValidationError(
+                field: "fingerprint",
+                code: "required",
+                message: "Validation failed for 'fingerprint': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        callId = try container.sdkDecodeRequired(.callId)
+        code = try container.sdkDecodeRequired(.code)
+        fingerprint = try container.sdkDecodeRequired(.fingerprint)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaProgramType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaProgram {
+    init(
+        type: BetaProgramType,
+        id: String,
+        callId: String,
+        code: String,
+        fingerprint: String,
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.code) = (callId, code)
         (self.fingerprint, self.agent) = (fingerprint, agent)
-            try sdkValidateRawEnum("type", self.type, BetaProgramType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaProgramType.allCases.map(\.rawValue))
     }
 }
 
@@ -370,13 +506,16 @@ public enum BetaProgramToolCallCallerType: String, CaseIterable, Codable {
 public struct BetaProgramOutputItemStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = BetaProgramOutputItemStatus(rawValue: "completed")
     public static let incomplete = BetaProgramOutputItemStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -443,13 +582,16 @@ public enum BetaProgramOutputType: String, CaseIterable, Codable {
 public struct BetaProgramOutputStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = BetaProgramOutputStatus(rawValue: "completed")
     public static let incomplete = BetaProgramOutputStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

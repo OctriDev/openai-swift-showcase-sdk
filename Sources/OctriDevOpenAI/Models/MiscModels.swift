@@ -3,29 +3,36 @@
 
 import Foundation
 
-// Misc domain models
+/// Misc domain models
 public indirect enum ModelIds {
     case modelIdsShared(ModelIdsShared)
     case modelIdsResponses(ModelIdsResponses)
 }
 
 extension ModelIds: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ModelIds")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension ModelIds {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(ModelIdsShared.self) { return .modelIdsShared(value) }
-        if let value = try? container.decode(ModelIdsResponses.self) { return .modelIdsResponses(value) }
+        if let value = try? container.decode(ModelIdsShared.self) {
+            return .modelIdsShared(value)
+        }
+        if let value = try? container.decode(ModelIdsResponses.self) {
+            return .modelIdsResponses(value)
+        }
         return nil
     }
 }
@@ -46,22 +53,32 @@ public indirect enum TranscriptionChunkingStrategy {
 }
 
 extension TranscriptionChunkingStrategy: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for TranscriptionChunkingStrategy")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for TranscriptionChunkingStrategy"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension TranscriptionChunkingStrategy {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(VadConfig.self) { return .vadConfig(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(VadConfig.self) {
+            return .vadConfig(value)
+        }
         return nil
     }
 }
@@ -85,19 +102,19 @@ public struct FineTuneChatCompletionRequestAssistantMessageVariant0: Codable {
     }
 
     init() {
-        self.weight = nil
+        weight = nil
     }
 }
 
-extension FineTuneChatCompletionRequestAssistantMessageVariant0 {
-    public init(from decoder: Decoder) throws {
+public extension FineTuneChatCompletionRequestAssistantMessageVariant0 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.weight = try container.sdkDecodeIfPresent(.weight)
+        weight = try container.sdkDecodeIfPresent(.weight)
     }
 }
 
-extension FineTuneChatCompletionRequestAssistantMessageVariant0 {
-    public init(weight: Int? = nil) {
+public extension FineTuneChatCompletionRequestAssistantMessageVariant0 {
+    init(weight: Int? = nil) {
         self.init()
         self.weight = weight
     }
@@ -118,29 +135,43 @@ public struct DeletedConversation: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DeletedConversation {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
-        self.id = try container.sdkDecodeRequired(.id)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DeletedConversation {
-    public init(object: DeletedConversationResourceObject, deleted: Bool, id: String) {
+public extension DeletedConversation {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+        id = try container.sdkDecodeRequired(.id)
+    }
+}
+
+public extension DeletedConversation {
+    init(object: DeletedConversationResourceObject, deleted: Bool, id: String) {
         (self.object, self.deleted) = (object, deleted)
         self.id = id
     }
@@ -165,37 +196,71 @@ public struct FileCitationParam: Codable {
         case filename
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FileCitationParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.index) else {
-            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
-        }
-        guard container.contains(.fileId) else {
-            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
-        }
-        guard container.contains(.filename) else {
-            throw SdkValidationError(field: "filename", code: "required", message: "Validation failed for 'filename': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.index = try container.sdkDecodeRequired(.index)
-        self.fileId = try container.sdkDecodeRequired(.fileId)
-        self.filename = try container.sdkDecodeRequired(.filename)
-            try validateRange("index", Double(self.index), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FileCitationParam {
-    public init(type: FileCitationParamType, index: Int, fileId: String, filename: String) throws {
+public extension FileCitationParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.index) else {
+            throw SdkValidationError(
+                field: "index",
+                code: "required",
+                message: "Validation failed for 'index': value is required"
+            )
+        }
+        guard container.contains(.fileId) else {
+            throw SdkValidationError(
+                field: "file_id",
+                code: "required",
+                message: "Validation failed for 'file_id': value is required"
+            )
+        }
+        guard container.contains(.filename) else {
+            throw SdkValidationError(
+                field: "filename",
+                code: "required",
+                message: "Validation failed for 'filename': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        index = try container.sdkDecodeRequired(.index)
+        fileId = try container.sdkDecodeRequired(.fileId)
+        filename = try container.sdkDecodeRequired(.filename)
+        try validateRange(
+            "index",
+            Double(index),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension FileCitationParam {
+    init(type: FileCitationParamType, index: Int, fileId: String, filename: String) throws {
         (self.type, self.index) = (type, index)
         (self.fileId, self.filename) = (fileId, filename)
-            try validateRange("index", Double(self.index), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "index",
+            Double(self.index),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -214,29 +279,43 @@ public struct OutputAudio: Codable {
         case transcript
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OutputAudio {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.transcript) else {
-            throw SdkValidationError(field: "transcript", code: "required", message: "Validation failed for 'transcript': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.transcript = try container.sdkDecodeRequired(.transcript)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OutputAudio {
-    public init(type: OutputAudioType, data: String, transcript: String) {
+public extension OutputAudio {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.transcript) else {
+            throw SdkValidationError(
+                field: "transcript",
+                code: "required",
+                message: "Validation failed for 'transcript': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        data = try container.sdkDecodeRequired(.data)
+        transcript = try container.sdkDecodeRequired(.transcript)
+    }
+}
+
+public extension OutputAudio {
+    init(type: OutputAudioType, data: String, transcript: String) {
         (self.type, self.data) = (type, data)
         self.transcript = transcript
     }
@@ -254,25 +333,35 @@ public struct DragPoint: Codable {
         case y
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DragPoint {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.x) else {
-            throw SdkValidationError(field: "x", code: "required", message: "Validation failed for 'x': value is required")
-        }
-        guard container.contains(.y) else {
-            throw SdkValidationError(field: "y", code: "required", message: "Validation failed for 'y': value is required")
-        }
-        self.x = try container.sdkDecodeRequired(.x)
-        self.y = try container.sdkDecodeRequired(.y)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DragPoint {
-    public init(x: Int, y: Int) {
+public extension DragPoint {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.x) else {
+            throw SdkValidationError(
+                field: "x",
+                code: "required",
+                message: "Validation failed for 'x': value is required"
+            )
+        }
+        guard container.contains(.y) else {
+            throw SdkValidationError(
+                field: "y",
+                code: "required",
+                message: "Validation failed for 'y': value is required"
+            )
+        }
+        x = try container.sdkDecodeRequired(.x)
+        y = try container.sdkDecodeRequired(.y)
+    }
+}
+
+public extension DragPoint {
+    init(x: Int, y: Int) {
         (self.x, self.y) = (x, y)
     }
 }
@@ -309,34 +398,49 @@ public struct FineTuneChatCompletionRequestAssistantMessage: Codable {
         case functionCall = "function_call"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FineTuneChatCompletionRequestAssistantMessage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        self.role = try container.sdkDecodeRequired(.role)
-        self.weight = try container.sdkDecodeIfPresent(.weight)
-        self.content = try container.sdkDecodeIfPresent(.content)
-        self.refusal = try container.sdkDecodeIfPresent(.refusal)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.toolCalls = try container.sdkDecodeIfPresent(.toolCalls)
-        self.functionCall = try container.sdkDecodeIfPresent(.functionCall)
-            try sdkValidateRawEnum("role", self.role, ChatCompletionRequestAssistantMessageRole.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FineTuneChatCompletionRequestAssistantMessage {
-    public init(role: ChatCompletionRequestAssistantMessageRole, weight: Int? = nil, content: ChatCompletionRequestAssistantMessageContent? = nil, refusal: String? = nil, name: String? = nil, audio: ChatCompletionRequestAssistantMessageAudio? = nil, toolCalls: ChatCompletionMessageToolCalls? = nil, functionCall: ChatCompletionRequestAssistantMessageFunctionCall? = nil) throws {
+public extension FineTuneChatCompletionRequestAssistantMessage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        role = try container.sdkDecodeRequired(.role)
+        weight = try container.sdkDecodeIfPresent(.weight)
+        content = try container.sdkDecodeIfPresent(.content)
+        refusal = try container.sdkDecodeIfPresent(.refusal)
+        name = try container.sdkDecodeIfPresent(.name)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        toolCalls = try container.sdkDecodeIfPresent(.toolCalls)
+        functionCall = try container.sdkDecodeIfPresent(.functionCall)
+        try sdkValidateRawEnum("role", role, ChatCompletionRequestAssistantMessageRole.allCases.map(\.rawValue))
+    }
+}
+
+public extension FineTuneChatCompletionRequestAssistantMessage {
+    init(
+        role: ChatCompletionRequestAssistantMessageRole,
+        weight: Int? = nil,
+        content: ChatCompletionRequestAssistantMessageContent? = nil,
+        refusal: String? = nil,
+        name: String? = nil,
+        audio: ChatCompletionRequestAssistantMessageAudio? = nil,
+        toolCalls: ChatCompletionMessageToolCalls? = nil,
+        functionCall: ChatCompletionRequestAssistantMessageFunctionCall? = nil
+    ) throws {
         (self.role, self.weight) = (role, weight)
         (self.content, self.refusal) = (content, refusal)
         (self.name, self.audio) = (name, audio)
         (self.toolCalls, self.functionCall) = (toolCalls, functionCall)
-            try sdkValidateRawEnum("role", self.role, ChatCompletionRequestAssistantMessageRole.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("role", self.role, ChatCompletionRequestAssistantMessageRole.allCases.map(\.rawValue))
     }
 }
 
@@ -355,29 +459,43 @@ public struct LogProbProperties: Codable {
         case bytes
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LogProbProperties {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.token) else {
-            throw SdkValidationError(field: "token", code: "required", message: "Validation failed for 'token': value is required")
-        }
-        guard container.contains(.logprob) else {
-            throw SdkValidationError(field: "logprob", code: "required", message: "Validation failed for 'logprob': value is required")
-        }
-        guard container.contains(.bytes) else {
-            throw SdkValidationError(field: "bytes", code: "required", message: "Validation failed for 'bytes': value is required")
-        }
-        self.token = try container.sdkDecodeRequired(.token)
-        self.logprob = try container.sdkDecodeRequired(.logprob)
-        self.bytes = try container.sdkDecodeRequired(.bytes)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LogProbProperties {
-    public init(token: String, logprob: Double, bytes: [Int]) {
+public extension LogProbProperties {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.token) else {
+            throw SdkValidationError(
+                field: "token",
+                code: "required",
+                message: "Validation failed for 'token': value is required"
+            )
+        }
+        guard container.contains(.logprob) else {
+            throw SdkValidationError(
+                field: "logprob",
+                code: "required",
+                message: "Validation failed for 'logprob': value is required"
+            )
+        }
+        guard container.contains(.bytes) else {
+            throw SdkValidationError(
+                field: "bytes",
+                code: "required",
+                message: "Validation failed for 'bytes': value is required"
+            )
+        }
+        token = try container.sdkDecodeRequired(.token)
+        logprob = try container.sdkDecodeRequired(.logprob)
+        bytes = try container.sdkDecodeRequired(.bytes)
+    }
+}
+
+public extension LogProbProperties {
+    init(token: String, logprob: Double, bytes: [Int]) {
         (self.token, self.logprob) = (token, logprob)
         self.bytes = bytes
     }
@@ -407,35 +525,60 @@ public struct ErrorPayload: Codable {
         case misalignment
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ErrorPayload {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        guard container.contains(.param) else {
-            throw SdkValidationError(field: "param", code: "required", message: "Validation failed for 'param': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.code = try container.sdkDecodeNullable(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.param = try container.sdkDecodeNullable(.param)
-        self.headers = try container.sdkDecodeIfPresent(.headers)
-        self.misalignment = try container.sdkDecodeIfPresent(.misalignment)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ErrorPayload {
-    public init(type: String, code: String?, message: String, param: String?, headers: [String: String]? = nil, misalignment: MisalignmentErrorDetailsResource? = nil) {
+public extension ErrorPayload {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        guard container.contains(.param) else {
+            throw SdkValidationError(
+                field: "param",
+                code: "required",
+                message: "Validation failed for 'param': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        code = try container.sdkDecodeNullable(.code)
+        message = try container.sdkDecodeRequired(.message)
+        param = try container.sdkDecodeNullable(.param)
+        headers = try container.sdkDecodeIfPresent(.headers)
+        misalignment = try container.sdkDecodeIfPresent(.misalignment)
+    }
+}
+
+public extension ErrorPayload {
+    init(
+        type: String,
+        code: String?,
+        message: String,
+        param: String?,
+        headers: [String: String]? = nil,
+        misalignment: MisalignmentErrorDetailsResource? = nil
+    ) {
         (self.type, self.code) = (type, code)
         (self.message, self.param) = (message, param)
         (self.headers, self.misalignment) = (headers, misalignment)
@@ -463,5 +606,7 @@ public struct UrlCitationParam: Codable {
         case title
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

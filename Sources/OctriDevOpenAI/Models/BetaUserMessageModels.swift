@@ -3,7 +3,7 @@
 
 import Foundation
 
-// BetaUserMessage domain models
+/// BetaUserMessage domain models
 public indirect enum BetaUserMessageItemParamContentItem {
     case betaInputTextContentParam(BetaInputTextContentParam)
     case betaInputImageContentParamAutoParam(BetaInputImageContentParamAutoParam)
@@ -13,7 +13,6 @@ public indirect enum BetaUserMessageItemParamContentItem {
 }
 
 extension BetaUserMessageItemParamContentItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension BetaUserMessageItemParamContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension BetaUserMessageItemParamContentItem: Codable {
 extension BetaUserMessageItemParamContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .betaInputTextContentParam(try BetaInputTextContentParam(from: decoder))
-        case "input_image": return .betaInputImageContentParamAutoParam(try BetaInputImageContentParamAutoParam(from: decoder))
-        case "input_file": return .betaInputFileContentParam(try BetaInputFileContentParam(from: decoder))
-        default: return nil
+        case "input_text": try .betaInputTextContentParam(BetaInputTextContentParam(from: decoder))
+        case "input_image": try .betaInputImageContentParamAutoParam(BetaInputImageContentParamAutoParam(from: decoder))
+        case "input_file": try .betaInputFileContentParam(BetaInputFileContentParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -63,15 +66,21 @@ public indirect enum BetaUserMessageItemParamContent {
 }
 
 extension BetaUserMessageItemParamContent: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaUserMessageItemParamContent")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for BetaUserMessageItemParamContent"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
@@ -80,9 +89,11 @@ extension BetaUserMessageItemParamContent {
         if let value = try? container.decode(
             [BetaUserMessageItemParamContentItem].self
         ) {
-            return             .betaUserMessageItemParamContentItemList(value)
+            return .betaUserMessageItemParamContentItemList(value)
         }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         return nil
     }
 }
@@ -96,10 +107,6 @@ extension BetaUserMessageItemParamContent {
         }
     }
 }
-
-
-
-
 
 /// Typed representation of the `BetaUserMessageItemParam` API schema.
 public struct BetaUserMessageItemParam: Codable {
@@ -125,37 +132,58 @@ public struct BetaUserMessageItemParam: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaUserMessageItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.role = try container.sdkDecodeRequired(.role)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.status = try container.sdkDecodeIfPresent(.status)
-            try sdkValidateRawEnum("type", self.type, BetaUserMessageItemParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaUserMessageItemParam {
-    public init(type: BetaUserMessageItemParamType, role: BetaUserMessageItemParamRole, content: BetaUserMessageItemParamContent, agent: BetaAgentTagParam? = nil, id: String? = nil, status: String? = nil) throws {
+public extension BetaUserMessageItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        role = try container.sdkDecodeRequired(.role)
+        content = try container.sdkDecodeRequired(.content)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        id = try container.sdkDecodeIfPresent(.id)
+        status = try container.sdkDecodeIfPresent(.status)
+        try sdkValidateRawEnum("type", type, BetaUserMessageItemParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaUserMessageItemParam {
+    init(
+        type: BetaUserMessageItemParamType,
+        role: BetaUserMessageItemParamRole,
+        content: BetaUserMessageItemParamContent,
+        agent: BetaAgentTagParam? = nil,
+        id: String? = nil,
+        status: String? = nil
+    ) throws {
         (self.type, self.role) = (type, role)
         (self.content, self.agent) = (content, agent)
         (self.id, self.status) = (id, status)
-            try sdkValidateRawEnum("type", self.type, BetaUserMessageItemParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaUserMessageItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -181,12 +209,15 @@ public enum BetaUserMessageItemParamType: String, CaseIterable, Codable {
 public struct BetaUserMessageItemParamRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = BetaUserMessageItemParamRole(rawValue: "user")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

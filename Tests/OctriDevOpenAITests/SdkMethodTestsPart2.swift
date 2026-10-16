@@ -37,9 +37,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.userOrganizationRoleAssignments.assignUserRole(
-            userId: decoded("\"user-1\""),
-            roleId: decoded("\"role-1\"")
-        )
+                userId: decoded("\"user-1\""),
+                roleId: decoded("\"role-1\"")
+            )
             XCTFail("assignUserRole did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -87,9 +87,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.betaCancel(
-            responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\""),
-            openaiBeta: decoded("[\"responses_multi_agent=v1\"]")
-        )
+                responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\""),
+                openaiBeta: decoded("[\"responses_multi_agent=v1\"]")
+            )
             XCTFail("betaCancelResponse did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -137,9 +137,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.betaCreate(
-            body: decoded(sdkMethodFixture28Value1),
-            openaiBeta: decoded("[\"responses_multi_agent=v1\"]")
-        )
+                body: decoded(sdkMethodFixture28Value1),
+                openaiBeta: decoded("[\"responses_multi_agent=v1\"]")
+            )
             XCTFail("betaCreateResponse did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -212,9 +212,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.betaDelete(
-            responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\""),
-            openaiBeta: decoded("[\"responses_multi_agent=v1\"]")
-        )
+                responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\""),
+                openaiBeta: decoded("[\"responses_multi_agent=v1\"]")
+            )
             XCTFail("betaDeleteResponse did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -266,13 +266,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.betaGet(
-            responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\""),
-            include: decoded("[\"file_search_call.results\"]"),
-            stream: decoded("false"),
-            startingAfter: decoded("1"),
-            includeObfuscation: decoded("false"),
-            openaiBeta: decoded("[\"responses_multi_agent=v1\"]")
-        )
+                responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\""),
+                include: decoded("[\"file_search_call.results\"]"),
+                stream: decoded("false"),
+                startingAfter: decoded("1"),
+                includeObfuscation: decoded("false"),
+                openaiBeta: decoded("[\"responses_multi_agent=v1\"]")
+            )
             XCTFail("betaGetResponse did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -353,13 +353,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.betaListInputItems(
-            responseId: decoded("\"response-1\""),
-            limit: decoded("20"),
-            order: decoded("\"asc\""),
-            after: decoded("\"after\""),
-            include: decoded("[\"file_search_call.results\"]"),
-            openaiBeta: decoded("[\"responses_multi_agent=v1\"]")
-        )
+                responseId: decoded("\"response-1\""),
+                limit: decoded("20"),
+                order: decoded("\"asc\""),
+                after: decoded("\"after\""),
+                include: decoded("[\"file_search_call.results\"]"),
+                openaiBeta: decoded("[\"responses_multi_agent=v1\"]")
+            )
             XCTFail("betaListInputItems did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -424,8 +424,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.betaCompact(
-            options: options
-        )
+                options: options
+            )
             XCTFail("betaResponsesCompact did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -500,8 +500,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.betaCountInputTokens(
-            options: options
-        )
+                options: options
+            )
             XCTFail("betaResponsesCountInputTokens did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -548,8 +548,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.batch.cancel(
-            batchId: decoded("\"batch-1\"")
-        )
+                batchId: decoded("\"batch-1\"")
+            )
             XCTFail("cancelBatch did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

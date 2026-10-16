@@ -6,13 +6,37 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectsMethods {
-    /// Deletes a service account from the project. Returns confirmation of service account deletion, or an error if the project is archived (archived projects have no service accounts).
+public extension ProjectsMethods {
+    /// Deletes a service account from the project. Returns confirmation of service account deletion, or an error if the
+    /// project is archived (archived projects have no service accounts).
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
     /// - serviceAccountId: The ID of the service account.
-    public static func deleteProjectServiceAccount(config: ClientConfig, projectId: String, serviceAccountId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectServiceAccountDeleteResponse {
-        return try (await sdkRequest("DELETE", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/service_accounts/", sdkEncodePathSegment(sdkWireString(serviceAccountId))].joined(), config: config, decoder: .json, operationId: "deleteProjectServiceAccount", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func deleteProjectServiceAccount(
+        config: ClientConfig,
+        projectId: String,
+        serviceAccountId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectServiceAccountDeleteResponse {
+        try await (sdkRequest(
+            "DELETE",
+            [
+                "/organization/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/service_accounts/",
+                sdkEncodePathSegment(sdkWireString(serviceAccountId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteProjectServiceAccount",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

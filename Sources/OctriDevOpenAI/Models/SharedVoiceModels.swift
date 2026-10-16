@@ -3,29 +3,40 @@
 
 import Foundation
 
-// SharedVoice domain models
+/// SharedVoice domain models
 public indirect enum VoiceIdsOrCustomVoice {
     case voiceIdsShared(VoiceIdsShared)
     case voiceIdsOrCustomVoiceVariant1(VoiceIdsOrCustomVoiceVariant1)
 }
 
 extension VoiceIdsOrCustomVoice: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for VoiceIdsOrCustomVoice")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for VoiceIdsOrCustomVoice"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension VoiceIdsOrCustomVoice {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(VoiceIdsShared.self) { return .voiceIdsShared(value) }
-        if let value = try? container.decode(VoiceIdsOrCustomVoiceVariant1.self) { return .voiceIdsOrCustomVoiceVariant1(value) }
+        if let value = try? container.decode(VoiceIdsShared.self) {
+            return .voiceIdsShared(value)
+        }
+        if let value = try? container
+            .decode(VoiceIdsOrCustomVoiceVariant1.self) {
+            return .voiceIdsOrCustomVoiceVariant1(value)
+        }
         return nil
     }
 }
@@ -52,21 +63,27 @@ public struct VoiceIdsOrCustomVoiceVariant1: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VoiceIdsOrCustomVoiceVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VoiceIdsOrCustomVoiceVariant1 {
-    public init(id: String) {
+public extension VoiceIdsOrCustomVoiceVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+    }
+}
+
+public extension VoiceIdsOrCustomVoiceVariant1 {
+    init(id: String) {
         self.id = id
     }
 }

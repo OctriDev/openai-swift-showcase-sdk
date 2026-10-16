@@ -6,7 +6,8 @@ import Foundation
 import XCTest
 
 extension SdkMethodTests {
-    func testCreateRealtimeTranscriptionSessionCreateRealtimeTranscriptionSessionReachesMockAndDecodesResponse() async throws {
+    func testCreateRealtimeTranscriptionSessionCreateRealtimeTranscriptionSessionReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -29,7 +30,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testCreateRealtimeTranslationClientSecretCreateRealtimeTranslatioX098a222d8dReachesMockAndDecodesResponse() async throws {
+    func testCreateRealtimeTranslationClientSecretCreateRealtimeTranslatioX098a222d8dReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -49,7 +51,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testCreateRealtimeTranslationClientSecretCreateRealtimeTranslatioX2e35becd3eReachesMockAndDecodesResponse() async throws {
+    func testCreateRealtimeTranslationClientSecretCreateRealtimeTranslatioX2e35becd3eReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -60,9 +63,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.realtime.createTranslationClientSecret(
-            session: decoded(sdkMethodFixture150Value1),
-            expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":600}")
-        )
+                session: decoded(sdkMethodFixture150Value1),
+                expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":600}")
+            )
             XCTFail("createRealtimeTranslationClientSecret did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -109,8 +112,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.create(
-            body: decoded(sdkMethodFixture152Value1)
-        )
+                body: decoded(sdkMethodFixture152Value1)
+            )
             XCTFail("createResponse did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -183,10 +186,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.roles.create(
-            roleName: decoded("\"Example Name\""),
-            permissions: decoded("[\"permissions\"]"),
-            description: decoded("\"example text\"")
-        )
+                roleName: decoded("\"Example Name\""),
+                permissions: decoded("[\"permissions\"]"),
+                description: decoded("\"example text\"")
+            )
             XCTFail("createRole did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -236,11 +239,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.roles.createProjectRole(
-            projectId: decoded("\"project-1\""),
-            roleName: decoded("\"Example Name\""),
-            permissions: decoded("[\"permissions\"]"),
-            description: decoded("\"example text\"")
-        )
+                projectId: decoded("\"project-1\""),
+                roleName: decoded("\"Example Name\""),
+                permissions: decoded("[\"permissions\"]"),
+                description: decoded("\"example text\"")
+            )
             XCTFail("createRolesProjectRole did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -262,7 +265,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try AssistantsMethods.CreateRunOptions(threadId: decoded("\"thread-1\""), assistantId: decoded("\"assistant-1\""))
+        var options = try AssistantsMethods.CreateRunOptions(
+            threadId: decoded("\"thread-1\""),
+            assistantId: decoded("\"assistant-1\"")
+        )
         options.include = try decoded("[\"step_details.tool_calls[*].file_search.results[*].content\"]")
         options.model = try decoded("\"gpt-4.1\"")
         options.reasoningEffort = try decoded("\"medium\"")
@@ -300,7 +306,11 @@ extension SdkMethodTests {
         }
         _ = client
         let stream = try await client.assistants.createRunStream(
-            options: AssistantsMethods.CreateRunStreamOptions(threadId: decoded("\"thread-1\""), assistantId: decoded("\"assistant-1\""), stream: decoded("false"))
+            options: AssistantsMethods.CreateRunStreamOptions(
+                threadId: decoded("\"thread-1\""),
+                assistantId: decoded("\"assistant-1\""),
+                stream: decoded("false")
+            )
         )
         var events = stream.makeAsyncIterator()
         guard let actual = try await events.next() else {
@@ -348,8 +358,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.create(
-            files: decoded("[\"ZXhhbXBsZQ==\"]")
-        )
+                files: decoded("[\"ZXhhbXBsZQ==\"]")
+            )
             XCTFail("createSkill did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -418,10 +428,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.createVersion(
-            skillId: decoded("\"skill_123\""),
-            files: decoded("[\"ZXhhbXBsZQ==\"]"),
-            default: decoded("false")
-        )
+                skillId: decoded("\"skill_123\""),
+                files: decoded("[\"ZXhhbXBsZQ==\"]"),
+                default: decoded("false")
+            )
             XCTFail("createSkillVersion did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -488,14 +498,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.audio.createSpeech(
-            model: decoded("\"model\""),
-            input: decoded("\"input\""),
-            voice: decoded("\"ash\""),
-            instructions: decoded("\"instructions\""),
-            responseFormat: decoded("\"mp3\""),
-            speed: decoded("1"),
-            streamFormat: decoded("\"audio\"")
-        )
+                model: decoded("\"model\""),
+                input: decoded("\"input\""),
+                voice: decoded("\"ash\""),
+                instructions: decoded("\"instructions\""),
+                responseFormat: decoded("\"mp3\""),
+                speed: decoded("1"),
+                streamFormat: decoded("\"audio\"")
+            )
             XCTFail("createSpeech did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

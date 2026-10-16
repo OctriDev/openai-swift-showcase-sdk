@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AssistantsMethods {
-    /// Lists the steps belonging to a run on a thread. Use cursor parameters to page through the steps, and set `order` to control their order by creation time.
+public extension AssistantsMethods {
+    /// Lists the steps belonging to a run on a thread. Use cursor parameters to page through the steps, and set `order`
+    /// to control their order by creation time.
     ///
     /// Returns a list of run steps belonging to a run.
     ///
@@ -32,13 +33,30 @@ extension AssistantsMethods {
     ///   file search result content. See the [file search tool
     ///   documentation](https://developers.openai.com/api/docs/guides/tools-file-sear
     ///   ch#retrieval-customization) for more information.
-    public static func listRunSteps(config: ClientConfig, threadId: String, runId: String, limit: Int? = nil, order: ListRunStepsParameter? = nil, after: String? = nil, before: String? = nil, include: [ListRunStepsParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> ListRunStepsResponse {
-        return try (await sdkRequest("GET", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/runs/", sdkEncodePathSegment(sdkWireString(runId)), "/steps"].joined(), config: config, query: [
+    static func listRunSteps(
+        config: ClientConfig,
+        threadId: String,
+        runId: String,
+        limit: Int? = nil,
+        order: ListRunStepsParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        include: [ListRunStepsParameterItem]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListRunStepsResponse {
+        try await (sdkRequest("GET", [
+            "/threads/",
+            sdkEncodePathSegment(sdkWireString(threadId)),
+            "/runs/",
+            sdkEncodePathSegment(sdkWireString(runId)),
+            "/steps",
+        ].joined(), config: config, query: [
             SdkQueryParameter("limit", value: limit),
             SdkQueryParameter("order", value: order),
             SdkQueryParameter("after", value: after),
             SdkQueryParameter("before", value: before),
             SdkQueryParameter("include[]", values: include, style: "form", explode: true),
-        ], decoder: .json, operationId: "listRunSteps", options: requestOptions, errors: ["429": ErrorResponse.self])).data
+        ], decoder: .json, operationId: "listRunSteps", options: requestOptions, errors: ["429": ErrorResponse.self]))
+            .data
     }
 }

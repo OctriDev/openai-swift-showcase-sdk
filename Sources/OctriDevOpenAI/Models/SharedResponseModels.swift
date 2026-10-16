@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedResponse domain models
+/// SharedResponse domain models
 public typealias ResponseFormatJsonSchemaSchema = [String: JSONValue]
 
 public typealias ResponsePromptVariables = [String: ResponsePromptVariablesValue]
@@ -28,24 +28,30 @@ public struct ResponseFormatJsonSchemaJsonSchema: Codable {
         case strict
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseFormatJsonSchemaJsonSchema {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeIfPresent(.description)
-        self.schema = try container.sdkDecodeIfPresent(.schema)
-        self.strict = try container.sdkDecodeIfPresent(.strict)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseFormatJsonSchemaJsonSchema {
-    public init(name: String, description: String? = nil, schema: ResponseFormatJsonSchemaSchema? = nil, strict: Bool? = nil) {
+public extension ResponseFormatJsonSchemaJsonSchema {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeIfPresent(.description)
+        schema = try container.sdkDecodeIfPresent(.schema)
+        strict = try container.sdkDecodeIfPresent(.strict)
+    }
+}
+
+public extension ResponseFormatJsonSchemaJsonSchema {
+    init(name: String, description: String? = nil, schema: ResponseFormatJsonSchemaSchema? = nil, strict: Bool? = nil) {
         (self.name, self.description) = (name, description)
         (self.schema, self.strict) = (schema, strict)
     }
@@ -60,24 +66,30 @@ public struct ResponseFormatText: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseFormatText {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, ResponseFormatTextType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseFormatText {
-    public init(type: ResponseFormatTextType) throws {
+public extension ResponseFormatText {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, ResponseFormatTextType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseFormatText {
+    init(type: ResponseFormatTextType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, ResponseFormatTextType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ResponseFormatTextType.allCases.map(\.rawValue))
     }
 }
 
@@ -91,19 +103,19 @@ public struct ResponseConfigurationUpdateItemParamReasoning: Codable {
     }
 
     init() {
-        self.effort = nil
+        effort = nil
     }
 }
 
-extension ResponseConfigurationUpdateItemParamReasoning {
-    public init(from decoder: Decoder) throws {
+public extension ResponseConfigurationUpdateItemParamReasoning {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.effort = try container.sdkDecodeIfPresent(.effort)
+        effort = try container.sdkDecodeIfPresent(.effort)
     }
 }
 
-extension ResponseConfigurationUpdateItemParamReasoning {
-    public init(effort: ReasoningEffortVariant0? = nil) {
+public extension ResponseConfigurationUpdateItemParamReasoning {
+    init(effort: ReasoningEffortVariant0? = nil) {
         self.init()
         self.effort = effort
     }
@@ -121,28 +133,38 @@ public struct ResponseFormatJsonSchema: Codable {
         case jsonSchema = "json_schema"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseFormatJsonSchema {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.jsonSchema) else {
-            throw SdkValidationError(field: "json_schema", code: "required", message: "Validation failed for 'json_schema': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.jsonSchema = try container.sdkDecodeRequired(.jsonSchema)
-            try sdkValidateRawEnum("type", self.type, ResponseFormatJsonSchemaType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseFormatJsonSchema {
-    public init(type: ResponseFormatJsonSchemaType, jsonSchema: ResponseFormatJsonSchemaJsonSchema) throws {
+public extension ResponseFormatJsonSchema {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.jsonSchema) else {
+            throw SdkValidationError(
+                field: "json_schema",
+                code: "required",
+                message: "Validation failed for 'json_schema': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        jsonSchema = try container.sdkDecodeRequired(.jsonSchema)
+        try sdkValidateRawEnum("type", type, ResponseFormatJsonSchemaType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseFormatJsonSchema {
+    init(type: ResponseFormatJsonSchemaType, jsonSchema: ResponseFormatJsonSchemaJsonSchema) throws {
         (self.type, self.jsonSchema) = (type, jsonSchema)
-            try sdkValidateRawEnum("type", self.type, ResponseFormatJsonSchemaType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ResponseFormatJsonSchemaType.allCases.map(\.rawValue))
     }
 }
 
@@ -156,19 +178,19 @@ public struct ResponseConfigurationUpdateReasoning: Codable {
     }
 
     init() {
-        self.effort = nil
+        effort = nil
     }
 }
 
-extension ResponseConfigurationUpdateReasoning {
-    public init(from decoder: Decoder) throws {
+public extension ResponseConfigurationUpdateReasoning {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.effort = try container.sdkDecodeIfPresent(.effort)
+        effort = try container.sdkDecodeIfPresent(.effort)
     }
 }
 
-extension ResponseConfigurationUpdateReasoning {
-    public init(effort: ReasoningEffortVariant0? = nil) {
+public extension ResponseConfigurationUpdateReasoning {
+    init(effort: ReasoningEffortVariant0? = nil) {
         self.init()
         self.effort = effort
     }
@@ -191,30 +213,44 @@ public struct ResponseConfigurationUpdate: Codable {
         case reasoning
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseConfigurationUpdate {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-            try sdkValidateRawEnum("type", self.type, ResponseConfigurationUpdateType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseConfigurationUpdate {
-    public init(id: String, type: ResponseConfigurationUpdateType, reasoning: ResponseConfigurationUpdateReasoning? = nil) throws {
+public extension ResponseConfigurationUpdate {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        try sdkValidateRawEnum("type", type, ResponseConfigurationUpdateType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseConfigurationUpdate {
+    init(
+        id: String,
+        type: ResponseConfigurationUpdateType,
+        reasoning: ResponseConfigurationUpdateReasoning? = nil
+    ) throws {
         (self.id, self.type) = (id, type)
         self.reasoning = reasoning
-            try sdkValidateRawEnum("type", self.type, ResponseConfigurationUpdateType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ResponseConfigurationUpdateType.allCases.map(\.rawValue))
     }
 }
 
@@ -229,24 +265,30 @@ public struct ResponseFormatJsonObject: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseFormatJsonObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, ResponseFormatJsonObjectType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseFormatJsonObject {
-    public init(type: ResponseFormatJsonObjectType) throws {
+public extension ResponseFormatJsonObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, ResponseFormatJsonObjectType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseFormatJsonObject {
+    init(type: ResponseFormatJsonObjectType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, ResponseFormatJsonObjectType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ResponseFormatJsonObjectType.allCases.map(\.rawValue))
     }
 }
 
@@ -266,27 +308,37 @@ public struct ResponseConfigurationUpdateItemParam: Codable {
         case reasoning
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseConfigurationUpdateItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-            try sdkValidateRawEnum("type", self.type, ResponseConfigurationUpdateItemParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseConfigurationUpdateItemParam {
-    public init(type: ResponseConfigurationUpdateItemParamType, id: String? = nil, reasoning: ResponseConfigurationUpdateItemParamReasoning? = nil) throws {
+public extension ResponseConfigurationUpdateItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeIfPresent(.id)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        try sdkValidateRawEnum("type", type, ResponseConfigurationUpdateItemParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseConfigurationUpdateItemParam {
+    init(
+        type: ResponseConfigurationUpdateItemParamType,
+        id: String? = nil,
+        reasoning: ResponseConfigurationUpdateItemParamReasoning? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         self.reasoning = reasoning
-            try sdkValidateRawEnum("type", self.type, ResponseConfigurationUpdateItemParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ResponseConfigurationUpdateItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -300,7 +352,6 @@ public indirect enum ResponsePromptVariablesValue {
 }
 
 extension ResponsePromptVariablesValue: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -308,20 +359,29 @@ extension ResponsePromptVariablesValue: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ResponsePromptVariablesValue")
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for ResponsePromptVariablesValue"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -332,20 +392,28 @@ extension ResponsePromptVariablesValue: Codable {
 extension ResponsePromptVariablesValue {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .inputTextContent(try InputTextContent(from: decoder))
-        case "input_image": return .inputImageContent(try InputImageContent(from: decoder))
-        case "input_file": return .inputFileContent(try InputFileContent(from: decoder))
-        default: return nil
+        case "input_text": try .inputTextContent(InputTextContent(from: decoder))
+        case "input_image": try .inputImageContent(InputImageContent(from: decoder))
+        case "input_file": try .inputFileContent(InputFileContent(from: decoder))
+        default: nil
         }
     }
 }
 
 extension ResponsePromptVariablesValue {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(InputTextContent.self) { return .inputTextContent(value) }
-        if let value = try? container.decode(InputImageContent.self) { return .inputImageContent(value) }
-        if let value = try? container.decode(InputFileContent.self) { return .inputFileContent(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(InputTextContent.self) {
+            return .inputTextContent(value)
+        }
+        if let value = try? container.decode(InputImageContent.self) {
+            return .inputImageContent(value)
+        }
+        if let value = try? container.decode(InputFileContent.self) {
+            return .inputFileContent(value)
+        }
         return nil
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedMcptool domain models
+/// SharedMcptool domain models
 /// Identifier for service connectors, like those available in ChatGPT. One of `server_url`, `connector_id`, or
 /// `tunnel_id` must be provided. Learn more about service connectors here. This field is deprecated for models
 /// released after September 1, 2026. Use `server_url` to connect to a remote MCP server, or `tunnel_id` to
@@ -12,7 +12,10 @@ import Foundation
 public struct MCPToolConnectorId: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let connectorDropbox = MCPToolConnectorId(rawValue: "connector_dropbox")
     public static let connectorGmail = MCPToolConnectorId(rawValue: "connector_gmail")
     public static let connectorGooglecalendar = MCPToolConnectorId(rawValue: "connector_googlecalendar")
@@ -24,7 +27,7 @@ public struct MCPToolConnectorId: RawRepresentable, Hashable, Codable, Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

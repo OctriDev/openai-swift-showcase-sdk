@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectsMethods {
+public extension ProjectsMethods {
     /// Returns a list of service accounts in the project.
     ///
     /// - Parameters:
@@ -17,11 +17,31 @@ extension ProjectsMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
-    public static func listProjectServiceAccounts(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectServiceAccountListResponse {
-        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/service_accounts"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("after", value: after),
-        ], decoder: .json, operationId: "listProjectServiceAccounts", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func listProjectServiceAccounts(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectServiceAccountListResponse {
+        try await (sdkRequest(
+            "GET",
+            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/service_accounts"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("after", value: after),
+            ],
+            decoder: .json,
+            operationId: "listProjectServiceAccounts",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 
     /// Returns a list of service accounts in the project.
@@ -34,18 +54,41 @@ extension ProjectsMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
-    public static func listProjectServiceAccountsPaginated(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ProjectServiceAccount, Swift.Error> {
-        return AsyncThrowingStream<ProjectServiceAccount, Swift.Error> { (continuation: AsyncThrowingStream<ProjectServiceAccount, Swift.Error>.Continuation) in
+    static func listProjectServiceAccountsPaginated(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ProjectServiceAccount, Swift.Error> {
+        AsyncThrowingStream<ProjectServiceAccount, Swift.Error> { (continuation: AsyncThrowingStream<
+            ProjectServiceAccount,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectServiceAccounts(config: config, projectId: projectId, limit: limit, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listProjectServiceAccounts(
+                            config: config,
+                            projectId: projectId,
+                            limit: limit,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -58,25 +101,50 @@ extension ProjectsMethods {
         }
     }
 
-    public struct ListProjectServiceAccountsPage {
+    struct ListProjectServiceAccountsPage {
         public let data: ProjectServiceAccountListResponse
         public let items: [ProjectServiceAccount]
         public let hasMore: Bool
     }
 
-    public static func listProjectServiceAccountsPages(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListProjectServiceAccountsPage, Swift.Error> {
-        return AsyncThrowingStream<ListProjectServiceAccountsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListProjectServiceAccountsPage, Swift.Error>.Continuation) in
+    static func listProjectServiceAccountsPages(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListProjectServiceAccountsPage, Swift.Error> {
+        AsyncThrowingStream<ListProjectServiceAccountsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListProjectServiceAccountsPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectServiceAccounts(config: config, projectId: projectId, limit: limit, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listProjectServiceAccounts(
+                            config: config,
+                            projectId: projectId,
+                            limit: limit,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListProjectServiceAccountsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageContinuation.yield(ListProjectServiceAccountsPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

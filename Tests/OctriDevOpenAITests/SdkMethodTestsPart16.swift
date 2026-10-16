@@ -17,12 +17,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.get(
-            responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\""),
-            include: decoded("[\"file_search_call.results\"]"),
-            stream: decoded("false"),
-            startingAfter: decoded("1"),
-            includeObfuscation: decoded("false")
-        )
+                responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\""),
+                include: decoded("[\"file_search_call.results\"]"),
+                stream: decoded("false"),
+                startingAfter: decoded("1"),
+                includeObfuscation: decoded("false")
+            )
             XCTFail("getResponse did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -139,8 +139,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.get(
-            skillId: decoded("\"skill_123\"")
-        )
+                skillId: decoded("\"skill_123\"")
+            )
             XCTFail("getSkill did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -179,8 +179,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.getContent(
-            skillId: decoded("\"skill_123\"")
-        )
+                skillId: decoded("\"skill_123\"")
+            )
             XCTFail("getSkillContent did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -228,9 +228,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.getVersion(
-            skillId: decoded("\"skill_123\""),
-            version: decoded("\"version\"")
-        )
+                skillId: decoded("\"skill_123\""),
+                version: decoded("\"version\"")
+            )
             XCTFail("getSkillVersion did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -270,9 +270,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.getVersionContent(
-            skillId: decoded("\"skill_123\""),
-            version: decoded("\"version\"")
-        )
+                skillId: decoded("\"skill_123\""),
+                version: decoded("\"version\"")
+            )
             XCTFail("getSkillVersionContent did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -338,8 +338,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.get(
-            vectorStoreId: decoded("\"vector_store-1\"")
-        )
+                vectorStoreId: decoded("\"vector_store-1\"")
+            )
             XCTFail("getVectorStore did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -387,9 +387,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.getFile(
-            vectorStoreId: decoded("\"vs_abc123\""),
-            fileId: decoded("\"file-abc123\"")
-        )
+                vectorStoreId: decoded("\"vs_abc123\""),
+                fileId: decoded("\"file-abc123\"")
+            )
             XCTFail("getVectorStoreFile did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -437,9 +437,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.getFileBatch(
-            vectorStoreId: decoded("\"vs_abc123\""),
-            batchId: decoded("\"vsfb_abc123\"")
-        )
+                vectorStoreId: decoded("\"vs_abc123\""),
+                batchId: decoded("\"vsfb_abc123\"")
+            )
             XCTFail("getVectorStoreFileBatch did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -486,8 +486,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.videos.get(
-            videoId: decoded("\"video_123\"")
-        )
+                videoId: decoded("\"video_123\"")
+            )
             XCTFail("getVideo did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -534,8 +534,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.videos.getCharacter(
-            characterId: decoded("\"char_123\"")
-        )
+                characterId: decoded("\"char_123\"")
+            )
             XCTFail("getVideoCharacter did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

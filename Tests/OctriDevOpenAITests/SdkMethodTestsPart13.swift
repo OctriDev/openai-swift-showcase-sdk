@@ -17,9 +17,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.deleteApiKey(
-            projectId: decoded("\"project-1\""),
-            apiKeyId: decoded("\"api_key-1\"")
-        )
+                projectId: decoded("\"project-1\""),
+                apiKeyId: decoded("\"api_key-1\"")
+            )
             XCTFail("deleteProjectApiKey did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -66,8 +66,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.deleteModelPermissions(
-            projectId: decoded("\"project-1\"")
-        )
+                projectId: decoded("\"project-1\"")
+            )
             XCTFail("deleteProjectModelPermissions did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -115,9 +115,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.deleteServiceAccount(
-            projectId: decoded("\"project-1\""),
-            serviceAccountId: decoded("\"service_account-1\"")
-        )
+                projectId: decoded("\"project-1\""),
+                serviceAccountId: decoded("\"service_account-1\"")
+            )
             XCTFail("deleteProjectServiceAccount did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -165,9 +165,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.spendAlerts.delete(
-            projectId: decoded("\"project-1\""),
-            alertId: decoded("\"alert-1\"")
-        )
+                projectId: decoded("\"project-1\""),
+                alertId: decoded("\"alert-1\"")
+            )
             XCTFail("deleteProjectSpendAlert did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -215,9 +215,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.deleteUser(
-            projectId: decoded("\"project-1\""),
-            userId: decoded("\"user-1\"")
-        )
+                projectId: decoded("\"project-1\""),
+                userId: decoded("\"user-1\"")
+            )
             XCTFail("deleteProjectUser did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -264,8 +264,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.delete(
-            responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\"")
-        )
+                responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\"")
+            )
             XCTFail("deleteResponse did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -312,8 +312,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.roles.delete(
-            roleId: decoded("\"role-1\"")
-        )
+                roleId: decoded("\"role-1\"")
+            )
             XCTFail("deleteRole did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -361,9 +361,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.roles.deleteProjectRole(
-            projectId: decoded("\"project-1\""),
-            roleId: decoded("\"role-1\"")
-        )
+                projectId: decoded("\"project-1\""),
+                roleId: decoded("\"role-1\"")
+            )
             XCTFail("deleteRolesProjectRole did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -410,8 +410,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.delete(
-            skillId: decoded("\"skill_123\"")
-        )
+                skillId: decoded("\"skill_123\"")
+            )
             XCTFail("deleteSkill did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -459,9 +459,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.deleteVersion(
-            skillId: decoded("\"skill_123\""),
-            version: decoded("\"version\"")
-        )
+                skillId: decoded("\"skill_123\""),
+                version: decoded("\"version\"")
+            )
             XCTFail("deleteSkillVersion did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -552,8 +552,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.spendLimits.deleteProject(
-            projectId: decoded("\"proj_123\"")
-        )
+                projectId: decoded("\"proj_123\"")
+            )
             XCTFail("deleteSpendLimitsProject did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

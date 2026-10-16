@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AssistantsMethods {
-    /// Lists messages belonging to a thread. Use `run_id` to filter by the run that generated the messages and `order` to control their creation-time order. Use `after` or `before` cursors to navigate the results.
+public extension AssistantsMethods {
+    /// Lists messages belonging to a thread. Use `run_id` to filter by the run that generated the messages and `order`
+    /// to control their creation-time order. Use `after` or `before` cursors to navigate the results.
     ///
     /// Returns a list of messages for a given thread.
     ///
@@ -28,13 +29,32 @@ extension AssistantsMethods {
     ///   receive 100 objects, starting with obj_foo, your subsequent call can include
     ///   before=obj_foo in order to fetch the previous page of the list.
     /// - runId: Filter messages by the run ID that generated them.
-    public static func listMessages(config: ClientConfig, threadId: String, limit: Int? = nil, order: ListMessagesParameter? = nil, after: String? = nil, before: String? = nil, runId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListMessagesResponse {
-        return try (await sdkRequest("GET", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/messages"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("before", value: before),
-            SdkQueryParameter("run_id", value: runId),
-        ], decoder: .json, operationId: "listMessages", options: requestOptions, errors: ["429": ErrorResponse.self])).data
+    static func listMessages(
+        config: ClientConfig,
+        threadId: String,
+        limit: Int? = nil,
+        order: ListMessagesParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        runId: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListMessagesResponse {
+        try await (sdkRequest(
+            "GET",
+            ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/messages"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("before", value: before),
+                SdkQueryParameter("run_id", value: runId),
+            ],
+            decoder: .json,
+            operationId: "listMessages",
+            options: requestOptions,
+            errors: ["429": ErrorResponse.self]
+        ))
+        .data
     }
 }

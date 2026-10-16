@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaResponse domain models
+/// ResponsesBetaResponse domain models
 /// Emitted when the model response is complete.
 public struct BetaResponseCompletedEvent: Codable {
     /// The type of the event. Always `response.completed`.
@@ -35,34 +35,53 @@ public struct BetaResponseCompletedEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponseCompletedEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.response) else {
-            throw SdkValidationError(field: "response", code: "required", message: "Validation failed for 'response': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.response = try container.sdkDecodeRequired(.response)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseCompletedEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponseCompletedEvent {
-    public init(type: BetaResponseCompletedEventType, response: BetaResponse, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
+public extension BetaResponseCompletedEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.response) else {
+            throw SdkValidationError(
+                field: "response",
+                code: "required",
+                message: "Validation failed for 'response': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        response = try container.sdkDecodeRequired(.response)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaResponseCompletedEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseCompletedEvent {
+    init(
+        type: BetaResponseCompletedEventType,
+        response: BetaResponse,
+        sequenceNumber: Int,
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.response) = (type, response)
         (self.sequenceNumber, self.agent) = (sequenceNumber, agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseCompletedEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseCompletedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -97,34 +116,53 @@ public struct BetaResponseCreatedEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponseCreatedEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.response) else {
-            throw SdkValidationError(field: "response", code: "required", message: "Validation failed for 'response': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.response = try container.sdkDecodeRequired(.response)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseCreatedEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponseCreatedEvent {
-    public init(type: BetaResponseCreatedEventType, response: BetaResponse, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
+public extension BetaResponseCreatedEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.response) else {
+            throw SdkValidationError(
+                field: "response",
+                code: "required",
+                message: "Validation failed for 'response': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        response = try container.sdkDecodeRequired(.response)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaResponseCreatedEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseCreatedEvent {
+    init(
+        type: BetaResponseCreatedEventType,
+        response: BetaResponse,
+        sequenceNumber: Int,
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.response) = (type, response)
         (self.sequenceNumber, self.agent) = (sequenceNumber, agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseCreatedEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseCreatedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -141,20 +179,20 @@ public struct BetaResponseLogProbTopLogprobsItem: Codable {
     }
 
     init() {
-        (self.token, self.logprob) = (nil, nil)
+        (token, logprob) = (nil, nil)
     }
 }
 
-extension BetaResponseLogProbTopLogprobsItem {
-    public init(from decoder: Decoder) throws {
+public extension BetaResponseLogProbTopLogprobsItem {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.token = try container.sdkDecodeIfPresent(.token)
-        self.logprob = try container.sdkDecodeIfPresent(.logprob)
+        token = try container.sdkDecodeIfPresent(.token)
+        logprob = try container.sdkDecodeIfPresent(.logprob)
     }
 }
 
-extension BetaResponseLogProbTopLogprobsItem {
-    public init(token: String? = nil, logprob: Double? = nil) {
+public extension BetaResponseLogProbTopLogprobsItem {
+    init(token: String? = nil, logprob: Double? = nil) {
         self.init()
         (self.token, self.logprob) = (token, logprob)
     }
@@ -166,22 +204,32 @@ public indirect enum BetaResponseVariant2Instructions {
 }
 
 extension BetaResponseVariant2Instructions: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaResponseVariant2Instructions")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for BetaResponseVariant2Instructions"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension BetaResponseVariant2Instructions {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode([BetaInputItem].self) { return .betaInputItemList(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode([BetaInputItem].self) {
+            return .betaInputItemList(value)
+        }
         return nil
     }
 }
@@ -200,12 +248,15 @@ extension BetaResponseVariant2Instructions {
 public struct BetaResponseItemListObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = BetaResponseItemListObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -218,12 +269,15 @@ public struct BetaResponseItemListObject: RawRepresentable, Hashable, Codable, S
 public struct BetaResponseVariant2Object: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let response = BetaResponseVariant2Object(rawValue: "response")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -289,10 +343,14 @@ public enum BetaResponseInProgressEventType: String, CaseIterable, Codable {
 /// The reason why the response is incomplete. `steered` means the response stopped at a safe output boundary
 /// after a WebSocket `response.steer` event. The server can then create a successor response automatically with
 /// the queued input.
-public struct BetaResponseVariant2IncompleteDetailsReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct BetaResponseVariant2IncompleteDetailsReason: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let maxOutputTokens = BetaResponseVariant2IncompleteDetailsReason(rawValue: "max_output_tokens")
     public static let maxMessages = BetaResponseVariant2IncompleteDetailsReason(rawValue: "max_messages")
     public static let contentFilter = BetaResponseVariant2IncompleteDetailsReason(rawValue: "content_filter")
@@ -300,7 +358,7 @@ public struct BetaResponseVariant2IncompleteDetailsReason: RawRepresentable, Has
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -314,7 +372,10 @@ public struct BetaResponseVariant2IncompleteDetailsReason: RawRepresentable, Has
 public struct BetaResponseVariant2Status: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = BetaResponseVariant2Status(rawValue: "completed")
     public static let failed = BetaResponseVariant2Status(rawValue: "failed")
     public static let inProgress = BetaResponseVariant2Status(rawValue: "in_progress")
@@ -324,7 +385,7 @@ public struct BetaResponseVariant2Status: RawRepresentable, Hashable, Codable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -409,16 +470,20 @@ public enum BetaResponseCompactionCompactingStreamingEventType: String, CaseIter
 /// model's context window size, the model will truncate the response to fit the context window by dropping
 /// items from the beginning of the conversation. - `disabled` (default): If the input size will exceed the
 /// context window size for a model, the request will fail with a 400 error.
-public struct BetaResponseVariant2TruncationVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct BetaResponseVariant2TruncationVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = BetaResponseVariant2TruncationVariant0(rawValue: "auto")
     public static let disabled = BetaResponseVariant2TruncationVariant0(rawValue: "disabled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

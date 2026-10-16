@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesResponseError domain models
+/// ResponsesResponseError domain models
 /// Emitted when an error occurs.
 public struct ResponseErrorEvent: Codable {
     /// The type of the event. Always `error`.
@@ -25,42 +25,64 @@ public struct ResponseErrorEvent: Codable {
         case sequenceNumber = "sequence_number"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseErrorEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        guard container.contains(.param) else {
-            throw SdkValidationError(field: "param", code: "required", message: "Validation failed for 'param': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.code = try container.sdkDecodeNullable(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.param = try container.sdkDecodeNullable(.param)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-            try sdkValidateRawEnum("type", self.type, ResponseErrorEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseErrorEvent {
-    public init(type: ResponseErrorEventType, code: String?, message: String, param: String?, sequenceNumber: Int) throws {
+public extension ResponseErrorEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        guard container.contains(.param) else {
+            throw SdkValidationError(
+                field: "param",
+                code: "required",
+                message: "Validation failed for 'param': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        code = try container.sdkDecodeNullable(.code)
+        message = try container.sdkDecodeRequired(.message)
+        param = try container.sdkDecodeNullable(.param)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        try sdkValidateRawEnum("type", type, ResponseErrorEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseErrorEvent {
+    init(type: ResponseErrorEventType, code: String?, message: String, param: String?, sequenceNumber: Int) throws {
         (self.type, self.code) = (type, code)
         (self.message, self.param) = (message, param)
         self.sequenceNumber = sequenceNumber
-            try sdkValidateRawEnum("type", self.type, ResponseErrorEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ResponseErrorEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -85,28 +107,44 @@ public struct ResponseError: Codable {
         case misalignment
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        self.code = try container.sdkDecodeRequired(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.param = try container.sdkDecodeIfPresent(.param)
-        self.misalignment = try container.sdkDecodeIfPresent(.misalignment)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseError {
-    public init(code: ResponseErrorCode, message: String, type: String? = nil, param: String? = nil, misalignment: MisalignmentErrorDetailsResource? = nil) {
+public extension ResponseError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        code = try container.sdkDecodeRequired(.code)
+        message = try container.sdkDecodeRequired(.message)
+        type = try container.sdkDecodeIfPresent(.type)
+        param = try container.sdkDecodeIfPresent(.param)
+        misalignment = try container.sdkDecodeIfPresent(.misalignment)
+    }
+}
+
+public extension ResponseError {
+    init(
+        code: ResponseErrorCode,
+        message: String,
+        type: String? = nil,
+        param: String? = nil,
+        misalignment: MisalignmentErrorDetailsResource? = nil
+    ) {
         (self.code, self.message) = (code, message)
         (self.type, self.param) = (type, param)
         self.misalignment = misalignment
@@ -135,7 +173,10 @@ public enum ResponseErrorEventType: String, CaseIterable, Codable {
 public struct ResponseErrorCode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let serverError = ResponseErrorCode(rawValue: "server_error")
     public static let rateLimitExceeded = ResponseErrorCode(rawValue: "rate_limit_exceeded")
     public static let invalidPrompt = ResponseErrorCode(rawValue: "invalid_prompt")
@@ -160,7 +201,7 @@ public struct ResponseErrorCode: RawRepresentable, Hashable, Codable, Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

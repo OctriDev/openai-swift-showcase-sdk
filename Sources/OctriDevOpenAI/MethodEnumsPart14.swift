@@ -11,7 +11,7 @@ struct CreateGroupRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encode(name, forKey: SdkCodingKey("name"))
     }
 }
 
@@ -20,7 +20,7 @@ struct UpdateGroupRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encode(name, forKey: SdkCodingKey("name"))
     }
 }
 
@@ -29,7 +29,7 @@ struct AssignGroupRoleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.roleId, forKey: SdkCodingKey("role_id"))
+        try keyedContainer.encode(roleId, forKey: SdkCodingKey("role_id"))
     }
 }
 
@@ -38,7 +38,7 @@ struct AddGroupUserRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.userId, forKey: SdkCodingKey("user_id"))
+        try keyedContainer.encode(userId, forKey: SdkCodingKey("user_id"))
     }
 }
 
@@ -49,9 +49,9 @@ struct CreateInvitesRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.email, forKey: SdkCodingKey("email"))
-        try keyedContainer.encode(self.role, forKey: SdkCodingKey("role"))
-        try keyedContainer.encodeIfPresent(self.projects, forKey: SdkCodingKey("projects"))
+        try keyedContainer.encode(email, forKey: SdkCodingKey("email"))
+        try keyedContainer.encode(role, forKey: SdkCodingKey("role"))
+        try keyedContainer.encodeIfPresent(projects, forKey: SdkCodingKey("projects"))
     }
 }
 
@@ -63,10 +63,10 @@ struct CreateProjectRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.geography, forKey: SdkCodingKey("geography"))
-        try keyedContainer.encodeIfPresent(self.residency, forKey: SdkCodingKey("residency"))
-        try keyedContainer.encodeIfPresent(self.externalKeyId, forKey: SdkCodingKey("external_key_id"))
+        try keyedContainer.encode(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(geography, forKey: SdkCodingKey("geography"))
+        try keyedContainer.encodeIfPresent(residency, forKey: SdkCodingKey("residency"))
+        try keyedContainer.encodeIfPresent(externalKeyId, forKey: SdkCodingKey("external_key_id"))
     }
 }
 
@@ -77,9 +77,9 @@ struct ModifyProjectRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.externalKeyId, forKey: SdkCodingKey("external_key_id"))
-        try keyedContainer.encodeIfPresent(self.geography, forKey: SdkCodingKey("geography"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(externalKeyId, forKey: SdkCodingKey("external_key_id"))
+        try keyedContainer.encodeIfPresent(geography, forKey: SdkCodingKey("geography"))
     }
 }
 
@@ -89,8 +89,8 @@ struct UpdateProjectApiKeyRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.expiresInSeconds, forKey: SdkCodingKey("expires_in_seconds"))
-        try keyedContainer.encodeIfPresent(self.scopes, forKey: SdkCodingKey("scopes"))
+        try keyedContainer.encodeIfPresent(expiresInSeconds, forKey: SdkCodingKey("expires_in_seconds"))
+        try keyedContainer.encodeIfPresent(scopes, forKey: SdkCodingKey("scopes"))
     }
 }
 
@@ -100,8 +100,8 @@ struct UpdateProjectModelPermissionsRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.mode, forKey: SdkCodingKey("mode"))
-        try keyedContainer.encode(self.modelIds, forKey: SdkCodingKey("model_ids"))
+        try keyedContainer.encode(mode, forKey: SdkCodingKey("mode"))
+        try keyedContainer.encode(modelIds, forKey: SdkCodingKey("model_ids"))
     }
 }
 
@@ -115,21 +115,27 @@ struct UpdateProjectRateLimitsRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.maxRequestsPer1Minute, forKey: SdkCodingKey("max_requests_per_1_minute"))
-        try keyedContainer.encodeIfPresent(self.maxTokensPer1Minute, forKey: SdkCodingKey("max_tokens_per_1_minute"))
-        try keyedContainer.encodeIfPresent(self.maxImagesPer1Minute, forKey: SdkCodingKey("max_images_per_1_minute"))
-        try keyedContainer.encodeIfPresent(self.maxAudioMegabytesPer1Minute, forKey: SdkCodingKey("max_audio_megabytes_per_1_minute"))
-        try keyedContainer.encodeIfPresent(self.maxRequestsPer1Day, forKey: SdkCodingKey("max_requests_per_1_day"))
-        try keyedContainer.encodeIfPresent(self.batch1DayMaxInputTokens, forKey: SdkCodingKey("batch_1_day_max_input_tokens"))
+        try keyedContainer.encodeIfPresent(maxRequestsPer1Minute, forKey: SdkCodingKey("max_requests_per_1_minute"))
+        try keyedContainer.encodeIfPresent(maxTokensPer1Minute, forKey: SdkCodingKey("max_tokens_per_1_minute"))
+        try keyedContainer.encodeIfPresent(maxImagesPer1Minute, forKey: SdkCodingKey("max_images_per_1_minute"))
+        try keyedContainer.encodeIfPresent(
+            maxAudioMegabytesPer1Minute,
+            forKey: SdkCodingKey("max_audio_megabytes_per_1_minute")
+        )
+        try keyedContainer.encodeIfPresent(maxRequestsPer1Day, forKey: SdkCodingKey("max_requests_per_1_day"))
+        try keyedContainer.encodeIfPresent(
+            batch1DayMaxInputTokens,
+            forKey: SdkCodingKey("batch_1_day_max_input_tokens")
+        )
     }
 
     init(options: ProjectsMethods.UpdateProjectRateLimitsOptions) {
-        self.maxRequestsPer1Minute = options.maxRequestsPer1Minute
-        self.maxTokensPer1Minute = options.maxTokensPer1Minute
-        self.maxImagesPer1Minute = options.maxImagesPer1Minute
-        self.maxAudioMegabytesPer1Minute = options.maxAudioMegabytesPer1Minute
-        self.maxRequestsPer1Day = options.maxRequestsPer1Day
-        self.batch1DayMaxInputTokens = options.batch1DayMaxInputTokens
+        maxRequestsPer1Minute = options.maxRequestsPer1Minute
+        maxTokensPer1Minute = options.maxTokensPer1Minute
+        maxImagesPer1Minute = options.maxImagesPer1Minute
+        maxAudioMegabytesPer1Minute = options.maxAudioMegabytesPer1Minute
+        maxRequestsPer1Day = options.maxRequestsPer1Day
+        batch1DayMaxInputTokens = options.batch1DayMaxInputTokens
     }
 }
 
@@ -140,9 +146,12 @@ struct CreateProjectServiceAccountRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.createServiceAccountOnly, forKey: SdkCodingKey("create_service_account_only"))
-        try keyedContainer.encodeIfPresent(self.expiresInSeconds, forKey: SdkCodingKey("expires_in_seconds"))
+        try keyedContainer.encode(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(
+            createServiceAccountOnly,
+            forKey: SdkCodingKey("create_service_account_only")
+        )
+        try keyedContainer.encodeIfPresent(expiresInSeconds, forKey: SdkCodingKey("expires_in_seconds"))
     }
 }
 
@@ -152,8 +161,8 @@ struct UpdateProjectServiceAccountRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.role, forKey: SdkCodingKey("role"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(role, forKey: SdkCodingKey("role"))
     }
 }
 
@@ -164,9 +173,9 @@ struct CreateProjectUserRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.role, forKey: SdkCodingKey("role"))
-        try keyedContainer.encodeIfPresent(self.userId, forKey: SdkCodingKey("user_id"))
-        try keyedContainer.encodeIfPresent(self.email, forKey: SdkCodingKey("email"))
+        try keyedContainer.encode(role, forKey: SdkCodingKey("role"))
+        try keyedContainer.encodeIfPresent(userId, forKey: SdkCodingKey("user_id"))
+        try keyedContainer.encodeIfPresent(email, forKey: SdkCodingKey("email"))
     }
 }
 
@@ -175,7 +184,7 @@ struct ModifyProjectUserRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.role, forKey: SdkCodingKey("role"))
+        try keyedContainer.encodeIfPresent(role, forKey: SdkCodingKey("role"))
     }
 }
 
@@ -186,9 +195,9 @@ struct CreateProjectsServiceAccountApiKeyRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.scopes, forKey: SdkCodingKey("scopes"))
-        try keyedContainer.encodeIfPresent(self.expiresInSeconds, forKey: SdkCodingKey("expires_in_seconds"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(scopes, forKey: SdkCodingKey("scopes"))
+        try keyedContainer.encodeIfPresent(expiresInSeconds, forKey: SdkCodingKey("expires_in_seconds"))
     }
 }
 
@@ -198,7 +207,7 @@ struct AddProjectGroupRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.groupId, forKey: SdkCodingKey("group_id"))
-        try keyedContainer.encode(self.role, forKey: SdkCodingKey("role"))
+        try keyedContainer.encode(groupId, forKey: SdkCodingKey("group_id"))
+        try keyedContainer.encode(role, forKey: SdkCodingKey("role"))
     }
 }

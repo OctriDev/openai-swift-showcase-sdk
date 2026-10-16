@@ -55,8 +55,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.users.delete(
-            userId: decoded("\"user-1\"")
-        )
+                userId: decoded("\"user-1\"")
+            )
             XCTFail("deleteUser did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -103,8 +103,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vaults.delete(
-            vaultId: decoded("\"vault-1\"")
-        )
+                vaultId: decoded("\"vault-1\"")
+            )
             XCTFail("deleteVault did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -152,9 +152,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vaults.deleteCredential(
-            vaultId: decoded("\"vault-1\""),
-            credentialId: decoded("\"credential-1\"")
-        )
+                vaultId: decoded("\"vault-1\""),
+                credentialId: decoded("\"credential-1\"")
+            )
             XCTFail("deleteVaultCredential did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -201,8 +201,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.delete(
-            vectorStoreId: decoded("\"vector_store-1\"")
-        )
+                vectorStoreId: decoded("\"vector_store-1\"")
+            )
             XCTFail("deleteVectorStore did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -250,9 +250,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.deleteFile(
-            vectorStoreId: decoded("\"vector_store-1\""),
-            fileId: decoded("\"file-1\"")
-        )
+                vectorStoreId: decoded("\"vector_store-1\""),
+                fileId: decoded("\"file-1\"")
+            )
             XCTFail("deleteVectorStoreFile did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -299,8 +299,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.videos.delete(
-            videoId: decoded("\"video_123\"")
-        )
+                videoId: decoded("\"video_123\"")
+            )
             XCTFail("deleteVideo did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -347,8 +347,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.audio.deleteVoiceConsent(
-            consentId: decoded("\"consent-1\"")
-        )
+                consentId: decoded("\"consent-1\"")
+            )
             XCTFail("deleteVoiceConsent did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -395,8 +395,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.webhookEndpoints.delete(
-            webhookEndpointId: decoded("\"whe_123\"")
-        )
+                webhookEndpointId: decoded("\"whe_123\"")
+            )
             XCTFail("deleteWebhookEndpoint did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -435,8 +435,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.files.download(
-            fileId: decoded("\"file-1\"")
-        )
+                fileId: decoded("\"file-1\"")
+            )
             XCTFail("downloadFile did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -475,8 +475,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.live.downloadRecording(
-            sessionId: decoded("\"live_a\"")
-        )
+                sessionId: decoded("\"live_a\"")
+            )
             XCTFail("downloadLiveRecording did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -525,10 +525,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.live.forkSession(
-            sessionId: decoded("\"session-1\""),
-            transport: decoded("{\"type\":\"webrtc\",\"sdp\":\"x\"}"),
-            session: decoded(sdkMethodFixture305Value1)
-        )
+                sessionId: decoded("\"session-1\""),
+                transport: decoded("{\"type\":\"webrtc\",\"sdp\":\"x\"}"),
+                session: decoded(sdkMethodFixture305Value1)
+            )
             XCTFail("forkLiveSession did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

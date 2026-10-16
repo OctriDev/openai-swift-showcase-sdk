@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaModeration domain models
+/// ResponsesBetaModeration domain models
 public indirect enum BetaModerationInput {
     case betaModerationResultBody(BetaModerationResultBody)
     case betaModerationErrorBody(BetaModerationErrorBody)
@@ -12,7 +12,6 @@ public indirect enum BetaModerationInput {
 }
 
 extension BetaModerationInput: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension BetaModerationInput: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,9 @@ extension BetaModerationInput: Codable {
 extension BetaModerationInput {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "moderation_result": return .betaModerationResultBody(try BetaModerationResultBody(from: decoder))
-        case "error": return .betaModerationErrorBody(try BetaModerationErrorBody(from: decoder))
-        default: return nil
+        case "moderation_result": try .betaModerationResultBody(BetaModerationResultBody(from: decoder))
+        case "error": try .betaModerationErrorBody(BetaModerationErrorBody(from: decoder))
+        default: nil
         }
     }
 }
@@ -62,7 +65,6 @@ public indirect enum BetaModerationOutput {
 }
 
 extension BetaModerationOutput: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -70,12 +72,16 @@ extension BetaModerationOutput: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -86,9 +92,9 @@ extension BetaModerationOutput: Codable {
 extension BetaModerationOutput {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "moderation_result": return .betaModerationResultBody(try BetaModerationResultBody(from: decoder))
-        case "error": return .betaModerationErrorBody(try BetaModerationErrorBody(from: decoder))
-        default: return nil
+        case "moderation_result": try .betaModerationResultBody(BetaModerationResultBody(from: decoder))
+        case "error": try .betaModerationErrorBody(BetaModerationErrorBody(from: decoder))
+        default: nil
         }
     }
 }
@@ -116,22 +122,28 @@ public struct BetaModerationParam: Codable {
         case policy
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaModerationParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        self.model = try container.sdkDecodeRequired(.model)
-        self.policy = try container.sdkDecodeIfPresent(.policy)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaModerationParam {
-    public init(model: String, policy: BetaModerationPolicyParam? = nil) {
+public extension BetaModerationParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        model = try container.sdkDecodeRequired(.model)
+        policy = try container.sdkDecodeIfPresent(.policy)
+    }
+}
+
+public extension BetaModerationParam {
+    init(model: String, policy: BetaModerationPolicyParam? = nil) {
         (self.model, self.policy) = (model, policy)
     }
 }
@@ -148,25 +160,35 @@ public struct BetaModeration: Codable {
         case output
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaModeration {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.input) else {
-            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        self.input = try container.sdkDecodeRequired(.input)
-        self.output = try container.sdkDecodeRequired(.output)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaModeration {
-    public init(input: BetaModerationInput, output: BetaModerationOutput) {
+public extension BetaModeration {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.input) else {
+            throw SdkValidationError(
+                field: "input",
+                code: "required",
+                message: "Validation failed for 'input': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        input = try container.sdkDecodeRequired(.input)
+        output = try container.sdkDecodeRequired(.output)
+    }
+}
+
+public extension BetaModeration {
+    init(input: BetaModerationInput, output: BetaModerationOutput) {
         (self.input, self.output) = (input, output)
     }
 }
@@ -184,20 +206,20 @@ public struct BetaModerationPolicyParam: Codable {
     }
 
     init() {
-        (self.input, self.output) = (nil, nil)
+        (input, output) = (nil, nil)
     }
 }
 
-extension BetaModerationPolicyParam {
-    public init(from decoder: Decoder) throws {
+public extension BetaModerationPolicyParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.input = try container.sdkDecodeIfPresent(.input)
-        self.output = try container.sdkDecodeIfPresent(.output)
+        input = try container.sdkDecodeIfPresent(.input)
+        output = try container.sdkDecodeIfPresent(.output)
     }
 }
 
-extension BetaModerationPolicyParam {
-    public init(input: BetaModerationConfigParam? = nil, output: BetaModerationConfigParam? = nil) {
+public extension BetaModerationPolicyParam {
+    init(input: BetaModerationConfigParam? = nil, output: BetaModerationConfigParam? = nil) {
         self.init()
         (self.input, self.output) = (input, output)
     }
@@ -227,46 +249,79 @@ public struct BetaModerationResultBody: Codable {
         case categoryAppliedInputTypes = "category_applied_input_types"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaModerationResultBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        guard container.contains(.flagged) else {
-            throw SdkValidationError(field: "flagged", code: "required", message: "Validation failed for 'flagged': value is required")
-        }
-        guard container.contains(.categories) else {
-            throw SdkValidationError(field: "categories", code: "required", message: "Validation failed for 'categories': value is required")
-        }
-        guard container.contains(.categoryScores) else {
-            throw SdkValidationError(field: "category_scores", code: "required", message: "Validation failed for 'category_scores': value is required")
-        }
-        guard container.contains(.categoryAppliedInputTypes) else {
-            throw SdkValidationError(field: "category_applied_input_types", code: "required", message: "Validation failed for 'category_applied_input_types': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.flagged = try container.sdkDecodeRequired(.flagged)
-        self.categories = try container.sdkDecodeRequired(.categories)
-        self.categoryScores = try container.sdkDecodeRequired(.categoryScores)
-        self.categoryAppliedInputTypes = try container.sdkDecodeRequired(.categoryAppliedInputTypes)
-            try sdkValidateRawEnum("type", self.type, BetaModerationResultBodyType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaModerationResultBody {
-    public init(type: BetaModerationResultBodyType, model: String, flagged: Bool, categories: [String: Bool], categoryScores: [String: Double], categoryAppliedInputTypes: [String: [BetaModerationInputType]]) throws {
+public extension BetaModerationResultBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        guard container.contains(.flagged) else {
+            throw SdkValidationError(
+                field: "flagged",
+                code: "required",
+                message: "Validation failed for 'flagged': value is required"
+            )
+        }
+        guard container.contains(.categories) else {
+            throw SdkValidationError(
+                field: "categories",
+                code: "required",
+                message: "Validation failed for 'categories': value is required"
+            )
+        }
+        guard container.contains(.categoryScores) else {
+            throw SdkValidationError(
+                field: "category_scores",
+                code: "required",
+                message: "Validation failed for 'category_scores': value is required"
+            )
+        }
+        guard container.contains(.categoryAppliedInputTypes) else {
+            throw SdkValidationError(
+                field: "category_applied_input_types",
+                code: "required",
+                message: "Validation failed for 'category_applied_input_types': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        model = try container.sdkDecodeRequired(.model)
+        flagged = try container.sdkDecodeRequired(.flagged)
+        categories = try container.sdkDecodeRequired(.categories)
+        categoryScores = try container.sdkDecodeRequired(.categoryScores)
+        categoryAppliedInputTypes = try container.sdkDecodeRequired(.categoryAppliedInputTypes)
+        try sdkValidateRawEnum("type", type, BetaModerationResultBodyType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaModerationResultBody {
+    init(
+        type: BetaModerationResultBodyType,
+        model: String,
+        flagged: Bool,
+        categories: [String: Bool],
+        categoryScores: [String: Double],
+        categoryAppliedInputTypes: [String: [BetaModerationInputType]]
+    ) throws {
         (self.type, self.model) = (type, model)
         (self.flagged, self.categories) = (flagged, categories)
         (self.categoryScores, self.categoryAppliedInputTypes) = (categoryScores, categoryAppliedInputTypes)
-            try sdkValidateRawEnum("type", self.type, BetaModerationResultBodyType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaModerationResultBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -279,21 +334,27 @@ public struct BetaModerationConfigParam: Codable {
         case mode
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaModerationConfigParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.mode) else {
-            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
-        }
-        self.mode = try container.sdkDecodeRequired(.mode)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaModerationConfigParam {
-    public init(mode: BetaModerationMode) {
+public extension BetaModerationConfigParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.mode) else {
+            throw SdkValidationError(
+                field: "mode",
+                code: "required",
+                message: "Validation failed for 'mode': value is required"
+            )
+        }
+        mode = try container.sdkDecodeRequired(.mode)
+    }
+}
+
+public extension BetaModerationConfigParam {
+    init(mode: BetaModerationMode) {
         self.mode = mode
     }
 }
@@ -313,33 +374,47 @@ public struct BetaModerationErrorBody: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaModerationErrorBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.code = try container.sdkDecodeRequired(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-            try sdkValidateRawEnum("type", self.type, BetaModerationErrorBodyType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaModerationErrorBody {
-    public init(type: BetaModerationErrorBodyType, code: String, message: String) throws {
+public extension BetaModerationErrorBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        code = try container.sdkDecodeRequired(.code)
+        message = try container.sdkDecodeRequired(.message)
+        try sdkValidateRawEnum("type", type, BetaModerationErrorBodyType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaModerationErrorBody {
+    init(type: BetaModerationErrorBodyType, code: String, message: String) throws {
         (self.type, self.code) = (type, code)
         self.message = message
-            try sdkValidateRawEnum("type", self.type, BetaModerationErrorBodyType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaModerationErrorBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -347,13 +422,16 @@ extension BetaModerationErrorBody {
 public struct BetaModerationMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let score = BetaModerationMode(rawValue: "score")
     public static let block = BetaModerationMode(rawValue: "block")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -402,13 +480,16 @@ public enum BetaModerationResultBodyType: String, CaseIterable, Codable {
 public struct BetaModerationInputType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let text = BetaModerationInputType(rawValue: "text")
     public static let image = BetaModerationInputType(rawValue: "image")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

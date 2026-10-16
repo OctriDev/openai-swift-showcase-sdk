@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponseSteer domain models
+/// ResponseSteer domain models
 /// Required enumerated value serialized in the `type` wire field.
 public enum ResponseSteerRequiredInputVariant0Type: String, CaseIterable, Codable {
     case functionCallOutput = "function_call_output"
@@ -26,12 +26,15 @@ public enum ResponseSteerRequiredInputVariant0Type: String, CaseIterable, Codabl
 public struct ResponseSteerFailedEventErrorType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let invalidRequestError = ResponseSteerFailedEventErrorType(rawValue: "invalid_request_error")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

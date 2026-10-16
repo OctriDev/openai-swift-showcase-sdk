@@ -3,10 +3,24 @@
 
 import Foundation
 
-extension ChatNamespace {
-/// Get the messages in a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to `true` will be returned.
-    public func getCompletionMessagesPaginated(completionId: String, after: String? = nil, limit: Int? = nil, order: GetChatCompletionMessagesParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ChatCompletionMessageListDataItem, Swift.Error> {
-        return ChatMethods.getChatCompletionMessagesPaginated(config: config, completionId: completionId, after: after, limit: limit, order: order, requestOptions: requestOptions)
+public extension ChatNamespace {
+    /// Get the messages in a stored chat completion. Only Chat Completions that have been created with the `store`
+    /// parameter set to `true` will be returned.
+    func getCompletionMessagesPaginated(
+        completionId: String,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: GetChatCompletionMessagesParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ChatCompletionMessageListDataItem, Swift.Error> {
+        ChatMethods.getChatCompletionMessagesPaginated(
+            config: config,
+            completionId: completionId,
+            after: after,
+            limit: limit,
+            order: order,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -16,18 +30,34 @@ public class CompletionsNamespace {
         self.config = config
     }
 
-/// Creates a completion from a prompt using the specified model and generation parameters. Supply `model` and `prompt`; use `stream` to receive partial results as server-sent events instead of a single response. The response contains generated text choices and usage statistics.
+    /// Creates a completion from a prompt using the specified model and generation parameters. Supply `model` and
+    /// `prompt`; use `stream` to receive partial results as server-sent events instead of a single response. The
+    /// response contains generated text choices and usage statistics.
     ///
-    /// Creates a completion for the provided prompt and parameters. Returns a completion object, or a sequence of completion objects if the request is streamed.
-    public func create(options: CompletionsMethods.CreateCompletionOptions, requestOptions: RequestOptions? = nil) async throws -> CreateCompletionResponse {
-        return try await CompletionsMethods.createCompletion(config: config, options: options, requestOptions: requestOptions)
+    /// Creates a completion for the provided prompt and parameters. Returns a completion object, or a sequence of
+    /// completion objects if the request is streamed.
+    public func create(
+        options: CompletionsMethods.CreateCompletionOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> CreateCompletionResponse {
+        try await CompletionsMethods.createCompletion(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Creates a completion from a prompt using the specified model and generation parameters. Supply `model` and `prompt`; use `stream` to receive partial results as server-sent events instead of a single response. The response contains generated text choices and usage statistics.
+    /// Creates a completion from a prompt using the specified model and generation parameters. Supply `model` and
+    /// `prompt`; use `stream` to receive partial results as server-sent events instead of a single response. The
+    /// response contains generated text choices and usage statistics.
     ///
-    /// Creates a completion for the provided prompt and parameters. Returns a completion object, or a sequence of completion objects if the request is streamed.
-    public func createStream(options: CompletionsMethods.CreateCompletionStreamOptions, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<CreateCompletionResponse, Swift.Error> {
-        return try await CompletionsMethods.createCompletionStream(config: config, options: options, requestOptions: requestOptions)
+    /// Creates a completion for the provided prompt and parameters. Returns a completion object, or a sequence of
+    /// completion objects if the request is streamed.
+    public func createStream(
+        options: CompletionsMethods.CreateCompletionStreamOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AsyncThrowingStream<CreateCompletionResponse, Swift.Error> {
+        try await CompletionsMethods.createCompletionStream(
+            config: config,
+            options: options,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -37,83 +67,216 @@ public class ContainersNamespace {
         self.config = config
     }
 
-/// Lists containers available to the authenticated user. Filter the results by `name` and use `after` to continue from a container ID returned in a previous page. Results are ordered by creation time, descending by default.
+    /// Lists containers available to the authenticated user. Filter the results by `name` and use `after` to continue
+    /// from a container ID returned in a previous page. Results are ordered by creation time, descending by default.
     ///
     /// List Containers
-    public func list(limit: Int? = nil, order: ListContainersParameter? = nil, after: String? = nil, name: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ContainerListResource {
-        return try await ContainersMethods.listContainers(config: config, limit: limit, order: order, after: after, name: name, requestOptions: requestOptions)
+    public func list(
+        limit: Int? = nil,
+        order: ListContainersParameter? = nil,
+        after: String? = nil,
+        name: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ContainerListResource {
+        try await ContainersMethods.listContainers(
+            config: config,
+            limit: limit,
+            order: order,
+            after: after,
+            name: name,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists containers available to the authenticated user. Filter the results by `name` and use `after` to continue from a container ID returned in a previous page. Results are ordered by creation time, descending by default.
+    /// Lists containers available to the authenticated user. Filter the results by `name` and use `after` to continue
+    /// from a container ID returned in a previous page. Results are ordered by creation time, descending by default.
     ///
     /// List Containers
-    public func listPaginated(limit: Int? = nil, order: ListContainersParameter? = nil, after: String? = nil, name: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ContainerResource, Swift.Error> {
-        return ContainersMethods.listContainersPaginated(config: config, limit: limit, order: order, after: after, name: name, requestOptions: requestOptions)
+    public func listPaginated(
+        limit: Int? = nil,
+        order: ListContainersParameter? = nil,
+        after: String? = nil,
+        name: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ContainerResource, Swift.Error> {
+        ContainersMethods.listContainersPaginated(
+            config: config,
+            limit: limit,
+            order: order,
+            after: after,
+            name: name,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates a container with the specified name and optional configuration. Use `file_ids` to copy files into the container and configure expiration, memory, network access, or skills as needed. The memory limit defaults to `1g` when omitted.
+    /// Creates a container with the specified name and optional configuration. Use `file_ids` to copy files into the
+    /// container and configure expiration, memory, network access, or skills as needed. The memory limit defaults to
+    /// `1g` when omitted.
     ///
     /// Create Container
-    public func create(name: String, fileIds: [String]? = nil, expiresAfter: CreateContainerBodyExpiresAfter? = nil, skills: [CreateContainerBodySkillsItem]? = nil, memoryLimit: CreateContainerBodyMemoryLimit? = nil, networkPolicy: CreateContainerBodyNetworkPolicy? = nil, requestOptions: RequestOptions? = nil) async throws -> ContainerResource {
-        return try await ContainersMethods.createContainer(config: config, name: name, fileIds: fileIds, expiresAfter: expiresAfter, skills: skills, memoryLimit: memoryLimit, networkPolicy: networkPolicy, requestOptions: requestOptions)
+    public func create(
+        name: String,
+        fileIds: [String]? = nil,
+        expiresAfter: CreateContainerBodyExpiresAfter? = nil,
+        skills: [CreateContainerBodySkillsItem]? = nil,
+        memoryLimit: CreateContainerBodyMemoryLimit? = nil,
+        networkPolicy: CreateContainerBodyNetworkPolicy? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ContainerResource {
+        try await ContainersMethods.createContainer(
+            config: config,
+            name: name,
+            fileIds: fileIds,
+            expiresAfter: expiresAfter,
+            skills: skills,
+            memoryLimit: memoryLimit,
+            networkPolicy: networkPolicy,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves a container by its unique identifier. Use this operation to inspect the container's status and configuration, including its expiration, memory limit, and network policy.
+    /// Retrieves a container by its unique identifier. Use this operation to inspect the container's status and
+    /// configuration, including its expiration, memory limit, and network policy.
     ///
     /// Retrieve Container
     public func retrieve(containerId: String, requestOptions: RequestOptions? = nil) async throws -> ContainerResource {
-        return try await ContainersMethods.retrieveContainer(config: config, containerId: containerId, requestOptions: requestOptions)
+        try await ContainersMethods.retrieveContainer(
+            config: config,
+            containerId: containerId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes a container by its unique identifier. Use this operation when the container is no longer needed; the response confirms whether the container was deleted.
+    /// Deletes a container by its unique identifier. Use this operation when the container is no longer needed; the
+    /// response confirms whether the container was deleted.
     ///
     /// Delete Container
-    public func delete(containerId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteContainerResponse {
-        return try await ContainersMethods.deleteContainer(config: config, containerId: containerId, requestOptions: requestOptions)
+    public func delete(
+        containerId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeleteContainerResponse {
+        try await ContainersMethods.deleteContainer(
+            config: config,
+            containerId: containerId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates a file in a container from raw multipart file content or a file ID supplied in a JSON request. Choose the request format based on whether you are uploading file content or referencing a file, and use `container_id` to identify the destination container.
+    /// Creates a file in a container from raw multipart file content or a file ID supplied in a JSON request. Choose
+    /// the request format based on whether you are uploading file content or referencing a file, and use `container_id`
+    /// to identify the destination container.
     ///
-    /// Create a Container File You can send either a multipart/form-data request with the raw file content, or a JSON request with a file ID.
-    public func createFile(containerId: String, fileId: String? = nil, file: Data? = nil, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ContainerFileResource {
-        return try await ContainersMethods.createContainerFile(config: config, containerId: containerId, fileId: fileId, file: file, contentType: contentType, requestOptions: requestOptions)
+    /// Create a Container File You can send either a multipart/form-data request with the raw file content, or a JSON
+    /// request with a file ID.
+    public func createFile(
+        containerId: String,
+        fileId: String? = nil,
+        file: Data? = nil,
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ContainerFileResource {
+        try await ContainersMethods.createContainerFile(
+            config: config,
+            containerId: containerId,
+            fileId: fileId,
+            file: file,
+            contentType: contentType,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists files associated with a container. Use `after` to continue from a file ID returned in a previous page, and `limit` and `order` to control the result page. The container must exist and must not have expired.
+    /// Lists files associated with a container. Use `after` to continue from a file ID returned in a previous page, and
+    /// `limit` and `order` to control the result page. The container must exist and must not have expired.
     ///
     /// List Container files
-    public func listFiles(containerId: String, limit: Int? = nil, order: ListContainerFilesParameter? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ContainerFileListResource {
-        return try await ContainersMethods.listContainerFiles(config: config, containerId: containerId, limit: limit, order: order, after: after, requestOptions: requestOptions)
+    public func listFiles(
+        containerId: String,
+        limit: Int? = nil,
+        order: ListContainerFilesParameter? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ContainerFileListResource {
+        try await ContainersMethods.listContainerFiles(
+            config: config,
+            containerId: containerId,
+            limit: limit,
+            order: order,
+            after: after,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists files associated with a container. Use `after` to continue from a file ID returned in a previous page, and `limit` and `order` to control the result page. The container must exist and must not have expired.
+    /// Lists files associated with a container. Use `after` to continue from a file ID returned in a previous page, and
+    /// `limit` and `order` to control the result page. The container must exist and must not have expired.
     ///
     /// List Container files
-    public func listFilesPaginated(containerId: String, limit: Int? = nil, order: ListContainerFilesParameter? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ContainerFileResource, Swift.Error> {
-        return ContainersMethods.listContainerFilesPaginated(config: config, containerId: containerId, limit: limit, order: order, after: after, requestOptions: requestOptions)
+    public func listFilesPaginated(
+        containerId: String,
+        limit: Int? = nil,
+        order: ListContainerFilesParameter? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ContainerFileResource, Swift.Error> {
+        ContainersMethods.listContainerFilesPaginated(
+            config: config,
+            containerId: containerId,
+            limit: limit,
+            order: order,
+            after: after,
+            requestOptions: requestOptions
+        )
     }
 }
 
-extension ContainersNamespace {
-/// Retrieves a file's metadata from a container. Use `container_id` and `file_id` to identify the container and file whose details you need.
+public extension ContainersNamespace {
+    /// Retrieves a file's metadata from a container. Use `container_id` and `file_id` to identify the container and
+    /// file whose details you need.
     ///
     /// Retrieve Container File
-    public func retrieveFile(containerId: String, fileId: String, requestOptions: RequestOptions? = nil) async throws -> ContainerFileResource {
-        return try await ContainersMethods.retrieveContainerFile(config: config, containerId: containerId, fileId: fileId, requestOptions: requestOptions)
+    func retrieveFile(
+        containerId: String,
+        fileId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ContainerFileResource {
+        try await ContainersMethods.retrieveContainerFile(
+            config: config,
+            containerId: containerId,
+            fileId: fileId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes a file from a container. Use `container_id` and `file_id` to identify the file to remove.
+    /// Deletes a file from a container. Use `container_id` and `file_id` to identify the file to remove.
     ///
     /// Delete Container File
-    public func deleteFile(containerId: String, fileId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteContainerFileResponse {
-        return try await ContainersMethods.deleteContainerFile(config: config, containerId: containerId, fileId: fileId, requestOptions: requestOptions)
+    func deleteFile(
+        containerId: String,
+        fileId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeleteContainerFileResponse {
+        try await ContainersMethods.deleteContainerFile(
+            config: config,
+            containerId: containerId,
+            fileId: fileId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves the raw content of a file in a container. Use `container_id` and `file_id` to identify the file whose content you want to download.
+    /// Retrieves the raw content of a file in a container. Use `container_id` and `file_id` to identify the file whose
+    /// content you want to download.
     ///
     /// Retrieve Container File Content
-    public func retrieveFileContent(containerId: String, fileId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
-        return try await ContainersMethods.retrieveContainerFileContent(config: config, containerId: containerId, fileId: fileId, requestOptions: requestOptions)
+    func retrieveFileContent(
+        containerId: String,
+        fileId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Data {
+        try await ContainersMethods.retrieveContainerFileContent(
+            config: config,
+            containerId: containerId,
+            fileId: fileId,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -123,67 +286,167 @@ public class ConversationsNamespace {
         self.config = config
     }
 
-/// Adds items to a conversation. Supply up to 20 items in `items`; a compaction trigger, if included, must be the final item in the request.
+    /// Adds items to a conversation. Supply up to 20 items in `items`; a compaction trigger, if included, must be the
+    /// final item in the request.
     ///
     /// Create items in a conversation with the given ID.
-    public func createItems(conversationId: String, items: [InputItem], include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) async throws -> ConversationItemList {
-        return try await ConversationsMethods.createConversationItems(config: config, conversationId: conversationId, items: items, include: include, requestOptions: requestOptions)
+    public func createItems(
+        conversationId: String,
+        items: [InputItem],
+        include: [IncludeEnum]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ConversationItemList {
+        try await ConversationsMethods.createConversationItems(
+            config: config,
+            conversationId: conversationId,
+            items: items,
+            include: include,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists the items in a conversation. Use `after` to continue from an item ID, `limit` to control the number of results, and `order` to choose the direction of the results.
+    /// Lists the items in a conversation. Use `after` to continue from an item ID, `limit` to control the number of
+    /// results, and `order` to choose the direction of the results.
     ///
     /// List all items for a conversation with the given ID.
-    public func listItems(conversationId: String, limit: Int? = nil, order: ListConversationItemsParameter? = nil, after: String? = nil, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) async throws -> ConversationItemList {
-        return try await ConversationsMethods.listConversationItems(config: config, conversationId: conversationId, limit: limit, order: order, after: after, include: include, requestOptions: requestOptions)
+    public func listItems(
+        conversationId: String,
+        limit: Int? = nil,
+        order: ListConversationItemsParameter? = nil,
+        after: String? = nil,
+        include: [IncludeEnum]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ConversationItemList {
+        try await ConversationsMethods.listConversationItems(
+            config: config,
+            conversationId: conversationId,
+            limit: limit,
+            order: order,
+            after: after,
+            include: include,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists the items in a conversation. Use `after` to continue from an item ID, `limit` to control the number of results, and `order` to choose the direction of the results.
+    /// Lists the items in a conversation. Use `after` to continue from an item ID, `limit` to control the number of
+    /// results, and `order` to choose the direction of the results.
     ///
     /// List all items for a conversation with the given ID.
-    public func listItemsPaginated(conversationId: String, limit: Int? = nil, order: ListConversationItemsParameter? = nil, after: String? = nil, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ConversationItem, Swift.Error> {
-        return ConversationsMethods.listConversationItemsPaginated(config: config, conversationId: conversationId, limit: limit, order: order, after: after, include: include, requestOptions: requestOptions)
+    public func listItemsPaginated(
+        conversationId: String,
+        limit: Int? = nil,
+        order: ListConversationItemsParameter? = nil,
+        after: String? = nil,
+        include: [IncludeEnum]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ConversationItem, Swift.Error> {
+        ConversationsMethods.listConversationItemsPaginated(
+            config: config,
+            conversationId: conversationId,
+            limit: limit,
+            order: order,
+            after: after,
+            include: include,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves a single item from a conversation. Use `conversation_id` and `item_id` to identify the conversation and the item you want to inspect.
+    /// Retrieves a single item from a conversation. Use `conversation_id` and `item_id` to identify the conversation
+    /// and the item you want to inspect.
     ///
     /// Get a single item from a conversation with the given IDs.
-    public func getItem(conversationId: String, itemId: String, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) async throws -> ConversationItem {
-        return try await ConversationsMethods.getConversationItem(config: config, conversationId: conversationId, itemId: itemId, include: include, requestOptions: requestOptions)
+    public func getItem(
+        conversationId: String,
+        itemId: String,
+        include: [IncludeEnum]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ConversationItem {
+        try await ConversationsMethods.getConversationItem(
+            config: config,
+            conversationId: conversationId,
+            itemId: itemId,
+            include: include,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes an item from a conversation. Use `conversation_id` and `item_id` to identify the item to remove.
+    /// Deletes an item from a conversation. Use `conversation_id` and `item_id` to identify the item to remove.
     ///
     /// Delete an item from a conversation with the given IDs.
-    public func deleteItem(conversationId: String, itemId: String, requestOptions: RequestOptions? = nil) async throws -> ConversationResource {
-        return try await ConversationsMethods.deleteConversationItem(config: config, conversationId: conversationId, itemId: itemId, requestOptions: requestOptions)
+    public func deleteItem(
+        conversationId: String,
+        itemId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ConversationResource {
+        try await ConversationsMethods.deleteConversationItem(
+            config: config,
+            conversationId: conversationId,
+            itemId: itemId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates a conversation that can include metadata and initial context items. Use `items` to seed the conversation with up to 20 items; metadata can store additional key-value information.
+    /// Creates a conversation that can include metadata and initial context items. Use `items` to seed the conversation
+    /// with up to 20 items; metadata can store additional key-value information.
     ///
     /// Create a conversation.
-    public func create(metadata: SdkOptional<Metadata>? = nil, items: SdkOptional<[InputItem]>? = nil, requestOptions: RequestOptions? = nil) async throws -> ConversationResource {
-        return try await ConversationsMethods.createConversation(config: config, metadata: metadata, items: items, requestOptions: requestOptions)
+    public func create(
+        metadata: SdkOptional<Metadata>? = nil,
+        items: SdkOptional<[InputItem]>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ConversationResource {
+        try await ConversationsMethods.createConversation(
+            config: config,
+            metadata: metadata,
+            items: items,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves a conversation by its identifier. Use `conversation_id` to get the conversation's metadata and creation time.
+    /// Retrieves a conversation by its identifier. Use `conversation_id` to get the conversation's metadata and
+    /// creation time.
     ///
     /// Get a conversation
-    public func get(conversationId: String, requestOptions: RequestOptions? = nil) async throws -> ConversationResource {
-        return try await ConversationsMethods.getConversation(config: config, conversationId: conversationId, requestOptions: requestOptions)
+    public func get(
+        conversationId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ConversationResource {
+        try await ConversationsMethods.getConversation(
+            config: config,
+            conversationId: conversationId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Delete a conversation. Items in the conversation will not be deleted.
-    public func delete(conversationId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedConversationResource {
-        return try await ConversationsMethods.deleteConversation(config: config, conversationId: conversationId, requestOptions: requestOptions)
+    /// Delete a conversation. Items in the conversation will not be deleted.
+    public func delete(
+        conversationId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeletedConversationResource {
+        try await ConversationsMethods.deleteConversation(
+            config: config,
+            conversationId: conversationId,
+            requestOptions: requestOptions
+        )
     }
 }
 
-extension ConversationsNamespace {
-/// Updates the metadata associated with a conversation. Supply the complete `metadata` value to replace the conversation's existing metadata, or use `null` to clear it.
+public extension ConversationsNamespace {
+    /// Updates the metadata associated with a conversation. Supply the complete `metadata` value to replace the
+    /// conversation's existing metadata, or use `null` to clear it.
     ///
     /// Update a conversation
-    public func update(conversationId: String, metadata: Metadata?, requestOptions: RequestOptions? = nil) async throws -> ConversationResource {
-        return try await ConversationsMethods.updateConversation(config: config, conversationId: conversationId, metadata: metadata, requestOptions: requestOptions)
+    func update(
+        conversationId: String,
+        metadata: Metadata?,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ConversationResource {
+        try await ConversationsMethods.updateConversation(
+            config: config,
+            conversationId: conversationId,
+            metadata: metadata,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -193,10 +456,27 @@ public class EmbeddingsNamespace {
         self.config = config
     }
 
-/// Creates embedding vectors for the supplied text or token input. Provide `model` and `input`, and use `encoding_format` or `dimensions` to control the returned vectors when the selected model supports those options.
+    /// Creates embedding vectors for the supplied text or token input. Provide `model` and `input`, and use
+    /// `encoding_format` or `dimensions` to control the returned vectors when the selected model supports those
+    /// options.
     ///
     /// Creates an embedding vector representing the input text.
-    public func create(input: CreateEmbeddingRequestInput, model: String, encodingFormat: CreateEmbeddingRequestEncodingFormat? = nil, dimensions: Int? = nil, user: String? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateEmbeddingResponse {
-        return try await EmbeddingsMethods.createEmbedding(config: config, input: input, model: model, encodingFormat: encodingFormat, dimensions: dimensions, user: user, requestOptions: requestOptions)
+    public func create(
+        input: CreateEmbeddingRequestInput,
+        model: String,
+        encodingFormat: CreateEmbeddingRequestEncodingFormat? = nil,
+        dimensions: Int? = nil,
+        user: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> CreateEmbeddingResponse {
+        try await EmbeddingsMethods.createEmbedding(
+            config: config,
+            input: input,
+            model: model,
+            encodingFormat: encodingFormat,
+            dimensions: dimensions,
+            user: user,
+            requestOptions: requestOptions
+        )
     }
 }

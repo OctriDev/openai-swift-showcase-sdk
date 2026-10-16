@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsComputer domain models
+/// AgentsComputer domain models
 /// The type of the object. Always `browser_origin_access`.
 public enum ComputerUseApprovalRequestKindResourceBrowserOriginAccessType: String, CaseIterable, Codable {
     case browserOriginAccess = "browser_origin_access"
@@ -23,15 +23,20 @@ public enum ComputerUseApprovalRequestKindResourceBrowserOriginAccessType: Strin
 }
 
 /// Required enumerated value serialized in the `type` wire field.
-public struct ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamType: RawRepresentable, Hashable, Codable,
+    Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let browserAuthentication = ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamType(rawValue: "browser_authentication")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let browserAuthentication =
+        ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamType(rawValue: "browser_authentication")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -41,15 +46,20 @@ public struct ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamTy
 }
 
 /// Required enumerated value serialized in the `type` wire field.
-public struct ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType: RawRepresentable, Hashable, Codable,
+    Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let browserAuthentication = ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType(rawValue: "browser_authentication")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let browserAuthentication =
+        ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType(rawValue: "browser_authentication")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -59,15 +69,20 @@ public struct ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamTy
 }
 
 /// Required enumerated value serialized in the `type` wire field.
-public struct ComputerUseApprovalResponseKindResourceBrowserAuthenticationCX8d958ab1db: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ComputerUseApprovalResponseKindResourceBrowserAuthenticationCX8d958ab1db: RawRepresentable, Hashable,
+    Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let browserAuthentication = ComputerUseApprovalResponseKindResourceBrowserAuthenticationCX8d958ab1db(rawValue: "browser_authentication")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let browserAuthentication =
+        ComputerUseApprovalResponseKindResourceBrowserAuthenticationCX8d958ab1db(rawValue: "browser_authentication")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

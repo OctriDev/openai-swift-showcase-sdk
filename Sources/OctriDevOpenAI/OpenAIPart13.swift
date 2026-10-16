@@ -3,33 +3,94 @@
 
 import Foundation
 
-extension ResponsesNamespace {
-/// Compacts a conversation and returns a compacted response object. Provide the required `model` and conversation content through `input` or `previous_response_id` to produce a compacted representation. Use the result to manage the context window in a long-running conversation.
+public extension ResponsesNamespace {
+    /// Compacts a conversation and returns a compacted response object. Provide the required `model` and conversation
+    /// content through `input` or `previous_response_id` to produce a compacted representation. Use the result to
+    /// manage the context window in a long-running conversation.
     ///
-    /// Compact a conversation. Returns a compacted response object. Learn when and how to compact long-running conversations in the [conversation state guide](https://developers.openai.com/api/docs/guides/conversation-state#managing-the-context-window). For ZDR-compatible compaction details, see [Compaction (advanced)](https://developers.openai.com/api/docs/guides/conversation-state#compaction-advanced).
-    public func betaCompact(options: ResponsesMethods.BetaResponsesCompactOptions, requestOptions: RequestOptions? = nil) async throws -> BetaCompactResource {
-        return try await ResponsesMethods.betaResponsesCompact(config: config, options: options, requestOptions: requestOptions)
+    /// Compact a conversation. Returns a compacted response object. Learn when and how to compact long-running
+    /// conversations in the [conversation state
+    /// guide](https://developers.openai.com/api/docs/guides/conversation-state#managing-the-context-window). For
+    /// ZDR-compatible compaction details, see [Compaction
+    /// (advanced)](https://developers.openai.com/api/docs/guides/conversation-state#compaction-advanced).
+    func betaCompact(
+        options: ResponsesMethods.BetaResponsesCompactOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BetaCompactResource {
+        try await ResponsesMethods.betaResponsesCompact(
+            config: config,
+            options: options,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists the input items used to generate a model response. Use `limit` to control the number of returned items and `order` to choose their sequence. Pass `after` with an item ID from a previous page to continue through the list.
+    /// Lists the input items used to generate a model response. Use `limit` to control the number of returned items and
+    /// `order` to choose their sequence. Pass `after` with an item ID from a previous page to continue through the
+    /// list.
     ///
     /// Returns a list of input items for a given response.
-    public func betaListInputItems(responseId: String, limit: Int? = nil, order: BetaListInputItemsParameter? = nil, after: String? = nil, include: [BetaIncludeEnum]? = nil, openaiBeta: [BetaListInputItemsParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> BetaResponseItemList {
-        return try await ResponsesMethods.betaListInputItems(config: config, responseId: responseId, limit: limit, order: order, after: after, include: include, openaiBeta: openaiBeta, requestOptions: requestOptions)
+    func betaListInputItems(
+        responseId: String,
+        limit: Int? = nil,
+        order: BetaListInputItemsParameter? = nil,
+        after: String? = nil,
+        include: [BetaIncludeEnum]? = nil,
+        openaiBeta: [BetaListInputItemsParameterItem]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BetaResponseItemList {
+        try await ResponsesMethods.betaListInputItems(
+            config: config,
+            responseId: responseId,
+            limit: limit,
+            order: order,
+            after: after,
+            include: include,
+            openaiBeta: openaiBeta,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists the input items used to generate a model response. Use `limit` to control the number of returned items and `order` to choose their sequence. Pass `after` with an item ID from a previous page to continue through the list.
+    /// Lists the input items used to generate a model response. Use `limit` to control the number of returned items and
+    /// `order` to choose their sequence. Pass `after` with an item ID from a previous page to continue through the
+    /// list.
     ///
     /// Returns a list of input items for a given response.
-    public func betaListInputItemsPaginated(responseId: String, limit: Int? = nil, order: BetaListInputItemsParameter? = nil, after: String? = nil, include: [BetaIncludeEnum]? = nil, openaiBeta: [BetaListInputItemsParameterItem]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<BetaItemResource, Swift.Error> {
-        return ResponsesMethods.betaListInputItemsPaginated(config: config, responseId: responseId, limit: limit, order: order, after: after, include: include, openaiBeta: openaiBeta, requestOptions: requestOptions)
+    func betaListInputItemsPaginated(
+        responseId: String,
+        limit: Int? = nil,
+        order: BetaListInputItemsParameter? = nil,
+        after: String? = nil,
+        include: [BetaIncludeEnum]? = nil,
+        openaiBeta: [BetaListInputItemsParameterItem]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<BetaItemResource, Swift.Error> {
+        ResponsesMethods.betaListInputItemsPaginated(
+            config: config,
+            responseId: responseId,
+            limit: limit,
+            order: order,
+            after: after,
+            include: include,
+            openaiBeta: openaiBeta,
+            requestOptions: requestOptions
+        )
     }
 
-/// Counts the input tokens for a prospective model request. Supply the model and any input, tool, text, reasoning, or conversation settings whose token contribution you want counted. Use the returned count to assess the request's input size before generating a response.
+    /// Counts the input tokens for a prospective model request. Supply the model and any input, tool, text, reasoning,
+    /// or conversation settings whose token contribution you want counted. Use the returned count to assess the
+    /// request's input size before generating a response.
     ///
-    /// Returns input token counts of the request. Returns an object with `object` set to `response.input_tokens` and an `input_tokens` count.
-    public func betaCountInputTokens(options: ResponsesMethods.BetaResponsesCountInputTokensOptions, requestOptions: RequestOptions? = nil) async throws -> BetaTokenCountsResource {
-        return try await ResponsesMethods.betaResponsesCountInputTokens(config: config, options: options, requestOptions: requestOptions)
+    /// Returns input token counts of the request. Returns an object with `object` set to `response.input_tokens` and an
+    /// `input_tokens` count.
+    func betaCountInputTokens(
+        options: ResponsesMethods.BetaResponsesCountInputTokensOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BetaTokenCountsResource {
+        try await ResponsesMethods.betaResponsesCountInputTokens(
+            config: config,
+            options: options,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -39,32 +100,96 @@ public class UploadsNamespace {
         self.config = config
     }
 
-/// Creates an upload that accepts file parts before they are assembled into a usable file. Provide the filename, purpose, byte count, and MIME type; uploads can contain up to 8 GB and expire after one hour. Add parts to the upload, then complete it to create the file.
+    /// Creates an upload that accepts file parts before they are assembled into a usable file. Provide the filename,
+    /// purpose, byte count, and MIME type; uploads can contain up to 8 GB and expire after one hour. Add parts to the
+    /// upload, then complete it to create the file.
     ///
-    /// Creates an intermediate [Upload](https://developers.openai.com/api/reference/resources/uploads) object that you can add [Parts](https://developers.openai.com/api/reference/resources/uploads/subresources/parts) to. Currently, an Upload can accept at most 8 GB in total and expires after an hour after you create it. Once you complete the Upload, we will create a [File](https://developers.openai.com/api/reference/resources/files) object that contains all the parts you uploaded. This File is usable in the rest of our platform as a regular File object. For certain `purpose` values, the correct `mime_type` must be specified. Please refer to documentation for the [supported MIME types for your use case](https://developers.openai.com/api/docs/guides/tools-file-search#supported-files). For guidance on the proper filename extensions for each purpose, please follow the documentation on [creating a File](https://developers.openai.com/api/reference/resources/files/methods/create). Returns the Upload object with status `pending`.
-    public func create(filename: String, purpose: CreateUploadRequestPurpose, bytes: Int, mimeType: String, expiresAfter: FileExpirationAfter? = nil, requestOptions: RequestOptions? = nil) async throws -> Upload {
-        return try await UploadsMethods.createUpload(config: config, filename: filename, purpose: purpose, bytes: bytes, mimeType: mimeType, expiresAfter: expiresAfter, requestOptions: requestOptions)
+    /// Creates an intermediate [Upload](https://developers.openai.com/api/reference/resources/uploads) object that you
+    /// can add [Parts](https://developers.openai.com/api/reference/resources/uploads/subresources/parts) to. Currently,
+    /// an Upload can accept at most 8 GB in total and expires after an hour after you create it. Once you complete the
+    /// Upload, we will create a [File](https://developers.openai.com/api/reference/resources/files) object that
+    /// contains all the parts you uploaded. This File is usable in the rest of our platform as a regular File object.
+    /// For certain `purpose` values, the correct `mime_type` must be specified. Please refer to documentation for the
+    /// [supported MIME types for your use
+    /// case](https://developers.openai.com/api/docs/guides/tools-file-search#supported-files). For guidance on the
+    /// proper filename extensions for each purpose, please follow the documentation on [creating a
+    /// File](https://developers.openai.com/api/reference/resources/files/methods/create). Returns the Upload object
+    /// with status `pending`.
+    public func create(
+        filename: String,
+        purpose: CreateUploadRequestPurpose,
+        bytes: Int,
+        mimeType: String,
+        expiresAfter: FileExpirationAfter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Upload {
+        try await UploadsMethods.createUpload(
+            config: config,
+            filename: filename,
+            purpose: purpose,
+            bytes: bytes,
+            mimeType: mimeType,
+            expiresAfter: expiresAfter,
+            requestOptions: requestOptions
+        )
     }
 
-/// Cancels a pending upload so that no more parts can be added. Use this operation when you no longer intend to complete the upload; the returned upload object has status `cancelled`.
+    /// Cancels a pending upload so that no more parts can be added. Use this operation when you no longer intend to
+    /// complete the upload; the returned upload object has status `cancelled`.
     ///
-    /// Cancels the Upload. No Parts may be added after an Upload is cancelled. Returns the Upload object with status `cancelled`.
+    /// Cancels the Upload. No Parts may be added after an Upload is cancelled. Returns the Upload object with status
+    /// `cancelled`.
     public func cancel(uploadId: String, requestOptions: RequestOptions? = nil) async throws -> Upload {
-        return try await UploadsMethods.cancelUpload(config: config, uploadId: uploadId, requestOptions: requestOptions)
+        try await UploadsMethods.cancelUpload(config: config, uploadId: uploadId, requestOptions: requestOptions)
     }
 
-/// Completes an upload by assembling its parts into a file that can be used on the platform. Supply the ordered part IDs and optionally an MD5 checksum; the total uploaded bytes must match the byte count specified when creating the upload. No more parts can be added after completion.
+    /// Completes an upload by assembling its parts into a file that can be used on the platform. Supply the ordered
+    /// part IDs and optionally an MD5 checksum; the total uploaded bytes must match the byte count specified when
+    /// creating the upload. No more parts can be added after completion.
     ///
-    /// Completes the [Upload](https://developers.openai.com/api/reference/resources/uploads). Within the returned Upload object, there is a nested [File](https://developers.openai.com/api/reference/resources/files) object that is ready to use in the rest of the platform. You can specify the order of the Parts by passing in an ordered list of the Part IDs. The number of bytes uploaded upon completion must match the number of bytes initially specified when creating the Upload object. No Parts may be added after an Upload is completed. Returns the Upload object with status `completed`, including an additional `file` property containing the created usable File object.
-    public func complete(uploadId: String, partIds: [String], md5: String? = nil, requestOptions: RequestOptions? = nil) async throws -> Upload {
-        return try await UploadsMethods.completeUpload(config: config, uploadId: uploadId, partIds: partIds, md5: md5, requestOptions: requestOptions)
+    /// Completes the [Upload](https://developers.openai.com/api/reference/resources/uploads). Within the returned
+    /// Upload object, there is a nested [File](https://developers.openai.com/api/reference/resources/files) object that
+    /// is ready to use in the rest of the platform. You can specify the order of the Parts by passing in an ordered
+    /// list of the Part IDs. The number of bytes uploaded upon completion must match the number of bytes initially
+    /// specified when creating the Upload object. No Parts may be added after an Upload is completed. Returns the
+    /// Upload object with status `completed`, including an additional `file` property containing the created usable
+    /// File object.
+    public func complete(
+        uploadId: String,
+        partIds: [String],
+        md5: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Upload {
+        try await UploadsMethods.completeUpload(
+            config: config,
+            uploadId: uploadId,
+            partIds: partIds,
+            md5: md5,
+            requestOptions: requestOptions
+        )
     }
 
-/// Adds a chunk of file bytes as a part of an existing upload. Send the chunk in the `data` field; each part can be at most 64 MB, and the upload can contain up to 8 GB in total. You can add parts in parallel and specify their order when you complete the upload.
+    /// Adds a chunk of file bytes as a part of an existing upload. Send the chunk in the `data` field; each part can be
+    /// at most 64 MB, and the upload can contain up to 8 GB in total. You can add parts in parallel and specify their
+    /// order when you complete the upload.
     ///
-    /// Adds a [Part](https://developers.openai.com/api/reference/resources/uploads/subresources/parts) to an [Upload](https://developers.openai.com/api/reference/resources/uploads) object. A Part represents a chunk of bytes from the file you are trying to upload. Each Part can be at most 64 MB, and you can add Parts until you hit the Upload maximum of 8 GB. It is possible to add multiple Parts in parallel. You can decide the intended order of the Parts when you [complete the Upload](https://developers.openai.com/api/reference/resources/uploads/methods/complete).
-    public func addPart(uploadId: String, data: SdkUploadFile, requestOptions: RequestOptions? = nil) async throws -> UploadPart {
-        return try await UploadsMethods.addUploadPart(config: config, uploadId: uploadId, data: data, requestOptions: requestOptions)
+    /// Adds a [Part](https://developers.openai.com/api/reference/resources/uploads/subresources/parts) to an
+    /// [Upload](https://developers.openai.com/api/reference/resources/uploads) object. A Part represents a chunk of
+    /// bytes from the file you are trying to upload. Each Part can be at most 64 MB, and you can add Parts until you
+    /// hit the Upload maximum of 8 GB. It is possible to add multiple Parts in parallel. You can decide the intended
+    /// order of the Parts when you [complete the
+    /// Upload](https://developers.openai.com/api/reference/resources/uploads/methods/complete).
+    public func addPart(
+        uploadId: String,
+        data: SdkUploadFile,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UploadPart {
+        try await UploadsMethods.addUploadPart(
+            config: config,
+            uploadId: uploadId,
+            data: data,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -74,118 +199,333 @@ public class VectorStoresNamespace {
         self.config = config
     }
 
-/// Lists vector stores, which are collections of processed files that you can use with the `file_search` tool. Use the cursor parameters to move forward or backward through the results, and set `order` to control sorting by creation time.
+    /// Lists vector stores, which are collections of processed files that you can use with the `file_search` tool. Use
+    /// the cursor parameters to move forward or backward through the results, and set `order` to control sorting by
+    /// creation time.
     ///
     /// Returns a list of vector stores.
-    public func list(limit: Int? = nil, order: ListVectorStoresParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListVectorStoresResponse {
-        return try await VectorStoresMethods.listVectorStores(config: config, limit: limit, order: order, after: after, before: before, requestOptions: requestOptions)
+    public func list(
+        limit: Int? = nil,
+        order: ListVectorStoresParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListVectorStoresResponse {
+        try await VectorStoresMethods.listVectorStores(
+            config: config,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates a vector store to collect processed files for use with the `file_search` tool. Supply `file_ids` to add files at creation, and optionally set a name, description, expiration policy, chunking strategy, or metadata.
+    /// Creates a vector store to collect processed files for use with the `file_search` tool. Supply `file_ids` to add
+    /// files at creation, and optionally set a name, description, expiration policy, chunking strategy, or metadata.
     ///
     /// Create a vector store.
-    public func create(fileIds: [String]? = nil, name: String? = nil, description: String? = nil, expiresAfter: VectorStoreExpirationAfter? = nil, chunkingStrategy: CreateVectorStoreRequestChunkingStrategy? = nil, metadata: SdkOptional<Metadata>? = nil, requestOptions: RequestOptions? = nil) async throws -> VectorStoreObject {
-        return try await VectorStoresMethods.createVectorStore(config: config, fileIds: fileIds, name: name, description: description, expiresAfter: expiresAfter, chunkingStrategy: chunkingStrategy, metadata: metadata, requestOptions: requestOptions)
+    public func create(
+        fileIds: [String]? = nil,
+        name: String? = nil,
+        description: String? = nil,
+        expiresAfter: VectorStoreExpirationAfter? = nil,
+        chunkingStrategy: CreateVectorStoreRequestChunkingStrategy? = nil,
+        metadata: SdkOptional<Metadata>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreObject {
+        try await VectorStoresMethods.createVectorStore(
+            config: config,
+            fileIds: fileIds,
+            name: name,
+            description: description,
+            expiresAfter: expiresAfter,
+            chunkingStrategy: chunkingStrategy,
+            metadata: metadata,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves a vector store by its ID. Use this operation to inspect the store's status, file counts, usage, expiration details, and metadata.
+    /// Retrieves a vector store by its ID. Use this operation to inspect the store's status, file counts, usage,
+    /// expiration details, and metadata.
     ///
     /// Retrieves a vector store.
     public func get(vectorStoreId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreObject {
-        return try await VectorStoresMethods.getVectorStore(config: config, vectorStoreId: vectorStoreId, requestOptions: requestOptions)
+        try await VectorStoresMethods.getVectorStore(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates a vector store's name, expiration policy, or metadata. Provide only the properties you want to change; omitted properties are not part of the update.
+    /// Updates a vector store's name, expiration policy, or metadata. Provide only the properties you want to change;
+    /// omitted properties are not part of the update.
     ///
     /// Modifies a vector store.
-    public func modify(vectorStoreId: String, name: SdkOptional<String>? = nil, expiresAfter: UpdateVectorStoreRequestExpiresAfter? = nil, metadata: SdkOptional<Metadata>? = nil, requestOptions: RequestOptions? = nil) async throws -> VectorStoreObject {
-        return try await VectorStoresMethods.modifyVectorStore(config: config, vectorStoreId: vectorStoreId, name: name, expiresAfter: expiresAfter, metadata: metadata, requestOptions: requestOptions)
+    public func modify(
+        vectorStoreId: String,
+        name: SdkOptional<String>? = nil,
+        expiresAfter: UpdateVectorStoreRequestExpiresAfter? = nil,
+        metadata: SdkOptional<Metadata>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreObject {
+        try await VectorStoresMethods.modifyVectorStore(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            name: name,
+            expiresAfter: expiresAfter,
+            metadata: metadata,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes a vector store. Use this operation when you no longer need the store or its associated collection of processed files.
+    /// Deletes a vector store. Use this operation when you no longer need the store or its associated collection of
+    /// processed files.
     ///
     /// Delete a vector store.
-    public func delete(vectorStoreId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteVectorStoreResponse {
-        return try await VectorStoresMethods.deleteVectorStore(config: config, vectorStoreId: vectorStoreId, requestOptions: requestOptions)
+    public func delete(
+        vectorStoreId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeleteVectorStoreResponse {
+        try await VectorStoresMethods.deleteVectorStore(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates a batch to attach files to a vector store for processing. Provide `file_ids` or `files`, and optionally set a shared chunking strategy or shared attributes when using `file_ids`. Use per-file settings in `files` when different files need different attributes or chunking strategies.
+    /// Creates a batch to attach files to a vector store for processing. Provide `file_ids` or `files`, and optionally
+    /// set a shared chunking strategy or shared attributes when using `file_ids`. Use per-file settings in `files` when
+    /// different files need different attributes or chunking strategies.
     ///
     /// Create a vector store file batch.
-    public func createFileBatch(vectorStoreId: String, fileIds: [String]? = nil, files: [CreateVectorStoreFileRequest]? = nil, chunkingStrategy: ChunkingStrategyRequestParam? = nil, attributes: SdkOptional<VectorStoreFileAttributes>? = nil, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileBatchObject {
-        return try await VectorStoresMethods.createVectorStoreFileBatch(config: config, vectorStoreId: vectorStoreId, fileIds: fileIds, files: files, chunkingStrategy: chunkingStrategy, attributes: attributes, requestOptions: requestOptions)
+    public func createFileBatch(
+        vectorStoreId: String,
+        fileIds: [String]? = nil,
+        files: [CreateVectorStoreFileRequest]? = nil,
+        chunkingStrategy: ChunkingStrategyRequestParam? = nil,
+        attributes: SdkOptional<VectorStoreFileAttributes>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreFileBatchObject {
+        try await VectorStoresMethods.createVectorStoreFileBatch(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            fileIds: fileIds,
+            files: files,
+            chunkingStrategy: chunkingStrategy,
+            attributes: attributes,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves a file batch associated with a vector store. Use the batch status and file counts to check the progress and outcome of file processing.
+    /// Retrieves a file batch associated with a vector store. Use the batch status and file counts to check the
+    /// progress and outcome of file processing.
     ///
     /// Retrieves a vector store file batch.
-    public func getFileBatch(vectorStoreId: String, batchId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileBatchObject {
-        return try await VectorStoresMethods.getVectorStoreFileBatch(config: config, vectorStoreId: vectorStoreId, batchId: batchId, requestOptions: requestOptions)
+    public func getFileBatch(
+        vectorStoreId: String,
+        batchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreFileBatchObject {
+        try await VectorStoresMethods.getVectorStoreFileBatch(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            batchId: batchId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Attempts to stop processing files in a vector store file batch as soon as possible. Check the returned batch status to see whether processing has been cancelled.
+    /// Attempts to stop processing files in a vector store file batch as soon as possible. Check the returned batch
+    /// status to see whether processing has been cancelled.
     ///
-    /// Cancel a vector store file batch. This attempts to cancel the processing of files in this batch as soon as possible.
-    public func cancelFileBatch(vectorStoreId: String, batchId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileBatchObject {
-        return try await VectorStoresMethods.cancelVectorStoreFileBatch(config: config, vectorStoreId: vectorStoreId, batchId: batchId, requestOptions: requestOptions)
+    /// Cancel a vector store file batch. This attempts to cancel the processing of files in this batch as soon as
+    /// possible.
+    public func cancelFileBatch(
+        vectorStoreId: String,
+        batchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreFileBatchObject {
+        try await VectorStoresMethods.cancelVectorStoreFileBatch(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            batchId: batchId,
+            requestOptions: requestOptions
+        )
     }
 }
 
-extension VectorStoresNamespace {
-/// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor parameters to navigate through the batch's files.
+public extension VectorStoresNamespace {
+    /// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor
+    /// parameters to navigate through the batch's files.
     ///
     /// Returns a list of vector store files in a batch.
-    public func listFilesInBatch(vectorStoreId: String, batchId: String, limit: Int? = nil, order: ListFilesInVectorStoreBatchParameter? = nil, after: String? = nil, before: String? = nil, filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil, requestOptions: RequestOptions? = nil) async throws -> ListVectorStoreFilesResponse {
-        return try await VectorStoresMethods.listFilesInVectorStoreBatch(config: config, vectorStoreId: vectorStoreId, batchId: batchId, limit: limit, order: order, after: after, before: before, filter: filter, requestOptions: requestOptions)
+    func listFilesInBatch(
+        vectorStoreId: String,
+        batchId: String,
+        limit: Int? = nil,
+        order: ListFilesInVectorStoreBatchParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListVectorStoreFilesResponse {
+        try await VectorStoresMethods.listFilesInVectorStoreBatch(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            batchId: batchId,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            filter: filter,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists files attached to a vector store, with pagination and an optional status filter. Use `after` or `before` to navigate the list, and `filter` to select files by processing status.
+    /// Lists files attached to a vector store, with pagination and an optional status filter. Use `after` or `before`
+    /// to navigate the list, and `filter` to select files by processing status.
     ///
     /// Returns a list of vector store files.
-    public func listFiles(vectorStoreId: String, limit: Int? = nil, order: ListVectorStoreFilesParameter? = nil, after: String? = nil, before: String? = nil, filter: ListVectorStoreFilesParameterX63027327? = nil, requestOptions: RequestOptions? = nil) async throws -> ListVectorStoreFilesResponse {
-        return try await VectorStoresMethods.listVectorStoreFiles(config: config, vectorStoreId: vectorStoreId, limit: limit, order: order, after: after, before: before, filter: filter, requestOptions: requestOptions)
+    func listFiles(
+        vectorStoreId: String,
+        limit: Int? = nil,
+        order: ListVectorStoreFilesParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        filter: ListVectorStoreFilesParameterX63027327? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListVectorStoreFilesResponse {
+        try await VectorStoresMethods.listVectorStoreFiles(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            filter: filter,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates an attachment between a file and a vector store. Supply the file's `file_id` and optionally configure `chunking_strategy` or attach `attributes`; use file batches for multi-file ingestion. The response includes the attached file's processing status.
+    /// Creates an attachment between a file and a vector store. Supply the file's `file_id` and optionally configure
+    /// `chunking_strategy` or attach `attributes`; use file batches for multi-file ingestion. The response includes the
+    /// attached file's processing status.
     ///
-    /// Create a vector store file by attaching a [File](https://developers.openai.com/api/reference/resources/files) to a [vector store](https://developers.openai.com/api/reference/resources/vector_stores).
-    public func createFile(vectorStoreId: String, fileId: String, chunkingStrategy: ChunkingStrategyRequestParam? = nil, attributes: SdkOptional<VectorStoreFileAttributes>? = nil, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileObject {
-        return try await VectorStoresMethods.createVectorStoreFile(config: config, vectorStoreId: vectorStoreId, fileId: fileId, chunkingStrategy: chunkingStrategy, attributes: attributes, requestOptions: requestOptions)
+    /// Create a vector store file by attaching a [File](https://developers.openai.com/api/reference/resources/files) to
+    /// a [vector store](https://developers.openai.com/api/reference/resources/vector_stores).
+    func createFile(
+        vectorStoreId: String,
+        fileId: String,
+        chunkingStrategy: ChunkingStrategyRequestParam? = nil,
+        attributes: SdkOptional<VectorStoreFileAttributes>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreFileObject {
+        try await VectorStoresMethods.createVectorStoreFile(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            fileId: fileId,
+            chunkingStrategy: chunkingStrategy,
+            attributes: attributes,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves a file attachment and its processing details from a vector store. Use `vector_store_id` and `file_id` to identify the attachment whose status and configuration you need.
+    /// Retrieves a file attachment and its processing details from a vector store. Use `vector_store_id` and `file_id`
+    /// to identify the attachment whose status and configuration you need.
     ///
     /// Retrieves a vector store file.
-    public func getFile(vectorStoreId: String, fileId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileObject {
-        return try await VectorStoresMethods.getVectorStoreFile(config: config, vectorStoreId: vectorStoreId, fileId: fileId, requestOptions: requestOptions)
+    func getFile(
+        vectorStoreId: String,
+        fileId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreFileObject {
+        try await VectorStoresMethods.getVectorStoreFile(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            fileId: fileId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes a file attachment from a vector store without deleting the underlying file. Use the file deletion operation separately if you also need to delete the file itself.
+    /// Deletes a file attachment from a vector store without deleting the underlying file. Use the file deletion
+    /// operation separately if you also need to delete the file itself.
     ///
-    /// Delete a vector store file. This will remove the file from the vector store but the file itself will not be deleted. To delete the file, use the [delete file](https://developers.openai.com/api/reference/resources/files/methods/delete) endpoint.
-    public func deleteFile(vectorStoreId: String, fileId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteVectorStoreFileResponse {
-        return try await VectorStoresMethods.deleteVectorStoreFile(config: config, vectorStoreId: vectorStoreId, fileId: fileId, requestOptions: requestOptions)
+    /// Delete a vector store file. This will remove the file from the vector store but the file itself will not be
+    /// deleted. To delete the file, use the [delete
+    /// file](https://developers.openai.com/api/reference/resources/files/methods/delete) endpoint.
+    func deleteFile(
+        vectorStoreId: String,
+        fileId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeleteVectorStoreFileResponse {
+        try await VectorStoresMethods.deleteVectorStoreFile(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            fileId: fileId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates the attributes attached to a file in a vector store. Supply `attributes` to replace the file's attribute set, or use `null` to clear it.
+    /// Updates the attributes attached to a file in a vector store. Supply `attributes` to replace the file's attribute
+    /// set, or use `null` to clear it.
     ///
     /// Update attributes on a vector store file.
-    public func updateFileAttributes(vectorStoreId: String, fileId: String, attributes: VectorStoreFileAttributes?, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileObject {
-        return try await VectorStoresMethods.updateVectorStoreFileAttributes(config: config, vectorStoreId: vectorStoreId, fileId: fileId, attributes: attributes, requestOptions: requestOptions)
+    func updateFileAttributes(
+        vectorStoreId: String,
+        fileId: String,
+        attributes: VectorStoreFileAttributes?,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreFileObject {
+        try await VectorStoresMethods.updateVectorStoreFileAttributes(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            fileId: fileId,
+            attributes: attributes,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves parsed content from a file attached to a vector store. Use `vector_store_id` and `file_id` to identify the file, then follow `next_page` when `has_more` indicates that additional content pages are available.
+    /// Retrieves parsed content from a file attached to a vector store. Use `vector_store_id` and `file_id` to identify
+    /// the file, then follow `next_page` when `has_more` indicates that additional content pages are available.
     ///
     /// Retrieve the parsed contents of a vector store file.
-    public func retrieveFileContent(vectorStoreId: String, fileId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileContentResponse {
-        return try await VectorStoresMethods.retrieveVectorStoreFileContent(config: config, vectorStoreId: vectorStoreId, fileId: fileId, requestOptions: requestOptions)
+    func retrieveFileContent(
+        vectorStoreId: String,
+        fileId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreFileContentResponse {
+        try await VectorStoresMethods.retrieveVectorStoreFileContent(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            fileId: fileId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Searches a vector store for relevant file chunks using one or more queries and optional file-attribute filters. Set `max_num_results` to control the result count and `ranking_options` to configure ranking; use `next_page` to continue when more results are available.
+    /// Searches a vector store for relevant file chunks using one or more queries and optional file-attribute filters.
+    /// Set `max_num_results` to control the result count and `ranking_options` to configure ranking; use `next_page` to
+    /// continue when more results are available.
     ///
     /// Search a vector store for relevant chunks based on a query and file attributes filter.
-    public func search(vectorStoreId: String, query: VectorStoreSearchRequestQuery, rewriteQuery: Bool? = nil, maxNumResults: Int? = nil, filters: VectorStoreSearchRequestFilters? = nil, rankingOptions: VectorStoreSearchRequestRankingOptions? = nil, requestOptions: RequestOptions? = nil) async throws -> VectorStoreSearchResultsPage {
-        return try await VectorStoresMethods.searchVectorStore(config: config, vectorStoreId: vectorStoreId, query: query, rewriteQuery: rewriteQuery, maxNumResults: maxNumResults, filters: filters, rankingOptions: rankingOptions, requestOptions: requestOptions)
+    func search(
+        vectorStoreId: String,
+        query: VectorStoreSearchRequestQuery,
+        rewriteQuery: Bool? = nil,
+        maxNumResults: Int? = nil,
+        filters: VectorStoreSearchRequestFilters? = nil,
+        rankingOptions: VectorStoreSearchRequestRankingOptions? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreSearchResultsPage {
+        try await VectorStoresMethods.searchVectorStore(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            query: query,
+            rewriteQuery: rewriteQuery,
+            maxNumResults: maxNumResults,
+            filters: filters,
+            rankingOptions: rankingOptions,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -195,15 +535,16 @@ public class SafetyNamespace {
         self.config = config
     }
 
-/// Retrieves a safety case by its identifier. Use `id` to specify the safety case you want to inspect; it can contain at most 128 characters.
+    /// Retrieves a safety case by its identifier. Use `id` to specify the safety case you want to inspect; it can
+    /// contain at most 128 characters.
     ///
     /// Get a safety case by ID.
     public func retrieveCase(id: String, requestOptions: RequestOptions? = nil) async throws -> SafetyCaseResource {
-        return try await SafetyMethods.retrieveSafetyCase(config: config, id: id, requestOptions: requestOptions)
+        try await SafetyMethods.retrieveSafetyCase(config: config, id: id, requestOptions: requestOptions)
     }
 
-/// Get a safety alert belonging to the authenticated API project.
+    /// Get a safety alert belonging to the authenticated API project.
     public func retrieveAlert(id: String, requestOptions: RequestOptions? = nil) async throws -> SafetyAlertResource {
-        return try await SafetyMethods.retrieveSafetyAlert(config: config, id: id, requestOptions: requestOptions)
+        try await SafetyMethods.retrieveSafetyAlert(config: config, id: id, requestOptions: requestOptions)
     }
 }

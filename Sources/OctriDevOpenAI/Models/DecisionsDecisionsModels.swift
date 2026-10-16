@@ -3,7 +3,7 @@
 
 import Foundation
 
-// DecisionsDecisions domain models
+/// DecisionsDecisions domain models
 /// Typed representation of the `DecisionsUsagePermissionErrorResponse` API schema.
 public struct DecisionsUsagePermissionErrorResponse: Codable {
     /// Details about the permission error.
@@ -13,21 +13,27 @@ public struct DecisionsUsagePermissionErrorResponse: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionsUsagePermissionErrorResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.error) else {
-            throw SdkValidationError(field: "error", code: "required", message: "Validation failed for 'error': value is required")
-        }
-        self.error = try container.sdkDecodeRequired(.error)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionsUsagePermissionErrorResponse {
-    public init(error: DecisionsUsagePermissionErrorResponseError) {
+public extension DecisionsUsagePermissionErrorResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.error) else {
+            throw SdkValidationError(
+                field: "error",
+                code: "required",
+                message: "Validation failed for 'error': value is required"
+            )
+        }
+        error = try container.sdkDecodeRequired(.error)
+    }
+}
+
+public extension DecisionsUsagePermissionErrorResponse {
+    init(error: DecisionsUsagePermissionErrorResponseError) {
         self.error = error
     }
 }
@@ -50,33 +56,51 @@ public struct DecisionsUsageBucket: Codable {
         case results
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionsUsageBucket {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.startTime) else {
-            throw SdkValidationError(field: "start_time", code: "required", message: "Validation failed for 'start_time': value is required")
-        }
-        guard container.contains(.endTime) else {
-            throw SdkValidationError(field: "end_time", code: "required", message: "Validation failed for 'end_time': value is required")
-        }
-        guard container.contains(.results) else {
-            throw SdkValidationError(field: "results", code: "required", message: "Validation failed for 'results': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.startTime = try container.sdkDecodeRequired(.startTime)
-        self.endTime = try container.sdkDecodeRequired(.endTime)
-        self.results = try container.sdkDecodeRequired(.results)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionsUsageBucket {
-    public init(object: DecisionsUsageBucketObject, startTime: Int, endTime: Int, results: [DecisionsUsageResult]) {
+public extension DecisionsUsageBucket {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.startTime) else {
+            throw SdkValidationError(
+                field: "start_time",
+                code: "required",
+                message: "Validation failed for 'start_time': value is required"
+            )
+        }
+        guard container.contains(.endTime) else {
+            throw SdkValidationError(
+                field: "end_time",
+                code: "required",
+                message: "Validation failed for 'end_time': value is required"
+            )
+        }
+        guard container.contains(.results) else {
+            throw SdkValidationError(
+                field: "results",
+                code: "required",
+                message: "Validation failed for 'results': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        startTime = try container.sdkDecodeRequired(.startTime)
+        endTime = try container.sdkDecodeRequired(.endTime)
+        results = try container.sdkDecodeRequired(.results)
+    }
+}
+
+public extension DecisionsUsageBucket {
+    init(object: DecisionsUsageBucketObject, startTime: Int, endTime: Int, results: [DecisionsUsageResult]) {
         (self.object, self.startTime) = (object, startTime)
         (self.endTime, self.results) = (endTime, results)
     }
@@ -100,33 +124,51 @@ public struct DecisionsUsageErrorDetails: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionsUsageErrorDetails {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        guard container.contains(.param) else {
-            throw SdkValidationError(field: "param", code: "required", message: "Validation failed for 'param': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.code = try container.sdkDecodeNullable(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.param = try container.sdkDecodeNullable(.param)
-        self.type = try container.sdkDecodeRequired(.type)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionsUsageErrorDetails {
-    public init(code: String?, message: String, param: String?, type: String) {
+public extension DecisionsUsageErrorDetails {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        guard container.contains(.param) else {
+            throw SdkValidationError(
+                field: "param",
+                code: "required",
+                message: "Validation failed for 'param': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        code = try container.sdkDecodeNullable(.code)
+        message = try container.sdkDecodeRequired(.message)
+        param = try container.sdkDecodeNullable(.param)
+        type = try container.sdkDecodeRequired(.type)
+    }
+}
+
+public extension DecisionsUsageErrorDetails {
+    init(code: String?, message: String, param: String?, type: String) {
         (self.code, self.message) = (code, message)
         (self.param, self.type) = (param, type)
     }
@@ -138,22 +180,33 @@ public indirect enum DecisionsUsagePermissionErrorResponseError {
 }
 
 extension DecisionsUsagePermissionErrorResponseError: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for DecisionsUsagePermissionErrorResponseError")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for DecisionsUsagePermissionErrorResponseError"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension DecisionsUsagePermissionErrorResponseError {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(DecisionsUsageErrorDetails.self) { return .decisionsUsageErrorDetails(value) }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container
+            .decode(DecisionsUsageErrorDetails.self) {
+            return .decisionsUsageErrorDetails(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         return nil
     }
 }
@@ -248,53 +301,96 @@ public struct DecisionsUsageResult: Codable {
         case serviceTier = "service_tier"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionsUsageResult {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.inputTokens) else {
-            throw SdkValidationError(field: "input_tokens", code: "required", message: "Validation failed for 'input_tokens': value is required")
-        }
-        guard container.contains(.outputTokens) else {
-            throw SdkValidationError(field: "output_tokens", code: "required", message: "Validation failed for 'output_tokens': value is required")
-        }
-        guard container.contains(.numModelRequests) else {
-            throw SdkValidationError(field: "num_model_requests", code: "required", message: "Validation failed for 'num_model_requests': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.inputTokens = try container.sdkDecodeRequired(.inputTokens)
-        self.outputTokens = try container.sdkDecodeRequired(.outputTokens)
-        self.numModelRequests = try container.sdkDecodeRequired(.numModelRequests)
-        self.apiSource = try container.sdkDecodeIfPresent(.apiSource)
-        self.inputCachedTokens = try container.sdkDecodeIfPresent(.inputCachedTokens)
-        self.inputCacheWriteTokens = try container.sdkDecodeIfPresent(.inputCacheWriteTokens)
-        self.inputCacheWrite12hTokens = try container.sdkDecodeIfPresent(.inputCacheWrite12hTokens)
-        self.inputUncachedTokens = try container.sdkDecodeIfPresent(.inputUncachedTokens)
-        self.inputTextTokens = try container.sdkDecodeIfPresent(.inputTextTokens)
-        self.outputTextTokens = try container.sdkDecodeIfPresent(.outputTextTokens)
-        self.inputCachedTextTokens = try container.sdkDecodeIfPresent(.inputCachedTextTokens)
-        self.inputAudioTokens = try container.sdkDecodeIfPresent(.inputAudioTokens)
-        self.inputCachedAudioTokens = try container.sdkDecodeIfPresent(.inputCachedAudioTokens)
-        self.outputAudioTokens = try container.sdkDecodeIfPresent(.outputAudioTokens)
-        self.inputImageTokens = try container.sdkDecodeIfPresent(.inputImageTokens)
-        self.inputCachedImageTokens = try container.sdkDecodeIfPresent(.inputCachedImageTokens)
-        self.outputImageTokens = try container.sdkDecodeIfPresent(.outputImageTokens)
-        self.projectId = try container.sdkDecodeIfPresent(.projectId)
-        self.userId = try container.sdkDecodeIfPresent(.userId)
-        self.apiKeyId = try container.sdkDecodeIfPresent(.apiKeyId)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.batch = try container.sdkDecodeIfPresent(.batch)
-        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionsUsageResult {
-    public init(object: DecisionsUsageResultObject, inputTokens: Int, outputTokens: Int, numModelRequests: Int, apiSource: DecisionsUsageApiSource? = nil, inputCachedTokens: Int? = nil, inputCacheWriteTokens: Int? = nil, inputCacheWrite12hTokens: Int? = nil, inputUncachedTokens: Int? = nil, inputTextTokens: Int? = nil, outputTextTokens: Int? = nil, inputCachedTextTokens: Int? = nil, inputAudioTokens: Int? = nil, inputCachedAudioTokens: Int? = nil, outputAudioTokens: Int? = nil, inputImageTokens: Int? = nil, inputCachedImageTokens: Int? = nil, outputImageTokens: Int? = nil, projectId: String? = nil, userId: String? = nil, apiKeyId: String? = nil, model: String? = nil, batch: Bool? = nil, serviceTier: String? = nil) {
+public extension DecisionsUsageResult {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.inputTokens) else {
+            throw SdkValidationError(
+                field: "input_tokens",
+                code: "required",
+                message: "Validation failed for 'input_tokens': value is required"
+            )
+        }
+        guard container.contains(.outputTokens) else {
+            throw SdkValidationError(
+                field: "output_tokens",
+                code: "required",
+                message: "Validation failed for 'output_tokens': value is required"
+            )
+        }
+        guard container.contains(.numModelRequests) else {
+            throw SdkValidationError(
+                field: "num_model_requests",
+                code: "required",
+                message: "Validation failed for 'num_model_requests': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        inputTokens = try container.sdkDecodeRequired(.inputTokens)
+        outputTokens = try container.sdkDecodeRequired(.outputTokens)
+        numModelRequests = try container.sdkDecodeRequired(.numModelRequests)
+        apiSource = try container.sdkDecodeIfPresent(.apiSource)
+        inputCachedTokens = try container.sdkDecodeIfPresent(.inputCachedTokens)
+        inputCacheWriteTokens = try container.sdkDecodeIfPresent(.inputCacheWriteTokens)
+        inputCacheWrite12hTokens = try container.sdkDecodeIfPresent(.inputCacheWrite12hTokens)
+        inputUncachedTokens = try container.sdkDecodeIfPresent(.inputUncachedTokens)
+        inputTextTokens = try container.sdkDecodeIfPresent(.inputTextTokens)
+        outputTextTokens = try container.sdkDecodeIfPresent(.outputTextTokens)
+        inputCachedTextTokens = try container.sdkDecodeIfPresent(.inputCachedTextTokens)
+        inputAudioTokens = try container.sdkDecodeIfPresent(.inputAudioTokens)
+        inputCachedAudioTokens = try container.sdkDecodeIfPresent(.inputCachedAudioTokens)
+        outputAudioTokens = try container.sdkDecodeIfPresent(.outputAudioTokens)
+        inputImageTokens = try container.sdkDecodeIfPresent(.inputImageTokens)
+        inputCachedImageTokens = try container.sdkDecodeIfPresent(.inputCachedImageTokens)
+        outputImageTokens = try container.sdkDecodeIfPresent(.outputImageTokens)
+        projectId = try container.sdkDecodeIfPresent(.projectId)
+        userId = try container.sdkDecodeIfPresent(.userId)
+        apiKeyId = try container.sdkDecodeIfPresent(.apiKeyId)
+        model = try container.sdkDecodeIfPresent(.model)
+        batch = try container.sdkDecodeIfPresent(.batch)
+        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+    }
+}
+
+public extension DecisionsUsageResult {
+    init(
+        object: DecisionsUsageResultObject,
+        inputTokens: Int,
+        outputTokens: Int,
+        numModelRequests: Int,
+        apiSource: DecisionsUsageApiSource? = nil,
+        inputCachedTokens: Int? = nil,
+        inputCacheWriteTokens: Int? = nil,
+        inputCacheWrite12hTokens: Int? = nil,
+        inputUncachedTokens: Int? = nil,
+        inputTextTokens: Int? = nil,
+        outputTextTokens: Int? = nil,
+        inputCachedTextTokens: Int? = nil,
+        inputAudioTokens: Int? = nil,
+        inputCachedAudioTokens: Int? = nil,
+        outputAudioTokens: Int? = nil,
+        inputImageTokens: Int? = nil,
+        inputCachedImageTokens: Int? = nil,
+        outputImageTokens: Int? = nil,
+        projectId: String? = nil,
+        userId: String? = nil,
+        apiKeyId: String? = nil,
+        model: String? = nil,
+        batch: Bool? = nil,
+        serviceTier: String? = nil
+    ) {
         (self.object, self.inputTokens) = (object, inputTokens)
         (self.outputTokens, self.numModelRequests) = (outputTokens, numModelRequests)
         (self.apiSource, self.inputCachedTokens) = (apiSource, inputCachedTokens)
@@ -320,21 +416,27 @@ public struct DecisionsUsageErrorResponse: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionsUsageErrorResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.error) else {
-            throw SdkValidationError(field: "error", code: "required", message: "Validation failed for 'error': value is required")
-        }
-        self.error = try container.sdkDecodeRequired(.error)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionsUsageErrorResponse {
-    public init(error: DecisionsUsageErrorDetails) {
+public extension DecisionsUsageErrorResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.error) else {
+            throw SdkValidationError(
+                field: "error",
+                code: "required",
+                message: "Validation failed for 'error': value is required"
+            )
+        }
+        error = try container.sdkDecodeRequired(.error)
+    }
+}
+
+public extension DecisionsUsageErrorResponse {
+    init(error: DecisionsUsageErrorDetails) {
         self.error = error
     }
 }
@@ -343,14 +445,17 @@ extension DecisionsUsageErrorResponse {
 public struct DecisionsUsageBucketWidth: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let value1m = DecisionsUsageBucketWidth(rawValue: "1m")
     public static let value1h = DecisionsUsageBucketWidth(rawValue: "1h")
     public static let value1d = DecisionsUsageBucketWidth(rawValue: "1d")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -363,7 +468,10 @@ public struct DecisionsUsageBucketWidth: RawRepresentable, Hashable, Codable, Se
 public struct DecisionsUsageGroupBy: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let projectId = DecisionsUsageGroupBy(rawValue: "project_id")
     public static let userId = DecisionsUsageGroupBy(rawValue: "user_id")
     public static let apiKeyId = DecisionsUsageGroupBy(rawValue: "api_key_id")
@@ -374,7 +482,7 @@ public struct DecisionsUsageGroupBy: RawRepresentable, Hashable, Codable, Sendab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -387,13 +495,16 @@ public struct DecisionsUsageGroupBy: RawRepresentable, Hashable, Codable, Sendab
 public struct DecisionsUsageApiSource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let agentsApi = DecisionsUsageApiSource(rawValue: "agents_api")
     public static let unlabeled = DecisionsUsageApiSource(rawValue: "unlabeled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -406,12 +517,16 @@ public struct DecisionsUsageApiSource: RawRepresentable, Hashable, Codable, Send
 public struct DecisionsUsageResultObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationUsageDecisionsResult = DecisionsUsageResultObject(rawValue: "organization.usage.decisions.result")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationUsageDecisionsResult =
+        DecisionsUsageResultObject(rawValue: "organization.usage.decisions.result")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -424,12 +539,15 @@ public struct DecisionsUsageResultObject: RawRepresentable, Hashable, Codable, S
 public struct DecisionsUsageBucketObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let bucket = DecisionsUsageBucketObject(rawValue: "bucket")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

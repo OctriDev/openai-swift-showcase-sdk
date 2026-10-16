@@ -17,9 +17,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.audio.updateVoiceConsent(
-            consentId: decoded("\"consent-1\""),
-            name: decoded("\"Example Name\"")
-        )
+                consentId: decoded("\"consent-1\""),
+                name: decoded("\"Example Name\"")
+            )
             XCTFail("updateVoiceConsent did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -69,11 +69,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.webhookEndpoints.update(
-            webhookEndpointId: decoded("\"whe_123\""),
-            name: decoded("\"Example Name\""),
-            url: decoded("\"https://\""),
-            eventTypes: decoded("[\"batch.completed\"]")
-        )
+                webhookEndpointId: decoded("\"whe_123\""),
+                name: decoded("\"Example Name\""),
+                url: decoded("\"https://\""),
+                eventTypes: decoded("[\"batch.completed\"]")
+            )
             XCTFail("updateWebhookEndpoint did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -121,9 +121,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.certificates.upload(
-            certificate: decoded("\"certificate\""),
-            name: decoded("\"Example Name\"")
-        )
+                certificate: decoded("\"certificate\""),
+                name: decoded("\"Example Name\"")
+            )
             XCTFail("uploadCertificate did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -190,8 +190,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.audioSpeeches(
-            options: options
-        )
+                options: options
+            )
             XCTFail("usageAudioSpeeches did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -258,8 +258,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.audioTranscriptions(
-            options: options
-        )
+                options: options
+            )
             XCTFail("usageAudioTranscriptions did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -312,14 +312,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.codeInterpreterSessions(
-            startTime: decoded("1"),
-            endTime: decoded("1"),
-            bucketWidth: decoded("\"1d\""),
-            projectIds: decoded("[\"project_ids\"]"),
-            groupBy: decoded("[\"project_id\"]"),
-            limit: decoded("1"),
-            page: decoded("\"page\"")
-        )
+                startTime: decoded("1"),
+                endTime: decoded("1"),
+                bucketWidth: decoded("\"1d\""),
+                projectIds: decoded("[\"project_ids\"]"),
+                groupBy: decoded("[\"project_id\"]"),
+                limit: decoded("1"),
+                page: decoded("\"page\"")
+            )
             XCTFail("usageCodeInterpreterSessions did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -388,8 +388,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.completions(
-            options: options
-        )
+                options: options
+            )
             XCTFail("usageCompletions did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -454,8 +454,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.costs(
-            options: options
-        )
+                options: options
+            )
             XCTFail("usageCosts did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -522,8 +522,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.embeddings(
-            options: options
-        )
+                options: options
+            )
             XCTFail("usageEmbeddings did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

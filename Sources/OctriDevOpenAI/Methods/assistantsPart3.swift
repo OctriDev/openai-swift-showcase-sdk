@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AssistantsMethods {
-    public struct CreateAssistantOptions: Codable {
+public extension AssistantsMethods {
+    struct CreateAssistantOptions: Codable {
         public var model: CreateAssistantRequestModel
         public var name: SdkOptional<String>?
         public var description: SdkOptional<String>?
@@ -25,7 +25,9 @@ extension AssistantsMethods {
         }
     }
 
-    /// Creates an assistant configuration with a model and optional instructions, tools, and response settings. Supply `model` and add only the configuration fields you need; numeric sampling settings and text lengths have schema limits. This operation is closing down and will be removed on a date not specified here.
+    /// Creates an assistant configuration with a model and optional instructions, tools, and response settings. Supply
+    /// `model` and add only the configuration fields you need; numeric sampling settings and text lengths have schema
+    /// limits. This operation is closing down and will be removed on a date not specified here.
     ///
     /// Create an assistant with a model and instructions.
     ///
@@ -61,13 +63,26 @@ extension AssistantsMethods {
     ///   wire field.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func createAssistant(config: ClientConfig, options: CreateAssistantOptions, requestOptions: RequestOptions? = nil) async throws -> AssistantObject {
+    static func createAssistant(
+        config: ClientConfig,
+        options: CreateAssistantOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AssistantObject {
         if let tools = options.tools {
             try validateItems("tools", tools, max: 128)
         }
 
         let requestBody = CreateAssistantRequestBody(options: options)
 
-        return try (await sdkRequest("POST", "/assistants", config: config, body: requestBody, decoder: .json, operationId: "createAssistant", options: requestOptions, errors: ["429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/assistants",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createAssistant",
+            options: requestOptions,
+            errors: ["429": ErrorResponse.self]
+        )).data
     }
 }

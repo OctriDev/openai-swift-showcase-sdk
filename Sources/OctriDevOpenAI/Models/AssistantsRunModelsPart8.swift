@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AssistantsRun domain models
+/// AssistantsRun domain models
 public enum RunStepStreamEventVariant2Event: String, CaseIterable, Codable {
     case threadRunStepDelta = "thread.run.step.delta"
     public init(from decoder: Decoder) throws {
@@ -25,12 +25,15 @@ public enum RunStepStreamEventVariant2Event: String, CaseIterable, Codable {
 public struct RunObjectRequiredActionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let submitToolOutputs = RunObjectRequiredActionType(rawValue: "submit_tool_outputs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,22 +3,28 @@
 
 import Foundation
 
-// Moderations domain models
+/// Moderations domain models
 public indirect enum CreateModerationRequestInputItem {
     case createModerationRequestInputItemVariant0(CreateModerationRequestInputItemVariant0)
     case createModerationRequestInputItemVariant1(CreateModerationRequestInputItemVariant1)
 }
 
 extension CreateModerationRequestInputItem: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateModerationRequestInputItem")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateModerationRequestInputItem"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
@@ -27,12 +33,12 @@ extension CreateModerationRequestInputItem {
         if let value = try? container.decode(
             CreateModerationRequestInputItemVariant0.self
         ) {
-            return             .createModerationRequestInputItemVariant0(value)
+            return .createModerationRequestInputItemVariant0(value)
         }
         if let value = try? container.decode(
             CreateModerationRequestInputItemVariant1.self
         ) {
-            return             .createModerationRequestInputItemVariant1(value)
+            return .createModerationRequestInputItemVariant1(value)
         }
         return nil
     }
@@ -100,30 +106,46 @@ public struct CreateModerationResponseResultsItemCategories: Codable {
         case violenceGraphic = "violence/graphic"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateModerationResponseResultsItemCategories {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.hate = try container.sdkDecodeRequired(.hate)
-        self.hateThreatening = try container.sdkDecodeRequired(.hateThreatening)
-        self.harassment = try container.sdkDecodeRequired(.harassment)
-        self.harassmentThreatening = try container.sdkDecodeRequired(.harassmentThreatening)
-        self.illicit = try container.sdkDecodeNullable(.illicit)
-        self.illicitViolent = try container.sdkDecodeNullable(.illicitViolent)
-        self.selfHarm = try container.sdkDecodeRequired(.selfHarm)
-        self.selfHarmIntent = try container.sdkDecodeRequired(.selfHarmIntent)
-        self.selfHarmInstructions = try container.sdkDecodeRequired(.selfHarmInstructions)
-        self.sexual = try container.sdkDecodeRequired(.sexual)
-        self.sexualMinors = try container.sdkDecodeRequired(.sexualMinors)
-        self.violence = try container.sdkDecodeRequired(.violence)
-        self.violenceGraphic = try container.sdkDecodeRequired(.violenceGraphic)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateModerationResponseResultsItemCategories {
-    public init(hate: Bool, hateThreatening: Bool, harassment: Bool, harassmentThreatening: Bool, illicit: Bool?, illicitViolent: Bool?, selfHarm: Bool, selfHarmIntent: Bool, selfHarmInstructions: Bool, sexual: Bool, sexualMinors: Bool, violence: Bool, violenceGraphic: Bool) {
+public extension CreateModerationResponseResultsItemCategories {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        hate = try container.sdkDecodeRequired(.hate)
+        hateThreatening = try container.sdkDecodeRequired(.hateThreatening)
+        harassment = try container.sdkDecodeRequired(.harassment)
+        harassmentThreatening = try container.sdkDecodeRequired(.harassmentThreatening)
+        illicit = try container.sdkDecodeNullable(.illicit)
+        illicitViolent = try container.sdkDecodeNullable(.illicitViolent)
+        selfHarm = try container.sdkDecodeRequired(.selfHarm)
+        selfHarmIntent = try container.sdkDecodeRequired(.selfHarmIntent)
+        selfHarmInstructions = try container.sdkDecodeRequired(.selfHarmInstructions)
+        sexual = try container.sdkDecodeRequired(.sexual)
+        sexualMinors = try container.sdkDecodeRequired(.sexualMinors)
+        violence = try container.sdkDecodeRequired(.violence)
+        violenceGraphic = try container.sdkDecodeRequired(.violenceGraphic)
+    }
+}
+
+public extension CreateModerationResponseResultsItemCategories {
+    init(
+        hate: Bool,
+        hateThreatening: Bool,
+        harassment: Bool,
+        harassmentThreatening: Bool,
+        illicit: Bool?,
+        illicitViolent: Bool?,
+        selfHarm: Bool,
+        selfHarmIntent: Bool,
+        selfHarmInstructions: Bool,
+        sexual: Bool,
+        sexualMinors: Bool,
+        violence: Bool,
+        violenceGraphic: Bool
+    ) {
         (self.hate, self.hateThreatening) = (hate, hateThreatening)
         (self.harassment, self.harassmentThreatening) = (harassment, harassmentThreatening)
         (self.illicit, self.illicitViolent) = (illicit, illicitViolent)
@@ -149,51 +171,70 @@ public struct CreateModerationRequest: Codable {
         case model
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateModerationRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.input) else {
-            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
-        }
-        self.input = try container.sdkDecodeRequired(.input)
-        self.model = try container.sdkDecodeIfPresent(.model)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateModerationRequest {
-    public init(input: CreateModerationRequestInput, model: String? = nil) {
+public extension CreateModerationRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.input) else {
+            throw SdkValidationError(
+                field: "input",
+                code: "required",
+                message: "Validation failed for 'input': value is required"
+            )
+        }
+        input = try container.sdkDecodeRequired(.input)
+        model = try container.sdkDecodeIfPresent(.model)
+    }
+}
+
+public extension CreateModerationRequest {
+    init(input: CreateModerationRequestInput, model: String? = nil) {
         (self.input, self.model) = (input, model)
     }
 }
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesHateList = [CreateModerationResponseResultsItemCategoryAppliedInputTypesHateItem]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesHateList =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesHateItem]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesHX8b8b2e6d8f = [CreateModerationResponseResultsItemCategoryAppliedInputTypesHX49743aaa37]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesHX8b8b2e6d8f =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesHX49743aaa37]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesHX8b95f3566e = [CreateModerationResponseResultsItemCategoryAppliedInputTypesHX0d9889c15d]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesHX8b95f3566e =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesHX0d9889c15d]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesHXd329e1bb0b = [CreateModerationResponseResultsItemCategoryAppliedInputTypesHX364dbb7f7f]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesHXd329e1bb0b =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesHX364dbb7f7f]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesIllicitList = [CreateModerationResponseResultsItemCategoryAppliedInputTypesIllicitItem]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesIllicitList =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesIllicitItem]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesIX1f9eabc395 = [CreateModerationResponseResultsItemCategoryAppliedInputTypesIX82388b00ec]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesIX1f9eabc395 =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesIX82388b00ec]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesSelfHarmList = [CreateModerationResponseResultsItemCategoryAppliedInputTypesSelfHarmItem]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesSelfHarmList =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesSelfHarmItem]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesSXf308db69fe = [CreateModerationResponseResultsItemCategoryAppliedInputTypesSX95bf977d69]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesSXf308db69fe =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesSX95bf977d69]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesSXc56dc8d1cb = [CreateModerationResponseResultsItemCategoryAppliedInputTypesSXa7e87222b1]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesSXc56dc8d1cb =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesSXa7e87222b1]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesSexualList = [CreateModerationResponseResultsItemCategoryAppliedInputTypesSexualItem]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesSexualList =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesSexualItem]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesSX9ab9481123 = [CreateModerationResponseResultsItemCategoryAppliedInputTypesSX612f28e753]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesSX9ab9481123 =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesSX612f28e753]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesViolenceList = [CreateModerationResponseResultsItemCategoryAppliedInputTypesViolenceItem]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesViolenceList =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesViolenceItem]
 
-public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesVX5bb0ab6fba = [CreateModerationResponseResultsItemCategoryAppliedInputTypesVX143234c62c]
+public typealias CreateModerationResponseResultsItemCategoryAppliedInputTypesVX5bb0ab6fba =
+    [CreateModerationResponseResultsItemCategoryAppliedInputTypesVX143234c62c]
 
 /// A list of the categories along with the input type(s) that the score applies to.
 public struct CreateModerationResponseResultsItemCategoryAppliedInputTypes: Codable {
@@ -240,30 +281,46 @@ public struct CreateModerationResponseResultsItemCategoryAppliedInputTypes: Coda
         case violenceGraphic = "violence/graphic"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateModerationResponseResultsItemCategoryAppliedInputTypes {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.hate = try container.sdkDecodeRequired(.hate)
-        self.hateThreatening = try container.sdkDecodeRequired(.hateThreatening)
-        self.harassment = try container.sdkDecodeRequired(.harassment)
-        self.harassmentThreatening = try container.sdkDecodeRequired(.harassmentThreatening)
-        self.illicit = try container.sdkDecodeRequired(.illicit)
-        self.illicitViolent = try container.sdkDecodeRequired(.illicitViolent)
-        self.selfHarm = try container.sdkDecodeRequired(.selfHarm)
-        self.selfHarmIntent = try container.sdkDecodeRequired(.selfHarmIntent)
-        self.selfHarmInstructions = try container.sdkDecodeRequired(.selfHarmInstructions)
-        self.sexual = try container.sdkDecodeRequired(.sexual)
-        self.sexualMinors = try container.sdkDecodeRequired(.sexualMinors)
-        self.violence = try container.sdkDecodeRequired(.violence)
-        self.violenceGraphic = try container.sdkDecodeRequired(.violenceGraphic)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateModerationResponseResultsItemCategoryAppliedInputTypes {
-    public init(hate: CreateModerationResponseResultsItemCategoryAppliedInputTypesHateList, hateThreatening: CreateModerationResponseResultsItemCategoryAppliedInputTypesHX8b8b2e6d8f, harassment: CreateModerationResponseResultsItemCategoryAppliedInputTypesHX8b95f3566e, harassmentThreatening: CreateModerationResponseResultsItemCategoryAppliedInputTypesHXd329e1bb0b, illicit: CreateModerationResponseResultsItemCategoryAppliedInputTypesIllicitList, illicitViolent: CreateModerationResponseResultsItemCategoryAppliedInputTypesIX1f9eabc395, selfHarm: CreateModerationResponseResultsItemCategoryAppliedInputTypesSelfHarmList, selfHarmIntent: CreateModerationResponseResultsItemCategoryAppliedInputTypesSXf308db69fe, selfHarmInstructions: CreateModerationResponseResultsItemCategoryAppliedInputTypesSXc56dc8d1cb, sexual: CreateModerationResponseResultsItemCategoryAppliedInputTypesSexualList, sexualMinors: CreateModerationResponseResultsItemCategoryAppliedInputTypesSX9ab9481123, violence: CreateModerationResponseResultsItemCategoryAppliedInputTypesViolenceList, violenceGraphic: CreateModerationResponseResultsItemCategoryAppliedInputTypesVX5bb0ab6fba) {
+public extension CreateModerationResponseResultsItemCategoryAppliedInputTypes {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        hate = try container.sdkDecodeRequired(.hate)
+        hateThreatening = try container.sdkDecodeRequired(.hateThreatening)
+        harassment = try container.sdkDecodeRequired(.harassment)
+        harassmentThreatening = try container.sdkDecodeRequired(.harassmentThreatening)
+        illicit = try container.sdkDecodeRequired(.illicit)
+        illicitViolent = try container.sdkDecodeRequired(.illicitViolent)
+        selfHarm = try container.sdkDecodeRequired(.selfHarm)
+        selfHarmIntent = try container.sdkDecodeRequired(.selfHarmIntent)
+        selfHarmInstructions = try container.sdkDecodeRequired(.selfHarmInstructions)
+        sexual = try container.sdkDecodeRequired(.sexual)
+        sexualMinors = try container.sdkDecodeRequired(.sexualMinors)
+        violence = try container.sdkDecodeRequired(.violence)
+        violenceGraphic = try container.sdkDecodeRequired(.violenceGraphic)
+    }
+}
+
+public extension CreateModerationResponseResultsItemCategoryAppliedInputTypes {
+    init(
+        hate: CreateModerationResponseResultsItemCategoryAppliedInputTypesHateList,
+        hateThreatening: CreateModerationResponseResultsItemCategoryAppliedInputTypesHX8b8b2e6d8f,
+        harassment: CreateModerationResponseResultsItemCategoryAppliedInputTypesHX8b95f3566e,
+        harassmentThreatening: CreateModerationResponseResultsItemCategoryAppliedInputTypesHXd329e1bb0b,
+        illicit: CreateModerationResponseResultsItemCategoryAppliedInputTypesIllicitList,
+        illicitViolent: CreateModerationResponseResultsItemCategoryAppliedInputTypesIX1f9eabc395,
+        selfHarm: CreateModerationResponseResultsItemCategoryAppliedInputTypesSelfHarmList,
+        selfHarmIntent: CreateModerationResponseResultsItemCategoryAppliedInputTypesSXf308db69fe,
+        selfHarmInstructions: CreateModerationResponseResultsItemCategoryAppliedInputTypesSXc56dc8d1cb,
+        sexual: CreateModerationResponseResultsItemCategoryAppliedInputTypesSexualList,
+        sexualMinors: CreateModerationResponseResultsItemCategoryAppliedInputTypesSX9ab9481123,
+        violence: CreateModerationResponseResultsItemCategoryAppliedInputTypesViolenceList,
+        violenceGraphic: CreateModerationResponseResultsItemCategoryAppliedInputTypesVX5bb0ab6fba
+    ) {
         (self.hate, self.hateThreatening) = (hate, hateThreatening)
         (self.harassment, self.harassmentThreatening) = (harassment, harassmentThreatening)
         (self.illicit, self.illicitViolent) = (illicit, illicitViolent)
@@ -286,28 +343,41 @@ public struct CreateModerationRequestInputItemVariant0: Codable {
         case imageUrl = "image_url"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateModerationRequestInputItemVariant0 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.imageUrl) else {
-            throw SdkValidationError(field: "image_url", code: "required", message: "Validation failed for 'image_url': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.imageUrl = try container.sdkDecodeRequired(.imageUrl)
-            try sdkValidateRawEnum("type", self.type, CreateModerationRequestInputItemVariant0Type.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateModerationRequestInputItemVariant0 {
-    public init(type: CreateModerationRequestInputItemVariant0Type, imageUrl: CreateModerationRequestInputItemVariant0ImageUrl) throws {
+public extension CreateModerationRequestInputItemVariant0 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.imageUrl) else {
+            throw SdkValidationError(
+                field: "image_url",
+                code: "required",
+                message: "Validation failed for 'image_url': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        imageUrl = try container.sdkDecodeRequired(.imageUrl)
+        try sdkValidateRawEnum("type", type, CreateModerationRequestInputItemVariant0Type.allCases.map(\.rawValue))
+    }
+}
+
+public extension CreateModerationRequestInputItemVariant0 {
+    init(
+        type: CreateModerationRequestInputItemVariant0Type,
+        imageUrl: CreateModerationRequestInputItemVariant0ImageUrl
+    ) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
-            try sdkValidateRawEnum("type", self.type, CreateModerationRequestInputItemVariant0Type.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, CreateModerationRequestInputItemVariant0Type.allCases.map(\.rawValue))
     }
 }
 
@@ -356,30 +426,46 @@ public struct CreateModerationResponseResultsItemCategoryScores: Codable {
         case violenceGraphic = "violence/graphic"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateModerationResponseResultsItemCategoryScores {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.hate = try container.sdkDecodeRequired(.hate)
-        self.hateThreatening = try container.sdkDecodeRequired(.hateThreatening)
-        self.harassment = try container.sdkDecodeRequired(.harassment)
-        self.harassmentThreatening = try container.sdkDecodeRequired(.harassmentThreatening)
-        self.illicit = try container.sdkDecodeRequired(.illicit)
-        self.illicitViolent = try container.sdkDecodeRequired(.illicitViolent)
-        self.selfHarm = try container.sdkDecodeRequired(.selfHarm)
-        self.selfHarmIntent = try container.sdkDecodeRequired(.selfHarmIntent)
-        self.selfHarmInstructions = try container.sdkDecodeRequired(.selfHarmInstructions)
-        self.sexual = try container.sdkDecodeRequired(.sexual)
-        self.sexualMinors = try container.sdkDecodeRequired(.sexualMinors)
-        self.violence = try container.sdkDecodeRequired(.violence)
-        self.violenceGraphic = try container.sdkDecodeRequired(.violenceGraphic)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateModerationResponseResultsItemCategoryScores {
-    public init(hate: Double, hateThreatening: Double, harassment: Double, harassmentThreatening: Double, illicit: Double, illicitViolent: Double, selfHarm: Double, selfHarmIntent: Double, selfHarmInstructions: Double, sexual: Double, sexualMinors: Double, violence: Double, violenceGraphic: Double) {
+public extension CreateModerationResponseResultsItemCategoryScores {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        hate = try container.sdkDecodeRequired(.hate)
+        hateThreatening = try container.sdkDecodeRequired(.hateThreatening)
+        harassment = try container.sdkDecodeRequired(.harassment)
+        harassmentThreatening = try container.sdkDecodeRequired(.harassmentThreatening)
+        illicit = try container.sdkDecodeRequired(.illicit)
+        illicitViolent = try container.sdkDecodeRequired(.illicitViolent)
+        selfHarm = try container.sdkDecodeRequired(.selfHarm)
+        selfHarmIntent = try container.sdkDecodeRequired(.selfHarmIntent)
+        selfHarmInstructions = try container.sdkDecodeRequired(.selfHarmInstructions)
+        sexual = try container.sdkDecodeRequired(.sexual)
+        sexualMinors = try container.sdkDecodeRequired(.sexualMinors)
+        violence = try container.sdkDecodeRequired(.violence)
+        violenceGraphic = try container.sdkDecodeRequired(.violenceGraphic)
+    }
+}
+
+public extension CreateModerationResponseResultsItemCategoryScores {
+    init(
+        hate: Double,
+        hateThreatening: Double,
+        harassment: Double,
+        harassmentThreatening: Double,
+        illicit: Double,
+        illicitViolent: Double,
+        selfHarm: Double,
+        selfHarmIntent: Double,
+        selfHarmInstructions: Double,
+        sexual: Double,
+        sexualMinors: Double,
+        violence: Double,
+        violenceGraphic: Double
+    ) {
         (self.hate, self.hateThreatening) = (hate, hateThreatening)
         (self.harassment, self.harassmentThreatening) = (harassment, harassmentThreatening)
         (self.illicit, self.illicitViolent) = (illicit, illicitViolent)
@@ -408,33 +494,56 @@ public struct CreateModerationResponseResultsItem: Codable {
         case categoryAppliedInputTypes = "category_applied_input_types"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateModerationResponseResultsItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.flagged) else {
-            throw SdkValidationError(field: "flagged", code: "required", message: "Validation failed for 'flagged': value is required")
-        }
-        guard container.contains(.categories) else {
-            throw SdkValidationError(field: "categories", code: "required", message: "Validation failed for 'categories': value is required")
-        }
-        guard container.contains(.categoryScores) else {
-            throw SdkValidationError(field: "category_scores", code: "required", message: "Validation failed for 'category_scores': value is required")
-        }
-        guard container.contains(.categoryAppliedInputTypes) else {
-            throw SdkValidationError(field: "category_applied_input_types", code: "required", message: "Validation failed for 'category_applied_input_types': value is required")
-        }
-        self.flagged = try container.sdkDecodeRequired(.flagged)
-        self.categories = try container.sdkDecodeRequired(.categories)
-        self.categoryScores = try container.sdkDecodeRequired(.categoryScores)
-        self.categoryAppliedInputTypes = try container.sdkDecodeRequired(.categoryAppliedInputTypes)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateModerationResponseResultsItem {
-    public init(flagged: Bool, categories: CreateModerationResponseResultsItemCategories, categoryScores: CreateModerationResponseResultsItemCategoryScores, categoryAppliedInputTypes: CreateModerationResponseResultsItemCategoryAppliedInputTypes) {
+public extension CreateModerationResponseResultsItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.flagged) else {
+            throw SdkValidationError(
+                field: "flagged",
+                code: "required",
+                message: "Validation failed for 'flagged': value is required"
+            )
+        }
+        guard container.contains(.categories) else {
+            throw SdkValidationError(
+                field: "categories",
+                code: "required",
+                message: "Validation failed for 'categories': value is required"
+            )
+        }
+        guard container.contains(.categoryScores) else {
+            throw SdkValidationError(
+                field: "category_scores",
+                code: "required",
+                message: "Validation failed for 'category_scores': value is required"
+            )
+        }
+        guard container.contains(.categoryAppliedInputTypes) else {
+            throw SdkValidationError(
+                field: "category_applied_input_types",
+                code: "required",
+                message: "Validation failed for 'category_applied_input_types': value is required"
+            )
+        }
+        flagged = try container.sdkDecodeRequired(.flagged)
+        categories = try container.sdkDecodeRequired(.categories)
+        categoryScores = try container.sdkDecodeRequired(.categoryScores)
+        categoryAppliedInputTypes = try container.sdkDecodeRequired(.categoryAppliedInputTypes)
+    }
+}
+
+public extension CreateModerationResponseResultsItem {
+    init(
+        flagged: Bool,
+        categories: CreateModerationResponseResultsItemCategories,
+        categoryScores: CreateModerationResponseResultsItemCategoryScores,
+        categoryAppliedInputTypes: CreateModerationResponseResultsItemCategoryAppliedInputTypes
+    ) {
         (self.flagged, self.categories) = (flagged, categories)
         (self.categoryScores, self.categoryAppliedInputTypes) = (categoryScores, categoryAppliedInputTypes)
     }
@@ -453,20 +562,30 @@ public struct CreateModerationRequestInputItemVariant1: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateModerationRequestInputItemVariant1 {
-    public init(from decoder: Decoder) throws {
+public extension CreateModerationRequestInputItemVariant1 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, CreateModerationRequestInputItemVariant1Type.allCases.map(\.rawValue))
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        try sdkValidateRawEnum("type", type, CreateModerationRequestInputItemVariant1Type.allCases.map(\.rawValue))
     }
 }

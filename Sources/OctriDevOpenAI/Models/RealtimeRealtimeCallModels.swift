@@ -3,7 +3,7 @@
 
 import Foundation
 
-// RealtimeRealtimeCall domain models
+/// RealtimeRealtimeCall domain models
 /// Parameters used to decline an incoming SIP call handled by the Realtime API.
 public struct RealtimeCallRejectRequest: Codable {
     /// SIP response code to send back to the caller. Defaults to `603` (Decline) when omitted.
@@ -15,19 +15,19 @@ public struct RealtimeCallRejectRequest: Codable {
     }
 
     init() {
-        self.statusCode = nil
+        statusCode = nil
     }
 }
 
-extension RealtimeCallRejectRequest {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeCallRejectRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.statusCode = try container.sdkDecodeIfPresent(.statusCode)
+        statusCode = try container.sdkDecodeIfPresent(.statusCode)
     }
 }
 
-extension RealtimeCallRejectRequest {
-    public init(statusCode: Int? = nil) {
+public extension RealtimeCallRejectRequest {
+    init(statusCode: Int? = nil) {
         self.init()
         self.statusCode = statusCode
     }
@@ -44,30 +44,30 @@ public struct RealtimeCallReferRequest: Codable {
         case targetUri = "target_uri"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeCallReferRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.targetUri) else {
-            throw SdkValidationError(field: "target_uri", code: "required", message: "Validation failed for 'target_uri': value is required")
-        }
-        self.targetUri = try container.sdkDecodeRequired(.targetUri)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeCallReferRequest {
-    public init(targetUri: String) {
+public extension RealtimeCallReferRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.targetUri) else {
+            throw SdkValidationError(
+                field: "target_uri",
+                code: "required",
+                message: "Validation failed for 'target_uri': value is required"
+            )
+        }
+        targetUri = try container.sdkDecodeRequired(.targetUri)
+    }
+}
+
+public extension RealtimeCallReferRequest {
+    init(targetUri: String) {
         self.targetUri = targetUri
     }
 }
-
-
-
-
-
-
 
 /// Optional session configuration to apply before the realtime session is created. Use the same parameters you
 /// would send in a `create client secret` request.
@@ -134,35 +134,56 @@ public struct RealtimeCallCreateRequestSession: Codable {
         case prompt
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeCallCreateRequestSession {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.include = try container.sdkDecodeIfPresent(.include)
-        self.tracing = try container.sdkDecodeIfPresent(.tracing)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        self.truncation = try container.sdkDecodeIfPresent(.truncation)
-        self.prompt = try container.sdkDecodeIfPresent(.prompt)
-            try sdkValidateRawEnum("type", self.type, RealtimeSessionCreateRequestGAType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeCallCreateRequestSession {
-    public init(type: RealtimeSessionCreateRequestGAType, outputModalities: [RealtimeSessionCreateRequestGAOutputModalitiesItem]? = nil, model: String? = nil, instructions: String? = nil, audio: RealtimeSessionCreateRequestGAAudio? = nil, include: [RealtimeSessionCreateRequestGAIncludeItem]? = nil, tracing: RealtimeSessionCreateRequestGATracing? = nil, tools: [RealtimeSessionCreateRequestGAToolsItem]? = nil, toolChoice: RealtimeSessionCreateRequestGAToolChoice? = nil, parallelToolCalls: Bool? = nil, reasoning: RealtimeReasoning? = nil, maxOutputTokens: RealtimeSessionCreateRequestGAMaxOutputTokens? = nil, truncation: RealtimeTruncation? = nil, prompt: Prompt? = nil) throws {
+public extension RealtimeCallCreateRequestSession {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
+        model = try container.sdkDecodeIfPresent(.model)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        include = try container.sdkDecodeIfPresent(.include)
+        tracing = try container.sdkDecodeIfPresent(.tracing)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        truncation = try container.sdkDecodeIfPresent(.truncation)
+        prompt = try container.sdkDecodeIfPresent(.prompt)
+        try sdkValidateRawEnum("type", type, RealtimeSessionCreateRequestGAType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeCallCreateRequestSession {
+    init(
+        type: RealtimeSessionCreateRequestGAType,
+        outputModalities: [RealtimeSessionCreateRequestGAOutputModalitiesItem]? = nil,
+        model: String? = nil,
+        instructions: String? = nil,
+        audio: RealtimeSessionCreateRequestGAAudio? = nil,
+        include: [RealtimeSessionCreateRequestGAIncludeItem]? = nil,
+        tracing: RealtimeSessionCreateRequestGATracing? = nil,
+        tools: [RealtimeSessionCreateRequestGAToolsItem]? = nil,
+        toolChoice: RealtimeSessionCreateRequestGAToolChoice? = nil,
+        parallelToolCalls: Bool? = nil,
+        reasoning: RealtimeReasoning? = nil,
+        maxOutputTokens: RealtimeSessionCreateRequestGAMaxOutputTokens? = nil,
+        truncation: RealtimeTruncation? = nil,
+        prompt: Prompt? = nil
+    ) throws {
         (self.type, self.outputModalities) = (type, outputModalities)
         (self.model, self.instructions) = (model, instructions)
         (self.audio, self.include) = (audio, include)
@@ -170,7 +191,7 @@ extension RealtimeCallCreateRequestSession {
         (self.toolChoice, self.parallelToolCalls) = (toolChoice, parallelToolCalls)
         (self.reasoning, self.maxOutputTokens) = (reasoning, maxOutputTokens)
         (self.truncation, self.prompt) = (truncation, prompt)
-            try sdkValidateRawEnum("type", self.type, RealtimeSessionCreateRequestGAType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeSessionCreateRequestGAType.allCases.map(\.rawValue))
     }
 }
 
@@ -189,22 +210,28 @@ public struct RealtimeCallCreateRequest: Codable {
         case session
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeCallCreateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.sdp) else {
-            throw SdkValidationError(field: "sdp", code: "required", message: "Validation failed for 'sdp': value is required")
-        }
-        self.sdp = try container.sdkDecodeRequired(.sdp)
-        self.session = try container.sdkDecodeIfPresent(.session)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeCallCreateRequest {
-    public init(sdp: String, session: RealtimeCallCreateRequestSession? = nil) {
+public extension RealtimeCallCreateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.sdp) else {
+            throw SdkValidationError(
+                field: "sdp",
+                code: "required",
+                message: "Validation failed for 'sdp': value is required"
+            )
+        }
+        sdp = try container.sdkDecodeRequired(.sdp)
+        session = try container.sdkDecodeIfPresent(.session)
+    }
+}
+
+public extension RealtimeCallCreateRequest {
+    init(sdp: String, session: RealtimeCallCreateRequestSession? = nil) {
         (self.sdp, self.session) = (sdp, session)
     }
 }

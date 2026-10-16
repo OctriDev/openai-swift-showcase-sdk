@@ -3,9 +3,15 @@
 
 import Foundation
 
-// Certificates domain models
-extension ListCertificatesResponse {
-    public init(data: [OrganizationCertificate], firstId: String?, lastId: String?, hasMore: Bool, object: ListCertificatesResponseObject) {
+/// Certificates domain models
+public extension ListCertificatesResponse {
+    init(
+        data: [OrganizationCertificate],
+        firstId: String?,
+        lastId: String?,
+        hasMore: Bool,
+        object: ListCertificatesResponseObject
+    ) {
         (self.data, self.firstId) = (data, firstId)
         (self.lastId, self.hasMore) = (lastId, hasMore)
         self.object = object
@@ -25,20 +31,20 @@ public struct OrganizationCertificateCertificateDetails: Codable {
     }
 
     init() {
-        (self.validAt, self.expiresAt) = (nil, nil)
+        (validAt, expiresAt) = (nil, nil)
     }
 }
 
-extension OrganizationCertificateCertificateDetails {
-    public init(from decoder: Decoder) throws {
+public extension OrganizationCertificateCertificateDetails {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.validAt = try container.sdkDecodeIfPresent(.validAt)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        validAt = try container.sdkDecodeIfPresent(.validAt)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
     }
 }
 
-extension OrganizationCertificateCertificateDetails {
-    public init(validAt: Int? = nil, expiresAt: Int? = nil) {
+public extension OrganizationCertificateCertificateDetails {
+    init(validAt: Int? = nil, expiresAt: Int? = nil) {
         self.init()
         (self.validAt, self.expiresAt) = (validAt, expiresAt)
     }
@@ -60,21 +66,21 @@ public struct CertificateCertificateDetails: Codable {
     }
 
     init() {
-        (self.validAt, self.expiresAt, self.content) = (nil, nil, nil)
+        (validAt, expiresAt, content) = (nil, nil, nil)
     }
 }
 
-extension CertificateCertificateDetails {
-    public init(from decoder: Decoder) throws {
+public extension CertificateCertificateDetails {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.validAt = try container.sdkDecodeIfPresent(.validAt)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        self.content = try container.sdkDecodeIfPresent(.content)
+        validAt = try container.sdkDecodeIfPresent(.validAt)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        content = try container.sdkDecodeIfPresent(.content)
     }
 }
 
-extension CertificateCertificateDetails {
-    public init(validAt: Int? = nil, expiresAt: Int? = nil, content: String? = nil) {
+public extension CertificateCertificateDetails {
+    init(validAt: Int? = nil, expiresAt: Int? = nil, content: String? = nil) {
         self.init()
         (self.validAt, self.expiresAt) = (validAt, expiresAt)
         self.content = content
@@ -105,41 +111,74 @@ public struct OrganizationProjectCertificate: Codable {
         case active
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OrganizationProjectCertificate {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.certificateDetails) else {
-            throw SdkValidationError(field: "certificate_details", code: "required", message: "Validation failed for 'certificate_details': value is required")
-        }
-        guard container.contains(.active) else {
-            throw SdkValidationError(field: "active", code: "required", message: "Validation failed for 'active': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.name = try container.sdkDecodeNullable(.name)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.certificateDetails = try container.sdkDecodeRequired(.certificateDetails)
-        self.active = try container.sdkDecodeRequired(.active)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OrganizationProjectCertificate {
-    public init(object: OrganizationProjectCertificateObject, id: String, name: String?, createdAt: Int, certificateDetails: OrganizationProjectCertificateCertificateDetails, active: Bool) {
+public extension OrganizationProjectCertificate {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.certificateDetails) else {
+            throw SdkValidationError(
+                field: "certificate_details",
+                code: "required",
+                message: "Validation failed for 'certificate_details': value is required"
+            )
+        }
+        guard container.contains(.active) else {
+            throw SdkValidationError(
+                field: "active",
+                code: "required",
+                message: "Validation failed for 'active': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        name = try container.sdkDecodeNullable(.name)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        certificateDetails = try container.sdkDecodeRequired(.certificateDetails)
+        active = try container.sdkDecodeRequired(.active)
+    }
+}
+
+public extension OrganizationProjectCertificate {
+    init(
+        object: OrganizationProjectCertificateObject,
+        id: String,
+        name: String?,
+        createdAt: Int,
+        certificateDetails: OrganizationProjectCertificateCertificateDetails,
+        active: Bool
+    ) {
         (self.object, self.id) = (object, id)
         (self.name, self.createdAt) = (name, createdAt)
         (self.certificateDetails, self.active) = (certificateDetails, active)
@@ -158,25 +197,35 @@ public struct OrganizationCertificateDeactivationResponse: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OrganizationCertificateDeactivationResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OrganizationCertificateDeactivationResponse {
-    public init(object: OrganizationCertificateDeactivationResponseObject, data: [OrganizationCertificate]) {
+public extension OrganizationCertificateDeactivationResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+    }
+}
+
+public extension OrganizationCertificateDeactivationResponse {
+    init(object: OrganizationCertificateDeactivationResponseObject, data: [OrganizationCertificate]) {
         (self.object, self.data) = (object, data)
     }
 }
@@ -193,39 +242,54 @@ public struct OrganizationCertificateActivationResponse: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OrganizationCertificateActivationResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OrganizationCertificateActivationResponse {
-    public init(object: OrganizationCertificateActivationResponseObject, data: [OrganizationCertificate]) {
+public extension OrganizationCertificateActivationResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+    }
+}
+
+public extension OrganizationCertificateActivationResponse {
+    init(object: OrganizationCertificateActivationResponseObject, data: [OrganizationCertificate]) {
         (self.object, self.data) = (object, data)
     }
 }
 
 /// The organization certificate deactivation result type.
-public struct OrganizationCertificateDeactivationResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct OrganizationCertificateDeactivationResponseObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationCertificateDeactivation = OrganizationCertificateDeactivationResponseObject(rawValue: "organization.certificate.deactivation")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationCertificateDeactivation =
+        OrganizationCertificateDeactivationResponseObject(rawValue: "organization.certificate.deactivation")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -238,12 +302,15 @@ public struct OrganizationCertificateDeactivationResponseObject: RawRepresentabl
 public struct ListProjectCertificatesResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = ListProjectCertificatesResponseObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -253,15 +320,20 @@ public struct ListProjectCertificatesResponseObject: RawRepresentable, Hashable,
 }
 
 /// The organization certificate activation result type.
-public struct OrganizationCertificateActivationResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct OrganizationCertificateActivationResponseObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationCertificateActivation = OrganizationCertificateActivationResponseObject(rawValue: "organization.certificate.activation")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationCertificateActivation =
+        OrganizationCertificateActivationResponseObject(rawValue: "organization.certificate.activation")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -274,12 +346,15 @@ public struct OrganizationCertificateActivationResponseObject: RawRepresentable,
 public struct OrganizationCertificateObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let organizationCertificate = OrganizationCertificateObject(rawValue: "organization.certificate")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -289,15 +364,20 @@ public struct OrganizationCertificateObject: RawRepresentable, Hashable, Codable
 }
 
 /// The project certificate activation result type.
-public struct OrganizationProjectCertificateActivationResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct OrganizationProjectCertificateActivationResponseObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationProjectCertificateActivation = OrganizationProjectCertificateActivationResponseObject(rawValue: "organization.project.certificate.activation")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationProjectCertificateActivation =
+        OrganizationProjectCertificateActivationResponseObject(rawValue: "organization.project.certificate.activation")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -310,12 +390,15 @@ public struct OrganizationProjectCertificateActivationResponseObject: RawReprese
 public struct ListCertificatesResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = ListCertificatesResponseObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -328,12 +411,15 @@ public struct ListCertificatesResponseObject: RawRepresentable, Hashable, Codabl
 public struct DeleteCertificateResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let certificateDeleted = DeleteCertificateResponseObject(rawValue: "certificate.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -346,12 +432,16 @@ public struct DeleteCertificateResponseObject: RawRepresentable, Hashable, Codab
 public struct OrganizationProjectCertificateObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationProjectCertificate = OrganizationProjectCertificateObject(rawValue: "organization.project.certificate")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationProjectCertificate =
+        OrganizationProjectCertificateObject(rawValue: "organization.project.certificate")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -367,14 +457,17 @@ public struct OrganizationProjectCertificateObject: RawRepresentable, Hashable, 
 public struct CertificateObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let certificate = CertificateObject(rawValue: "certificate")
     public static let organizationCertificate = CertificateObject(rawValue: "organization.certificate")
     public static let organizationProjectCertificate = CertificateObject(rawValue: "organization.project.certificate")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -384,15 +477,22 @@ public struct CertificateObject: RawRepresentable, Hashable, Codable, Sendable, 
 }
 
 /// The project certificate deactivation result type.
-public struct OrganizationProjectCertificateDeactivationResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct OrganizationProjectCertificateDeactivationResponseObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationProjectCertificateDeactivation = OrganizationProjectCertificateDeactivationResponseObject(rawValue: "organization.project.certificate.deactivation")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationProjectCertificateDeactivation =
+        OrganizationProjectCertificateDeactivationResponseObject(
+            rawValue: "organization.project.certificate.deactivation"
+        )
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
