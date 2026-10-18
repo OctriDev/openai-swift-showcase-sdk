@@ -3,29 +3,39 @@
 
 import Foundation
 
-// ResponsesCompact domain models
+/// ResponsesCompact domain models
 public indirect enum CompactResponseMethodPublicBodyInput {
     case stringValue(String)
     case inputItemList([InputItem])
 }
 
 extension CompactResponseMethodPublicBodyInput: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CompactResponseMethodPublicBodyInput")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CompactResponseMethodPublicBodyInput"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension CompactResponseMethodPublicBodyInput {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode([InputItem].self) { return .inputItemList(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode([InputItem].self) {
+            return .inputItemList(value)
+        }
         return nil
     }
 }
@@ -61,37 +71,59 @@ public struct CompactResource: Codable {
         case usage
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CompactResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.usage) else {
-            throw SdkValidationError(field: "usage", code: "required", message: "Validation failed for 'usage': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.output = try container.sdkDecodeRequired(.output)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.usage = try container.sdkDecodeRequired(.usage)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CompactResource {
-    public init(id: String, object: CompactResourceObject, output: [ItemField], createdAt: Int, usage: ResponseUsage) {
+public extension CompactResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.usage) else {
+            throw SdkValidationError(
+                field: "usage",
+                code: "required",
+                message: "Validation failed for 'usage': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        output = try container.sdkDecodeRequired(.output)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        usage = try container.sdkDecodeRequired(.usage)
+    }
+}
+
+public extension CompactResource {
+    init(id: String, object: CompactResourceObject, output: [ItemField], createdAt: Int, usage: ResponseUsage) {
         (self.id, self.object) = (id, object)
         (self.output, self.createdAt) = (output, createdAt)
         self.usage = usage
@@ -130,28 +162,43 @@ public struct CompactResponseMethodPublicBody: Codable {
         case serviceTier = "service_tier"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CompactResponseMethodPublicBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        self.model = try container.sdkDecodeNullable(.model)
-        self.input = try container.sdkDecodeIfPresent(.input)
-        self.previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
-        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CompactResponseMethodPublicBody {
-    public init(model: ModelIdsCompaction?, input: CompactResponseMethodPublicBodyInput? = nil, previousResponseId: String? = nil, instructions: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: PromptCacheRetentionEnum? = nil, promptCacheOptions: PromptCacheOptionsParam? = nil, serviceTier: ServiceTierEnum? = nil) {
+public extension CompactResponseMethodPublicBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        model = try container.sdkDecodeNullable(.model)
+        input = try container.sdkDecodeIfPresent(.input)
+        previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+    }
+}
+
+public extension CompactResponseMethodPublicBody {
+    init(
+        model: ModelIdsCompaction?,
+        input: CompactResponseMethodPublicBodyInput? = nil,
+        previousResponseId: String? = nil,
+        instructions: String? = nil,
+        promptCacheKey: String? = nil,
+        promptCacheRetention: PromptCacheRetentionEnum? = nil,
+        promptCacheOptions: PromptCacheOptionsParam? = nil,
+        serviceTier: ServiceTierEnum? = nil
+    ) {
         (self.model, self.input) = (model, input)
         (self.previousResponseId, self.instructions) = (previousResponseId, instructions)
         (self.promptCacheKey, self.promptCacheRetention) = (promptCacheKey, promptCacheRetention)
@@ -163,12 +210,15 @@ extension CompactResponseMethodPublicBody {
 public struct CompactResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let responseCompaction = CompactResourceObject(rawValue: "response.compaction")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveWeb domain models
+/// LiveLiveWeb domain models
 /// A web search tool available to the Live session’s Responses backend.
 public struct LiveWebSearchToolInputParam: Codable {
     /// The tool type. Always `web_search`.
@@ -13,24 +13,30 @@ public struct LiveWebSearchToolInputParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveWebSearchToolInputParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, LiveWebSearchToolInputParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveWebSearchToolInputParam {
-    public init(type: LiveWebSearchToolInputParamType) throws {
+public extension LiveWebSearchToolInputParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, LiveWebSearchToolInputParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveWebSearchToolInputParam {
+    init(type: LiveWebSearchToolInputParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, LiveWebSearchToolInputParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveWebSearchToolInputParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -46,30 +52,40 @@ public struct LiveWebRTCTransport: Codable {
         case sdp
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveWebRTCTransport {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.sdp) else {
-            throw SdkValidationError(field: "sdp", code: "required", message: "Validation failed for 'sdp': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.sdp = try container.sdkDecodeRequired(.sdp)
-            try sdkValidateRawEnum("type", self.type, LiveWebRTCTransportType.allCases.map(\.rawValue))
-            try validateLength("sdp", self.sdp, min: 1, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveWebRTCTransport {
-    public init(type: LiveWebRTCTransportType, sdp: String) throws {
+public extension LiveWebRTCTransport {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.sdp) else {
+            throw SdkValidationError(
+                field: "sdp",
+                code: "required",
+                message: "Validation failed for 'sdp': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        sdp = try container.sdkDecodeRequired(.sdp)
+        try sdkValidateRawEnum("type", type, LiveWebRTCTransportType.allCases.map(\.rawValue))
+        try validateLength("sdp", sdp, min: 1, max: nil)
+    }
+}
+
+public extension LiveWebRTCTransport {
+    init(type: LiveWebRTCTransportType, sdp: String) throws {
         (self.type, self.sdp) = (type, sdp)
-            try sdkValidateRawEnum("type", self.type, LiveWebRTCTransportType.allCases.map(\.rawValue))
-            try validateLength("sdp", self.sdp, min: 1, max: nil)
+        try sdkValidateRawEnum("type", self.type, LiveWebRTCTransportType.allCases.map(\.rawValue))
+        try validateLength("sdp", self.sdp, min: 1, max: nil)
     }
 }
 

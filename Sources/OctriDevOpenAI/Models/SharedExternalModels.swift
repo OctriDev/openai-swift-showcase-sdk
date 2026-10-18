@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedExternal domain models
+/// SharedExternal domain models
 public indirect enum ExternalStorageResponseProvider {
     case awsExternalStorageProviderResponse(AwsExternalStorageProviderResponse)
     case azureExternalStorageProviderResponse(AzureExternalStorageProviderResponse)
@@ -14,7 +14,6 @@ public indirect enum ExternalStorageResponseProvider {
 }
 
 extension ExternalStorageResponseProvider: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -22,12 +21,16 @@ extension ExternalStorageResponseProvider: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -38,11 +41,11 @@ extension ExternalStorageResponseProvider: Codable {
 extension ExternalStorageResponseProvider {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "aws": return .awsExternalStorageProviderResponse(try AwsExternalStorageProviderResponse(from: decoder))
-        case "azure": return .azureExternalStorageProviderResponse(try AzureExternalStorageProviderResponse(from: decoder))
-        case "gcp": return .gcpExternalStorageProviderResponse(try GcpExternalStorageProviderResponse(from: decoder))
-        case "oci": return .ociExternalStorageProviderResponse(try OciExternalStorageProviderResponse(from: decoder))
-        default: return nil
+        case "aws": try .awsExternalStorageProviderResponse(AwsExternalStorageProviderResponse(from: decoder))
+        case "azure": try .azureExternalStorageProviderResponse(AzureExternalStorageProviderResponse(from: decoder))
+        case "gcp": try .gcpExternalStorageProviderResponse(GcpExternalStorageProviderResponse(from: decoder))
+        case "oci": try .ociExternalStorageProviderResponse(OciExternalStorageProviderResponse(from: decoder))
+        default: nil
         }
     }
 }
@@ -87,45 +90,83 @@ public struct ExternalStorageResponse: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ExternalStorageResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.projectId) else {
-            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
-        }
-        guard container.contains(.provider) else {
-            throw SdkValidationError(field: "provider", code: "required", message: "Validation failed for 'provider': value is required")
-        }
-        guard container.contains(.geography) else {
-            throw SdkValidationError(field: "geography", code: "required", message: "Validation failed for 'geography': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.projectId = try container.sdkDecodeRequired(.projectId)
-        self.provider = try container.sdkDecodeRequired(.provider)
-        self.geography = try container.sdkDecodeRequired(.geography)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ExternalStorageResponse {
-    public init(object: ExternalStorageResponseObject, id: String, projectId: String, provider: ExternalStorageResponseProvider, geography: String, status: ExternalStorageStatus, createdAt: Int) {
+public extension ExternalStorageResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.projectId) else {
+            throw SdkValidationError(
+                field: "project_id",
+                code: "required",
+                message: "Validation failed for 'project_id': value is required"
+            )
+        }
+        guard container.contains(.provider) else {
+            throw SdkValidationError(
+                field: "provider",
+                code: "required",
+                message: "Validation failed for 'provider': value is required"
+            )
+        }
+        guard container.contains(.geography) else {
+            throw SdkValidationError(
+                field: "geography",
+                code: "required",
+                message: "Validation failed for 'geography': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        projectId = try container.sdkDecodeRequired(.projectId)
+        provider = try container.sdkDecodeRequired(.provider)
+        geography = try container.sdkDecodeRequired(.geography)
+        status = try container.sdkDecodeRequired(.status)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+    }
+}
+
+public extension ExternalStorageResponse {
+    init(
+        object: ExternalStorageResponseObject,
+        id: String,
+        projectId: String,
+        provider: ExternalStorageResponseProvider,
+        geography: String,
+        status: ExternalStorageStatus,
+        createdAt: Int
+    ) {
         (self.object, self.id) = (object, id)
         (self.projectId, self.provider) = (projectId, provider)
         (self.geography, self.status) = (geography, status)
@@ -137,12 +178,16 @@ extension ExternalStorageResponse {
 public struct ExternalStorageResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationExternalStorage = ExternalStorageResponseObject(rawValue: "organization.external_storage")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationExternalStorage =
+        ExternalStorageResponseObject(rawValue: "organization.external_storage")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -155,7 +200,10 @@ public struct ExternalStorageResponseObject: RawRepresentable, Hashable, Codable
 public struct ExternalStorageStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let pending = ExternalStorageStatus(rawValue: "pending")
     public static let validated = ExternalStorageStatus(rawValue: "validated")
     public static let degraded = ExternalStorageStatus(rawValue: "degraded")
@@ -163,7 +211,7 @@ public struct ExternalStorageStatus: RawRepresentable, Hashable, Codable, Sendab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,18 +6,33 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension UsersMethods {
-    /// Retrieves a user from the organization by their identifier. Use this operation to view the user's organization role, account details, and associated user metadata.
+public extension UsersMethods {
+    /// Retrieves a user from the organization by their identifier. Use this operation to view the user's organization
+    /// role, account details, and associated user metadata.
     ///
     /// Retrieves a user by their identifier.
     ///
     /// - Parameters:
     /// - userId: The ID of the user.
-    public static func retrieveUser(config: ClientConfig, userId: String, requestOptions: RequestOptions? = nil) async throws -> User {
-        return try (await sdkRequest("GET", ["/organization/users/", sdkEncodePathSegment(sdkWireString(userId))].joined(), config: config, decoder: .json, operationId: "retrieveUser", options: requestOptions, errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func retrieveUser(
+        config: ClientConfig,
+        userId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> User {
+        try await (sdkRequest(
+            "GET",
+            ["/organization/users/", sdkEncodePathSegment(sdkWireString(userId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "retrieveUser",
+            options: requestOptions,
+            errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Updates a user's role or metadata in the organization. Supply the body fields you want to change, such as `role`, `role_id`, `technical_level`, or `developer_persona`. The response contains the updated organization user.
+    /// Updates a user's role or metadata in the organization. Supply the body fields you want to change, such as
+    /// `role`, `role_id`, `technical_level`, or `developer_persona`. The response contains the updated organization
+    /// user.
     ///
     /// Modifies a user's role in the organization.
     ///
@@ -27,9 +42,36 @@ extension UsersMethods {
     /// - roleId: Role ID to assign to the user.
     /// - technicalLevel: Technical level metadata.
     /// - developerPersona: Developer persona metadata.
-    public static func modifyUser(config: ClientConfig, userId: String, role: SdkOptional<String>? = nil, roleId: SdkOptional<String>? = nil, technicalLevel: SdkOptional<String>? = nil, developerPersona: SdkOptional<String>? = nil, requestOptions: RequestOptions? = nil) async throws -> User {
-        let requestBody = ModifyUserRequestBody(role: role, roleId: roleId, technicalLevel: technicalLevel, developerPersona: developerPersona)
+    static func modifyUser(
+        config: ClientConfig,
+        userId: String,
+        role: SdkOptional<String>? = nil,
+        roleId: SdkOptional<String>? = nil,
+        technicalLevel: SdkOptional<String>? = nil,
+        developerPersona: SdkOptional<String>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> User {
+        let requestBody = ModifyUserRequestBody(
+            role: role,
+            roleId: roleId,
+            technicalLevel: technicalLevel,
+            developerPersona: developerPersona
+        )
 
-        return try (await sdkRequest("POST", ["/organization/users/", sdkEncodePathSegment(sdkWireString(userId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "modifyUser", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/organization/users/", sdkEncodePathSegment(sdkWireString(userId))].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "modifyUser",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

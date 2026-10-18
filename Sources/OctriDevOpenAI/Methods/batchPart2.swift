@@ -6,8 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension BatchMethods {
-    /// Creates and executes a batch from an uploaded file of requests. Supply the required `input_file_id`, `endpoint`, and `completion_window`; the batch endpoint must be one of the supported API paths, and the only supported completion window is `24h`. The response includes the batch status so you can track processing.
+public extension BatchMethods {
+    /// Creates and executes a batch from an uploaded file of requests. Supply the required `input_file_id`, `endpoint`,
+    /// and `completion_window`; the batch endpoint must be one of the supported API paths, and the only supported
+    /// completion window is `24h`. The response includes the batch status so you can track processing.
     ///
     /// Creates and executes a batch from an uploaded file of requests
     ///
@@ -35,9 +37,37 @@ extension BatchMethods {
     ///   a maximum length of 512 characters.
     /// - outputExpiresAfter: The expiration policy for the output and/or error file
     ///   that are generated for a batch.
-    public static func createBatch(config: ClientConfig, inputFileId: String, endpoint: CreateBatchRequestEndpoint, completionWindow: CreateBatchRequestCompletionWindow, metadata: SdkOptional<Metadata>? = nil, outputExpiresAfter: BatchFileExpirationAfter? = nil, requestOptions: RequestOptions? = nil) async throws -> Batch {
-        let requestBody = CreateBatchRequestBody(inputFileId: inputFileId, endpoint: endpoint, completionWindow: completionWindow, metadata: metadata, outputExpiresAfter: outputExpiresAfter)
+    static func createBatch(
+        config: ClientConfig,
+        inputFileId: String,
+        endpoint: CreateBatchRequestEndpoint,
+        completionWindow: CreateBatchRequestCompletionWindow,
+        metadata: SdkOptional<Metadata>? = nil,
+        outputExpiresAfter: BatchFileExpirationAfter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Batch {
+        let requestBody = CreateBatchRequestBody(
+            inputFileId: inputFileId,
+            endpoint: endpoint,
+            completionWindow: completionWindow,
+            metadata: metadata,
+            outputExpiresAfter: outputExpiresAfter
+        )
 
-        return try (await sdkRequest("POST", "/batches", config: config, body: requestBody, decoder: .json, operationId: "createBatch", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/batches",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createBatch",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
+        )).data
     }
 }

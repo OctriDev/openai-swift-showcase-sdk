@@ -3,17 +3,20 @@
 
 import Foundation
 
-// AssistantsAssistant domain models
+/// AssistantsAssistant domain models
 /// The object type, which is always `assistant`.
 public struct AssistantObjectObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let assistant = AssistantObjectObject(rawValue: "assistant")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -26,7 +29,10 @@ public struct AssistantObjectObject: RawRepresentable, Hashable, Codable, Sendab
 public struct AssistantSupportedModels: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let gpt5 = AssistantSupportedModels(rawValue: "gpt-5")
     public static let gpt5Mini = AssistantSupportedModels(rawValue: "gpt-5-mini")
     public static let gpt5Nano = AssistantSupportedModels(rawValue: "gpt-5-nano")
@@ -72,7 +78,7 @@ public struct AssistantSupportedModels: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

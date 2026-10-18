@@ -6,8 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AudioMethods {
-    /// Creates a voice consent recording by uploading its audio file with a label and language tag. Provide `name`, `recording`, and `language`, and send the recording as multipart form data in a supported audio format. The response includes the new recording's identifier and creation timestamp.
+public extension AudioMethods {
+    /// Creates a voice consent recording by uploading its audio file with a label and language tag. Provide `name`,
+    /// `recording`, and `language`, and send the recording as multipart form data in a supported audio format. The
+    /// response includes the new recording's identifier and creation timestamp.
     ///
     /// Upload a voice consent recording.
     ///
@@ -18,13 +20,29 @@ extension AudioMethods {
     ///   `audio/aac`, `audio/flac`, `audio/webm`, `audio/mp4`.
     /// - language: The BCP 47 language tag for the consent phrase (for example,
     ///   `en-US`).
-    public static func createVoiceConsent(config: ClientConfig, name: String, recording: SdkUploadFile, language: String, requestOptions: RequestOptions? = nil) async throws -> VoiceConsentResource {
+    static func createVoiceConsent(
+        config: ClientConfig,
+        name: String,
+        recording: SdkUploadFile,
+        language: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VoiceConsentResource {
         var multipartParts: [SdkMultipartField] = []
         multipartParts.append(.scalar("name", name))
         multipartParts.append(.file("recording", recording))
         multipartParts.append(.scalar("language", language))
         let multipart = sdkEncodeMultipart(multipartParts)
 
-        return try (await sdkRequest("POST", "/audio/voice_consents", config: config, rawBody: multipart.data, contentType: multipart.contentType, decoder: .json, operationId: "createVoiceConsent", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/audio/voice_consents",
+            config: config,
+            rawBody: multipart.data,
+            contentType: multipart.contentType,
+            decoder: .json,
+            operationId: "createVoiceConsent",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 }

@@ -6,10 +6,12 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension FineTuningMethods {
-    /// Lists permissions for a fine-tuned model checkpoint. Use `project_id` to filter permissions by project and `after` to continue from a permission ID; this endpoint requires an admin API key.
+public extension FineTuningMethods {
+    /// Lists permissions for a fine-tuned model checkpoint. Use `project_id` to filter permissions by project and
+    /// `after` to continue from a permission ID; this endpoint requires an admin API key.
     ///
-    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys). Organization owners can use this endpoint to view all permissions for a fine-tuned model checkpoint.
+    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys).
+    /// Organization owners can use this endpoint to view all permissions for a fine-tuned model checkpoint.
     ///
     /// - Parameters:
     /// - fineTunedModelCheckpoint: The ID of the fine-tuned model checkpoint to get
@@ -19,18 +21,38 @@ extension FineTuningMethods {
     ///   request.
     /// - limit: Number of permissions to retrieve.
     /// - order: The order in which to retrieve permissions.
-    public static func listFineTuningCheckpointPermissions(config: ClientConfig, fineTunedModelCheckpoint: String, projectId: String? = nil, after: String? = nil, limit: Int? = nil, order: ListFineTuningCheckpointPermissionsParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFineTuningCheckpointPermissionResponse {
-        return try (await sdkRequest("GET", ["/fine_tuning/checkpoints/", sdkEncodePathSegment(sdkWireString(fineTunedModelCheckpoint)), "/permissions"].joined(), config: config, query: [
-            SdkQueryParameter("project_id", value: projectId),
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-        ], decoder: .json, operationId: "listFineTuningCheckpointPermissions", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func listFineTuningCheckpointPermissions(
+        config: ClientConfig,
+        fineTunedModelCheckpoint: String,
+        projectId: String? = nil,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: ListFineTuningCheckpointPermissionsParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListFineTuningCheckpointPermissionResponse {
+        try await (sdkRequest(
+            "GET",
+            ["/fine_tuning/checkpoints/", sdkEncodePathSegment(sdkWireString(fineTunedModelCheckpoint)), "/permissions"]
+                .joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("project_id", value: projectId),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+            ],
+            decoder: .json,
+            operationId: "listFineTuningCheckpointPermissions",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Lists permissions for a fine-tuned model checkpoint. Use `project_id` to filter permissions by project and `after` to continue from a permission ID; this endpoint requires an admin API key.
+    /// Lists permissions for a fine-tuned model checkpoint. Use `project_id` to filter permissions by project and
+    /// `after` to continue from a permission ID; this endpoint requires an admin API key.
     ///
-    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys). Organization owners can use this endpoint to view all permissions for a fine-tuned model checkpoint.
+    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys).
+    /// Organization owners can use this endpoint to view all permissions for a fine-tuned model checkpoint.
     ///
     /// - Parameters:
     /// - fineTunedModelCheckpoint: The ID of the fine-tuned model checkpoint to get
@@ -40,18 +62,45 @@ extension FineTuningMethods {
     ///   request.
     /// - limit: Number of permissions to retrieve.
     /// - order: The order in which to retrieve permissions.
-    public static func listFineTuningCheckpointPermissionsPaginated(config: ClientConfig, fineTunedModelCheckpoint: String, projectId: String? = nil, after: String? = nil, limit: Int? = nil, order: ListFineTuningCheckpointPermissionsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<FineTuningCheckpointPermission, Swift.Error> {
-        return AsyncThrowingStream<FineTuningCheckpointPermission, Swift.Error> { (continuation: AsyncThrowingStream<FineTuningCheckpointPermission, Swift.Error>.Continuation) in
+    static func listFineTuningCheckpointPermissionsPaginated(
+        config: ClientConfig,
+        fineTunedModelCheckpoint: String,
+        projectId: String? = nil,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: ListFineTuningCheckpointPermissionsParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<FineTuningCheckpointPermission, Swift.Error> {
+        AsyncThrowingStream<FineTuningCheckpointPermission, Swift.Error> { (continuation: AsyncThrowingStream<
+            FineTuningCheckpointPermission,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listFineTuningCheckpointPermissions(config: config, fineTunedModelCheckpoint: fineTunedModelCheckpoint, projectId: projectId, after: pageCursor, limit: limit, order: order, requestOptions: requestOptions)
+                        let pageResponse = try await listFineTuningCheckpointPermissions(
+                            config: config,
+                            fineTunedModelCheckpoint: fineTunedModelCheckpoint,
+                            projectId: projectId,
+                            after: pageCursor,
+                            limit: limit,
+                            order: order,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -64,25 +113,57 @@ extension FineTuningMethods {
         }
     }
 
-    public struct ListFineTuningCheckpointPermissionsPage {
+    struct ListFineTuningCheckpointPermissionsPage {
         public let data: ListFineTuningCheckpointPermissionResponse
         public let items: [FineTuningCheckpointPermission]
         public let hasMore: Bool
     }
 
-    public static func listFineTuningCheckpointPermissionsPages(config: ClientConfig, fineTunedModelCheckpoint: String, projectId: String? = nil, after: String? = nil, limit: Int? = nil, order: ListFineTuningCheckpointPermissionsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListFineTuningCheckpointPermissionsPage, Swift.Error> {
-        return AsyncThrowingStream<ListFineTuningCheckpointPermissionsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListFineTuningCheckpointPermissionsPage, Swift.Error>.Continuation) in
+    static func listFineTuningCheckpointPermissionsPages(
+        config: ClientConfig,
+        fineTunedModelCheckpoint: String,
+        projectId: String? = nil,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: ListFineTuningCheckpointPermissionsParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListFineTuningCheckpointPermissionsPage, Swift.Error> {
+        AsyncThrowingStream<
+            ListFineTuningCheckpointPermissionsPage,
+            Swift.Error
+        > { (pageContinuation: AsyncThrowingStream<
+            ListFineTuningCheckpointPermissionsPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listFineTuningCheckpointPermissions(config: config, fineTunedModelCheckpoint: fineTunedModelCheckpoint, projectId: projectId, after: pageCursor, limit: limit, order: order, requestOptions: requestOptions)
+                        let pageResponse = try await listFineTuningCheckpointPermissions(
+                            config: config,
+                            fineTunedModelCheckpoint: fineTunedModelCheckpoint,
+                            projectId: projectId,
+                            after: pageCursor,
+                            limit: limit,
+                            order: order,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListFineTuningCheckpointPermissionsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageContinuation.yield(ListFineTuningCheckpointPermissionsPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

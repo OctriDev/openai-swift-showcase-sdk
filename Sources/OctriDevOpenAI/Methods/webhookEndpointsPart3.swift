@@ -6,14 +6,20 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension WebhookEndpointsMethods {
+public extension WebhookEndpointsMethods {
     /// Creates a webhook endpoint for the authenticated project.
     ///
     /// - Parameters:
     /// - name: A human-readable name for the webhook endpoint.
     /// - url: The HTTPS URL that receives webhook deliveries.
     /// - eventTypes: The event types that trigger deliveries to this endpoint.
-    public static func createWebhookEndpoint(config: ClientConfig, name: String, url: String, eventTypes: [ProjectEventTypeEnum], requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointWithSecretResource {
+    static func createWebhookEndpoint(
+        config: ClientConfig,
+        name: String,
+        url: String,
+        eventTypes: [ProjectEventTypeEnum],
+        requestOptions: RequestOptions? = nil
+    ) async throws -> WebhookEndpointWithSecretResource {
         try validateLength("name", name, min: 1, max: 256)
 
         try validateLength("url", url, max: 2048)
@@ -23,14 +29,35 @@ extension WebhookEndpointsMethods {
 
         let requestBody = CreateWebhookEndpointRequestBody(name: name, url: url, eventTypes: eventTypes)
 
-        return try (await sdkRequest("POST", "/webhook_endpoints", config: config, body: requestBody, decoder: .json, operationId: "CreateWebhookEndpoint", options: requestOptions, errors: ["400": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/webhook_endpoints",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "CreateWebhookEndpoint",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self]
+        )).data
     }
 
     /// Retrieves a webhook endpoint for the authenticated project.
     ///
     /// - Parameters:
     /// - webhookEndpointId: The ID of the webhook endpoint to retrieve.
-    public static func retrieveWebhookEndpoint(config: ClientConfig, webhookEndpointId: String, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointBody {
-        return try (await sdkRequest("GET", ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId))].joined(), config: config, decoder: .json, operationId: "RetrieveWebhookEndpoint", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
+    static func retrieveWebhookEndpoint(
+        config: ClientConfig,
+        webhookEndpointId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> WebhookEndpointBody {
+        try await (sdkRequest(
+            "GET",
+            ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "RetrieveWebhookEndpoint",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 }

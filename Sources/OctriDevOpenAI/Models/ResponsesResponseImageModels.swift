@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesResponseImage domain models
+/// ResponsesResponseImage domain models
 /// Emitted when an image generation tool call is in progress.
 public struct ResponseImageGenCallInProgressEvent: Codable {
     /// The type of the event. Always 'response.image_generation_call.in_progress'.
@@ -22,37 +22,55 @@ public struct ResponseImageGenCallInProgressEvent: Codable {
         case sequenceNumber = "sequence_number"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseImageGenCallInProgressEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-            try sdkValidateRawEnum("type", self.type, ResponseImageGenCallInProgressEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseImageGenCallInProgressEvent {
-    public init(type: ResponseImageGenCallInProgressEventType, outputIndex: Int, itemId: String, sequenceNumber: Int) throws {
+public extension ResponseImageGenCallInProgressEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        try sdkValidateRawEnum("type", type, ResponseImageGenCallInProgressEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseImageGenCallInProgressEvent {
+    init(type: ResponseImageGenCallInProgressEventType, outputIndex: Int, itemId: String, sequenceNumber: Int) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.sequenceNumber) = (itemId, sequenceNumber)
-            try sdkValidateRawEnum("type", self.type, ResponseImageGenCallInProgressEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ResponseImageGenCallInProgressEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -74,37 +92,55 @@ public struct ResponseImageGenCallCompletedEvent: Codable {
         case itemId = "item_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseImageGenCallCompletedEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-            try sdkValidateRawEnum("type", self.type, ResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseImageGenCallCompletedEvent {
-    public init(type: ResponseImageGenCallCompletedEventType, outputIndex: Int, sequenceNumber: Int, itemId: String) throws {
+public extension ResponseImageGenCallCompletedEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        try sdkValidateRawEnum("type", type, ResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseImageGenCallCompletedEvent {
+    init(type: ResponseImageGenCallCompletedEventType, outputIndex: Int, sequenceNumber: Int, itemId: String) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.sequenceNumber, self.itemId) = (sequenceNumber, itemId)
-            try sdkValidateRawEnum("type", self.type, ResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -126,37 +162,55 @@ public struct ResponseImageGenCallGeneratingEvent: Codable {
         case sequenceNumber = "sequence_number"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseImageGenCallGeneratingEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-            try sdkValidateRawEnum("type", self.type, ResponseImageGenCallGeneratingEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseImageGenCallGeneratingEvent {
-    public init(type: ResponseImageGenCallGeneratingEventType, outputIndex: Int, itemId: String, sequenceNumber: Int) throws {
+public extension ResponseImageGenCallGeneratingEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        try sdkValidateRawEnum("type", type, ResponseImageGenCallGeneratingEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseImageGenCallGeneratingEvent {
+    init(type: ResponseImageGenCallGeneratingEventType, outputIndex: Int, itemId: String, sequenceNumber: Int) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.sequenceNumber) = (itemId, sequenceNumber)
-            try sdkValidateRawEnum("type", self.type, ResponseImageGenCallGeneratingEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ResponseImageGenCallGeneratingEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -196,52 +250,89 @@ public struct ResponseImageGenCallPartialImageEvent: Codable {
         case outputFormat = "output_format"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseImageGenCallPartialImageEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        guard container.contains(.partialImageIndex) else {
-            throw SdkValidationError(field: "partial_image_index", code: "required", message: "Validation failed for 'partial_image_index': value is required")
-        }
-        guard container.contains(.partialImageB64) else {
-            throw SdkValidationError(field: "partial_image_b64", code: "required", message: "Validation failed for 'partial_image_b64': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.partialImageIndex = try container.sdkDecodeRequired(.partialImageIndex)
-        self.partialImageB64 = try container.sdkDecodeRequired(.partialImageB64)
-        self.size = try container.sdkDecodeIfPresent(.size)
-        self.quality = try container.sdkDecodeIfPresent(.quality)
-        self.background = try container.sdkDecodeIfPresent(.background)
-        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-            try sdkValidateRawEnum("type", self.type, ResponseImageGenCallPartialImageEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseImageGenCallPartialImageEvent {
-    public init(type: ResponseImageGenCallPartialImageEventType, outputIndex: Int, itemId: String, sequenceNumber: Int, partialImageIndex: Int, partialImageB64: String, size: String? = nil, quality: String? = nil, background: String? = nil, outputFormat: String? = nil) throws {
+public extension ResponseImageGenCallPartialImageEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        guard container.contains(.partialImageIndex) else {
+            throw SdkValidationError(
+                field: "partial_image_index",
+                code: "required",
+                message: "Validation failed for 'partial_image_index': value is required"
+            )
+        }
+        guard container.contains(.partialImageB64) else {
+            throw SdkValidationError(
+                field: "partial_image_b64",
+                code: "required",
+                message: "Validation failed for 'partial_image_b64': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        partialImageIndex = try container.sdkDecodeRequired(.partialImageIndex)
+        partialImageB64 = try container.sdkDecodeRequired(.partialImageB64)
+        size = try container.sdkDecodeIfPresent(.size)
+        quality = try container.sdkDecodeIfPresent(.quality)
+        background = try container.sdkDecodeIfPresent(.background)
+        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+        try sdkValidateRawEnum("type", type, ResponseImageGenCallPartialImageEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseImageGenCallPartialImageEvent {
+    init(
+        type: ResponseImageGenCallPartialImageEventType,
+        outputIndex: Int,
+        itemId: String,
+        sequenceNumber: Int,
+        partialImageIndex: Int,
+        partialImageB64: String,
+        size: String? = nil,
+        quality: String? = nil,
+        background: String? = nil,
+        outputFormat: String? = nil
+    ) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.sequenceNumber) = (itemId, sequenceNumber)
         (self.partialImageIndex, self.partialImageB64) = (partialImageIndex, partialImageB64)
         (self.size, self.quality) = (size, quality)
         (self.background, self.outputFormat) = (background, outputFormat)
-            try sdkValidateRawEnum("type", self.type, ResponseImageGenCallPartialImageEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ResponseImageGenCallPartialImageEventType.allCases.map(\.rawValue))
     }
 }
 

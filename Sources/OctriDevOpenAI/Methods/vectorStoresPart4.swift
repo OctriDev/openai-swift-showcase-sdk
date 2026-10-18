@@ -6,18 +6,32 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VectorStoresMethods {
-    /// Retrieves a vector store by its ID. Use this operation to inspect the store's status, file counts, usage, expiration details, and metadata.
+public extension VectorStoresMethods {
+    /// Retrieves a vector store by its ID. Use this operation to inspect the store's status, file counts, usage,
+    /// expiration details, and metadata.
     ///
     /// Retrieves a vector store.
     ///
     /// - Parameters:
     /// - vectorStoreId: The ID of the vector store to retrieve.
-    public static func getVectorStore(config: ClientConfig, vectorStoreId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreObject {
-        return try (await sdkRequest("GET", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId))].joined(), config: config, decoder: .json, operationId: "getVectorStore", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func getVectorStore(
+        config: ClientConfig,
+        vectorStoreId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreObject {
+        try await (sdkRequest(
+            "GET",
+            ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getVectorStore",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Updates a vector store's name, expiration policy, or metadata. Provide only the properties you want to change; omitted properties are not part of the update.
+    /// Updates a vector store's name, expiration policy, or metadata. Provide only the properties you want to change;
+    /// omitted properties are not part of the update.
     ///
     /// Modifies a vector store.
     ///
@@ -31,9 +45,30 @@ extension VectorStoresMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    public static func modifyVectorStore(config: ClientConfig, vectorStoreId: String, name: SdkOptional<String>? = nil, expiresAfter: UpdateVectorStoreRequestExpiresAfter? = nil, metadata: SdkOptional<Metadata>? = nil, requestOptions: RequestOptions? = nil) async throws -> VectorStoreObject {
+    static func modifyVectorStore(
+        config: ClientConfig,
+        vectorStoreId: String,
+        name: SdkOptional<String>? = nil,
+        expiresAfter: UpdateVectorStoreRequestExpiresAfter? = nil,
+        metadata: SdkOptional<Metadata>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreObject {
         let requestBody = ModifyVectorStoreRequestBody(name: name, expiresAfter: expiresAfter, metadata: metadata)
 
-        return try (await sdkRequest("POST", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "modifyVectorStore", options: requestOptions, errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId))].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "modifyVectorStore",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

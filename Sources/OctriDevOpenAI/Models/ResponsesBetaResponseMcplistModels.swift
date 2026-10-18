@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaResponseMcplist domain models
+/// ResponsesBetaResponseMcplist domain models
 /// Emitted when the attempt to list available MCP tools has failed.
 public struct BetaResponseMCPListToolsFailedEvent: Codable {
     /// The type of the event. Always 'response.mcp_list_tools.failed'.
@@ -25,39 +25,63 @@ public struct BetaResponseMCPListToolsFailedEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponseMCPListToolsFailedEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseMCPListToolsFailedEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponseMCPListToolsFailedEvent {
-    public init(type: BetaResponseMCPListToolsFailedEventType, itemId: String, outputIndex: Int, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
+public extension BetaResponseMCPListToolsFailedEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaResponseMCPListToolsFailedEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseMCPListToolsFailedEvent {
+    init(
+        type: BetaResponseMCPListToolsFailedEventType,
+        itemId: String,
+        outputIndex: Int,
+        sequenceNumber: Int,
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.sequenceNumber) = (outputIndex, sequenceNumber)
         self.agent = agent
-            try sdkValidateRawEnum("type", self.type, BetaResponseMCPListToolsFailedEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseMCPListToolsFailedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -82,39 +106,63 @@ public struct BetaResponseMCPListToolsCompletedEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponseMCPListToolsCompletedEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseMCPListToolsCompletedEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponseMCPListToolsCompletedEvent {
-    public init(type: BetaResponseMCPListToolsCompletedEventType, itemId: String, outputIndex: Int, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
+public extension BetaResponseMCPListToolsCompletedEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaResponseMCPListToolsCompletedEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseMCPListToolsCompletedEvent {
+    init(
+        type: BetaResponseMCPListToolsCompletedEventType,
+        itemId: String,
+        outputIndex: Int,
+        sequenceNumber: Int,
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.sequenceNumber) = (outputIndex, sequenceNumber)
         self.agent = agent
-            try sdkValidateRawEnum("type", self.type, BetaResponseMCPListToolsCompletedEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseMCPListToolsCompletedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -139,39 +187,63 @@ public struct BetaResponseMCPListToolsInProgressEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponseMCPListToolsInProgressEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseMCPListToolsInProgressEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponseMCPListToolsInProgressEvent {
-    public init(type: BetaResponseMCPListToolsInProgressEventType, itemId: String, outputIndex: Int, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
+public extension BetaResponseMCPListToolsInProgressEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaResponseMCPListToolsInProgressEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseMCPListToolsInProgressEvent {
+    init(
+        type: BetaResponseMCPListToolsInProgressEventType,
+        itemId: String,
+        outputIndex: Int,
+        sequenceNumber: Int,
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.sequenceNumber) = (outputIndex, sequenceNumber)
         self.agent = agent
-            try sdkValidateRawEnum("type", self.type, BetaResponseMCPListToolsInProgressEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseMCPListToolsInProgressEventType.allCases.map(\.rawValue))
     }
 }
 

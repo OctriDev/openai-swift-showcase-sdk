@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ChatMethods {
-    /// Get the messages in a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to `true` will be returned.
+public extension ChatMethods {
+    /// Get the messages in a stored chat completion. Only Chat Completions that have been created with the `store`
+    /// parameter set to `true` will be returned.
     ///
     /// - Parameters:
     /// - completionId: The ID of the chat completion to retrieve messages from.
@@ -16,15 +17,37 @@ extension ChatMethods {
     /// - limit: Number of messages to retrieve.
     /// - order: Sort order for messages by timestamp. Use `asc` for ascending order
     ///   or `desc` for descending order. Defaults to `asc`.
-    public static func getChatCompletionMessages(config: ClientConfig, completionId: String, after: String? = nil, limit: Int? = nil, order: GetChatCompletionMessagesParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ChatCompletionMessageList {
-        return try (await sdkRequest("GET", ["/chat/completions/", sdkEncodePathSegment(sdkWireString(completionId)), "/messages"].joined(), config: config, query: [
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-        ], decoder: .json, operationId: "getChatCompletionMessages", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+    static func getChatCompletionMessages(
+        config: ClientConfig,
+        completionId: String,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: GetChatCompletionMessagesParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ChatCompletionMessageList {
+        try await (sdkRequest(
+            "GET",
+            ["/chat/completions/", sdkEncodePathSegment(sdkWireString(completionId)), "/messages"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+            ],
+            decoder: .json,
+            operationId: "getChatCompletionMessages",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+            ]
+        )).data
     }
 
-    /// Get the messages in a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to `true` will be returned.
+    /// Get the messages in a stored chat completion. Only Chat Completions that have been created with the `store`
+    /// parameter set to `true` will be returned.
     ///
     /// - Parameters:
     /// - completionId: The ID of the chat completion to retrieve messages from.
@@ -33,18 +56,43 @@ extension ChatMethods {
     /// - limit: Number of messages to retrieve.
     /// - order: Sort order for messages by timestamp. Use `asc` for ascending order
     ///   or `desc` for descending order. Defaults to `asc`.
-    public static func getChatCompletionMessagesPaginated(config: ClientConfig, completionId: String, after: String? = nil, limit: Int? = nil, order: GetChatCompletionMessagesParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ChatCompletionMessageListDataItem, Swift.Error> {
-        return AsyncThrowingStream<ChatCompletionMessageListDataItem, Swift.Error> { (continuation: AsyncThrowingStream<ChatCompletionMessageListDataItem, Swift.Error>.Continuation) in
+    static func getChatCompletionMessagesPaginated(
+        config: ClientConfig,
+        completionId: String,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: GetChatCompletionMessagesParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ChatCompletionMessageListDataItem, Swift.Error> {
+        AsyncThrowingStream<ChatCompletionMessageListDataItem, Swift.Error> { (continuation: AsyncThrowingStream<
+            ChatCompletionMessageListDataItem,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await getChatCompletionMessages(config: config, completionId: completionId, after: pageCursor, limit: limit, order: order, requestOptions: requestOptions)
+                        let pageResponse = try await getChatCompletionMessages(
+                            config: config,
+                            completionId: completionId,
+                            after: pageCursor,
+                            limit: limit,
+                            order: order,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -57,25 +105,52 @@ extension ChatMethods {
         }
     }
 
-    public struct GetChatCompletionMessagesPage {
+    struct GetChatCompletionMessagesPage {
         public let data: ChatCompletionMessageList
         public let items: [ChatCompletionMessageListDataItem]
         public let hasMore: Bool
     }
 
-    public static func getChatCompletionMessagesPages(config: ClientConfig, completionId: String, after: String? = nil, limit: Int? = nil, order: GetChatCompletionMessagesParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<GetChatCompletionMessagesPage, Swift.Error> {
-        return AsyncThrowingStream<GetChatCompletionMessagesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<GetChatCompletionMessagesPage, Swift.Error>.Continuation) in
+    static func getChatCompletionMessagesPages(
+        config: ClientConfig,
+        completionId: String,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: GetChatCompletionMessagesParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<GetChatCompletionMessagesPage, Swift.Error> {
+        AsyncThrowingStream<GetChatCompletionMessagesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            GetChatCompletionMessagesPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await getChatCompletionMessages(config: config, completionId: completionId, after: pageCursor, limit: limit, order: order, requestOptions: requestOptions)
+                        let pageResponse = try await getChatCompletionMessages(
+                            config: config,
+                            completionId: completionId,
+                            after: pageCursor,
+                            limit: limit,
+                            order: order,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(GetChatCompletionMessagesPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageContinuation.yield(GetChatCompletionMessagesPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

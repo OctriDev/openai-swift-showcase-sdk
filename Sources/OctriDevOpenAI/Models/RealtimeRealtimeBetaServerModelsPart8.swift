@@ -3,17 +3,22 @@
 
 import Foundation
 
-// RealtimeRealtimeBetaServer domain models
+/// RealtimeRealtimeBetaServer domain models
 /// The event type, must be `response.output_text.done`.
-public struct RealtimeBetaServerEventResponseTextDoneType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventResponseTextDoneType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let responseOutputTextDone = RealtimeBetaServerEventResponseTextDoneType(rawValue: "response.output_text.done")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let responseOutputTextDone =
+        RealtimeBetaServerEventResponseTextDoneType(rawValue: "response.output_text.done")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -23,15 +28,20 @@ public struct RealtimeBetaServerEventResponseTextDoneType: RawRepresentable, Has
 }
 
 /// The event type, must be `response.output_text.delta`.
-public struct RealtimeBetaServerEventResponseTextDeltaType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventResponseTextDeltaType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let responseOutputTextDelta = RealtimeBetaServerEventResponseTextDeltaType(rawValue: "response.output_text.delta")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let responseOutputTextDelta =
+        RealtimeBetaServerEventResponseTextDeltaType(rawValue: "response.output_text.delta")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -41,15 +51,20 @@ public struct RealtimeBetaServerEventResponseTextDeltaType: RawRepresentable, Ha
 }
 
 /// The event type, must be `mcp_list_tools.failed`.
-public struct RealtimeBetaServerEventMCPListToolsFailedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventMCPListToolsFailedType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let mcpListToolsFailed = RealtimeBetaServerEventMCPListToolsFailedType(rawValue: "mcp_list_tools.failed")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let mcpListToolsFailed =
+        RealtimeBetaServerEventMCPListToolsFailedType(rawValue: "mcp_list_tools.failed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -59,15 +74,22 @@ public struct RealtimeBetaServerEventMCPListToolsFailedType: RawRepresentable, H
 }
 
 /// The event type, must be `conversation.item.input_audio_transcription.delta`.
-public struct RealtimeBetaServerEventConversationItemInputAudioTranscriptionDeltaType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventConversationItemInputAudioTranscriptionDeltaType: RawRepresentable, Hashable,
+    Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let conversationItemInputAudioTranscriptionDelta = RealtimeBetaServerEventConversationItemInputAudioTranscriptionDeltaType(rawValue: "conversation.item.input_audio_transcription.delta")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let conversationItemInputAudioTranscriptionDelta =
+        RealtimeBetaServerEventConversationItemInputAudioTranscriptionDeltaType(
+            rawValue: "conversation.item.input_audio_transcription.delta"
+        )
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -77,15 +99,22 @@ public struct RealtimeBetaServerEventConversationItemInputAudioTranscriptionDelt
 }
 
 /// The event type, must be `conversation.item.input_audio_transcription.segment`.
-public struct RealtimeBetaServerEventConversationItemInputAudioTranscriptioX7662a21e4b: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventConversationItemInputAudioTranscriptioX7662a21e4b: RawRepresentable, Hashable,
+    Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let conversationItemInputAudioTranscriptionSegment = RealtimeBetaServerEventConversationItemInputAudioTranscriptioX7662a21e4b(rawValue: "conversation.item.input_audio_transcription.segment")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let conversationItemInputAudioTranscriptionSegment =
+        RealtimeBetaServerEventConversationItemInputAudioTranscriptioX7662a21e4b(
+            rawValue: "conversation.item.input_audio_transcription.segment"
+        )
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -95,15 +124,20 @@ public struct RealtimeBetaServerEventConversationItemInputAudioTranscriptioX7662
 }
 
 /// The event type, must be `mcp_list_tools.in_progress`.
-public struct RealtimeBetaServerEventMCPListToolsInProgressType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventMCPListToolsInProgressType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let mcpListToolsInProgress = RealtimeBetaServerEventMCPListToolsInProgressType(rawValue: "mcp_list_tools.in_progress")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let mcpListToolsInProgress =
+        RealtimeBetaServerEventMCPListToolsInProgressType(rawValue: "mcp_list_tools.in_progress")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -113,15 +147,20 @@ public struct RealtimeBetaServerEventMCPListToolsInProgressType: RawRepresentabl
 }
 
 /// The event type, must be `response.mcp_call.completed`.
-public struct RealtimeBetaServerEventResponseMCPCallCompletedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventResponseMCPCallCompletedType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let responseMcpCallCompleted = RealtimeBetaServerEventResponseMCPCallCompletedType(rawValue: "response.mcp_call.completed")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let responseMcpCallCompleted =
+        RealtimeBetaServerEventResponseMCPCallCompletedType(rawValue: "response.mcp_call.completed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -131,15 +170,20 @@ public struct RealtimeBetaServerEventResponseMCPCallCompletedType: RawRepresenta
 }
 
 /// The event type, must be `conversation.item.created`.
-public struct RealtimeBetaServerEventConversationItemCreatedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventConversationItemCreatedType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let conversationItemCreated = RealtimeBetaServerEventConversationItemCreatedType(rawValue: "conversation.item.created")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let conversationItemCreated =
+        RealtimeBetaServerEventConversationItemCreatedType(rawValue: "conversation.item.created")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -149,15 +193,20 @@ public struct RealtimeBetaServerEventConversationItemCreatedType: RawRepresentab
 }
 
 /// The event type, must be `response.output_item.done`.
-public struct RealtimeBetaServerEventResponseOutputItemDoneType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventResponseOutputItemDoneType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let responseOutputItemDone = RealtimeBetaServerEventResponseOutputItemDoneType(rawValue: "response.output_item.done")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let responseOutputItemDone =
+        RealtimeBetaServerEventResponseOutputItemDoneType(rawValue: "response.output_item.done")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -167,15 +216,20 @@ public struct RealtimeBetaServerEventResponseOutputItemDoneType: RawRepresentabl
 }
 
 /// The event type, must be `conversation.item.retrieved`.
-public struct RealtimeBetaServerEventConversationItemRetrievedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventConversationItemRetrievedType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let conversationItemRetrieved = RealtimeBetaServerEventConversationItemRetrievedType(rawValue: "conversation.item.retrieved")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let conversationItemRetrieved =
+        RealtimeBetaServerEventConversationItemRetrievedType(rawValue: "conversation.item.retrieved")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -185,15 +239,20 @@ public struct RealtimeBetaServerEventConversationItemRetrievedType: RawRepresent
 }
 
 /// The event type, must be `transcription_session.updated`.
-public struct RealtimeBetaServerEventTranscriptionSessionUpdatedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventTranscriptionSessionUpdatedType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let transcriptionSessionUpdated = RealtimeBetaServerEventTranscriptionSessionUpdatedType(rawValue: "transcription_session.updated")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let transcriptionSessionUpdated =
+        RealtimeBetaServerEventTranscriptionSessionUpdatedType(rawValue: "transcription_session.updated")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

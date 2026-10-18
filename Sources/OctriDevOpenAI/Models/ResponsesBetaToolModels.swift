@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaTool domain models
+/// ResponsesBetaTool domain models
 public indirect enum BetaTool {
     case betaFunctionTool(BetaFunctionTool)
     case betaFileSearchTool(BetaFileSearchTool)
@@ -26,7 +26,6 @@ public indirect enum BetaTool {
 }
 
 extension BetaTool: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -34,13 +33,19 @@ extension BetaTool: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -51,26 +56,28 @@ extension BetaTool: Codable {
 extension BetaTool {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": return .betaFunctionTool(try BetaFunctionTool(from: decoder))
-        case "file_search": return .betaFileSearchTool(try BetaFileSearchTool(from: decoder))
-        case "computer": return .betaComputerTool(try BetaComputerTool(from: decoder))
-        case "computer_use_preview": return .betaComputerUsePreviewTool(try BetaComputerUsePreviewTool(from: decoder))
-        case "web_search", "web_search_2025_08_26": return .betaWebSearchTool(try BetaWebSearchTool(from: decoder))
-        case "mcp": return .betaMcpTool(try BetaMCPTool(from: decoder))
-        case "code_interpreter": return .betaCodeInterpreterTool(try BetaCodeInterpreterTool(from: decoder))
-        case "programmatic_tool_calling": return .betaProgrammaticToolCallingParam(try BetaProgrammaticToolCallingParam(from: decoder))
-        case "image_generation": return .betaImageGenTool(try BetaImageGenTool(from: decoder))
-        case "local_shell": return .betaLocalShellToolParam(try BetaLocalShellToolParam(from: decoder))
-        case "shell": return .betaFunctionShellToolParam(try BetaFunctionShellToolParam(from: decoder))
-        case "custom": return .betaCustomToolParam(try BetaCustomToolParam(from: decoder))
-        case "namespace": return .betaNamespaceToolParam(try BetaNamespaceToolParam(from: decoder))
-        case "tool_search": return .betaToolSearchToolParam(try BetaToolSearchToolParam(from: decoder))
+        case "function": try .betaFunctionTool(BetaFunctionTool(from: decoder))
+        case "file_search": try .betaFileSearchTool(BetaFileSearchTool(from: decoder))
+        case "computer": try .betaComputerTool(BetaComputerTool(from: decoder))
+        case "computer_use_preview": try .betaComputerUsePreviewTool(BetaComputerUsePreviewTool(from: decoder))
+        case "web_search", "web_search_2025_08_26": try .betaWebSearchTool(BetaWebSearchTool(from: decoder))
+        case "mcp": try .betaMcpTool(BetaMCPTool(from: decoder))
+        case "code_interpreter": try .betaCodeInterpreterTool(BetaCodeInterpreterTool(from: decoder))
+        case "programmatic_tool_calling": try .betaProgrammaticToolCallingParam(
+                BetaProgrammaticToolCallingParam(from: decoder)
+            )
+        case "image_generation": try .betaImageGenTool(BetaImageGenTool(from: decoder))
+        case "local_shell": try .betaLocalShellToolParam(BetaLocalShellToolParam(from: decoder))
+        case "shell": try .betaFunctionShellToolParam(BetaFunctionShellToolParam(from: decoder))
+        case "custom": try .betaCustomToolParam(BetaCustomToolParam(from: decoder))
+        case "namespace": try .betaNamespaceToolParam(BetaNamespaceToolParam(from: decoder))
+        case "tool_search": try .betaToolSearchToolParam(BetaToolSearchToolParam(from: decoder))
         case "web_search_preview":
-        return .betaWebSearchPreviewTool(try BetaWebSearchPreviewTool(from: decoder))
+            try .betaWebSearchPreviewTool(BetaWebSearchPreviewTool(from: decoder))
         case "web_search_preview_2025_03_11":
-        return .betaWebSearchPreviewTool(try BetaWebSearchPreviewTool(from: decoder))
-        case "apply_patch": return .betaApplyPatchToolParam(try BetaApplyPatchToolParam(from: decoder))
-        default: return nil
+            try .betaWebSearchPreviewTool(BetaWebSearchPreviewTool(from: decoder))
+        case "apply_patch": try .betaApplyPatchToolParam(BetaApplyPatchToolParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -117,7 +124,6 @@ public indirect enum BetaToolCallCaller {
 }
 
 extension BetaToolCallCaller: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -125,12 +131,16 @@ extension BetaToolCallCaller: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -141,9 +151,9 @@ extension BetaToolCallCaller: Codable {
 extension BetaToolCallCaller {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "direct": return .betaDirectToolCallCaller(try BetaDirectToolCallCaller(from: decoder))
-        case "program": return .betaProgramToolCallCaller(try BetaProgramToolCallCaller(from: decoder))
-        default: return nil
+        case "direct": try .betaDirectToolCallCaller(BetaDirectToolCallCaller(from: decoder))
+        case "program": try .betaProgramToolCallCaller(BetaProgramToolCallCaller(from: decoder))
+        default: nil
         }
     }
 }
@@ -167,7 +177,6 @@ public indirect enum BetaToolCallCallerParam {
 }
 
 extension BetaToolCallCallerParam: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -175,12 +184,16 @@ extension BetaToolCallCallerParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -191,9 +204,9 @@ extension BetaToolCallCallerParam: Codable {
 extension BetaToolCallCallerParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "direct": return .betaDirectToolCallCallerParam(try BetaDirectToolCallCallerParam(from: decoder))
-        case "program": return .betaProgramToolCallCallerParam(try BetaProgramToolCallCallerParam(from: decoder))
-        default: return nil
+        case "direct": try .betaDirectToolCallCallerParam(BetaDirectToolCallCallerParam(from: decoder))
+        case "program": try .betaProgramToolCallCallerParam(BetaProgramToolCallCallerParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -224,7 +237,6 @@ public indirect enum BetaToolChoiceParam {
 }
 
 extension BetaToolChoiceParam: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -232,20 +244,29 @@ extension BetaToolChoiceParam: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaToolChoiceParam")
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for BetaToolChoiceParam"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -256,50 +277,68 @@ extension BetaToolChoiceParam: Codable {
 extension BetaToolChoiceParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "allowed_tools": return .betaToolChoiceAllowed(try BetaToolChoiceAllowed(from: decoder))
+        case "allowed_tools": try .betaToolChoiceAllowed(BetaToolChoiceAllowed(from: decoder))
         case "file_search":
-        return .betaToolChoiceTypes(try BetaToolChoiceTypes(from: decoder))
+            try .betaToolChoiceTypes(BetaToolChoiceTypes(from: decoder))
         case "web_search_preview":
-        return .betaToolChoiceTypes(try BetaToolChoiceTypes(from: decoder))
+            try .betaToolChoiceTypes(BetaToolChoiceTypes(from: decoder))
         case "computer":
-        return .betaToolChoiceTypes(try BetaToolChoiceTypes(from: decoder))
+            try .betaToolChoiceTypes(BetaToolChoiceTypes(from: decoder))
         case "computer_use_preview":
-        return .betaToolChoiceTypes(try BetaToolChoiceTypes(from: decoder))
+            try .betaToolChoiceTypes(BetaToolChoiceTypes(from: decoder))
         case "computer_use":
-        return .betaToolChoiceTypes(try BetaToolChoiceTypes(from: decoder))
+            try .betaToolChoiceTypes(BetaToolChoiceTypes(from: decoder))
         case "web_search_preview_2025_03_11":
-        return .betaToolChoiceTypes(try BetaToolChoiceTypes(from: decoder))
+            try .betaToolChoiceTypes(BetaToolChoiceTypes(from: decoder))
         case "image_generation":
-        return .betaToolChoiceTypes(try BetaToolChoiceTypes(from: decoder))
+            try .betaToolChoiceTypes(BetaToolChoiceTypes(from: decoder))
         case "code_interpreter":
-        return .betaToolChoiceTypes(try BetaToolChoiceTypes(from: decoder))
-        case "function": return .betaToolChoiceFunction(try BetaToolChoiceFunction(from: decoder))
-        case "mcp": return .betaToolChoiceMcp(try BetaToolChoiceMCP(from: decoder))
-        case "custom": return .betaToolChoiceCustom(try BetaToolChoiceCustom(from: decoder))
+            try .betaToolChoiceTypes(BetaToolChoiceTypes(from: decoder))
+        case "function": try .betaToolChoiceFunction(BetaToolChoiceFunction(from: decoder))
+        case "mcp": try .betaToolChoiceMcp(BetaToolChoiceMCP(from: decoder))
+        case "custom": try .betaToolChoiceCustom(BetaToolChoiceCustom(from: decoder))
         case "programmatic_tool_calling":
-        return .betaSpecificProgrammaticToolCallingParam(try BetaSpecificProgrammaticToolCallingParam(from: decoder))
-        case "apply_patch": return .betaSpecificApplyPatchParam(try BetaSpecificApplyPatchParam(from: decoder))
-        case "shell": return .betaSpecificFunctionShellParam(try BetaSpecificFunctionShellParam(from: decoder))
-        default: return nil
+            try .betaSpecificProgrammaticToolCallingParam(BetaSpecificProgrammaticToolCallingParam(from: decoder))
+        case "apply_patch": try .betaSpecificApplyPatchParam(BetaSpecificApplyPatchParam(from: decoder))
+        case "shell": try .betaSpecificFunctionShellParam(BetaSpecificFunctionShellParam(from: decoder))
+        default: nil
         }
     }
 }
 
 extension BetaToolChoiceParam {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(BetaToolChoiceOptions.self) { return .betaToolChoiceOptions(value) }
-        if let value = try? container.decode(BetaToolChoiceAllowed.self) { return .betaToolChoiceAllowed(value) }
-        if let value = try? container.decode(BetaToolChoiceTypes.self) { return .betaToolChoiceTypes(value) }
-        if let value = try? container.decode(BetaToolChoiceFunction.self) { return .betaToolChoiceFunction(value) }
-        if let value = try? container.decode(BetaToolChoiceMCP.self) { return .betaToolChoiceMcp(value) }
-        if let value = try? container.decode(BetaToolChoiceCustom.self) { return .betaToolChoiceCustom(value) }
+        if let value = try? container.decode(BetaToolChoiceOptions.self) {
+            return .betaToolChoiceOptions(value)
+        }
+        if let value = try? container.decode(BetaToolChoiceAllowed.self) {
+            return .betaToolChoiceAllowed(value)
+        }
+        if let value = try? container.decode(BetaToolChoiceTypes.self) {
+            return .betaToolChoiceTypes(value)
+        }
+        if let value = try? container.decode(BetaToolChoiceFunction.self) {
+            return .betaToolChoiceFunction(value)
+        }
+        if let value = try? container.decode(BetaToolChoiceMCP.self) {
+            return .betaToolChoiceMcp(value)
+        }
+        if let value = try? container.decode(BetaToolChoiceCustom.self) {
+            return .betaToolChoiceCustom(value)
+        }
         if let value = try? container.decode(
             BetaSpecificProgrammaticToolCallingParam.self
         ) {
-            return             .betaSpecificProgrammaticToolCallingParam(value)
+            return .betaSpecificProgrammaticToolCallingParam(value)
         }
-        if let value = try? container.decode(BetaSpecificApplyPatchParam.self) { return .betaSpecificApplyPatchParam(value) }
-        if let value = try? container.decode(BetaSpecificFunctionShellParam.self) { return .betaSpecificFunctionShellParam(value) }
+        if let value = try? container
+            .decode(BetaSpecificApplyPatchParam.self) {
+            return .betaSpecificApplyPatchParam(value)
+        }
+        if let value = try? container
+            .decode(BetaSpecificFunctionShellParam.self) {
+            return .betaSpecificFunctionShellParam(value)
+        }
         return nil
     }
 }
@@ -330,7 +369,6 @@ public indirect enum BetaToolSearchOutputNamespaceToolParamToolsItem {
 }
 
 extension BetaToolSearchOutputNamespaceToolParamToolsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -338,12 +376,16 @@ extension BetaToolSearchOutputNamespaceToolParamToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -354,9 +396,11 @@ extension BetaToolSearchOutputNamespaceToolParamToolsItem: Codable {
 extension BetaToolSearchOutputNamespaceToolParamToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": return .betaToolSearchOutputFunctionToolParam(try BetaToolSearchOutputFunctionToolParam(from: decoder))
-        case "custom": return .betaCustomToolParam(try BetaCustomToolParam(from: decoder))
-        default: return nil
+        case "function": try .betaToolSearchOutputFunctionToolParam(
+                BetaToolSearchOutputFunctionToolParam(from: decoder)
+            )
+        case "custom": try .betaCustomToolParam(BetaCustomToolParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -394,7 +438,6 @@ public indirect enum BetaToolSearchOutputTool {
 }
 
 extension BetaToolSearchOutputTool: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -402,13 +445,19 @@ extension BetaToolSearchOutputTool: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -419,26 +468,30 @@ extension BetaToolSearchOutputTool: Codable {
 extension BetaToolSearchOutputTool {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": return .betaFunctionTool(try BetaFunctionTool(from: decoder))
-        case "file_search": return .betaFileSearchTool(try BetaFileSearchTool(from: decoder))
-        case "computer": return .betaComputerTool(try BetaComputerTool(from: decoder))
-        case "computer_use_preview": return .betaComputerUsePreviewTool(try BetaComputerUsePreviewTool(from: decoder))
-        case "web_search", "web_search_2025_08_26": return .betaWebSearchTool(try BetaWebSearchTool(from: decoder))
-        case "mcp": return .betaMcpTool(try BetaMCPTool(from: decoder))
-        case "code_interpreter": return .betaCodeInterpreterTool(try BetaCodeInterpreterTool(from: decoder))
-        case "programmatic_tool_calling": return .betaProgrammaticToolCallingParam(try BetaProgrammaticToolCallingParam(from: decoder))
-        case "image_generation": return .betaImageGenTool(try BetaImageGenTool(from: decoder))
-        case "local_shell": return .betaLocalShellToolParam(try BetaLocalShellToolParam(from: decoder))
-        case "shell": return .betaFunctionShellToolParam(try BetaFunctionShellToolParam(from: decoder))
-        case "custom": return .betaCustomToolParam(try BetaCustomToolParam(from: decoder))
-        case "namespace": return .betaToolSearchOutputNamespaceToolParam(try BetaToolSearchOutputNamespaceToolParam(from: decoder))
-        case "tool_search": return .betaToolSearchToolParam(try BetaToolSearchToolParam(from: decoder))
+        case "function": try .betaFunctionTool(BetaFunctionTool(from: decoder))
+        case "file_search": try .betaFileSearchTool(BetaFileSearchTool(from: decoder))
+        case "computer": try .betaComputerTool(BetaComputerTool(from: decoder))
+        case "computer_use_preview": try .betaComputerUsePreviewTool(BetaComputerUsePreviewTool(from: decoder))
+        case "web_search", "web_search_2025_08_26": try .betaWebSearchTool(BetaWebSearchTool(from: decoder))
+        case "mcp": try .betaMcpTool(BetaMCPTool(from: decoder))
+        case "code_interpreter": try .betaCodeInterpreterTool(BetaCodeInterpreterTool(from: decoder))
+        case "programmatic_tool_calling": try .betaProgrammaticToolCallingParam(
+                BetaProgrammaticToolCallingParam(from: decoder)
+            )
+        case "image_generation": try .betaImageGenTool(BetaImageGenTool(from: decoder))
+        case "local_shell": try .betaLocalShellToolParam(BetaLocalShellToolParam(from: decoder))
+        case "shell": try .betaFunctionShellToolParam(BetaFunctionShellToolParam(from: decoder))
+        case "custom": try .betaCustomToolParam(BetaCustomToolParam(from: decoder))
+        case "namespace": try .betaToolSearchOutputNamespaceToolParam(
+                BetaToolSearchOutputNamespaceToolParam(from: decoder)
+            )
+        case "tool_search": try .betaToolSearchToolParam(BetaToolSearchToolParam(from: decoder))
         case "web_search_preview":
-        return .betaWebSearchPreviewTool(try BetaWebSearchPreviewTool(from: decoder))
+            try .betaWebSearchPreviewTool(BetaWebSearchPreviewTool(from: decoder))
         case "web_search_preview_2025_03_11":
-        return .betaWebSearchPreviewTool(try BetaWebSearchPreviewTool(from: decoder))
-        case "apply_patch": return .betaApplyPatchToolParam(try BetaApplyPatchToolParam(from: decoder))
-        default: return nil
+            try .betaWebSearchPreviewTool(BetaWebSearchPreviewTool(from: decoder))
+        case "apply_patch": try .betaApplyPatchToolParam(BetaApplyPatchToolParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -489,28 +542,38 @@ public struct BetaToolChoiceFunction: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaToolChoiceFunction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-            try sdkValidateRawEnum("type", self.type, BetaToolChoiceFunctionType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaToolChoiceFunction {
-    public init(type: BetaToolChoiceFunctionType, name: String) throws {
+public extension BetaToolChoiceFunction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        try sdkValidateRawEnum("type", type, BetaToolChoiceFunctionType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaToolChoiceFunction {
+    init(type: BetaToolChoiceFunctionType, name: String) throws {
         (self.type, self.name) = (type, name)
-            try sdkValidateRawEnum("type", self.type, BetaToolChoiceFunctionType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaToolChoiceFunctionType.allCases.map(\.rawValue))
     }
 }
 
@@ -532,5 +595,7 @@ public struct BetaToolSearchToolParam: Codable {
         case parameters
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

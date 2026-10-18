@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension UsageMethods {
-    public struct DecisionsUsageOptions: Codable {
+public extension UsageMethods {
+    struct DecisionsUsageOptions: Codable {
         public var startTime: Int
         public var endTime: Int?
         public var bucketWidth: DecisionsUsageParameter?
@@ -49,20 +49,37 @@ extension UsageMethods {
     /// - models: Return only usage for these models.
     /// - batch: If `true`, return batch jobs only. If `false`, return non-batch
     ///   jobs only. By default, return both.
-    public static func decisionsUsage(config: ClientConfig, options: DecisionsUsageOptions, requestOptions: RequestOptions? = nil) async throws -> PublicDecisionsUsageResponseResource {
-        return try (await sdkRequest("GET", "/organization/usage/decisions", config: config, query: [
-            SdkQueryParameter("start_time", value: options.startTime),
-            SdkQueryParameter("end_time", value: options.endTime),
-            SdkQueryParameter("bucket_width", value: options.bucketWidth),
-            SdkQueryParameter("limit", value: options.limit),
-            SdkQueryParameter("page", value: options.page),
-            SdkQueryParameter("project_ids", value: options.projectIds),
-            SdkQueryParameter("group_by", value: options.groupBy),
-            SdkQueryParameter("user_ids", value: options.userIds),
-            SdkQueryParameter("api_key_ids", value: options.apiKeyIds),
-            SdkQueryParameter("models", value: options.models),
-            SdkQueryParameter("batch", value: options.batch),
-        ], decoder: .json, operationId: "decisionsUsage", options: requestOptions, errors: ["400": DecisionsUsageErrorResponse.self, "403": DecisionsUsagePermissionErrorResponse.self, "429": ErrorResponse.self])).data
+    static func decisionsUsage(
+        config: ClientConfig,
+        options: DecisionsUsageOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> PublicDecisionsUsageResponseResource {
+        try await (sdkRequest(
+            "GET",
+            "/organization/usage/decisions",
+            config: config,
+            query: [
+                SdkQueryParameter("start_time", value: options.startTime),
+                SdkQueryParameter("end_time", value: options.endTime),
+                SdkQueryParameter("bucket_width", value: options.bucketWidth),
+                SdkQueryParameter("limit", value: options.limit),
+                SdkQueryParameter("page", value: options.page),
+                SdkQueryParameter("project_ids", value: options.projectIds),
+                SdkQueryParameter("group_by", value: options.groupBy),
+                SdkQueryParameter("user_ids", value: options.userIds),
+                SdkQueryParameter("api_key_ids", value: options.apiKeyIds),
+                SdkQueryParameter("models", value: options.models),
+                SdkQueryParameter("batch", value: options.batch),
+            ],
+            decoder: .json,
+            operationId: "decisionsUsage",
+            options: requestOptions,
+            errors: [
+                "400": DecisionsUsageErrorResponse.self,
+                "403": DecisionsUsagePermissionErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 
     /// Get Decisions API usage details for the organization.
@@ -89,21 +106,40 @@ extension UsageMethods {
     /// - models: Return only usage for these models.
     /// - batch: If `true`, return batch jobs only. If `false`, return non-batch
     ///   jobs only. By default, return both.
-    public static func decisionsUsagePaginated(config: ClientConfig, options: DecisionsUsageOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<DecisionsUsageBucket, Swift.Error> {
+    static func decisionsUsagePaginated(
+        config: ClientConfig,
+        options: DecisionsUsageOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<DecisionsUsageBucket, Swift.Error> {
         let page = options.page
-        return AsyncThrowingStream<DecisionsUsageBucket, Swift.Error> { (continuation: AsyncThrowingStream<DecisionsUsageBucket, Swift.Error>.Continuation) in
+        return AsyncThrowingStream<DecisionsUsageBucket, Swift.Error> { (continuation: AsyncThrowingStream<
+            DecisionsUsageBucket,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = page
                     while true {
                         var nextOptions = options
                         nextOptions.page = pageCursor
-                        let pageResponse = try await decisionsUsage(config: config, options: nextOptions, requestOptions: requestOptions)
+                        let pageResponse = try await decisionsUsage(
+                            config: config,
+                            options: nextOptions,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.nextPage else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.nextPage else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -116,28 +152,49 @@ extension UsageMethods {
         }
     }
 
-    public struct DecisionsUsagePage {
+    struct DecisionsUsagePage {
         public let data: PublicDecisionsUsageResponseResource
         public let items: [DecisionsUsageBucket]
         public let hasMore: Bool
     }
 
-    public static func decisionsUsagePages(config: ClientConfig, options: DecisionsUsageOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<DecisionsUsagePage, Swift.Error> {
+    static func decisionsUsagePages(
+        config: ClientConfig,
+        options: DecisionsUsageOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<DecisionsUsagePage, Swift.Error> {
         let page = options.page
-        return AsyncThrowingStream<DecisionsUsagePage, Swift.Error> { (pageContinuation: AsyncThrowingStream<DecisionsUsagePage, Swift.Error>.Continuation) in
+        return AsyncThrowingStream<DecisionsUsagePage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            DecisionsUsagePage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = page
                     while true {
                         var nextOptions = options
                         nextOptions.page = pageCursor
-                        let pageResponse = try await decisionsUsage(config: config, options: nextOptions, requestOptions: requestOptions)
+                        let pageResponse = try await decisionsUsage(
+                            config: config,
+                            options: nextOptions,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.nextPage != nil
-                        pageContinuation.yield(DecisionsUsagePage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.nextPage else { break }
+                        pageContinuation.yield(DecisionsUsagePage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.nextPage else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

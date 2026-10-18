@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Decisions domain models
+/// Decisions domain models
 /// Typed representation of the `ResponseUsageResource` API schema.
 public struct ResponseUsageResource: Codable {
     /// Required `int64`-formatted value serialized in the `input_tokens` wire field.
@@ -25,46 +25,122 @@ public struct ResponseUsageResource: Codable {
         case totalTokens = "total_tokens"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseUsageResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.inputTokens) else {
-            throw SdkValidationError(field: "input_tokens", code: "required", message: "Validation failed for 'input_tokens': value is required")
-        }
-        guard container.contains(.inputTokensDetails) else {
-            throw SdkValidationError(field: "input_tokens_details", code: "required", message: "Validation failed for 'input_tokens_details': value is required")
-        }
-        guard container.contains(.outputTokens) else {
-            throw SdkValidationError(field: "output_tokens", code: "required", message: "Validation failed for 'output_tokens': value is required")
-        }
-        guard container.contains(.outputTokensDetails) else {
-            throw SdkValidationError(field: "output_tokens_details", code: "required", message: "Validation failed for 'output_tokens_details': value is required")
-        }
-        guard container.contains(.totalTokens) else {
-            throw SdkValidationError(field: "total_tokens", code: "required", message: "Validation failed for 'total_tokens': value is required")
-        }
-        self.inputTokens = try container.sdkDecodeRequired(.inputTokens)
-        self.inputTokensDetails = try container.sdkDecodeRequired(.inputTokensDetails)
-        self.outputTokens = try container.sdkDecodeRequired(.outputTokens)
-        self.outputTokensDetails = try container.sdkDecodeRequired(.outputTokensDetails)
-        self.totalTokens = try container.sdkDecodeRequired(.totalTokens)
-            try validateRange("input_tokens", Double(self.inputTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("output_tokens", Double(self.outputTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("total_tokens", Double(self.totalTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseUsageResource {
-    public init(inputTokens: Int, inputTokensDetails: InputTokensDetailsResource, outputTokens: Int, outputTokensDetails: OutputTokensDetailsResource, totalTokens: Int) throws {
+public extension ResponseUsageResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.inputTokens) else {
+            throw SdkValidationError(
+                field: "input_tokens",
+                code: "required",
+                message: "Validation failed for 'input_tokens': value is required"
+            )
+        }
+        guard container.contains(.inputTokensDetails) else {
+            throw SdkValidationError(
+                field: "input_tokens_details",
+                code: "required",
+                message: "Validation failed for 'input_tokens_details': value is required"
+            )
+        }
+        guard container.contains(.outputTokens) else {
+            throw SdkValidationError(
+                field: "output_tokens",
+                code: "required",
+                message: "Validation failed for 'output_tokens': value is required"
+            )
+        }
+        guard container.contains(.outputTokensDetails) else {
+            throw SdkValidationError(
+                field: "output_tokens_details",
+                code: "required",
+                message: "Validation failed for 'output_tokens_details': value is required"
+            )
+        }
+        guard container.contains(.totalTokens) else {
+            throw SdkValidationError(
+                field: "total_tokens",
+                code: "required",
+                message: "Validation failed for 'total_tokens': value is required"
+            )
+        }
+        inputTokens = try container.sdkDecodeRequired(.inputTokens)
+        inputTokensDetails = try container.sdkDecodeRequired(.inputTokensDetails)
+        outputTokens = try container.sdkDecodeRequired(.outputTokens)
+        outputTokensDetails = try container.sdkDecodeRequired(.outputTokensDetails)
+        totalTokens = try container.sdkDecodeRequired(.totalTokens)
+        try validateRange(
+            "input_tokens",
+            Double(inputTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "output_tokens",
+            Double(outputTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "total_tokens",
+            Double(totalTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension ResponseUsageResource {
+    init(
+        inputTokens: Int,
+        inputTokensDetails: InputTokensDetailsResource,
+        outputTokens: Int,
+        outputTokensDetails: OutputTokensDetailsResource,
+        totalTokens: Int
+    ) throws {
         (self.inputTokens, self.inputTokensDetails) = (inputTokens, inputTokensDetails)
         (self.outputTokens, self.outputTokensDetails) = (outputTokens, outputTokensDetails)
         self.totalTokens = totalTokens
-            try validateRange("input_tokens", Double(self.inputTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("output_tokens", Double(self.outputTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("total_tokens", Double(self.totalTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "input_tokens",
+            Double(self.inputTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "output_tokens",
+            Double(self.outputTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "total_tokens",
+            Double(self.totalTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -77,24 +153,46 @@ public struct OutputTokensDetailsResource: Codable {
         case reasoningTokens = "reasoning_tokens"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OutputTokensDetailsResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.reasoningTokens) else {
-            throw SdkValidationError(field: "reasoning_tokens", code: "required", message: "Validation failed for 'reasoning_tokens': value is required")
-        }
-        self.reasoningTokens = try container.sdkDecodeRequired(.reasoningTokens)
-            try validateRange("reasoning_tokens", Double(self.reasoningTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OutputTokensDetailsResource {
-    public init(reasoningTokens: Int) throws {
+public extension OutputTokensDetailsResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.reasoningTokens) else {
+            throw SdkValidationError(
+                field: "reasoning_tokens",
+                code: "required",
+                message: "Validation failed for 'reasoning_tokens': value is required"
+            )
+        }
+        reasoningTokens = try container.sdkDecodeRequired(.reasoningTokens)
+        try validateRange(
+            "reasoning_tokens",
+            Double(reasoningTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension OutputTokensDetailsResource {
+    init(reasoningTokens: Int) throws {
         self.reasoningTokens = reasoningTokens
-            try validateRange("reasoning_tokens", Double(self.reasoningTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "reasoning_tokens",
+            Double(self.reasoningTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -110,30 +208,72 @@ public struct InputTokensDetailsResource: Codable {
         case cacheWriteTokens = "cache_write_tokens"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension InputTokensDetailsResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.cachedTokens) else {
-            throw SdkValidationError(field: "cached_tokens", code: "required", message: "Validation failed for 'cached_tokens': value is required")
-        }
-        guard container.contains(.cacheWriteTokens) else {
-            throw SdkValidationError(field: "cache_write_tokens", code: "required", message: "Validation failed for 'cache_write_tokens': value is required")
-        }
-        self.cachedTokens = try container.sdkDecodeRequired(.cachedTokens)
-        self.cacheWriteTokens = try container.sdkDecodeRequired(.cacheWriteTokens)
-            try validateRange("cached_tokens", Double(self.cachedTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("cache_write_tokens", Double(self.cacheWriteTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension InputTokensDetailsResource {
-    public init(cachedTokens: Int, cacheWriteTokens: Int) throws {
+public extension InputTokensDetailsResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.cachedTokens) else {
+            throw SdkValidationError(
+                field: "cached_tokens",
+                code: "required",
+                message: "Validation failed for 'cached_tokens': value is required"
+            )
+        }
+        guard container.contains(.cacheWriteTokens) else {
+            throw SdkValidationError(
+                field: "cache_write_tokens",
+                code: "required",
+                message: "Validation failed for 'cache_write_tokens': value is required"
+            )
+        }
+        cachedTokens = try container.sdkDecodeRequired(.cachedTokens)
+        cacheWriteTokens = try container.sdkDecodeRequired(.cacheWriteTokens)
+        try validateRange(
+            "cached_tokens",
+            Double(cachedTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "cache_write_tokens",
+            Double(cacheWriteTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension InputTokensDetailsResource {
+    init(cachedTokens: Int, cacheWriteTokens: Int) throws {
         (self.cachedTokens, self.cacheWriteTokens) = (cachedTokens, cacheWriteTokens)
-            try validateRange("cached_tokens", Double(self.cachedTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-            try validateRange("cache_write_tokens", Double(self.cacheWriteTokens), min: -2147483648, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "cached_tokens",
+            Double(self.cachedTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        try validateRange(
+            "cache_write_tokens",
+            Double(self.cacheWriteTokens),
+            min: -2_147_483_648,
+            max: 2_147_483_647,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -155,48 +295,75 @@ public struct PublicDecisionsUsageResponseResource: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension PublicDecisionsUsageResponseResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        guard container.contains(.nextPage) else {
-            throw SdkValidationError(field: "next_page", code: "required", message: "Validation failed for 'next_page': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-        self.nextPage = try container.sdkDecodeNullable(.nextPage)
-        self.data = try container.sdkDecodeRequired(.data)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension PublicDecisionsUsageResponseResource {
-    public init(object: PublicDecisionsUsageResponseResourceObject, hasMore: Bool, nextPage: String?, data: [DecisionsUsageBucket]) {
+public extension PublicDecisionsUsageResponseResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        guard container.contains(.nextPage) else {
+            throw SdkValidationError(
+                field: "next_page",
+                code: "required",
+                message: "Validation failed for 'next_page': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        nextPage = try container.sdkDecodeNullable(.nextPage)
+        data = try container.sdkDecodeRequired(.data)
+    }
+}
+
+public extension PublicDecisionsUsageResponseResource {
+    init(
+        object: PublicDecisionsUsageResponseResourceObject,
+        hasMore: Bool,
+        nextPage: String?,
+        data: [DecisionsUsageBucket]
+    ) {
         (self.object, self.hasMore) = (object, hasMore)
         (self.nextPage, self.data) = (nextPage, data)
     }
 }
 
 /// Required enumerated value serialized in the `object` wire field.
-public struct PublicDecisionsUsageResponseResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct PublicDecisionsUsageResponseResourceObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let page = PublicDecisionsUsageResponseResourceObject(rawValue: "page")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -209,7 +376,10 @@ public struct PublicDecisionsUsageResponseResourceObject: RawRepresentable, Hash
 public struct ImageDetailParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = ImageDetailParam(rawValue: "low")
     public static let high = ImageDetailParam(rawValue: "high")
     public static let auto = ImageDetailParam(rawValue: "auto")
@@ -217,7 +387,7 @@ public struct ImageDetailParam: RawRepresentable, Hashable, Codable, Sendable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -230,14 +400,17 @@ public struct ImageDetailParam: RawRepresentable, Hashable, Codable, Sendable, S
 public struct FunctionCallStatusParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = FunctionCallStatusParam(rawValue: "in_progress")
     public static let completed = FunctionCallStatusParam(rawValue: "completed")
     public static let incomplete = FunctionCallStatusParam(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -250,13 +423,16 @@ public struct FunctionCallStatusParam: RawRepresentable, Hashable, Codable, Send
 public struct MessagePhaseParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let commentary = MessagePhaseParam(rawValue: "commentary")
     public static let finalAnswer = MessagePhaseParam(rawValue: "final_answer")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

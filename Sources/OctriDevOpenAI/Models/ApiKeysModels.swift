@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ApiKeys domain models
+/// ApiKeys domain models
 /// Typed representation of the `ServiceAccountApiKeyBody` API schema.
 public struct ServiceAccountApiKeyBody: Codable {
     /// The object type, which is always `organization.project.service_account.api_key`
@@ -28,38 +28,67 @@ public struct ServiceAccountApiKeyBody: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ServiceAccountApiKeyBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.value) else {
-            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.value = try container.sdkDecodeRequired(.value)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ServiceAccountApiKeyBody {
-    public init(object: ServiceAccountApiKeyBodyObject, value: String, name: String, createdAt: Int, id: String, expiresAt: Int? = nil) {
+public extension ServiceAccountApiKeyBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.value) else {
+            throw SdkValidationError(
+                field: "value",
+                code: "required",
+                message: "Validation failed for 'value': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        value = try container.sdkDecodeRequired(.value)
+        name = try container.sdkDecodeRequired(.name)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        id = try container.sdkDecodeRequired(.id)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+    }
+}
+
+public extension ServiceAccountApiKeyBody {
+    init(
+        object: ServiceAccountApiKeyBodyObject,
+        value: String,
+        name: String,
+        createdAt: Int,
+        id: String,
+        expiresAt: Int? = nil
+    ) {
         (self.object, self.value) = (object, value)
         (self.name, self.createdAt) = (name, createdAt)
         (self.id, self.expiresAt) = (id, expiresAt)
@@ -82,21 +111,21 @@ public struct CreateProjectServiceAccountApiKeyBody: Codable {
     }
 
     init() {
-        (self.name, self.scopes, self.expiresInSeconds) = (nil, nil, nil)
+        (name, scopes, expiresInSeconds) = (nil, nil, nil)
     }
 }
 
-extension CreateProjectServiceAccountApiKeyBody {
-    public init(from decoder: Decoder) throws {
+public extension CreateProjectServiceAccountApiKeyBody {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.scopes = try container.sdkDecodeIfPresent(.scopes)
-        self.expiresInSeconds = try container.sdkDecodeIfPresent(.expiresInSeconds)
+        name = try container.sdkDecodeIfPresent(.name)
+        scopes = try container.sdkDecodeIfPresent(.scopes)
+        expiresInSeconds = try container.sdkDecodeIfPresent(.expiresInSeconds)
     }
 }
 
-extension CreateProjectServiceAccountApiKeyBody {
-    public init(name: String? = nil, scopes: [String]? = nil, expiresInSeconds: Int? = nil) {
+public extension CreateProjectServiceAccountApiKeyBody {
+    init(name: String? = nil, scopes: [String]? = nil, expiresInSeconds: Int? = nil) {
         self.init()
         (self.name, self.scopes) = (name, scopes)
         self.expiresInSeconds = expiresInSeconds
@@ -107,12 +136,16 @@ extension CreateProjectServiceAccountApiKeyBody {
 public struct ServiceAccountApiKeyBodyObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationProjectServiceAccountApiKey = ServiceAccountApiKeyBodyObject(rawValue: "organization.project.service_account.api_key")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationProjectServiceAccountApiKey =
+        ServiceAccountApiKeyBodyObject(rawValue: "organization.project.service_account.api_key")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

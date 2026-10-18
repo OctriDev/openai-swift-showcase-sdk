@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VectorStoresMethods {
-    /// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor parameters to navigate through the batch's files.
+public extension VectorStoresMethods {
+    /// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor
+    /// parameters to navigate through the batch's files.
     ///
     /// Returns a list of vector store files in a batch.
     ///
@@ -28,17 +29,43 @@ extension VectorStoresMethods {
     ///   before=obj_foo in order to fetch the previous page of the list.
     /// - filter: Filter by file status. One of `in_progress`, `completed`,
     ///   `failed`, `cancelled`.
-    public static func listFilesInVectorStoreBatch(config: ClientConfig, vectorStoreId: String, batchId: String, limit: Int? = nil, order: ListFilesInVectorStoreBatchParameter? = nil, after: String? = nil, before: String? = nil, filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil, requestOptions: RequestOptions? = nil) async throws -> ListVectorStoreFilesResponse {
-        return try (await sdkRequest("GET", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/file_batches/", sdkEncodePathSegment(sdkWireString(batchId)), "/files"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("before", value: before),
-            SdkQueryParameter("filter", value: filter),
-        ], decoder: .json, operationId: "listFilesInVectorStoreBatch", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func listFilesInVectorStoreBatch(
+        config: ClientConfig,
+        vectorStoreId: String,
+        batchId: String,
+        limit: Int? = nil,
+        order: ListFilesInVectorStoreBatchParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListVectorStoreFilesResponse {
+        try await (sdkRequest(
+            "GET",
+            [
+                "/vector_stores/",
+                sdkEncodePathSegment(sdkWireString(vectorStoreId)),
+                "/file_batches/",
+                sdkEncodePathSegment(sdkWireString(batchId)),
+                "/files",
+            ].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("before", value: before),
+                SdkQueryParameter("filter", value: filter),
+            ],
+            decoder: .json,
+            operationId: "listFilesInVectorStoreBatch",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor parameters to navigate through the batch's files.
+    /// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor
+    /// parameters to navigate through the batch's files.
     ///
     /// Returns a list of vector store files in a batch.
     ///
@@ -59,17 +86,46 @@ extension VectorStoresMethods {
     ///   before=obj_foo in order to fetch the previous page of the list.
     /// - filter: Filter by file status. One of `in_progress`, `completed`,
     ///   `failed`, `cancelled`.
-    public static func listFilesInVectorStoreBatchPaginated(config: ClientConfig, vectorStoreId: String, batchId: String, limit: Int? = nil, order: ListFilesInVectorStoreBatchParameter? = nil, after: String? = nil, before: String? = nil, filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<VectorStoreFileObject, Swift.Error> {
-        return AsyncThrowingStream<VectorStoreFileObject, Swift.Error> { (continuation: AsyncThrowingStream<VectorStoreFileObject, Swift.Error>.Continuation) in
+    static func listFilesInVectorStoreBatchPaginated(
+        config: ClientConfig,
+        vectorStoreId: String,
+        batchId: String,
+        limit: Int? = nil,
+        order: ListFilesInVectorStoreBatchParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<VectorStoreFileObject, Swift.Error> {
+        AsyncThrowingStream<VectorStoreFileObject, Swift.Error> { (continuation: AsyncThrowingStream<
+            VectorStoreFileObject,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listFilesInVectorStoreBatch(config: config, vectorStoreId: vectorStoreId, batchId: batchId, limit: limit, order: order, after: pageCursor, before: before, filter: filter, requestOptions: requestOptions)
+                        let pageResponse = try await listFilesInVectorStoreBatch(
+                            config: config,
+                            vectorStoreId: vectorStoreId,
+                            batchId: batchId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            before: before,
+                            filter: filter,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -82,24 +138,55 @@ extension VectorStoresMethods {
         }
     }
 
-    public struct ListFilesInVectorStoreBatchPage {
+    struct ListFilesInVectorStoreBatchPage {
         public let data: ListVectorStoreFilesResponse
         public let items: [VectorStoreFileObject]
         public let hasMore: Bool
     }
 
-    public static func listFilesInVectorStoreBatchPages(config: ClientConfig, vectorStoreId: String, batchId: String, limit: Int? = nil, order: ListFilesInVectorStoreBatchParameter? = nil, after: String? = nil, before: String? = nil, filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListFilesInVectorStoreBatchPage, Swift.Error> {
-        return AsyncThrowingStream<ListFilesInVectorStoreBatchPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListFilesInVectorStoreBatchPage, Swift.Error>.Continuation) in
+    static func listFilesInVectorStoreBatchPages(
+        config: ClientConfig,
+        vectorStoreId: String,
+        batchId: String,
+        limit: Int? = nil,
+        order: ListFilesInVectorStoreBatchParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListFilesInVectorStoreBatchPage, Swift.Error> {
+        AsyncThrowingStream<ListFilesInVectorStoreBatchPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListFilesInVectorStoreBatchPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listFilesInVectorStoreBatch(config: config, vectorStoreId: vectorStoreId, batchId: batchId, limit: limit, order: order, after: pageCursor, before: before, filter: filter, requestOptions: requestOptions)
+                        let pageResponse = try await listFilesInVectorStoreBatch(
+                            config: config,
+                            vectorStoreId: vectorStoreId,
+                            batchId: batchId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            before: before,
+                            filter: filter,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && true
-                        pageContinuation.yield(ListFilesInVectorStoreBatchPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
+                        pageContinuation.yield(ListFilesInVectorStoreBatchPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

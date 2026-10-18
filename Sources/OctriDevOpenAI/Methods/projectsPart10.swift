@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectsMethods {
-    /// Lists the rate limits configured for a project, with each result describing limits for a model. Use `limit` to set the number of results and `after` or `before` to navigate the list using cursors.
+public extension ProjectsMethods {
+    /// Lists the rate limits configured for a project, with each result describing limits for a model. Use `limit` to
+    /// set the number of results and `after` or `before` to navigate the list using cursors.
     ///
     /// Returns the rate limits per model for a project.
     ///
@@ -23,15 +24,32 @@ extension ProjectsMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, beginning with obj_foo, your subsequent call can
     ///   include before=obj_foo in order to fetch the previous page of the list.
-    public static func listProjectRateLimits(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectRateLimitListResponse {
-        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/rate_limits"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("before", value: before),
-        ], decoder: .json, operationId: "listProjectRateLimits", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
+    static func listProjectRateLimits(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectRateLimitListResponse {
+        try await (sdkRequest(
+            "GET",
+            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/rate_limits"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("before", value: before),
+            ],
+            decoder: .json,
+            operationId: "listProjectRateLimits",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
-    /// Lists the rate limits configured for a project, with each result describing limits for a model. Use `limit` to set the number of results and `after` or `before` to navigate the list using cursors.
+    /// Lists the rate limits configured for a project, with each result describing limits for a model. Use `limit` to
+    /// set the number of results and `after` or `before` to navigate the list using cursors.
     ///
     /// Returns the rate limits per model for a project.
     ///
@@ -47,18 +65,43 @@ extension ProjectsMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, beginning with obj_foo, your subsequent call can
     ///   include before=obj_foo in order to fetch the previous page of the list.
-    public static func listProjectRateLimitsPaginated(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ProjectRateLimit, Swift.Error> {
-        return AsyncThrowingStream<ProjectRateLimit, Swift.Error> { (continuation: AsyncThrowingStream<ProjectRateLimit, Swift.Error>.Continuation) in
+    static func listProjectRateLimitsPaginated(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ProjectRateLimit, Swift.Error> {
+        AsyncThrowingStream<ProjectRateLimit, Swift.Error> { (continuation: AsyncThrowingStream<
+            ProjectRateLimit,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectRateLimits(config: config, projectId: projectId, limit: limit, after: pageCursor, before: before, requestOptions: requestOptions)
+                        let pageResponse = try await listProjectRateLimits(
+                            config: config,
+                            projectId: projectId,
+                            limit: limit,
+                            after: pageCursor,
+                            before: before,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -71,25 +114,52 @@ extension ProjectsMethods {
         }
     }
 
-    public struct ListProjectRateLimitsPage {
+    struct ListProjectRateLimitsPage {
         public let data: ProjectRateLimitListResponse
         public let items: [ProjectRateLimit]
         public let hasMore: Bool
     }
 
-    public static func listProjectRateLimitsPages(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListProjectRateLimitsPage, Swift.Error> {
-        return AsyncThrowingStream<ListProjectRateLimitsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListProjectRateLimitsPage, Swift.Error>.Continuation) in
+    static func listProjectRateLimitsPages(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListProjectRateLimitsPage, Swift.Error> {
+        AsyncThrowingStream<ListProjectRateLimitsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListProjectRateLimitsPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectRateLimits(config: config, projectId: projectId, limit: limit, after: pageCursor, before: before, requestOptions: requestOptions)
+                        let pageResponse = try await listProjectRateLimits(
+                            config: config,
+                            projectId: projectId,
+                            limit: limit,
+                            after: pageCursor,
+                            before: before,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListProjectRateLimitsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageContinuation.yield(ListProjectRateLimitsPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

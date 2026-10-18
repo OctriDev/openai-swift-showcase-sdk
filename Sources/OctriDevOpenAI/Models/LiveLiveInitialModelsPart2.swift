@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveInitial domain models
+/// LiveLiveInitial domain models
 /// The author of this history message. Always `user`.
 public enum LiveInitialUserMessageItemParamRole: String, CaseIterable, Codable {
     case user
@@ -41,15 +41,19 @@ public enum LiveInitialTextContentPartParamType: String, CaseIterable, Codable {
 }
 
 /// The history item type. Always `message`.
-public struct LiveInitialDeveloperMessageItemParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct LiveInitialDeveloperMessageItemParamType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let message = LiveInitialDeveloperMessageItemParamType(rawValue: "message")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -59,15 +63,19 @@ public struct LiveInitialDeveloperMessageItemParamType: RawRepresentable, Hashab
 }
 
 /// The text content type. Always `input_text`.
-public struct LiveInitialInputTextContentPartParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct LiveInitialInputTextContentPartParamType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inputText = LiveInitialInputTextContentPartParamType(rawValue: "input_text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -77,15 +85,19 @@ public struct LiveInitialInputTextContentPartParamType: RawRepresentable, Hashab
 }
 
 /// The history item type. Always `message`.
-public struct LiveInitialAssistantMessageItemParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct LiveInitialAssistantMessageItemParamType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let message = LiveInitialAssistantMessageItemParamType(rawValue: "message")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -116,12 +128,15 @@ public enum LiveInitialOutputTextContentPartParamType: String, CaseIterable, Cod
 public struct LiveInitialUserMessageItemParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let message = LiveInitialUserMessageItemParamType(rawValue: "message")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -131,10 +146,14 @@ public struct LiveInitialUserMessageItemParamType: RawRepresentable, Hashable, C
 }
 
 /// Optional enumerated value serialized in the `voice` wire field.
-public struct LiveInitialSessionAudioOutputParamVoiceVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct LiveInitialSessionAudioOutputParamVoiceVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let alloy = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "alloy")
     public static let ash = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "ash")
     public static let ballad = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "ballad")
@@ -169,7 +188,7 @@ public struct LiveInitialSessionAudioOutputParamVoiceVariant1: RawRepresentable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -182,13 +201,16 @@ public struct LiveInitialSessionAudioOutputParamVoiceVariant1: RawRepresentable,
 public struct LiveInitialMessageStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let incomplete = LiveInitialMessageStatus(rawValue: "incomplete")
     public static let completed = LiveInitialMessageStatus(rawValue: "completed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

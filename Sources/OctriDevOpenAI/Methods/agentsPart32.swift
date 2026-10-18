@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AgentsMethods {
-    /// Lists turns by creation time and turn ID. The after cursor is exclusive in the selected order. See [session turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
+public extension AgentsMethods {
+    /// Lists turns by creation time and turn ID. The after cursor is exclusive in the selected order. See [session
+    /// turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
     ///
     /// - Parameters:
     /// - sessionId: The ID of the session.
@@ -15,25 +16,50 @@ extension AgentsMethods {
     ///   Defaults to 20.
     /// - order: The order in which resources are returned. Defaults to `desc`.
     /// - after: Return resources after this resource ID in the selected order.
-    public static func listAgentSessionTurns(config: ClientConfig, sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionTurnListResource {
-        try validateLength("session_id", sessionId, min: 0, max: 1048576)
+    static func listAgentSessionTurns(
+        config: ClientConfig,
+        sessionId: String,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SessionTurnListResource {
+        try validateLength("session_id", sessionId, min: 0, max: 1_048_576)
 
-        if let limit = limit {
+        if let limit {
             try validateRange("limit", Double(limit), min: 1, max: 100)
         }
 
-        if let after = after {
-            try validateLength("after", after, min: 0, max: 1048576)
+        if let after {
+            try validateLength("after", after, min: 0, max: 1_048_576)
         }
 
-        return try (await sdkRequest("GET", ["/agents/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/turns"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-        ], decoder: .json, operationId: "listAgentSessionTurns", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/agents/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/turns"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+            ],
+            decoder: .json,
+            operationId: "listAgentSessionTurns",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 
-    /// Lists turns by creation time and turn ID. The after cursor is exclusive in the selected order. See [session turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
+    /// Lists turns by creation time and turn ID. The after cursor is exclusive in the selected order. See [session
+    /// turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
     ///
     /// - Parameters:
     /// - sessionId: The ID of the session.
@@ -41,18 +67,43 @@ extension AgentsMethods {
     ///   Defaults to 20.
     /// - order: The order in which resources are returned. Defaults to `desc`.
     /// - after: Return resources after this resource ID in the selected order.
-    public static func listAgentSessionTurnsPaginated(config: ClientConfig, sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<TurnResource, Swift.Error> {
-        return AsyncThrowingStream<TurnResource, Swift.Error> { (continuation: AsyncThrowingStream<TurnResource, Swift.Error>.Continuation) in
+    static func listAgentSessionTurnsPaginated(
+        config: ClientConfig,
+        sessionId: String,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<TurnResource, Swift.Error> {
+        AsyncThrowingStream<TurnResource, Swift.Error> { (continuation: AsyncThrowingStream<
+            TurnResource,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAgentSessionTurns(config: config, sessionId: sessionId, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listAgentSessionTurns(
+                            config: config,
+                            sessionId: sessionId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -65,25 +116,52 @@ extension AgentsMethods {
         }
     }
 
-    public struct ListAgentSessionTurnsPage {
+    struct ListAgentSessionTurnsPage {
         public let data: SessionTurnListResource
         public let items: [TurnResource]
         public let hasMore: Bool
     }
 
-    public static func listAgentSessionTurnsPages(config: ClientConfig, sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListAgentSessionTurnsPage, Swift.Error> {
-        return AsyncThrowingStream<ListAgentSessionTurnsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListAgentSessionTurnsPage, Swift.Error>.Continuation) in
+    static func listAgentSessionTurnsPages(
+        config: ClientConfig,
+        sessionId: String,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListAgentSessionTurnsPage, Swift.Error> {
+        AsyncThrowingStream<ListAgentSessionTurnsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListAgentSessionTurnsPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAgentSessionTurns(config: config, sessionId: sessionId, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listAgentSessionTurns(
+                            config: config,
+                            sessionId: sessionId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListAgentSessionTurnsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageContinuation.yield(ListAgentSessionTurnsPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

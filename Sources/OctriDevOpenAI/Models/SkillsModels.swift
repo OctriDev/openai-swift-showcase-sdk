@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Skills domain models
+/// Skills domain models
 /// Uploads a skill either as a directory (multipart `files[]`) or as a single zip file.
 public struct CreateSkillBody: Codable {
     /// Skill files to upload (directory upload) or a single zip file.
@@ -13,24 +13,30 @@ public struct CreateSkillBody: Codable {
         case files
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateSkillBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.files) else {
-            throw SdkValidationError(field: "files", code: "required", message: "Validation failed for 'files': value is required")
-        }
-        self.files = try container.sdkDecodeRequired(.files)
-            try validateItems("files", self.files, min: nil, max: 500)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateSkillBody {
-    public init(files: [Data]) throws {
+public extension CreateSkillBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.files) else {
+            throw SdkValidationError(
+                field: "files",
+                code: "required",
+                message: "Validation failed for 'files': value is required"
+            )
+        }
+        files = try container.sdkDecodeRequired(.files)
+        try validateItems("files", files, min: nil, max: 500)
+    }
+}
+
+public extension CreateSkillBody {
+    init(files: [Data]) throws {
         self.files = files
-            try validateItems("files", self.files, min: nil, max: 500)
+        try validateItems("files", self.files, min: nil, max: 500)
     }
 }
 
@@ -55,37 +61,65 @@ public struct SkillVersionListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SkillVersionListResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.firstId) else {
-            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
-        }
-        guard container.contains(.lastId) else {
-            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.firstId = try container.sdkDecodeNullable(.firstId)
-        self.lastId = try container.sdkDecodeNullable(.lastId)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SkillVersionListResource {
-    public init(object: SkillVersionListResourceObject, data: [SkillVersionResource], firstId: String?, lastId: String?, hasMore: Bool) {
+public extension SkillVersionListResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.firstId) else {
+            throw SdkValidationError(
+                field: "first_id",
+                code: "required",
+                message: "Validation failed for 'first_id': value is required"
+            )
+        }
+        guard container.contains(.lastId) else {
+            throw SdkValidationError(
+                field: "last_id",
+                code: "required",
+                message: "Validation failed for 'last_id': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        firstId = try container.sdkDecodeNullable(.firstId)
+        lastId = try container.sdkDecodeNullable(.lastId)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+    }
+}
+
+public extension SkillVersionListResource {
+    init(
+        object: SkillVersionListResourceObject,
+        data: [SkillVersionResource],
+        firstId: String?,
+        lastId: String?,
+        hasMore: Bool
+    ) {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
@@ -110,33 +144,51 @@ public struct DeletedSkillVersionResource: Codable {
         case version
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DeletedSkillVersionResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.version) else {
-            throw SdkValidationError(field: "version", code: "required", message: "Validation failed for 'version': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.version = try container.sdkDecodeRequired(.version)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DeletedSkillVersionResource {
-    public init(object: DeletedSkillVersionResourceObject, deleted: Bool, id: String, version: String) {
+public extension DeletedSkillVersionResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.version) else {
+            throw SdkValidationError(
+                field: "version",
+                code: "required",
+                message: "Validation failed for 'version': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+        id = try container.sdkDecodeRequired(.id)
+        version = try container.sdkDecodeRequired(.version)
+    }
+}
+
+public extension DeletedSkillVersionResource {
+    init(object: DeletedSkillVersionResourceObject, deleted: Bool, id: String, version: String) {
         (self.object, self.deleted) = (object, deleted)
         (self.id, self.version) = (id, version)
     }
@@ -154,25 +206,31 @@ public struct CreateSkillVersionBody: Codable {
         case `default`
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateSkillVersionBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.files) else {
-            throw SdkValidationError(field: "files", code: "required", message: "Validation failed for 'files': value is required")
-        }
-        self.files = try container.sdkDecodeRequired(.files)
-        self.`default` = try container.sdkDecodeIfPresent(.`default`)
-            try validateItems("files", self.files, min: nil, max: 500)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateSkillVersionBody {
-    public init(files: [Data], `default`: Bool? = nil) throws {
-        (self.files, self.`default`) = (files, `default`)
-            try validateItems("files", self.files, min: nil, max: 500)
+public extension CreateSkillVersionBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.files) else {
+            throw SdkValidationError(
+                field: "files",
+                code: "required",
+                message: "Validation failed for 'files': value is required"
+            )
+        }
+        files = try container.sdkDecodeRequired(.files)
+        self.default = try container.sdkDecodeIfPresent(.default)
+        try validateItems("files", files, min: nil, max: 500)
+    }
+}
+
+public extension CreateSkillVersionBody {
+    init(files: [Data], default: Bool? = nil) throws {
+        (self.files, self.default) = (files, `default`)
+        try validateItems("files", self.files, min: nil, max: 500)
     }
 }
 
@@ -203,45 +261,83 @@ public struct SkillResource: Codable {
         case latestVersion = "latest_version"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SkillResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.defaultVersion) else {
-            throw SdkValidationError(field: "default_version", code: "required", message: "Validation failed for 'default_version': value is required")
-        }
-        guard container.contains(.latestVersion) else {
-            throw SdkValidationError(field: "latest_version", code: "required", message: "Validation failed for 'latest_version': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeRequired(.description)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.defaultVersion = try container.sdkDecodeRequired(.defaultVersion)
-        self.latestVersion = try container.sdkDecodeRequired(.latestVersion)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SkillResource {
-    public init(id: String, object: SkillResourceObject, name: String, description: String, createdAt: Int, defaultVersion: String, latestVersion: String) {
+public extension SkillResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.defaultVersion) else {
+            throw SdkValidationError(
+                field: "default_version",
+                code: "required",
+                message: "Validation failed for 'default_version': value is required"
+            )
+        }
+        guard container.contains(.latestVersion) else {
+            throw SdkValidationError(
+                field: "latest_version",
+                code: "required",
+                message: "Validation failed for 'latest_version': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeRequired(.description)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        defaultVersion = try container.sdkDecodeRequired(.defaultVersion)
+        latestVersion = try container.sdkDecodeRequired(.latestVersion)
+    }
+}
+
+public extension SkillResource {
+    init(
+        id: String,
+        object: SkillResourceObject,
+        name: String,
+        description: String,
+        createdAt: Int,
+        defaultVersion: String,
+        latestVersion: String
+    ) {
         (self.id, self.object) = (id, object)
         (self.name, self.description) = (name, description)
         (self.createdAt, self.defaultVersion) = (createdAt, defaultVersion)
@@ -276,45 +372,83 @@ public struct SkillVersionResource: Codable {
         case description
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SkillVersionResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.skillId) else {
-            throw SdkValidationError(field: "skill_id", code: "required", message: "Validation failed for 'skill_id': value is required")
-        }
-        guard container.contains(.version) else {
-            throw SdkValidationError(field: "version", code: "required", message: "Validation failed for 'version': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.skillId = try container.sdkDecodeRequired(.skillId)
-        self.version = try container.sdkDecodeRequired(.version)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeRequired(.description)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SkillVersionResource {
-    public init(object: SkillVersionResourceObject, id: String, skillId: String, version: String, createdAt: Int, name: String, description: String) {
+public extension SkillVersionResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.skillId) else {
+            throw SdkValidationError(
+                field: "skill_id",
+                code: "required",
+                message: "Validation failed for 'skill_id': value is required"
+            )
+        }
+        guard container.contains(.version) else {
+            throw SdkValidationError(
+                field: "version",
+                code: "required",
+                message: "Validation failed for 'version': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        skillId = try container.sdkDecodeRequired(.skillId)
+        version = try container.sdkDecodeRequired(.version)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeRequired(.description)
+    }
+}
+
+public extension SkillVersionResource {
+    init(
+        object: SkillVersionResourceObject,
+        id: String,
+        skillId: String,
+        version: String,
+        createdAt: Int,
+        name: String,
+        description: String
+    ) {
         (self.object, self.id) = (object, id)
         (self.skillId, self.version) = (skillId, version)
         (self.createdAt, self.name) = (createdAt, name)
@@ -337,29 +471,43 @@ public struct DeletedSkillResource: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DeletedSkillResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
-        self.id = try container.sdkDecodeRequired(.id)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DeletedSkillResource {
-    public init(object: DeletedSkillResourceObject, deleted: Bool, id: String) {
+public extension DeletedSkillResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+        id = try container.sdkDecodeRequired(.id)
+    }
+}
+
+public extension DeletedSkillResource {
+    init(object: DeletedSkillResourceObject, deleted: Bool, id: String) {
         (self.object, self.deleted) = (object, deleted)
         self.id = id
     }
@@ -386,37 +534,59 @@ public struct SkillListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SkillListResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.firstId) else {
-            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
-        }
-        guard container.contains(.lastId) else {
-            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.firstId = try container.sdkDecodeNullable(.firstId)
-        self.lastId = try container.sdkDecodeNullable(.lastId)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SkillListResource {
-    public init(object: SkillListResourceObject, data: [SkillResource], firstId: String?, lastId: String?, hasMore: Bool) {
+public extension SkillListResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.firstId) else {
+            throw SdkValidationError(
+                field: "first_id",
+                code: "required",
+                message: "Validation failed for 'first_id': value is required"
+            )
+        }
+        guard container.contains(.lastId) else {
+            throw SdkValidationError(
+                field: "last_id",
+                code: "required",
+                message: "Validation failed for 'last_id': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        firstId = try container.sdkDecodeNullable(.firstId)
+        lastId = try container.sdkDecodeNullable(.lastId)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+    }
+}
+
+public extension SkillListResource {
+    init(object: SkillListResourceObject, data: [SkillResource], firstId: String?, lastId: String?, hasMore: Bool) {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
@@ -432,21 +602,27 @@ public struct SetDefaultSkillVersionBody: Codable {
         case defaultVersion = "default_version"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SetDefaultSkillVersionBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.defaultVersion) else {
-            throw SdkValidationError(field: "default_version", code: "required", message: "Validation failed for 'default_version': value is required")
-        }
-        self.defaultVersion = try container.sdkDecodeRequired(.defaultVersion)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SetDefaultSkillVersionBody {
-    public init(defaultVersion: String) {
+public extension SetDefaultSkillVersionBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.defaultVersion) else {
+            throw SdkValidationError(
+                field: "default_version",
+                code: "required",
+                message: "Validation failed for 'default_version': value is required"
+            )
+        }
+        defaultVersion = try container.sdkDecodeRequired(.defaultVersion)
+    }
+}
+
+public extension SetDefaultSkillVersionBody {
+    init(defaultVersion: String) {
         self.defaultVersion = defaultVersion
     }
 }

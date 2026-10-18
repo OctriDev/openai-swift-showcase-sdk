@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsSession domain models
+/// AgentsSession domain models
 /// A Managed Agents session.
 public struct SessionResource: Codable {
     /// Custom string key-value pairs attached to the session.
@@ -49,36 +49,52 @@ public struct SessionResource: Codable {
         case spendControl = "spend_control"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SessionResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.metadata = try container.sdkDecodeRequired(.metadata)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.lastActiveAt = try container.sdkDecodeRequired(.lastActiveAt)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.requiredActions = try container.sdkDecodeRequired(.requiredActions)
-        self.error = try container.sdkDecodeNullable(.error)
-        self.agent = try container.sdkDecodeRequired(.agent)
-        self.environment = try container.sdkDecodeRequired(.environment)
-        self.vaultIds = try container.sdkDecodeRequired(.vaultIds)
-        self.usage = try container.sdkDecodeNullable(.usage)
-        self.spendControl = try container.sdkDecodeIfPresent(.spendControl)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateItems("required_actions", self.requiredActions, min: 0, max: 2000)
-        if let value = self.error {
-            try validateLength("error", value, min: 0, max: nil)
-        }
-            try validateItems("vault_ids", self.vaultIds, min: 0, max: 2000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SessionResource {
-    public init(metadata: [String: String], id: String, object: SessionResourceObject, createdAt: Int, lastActiveAt: Int, status: SessionStatusResource, requiredActions: [SessionRequiredActionResource], error: String?, agent: SessionAgentResource, environment: EnvironmentResource, vaultIds: [String], usage: TokenUsageResource?, spendControl: SessionSpendControlResource? = nil) throws {
+public extension SessionResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        metadata = try container.sdkDecodeRequired(.metadata)
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        lastActiveAt = try container.sdkDecodeRequired(.lastActiveAt)
+        status = try container.sdkDecodeRequired(.status)
+        requiredActions = try container.sdkDecodeRequired(.requiredActions)
+        error = try container.sdkDecodeNullable(.error)
+        agent = try container.sdkDecodeRequired(.agent)
+        environment = try container.sdkDecodeRequired(.environment)
+        vaultIds = try container.sdkDecodeRequired(.vaultIds)
+        usage = try container.sdkDecodeNullable(.usage)
+        spendControl = try container.sdkDecodeIfPresent(.spendControl)
+        try validateLength("id", id, min: 0, max: nil)
+        try validateItems("required_actions", requiredActions, min: 0, max: 2000)
+        if let value = error {
+            try validateLength("error", value, min: 0, max: nil)
+        }
+        try validateItems("vault_ids", vaultIds, min: 0, max: 2000)
+    }
+}
+
+public extension SessionResource {
+    init(
+        metadata: [String: String],
+        id: String,
+        object: SessionResourceObject,
+        createdAt: Int,
+        lastActiveAt: Int,
+        status: SessionStatusResource,
+        requiredActions: [SessionRequiredActionResource],
+        error: String?,
+        agent: SessionAgentResource,
+        environment: EnvironmentResource,
+        vaultIds: [String],
+        usage: TokenUsageResource?,
+        spendControl: SessionSpendControlResource? = nil
+    ) throws {
         (self.metadata, self.id) = (metadata, id)
         (self.object, self.createdAt) = (object, createdAt)
         (self.lastActiveAt, self.status) = (lastActiveAt, status)
@@ -86,12 +102,12 @@ extension SessionResource {
         (self.agent, self.environment) = (agent, environment)
         (self.vaultIds, self.usage) = (vaultIds, usage)
         self.spendControl = spendControl
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateItems("required_actions", self.requiredActions, min: 0, max: 2000)
+        try validateLength("id", self.id, min: 0, max: nil)
+        try validateItems("required_actions", self.requiredActions, min: 0, max: 2000)
         if let value = self.error {
             try validateLength("error", value, min: 0, max: nil)
         }
-            try validateItems("vault_ids", self.vaultIds, min: 0, max: 2000)
+        try validateItems("vault_ids", self.vaultIds, min: 0, max: 2000)
     }
 }
 
@@ -117,48 +133,76 @@ public struct SessionTraceListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension SessionTraceListResource {
-    public init(from decoder: Decoder) throws {
+public extension SessionTraceListResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
+            throw SdkValidationError(
+                field: "first_id",
+                code: "required",
+                message: "Validation failed for 'first_id': value is required"
+            )
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
+            throw SdkValidationError(
+                field: "last_id",
+                code: "required",
+                message: "Validation failed for 'last_id': value is required"
+            )
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
         }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.firstId = try container.sdkDecodeNullable(.firstId)
-        self.lastId = try container.sdkDecodeNullable(.lastId)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-            try validateItems("data", self.data, min: 0, max: 2000)
-        if let value = self.firstId {
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        firstId = try container.sdkDecodeNullable(.firstId)
+        lastId = try container.sdkDecodeNullable(.lastId)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        try validateItems("data", data, min: 0, max: 2000)
+        if let value = firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
-        if let value = self.lastId {
+        if let value = lastId {
             try validateLength("last_id", value, min: 0, max: nil)
         }
     }
 }
 
-extension SessionTraceListResource {
-    public init(object: SessionTraceListResourceObject, data: [SessionTurnTraceResource], firstId: String?, lastId: String?, hasMore: Bool) throws {
+public extension SessionTraceListResource {
+    init(
+        object: SessionTraceListResourceObject,
+        data: [SessionTurnTraceResource],
+        firstId: String?,
+        lastId: String?,
+        hasMore: Bool
+    ) throws {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
-            try validateItems("data", self.data, min: 0, max: 2000)
+        try validateItems("data", self.data, min: 0, max: 2000)
         if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
@@ -190,48 +234,76 @@ public struct SessionListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension SessionListResource {
-    public init(from decoder: Decoder) throws {
+public extension SessionListResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
+            throw SdkValidationError(
+                field: "first_id",
+                code: "required",
+                message: "Validation failed for 'first_id': value is required"
+            )
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
+            throw SdkValidationError(
+                field: "last_id",
+                code: "required",
+                message: "Validation failed for 'last_id': value is required"
+            )
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
         }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.firstId = try container.sdkDecodeNullable(.firstId)
-        self.lastId = try container.sdkDecodeNullable(.lastId)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-            try validateItems("data", self.data, min: 0, max: 2000)
-        if let value = self.firstId {
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        firstId = try container.sdkDecodeNullable(.firstId)
+        lastId = try container.sdkDecodeNullable(.lastId)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        try validateItems("data", data, min: 0, max: 2000)
+        if let value = firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
-        if let value = self.lastId {
+        if let value = lastId {
             try validateLength("last_id", value, min: 0, max: nil)
         }
     }
 }
 
-extension SessionListResource {
-    public init(object: SessionListResourceObject, data: [SessionResource], firstId: String?, lastId: String?, hasMore: Bool) throws {
+public extension SessionListResource {
+    init(
+        object: SessionListResourceObject,
+        data: [SessionResource],
+        firstId: String?,
+        lastId: String?,
+        hasMore: Bool
+    ) throws {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
-            try validateItems("data", self.data, min: 0, max: 2000)
+        try validateItems("data", self.data, min: 0, max: 2000)
         if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
@@ -259,48 +331,66 @@ public struct SessionErrorResource: Codable {
         case param
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension SessionErrorResource {
-    public init(from decoder: Decoder) throws {
+public extension SessionErrorResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
         }
         guard container.contains(.param) else {
-            throw SdkValidationError(field: "param", code: "required", message: "Validation failed for 'param': value is required")
+            throw SdkValidationError(
+                field: "param",
+                code: "required",
+                message: "Validation failed for 'param': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.code = try container.sdkDecodeNullable(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.param = try container.sdkDecodeNullable(.param)
-            try validateLength("type", self.type, min: 0, max: nil)
-        if let value = self.code {
+        type = try container.sdkDecodeRequired(.type)
+        code = try container.sdkDecodeNullable(.code)
+        message = try container.sdkDecodeRequired(.message)
+        param = try container.sdkDecodeNullable(.param)
+        try validateLength("type", type, min: 0, max: nil)
+        if let value = code {
             try validateLength("code", value, min: 0, max: nil)
         }
-            try validateLength("message", self.message, min: 0, max: nil)
-        if let value = self.param {
+        try validateLength("message", message, min: 0, max: nil)
+        if let value = param {
             try validateLength("param", value, min: 0, max: nil)
         }
     }
 }
 
-extension SessionErrorResource {
-    public init(type: String, code: String?, message: String, param: String?) throws {
+public extension SessionErrorResource {
+    init(type: String, code: String?, message: String, param: String?) throws {
         (self.type, self.code) = (type, code)
         (self.message, self.param) = (message, param)
-            try validateLength("type", self.type, min: 0, max: nil)
+        try validateLength("type", self.type, min: 0, max: nil)
         if let value = self.code {
             try validateLength("code", value, min: 0, max: nil)
         }
-            try validateLength("message", self.message, min: 0, max: nil)
+        try validateLength("message", self.message, min: 0, max: nil)
         if let value = self.param {
             try validateLength("param", value, min: 0, max: nil)
         }
@@ -329,48 +419,76 @@ public struct SessionItemListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension SessionItemListResource {
-    public init(from decoder: Decoder) throws {
+public extension SessionItemListResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
+            throw SdkValidationError(
+                field: "first_id",
+                code: "required",
+                message: "Validation failed for 'first_id': value is required"
+            )
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
+            throw SdkValidationError(
+                field: "last_id",
+                code: "required",
+                message: "Validation failed for 'last_id': value is required"
+            )
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
         }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.firstId = try container.sdkDecodeNullable(.firstId)
-        self.lastId = try container.sdkDecodeNullable(.lastId)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-            try validateItems("data", self.data, min: 0, max: 2000)
-        if let value = self.firstId {
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        firstId = try container.sdkDecodeNullable(.firstId)
+        lastId = try container.sdkDecodeNullable(.lastId)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        try validateItems("data", data, min: 0, max: 2000)
+        if let value = firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
-        if let value = self.lastId {
+        if let value = lastId {
             try validateLength("last_id", value, min: 0, max: nil)
         }
     }
 }
 
-extension SessionItemListResource {
-    public init(object: SessionItemListResourceObject, data: [SessionTurnItemResource], firstId: String?, lastId: String?, hasMore: Bool) throws {
+public extension SessionItemListResource {
+    init(
+        object: SessionItemListResourceObject,
+        data: [SessionTurnItemResource],
+        firstId: String?,
+        lastId: String?,
+        hasMore: Bool
+    ) throws {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
-            try validateItems("data", self.data, min: 0, max: 2000)
+        try validateItems("data", self.data, min: 0, max: 2000)
         if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
@@ -384,12 +502,15 @@ extension SessionItemListResource {
 public struct SessionTraceListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = SessionTraceListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -402,12 +523,15 @@ public struct SessionTraceListResourceObject: RawRepresentable, Hashable, Codabl
 public struct SessionItemListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = SessionItemListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -420,7 +544,10 @@ public struct SessionItemListResourceObject: RawRepresentable, Hashable, Codable
 public struct SessionStatusResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let idle = SessionStatusResource(rawValue: "idle")
     public static let inProgress = SessionStatusResource(rawValue: "in_progress")
     public static let requiresAction = SessionStatusResource(rawValue: "requires_action")
@@ -428,7 +555,7 @@ public struct SessionStatusResource: RawRepresentable, Hashable, Codable, Sendab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -441,12 +568,15 @@ public struct SessionStatusResource: RawRepresentable, Hashable, Codable, Sendab
 public struct SessionListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = SessionListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -459,12 +589,15 @@ public struct SessionListResourceObject: RawRepresentable, Hashable, Codable, Se
 public struct SessionResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let agentSession = SessionResourceObject(rawValue: "agent.session")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -477,13 +610,16 @@ public struct SessionResourceObject: RawRepresentable, Hashable, Codable, Sendab
 public struct SessionMessageRoleResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = SessionMessageRoleResource(rawValue: "user")
     public static let assistant = SessionMessageRoleResource(rawValue: "assistant")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

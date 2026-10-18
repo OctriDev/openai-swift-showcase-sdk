@@ -6,26 +6,71 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VectorStoresMethods {
-    /// Retrieves a file batch associated with a vector store. Use the batch status and file counts to check the progress and outcome of file processing.
+public extension VectorStoresMethods {
+    /// Retrieves a file batch associated with a vector store. Use the batch status and file counts to check the
+    /// progress and outcome of file processing.
     ///
     /// Retrieves a vector store file batch.
     ///
     /// - Parameters:
     /// - vectorStoreId: The ID of the vector store that the file batch belongs to.
     /// - batchId: The ID of the file batch being retrieved.
-    public static func getVectorStoreFileBatch(config: ClientConfig, vectorStoreId: String, batchId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileBatchObject {
-        return try (await sdkRequest("GET", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/file_batches/", sdkEncodePathSegment(sdkWireString(batchId))].joined(), config: config, decoder: .json, operationId: "getVectorStoreFileBatch", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func getVectorStoreFileBatch(
+        config: ClientConfig,
+        vectorStoreId: String,
+        batchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreFileBatchObject {
+        try await (sdkRequest(
+            "GET",
+            [
+                "/vector_stores/",
+                sdkEncodePathSegment(sdkWireString(vectorStoreId)),
+                "/file_batches/",
+                sdkEncodePathSegment(sdkWireString(batchId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getVectorStoreFileBatch",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Attempts to stop processing files in a vector store file batch as soon as possible. Check the returned batch status to see whether processing has been cancelled.
+    /// Attempts to stop processing files in a vector store file batch as soon as possible. Check the returned batch
+    /// status to see whether processing has been cancelled.
     ///
-    /// Cancel a vector store file batch. This attempts to cancel the processing of files in this batch as soon as possible.
+    /// Cancel a vector store file batch. This attempts to cancel the processing of files in this batch as soon as
+    /// possible.
     ///
     /// - Parameters:
     /// - vectorStoreId: The ID of the vector store that the file batch belongs to.
     /// - batchId: The ID of the file batch to cancel.
-    public static func cancelVectorStoreFileBatch(config: ClientConfig, vectorStoreId: String, batchId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileBatchObject {
-        return try (await sdkRequest("POST", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/file_batches/", sdkEncodePathSegment(sdkWireString(batchId)), "/cancel"].joined(), config: config, decoder: .json, operationId: "cancelVectorStoreFileBatch", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func cancelVectorStoreFileBatch(
+        config: ClientConfig,
+        vectorStoreId: String,
+        batchId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreFileBatchObject {
+        try await (sdkRequest(
+            "POST",
+            [
+                "/vector_stores/",
+                sdkEncodePathSegment(sdkWireString(vectorStoreId)),
+                "/file_batches/",
+                sdkEncodePathSegment(sdkWireString(batchId)),
+                "/cancel",
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "cancelVectorStoreFileBatch",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "409": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaClick domain models
+/// ResponsesBetaClick domain models
 /// A click action.
 public struct BetaClickParam: Codable {
     /// Specifies the event type. For a click action, this property is always `click`.
@@ -26,39 +26,57 @@ public struct BetaClickParam: Codable {
         case keys
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaClickParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.button) else {
-            throw SdkValidationError(field: "button", code: "required", message: "Validation failed for 'button': value is required")
-        }
-        guard container.contains(.x) else {
-            throw SdkValidationError(field: "x", code: "required", message: "Validation failed for 'x': value is required")
-        }
-        guard container.contains(.y) else {
-            throw SdkValidationError(field: "y", code: "required", message: "Validation failed for 'y': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.button = try container.sdkDecodeRequired(.button)
-        self.x = try container.sdkDecodeRequired(.x)
-        self.y = try container.sdkDecodeRequired(.y)
-        self.keys = try container.sdkDecodeIfPresent(.keys)
-            try sdkValidateRawEnum("type", self.type, BetaClickParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaClickParam {
-    public init(type: BetaClickParamType, button: BetaClickButtonType, x: Int, y: Int, keys: [String]? = nil) throws {
+public extension BetaClickParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.button) else {
+            throw SdkValidationError(
+                field: "button",
+                code: "required",
+                message: "Validation failed for 'button': value is required"
+            )
+        }
+        guard container.contains(.x) else {
+            throw SdkValidationError(
+                field: "x",
+                code: "required",
+                message: "Validation failed for 'x': value is required"
+            )
+        }
+        guard container.contains(.y) else {
+            throw SdkValidationError(
+                field: "y",
+                code: "required",
+                message: "Validation failed for 'y': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        button = try container.sdkDecodeRequired(.button)
+        x = try container.sdkDecodeRequired(.x)
+        y = try container.sdkDecodeRequired(.y)
+        keys = try container.sdkDecodeIfPresent(.keys)
+        try sdkValidateRawEnum("type", type, BetaClickParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaClickParam {
+    init(type: BetaClickParamType, button: BetaClickButtonType, x: Int, y: Int, keys: [String]? = nil) throws {
         (self.type, self.button) = (type, button)
         (self.x, self.y) = (x, y)
         self.keys = keys
-            try sdkValidateRawEnum("type", self.type, BetaClickParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaClickParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -84,7 +102,10 @@ public enum BetaClickParamType: String, CaseIterable, Codable {
 public struct BetaClickButtonType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let left = BetaClickButtonType(rawValue: "left")
     public static let right = BetaClickButtonType(rawValue: "right")
     public static let wheel = BetaClickButtonType(rawValue: "wheel")
@@ -93,7 +114,7 @@ public struct BetaClickButtonType: RawRepresentable, Hashable, Codable, Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

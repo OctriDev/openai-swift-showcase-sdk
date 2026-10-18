@@ -6,10 +6,13 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AssistantsMethods {
-    /// Submits tool outputs for a run that is waiting for tool results. Provide the outputs for all completed tool calls in one request so the run can continue. Set `stream` to receive run events as server-sent events.
+public extension AssistantsMethods {
+    /// Submits tool outputs for a run that is waiting for tool results. Provide the outputs for all completed tool
+    /// calls in one request so the run can continue. Set `stream` to receive run events as server-sent events.
     ///
-    /// When a run has the `status: "requires_action"` and `required_action.type` is `submit_tool_outputs`, this endpoint can be used to submit the outputs from the tool calls once they're all completed. All outputs must be submitted in a single request.
+    /// When a run has the `status: "requires_action"` and `required_action.type` is `submit_tool_outputs`, this
+    /// endpoint can be used to submit the outputs from the tool calls once they're all completed. All outputs must be
+    /// submitted in a single request.
     ///
     /// - Parameters:
     /// - threadId: The ID of the
@@ -18,13 +21,28 @@ extension AssistantsMethods {
     /// - runId: The ID of the run that requires the tool output submission.
     /// - toolOutputs: A list of tools for which the outputs are being submitted.
     /// - stream: Optional `boolean` value serialized in the `stream` wire field.
-    public static func submitAssistantsToolOutputsToRunStream(config: ClientConfig, threadId: String, runId: String, toolOutputs: [SubmitToolOutputsRunRequestToolOutputsItem], stream: Bool?, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<AssistantStreamEvent, Swift.Error> {
-        let requestBody = SubmitAssistantsToolOutputsToRunStreamStreamRequestBody(toolOutputs: toolOutputs, stream: stream)
-
+    static func submitAssistantsToolOutputsToRunStream(
+        config: ClientConfig,
+        threadId: String,
+        runId: String,
+        toolOutputs: [SubmitToolOutputsRunRequestToolOutputsItem],
+        stream: Bool?,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AsyncThrowingStream<AssistantStreamEvent, Swift.Error> {
+        let requestBody = SubmitAssistantsToolOutputsToRunStreamStreamRequestBody(
+            toolOutputs: toolOutputs,
+            stream: stream
+        )
 
         let upstream = try await sdkStream(
             "POST",
-            ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/runs/", sdkEncodePathSegment(sdkWireString(runId)), "/submit_tool_outputs"].joined(),
+            [
+                "/threads/",
+                sdkEncodePathSegment(sdkWireString(threadId)),
+                "/runs/",
+                sdkEncodePathSegment(sdkWireString(runId)),
+                "/submit_tool_outputs",
+            ].joined(),
             config: config,
             body: requestBody,
             operationId: "submitAssistantsToolOutputsToRunStream",
@@ -42,8 +60,11 @@ extension AssistantsMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(AssistantStreamEvent.self, from: Data(event.data.utf8)) }
-                        
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
+                            AssistantStreamEvent.self,
+                            from: Data(event.data.utf8)
+                        ) }
+
                         continuation.yield(payload)
                     }
                     continuation.finish()

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Alerts domain models
+/// Alerts domain models
 /// Typed representation of the `SafetyAlertResource` API schema.
 public struct SafetyAlertResource: Codable {
     /// Required `string` value serialized in the `id` wire field.
@@ -41,27 +41,40 @@ public struct SafetyAlertResource: Codable {
         case detailedExplanation = "detailed_explanation"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SafetyAlertResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.requestId = try container.sdkDecodeRequired(.requestId)
-        self.responseId = try container.sdkDecodeRequired(.responseId)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.requestPaused = try container.sdkDecodeRequired(.requestPaused)
-        self.errorType = try container.sdkDecodeRequired(.errorType)
-        self.reason = try container.sdkDecodeNullable(.reason)
-        self.detailedExplanation = try container.sdkDecodeIfPresent(.detailedExplanation)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SafetyAlertResource {
-    public init(id: String, object: SafetyAlertResourceObject, createdAt: Int, requestId: String, responseId: String, model: String, requestPaused: Bool, errorType: SafetyAlertErrorType, reason: String?, detailedExplanation: String? = nil) {
+public extension SafetyAlertResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        requestId = try container.sdkDecodeRequired(.requestId)
+        responseId = try container.sdkDecodeRequired(.responseId)
+        model = try container.sdkDecodeRequired(.model)
+        requestPaused = try container.sdkDecodeRequired(.requestPaused)
+        errorType = try container.sdkDecodeRequired(.errorType)
+        reason = try container.sdkDecodeNullable(.reason)
+        detailedExplanation = try container.sdkDecodeIfPresent(.detailedExplanation)
+    }
+}
+
+public extension SafetyAlertResource {
+    init(
+        id: String,
+        object: SafetyAlertResourceObject,
+        createdAt: Int,
+        requestId: String,
+        responseId: String,
+        model: String,
+        requestPaused: Bool,
+        errorType: SafetyAlertErrorType,
+        reason: String?,
+        detailedExplanation: String? = nil
+    ) {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.requestId) = (createdAt, requestId)
         (self.responseId, self.model) = (responseId, model)
@@ -74,12 +87,15 @@ extension SafetyAlertResource {
 public struct SafetyAlertResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let safetyAlert = SafetyAlertResourceObject(rawValue: "safety.alert")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -92,15 +108,21 @@ public struct SafetyAlertResourceObject: RawRepresentable, Hashable, Codable, Se
 public struct SafetyAlertErrorType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let potentiallyUnintendedDataTransfer = SafetyAlertErrorType(rawValue: "potentially_unintended_data_transfer")
-    public static let potentiallyUnintendedDataAccess = SafetyAlertErrorType(rawValue: "potentially_unintended_data_access")
-    public static let potentiallyUnintendedDestructiveActivity = SafetyAlertErrorType(rawValue: "potentially_unintended_destructive_activity")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let potentiallyUnintendedDataTransfer =
+        SafetyAlertErrorType(rawValue: "potentially_unintended_data_transfer")
+    public static let potentiallyUnintendedDataAccess =
+        SafetyAlertErrorType(rawValue: "potentially_unintended_data_access")
+    public static let potentiallyUnintendedDestructiveActivity =
+        SafetyAlertErrorType(rawValue: "potentially_unintended_destructive_activity")
     public static let other = SafetyAlertErrorType(rawValue: "other")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

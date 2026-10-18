@@ -18,25 +18,25 @@ struct CompactResponsesRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(self.input, forKey: SdkCodingKey("input"))
-        try keyedContainer.encodeIfPresent(self.previousResponseId, forKey: SdkCodingKey("previous_response_id"))
-        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(self.promptCacheKey, forKey: SdkCodingKey("prompt_cache_key"))
-        try keyedContainer.encodeIfPresent(self.promptCacheRetention, forKey: SdkCodingKey("prompt_cache_retention"))
-        try keyedContainer.encodeIfPresent(self.promptCacheOptions, forKey: SdkCodingKey("prompt_cache_options"))
-        try keyedContainer.encodeIfPresent(self.serviceTier, forKey: SdkCodingKey("service_tier"))
+        try keyedContainer.encode(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(input, forKey: SdkCodingKey("input"))
+        try keyedContainer.encodeIfPresent(previousResponseId, forKey: SdkCodingKey("previous_response_id"))
+        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(promptCacheKey, forKey: SdkCodingKey("prompt_cache_key"))
+        try keyedContainer.encodeIfPresent(promptCacheRetention, forKey: SdkCodingKey("prompt_cache_retention"))
+        try keyedContainer.encodeIfPresent(promptCacheOptions, forKey: SdkCodingKey("prompt_cache_options"))
+        try keyedContainer.encodeIfPresent(serviceTier, forKey: SdkCodingKey("service_tier"))
     }
 
     init(options: ResponsesMethods.CompactResponsesOptions) {
-        self.model = options.model
-        self.input = options.input
-        self.previousResponseId = options.previousResponseId
-        self.instructions = options.instructions
-        self.promptCacheKey = options.promptCacheKey
-        self.promptCacheRetention = options.promptCacheRetention
-        self.promptCacheOptions = options.promptCacheOptions
-        self.serviceTier = options.serviceTier
+        model = options.model
+        input = options.input
+        previousResponseId = options.previousResponseId
+        instructions = options.instructions
+        promptCacheKey = options.promptCacheKey
+        promptCacheRetention = options.promptCacheRetention
+        promptCacheOptions = options.promptCacheOptions
+        serviceTier = options.serviceTier
     }
 }
 
@@ -52,25 +52,25 @@ struct BetaResponsesCompactRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(self.input, forKey: SdkCodingKey("input"))
-        try keyedContainer.encodeIfPresent(self.previousResponseId, forKey: SdkCodingKey("previous_response_id"))
-        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(self.promptCacheKey, forKey: SdkCodingKey("prompt_cache_key"))
-        try keyedContainer.encodeIfPresent(self.promptCacheRetention, forKey: SdkCodingKey("prompt_cache_retention"))
-        try keyedContainer.encodeIfPresent(self.promptCacheOptions, forKey: SdkCodingKey("prompt_cache_options"))
-        try keyedContainer.encodeIfPresent(self.serviceTier, forKey: SdkCodingKey("service_tier"))
+        try keyedContainer.encode(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(input, forKey: SdkCodingKey("input"))
+        try keyedContainer.encodeIfPresent(previousResponseId, forKey: SdkCodingKey("previous_response_id"))
+        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(promptCacheKey, forKey: SdkCodingKey("prompt_cache_key"))
+        try keyedContainer.encodeIfPresent(promptCacheRetention, forKey: SdkCodingKey("prompt_cache_retention"))
+        try keyedContainer.encodeIfPresent(promptCacheOptions, forKey: SdkCodingKey("prompt_cache_options"))
+        try keyedContainer.encodeIfPresent(serviceTier, forKey: SdkCodingKey("service_tier"))
     }
 
     init(options: ResponsesMethods.BetaResponsesCompactOptions) {
-        self.model = options.model
-        self.input = options.input
-        self.previousResponseId = options.previousResponseId
-        self.instructions = options.instructions
-        self.promptCacheKey = options.promptCacheKey
-        self.promptCacheRetention = options.promptCacheRetention
-        self.promptCacheOptions = options.promptCacheOptions
-        self.serviceTier = options.serviceTier
+        model = options.model
+        input = options.input
+        previousResponseId = options.previousResponseId
+        instructions = options.instructions
+        promptCacheKey = options.promptCacheKey
+        promptCacheRetention = options.promptCacheRetention
+        promptCacheOptions = options.promptCacheOptions
+        serviceTier = options.serviceTier
     }
 }
 
@@ -90,33 +90,33 @@ struct BetaResponsesCountInputTokensRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(self.input, forKey: SdkCodingKey("input"))
-        try keyedContainer.encodeIfPresent(self.previousResponseId, forKey: SdkCodingKey("previous_response_id"))
-        try keyedContainer.encodeIfPresent(self.tools, forKey: SdkCodingKey("tools"))
-        try keyedContainer.encodeIfPresent(self.text, forKey: SdkCodingKey("text"))
-        try keyedContainer.encodeIfPresent(self.reasoning, forKey: SdkCodingKey("reasoning"))
-        try keyedContainer.encodeIfPresent(self.truncation, forKey: SdkCodingKey("truncation"))
-        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(self.personality, forKey: SdkCodingKey("personality"))
-        try keyedContainer.encodeIfPresent(self.conversation, forKey: SdkCodingKey("conversation"))
-        try keyedContainer.encodeIfPresent(self.toolChoice, forKey: SdkCodingKey("tool_choice"))
-        try keyedContainer.encodeIfPresent(self.parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
+        try keyedContainer.encodeIfPresent(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(input, forKey: SdkCodingKey("input"))
+        try keyedContainer.encodeIfPresent(previousResponseId, forKey: SdkCodingKey("previous_response_id"))
+        try keyedContainer.encodeIfPresent(tools, forKey: SdkCodingKey("tools"))
+        try keyedContainer.encodeIfPresent(text, forKey: SdkCodingKey("text"))
+        try keyedContainer.encodeIfPresent(reasoning, forKey: SdkCodingKey("reasoning"))
+        try keyedContainer.encodeIfPresent(truncation, forKey: SdkCodingKey("truncation"))
+        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(personality, forKey: SdkCodingKey("personality"))
+        try keyedContainer.encodeIfPresent(conversation, forKey: SdkCodingKey("conversation"))
+        try keyedContainer.encodeIfPresent(toolChoice, forKey: SdkCodingKey("tool_choice"))
+        try keyedContainer.encodeIfPresent(parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
     }
 
     init(options: ResponsesMethods.BetaResponsesCountInputTokensOptions) {
-        self.model = options.model
-        self.input = options.input
-        self.previousResponseId = options.previousResponseId
-        self.tools = options.tools
-        self.text = options.text
-        self.reasoning = options.reasoning
-        self.truncation = options.truncation
-        self.instructions = options.instructions
-        self.personality = options.personality
-        self.conversation = options.conversation
-        self.toolChoice = options.toolChoice
-        self.parallelToolCalls = options.parallelToolCalls
+        model = options.model
+        input = options.input
+        previousResponseId = options.previousResponseId
+        tools = options.tools
+        text = options.text
+        reasoning = options.reasoning
+        truncation = options.truncation
+        instructions = options.instructions
+        personality = options.personality
+        conversation = options.conversation
+        toolChoice = options.toolChoice
+        parallelToolCalls = options.parallelToolCalls
     }
 }
 
@@ -129,11 +129,11 @@ struct CreateUploadRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.filename, forKey: SdkCodingKey("filename"))
-        try keyedContainer.encode(self.purpose, forKey: SdkCodingKey("purpose"))
-        try keyedContainer.encode(self.bytes, forKey: SdkCodingKey("bytes"))
-        try keyedContainer.encode(self.mimeType, forKey: SdkCodingKey("mime_type"))
-        try keyedContainer.encodeIfPresent(self.expiresAfter, forKey: SdkCodingKey("expires_after"))
+        try keyedContainer.encode(filename, forKey: SdkCodingKey("filename"))
+        try keyedContainer.encode(purpose, forKey: SdkCodingKey("purpose"))
+        try keyedContainer.encode(bytes, forKey: SdkCodingKey("bytes"))
+        try keyedContainer.encode(mimeType, forKey: SdkCodingKey("mime_type"))
+        try keyedContainer.encodeIfPresent(expiresAfter, forKey: SdkCodingKey("expires_after"))
     }
 }
 
@@ -143,8 +143,8 @@ struct CompleteUploadRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.partIds, forKey: SdkCodingKey("part_ids"))
-        try keyedContainer.encodeIfPresent(self.md5, forKey: SdkCodingKey("md5"))
+        try keyedContainer.encode(partIds, forKey: SdkCodingKey("part_ids"))
+        try keyedContainer.encodeIfPresent(md5, forKey: SdkCodingKey("md5"))
     }
 }
 
@@ -158,12 +158,12 @@ struct CreateVectorStoreRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.fileIds, forKey: SdkCodingKey("file_ids"))
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.description, forKey: SdkCodingKey("description"))
-        try keyedContainer.encodeIfPresent(self.expiresAfter, forKey: SdkCodingKey("expires_after"))
-        try keyedContainer.encodeIfPresent(self.chunkingStrategy, forKey: SdkCodingKey("chunking_strategy"))
-        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(fileIds, forKey: SdkCodingKey("file_ids"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(description, forKey: SdkCodingKey("description"))
+        try keyedContainer.encodeIfPresent(expiresAfter, forKey: SdkCodingKey("expires_after"))
+        try keyedContainer.encodeIfPresent(chunkingStrategy, forKey: SdkCodingKey("chunking_strategy"))
+        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -174,9 +174,9 @@ struct ModifyVectorStoreRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.expiresAfter, forKey: SdkCodingKey("expires_after"))
-        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(expiresAfter, forKey: SdkCodingKey("expires_after"))
+        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -188,10 +188,10 @@ struct CreateVectorStoreFileBatchRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.fileIds, forKey: SdkCodingKey("file_ids"))
-        try keyedContainer.encodeIfPresent(self.files, forKey: SdkCodingKey("files"))
-        try keyedContainer.encodeIfPresent(self.chunkingStrategy, forKey: SdkCodingKey("chunking_strategy"))
-        try keyedContainer.encodeIfPresent(self.attributes, forKey: SdkCodingKey("attributes"))
+        try keyedContainer.encodeIfPresent(fileIds, forKey: SdkCodingKey("file_ids"))
+        try keyedContainer.encodeIfPresent(files, forKey: SdkCodingKey("files"))
+        try keyedContainer.encodeIfPresent(chunkingStrategy, forKey: SdkCodingKey("chunking_strategy"))
+        try keyedContainer.encodeIfPresent(attributes, forKey: SdkCodingKey("attributes"))
     }
 }
 
@@ -202,9 +202,9 @@ struct CreateVectorStoreFileRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.fileId, forKey: SdkCodingKey("file_id"))
-        try keyedContainer.encodeIfPresent(self.chunkingStrategy, forKey: SdkCodingKey("chunking_strategy"))
-        try keyedContainer.encodeIfPresent(self.attributes, forKey: SdkCodingKey("attributes"))
+        try keyedContainer.encode(fileId, forKey: SdkCodingKey("file_id"))
+        try keyedContainer.encodeIfPresent(chunkingStrategy, forKey: SdkCodingKey("chunking_strategy"))
+        try keyedContainer.encodeIfPresent(attributes, forKey: SdkCodingKey("attributes"))
     }
 }
 
@@ -213,6 +213,6 @@ struct UpdateVectorStoreFileAttributesRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.attributes, forKey: SdkCodingKey("attributes"))
+        try keyedContainer.encode(attributes, forKey: SdkCodingKey("attributes"))
     }
 }

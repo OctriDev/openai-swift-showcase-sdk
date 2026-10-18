@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentSession domain models
+/// AgentSession domain models
 /// Typed representation of the `AgentSessionEnvironmentPayloadResource` API schema.
 public struct AgentSessionEnvironmentPayloadResource: Codable {
     /// The ID of the session.
@@ -19,35 +19,45 @@ public struct AgentSessionEnvironmentPayloadResource: Codable {
         case environmentId = "environment_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension AgentSessionEnvironmentPayloadResource {
-    public init(from decoder: Decoder) throws {
+public extension AgentSessionEnvironmentPayloadResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
         }
         guard container.contains(.environmentType) else {
-            throw SdkValidationError(field: "environment_type", code: "required", message: "Validation failed for 'environment_type': value is required")
+            throw SdkValidationError(
+                field: "environment_type",
+                code: "required",
+                message: "Validation failed for 'environment_type': value is required"
+            )
         }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.environmentType = try container.sdkDecodeRequired(.environmentType)
-        self.environmentId = try container.sdkDecodeIfPresent(.environmentId)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("environment_type", self.environmentType, min: 0, max: nil)
-        if let value = self.environmentId {
+        id = try container.sdkDecodeRequired(.id)
+        environmentType = try container.sdkDecodeRequired(.environmentType)
+        environmentId = try container.sdkDecodeIfPresent(.environmentId)
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("environment_type", environmentType, min: 0, max: nil)
+        if let value = environmentId {
             try validateLength("environment_id", value, min: 0, max: nil)
         }
     }
 }
 
-extension AgentSessionEnvironmentPayloadResource {
-    public init(id: String, environmentType: String, environmentId: String? = nil) throws {
+public extension AgentSessionEnvironmentPayloadResource {
+    init(id: String, environmentType: String, environmentId: String? = nil) throws {
         (self.id, self.environmentType) = (id, environmentType)
         self.environmentId = environmentId
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("environment_type", self.environmentType, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("environment_type", self.environmentType, min: 0, max: nil)
         if let value = self.environmentId {
             try validateLength("environment_id", value, min: 0, max: nil)
         }
@@ -66,28 +76,38 @@ public struct AgentSessionActionRequiredPayloadResource: Codable {
         case requiredAction = "required_action"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AgentSessionActionRequiredPayloadResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.requiredAction) else {
-            throw SdkValidationError(field: "required_action", code: "required", message: "Validation failed for 'required_action': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.requiredAction = try container.sdkDecodeRequired(.requiredAction)
-            try validateLength("id", self.id, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AgentSessionActionRequiredPayloadResource {
-    public init(id: String, requiredAction: AgentSessionRequiredActionPayloadResource) throws {
+public extension AgentSessionActionRequiredPayloadResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.requiredAction) else {
+            throw SdkValidationError(
+                field: "required_action",
+                code: "required",
+                message: "Validation failed for 'required_action': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        requiredAction = try container.sdkDecodeRequired(.requiredAction)
+        try validateLength("id", id, min: 0, max: nil)
+    }
+}
+
+public extension AgentSessionActionRequiredPayloadResource {
+    init(id: String, requiredAction: AgentSessionRequiredActionPayloadResource) throws {
         (self.id, self.requiredAction) = (id, requiredAction)
-            try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
     }
 }
 
@@ -109,36 +129,51 @@ public struct AgentSessionCreatedPayloadResource: Codable {
         case connect
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension AgentSessionCreatedPayloadResource {
-    public init(from decoder: Decoder) throws {
+public extension AgentSessionCreatedPayloadResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
         }
         guard container.contains(.environmentType) else {
-            throw SdkValidationError(field: "environment_type", code: "required", message: "Validation failed for 'environment_type': value is required")
+            throw SdkValidationError(
+                field: "environment_type",
+                code: "required",
+                message: "Validation failed for 'environment_type': value is required"
+            )
         }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.environmentType = try container.sdkDecodeRequired(.environmentType)
-        self.environmentId = try container.sdkDecodeIfPresent(.environmentId)
-        self.connect = try container.sdkDecodeIfPresent(.connect)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("environment_type", self.environmentType, min: 0, max: nil)
-        if let value = self.environmentId {
+        id = try container.sdkDecodeRequired(.id)
+        environmentType = try container.sdkDecodeRequired(.environmentType)
+        environmentId = try container.sdkDecodeIfPresent(.environmentId)
+        connect = try container.sdkDecodeIfPresent(.connect)
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("environment_type", environmentType, min: 0, max: nil)
+        if let value = environmentId {
             try validateLength("environment_id", value, min: 0, max: nil)
         }
     }
 }
 
-extension AgentSessionCreatedPayloadResource {
-    public init(id: String, environmentType: String, environmentId: String? = nil, connect: AgentSessionConnectPayloadResource? = nil) throws {
+public extension AgentSessionCreatedPayloadResource {
+    init(
+        id: String,
+        environmentType: String,
+        environmentId: String? = nil,
+        connect: AgentSessionConnectPayloadResource? = nil
+    ) throws {
         (self.id, self.environmentType) = (id, environmentType)
         (self.environmentId, self.connect) = (environmentId, connect)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("environment_type", self.environmentType, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("environment_type", self.environmentType, min: 0, max: nil)
         if let value = self.environmentId {
             try validateLength("environment_id", value, min: 0, max: nil)
         }
@@ -154,24 +189,30 @@ public struct AgentSessionConnectPayloadResource: Codable {
         case remoteUrl = "remote_url"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AgentSessionConnectPayloadResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.remoteUrl) else {
-            throw SdkValidationError(field: "remote_url", code: "required", message: "Validation failed for 'remote_url': value is required")
-        }
-        self.remoteUrl = try container.sdkDecodeRequired(.remoteUrl)
-            try validateLength("remote_url", self.remoteUrl, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AgentSessionConnectPayloadResource {
-    public init(remoteUrl: String) throws {
+public extension AgentSessionConnectPayloadResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.remoteUrl) else {
+            throw SdkValidationError(
+                field: "remote_url",
+                code: "required",
+                message: "Validation failed for 'remote_url': value is required"
+            )
+        }
+        remoteUrl = try container.sdkDecodeRequired(.remoteUrl)
+        try validateLength("remote_url", remoteUrl, min: 0, max: nil)
+    }
+}
+
+public extension AgentSessionConnectPayloadResource {
+    init(remoteUrl: String) throws {
         self.remoteUrl = remoteUrl
-            try validateLength("remote_url", self.remoteUrl, min: 0, max: nil)
+        try validateLength("remote_url", self.remoteUrl, min: 0, max: nil)
     }
 }
 
@@ -184,37 +225,48 @@ public struct AgentSessionRequiredActionPayloadResource: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AgentSessionRequiredActionPayloadResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AgentSessionRequiredActionPayloadResource {
-    public init(type: AgentSessionRequiredActionTypeResource) {
+public extension AgentSessionRequiredActionPayloadResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+    }
+}
+
+public extension AgentSessionRequiredActionPayloadResource {
+    init(type: AgentSessionRequiredActionTypeResource) {
         self.type = type
     }
 }
 
 /// Typed representation of the `AgentSessionRequiredActionTypeResource` API schema.
-public struct AgentSessionRequiredActionTypeResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct AgentSessionRequiredActionTypeResource: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let computerUseApprovalRequest = AgentSessionRequiredActionTypeResource(rawValue: "computer_use_approval_request")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let computerUseApprovalRequest =
+        AgentSessionRequiredActionTypeResource(rawValue: "computer_use_approval_request")
     public static let functionCall = AgentSessionRequiredActionTypeResource(rawValue: "function_call")
     public static let environmentConnection = AgentSessionRequiredActionTypeResource(rawValue: "environment_connection")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

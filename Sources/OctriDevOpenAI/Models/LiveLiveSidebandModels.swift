@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveSideband domain models
+/// LiveLiveSideband domain models
 public indirect enum LiveSidebandClientEvent {
     case liveSessionUpdateParam(LiveSessionUpdateParam)
     case liveInputAudioMuteParam(LiveInputAudioMuteParam)
@@ -23,7 +23,6 @@ public indirect enum LiveSidebandClientEvent {
 }
 
 extension LiveSidebandClientEvent: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -31,13 +30,19 @@ extension LiveSidebandClientEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -48,21 +53,21 @@ extension LiveSidebandClientEvent: Codable {
 extension LiveSidebandClientEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "session.update": return .liveSessionUpdateParam(try LiveSessionUpdateParam(from: decoder))
-        case "session.input_audio.mute": return .liveInputAudioMuteParam(try LiveInputAudioMuteParam(from: decoder))
-        case "session.input_audio.unmute": return .liveInputAudioUnmuteParam(try LiveInputAudioUnmuteParam(from: decoder))
+        case "session.update": try .liveSessionUpdateParam(LiveSessionUpdateParam(from: decoder))
+        case "session.input_audio.mute": try .liveInputAudioMuteParam(LiveInputAudioMuteParam(from: decoder))
+        case "session.input_audio.unmute": try .liveInputAudioUnmuteParam(LiveInputAudioUnmuteParam(from: decoder))
         case "session.output_audio.fixture.play":
-        return .liveOutputAudioFixturePlayParam(try LiveOutputAudioFixturePlayParam(from: decoder))
-        case "session.instructions.append": return .liveInstructionsAppendParam(try LiveInstructionsAppendParam(from: decoder))
-        case "session.thinking.append": return .liveThinkingAppendParam(try LiveThinkingAppendParam(from: decoder))
-        case "session.commentary.append": return .liveCommentaryAppendParam(try LiveCommentaryAppendParam(from: decoder))
-        case "decision.create": return .liveDecisionCreateParam(try LiveDecisionCreateParam(from: decoder))
-        case "decision.item.create": return .liveDecisionItemCreateParam(try LiveDecisionItemCreateParam(from: decoder))
-        case "decision.item.delete": return .liveDecisionItemDeleteParam(try LiveDecisionItemDeleteParam(from: decoder))
-        case "response.item.create": return .liveResponseItemCreateParam(try LiveResponseItemCreateParam(from: decoder))
-        case "response.create": return .liveResponseCreateParam(try LiveResponseCreateParam(from: decoder))
-        case "session.close": return .liveSessionCloseParam(try LiveSessionCloseParam(from: decoder))
-        default: return nil
+            try .liveOutputAudioFixturePlayParam(LiveOutputAudioFixturePlayParam(from: decoder))
+        case "session.instructions.append": try .liveInstructionsAppendParam(LiveInstructionsAppendParam(from: decoder))
+        case "session.thinking.append": try .liveThinkingAppendParam(LiveThinkingAppendParam(from: decoder))
+        case "session.commentary.append": try .liveCommentaryAppendParam(LiveCommentaryAppendParam(from: decoder))
+        case "decision.create": try .liveDecisionCreateParam(LiveDecisionCreateParam(from: decoder))
+        case "decision.item.create": try .liveDecisionItemCreateParam(LiveDecisionItemCreateParam(from: decoder))
+        case "decision.item.delete": try .liveDecisionItemDeleteParam(LiveDecisionItemDeleteParam(from: decoder))
+        case "response.item.create": try .liveResponseItemCreateParam(LiveResponseItemCreateParam(from: decoder))
+        case "response.create": try .liveResponseCreateParam(LiveResponseCreateParam(from: decoder))
+        case "session.close": try .liveSessionCloseParam(LiveSessionCloseParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -127,7 +132,6 @@ public indirect enum LiveSidebandServerEvent {
 }
 
 extension LiveSidebandServerEvent: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -135,14 +139,22 @@ extension LiveSidebandServerEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
-        if let value = try Self.decodeGroup2(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
+        if let value = try Self.decodeGroup2(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -153,27 +165,31 @@ extension LiveSidebandServerEvent: Codable {
 extension LiveSidebandServerEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "transport.ringing": return .liveTransportRinging(try LiveTransportRinging(from: decoder))
-        case "transport.answered": return .liveTransportAnswered(try LiveTransportAnswered(from: decoder))
-        case "transport.failed": return .liveTransportFailed(try LiveTransportFailed(from: decoder))
-        case "session.started": return .liveSessionStarted(try LiveSessionStarted(from: decoder))
-        case "session.updated": return .liveSessionUpdated(try LiveSessionUpdated(from: decoder))
-        case "session.input_audio.muted": return .liveInputAudioMuted(try LiveInputAudioMuted(from: decoder))
-        case "session.input_audio.unmuted": return .liveInputAudioUnmuted(try LiveInputAudioUnmuted(from: decoder))
-        case "session.output_audio.fixture.playing": return .liveOutputAudioFixturePlaying(try LiveOutputAudioFixturePlaying(from: decoder))
-        case "session.output_audio.fixture.played": return .liveOutputAudioFixturePlayed(try LiveOutputAudioFixturePlayed(from: decoder))
-        case "session.instructions.appended": return .liveInstructionsAppended(try LiveInstructionsAppended(from: decoder))
-        case "session.thinking.appended": return .liveThinkingAppended(try LiveThinkingAppended(from: decoder))
-        case "session.commentary.appended": return .liveCommentaryAppended(try LiveCommentaryAppended(from: decoder))
-        case "session.input_transcript.delta": return .liveInputTranscriptDelta(try LiveInputTranscriptDelta(from: decoder))
-        case "session.output_transcript.delta": return .liveOutputTranscriptDelta(try LiveOutputTranscriptDelta(from: decoder))
-        case "session.delegation.created": return .liveDelegationCreated(try LiveDelegationCreated(from: decoder))
-        case "decision.event": return .liveDecisionEvent(try LiveDecisionEvent(from: decoder))
-        case "decision.item.created": return .liveDecisionItemCreated(try LiveDecisionItemCreated(from: decoder))
-        case "decision.item.deleted": return .liveDecisionItemDeleted(try LiveDecisionItemDeleted(from: decoder))
-        case "response.event": return .liveResponseEvent(try LiveResponseEvent(from: decoder))
-        case "session.usage.updated": return .liveSessionUsageUpdated(try LiveSessionUsageUpdated(from: decoder))
-        default: return nil
+        case "transport.ringing": try .liveTransportRinging(LiveTransportRinging(from: decoder))
+        case "transport.answered": try .liveTransportAnswered(LiveTransportAnswered(from: decoder))
+        case "transport.failed": try .liveTransportFailed(LiveTransportFailed(from: decoder))
+        case "session.started": try .liveSessionStarted(LiveSessionStarted(from: decoder))
+        case "session.updated": try .liveSessionUpdated(LiveSessionUpdated(from: decoder))
+        case "session.input_audio.muted": try .liveInputAudioMuted(LiveInputAudioMuted(from: decoder))
+        case "session.input_audio.unmuted": try .liveInputAudioUnmuted(LiveInputAudioUnmuted(from: decoder))
+        case "session.output_audio.fixture.playing": try .liveOutputAudioFixturePlaying(
+                LiveOutputAudioFixturePlaying(from: decoder)
+            )
+        case "session.output_audio.fixture.played": try .liveOutputAudioFixturePlayed(
+                LiveOutputAudioFixturePlayed(from: decoder)
+            )
+        case "session.instructions.appended": try .liveInstructionsAppended(LiveInstructionsAppended(from: decoder))
+        case "session.thinking.appended": try .liveThinkingAppended(LiveThinkingAppended(from: decoder))
+        case "session.commentary.appended": try .liveCommentaryAppended(LiveCommentaryAppended(from: decoder))
+        case "session.input_transcript.delta": try .liveInputTranscriptDelta(LiveInputTranscriptDelta(from: decoder))
+        case "session.output_transcript.delta": try .liveOutputTranscriptDelta(LiveOutputTranscriptDelta(from: decoder))
+        case "session.delegation.created": try .liveDelegationCreated(LiveDelegationCreated(from: decoder))
+        case "decision.event": try .liveDecisionEvent(LiveDecisionEvent(from: decoder))
+        case "decision.item.created": try .liveDecisionItemCreated(LiveDecisionItemCreated(from: decoder))
+        case "decision.item.deleted": try .liveDecisionItemDeleted(LiveDecisionItemDeleted(from: decoder))
+        case "response.event": try .liveResponseEvent(LiveResponseEvent(from: decoder))
+        case "session.usage.updated": try .liveSessionUsageUpdated(LiveSessionUsageUpdated(from: decoder))
+        default: nil
         }
     }
 }
@@ -181,10 +197,10 @@ extension LiveSidebandServerEvent {
 extension LiveSidebandServerEvent {
     static func decodeGroup2(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "session.closed": return .liveSessionClosed(try LiveSessionClosed(from: decoder))
-        case "error": return .liveErrorEvent(try LiveErrorEvent(from: decoder))
-        case "info": return .liveInfoEvent(try LiveInfoEvent(from: decoder))
-        default: return nil
+        case "session.closed": try .liveSessionClosed(LiveSessionClosed(from: decoder))
+        case "error": try .liveErrorEvent(LiveErrorEvent(from: decoder))
+        case "info": try .liveInfoEvent(LiveInfoEvent(from: decoder))
+        default: nil
         }
     }
 }
@@ -241,19 +257,19 @@ public struct LiveSidebandConnectParams: Codable {
     }
 
     init() {
-        self.gracefulClose = nil
+        gracefulClose = nil
     }
 }
 
-extension LiveSidebandConnectParams {
-    public init(from decoder: Decoder) throws {
+public extension LiveSidebandConnectParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.gracefulClose = try container.sdkDecodeIfPresent(.gracefulClose)
+        gracefulClose = try container.sdkDecodeIfPresent(.gracefulClose)
     }
 }
 
-extension LiveSidebandConnectParams {
-    public init(gracefulClose: Bool? = nil) {
+public extension LiveSidebandConnectParams {
+    init(gracefulClose: Bool? = nil) {
         self.init()
         self.gracefulClose = gracefulClose
     }
@@ -268,21 +284,27 @@ public struct LiveSidebandPathParams: Codable {
         case sessionId = "session_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveSidebandPathParams {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.sessionId) else {
-            throw SdkValidationError(field: "session_id", code: "required", message: "Validation failed for 'session_id': value is required")
-        }
-        self.sessionId = try container.sdkDecodeRequired(.sessionId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveSidebandPathParams {
-    public init(sessionId: String) {
+public extension LiveSidebandPathParams {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.sessionId) else {
+            throw SdkValidationError(
+                field: "session_id",
+                code: "required",
+                message: "Validation failed for 'session_id': value is required"
+            )
+        }
+        sessionId = try container.sdkDecodeRequired(.sessionId)
+    }
+}
+
+public extension LiveSidebandPathParams {
+    init(sessionId: String) {
         self.sessionId = sessionId
     }
 }
