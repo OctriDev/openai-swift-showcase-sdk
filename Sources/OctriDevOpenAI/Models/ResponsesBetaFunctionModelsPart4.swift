@@ -3,62 +3,44 @@
 
 import Foundation
 
-/// ResponsesBetaFunction domain models
-public extension BetaFunctionToolParam {
-    init(from decoder: Decoder) throws {
+// ResponsesBetaFunction domain models
+extension BetaFunctionToolParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        type = try container.sdkDecodeRequired(.type)
-        description = try container.sdkDecodeIfPresent(.description)
-        parameters = try container.sdkDecodeIfPresent(.parameters)
-        strict = try container.sdkDecodeIfPresent(.strict)
-        async = try container.sdkDecodeIfPresent(.async)
-        outputSchema = try container.sdkDecodeIfPresent(.outputSchema)
-        deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
-        allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
-        try validateLength("name", name, min: 1, max: 128)
-        try sdkValidatePattern("name", name, sdkPatterna828669d9fe5)
-        try sdkValidateRawEnum("type", type, BetaFunctionToolParamType.allCases.map(\.rawValue))
-        if let value = allowedCallers {
+        self.name = try container.sdkDecodeRequired(.name)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.description = try container.sdkDecodeIfPresent(.description)
+        self.parameters = try container.sdkDecodeIfPresent(.parameters)
+        self.strict = try container.sdkDecodeIfPresent(.strict)
+        self.async = try container.sdkDecodeIfPresent(.async)
+        self.outputSchema = try container.sdkDecodeIfPresent(.outputSchema)
+        self.deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
+        self.allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
+            try validateLength("name", self.name, min: 1, max: 128)
+            try sdkValidatePattern("name", self.name, sdkPatterna828669d9fe5)
+            try sdkValidateRawEnum("type", self.type, BetaFunctionToolParamType.allCases.map(\.rawValue))
+        if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
     }
 }
 
-public extension BetaFunctionToolParam {
-    init(
-        name: String,
-        type: BetaFunctionToolParamType,
-        description: String? = nil,
-        parameters: BetaEmptyModelParam? = nil,
-        strict: Bool? = nil,
-        async: Bool? = nil,
-        outputSchema: [String: JSONValue]? = nil,
-        deferLoading: Bool? = nil,
-        allowedCallers: [BetaCallableToolAllowedCaller]? = nil
-    ) throws {
+extension BetaFunctionToolParam {
+    public init(name: String, type: BetaFunctionToolParamType, description: String? = nil, parameters: BetaEmptyModelParam? = nil, strict: Bool? = nil, async: Bool? = nil, outputSchema: [String: JSONValue]? = nil, deferLoading: Bool? = nil, allowedCallers: [BetaCallableToolAllowedCaller]? = nil) throws {
         (self.name, self.type) = (name, type)
         (self.description, self.parameters) = (description, parameters)
         (self.strict, self.async) = (strict, async)
         (self.outputSchema, self.deferLoading) = (outputSchema, deferLoading)
         self.allowedCallers = allowedCallers
-        try validateLength("name", self.name, min: 1, max: 128)
-        try sdkValidatePattern("name", self.name, sdkPatterna828669d9fe5)
-        try sdkValidateRawEnum("type", self.type, BetaFunctionToolParamType.allCases.map(\.rawValue))
+            try validateLength("name", self.name, min: 1, max: 128)
+            try sdkValidatePattern("name", self.name, sdkPatterna828669d9fe5)
+            try sdkValidateRawEnum("type", self.type, BetaFunctionToolParamType.allCases.map(\.rawValue))
         if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
@@ -81,36 +63,26 @@ public struct BetaFunctionToolCallOutputResourceVariant1: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaFunctionToolCallOutputResourceVariant1 {
-    init(from decoder: Decoder) throws {
+extension BetaFunctionToolCallOutputResourceVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        status = try container.sdkDecodeRequired(.status)
-        createdBy = try container.sdkDecodeIfPresent(.createdBy)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
     }
 }
 
-public extension BetaFunctionToolCallOutputResourceVariant1 {
-    init(id: String, status: BetaFunctionCallOutputStatusEnum, createdBy: String? = nil) {
+extension BetaFunctionToolCallOutputResourceVariant1 {
+    public init(id: String, status: BetaFunctionCallOutputStatusEnum, createdBy: String? = nil) {
         (self.id, self.status) = (id, status)
         self.createdBy = createdBy
     }
@@ -128,38 +100,28 @@ public struct BetaFunctionShellCallOutputExitOutcome: Codable {
         case exitCode = "exit_code"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaFunctionShellCallOutputExitOutcome {
-    init(from decoder: Decoder) throws {
+extension BetaFunctionShellCallOutputExitOutcome {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.exitCode) else {
-            throw SdkValidationError(
-                field: "exit_code",
-                code: "required",
-                message: "Validation failed for 'exit_code': value is required"
-            )
+            throw SdkValidationError(field: "exit_code", code: "required", message: "Validation failed for 'exit_code': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        exitCode = try container.sdkDecodeRequired(.exitCode)
-        try sdkValidateRawEnum("type", type, BetaFunctionShellCallOutputExitOutcomeType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.exitCode = try container.sdkDecodeRequired(.exitCode)
+            try sdkValidateRawEnum("type", self.type, BetaFunctionShellCallOutputExitOutcomeType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaFunctionShellCallOutputExitOutcome {
-    init(type: BetaFunctionShellCallOutputExitOutcomeType, exitCode: Int) throws {
+extension BetaFunctionShellCallOutputExitOutcome {
+    public init(type: BetaFunctionShellCallOutputExitOutcomeType, exitCode: Int) throws {
         (self.type, self.exitCode) = (type, exitCode)
-        try sdkValidateRawEnum("type", self.type, BetaFunctionShellCallOutputExitOutcomeType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaFunctionShellCallOutputExitOutcomeType.allCases.map(\.rawValue))
     }
 }
 
@@ -193,65 +155,42 @@ public struct BetaFunctionShellCallOutputItemParam: Codable {
         case maxOutputLength = "max_output_length"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaFunctionShellCallOutputItemParam {
-    init(from decoder: Decoder) throws {
+extension BetaFunctionShellCallOutputItemParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
-        callId = try container.sdkDecodeRequired(.callId)
-        type = try container.sdkDecodeRequired(.type)
-        output = try container.sdkDecodeRequired(.output)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        id = try container.sdkDecodeIfPresent(.id)
-        caller = try container.sdkDecodeIfPresent(.caller)
-        status = try container.sdkDecodeIfPresent(.status)
-        maxOutputLength = try container.sdkDecodeIfPresent(.maxOutputLength)
-        try validateLength("call_id", callId, min: 1, max: 64)
-        try sdkValidateRawEnum("type", type, BetaFunctionShellCallOutputItemParamType.allCases.map(\.rawValue))
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.output = try container.sdkDecodeRequired(.output)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.caller = try container.sdkDecodeIfPresent(.caller)
+        self.status = try container.sdkDecodeIfPresent(.status)
+        self.maxOutputLength = try container.sdkDecodeIfPresent(.maxOutputLength)
+            try validateLength("call_id", self.callId, min: 1, max: 64)
+            try sdkValidateRawEnum("type", self.type, BetaFunctionShellCallOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaFunctionShellCallOutputItemParam {
-    init(
-        callId: String,
-        type: BetaFunctionShellCallOutputItemParamType,
-        output: [BetaFunctionShellCallOutputContentParam],
-        agent: BetaAgentTagParam? = nil,
-        id: String? = nil,
-        caller: BetaToolCallCallerParam? = nil,
-        status: BetaFunctionShellCallItemStatus? = nil,
-        maxOutputLength: Int? = nil
-    ) throws {
+extension BetaFunctionShellCallOutputItemParam {
+    public init(callId: String, type: BetaFunctionShellCallOutputItemParamType, output: [BetaFunctionShellCallOutputContentParam], agent: BetaAgentTagParam? = nil, id: String? = nil, caller: BetaToolCallCallerParam? = nil, status: BetaFunctionShellCallItemStatus? = nil, maxOutputLength: Int? = nil) throws {
         (self.callId, self.type) = (callId, type)
         (self.output, self.agent) = (output, agent)
         (self.id, self.caller) = (id, caller)
         (self.status, self.maxOutputLength) = (status, maxOutputLength)
-        try validateLength("call_id", self.callId, min: 1, max: 64)
-        try sdkValidateRawEnum("type", self.type, BetaFunctionShellCallOutputItemParamType.allCases.map(\.rawValue))
+            try validateLength("call_id", self.callId, min: 1, max: 64)
+            try sdkValidateRawEnum("type", self.type, BetaFunctionShellCallOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -288,87 +227,51 @@ public struct BetaFunctionShellCall: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaFunctionShellCall {
-    init(from decoder: Decoder) throws {
+extension BetaFunctionShellCall {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.action) else {
-            throw SdkValidationError(
-                field: "action",
-                code: "required",
-                message: "Validation failed for 'action': value is required"
-            )
+            throw SdkValidationError(field: "action", code: "required", message: "Validation failed for 'action': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.environment) else {
-            throw SdkValidationError(
-                field: "environment",
-                code: "required",
-                message: "Validation failed for 'environment': value is required"
-            )
+            throw SdkValidationError(field: "environment", code: "required", message: "Validation failed for 'environment': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        callId = try container.sdkDecodeRequired(.callId)
-        action = try container.sdkDecodeRequired(.action)
-        status = try container.sdkDecodeRequired(.status)
-        environment = try container.sdkDecodeNullable(.environment)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        caller = try container.sdkDecodeIfPresent(.caller)
-        createdBy = try container.sdkDecodeIfPresent(.createdBy)
-        try sdkValidateRawEnum("type", type, BetaFunctionShellCallType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.action = try container.sdkDecodeRequired(.action)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.environment = try container.sdkDecodeNullable(.environment)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.caller = try container.sdkDecodeIfPresent(.caller)
+        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
+            try sdkValidateRawEnum("type", self.type, BetaFunctionShellCallType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaFunctionShellCall {
-    init(
-        type: BetaFunctionShellCallType,
-        id: String,
-        callId: String,
-        action: BetaFunctionShellAction,
-        status: BetaFunctionShellCallStatus,
-        environment: BetaFunctionShellCallEnvironment?,
-        agent: BetaAgentTag? = nil,
-        caller: BetaToolCallCaller? = nil,
-        createdBy: String? = nil
-    ) throws {
+extension BetaFunctionShellCall {
+    public init(type: BetaFunctionShellCallType, id: String, callId: String, action: BetaFunctionShellAction, status: BetaFunctionShellCallStatus, environment: BetaFunctionShellCallEnvironment?, agent: BetaAgentTag? = nil, caller: BetaToolCallCaller? = nil, createdBy: String? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.action) = (callId, action)
         (self.status, self.environment) = (status, environment)
         (self.agent, self.caller) = (agent, caller)
         self.createdBy = createdBy
-        try sdkValidateRawEnum("type", self.type, BetaFunctionShellCallType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaFunctionShellCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -376,17 +279,14 @@ public extension BetaFunctionShellCall {
 public struct BetaFunctionCallItemStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaFunctionCallItemStatus(rawValue: "in_progress")
     public static let completed = BetaFunctionCallItemStatus(rawValue: "completed")
     public static let incomplete = BetaFunctionCallItemStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -400,17 +300,14 @@ public struct BetaFunctionCallItemStatus: RawRepresentable, Hashable, Codable, S
 public struct BetaFunctionToolCallOutputStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaFunctionToolCallOutputStatus(rawValue: "in_progress")
     public static let completed = BetaFunctionToolCallOutputStatus(rawValue: "completed")
     public static let incomplete = BetaFunctionToolCallOutputStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -442,17 +339,14 @@ public enum BetaFunctionToolParamType: String, CaseIterable, Codable {
 public struct BetaFunctionToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaFunctionToolCallStatus(rawValue: "in_progress")
     public static let completed = BetaFunctionToolCallStatus(rawValue: "completed")
     public static let incomplete = BetaFunctionToolCallStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

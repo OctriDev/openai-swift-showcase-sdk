@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsSessionInput domain models
+// AgentsSessionInput domain models
 public indirect enum SessionInputParam {
     case sessionInputParamAgentSessionInputComputerUseApprovalRequestResult(
         SessionInputParamAgentSessionInputComputerUseApprovalRequestResult
@@ -16,6 +16,7 @@ public indirect enum SessionInputParam {
 }
 
 extension SessionInputParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -23,16 +24,12 @@ extension SessionInputParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -44,18 +41,16 @@ extension SessionInputParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "agent.session.input.computer_use_approval_request_result":
-            try .sessionInputParamAgentSessionInputComputerUseApprovalRequestResult(
-                SessionInputParamAgentSessionInputComputerUseApprovalRequestResult(from: decoder)
-            )
+        return .sessionInputParamAgentSessionInputComputerUseApprovalRequestResult(
+            try SessionInputParamAgentSessionInputComputerUseApprovalRequestResult(from: decoder)
+        )
         case "agent.session.input.message":
-            try .sessionInputParamAgentSessionInputMessage(SessionInputParamAgentSessionInputMessage(from: decoder))
+        return .sessionInputParamAgentSessionInputMessage(try SessionInputParamAgentSessionInputMessage(from: decoder))
         case "agent.session.input.cancel":
-            try .sessionInputParamAgentSessionInputCancel(SessionInputParamAgentSessionInputCancel(from: decoder))
+        return .sessionInputParamAgentSessionInputCancel(try SessionInputParamAgentSessionInputCancel(from: decoder))
         case "agent.session.input.tool_result":
-            try .sessionInputParamAgentSessionInputToolResult(
-                SessionInputParamAgentSessionInputToolResult(from: decoder)
-            )
-        default: nil
+        return .sessionInputParamAgentSessionInputToolResult(try SessionInputParamAgentSessionInputToolResult(from: decoder))
+        default: return nil
         }
     }
 }
@@ -64,8 +59,7 @@ extension SessionInputParam {
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .sessionInputParamAgentSessionInputComputerUseApprovalRequestResult(value): try container
-            .encode(value); return true
+        case let .sessionInputParamAgentSessionInputComputerUseApprovalRequestResult(value): try container.encode(value); return true
         case let .sessionInputParamAgentSessionInputMessage(value): try container.encode(value); return true
         case let .sessionInputParamAgentSessionInputCancel(value): try container.encode(value); return true
         case let .sessionInputParamAgentSessionInputToolResult(value): try container.encode(value); return true
@@ -89,61 +83,35 @@ public struct SessionInputParamAgentSessionInputComputerUseApprovalRequestResult
         case response
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SessionInputParamAgentSessionInputComputerUseApprovalRequestResult {
-    init(from decoder: Decoder) throws {
+extension SessionInputParamAgentSessionInputComputerUseApprovalRequestResult {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.requestId) else {
-            throw SdkValidationError(
-                field: "request_id",
-                code: "required",
-                message: "Validation failed for 'request_id': value is required"
-            )
+            throw SdkValidationError(field: "request_id", code: "required", message: "Validation failed for 'request_id': value is required")
         }
         guard container.contains(.response) else {
-            throw SdkValidationError(
-                field: "response",
-                code: "required",
-                message: "Validation failed for 'response': value is required"
-            )
+            throw SdkValidationError(field: "response", code: "required", message: "Validation failed for 'response': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        requestId = try container.sdkDecodeRequired(.requestId)
-        response = try container.sdkDecodeRequired(.response)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            SessionInputParamAgentSessionInputComputerUseApprovalRequestResultType.allCases.map(\.rawValue)
-        )
-        try validateLength("request_id", requestId, min: 0, max: 1_048_576)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.requestId = try container.sdkDecodeRequired(.requestId)
+        self.response = try container.sdkDecodeRequired(.response)
+            try sdkValidateRawEnum("type", self.type, SessionInputParamAgentSessionInputComputerUseApprovalRequestResultType.allCases.map(\.rawValue))
+            try validateLength("request_id", self.requestId, min: 0, max: 1048576)
     }
 }
 
-public extension SessionInputParamAgentSessionInputComputerUseApprovalRequestResult {
-    init(
-        type: SessionInputParamAgentSessionInputComputerUseApprovalRequestResultType,
-        requestId: String,
-        response: ComputerUseApprovalResponseParam
-    ) throws {
+extension SessionInputParamAgentSessionInputComputerUseApprovalRequestResult {
+    public init(type: SessionInputParamAgentSessionInputComputerUseApprovalRequestResultType, requestId: String, response: ComputerUseApprovalResponseParam) throws {
         (self.type, self.requestId) = (type, requestId)
         self.response = response
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            SessionInputParamAgentSessionInputComputerUseApprovalRequestResultType.allCases.map(\.rawValue)
-        )
-        try validateLength("request_id", self.requestId, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, SessionInputParamAgentSessionInputComputerUseApprovalRequestResultType.allCases.map(\.rawValue))
+            try validateLength("request_id", self.requestId, min: 0, max: 1048576)
     }
 }
 
@@ -156,30 +124,24 @@ public struct SessionInputParamAgentSessionInputCancel: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SessionInputParamAgentSessionInputCancel {
-    init(from decoder: Decoder) throws {
+extension SessionInputParamAgentSessionInputCancel {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, SessionInputParamAgentSessionInputCancelType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, SessionInputParamAgentSessionInputCancelType.allCases.map(\.rawValue))
     }
 }
 
-public extension SessionInputParamAgentSessionInputCancel {
-    init(type: SessionInputParamAgentSessionInputCancelType) throws {
+extension SessionInputParamAgentSessionInputCancel {
+    public init(type: SessionInputParamAgentSessionInputCancelType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, SessionInputParamAgentSessionInputCancelType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, SessionInputParamAgentSessionInputCancelType.allCases.map(\.rawValue))
     }
 }
 
@@ -195,44 +157,30 @@ public struct SessionInputParamAgentSessionInputMessage: Codable {
         case input
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SessionInputParamAgentSessionInputMessage {
-    init(from decoder: Decoder) throws {
+extension SessionInputParamAgentSessionInputMessage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.input) else {
-            throw SdkValidationError(
-                field: "input",
-                code: "required",
-                message: "Validation failed for 'input': value is required"
-            )
+            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        input = try container.sdkDecodeRequired(.input)
-        try sdkValidateRawEnum("type", type, SessionInputParamAgentSessionInputMessageType.allCases.map(\.rawValue))
-        try validateItems("input", input, min: 0, max: 16384)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.input = try container.sdkDecodeRequired(.input)
+            try sdkValidateRawEnum("type", self.type, SessionInputParamAgentSessionInputMessageType.allCases.map(\.rawValue))
+            try validateItems("input", self.input, min: 0, max: 16384)
     }
 }
 
-public extension SessionInputParamAgentSessionInputMessage {
-    init(type: SessionInputParamAgentSessionInputMessageType, input: [InputMessageParam]) throws {
+extension SessionInputParamAgentSessionInputMessage {
+    public init(type: SessionInputParamAgentSessionInputMessageType, input: [InputMessageParam]) throws {
         (self.type, self.input) = (type, input)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            SessionInputParamAgentSessionInputMessageType.allCases.map(\.rawValue)
-        )
-        try validateItems("input", self.input, min: 0, max: 16384)
+            try sdkValidateRawEnum("type", self.type, SessionInputParamAgentSessionInputMessageType.allCases.map(\.rawValue))
+            try validateItems("input", self.input, min: 0, max: 16384)
     }
 }
 
@@ -260,78 +208,49 @@ public struct SessionInputParamAgentSessionInputToolResult: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SessionInputParamAgentSessionInputToolResult {
-    init(from decoder: Decoder) throws {
+extension SessionInputParamAgentSessionInputToolResult {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.turnId) else {
-            throw SdkValidationError(
-                field: "turn_id",
-                code: "required",
-                message: "Validation failed for 'turn_id': value is required"
-            )
+            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.success) else {
-            throw SdkValidationError(
-                field: "success",
-                code: "required",
-                message: "Validation failed for 'success': value is required"
-            )
+            throw SdkValidationError(field: "success", code: "required", message: "Validation failed for 'success': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        turnId = try container.sdkDecodeRequired(.turnId)
-        callId = try container.sdkDecodeRequired(.callId)
-        success = try container.sdkDecodeRequired(.success)
-        output = try container.sdkDecodeIfPresent(.output)
-        error = try container.sdkDecodeIfPresent(.error)
-        try sdkValidateRawEnum("type", type, SessionInputParamAgentSessionInputToolResultType.allCases.map(\.rawValue))
-        try validateLength("turn_id", turnId, min: 0, max: 1_048_576)
-        try validateLength("call_id", callId, min: 0, max: 1_048_576)
-        if let value = error {
-            try validateLength("error", value, min: 0, max: 1_048_576)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.turnId = try container.sdkDecodeRequired(.turnId)
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.success = try container.sdkDecodeRequired(.success)
+        self.output = try container.sdkDecodeIfPresent(.output)
+        self.error = try container.sdkDecodeIfPresent(.error)
+            try sdkValidateRawEnum("type", self.type, SessionInputParamAgentSessionInputToolResultType.allCases.map(\.rawValue))
+            try validateLength("turn_id", self.turnId, min: 0, max: 1048576)
+            try validateLength("call_id", self.callId, min: 0, max: 1048576)
+        if let value = self.error {
+            try validateLength("error", value, min: 0, max: 1048576)
         }
     }
 }
 
-public extension SessionInputParamAgentSessionInputToolResult {
-    init(
-        type: SessionInputParamAgentSessionInputToolResultType,
-        turnId: String,
-        callId: String,
-        success: Bool,
-        output: FunctionCallOutputParam? = nil,
-        error: String? = nil
-    ) throws {
+extension SessionInputParamAgentSessionInputToolResult {
+    public init(type: SessionInputParamAgentSessionInputToolResultType, turnId: String, callId: String, success: Bool, output: FunctionCallOutputParam? = nil, error: String? = nil) throws {
         (self.type, self.turnId) = (type, turnId)
         (self.callId, self.success) = (callId, success)
         (self.output, self.error) = (output, error)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            SessionInputParamAgentSessionInputToolResultType.allCases.map(\.rawValue)
-        )
-        try validateLength("turn_id", self.turnId, min: 0, max: 1_048_576)
-        try validateLength("call_id", self.callId, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, SessionInputParamAgentSessionInputToolResultType.allCases.map(\.rawValue))
+            try validateLength("turn_id", self.turnId, min: 0, max: 1048576)
+            try validateLength("call_id", self.callId, min: 0, max: 1048576)
         if let value = self.error {
-            try validateLength("error", value, min: 0, max: 1_048_576)
+            try validateLength("error", value, min: 0, max: 1048576)
         }
     }
 }

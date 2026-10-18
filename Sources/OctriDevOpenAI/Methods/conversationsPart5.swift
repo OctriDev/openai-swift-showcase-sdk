@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ConversationsMethods {
-    /// Creates a conversation that can include metadata and initial context items. Use `items` to seed the conversation
-    /// with up to 20 items; metadata can store additional key-value information.
+extension ConversationsMethods {
+    /// Creates a conversation that can include metadata and initial context items. Use `items` to seed the conversation with up to 20 items; metadata can store additional key-value information.
     ///
     /// Create a conversation.
     ///
@@ -16,70 +15,31 @@ public extension ConversationsMethods {
     /// - metadata: Optional API value serialized in the `metadata` wire field.
     /// - items: Initial items to include in the conversation context. You may add
     ///   up to 20 items at a time.
-    static func createConversation(
-        config: ClientConfig,
-        metadata: SdkOptional<Metadata>? = nil,
-        items: SdkOptional<[InputItem]>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationResource {
+    public static func createConversation(config: ClientConfig, metadata: SdkOptional<Metadata>? = nil, items: SdkOptional<[InputItem]>? = nil, requestOptions: RequestOptions? = nil) async throws -> ConversationResource {
         if let items = items?.valueOrNil {
             try validateItems("items", items, max: 20)
         }
 
         let requestBody = CreateConversationRequestBody(metadata: metadata, items: items)
 
-        return try await (sdkRequest(
-            "POST",
-            "/conversations",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createConversation",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/conversations", config: config, body: requestBody, decoder: .json, operationId: "createConversation", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 
-    /// Retrieves a conversation by its identifier. Use `conversation_id` to get the conversation's metadata and
-    /// creation time.
+    /// Retrieves a conversation by its identifier. Use `conversation_id` to get the conversation's metadata and creation time.
     ///
     /// Get a conversation
     ///
     /// - Parameters:
     /// - conversationId: The ID of the conversation to retrieve.
-    static func getConversation(
-        config: ClientConfig,
-        conversationId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationResource {
-        try await (sdkRequest(
-            "GET",
-            ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getConversation",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func getConversation(config: ClientConfig, conversationId: String, requestOptions: RequestOptions? = nil) async throws -> ConversationResource {
+        return try (await sdkRequest("GET", ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId))].joined(), config: config, decoder: .json, operationId: "getConversation", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
     /// Delete a conversation. Items in the conversation will not be deleted.
     ///
     /// - Parameters:
     /// - conversationId: The ID of the conversation to delete.
-    static func deleteConversation(
-        config: ClientConfig,
-        conversationId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedConversationResource {
-        try await (sdkRequest(
-            "DELETE",
-            ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteConversation",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func deleteConversation(config: ClientConfig, conversationId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedConversationResource {
+        return try (await sdkRequest("DELETE", ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId))].joined(), config: config, decoder: .json, operationId: "deleteConversation", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

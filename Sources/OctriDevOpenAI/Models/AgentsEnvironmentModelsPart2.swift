@@ -3,71 +3,39 @@
 
 import Foundation
 
-/// AgentsEnvironment domain models
-public extension EnvironmentFileResource {
-    init(from decoder: Decoder) throws {
+// AgentsEnvironment domain models
+extension EnvironmentFileResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.environmentId) else {
-            throw SdkValidationError(
-                field: "environment_id",
-                code: "required",
-                message: "Validation failed for 'environment_id': value is required"
-            )
+            throw SdkValidationError(field: "environment_id", code: "required", message: "Validation failed for 'environment_id': value is required")
         }
         guard container.contains(.path) else {
-            throw SdkValidationError(
-                field: "path",
-                code: "required",
-                message: "Validation failed for 'path': value is required"
-            )
+            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
         }
         guard container.contains(.sizeBytes) else {
-            throw SdkValidationError(
-                field: "size_bytes",
-                code: "required",
-                message: "Validation failed for 'size_bytes': value is required"
-            )
+            throw SdkValidationError(field: "size_bytes", code: "required", message: "Validation failed for 'size_bytes': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        environmentId = try container.sdkDecodeRequired(.environmentId)
-        path = try container.sdkDecodeRequired(.path)
-        sizeBytes = try container.sdkDecodeRequired(.sizeBytes)
-        try validateLength("environment_id", environmentId, min: 0, max: nil)
-        try validateLength("path", path, min: 0, max: nil)
-        try validateRange(
-            "size_bytes",
-            Double(sizeBytes),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.object = try container.sdkDecodeRequired(.object)
+        self.environmentId = try container.sdkDecodeRequired(.environmentId)
+        self.path = try container.sdkDecodeRequired(.path)
+        self.sizeBytes = try container.sdkDecodeRequired(.sizeBytes)
+            try validateLength("environment_id", self.environmentId, min: 0, max: nil)
+            try validateLength("path", self.path, min: 0, max: nil)
+            try validateRange("size_bytes", Double(self.sizeBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension EnvironmentFileResource {
-    init(object: EnvironmentFileResourceObject, environmentId: String, path: String, sizeBytes: Int) throws {
+extension EnvironmentFileResource {
+    public init(object: EnvironmentFileResourceObject, environmentId: String, path: String, sizeBytes: Int) throws {
         (self.object, self.environmentId) = (object, environmentId)
         (self.path, self.sizeBytes) = (path, sizeBytes)
-        try validateLength("environment_id", self.environmentId, min: 0, max: nil)
-        try validateLength("path", self.path, min: 0, max: nil)
-        try validateRange(
-            "size_bytes",
-            Double(self.sizeBytes),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateLength("environment_id", self.environmentId, min: 0, max: nil)
+            try validateLength("path", self.path, min: 0, max: nil)
+            try validateRange("size_bytes", Double(self.sizeBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -93,76 +61,48 @@ public struct EnvironmentTemplateListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EnvironmentTemplateListResource {
-    init(from decoder: Decoder) throws {
+extension EnvironmentTemplateListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(
-                field: "first_id",
-                code: "required",
-                message: "Validation failed for 'first_id': value is required"
-            )
+            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(
-                field: "last_id",
-                code: "required",
-                message: "Validation failed for 'last_id': value is required"
-            )
+            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        firstId = try container.sdkDecodeNullable(.firstId)
-        lastId = try container.sdkDecodeNullable(.lastId)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        try validateItems("data", data, min: 0, max: 2000)
-        if let value = firstId {
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.firstId = try container.sdkDecodeNullable(.firstId)
+        self.lastId = try container.sdkDecodeNullable(.lastId)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+            try validateItems("data", self.data, min: 0, max: 2000)
+        if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
-        if let value = lastId {
+        if let value = self.lastId {
             try validateLength("last_id", value, min: 0, max: nil)
         }
     }
 }
 
-public extension EnvironmentTemplateListResource {
-    init(
-        object: EnvironmentTemplateListResourceObject,
-        data: [EnvironmentTemplateResource],
-        firstId: String?,
-        lastId: String?,
-        hasMore: Bool
-    ) throws {
+extension EnvironmentTemplateListResource {
+    public init(object: EnvironmentTemplateListResourceObject, data: [EnvironmentTemplateResource], firstId: String?, lastId: String?, hasMore: Bool) throws {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
-        try validateItems("data", self.data, min: 0, max: 2000)
+            try validateItems("data", self.data, min: 0, max: 2000)
         if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
@@ -219,54 +159,34 @@ public struct EnvironmentParamOpenaiHosted: Codable {
         case containerSize = "container_size"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EnvironmentParamOpenaiHosted {
-    init(from decoder: Decoder) throws {
+extension EnvironmentParamOpenaiHosted {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        packages = try container.sdkDecodeIfPresent(.packages)
-        setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
-        network = try container.sdkDecodeIfPresent(.network)
-        desktop = try container.sdkDecodeIfPresent(.desktop)
-        env = try container.sdkDecodeIfPresent(.env)
-        capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
-        skills = try container.sdkDecodeIfPresent(.skills)
-        plugins = try container.sdkDecodeIfPresent(.plugins)
-        files = try container.sdkDecodeIfPresent(.files)
-        environmentId = try container.sdkDecodeIfPresent(.environmentId)
-        environmentTemplateId = try container.sdkDecodeIfPresent(.environmentTemplateId)
-        containerSize = try container.sdkDecodeIfPresent(.containerSize)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.packages = try container.sdkDecodeIfPresent(.packages)
+        self.setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
+        self.network = try container.sdkDecodeIfPresent(.network)
+        self.desktop = try container.sdkDecodeIfPresent(.desktop)
+        self.env = try container.sdkDecodeIfPresent(.env)
+        self.capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
+        self.skills = try container.sdkDecodeIfPresent(.skills)
+        self.plugins = try container.sdkDecodeIfPresent(.plugins)
+        self.files = try container.sdkDecodeIfPresent(.files)
+        self.environmentId = try container.sdkDecodeIfPresent(.environmentId)
+        self.environmentTemplateId = try container.sdkDecodeIfPresent(.environmentTemplateId)
+        self.containerSize = try container.sdkDecodeIfPresent(.containerSize)
         try sdkValidateConstraints()
     }
 }
 
-public extension EnvironmentParamOpenaiHosted {
-    init(
-        type: EnvironmentParamOpenaiHostedType,
-        packages: EnvironmentPackagesParam? = nil,
-        setupCommands: [SetupCommandParam]? = nil,
-        network: NetworkPolicyParam? = nil,
-        desktop: DesktopParam? = nil,
-        env: [String: String]? = nil,
-        capabilityDirectories: [String]? = nil,
-        skills: [HostedSkillParam]? = nil,
-        plugins: [HostedPluginParam]? = nil,
-        files: [HostedEnvironmentFileParam]? = nil,
-        environmentId: String? = nil,
-        environmentTemplateId: String? = nil,
-        containerSize: ContainerSizeParam? = nil
-    ) throws {
+extension EnvironmentParamOpenaiHosted {
+    public init(type: EnvironmentParamOpenaiHostedType, packages: EnvironmentPackagesParam? = nil, setupCommands: [SetupCommandParam]? = nil, network: NetworkPolicyParam? = nil, desktop: DesktopParam? = nil, env: [String: String]? = nil, capabilityDirectories: [String]? = nil, skills: [HostedSkillParam]? = nil, plugins: [HostedPluginParam]? = nil, files: [HostedEnvironmentFileParam]? = nil, environmentId: String? = nil, environmentTemplateId: String? = nil, containerSize: ContainerSizeParam? = nil) throws {
         (self.type, self.packages) = (type, packages)
         (self.setupCommands, self.network) = (setupCommands, network)
         (self.desktop, self.env) = (desktop, env)
@@ -280,26 +200,26 @@ public extension EnvironmentParamOpenaiHosted {
 
 extension EnvironmentParamOpenaiHosted {
     func sdkValidateConstraints() throws {
-        try sdkValidateRawEnum("type", type, EnvironmentParamOpenaiHostedType.allCases.map(\.rawValue))
-        if let value = setupCommands {
+            try sdkValidateRawEnum("type", self.type, EnvironmentParamOpenaiHostedType.allCases.map(\.rawValue))
+        if let value = self.setupCommands {
             try validateItems("setup_commands", value, min: 0, max: 16)
         }
-        if let value = capabilityDirectories {
+        if let value = self.capabilityDirectories {
             try validateItems("capability_directories", value, min: 0, max: 16384)
         }
-        if let value = skills {
+        if let value = self.skills {
             try validateItems("skills", value, min: 0, max: 200)
         }
-        if let value = plugins {
+        if let value = self.plugins {
             try validateItems("plugins", value, min: 0, max: 32)
         }
-        if let value = files {
+        if let value = self.files {
             try validateItems("files", value, min: 0, max: 50)
         }
-        if let value = environmentId {
+        if let value = self.environmentId {
             try validateLength("environment_id", value, min: 9, max: 256)
         }
-        if let value = environmentTemplateId {
+        if let value = self.environmentTemplateId {
             try validateLength("environment_template_id", value, min: 0, max: 64)
         }
     }
@@ -320,59 +240,31 @@ public indirect enum EnvironmentParamOpenaiHostedXf83f4ee2 {
 }
 
 extension EnvironmentParamOpenaiHostedXf83f4ee2: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for EnvironmentParamOpenaiHostedXf83f4ee2"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for EnvironmentParamOpenaiHostedXf83f4ee2")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension EnvironmentParamOpenaiHostedXf83f4ee2 {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue1(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue2(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue3(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue4(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue5(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue6(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue7(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue8(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue9(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue10(value)
-        }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue1(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue2(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue3(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue4(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue5(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue6(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue7(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue8(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue9(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue10(value) }
         return nil
     }
 }
@@ -411,49 +303,35 @@ public struct EnvironmentParamSelfHosted: Codable {
         case capabilityDirectories = "capability_directories"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EnvironmentParamSelfHosted {
-    init(from decoder: Decoder) throws {
+extension EnvironmentParamSelfHosted {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.workspaceDirectory) else {
-            throw SdkValidationError(
-                field: "workspace_directory",
-                code: "required",
-                message: "Validation failed for 'workspace_directory': value is required"
-            )
+            throw SdkValidationError(field: "workspace_directory", code: "required", message: "Validation failed for 'workspace_directory': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        workspaceDirectory = try container.sdkDecodeRequired(.workspaceDirectory)
-        capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
-        try sdkValidateRawEnum("type", type, EnvironmentParamSelfHostedType.allCases.map(\.rawValue))
-        try validateLength("workspace_directory", workspaceDirectory, min: 0, max: 1_048_576)
-        if let value = capabilityDirectories {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.workspaceDirectory = try container.sdkDecodeRequired(.workspaceDirectory)
+        self.capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
+            try sdkValidateRawEnum("type", self.type, EnvironmentParamSelfHostedType.allCases.map(\.rawValue))
+            try validateLength("workspace_directory", self.workspaceDirectory, min: 0, max: 1048576)
+        if let value = self.capabilityDirectories {
             try validateItems("capability_directories", value, min: 0, max: 16384)
         }
     }
 }
 
-public extension EnvironmentParamSelfHosted {
-    init(
-        type: EnvironmentParamSelfHostedType,
-        workspaceDirectory: String,
-        capabilityDirectories: [String]? = nil
-    ) throws {
+extension EnvironmentParamSelfHosted {
+    public init(type: EnvironmentParamSelfHostedType, workspaceDirectory: String, capabilityDirectories: [String]? = nil) throws {
         (self.type, self.workspaceDirectory) = (type, workspaceDirectory)
         self.capabilityDirectories = capabilityDirectories
-        try sdkValidateRawEnum("type", self.type, EnvironmentParamSelfHostedType.allCases.map(\.rawValue))
-        try validateLength("workspace_directory", self.workspaceDirectory, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, EnvironmentParamSelfHostedType.allCases.map(\.rawValue))
+            try validateLength("workspace_directory", self.workspaceDirectory, min: 0, max: 1048576)
         if let value = self.capabilityDirectories {
             try validateItems("capability_directories", value, min: 0, max: 16384)
         }
@@ -481,78 +359,50 @@ public struct EnvironmentResourceSelfHosted: Codable {
         case capabilityDirectories = "capability_directories"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EnvironmentResourceSelfHosted {
-    init(from decoder: Decoder) throws {
+extension EnvironmentResourceSelfHosted {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.remoteUrl) else {
-            throw SdkValidationError(
-                field: "remote_url",
-                code: "required",
-                message: "Validation failed for 'remote_url': value is required"
-            )
+            throw SdkValidationError(field: "remote_url", code: "required", message: "Validation failed for 'remote_url': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.workspaceDirectory) else {
-            throw SdkValidationError(
-                field: "workspace_directory",
-                code: "required",
-                message: "Validation failed for 'workspace_directory': value is required"
-            )
+            throw SdkValidationError(field: "workspace_directory", code: "required", message: "Validation failed for 'workspace_directory': value is required")
         }
         guard container.contains(.capabilityDirectories) else {
-            throw SdkValidationError(
-                field: "capability_directories",
-                code: "required",
-                message: "Validation failed for 'capability_directories': value is required"
-            )
+            throw SdkValidationError(field: "capability_directories", code: "required", message: "Validation failed for 'capability_directories': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        remoteUrl = try container.sdkDecodeRequired(.remoteUrl)
-        id = try container.sdkDecodeRequired(.id)
-        workspaceDirectory = try container.sdkDecodeRequired(.workspaceDirectory)
-        capabilityDirectories = try container.sdkDecodeRequired(.capabilityDirectories)
-        try sdkValidateRawEnum("type", type, EnvironmentResourceSelfHostedType.allCases.map(\.rawValue))
-        try validateLength("remote_url", remoteUrl, min: 0, max: nil)
-        try validateLength("id", id, min: 0, max: nil)
-        try validateLength("workspace_directory", workspaceDirectory, min: 0, max: nil)
-        try validateItems("capability_directories", capabilityDirectories, min: 0, max: 2000)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.remoteUrl = try container.sdkDecodeRequired(.remoteUrl)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.workspaceDirectory = try container.sdkDecodeRequired(.workspaceDirectory)
+        self.capabilityDirectories = try container.sdkDecodeRequired(.capabilityDirectories)
+            try sdkValidateRawEnum("type", self.type, EnvironmentResourceSelfHostedType.allCases.map(\.rawValue))
+            try validateLength("remote_url", self.remoteUrl, min: 0, max: nil)
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("workspace_directory", self.workspaceDirectory, min: 0, max: nil)
+            try validateItems("capability_directories", self.capabilityDirectories, min: 0, max: 2000)
     }
 }
 
-public extension EnvironmentResourceSelfHosted {
-    init(
-        type: EnvironmentResourceSelfHostedType,
-        remoteUrl: String,
-        id: String,
-        workspaceDirectory: String,
-        capabilityDirectories: [String]
-    ) throws {
+extension EnvironmentResourceSelfHosted {
+    public init(type: EnvironmentResourceSelfHostedType, remoteUrl: String, id: String, workspaceDirectory: String, capabilityDirectories: [String]) throws {
         (self.type, self.remoteUrl) = (type, remoteUrl)
         (self.id, self.workspaceDirectory) = (id, workspaceDirectory)
         self.capabilityDirectories = capabilityDirectories
-        try sdkValidateRawEnum("type", self.type, EnvironmentResourceSelfHostedType.allCases.map(\.rawValue))
-        try validateLength("remote_url", self.remoteUrl, min: 0, max: nil)
-        try validateLength("id", self.id, min: 0, max: nil)
-        try validateLength("workspace_directory", self.workspaceDirectory, min: 0, max: nil)
-        try validateItems("capability_directories", self.capabilityDirectories, min: 0, max: 2000)
+            try sdkValidateRawEnum("type", self.type, EnvironmentResourceSelfHostedType.allCases.map(\.rawValue))
+            try validateLength("remote_url", self.remoteUrl, min: 0, max: nil)
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("workspace_directory", self.workspaceDirectory, min: 0, max: nil)
+            try validateItems("capability_directories", self.capabilityDirectories, min: 0, max: 2000)
     }
 }
 
@@ -614,15 +464,12 @@ public enum EnvironmentParamOpenaiHostedType: String, CaseIterable, Codable {
 public struct EnvironmentFilePageObjectResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let page = EnvironmentFilePageObjectResource(rawValue: "page")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

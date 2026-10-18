@@ -6,53 +6,22 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension BatchMethods {
-    /// Retrieves a batch by its identifier. Use `batch_id` to inspect the batch configuration, status, and available
-    /// output or error file references.
+extension BatchMethods {
+    /// Retrieves a batch by its identifier. Use `batch_id` to inspect the batch configuration, status, and available output or error file references.
     ///
     /// Retrieves a batch.
     ///
     /// - Parameters:
     /// - batchId: The ID of the batch to retrieve.
-    static func retrieveBatch(
-        config: ClientConfig,
-        batchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Batch {
-        try await (sdkRequest(
-            "GET",
-            ["/batches/", sdkEncodePathSegment(sdkWireString(batchId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveBatch",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func retrieveBatch(config: ClientConfig, batchId: String, requestOptions: RequestOptions? = nil) async throws -> Batch {
+        return try (await sdkRequest("GET", ["/batches/", sdkEncodePathSegment(sdkWireString(batchId))].joined(), config: config, decoder: .json, operationId: "retrieveBatch", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Cancels an in-progress batch. The batch will be in status `cancelling` for up to 10 minutes, before changing to
-    /// `cancelled`, where it will have partial results (if any) available in the output file.
+    /// Cancels an in-progress batch. The batch will be in status `cancelling` for up to 10 minutes, before changing to `cancelled`, where it will have partial results (if any) available in the output file.
     ///
     /// - Parameters:
     /// - batchId: The ID of the batch to cancel.
-    static func cancelBatch(
-        config: ClientConfig,
-        batchId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Batch {
-        try await (sdkRequest(
-            "POST",
-            ["/batches/", sdkEncodePathSegment(sdkWireString(batchId)), "/cancel"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "cancelBatch",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "409": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func cancelBatch(config: ClientConfig, batchId: String, requestOptions: RequestOptions? = nil) async throws -> Batch {
+        return try (await sdkRequest("POST", ["/batches/", sdkEncodePathSegment(sdkWireString(batchId)), "/cancel"].joined(), config: config, decoder: .json, operationId: "cancelBatch", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension InvitesMethods {
-    /// Lists organization invites and their status, role, and project access details. Use `limit` to control the number
-    /// of results and `after` to continue from an invite ID. The response includes `has_more` and cursor IDs to help
-    /// you paginate.
+extension InvitesMethods {
+    /// Lists organization invites and their status, role, and project access details. Use `limit` to control the number of results and `after` to continue from an invite ID. The response includes `has_more` and cursor IDs to help you paginate.
     ///
     /// Returns a list of invites in the organization.
     ///
@@ -20,35 +18,14 @@ public extension InvitesMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
-    static func listInvites(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> InviteListResponse {
-        try await (sdkRequest(
-            "GET",
-            "/organization/invites",
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("after", value: after),
-            ],
-            decoder: .json,
-            operationId: "listInvites",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func listInvites(config: ClientConfig, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> InviteListResponse {
+        return try (await sdkRequest("GET", "/organization/invites", config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("after", value: after),
+        ], decoder: .json, operationId: "listInvites", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists organization invites and their status, role, and project access details. Use `limit` to control the number
-    /// of results and `after` to continue from an invite ID. The response includes `has_more` and cursor IDs to help
-    /// you paginate.
+    /// Lists organization invites and their status, role, and project access details. Use `limit` to control the number of results and `after` to continue from an invite ID. The response includes `has_more` and cursor IDs to help you paginate.
     ///
     /// Returns a list of invites in the organization.
     ///
@@ -59,39 +36,18 @@ public extension InvitesMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
-    static func listInvitesPaginated(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<Invite, Swift.Error> {
-        AsyncThrowingStream<Invite, Swift.Error> { (continuation: AsyncThrowingStream<
-            Invite,
-            Swift.Error
-        >.Continuation) in
+    public static func listInvitesPaginated(config: ClientConfig, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<Invite, Swift.Error> {
+        return AsyncThrowingStream<Invite, Swift.Error> { (continuation: AsyncThrowingStream<Invite, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listInvites(
-                            config: config,
-                            limit: limit,
-                            after: pageCursor,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listInvites(config: config, limit: limit, after: pageCursor, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -104,44 +60,25 @@ public extension InvitesMethods {
         }
     }
 
-    struct ListInvitesPage {
+    public struct ListInvitesPage {
         public let data: InviteListResponse
         public let items: [Invite]
         public let hasMore: Bool
     }
 
-    static func listInvitesPages(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListInvitesPage, Swift.Error> {
-        AsyncThrowingStream<ListInvitesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListInvitesPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listInvitesPages(config: ClientConfig, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListInvitesPage, Swift.Error> {
+        return AsyncThrowingStream<ListInvitesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListInvitesPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listInvites(
-                            config: config,
-                            limit: limit,
-                            after: pageCursor,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listInvites(config: config, limit: limit, after: pageCursor, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
                         pageContinuation.yield(ListInvitesPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

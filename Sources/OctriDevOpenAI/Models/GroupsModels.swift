@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Groups domain models
+// Groups domain models
 /// Confirmation payload returned after deleting a group.
 public struct GroupDeletedResource: Codable {
     /// Always `group.deleted`.
@@ -19,43 +19,29 @@ public struct GroupDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GroupDeletedResource {
-    init(from decoder: Decoder) throws {
+extension GroupDeletedResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        id = try container.sdkDecodeRequired(.id)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension GroupDeletedResource {
-    init(object: GroupDeletedResourceObject, id: String, deleted: Bool) {
+extension GroupDeletedResource {
+    public init(object: GroupDeletedResourceObject, id: String, deleted: Bool) {
         (self.object, self.id) = (object, id)
         self.deleted = deleted
     }
@@ -79,51 +65,33 @@ public struct GroupResourceWithSuccess: Codable {
         case isScimManaged = "is_scim_managed"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GroupResourceWithSuccess {
-    init(from decoder: Decoder) throws {
+extension GroupResourceWithSuccess {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.isScimManaged) else {
-            throw SdkValidationError(
-                field: "is_scim_managed",
-                code: "required",
-                message: "Validation failed for 'is_scim_managed': value is required"
-            )
+            throw SdkValidationError(field: "is_scim_managed", code: "required", message: "Validation failed for 'is_scim_managed': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        name = try container.sdkDecodeRequired(.name)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        isScimManaged = try container.sdkDecodeRequired(.isScimManaged)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.isScimManaged = try container.sdkDecodeRequired(.isScimManaged)
     }
 }
 
-public extension GroupResourceWithSuccess {
-    init(id: String, name: String, createdAt: Int, isScimManaged: Bool) {
+extension GroupResourceWithSuccess {
+    public init(id: String, name: String, createdAt: Int, isScimManaged: Bool) {
         (self.id, self.name) = (id, name)
         (self.createdAt, self.isScimManaged) = (createdAt, isScimManaged)
     }
@@ -138,30 +106,24 @@ public struct UpdateGroupBody: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateGroupBody {
-    init(from decoder: Decoder) throws {
+extension UpdateGroupBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        try validateLength("name", name, min: 1, max: 255)
+        self.name = try container.sdkDecodeRequired(.name)
+            try validateLength("name", self.name, min: 1, max: 255)
     }
 }
 
-public extension UpdateGroupBody {
-    init(name: String) throws {
+extension UpdateGroupBody {
+    public init(name: String) throws {
         self.name = name
-        try validateLength("name", self.name, min: 1, max: 255)
+            try validateLength("name", self.name, min: 1, max: 255)
     }
 }
 
@@ -183,51 +145,33 @@ public struct GroupListResource: Codable {
         case next
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GroupListResource {
-    init(from decoder: Decoder) throws {
+extension GroupListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
         guard container.contains(.next) else {
-            throw SdkValidationError(
-                field: "next",
-                code: "required",
-                message: "Validation failed for 'next': value is required"
-            )
+            throw SdkValidationError(field: "next", code: "required", message: "Validation failed for 'next': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        next = try container.sdkDecodeNullable(.next)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.next = try container.sdkDecodeNullable(.next)
     }
 }
 
-public extension GroupListResource {
-    init(object: GroupListResourceObject, data: [GroupResponse], hasMore: Bool, next: String?) {
+extension GroupListResource {
+    public init(object: GroupListResourceObject, data: [GroupResponse], hasMore: Bool, next: String?) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.next) = (hasMore, next)
     }
@@ -242,30 +186,24 @@ public struct CreateGroupBody: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateGroupBody {
-    init(from decoder: Decoder) throws {
+extension CreateGroupBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        try validateLength("name", name, min: 1, max: 255)
+        self.name = try container.sdkDecodeRequired(.name)
+            try validateLength("name", self.name, min: 1, max: 255)
     }
 }
 
-public extension CreateGroupBody {
-    init(name: String) throws {
+extension CreateGroupBody {
+    public init(name: String) throws {
         self.name = name
-        try validateLength("name", self.name, min: 1, max: 255)
+            try validateLength("name", self.name, min: 1, max: 255)
     }
 }
 
@@ -290,59 +228,37 @@ public struct GroupResponse: Codable {
         case groupType = "group_type"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GroupResponse {
-    init(from decoder: Decoder) throws {
+extension GroupResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.isScimManaged) else {
-            throw SdkValidationError(
-                field: "is_scim_managed",
-                code: "required",
-                message: "Validation failed for 'is_scim_managed': value is required"
-            )
+            throw SdkValidationError(field: "is_scim_managed", code: "required", message: "Validation failed for 'is_scim_managed': value is required")
         }
         guard container.contains(.groupType) else {
-            throw SdkValidationError(
-                field: "group_type",
-                code: "required",
-                message: "Validation failed for 'group_type': value is required"
-            )
+            throw SdkValidationError(field: "group_type", code: "required", message: "Validation failed for 'group_type': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        name = try container.sdkDecodeRequired(.name)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        isScimManaged = try container.sdkDecodeRequired(.isScimManaged)
-        groupType = try container.sdkDecodeRequired(.groupType)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.isScimManaged = try container.sdkDecodeRequired(.isScimManaged)
+        self.groupType = try container.sdkDecodeRequired(.groupType)
     }
 }
 
-public extension GroupResponse {
-    init(id: String, name: String, createdAt: Int, isScimManaged: Bool, groupType: GroupResponseGroupType) {
+extension GroupResponse {
+    public init(id: String, name: String, createdAt: Int, isScimManaged: Bool, groupType: GroupResponseGroupType) {
         (self.id, self.name) = (id, name)
         (self.createdAt, self.isScimManaged) = (createdAt, isScimManaged)
         self.groupType = groupType
@@ -353,16 +269,13 @@ public extension GroupResponse {
 public struct GroupResponseGroupType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let group = GroupResponseGroupType(rawValue: "group")
     public static let tenantGroup = GroupResponseGroupType(rawValue: "tenant_group")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -375,15 +288,12 @@ public struct GroupResponseGroupType: RawRepresentable, Hashable, Codable, Senda
 public struct GroupListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = GroupListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -396,15 +306,12 @@ public struct GroupListResourceObject: RawRepresentable, Hashable, Codable, Send
 public struct GroupDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let groupDeleted = GroupDeletedResourceObject(rawValue: "group.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

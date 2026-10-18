@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ContainersMethods {
-    /// Creates a container with the specified name and optional configuration. Use `file_ids` to copy files into the
-    /// container and configure expiration, memory, network access, or skills as needed. The memory limit defaults to
-    /// `1g` when omitted.
+extension ContainersMethods {
+    /// Creates a container with the specified name and optional configuration. Use `file_ids` to copy files into the container and configure expiration, memory, network access, or skills as needed. The memory limit defaults to `1g` when omitted.
     ///
     /// Create Container
     ///
@@ -21,54 +19,16 @@ public extension ContainersMethods {
     /// - skills: An optional list of skills referenced by id or inline data.
     /// - memoryLimit: Optional memory limit for the container. Defaults to "1g".
     /// - networkPolicy: Network access policy for the container.
-    static func createContainer(
-        config: ClientConfig,
-        name: String,
-        fileIds: [String]? = nil,
-        expiresAfter: CreateContainerBodyExpiresAfter? = nil,
-        skills: [CreateContainerBodySkillsItem]? = nil,
-        memoryLimit: CreateContainerBodyMemoryLimit? = nil,
-        networkPolicy: CreateContainerBodyNetworkPolicy? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ContainerResource {
-        let requestBody = CreateContainerRequestBody(
-            name: name,
-            fileIds: fileIds,
-            expiresAfter: expiresAfter,
-            skills: skills,
-            memoryLimit: memoryLimit,
-            networkPolicy: networkPolicy
-        )
+    public static func createContainer(config: ClientConfig, name: String, fileIds: [String]? = nil, expiresAfter: CreateContainerBodyExpiresAfter? = nil, skills: [CreateContainerBodySkillsItem]? = nil, memoryLimit: CreateContainerBodyMemoryLimit? = nil, networkPolicy: CreateContainerBodyNetworkPolicy? = nil, requestOptions: RequestOptions? = nil) async throws -> ContainerResource {
+        let requestBody = CreateContainerRequestBody(name: name, fileIds: fileIds, expiresAfter: expiresAfter, skills: skills, memoryLimit: memoryLimit, networkPolicy: networkPolicy)
 
-        return try await (sdkRequest(
-            "POST",
-            "/containers",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "CreateContainer",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/containers", config: config, body: requestBody, decoder: .json, operationId: "CreateContainer", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Retrieves a container by its unique identifier. Use this operation to inspect the container's status and
-    /// configuration, including its expiration, memory limit, and network policy.
+    /// Retrieves a container by its unique identifier. Use this operation to inspect the container's status and configuration, including its expiration, memory limit, and network policy.
     ///
     /// Retrieve Container
-    static func retrieveContainer(
-        config: ClientConfig,
-        containerId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ContainerResource {
-        try await (sdkRequest(
-            "GET",
-            ["/containers/", sdkEncodePathSegment(sdkWireString(containerId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "RetrieveContainer",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func retrieveContainer(config: ClientConfig, containerId: String, requestOptions: RequestOptions? = nil) async throws -> ContainerResource {
+        return try (await sdkRequest("GET", ["/containers/", sdkEncodePathSegment(sdkWireString(containerId))].joined(), config: config, decoder: .json, operationId: "RetrieveContainer", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

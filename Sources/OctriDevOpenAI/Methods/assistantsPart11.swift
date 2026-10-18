@@ -6,27 +6,14 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    /// Deletes a thread. Use the thread's identifier to select the thread to remove; the response confirms the
-    /// deletion.
+extension AssistantsMethods {
+    /// Deletes a thread. Use the thread's identifier to select the thread to remove; the response confirms the deletion.
     ///
     /// Delete a thread.
     ///
     /// - Parameters:
     /// - threadId: The ID of the thread to delete.
-    static func deleteThread(
-        config: ClientConfig,
-        threadId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeleteThreadResponse {
-        try await (sdkRequest(
-            "DELETE",
-            ["/threads/", sdkEncodePathSegment(sdkWireString(threadId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteThread",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+    public static func deleteThread(config: ClientConfig, threadId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteThreadResponse {
+        return try (await sdkRequest("DELETE", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId))].joined(), config: config, decoder: .json, operationId: "deleteThread", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 }

@@ -6,44 +6,19 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectsMethods {
-    /// Retrieves a service account in a project. Use the project and service account identifiers to inspect the
-    /// account's name, role, and creation timestamp.
+extension ProjectsMethods {
+    /// Retrieves a service account in a project. Use the project and service account identifiers to inspect the account's name, role, and creation timestamp.
     ///
     /// Retrieves a service account in the project.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
     /// - serviceAccountId: The ID of the service account.
-    static func retrieveProjectServiceAccount(
-        config: ClientConfig,
-        projectId: String,
-        serviceAccountId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectServiceAccount {
-        try await (sdkRequest(
-            "GET",
-            [
-                "/organization/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/service_accounts/",
-                sdkEncodePathSegment(sdkWireString(serviceAccountId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveProjectServiceAccount",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func retrieveProjectServiceAccount(config: ClientConfig, projectId: String, serviceAccountId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectServiceAccount {
+        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/service_accounts/", sdkEncodePathSegment(sdkWireString(serviceAccountId))].joined(), config: config, decoder: .json, operationId: "retrieveProjectServiceAccount", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Updates a service account in a project. Supply `name` or `role` to change the corresponding account property;
-    /// the role must be `member` or `owner`.
+    /// Updates a service account in a project. Supply `name` or `role` to change the corresponding account property; the role must be `member` or `owner`.
     ///
     /// Updates a service account in the project.
     ///
@@ -52,35 +27,9 @@ public extension ProjectsMethods {
     /// - serviceAccountId: The ID of the service account.
     /// - name: The updated service account name.
     /// - role: The updated service account role.
-    static func updateProjectServiceAccount(
-        config: ClientConfig,
-        projectId: String,
-        serviceAccountId: String,
-        name: String? = nil,
-        role: UpdateProjectServiceAccountBodyRole? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectServiceAccount {
+    public static func updateProjectServiceAccount(config: ClientConfig, projectId: String, serviceAccountId: String, name: String? = nil, role: UpdateProjectServiceAccountBodyRole? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectServiceAccount {
         let requestBody = UpdateProjectServiceAccountRequestBody(name: name, role: role)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/organization/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/service_accounts/",
-                sdkEncodePathSegment(sdkWireString(serviceAccountId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateProjectServiceAccount",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/service_accounts/", sdkEncodePathSegment(sdkWireString(serviceAccountId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateProjectServiceAccount", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

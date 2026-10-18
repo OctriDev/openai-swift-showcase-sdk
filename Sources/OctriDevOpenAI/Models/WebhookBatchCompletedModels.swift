@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// WebhookBatchCompleted domain models
+// WebhookBatchCompleted domain models
 /// Event data payload.
 public struct WebhookBatchCompletedData: Codable {
     /// The unique ID of the batch API request.
@@ -13,30 +13,28 @@ public struct WebhookBatchCompletedData: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookBatchCompletedData {
-    init(from decoder: Decoder) throws {
+extension WebhookBatchCompletedData {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension WebhookBatchCompletedData {
-    init(id: String) {
+extension WebhookBatchCompletedData {
+    public init(id: String) {
         self.id = id
     }
 }
+
+
+
+
 
 /// Sent when a batch API request has been completed.
 public struct WebhookBatchCompleted: Codable {
@@ -59,58 +57,34 @@ public struct WebhookBatchCompleted: Codable {
         case object
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookBatchCompleted {
-    init(from decoder: Decoder) throws {
+extension WebhookBatchCompleted {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        id = try container.sdkDecodeRequired(.id)
-        data = try container.sdkDecodeRequired(.data)
-        type = try container.sdkDecodeRequired(.type)
-        object = try container.sdkDecodeIfPresent(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.object = try container.sdkDecodeIfPresent(.object)
     }
 }
 
-public extension WebhookBatchCompleted {
-    init(
-        createdAt: Int,
-        id: String,
-        data: WebhookBatchCompletedData,
-        type: WebhookBatchCompletedType,
-        object: WebhookBatchCompletedObject? = nil
-    ) {
+extension WebhookBatchCompleted {
+    public init(createdAt: Int, id: String, data: WebhookBatchCompletedData, type: WebhookBatchCompletedType, object: WebhookBatchCompletedObject? = nil) {
         (self.createdAt, self.id) = (createdAt, id)
         (self.data, self.type) = (data, type)
         self.object = object
@@ -121,15 +95,12 @@ public extension WebhookBatchCompleted {
 public struct WebhookBatchCompletedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let batchCompleted = WebhookBatchCompletedType(rawValue: "batch.completed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -142,15 +113,12 @@ public struct WebhookBatchCompletedType: RawRepresentable, Hashable, Codable, Se
 public struct WebhookBatchCompletedObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let event = WebhookBatchCompletedObject(rawValue: "event")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

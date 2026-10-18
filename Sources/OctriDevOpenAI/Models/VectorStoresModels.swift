@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// VectorStores domain models
+// VectorStores domain models
 public indirect enum ChunkingStrategyRequestParam {
     case autoChunkingStrategyRequestParam(AutoChunkingStrategyRequestParam)
     case staticChunkingStrategyRequestParam(StaticChunkingStrategyRequestParam)
@@ -12,6 +12,7 @@ public indirect enum ChunkingStrategyRequestParam {
 }
 
 extension ChunkingStrategyRequestParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension ChunkingStrategyRequestParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension ChunkingStrategyRequestParam: Codable {
 extension ChunkingStrategyRequestParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "auto": try .autoChunkingStrategyRequestParam(AutoChunkingStrategyRequestParam(from: decoder))
-        case "static": try .staticChunkingStrategyRequestParam(StaticChunkingStrategyRequestParam(from: decoder))
-        default: nil
+        case "auto": return .autoChunkingStrategyRequestParam(try AutoChunkingStrategyRequestParam(from: decoder))
+        case "static": return .staticChunkingStrategyRequestParam(try StaticChunkingStrategyRequestParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -65,6 +62,7 @@ public indirect enum CreateVectorStoreRequestChunkingStrategy {
 }
 
 extension CreateVectorStoreRequestChunkingStrategy: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -72,16 +70,12 @@ extension CreateVectorStoreRequestChunkingStrategy: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -92,9 +86,9 @@ extension CreateVectorStoreRequestChunkingStrategy: Codable {
 extension CreateVectorStoreRequestChunkingStrategy {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "auto": try .autoChunkingStrategyRequestParam(AutoChunkingStrategyRequestParam(from: decoder))
-        case "static": try .staticChunkingStrategyRequestParam(StaticChunkingStrategyRequestParam(from: decoder))
-        default: nil
+        case "auto": return .autoChunkingStrategyRequestParam(try AutoChunkingStrategyRequestParam(from: decoder))
+        case "static": return .staticChunkingStrategyRequestParam(try StaticChunkingStrategyRequestParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -118,6 +112,7 @@ public indirect enum VectorStoreFileObjectChunkingStrategy {
 }
 
 extension VectorStoreFileObjectChunkingStrategy: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -125,16 +120,12 @@ extension VectorStoreFileObjectChunkingStrategy: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -145,9 +136,9 @@ extension VectorStoreFileObjectChunkingStrategy: Codable {
 extension VectorStoreFileObjectChunkingStrategy {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "static": try .staticChunkingStrategyResponseParam(StaticChunkingStrategyResponseParam(from: decoder))
-        case "other": try .otherChunkingStrategyResponseParam(OtherChunkingStrategyResponseParam(from: decoder))
-        default: nil
+        case "static": return .staticChunkingStrategyResponseParam(try StaticChunkingStrategyResponseParam(from: decoder))
+        case "other": return .otherChunkingStrategyResponseParam(try OtherChunkingStrategyResponseParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -171,6 +162,7 @@ public indirect enum VectorStoreSearchRequestFilters {
 }
 
 extension VectorStoreSearchRequestFilters: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -178,16 +170,12 @@ extension VectorStoreSearchRequestFilters: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -198,9 +186,9 @@ extension VectorStoreSearchRequestFilters: Codable {
 extension VectorStoreSearchRequestFilters {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "eq", "ne", "gt", "gte", "lt", "lte", "in", "nin": try .comparisonFilter(ComparisonFilter(from: decoder))
-        case "and", "or": try .compoundFilter(CompoundFilter(from: decoder))
-        default: nil
+        case "eq", "ne", "gt", "gte", "lt", "lte", "in", "nin": return .comparisonFilter(try ComparisonFilter(from: decoder))
+        case "and", "or": return .compoundFilter(try CompoundFilter(from: decoder))
+        default: return nil
         }
     }
 }
@@ -241,74 +229,41 @@ public struct VectorStoreFileBatchObject: Codable {
         case fileCounts = "file_counts"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VectorStoreFileBatchObject {
-    init(from decoder: Decoder) throws {
+extension VectorStoreFileBatchObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.vectorStoreId) else {
-            throw SdkValidationError(
-                field: "vector_store_id",
-                code: "required",
-                message: "Validation failed for 'vector_store_id': value is required"
-            )
+            throw SdkValidationError(field: "vector_store_id", code: "required", message: "Validation failed for 'vector_store_id': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.fileCounts) else {
-            throw SdkValidationError(
-                field: "file_counts",
-                code: "required",
-                message: "Validation failed for 'file_counts': value is required"
-            )
+            throw SdkValidationError(field: "file_counts", code: "required", message: "Validation failed for 'file_counts': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        vectorStoreId = try container.sdkDecodeRequired(.vectorStoreId)
-        status = try container.sdkDecodeRequired(.status)
-        fileCounts = try container.sdkDecodeRequired(.fileCounts)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.vectorStoreId = try container.sdkDecodeRequired(.vectorStoreId)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.fileCounts = try container.sdkDecodeRequired(.fileCounts)
     }
 }
 
-public extension VectorStoreFileBatchObject {
-    init(
-        id: String,
-        object: VectorStoreFileBatchObjectObject,
-        createdAt: Int,
-        vectorStoreId: String,
-        status: VectorStoreFileBatchObjectStatus,
-        fileCounts: VectorStoreFileBatchObjectFileCounts
-    ) {
+extension VectorStoreFileBatchObject {
+    public init(id: String, object: VectorStoreFileBatchObjectObject, createdAt: Int, vectorStoreId: String, status: VectorStoreFileBatchObjectStatus, fileCounts: VectorStoreFileBatchObjectFileCounts) {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.vectorStoreId) = (createdAt, vectorStoreId)
         (self.status, self.fileCounts) = (status, fileCounts)
@@ -321,32 +276,22 @@ public indirect enum VectorStoreSearchRequestQuery {
 }
 
 extension VectorStoreSearchRequestQuery: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for VectorStoreSearchRequestQuery"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for VectorStoreSearchRequestQuery")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension VectorStoreSearchRequestQuery {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode([String].self) {
-            return .stringList(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode([String].self) { return .stringList(value) }
         return nil
     }
 }
@@ -382,59 +327,37 @@ public struct VectorStoreFileBatchObjectFileCounts: Codable {
         case total
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VectorStoreFileBatchObjectFileCounts {
-    init(from decoder: Decoder) throws {
+extension VectorStoreFileBatchObjectFileCounts {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.inProgress) else {
-            throw SdkValidationError(
-                field: "in_progress",
-                code: "required",
-                message: "Validation failed for 'in_progress': value is required"
-            )
+            throw SdkValidationError(field: "in_progress", code: "required", message: "Validation failed for 'in_progress': value is required")
         }
         guard container.contains(.completed) else {
-            throw SdkValidationError(
-                field: "completed",
-                code: "required",
-                message: "Validation failed for 'completed': value is required"
-            )
+            throw SdkValidationError(field: "completed", code: "required", message: "Validation failed for 'completed': value is required")
         }
         guard container.contains(.failed) else {
-            throw SdkValidationError(
-                field: "failed",
-                code: "required",
-                message: "Validation failed for 'failed': value is required"
-            )
+            throw SdkValidationError(field: "failed", code: "required", message: "Validation failed for 'failed': value is required")
         }
         guard container.contains(.cancelled) else {
-            throw SdkValidationError(
-                field: "cancelled",
-                code: "required",
-                message: "Validation failed for 'cancelled': value is required"
-            )
+            throw SdkValidationError(field: "cancelled", code: "required", message: "Validation failed for 'cancelled': value is required")
         }
         guard container.contains(.total) else {
-            throw SdkValidationError(
-                field: "total",
-                code: "required",
-                message: "Validation failed for 'total': value is required"
-            )
+            throw SdkValidationError(field: "total", code: "required", message: "Validation failed for 'total': value is required")
         }
-        inProgress = try container.sdkDecodeRequired(.inProgress)
-        completed = try container.sdkDecodeRequired(.completed)
-        failed = try container.sdkDecodeRequired(.failed)
-        cancelled = try container.sdkDecodeRequired(.cancelled)
-        total = try container.sdkDecodeRequired(.total)
+        self.inProgress = try container.sdkDecodeRequired(.inProgress)
+        self.completed = try container.sdkDecodeRequired(.completed)
+        self.failed = try container.sdkDecodeRequired(.failed)
+        self.cancelled = try container.sdkDecodeRequired(.cancelled)
+        self.total = try container.sdkDecodeRequired(.total)
     }
 }
 
-public extension VectorStoreFileBatchObjectFileCounts {
-    init(inProgress: Int, completed: Int, failed: Int, cancelled: Int, total: Int) {
+extension VectorStoreFileBatchObjectFileCounts {
+    public init(inProgress: Int, completed: Int, failed: Int, cancelled: Int, total: Int) {
         (self.inProgress, self.completed) = (inProgress, completed)
         (self.failed, self.cancelled) = (failed, cancelled)
         self.total = total
@@ -465,59 +388,37 @@ public struct ListVectorStoresResponse: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ListVectorStoresResponse {
-    init(from decoder: Decoder) throws {
+extension ListVectorStoresResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(
-                field: "first_id",
-                code: "required",
-                message: "Validation failed for 'first_id': value is required"
-            )
+            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(
-                field: "last_id",
-                code: "required",
-                message: "Validation failed for 'last_id': value is required"
-            )
+            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        firstId = try container.sdkDecodeRequired(.firstId)
-        lastId = try container.sdkDecodeRequired(.lastId)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.firstId = try container.sdkDecodeRequired(.firstId)
+        self.lastId = try container.sdkDecodeRequired(.lastId)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
     }
 }
 
-public extension ListVectorStoresResponse {
-    init(object: String, data: [VectorStoreObject], firstId: String, lastId: String, hasMore: Bool) {
+extension ListVectorStoresResponse {
+    public init(object: String, data: [VectorStoreObject], firstId: String, lastId: String, hasMore: Bool) {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
@@ -545,65 +446,37 @@ public struct VectorStoreSearchResultsPage: Codable {
         case nextPage = "next_page"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VectorStoreSearchResultsPage {
-    init(from decoder: Decoder) throws {
+extension VectorStoreSearchResultsPage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.searchQuery) else {
-            throw SdkValidationError(
-                field: "search_query",
-                code: "required",
-                message: "Validation failed for 'search_query': value is required"
-            )
+            throw SdkValidationError(field: "search_query", code: "required", message: "Validation failed for 'search_query': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
         guard container.contains(.nextPage) else {
-            throw SdkValidationError(
-                field: "next_page",
-                code: "required",
-                message: "Validation failed for 'next_page': value is required"
-            )
+            throw SdkValidationError(field: "next_page", code: "required", message: "Validation failed for 'next_page': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        searchQuery = try container.sdkDecodeRequired(.searchQuery)
-        data = try container.sdkDecodeRequired(.data)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        nextPage = try container.sdkDecodeNullable(.nextPage)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.searchQuery = try container.sdkDecodeRequired(.searchQuery)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.nextPage = try container.sdkDecodeNullable(.nextPage)
     }
 }
 
-public extension VectorStoreSearchResultsPage {
-    init(
-        object: VectorStoreSearchResultsPageObject,
-        searchQuery: [String],
-        data: [VectorStoreSearchResultItem],
-        hasMore: Bool,
-        nextPage: String?
-    ) {
+extension VectorStoreSearchResultsPage {
+    public init(object: VectorStoreSearchResultsPageObject, searchQuery: [String], data: [VectorStoreSearchResultItem], hasMore: Bool, nextPage: String?) {
         (self.object, self.searchQuery) = (object, searchQuery)
         (self.data, self.hasMore) = (data, hasMore)
         self.nextPage = nextPage

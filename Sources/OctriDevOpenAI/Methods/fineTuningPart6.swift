@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension FineTuningMethods {
-    /// Lists fine-tuning jobs belonging to your organization. Use `after` to continue from the last job in a previous
-    /// page, and use `limit` to control how many jobs to retrieve. You can filter jobs by metadata using the
-    /// `metadata[k]=v` query syntax.
+extension FineTuningMethods {
+    /// Lists fine-tuning jobs belonging to your organization. Use `after` to continue from the last job in a previous page, and use `limit` to control how many jobs to retrieve. You can filter jobs by metadata using the `metadata[k]=v` query syntax.
     ///
     /// List your organization's fine-tuning jobs
     ///
@@ -23,50 +21,21 @@ public extension FineTuningMethods {
     ///   literal query string `metadata=null`. Nullable caller types do not specify
     ///   how a client serializes null for a deep-object parameter. Use a raw query
     ///   parameter if the client omits null. Do not combine the two query forms.
-    static func listFineTuningJobs(
-        config: ClientConfig,
-        after: String? = nil,
-        limit: Int? = nil,
-        metadata: [String: String]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListPaginatedFineTuningJobsResponse {
-        try await (sdkRequest(
-            "GET",
-            "/fine_tuning/jobs",
-            config: config,
-            query: [
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("metadata", object: metadata, style: "deepObject", explode: true),
-            ],
-            decoder: .json,
-            operationId: "listFineTuningJobs",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func listFineTuningJobs(config: ClientConfig, after: String? = nil, limit: Int? = nil, metadata: [String: String]? = nil, requestOptions: RequestOptions? = nil) async throws -> ListPaginatedFineTuningJobsResponse {
+        return try (await sdkRequest("GET", "/fine_tuning/jobs", config: config, query: [
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("metadata", object: metadata, style: "deepObject", explode: true),
+        ], decoder: .json, operationId: "listFineTuningJobs", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Retrieves details for a fine-tuning job. Use `fine_tuning_job_id` to identify the job whose status, model, and
-    /// training details you need. The response includes result file IDs when they are available.
+    /// Retrieves details for a fine-tuning job. Use `fine_tuning_job_id` to identify the job whose status, model, and training details you need. The response includes result file IDs when they are available.
     ///
-    /// Get info about a fine-tuning job. [Learn more about
-    /// fine-tuning](https://developers.openai.com/api/docs/guides/model-optimization)
+    /// Get info about a fine-tuning job. [Learn more about fine-tuning](https://developers.openai.com/api/docs/guides/model-optimization)
     ///
     /// - Parameters:
     /// - fineTuningJobId: The ID of the fine-tuning job.
-    static func retrieveFineTuningJob(
-        config: ClientConfig,
-        fineTuningJobId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> FineTuningJob {
-        try await (sdkRequest(
-            "GET",
-            ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveFineTuningJob",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func retrieveFineTuningJob(config: ClientConfig, fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
+        return try (await sdkRequest("GET", ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId))].joined(), config: config, decoder: .json, operationId: "retrieveFineTuningJob", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

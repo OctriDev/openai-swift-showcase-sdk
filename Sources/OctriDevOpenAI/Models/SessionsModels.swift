@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Sessions domain models
+// Sessions domain models
 /// Parameters for provisioning a new ChatKit session.
 public struct CreateChatSessionBody: Codable {
     /// Workflow that powers the session.
@@ -26,49 +26,33 @@ public struct CreateChatSessionBody: Codable {
         case chatkitConfiguration = "chatkit_configuration"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateChatSessionBody {
-    init(from decoder: Decoder) throws {
+extension CreateChatSessionBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.workflow) else {
-            throw SdkValidationError(
-                field: "workflow",
-                code: "required",
-                message: "Validation failed for 'workflow': value is required"
-            )
+            throw SdkValidationError(field: "workflow", code: "required", message: "Validation failed for 'workflow': value is required")
         }
         guard container.contains(.user) else {
-            throw SdkValidationError(
-                field: "user",
-                code: "required",
-                message: "Validation failed for 'user': value is required"
-            )
+            throw SdkValidationError(field: "user", code: "required", message: "Validation failed for 'user': value is required")
         }
-        workflow = try container.sdkDecodeRequired(.workflow)
-        user = try container.sdkDecodeRequired(.user)
-        expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
-        rateLimits = try container.sdkDecodeIfPresent(.rateLimits)
-        chatkitConfiguration = try container.sdkDecodeIfPresent(.chatkitConfiguration)
-        try validateLength("user", user, min: 1, max: nil)
+        self.workflow = try container.sdkDecodeRequired(.workflow)
+        self.user = try container.sdkDecodeRequired(.user)
+        self.expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
+        self.rateLimits = try container.sdkDecodeIfPresent(.rateLimits)
+        self.chatkitConfiguration = try container.sdkDecodeIfPresent(.chatkitConfiguration)
+            try validateLength("user", self.user, min: 1, max: nil)
     }
 }
 
-public extension CreateChatSessionBody {
-    init(
-        workflow: WorkflowParam,
-        user: String,
-        expiresAfter: ExpiresAfterParam? = nil,
-        rateLimits: RateLimitsParam? = nil,
-        chatkitConfiguration: ChatkitConfigurationParam? = nil
-    ) throws {
+extension CreateChatSessionBody {
+    public init(workflow: WorkflowParam, user: String, expiresAfter: ExpiresAfterParam? = nil, rateLimits: RateLimitsParam? = nil, chatkitConfiguration: ChatkitConfigurationParam? = nil) throws {
         (self.workflow, self.user) = (workflow, user)
         (self.expiresAfter, self.rateLimits) = (expiresAfter, rateLimits)
         self.chatkitConfiguration = chatkitConfiguration
-        try validateLength("user", self.user, min: 1, max: nil)
+            try validateLength("user", self.user, min: 1, max: nil)
     }
 }
 
@@ -82,42 +66,26 @@ public struct RateLimitsParam: Codable {
     }
 
     init() {
-        maxRequestsPer1Minute = nil
+        self.maxRequestsPer1Minute = nil
     }
 }
 
-public extension RateLimitsParam {
-    init(from decoder: Decoder) throws {
+extension RateLimitsParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        maxRequestsPer1Minute = try container.sdkDecodeIfPresent(.maxRequestsPer1Minute)
-        if let value = maxRequestsPer1Minute {
-            try validateRange(
-                "max_requests_per_1_minute",
-                Double(value),
-                min: 1,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.maxRequestsPer1Minute = try container.sdkDecodeIfPresent(.maxRequestsPer1Minute)
+        if let value = self.maxRequestsPer1Minute {
+            try validateRange("max_requests_per_1_minute", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension RateLimitsParam {
-    init(maxRequestsPer1Minute: Int? = nil) throws {
+extension RateLimitsParam {
+    public init(maxRequestsPer1Minute: Int? = nil) throws {
         self.init()
         self.maxRequestsPer1Minute = maxRequestsPer1Minute
         if let value = self.maxRequestsPer1Minute {
-            try validateRange(
-                "max_requests_per_1_minute",
-                Double(value),
-                min: 1,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("max_requests_per_1_minute", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -134,54 +102,28 @@ public struct ExpiresAfterParam: Codable {
         case seconds
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ExpiresAfterParam {
-    init(from decoder: Decoder) throws {
+extension ExpiresAfterParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.anchor) else {
-            throw SdkValidationError(
-                field: "anchor",
-                code: "required",
-                message: "Validation failed for 'anchor': value is required"
-            )
+            throw SdkValidationError(field: "anchor", code: "required", message: "Validation failed for 'anchor': value is required")
         }
         guard container.contains(.seconds) else {
-            throw SdkValidationError(
-                field: "seconds",
-                code: "required",
-                message: "Validation failed for 'seconds': value is required"
-            )
+            throw SdkValidationError(field: "seconds", code: "required", message: "Validation failed for 'seconds': value is required")
         }
-        anchor = try container.sdkDecodeRequired(.anchor)
-        seconds = try container.sdkDecodeRequired(.seconds)
-        try validateRange(
-            "seconds",
-            Double(seconds),
-            min: 1,
-            max: 600,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.anchor = try container.sdkDecodeRequired(.anchor)
+        self.seconds = try container.sdkDecodeRequired(.seconds)
+            try validateRange("seconds", Double(self.seconds), min: 1, max: 600, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension ExpiresAfterParam {
-    init(anchor: ExpiresAfterParamAnchor, seconds: Int) throws {
+extension ExpiresAfterParam {
+    public init(anchor: ExpiresAfterParamAnchor, seconds: Int) throws {
         (self.anchor, self.seconds) = (anchor, seconds)
-        try validateRange(
-            "seconds",
-            Double(self.seconds),
-            min: 1,
-            max: 600,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("seconds", Double(self.seconds), min: 1, max: 600, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -198,43 +140,27 @@ public struct HistoryParam: Codable {
     }
 
     init() {
-        (enabled, recentThreads) = (nil, nil)
+        (self.enabled, self.recentThreads) = (nil, nil)
     }
 }
 
-public extension HistoryParam {
-    init(from decoder: Decoder) throws {
+extension HistoryParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        enabled = try container.sdkDecodeIfPresent(.enabled)
-        recentThreads = try container.sdkDecodeIfPresent(.recentThreads)
-        if let value = recentThreads {
-            try validateRange(
-                "recent_threads",
-                Double(value),
-                min: 1,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.enabled = try container.sdkDecodeIfPresent(.enabled)
+        self.recentThreads = try container.sdkDecodeIfPresent(.recentThreads)
+        if let value = self.recentThreads {
+            try validateRange("recent_threads", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension HistoryParam {
-    init(enabled: Bool? = nil, recentThreads: Int? = nil) throws {
+extension HistoryParam {
+    public init(enabled: Bool? = nil, recentThreads: Int? = nil) throws {
         self.init()
         (self.enabled, self.recentThreads) = (enabled, recentThreads)
         if let value = self.recentThreads {
-            try validateRange(
-                "recent_threads",
-                Double(value),
-                min: 1,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("recent_threads", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -247,38 +173,24 @@ public indirect enum WorkflowParamStateVariablesValue {
 }
 
 extension WorkflowParamStateVariablesValue: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for WorkflowParamStateVariablesValue"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for WorkflowParamStateVariablesValue")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension WorkflowParamStateVariablesValue {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
-        if let value = try? container.decode(Bool.self) {
-            return .boolValue(value)
-        }
-        if let value = try? container.decode(Double.self) {
-            return .doubleValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) { return .intValue(value) }
+        if let value = try? container.decode(Bool.self) { return .boolValue(value) }
+        if let value = try? container.decode(Double.self) { return .doubleValue(value) }
         return nil
     }
 }
@@ -321,67 +233,35 @@ public struct FileUploadParam: Codable {
     }
 
     init() {
-        (enabled, maxFileSize, maxFiles) = (nil, nil, nil)
+        (self.enabled, self.maxFileSize, self.maxFiles) = (nil, nil, nil)
     }
 }
 
-public extension FileUploadParam {
-    init(from decoder: Decoder) throws {
+extension FileUploadParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        enabled = try container.sdkDecodeIfPresent(.enabled)
-        maxFileSize = try container.sdkDecodeIfPresent(.maxFileSize)
-        maxFiles = try container.sdkDecodeIfPresent(.maxFiles)
-        if let value = maxFileSize {
-            try validateRange(
-                "max_file_size",
-                Double(value),
-                min: 1,
-                max: 512,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.enabled = try container.sdkDecodeIfPresent(.enabled)
+        self.maxFileSize = try container.sdkDecodeIfPresent(.maxFileSize)
+        self.maxFiles = try container.sdkDecodeIfPresent(.maxFiles)
+        if let value = self.maxFileSize {
+            try validateRange("max_file_size", Double(value), min: 1, max: 512, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = maxFiles {
-            try validateRange(
-                "max_files",
-                Double(value),
-                min: 1,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.maxFiles {
+            try validateRange("max_files", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension FileUploadParam {
-    init(enabled: Bool? = nil, maxFileSize: Int? = nil, maxFiles: Int? = nil) throws {
+extension FileUploadParam {
+    public init(enabled: Bool? = nil, maxFileSize: Int? = nil, maxFiles: Int? = nil) throws {
         self.init()
         (self.enabled, self.maxFileSize) = (enabled, maxFileSize)
         self.maxFiles = maxFiles
         if let value = self.maxFileSize {
-            try validateRange(
-                "max_file_size",
-                Double(value),
-                min: 1,
-                max: 512,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("max_file_size", Double(value), min: 1, max: 512, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.maxFiles {
-            try validateRange(
-                "max_files",
-                Double(value),
-                min: 1,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("max_files", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -396,19 +276,19 @@ public struct WorkflowTracingParam: Codable {
     }
 
     init() {
-        enabled = nil
+        self.enabled = nil
     }
 }
 
-public extension WorkflowTracingParam {
-    init(from decoder: Decoder) throws {
+extension WorkflowTracingParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        enabled = try container.sdkDecodeIfPresent(.enabled)
+        self.enabled = try container.sdkDecodeIfPresent(.enabled)
     }
 }
 
-public extension WorkflowTracingParam {
-    init(enabled: Bool? = nil) {
+extension WorkflowTracingParam {
+    public init(enabled: Bool? = nil) {
         self.init()
         self.enabled = enabled
     }
@@ -433,35 +313,24 @@ public struct WorkflowParam: Codable {
         case tracing
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WorkflowParam {
-    init(from decoder: Decoder) throws {
+extension WorkflowParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        version = try container.sdkDecodeIfPresent(.version)
-        stateVariables = try container.sdkDecodeIfPresent(.stateVariables)
-        tracing = try container.sdkDecodeIfPresent(.tracing)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.version = try container.sdkDecodeIfPresent(.version)
+        self.stateVariables = try container.sdkDecodeIfPresent(.stateVariables)
+        self.tracing = try container.sdkDecodeIfPresent(.tracing)
     }
 }
 
-public extension WorkflowParam {
-    init(
-        id: String,
-        version: String? = nil,
-        stateVariables: [String: WorkflowParamStateVariablesValue]? = nil,
-        tracing: WorkflowTracingParam? = nil
-    ) {
+extension WorkflowParam {
+    public init(id: String, version: String? = nil, stateVariables: [String: WorkflowParamStateVariablesValue]? = nil, tracing: WorkflowTracingParam? = nil) {
         (self.id, self.version) = (id, version)
         (self.stateVariables, self.tracing) = (stateVariables, tracing)
     }
@@ -477,19 +346,19 @@ public struct AutomaticThreadTitlingParam: Codable {
     }
 
     init() {
-        enabled = nil
+        self.enabled = nil
     }
 }
 
-public extension AutomaticThreadTitlingParam {
-    init(from decoder: Decoder) throws {
+extension AutomaticThreadTitlingParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        enabled = try container.sdkDecodeIfPresent(.enabled)
+        self.enabled = try container.sdkDecodeIfPresent(.enabled)
     }
 }
 
-public extension AutomaticThreadTitlingParam {
-    init(enabled: Bool? = nil) {
+extension AutomaticThreadTitlingParam {
+    public init(enabled: Bool? = nil) {
         self.init()
         self.enabled = enabled
     }
@@ -513,25 +382,21 @@ public struct ChatkitConfigurationParam: Codable {
     }
 
     init() {
-        (automaticThreadTitling, fileUpload, history) = (nil, nil, nil)
+        (self.automaticThreadTitling, self.fileUpload, self.history) = (nil, nil, nil)
     }
 }
 
-public extension ChatkitConfigurationParam {
-    init(from decoder: Decoder) throws {
+extension ChatkitConfigurationParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        automaticThreadTitling = try container.sdkDecodeIfPresent(.automaticThreadTitling)
-        fileUpload = try container.sdkDecodeIfPresent(.fileUpload)
-        history = try container.sdkDecodeIfPresent(.history)
+        self.automaticThreadTitling = try container.sdkDecodeIfPresent(.automaticThreadTitling)
+        self.fileUpload = try container.sdkDecodeIfPresent(.fileUpload)
+        self.history = try container.sdkDecodeIfPresent(.history)
     }
 }
 
-public extension ChatkitConfigurationParam {
-    init(
-        automaticThreadTitling: AutomaticThreadTitlingParam? = nil,
-        fileUpload: FileUploadParam? = nil,
-        history: HistoryParam? = nil
-    ) {
+extension ChatkitConfigurationParam {
+    public init(automaticThreadTitling: AutomaticThreadTitlingParam? = nil, fileUpload: FileUploadParam? = nil, history: HistoryParam? = nil) {
         self.init()
         (self.automaticThreadTitling, self.fileUpload) = (automaticThreadTitling, fileUpload)
         self.history = history
@@ -542,15 +407,12 @@ public extension ChatkitConfigurationParam {
 public struct ExpiresAfterParamAnchor: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let createdAt = ExpiresAfterParamAnchor(rawValue: "created_at")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

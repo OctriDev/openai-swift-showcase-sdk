@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveSession domain models
+// LiveLiveSession domain models
 public indirect enum LiveSessionCreateParamsDelegation {
     case liveClientDelegationParam(LiveClientDelegationParam)
     case liveResponsesDelegationParam(LiveResponsesDelegationParam)
@@ -13,6 +13,7 @@ public indirect enum LiveSessionCreateParamsDelegation {
 }
 
 extension LiveSessionCreateParamsDelegation: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension LiveSessionCreateParamsDelegation: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,10 +37,10 @@ extension LiveSessionCreateParamsDelegation: Codable {
 extension LiveSessionCreateParamsDelegation {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "client": try .liveClientDelegationParam(LiveClientDelegationParam(from: decoder))
-        case "responses": try .liveResponsesDelegationParam(LiveResponsesDelegationParam(from: decoder))
-        case "decisions": try .liveDecisionsDelegationParam2(LiveDecisionsDelegationParam2(from: decoder))
-        default: nil
+        case "client": return .liveClientDelegationParam(try LiveClientDelegationParam(from: decoder))
+        case "responses": return .liveResponsesDelegationParam(try LiveResponsesDelegationParam(from: decoder))
+        case "decisions": return .liveDecisionsDelegationParam2(try LiveDecisionsDelegationParam2(from: decoder))
+        default: return nil
         }
     }
 }
@@ -68,6 +65,7 @@ public indirect enum LiveSessionCreateRequestTransport {
 }
 
 extension LiveSessionCreateRequestTransport: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -75,16 +73,12 @@ extension LiveSessionCreateRequestTransport: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -95,9 +89,9 @@ extension LiveSessionCreateRequestTransport: Codable {
 extension LiveSessionCreateRequestTransport {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "webrtc": try .liveWebRtcTransport(LiveWebRTCTransport(from: decoder))
-        case "sip": try .liveSipTransport(LiveSIPTransport(from: decoder))
-        default: nil
+        case "webrtc": return .liveWebRtcTransport(try LiveWebRTCTransport(from: decoder))
+        case "sip": return .liveSipTransport(try LiveSIPTransport(from: decoder))
+        default: return nil
         }
     }
 }
@@ -121,6 +115,7 @@ public indirect enum LiveSessionCreateRequestTransportRequest {
 }
 
 extension LiveSessionCreateRequestTransportRequest: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -128,29 +123,20 @@ extension LiveSessionCreateRequestTransportRequest: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-                self = value; return
-            }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) {
-            self = value; return
-        }
+        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for LiveSessionCreateRequestTransportRequest"
-        )
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for LiveSessionCreateRequestTransportRequest")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -161,17 +147,15 @@ extension LiveSessionCreateRequestTransportRequest: Codable {
 extension LiveSessionCreateRequestTransportRequest {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "webrtc": try .liveWebRtcTransport(LiveWebRTCTransport(from: decoder))
-        default: nil
+        case "webrtc": return .liveWebRtcTransport(try LiveWebRTCTransport(from: decoder))
+        default: return nil
         }
     }
 }
 
 extension LiveSessionCreateRequestTransportRequest {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(LiveSIPTransportRequest.self) {
-            return .liveSipTransportRequest(value)
-        }
+        if let value = try? container.decode(LiveSIPTransportRequest.self) { return .liveSipTransportRequest(value) }
         return nil
     }
 }
@@ -193,26 +177,18 @@ public indirect enum LiveSessionCreateResponseTransport {
 }
 
 extension LiveSessionCreateResponseTransport: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for LiveSessionCreateResponseTransport"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for LiveSessionCreateResponseTransport")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
@@ -221,10 +197,7 @@ extension LiveSessionCreateResponseTransport {
         if let value = try? container.decode(LiveWebRTCTransport.self), sdkKeepsEveryKey(value, of: raw) {
             return .liveWebRtcTransport(value)
         }
-        if let value = try? container.decode(LiveSessionCreateResponseTransportVariant1.self), sdkKeepsEveryKey(
-            value,
-            of: raw
-        ) {
+        if let value = try? container.decode(LiveSessionCreateResponseTransportVariant1.self), sdkKeepsEveryKey(value, of: raw) {
             return .liveSessionCreateResponseTransportVariant1(value)
         }
         return nil
@@ -233,13 +206,11 @@ extension LiveSessionCreateResponseTransport {
 
 extension LiveSessionCreateResponseTransport {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(LiveWebRTCTransport.self) {
-            return .liveWebRtcTransport(value)
-        }
+        if let value = try? container.decode(LiveWebRTCTransport.self) { return .liveWebRtcTransport(value) }
         if let value = try? container.decode(
             LiveSessionCreateResponseTransportVariant1.self
         ) {
-            return .liveSessionCreateResponseTransportVariant1(value)
+            return             .liveSessionCreateResponseTransportVariant1(value)
         }
         return nil
     }
@@ -264,6 +235,7 @@ public indirect enum LiveSessionResourceParamDelegation {
 }
 
 extension LiveSessionResourceParamDelegation: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -271,16 +243,12 @@ extension LiveSessionResourceParamDelegation: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -291,10 +259,10 @@ extension LiveSessionResourceParamDelegation: Codable {
 extension LiveSessionResourceParamDelegation {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "client": try .liveClientDelegationParam(LiveClientDelegationParam(from: decoder))
-        case "responses": try .liveResponsesDelegationParam(LiveResponsesDelegationParam(from: decoder))
-        case "decisions": try .liveDecisionsDelegationParam2(LiveDecisionsDelegationParam2(from: decoder))
-        default: nil
+        case "client": return .liveClientDelegationParam(try LiveClientDelegationParam(from: decoder))
+        case "responses": return .liveResponsesDelegationParam(try LiveResponsesDelegationParam(from: decoder))
+        case "decisions": return .liveDecisionsDelegationParam2(try LiveDecisionsDelegationParam2(from: decoder))
+        default: return nil
         }
     }
 }
@@ -320,6 +288,7 @@ public indirect enum LiveSessionUpdateParamsDelegation {
 }
 
 extension LiveSessionUpdateParamsDelegation: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -327,16 +296,12 @@ extension LiveSessionUpdateParamsDelegation: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -347,10 +312,10 @@ extension LiveSessionUpdateParamsDelegation: Codable {
 extension LiveSessionUpdateParamsDelegation {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "client": try .liveClientDelegationParam(LiveClientDelegationParam(from: decoder))
-        case "responses": try .liveResponsesDelegationUpdateParam(LiveResponsesDelegationUpdateParam(from: decoder))
-        case "decisions": try .liveDecisionsDelegationUpdateParam(LiveDecisionsDelegationUpdateParam(from: decoder))
-        default: nil
+        case "client": return .liveClientDelegationParam(try LiveClientDelegationParam(from: decoder))
+        case "responses": return .liveResponsesDelegationUpdateParam(try LiveResponsesDelegationUpdateParam(from: decoder))
+        case "decisions": return .liveDecisionsDelegationUpdateParam(try LiveDecisionsDelegationUpdateParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -394,72 +359,43 @@ public struct LiveSessionClosed: Codable {
         case clientEventId = "client_event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSessionClosed {
-    init(from decoder: Decoder) throws {
+extension LiveSessionClosed {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.reason) else {
-            throw SdkValidationError(
-                field: "reason",
-                code: "required",
-                message: "Validation failed for 'reason': value is required"
-            )
+            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
         }
         guard container.contains(.session) else {
-            throw SdkValidationError(
-                field: "session",
-                code: "required",
-                message: "Validation failed for 'session': value is required"
-            )
+            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
         }
         guard container.contains(.usage) else {
-            throw SdkValidationError(
-                field: "usage",
-                code: "required",
-                message: "Validation failed for 'usage': value is required"
-            )
+            throw SdkValidationError(field: "usage", code: "required", message: "Validation failed for 'usage': value is required")
         }
-        eventId = try container.sdkDecodeRequired(.eventId)
-        type = try container.sdkDecodeRequired(.type)
-        reason = try container.sdkDecodeRequired(.reason)
-        session = try container.sdkDecodeRequired(.session)
-        usage = try container.sdkDecodeRequired(.usage)
-        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
-        try sdkValidateRawEnum("type", type, LiveSessionClosedType.allCases.map(\.rawValue))
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.reason = try container.sdkDecodeRequired(.reason)
+        self.session = try container.sdkDecodeRequired(.session)
+        self.usage = try container.sdkDecodeRequired(.usage)
+        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+            try sdkValidateRawEnum("type", self.type, LiveSessionClosedType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSessionClosed {
-    init(
-        eventId: String,
-        type: LiveSessionClosedType,
-        reason: LiveSessionClosedReason,
-        session: LiveSessionResourceParam,
-        usage: LiveSessionUsage,
-        clientEventId: String? = nil
-    ) throws {
+extension LiveSessionClosed {
+    public init(eventId: String, type: LiveSessionClosedType, reason: LiveSessionClosedReason, session: LiveSessionResourceParam, usage: LiveSessionUsage, clientEventId: String? = nil) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.reason, self.session) = (reason, session)
         (self.usage, self.clientEventId) = (usage, clientEventId)
-        try sdkValidateRawEnum("type", self.type, LiveSessionClosedType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSessionClosedType.allCases.map(\.rawValue))
     }
 }
 
@@ -485,56 +421,36 @@ public struct LiveSessionUsageUpdated: Codable {
         case contextWindow = "context_window"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSessionUsageUpdated {
-    init(from decoder: Decoder) throws {
+extension LiveSessionUsageUpdated {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.usage) else {
-            throw SdkValidationError(
-                field: "usage",
-                code: "required",
-                message: "Validation failed for 'usage': value is required"
-            )
+            throw SdkValidationError(field: "usage", code: "required", message: "Validation failed for 'usage': value is required")
         }
-        eventId = try container.sdkDecodeRequired(.eventId)
-        type = try container.sdkDecodeRequired(.type)
-        usage = try container.sdkDecodeRequired(.usage)
-        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
-        contextWindow = try container.sdkDecodeIfPresent(.contextWindow)
-        try sdkValidateRawEnum("type", type, LiveSessionUsageUpdatedType.allCases.map(\.rawValue))
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.usage = try container.sdkDecodeRequired(.usage)
+        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+        self.contextWindow = try container.sdkDecodeIfPresent(.contextWindow)
+            try sdkValidateRawEnum("type", self.type, LiveSessionUsageUpdatedType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSessionUsageUpdated {
-    init(
-        eventId: String,
-        type: LiveSessionUsageUpdatedType,
-        usage: LiveSessionUsage,
-        clientEventId: String? = nil,
-        contextWindow: LiveContextWindowUsage? = nil
-    ) throws {
+extension LiveSessionUsageUpdated {
+    public init(eventId: String, type: LiveSessionUsageUpdatedType, usage: LiveSessionUsage, clientEventId: String? = nil, contextWindow: LiveContextWindowUsage? = nil) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.usage, self.clientEventId) = (usage, clientEventId)
         self.contextWindow = contextWindow
-        try sdkValidateRawEnum("type", self.type, LiveSessionUsageUpdatedType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSessionUsageUpdatedType.allCases.map(\.rawValue))
     }
 }
 
@@ -586,7 +502,5 @@ public struct LiveSessionResourceParam: Codable {
         case client
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

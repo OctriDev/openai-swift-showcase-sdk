@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AssistantsMessage domain models
+// AssistantsMessage domain models
 /// Occurs when a message is completed.
 public struct MessageStreamEventVariant3: Codable {
     public var event: MessageStreamEventVariant3Event
@@ -15,38 +15,28 @@ public struct MessageStreamEventVariant3: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageStreamEventVariant3 {
-    init(from decoder: Decoder) throws {
+extension MessageStreamEventVariant3 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.event) else {
-            throw SdkValidationError(
-                field: "event",
-                code: "required",
-                message: "Validation failed for 'event': value is required"
-            )
+            throw SdkValidationError(field: "event", code: "required", message: "Validation failed for 'event': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        event = try container.sdkDecodeRequired(.event)
-        data = try container.sdkDecodeRequired(.data)
-        try sdkValidateRawEnum("event", event, MessageStreamEventVariant3Event.allCases.map(\.rawValue))
+        self.event = try container.sdkDecodeRequired(.event)
+        self.data = try container.sdkDecodeRequired(.data)
+            try sdkValidateRawEnum("event", self.event, MessageStreamEventVariant3Event.allCases.map(\.rawValue))
     }
 }
 
-public extension MessageStreamEventVariant3 {
-    init(event: MessageStreamEventVariant3Event, data: MessageObject) throws {
+extension MessageStreamEventVariant3 {
+    public init(event: MessageStreamEventVariant3Event, data: MessageObject) throws {
         (self.event, self.data) = (event, data)
-        try sdkValidateRawEnum("event", self.event, MessageStreamEventVariant3Event.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("event", self.event, MessageStreamEventVariant3Event.allCases.map(\.rawValue))
     }
 }
 
@@ -59,27 +49,21 @@ public struct MessageContentTextAnnotationsFileCitationObjectFileCitation: Codab
         case fileId = "file_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageContentTextAnnotationsFileCitationObjectFileCitation {
-    init(from decoder: Decoder) throws {
+extension MessageContentTextAnnotationsFileCitationObjectFileCitation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.fileId) else {
-            throw SdkValidationError(
-                field: "file_id",
-                code: "required",
-                message: "Validation failed for 'file_id': value is required"
-            )
+            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
         }
-        fileId = try container.sdkDecodeRequired(.fileId)
+        self.fileId = try container.sdkDecodeRequired(.fileId)
     }
 }
 
-public extension MessageContentTextAnnotationsFileCitationObjectFileCitation {
-    init(fileId: String) {
+extension MessageContentTextAnnotationsFileCitationObjectFileCitation {
+    public init(fileId: String) {
         self.fileId = fileId
     }
 }
@@ -106,114 +90,46 @@ public struct MessageContentTextAnnotationsFileCitationObject: Codable {
         case endIndex = "end_index"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageContentTextAnnotationsFileCitationObject {
-    init(from decoder: Decoder) throws {
+extension MessageContentTextAnnotationsFileCitationObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
         guard container.contains(.fileCitation) else {
-            throw SdkValidationError(
-                field: "file_citation",
-                code: "required",
-                message: "Validation failed for 'file_citation': value is required"
-            )
+            throw SdkValidationError(field: "file_citation", code: "required", message: "Validation failed for 'file_citation': value is required")
         }
         guard container.contains(.startIndex) else {
-            throw SdkValidationError(
-                field: "start_index",
-                code: "required",
-                message: "Validation failed for 'start_index': value is required"
-            )
+            throw SdkValidationError(field: "start_index", code: "required", message: "Validation failed for 'start_index': value is required")
         }
         guard container.contains(.endIndex) else {
-            throw SdkValidationError(
-                field: "end_index",
-                code: "required",
-                message: "Validation failed for 'end_index': value is required"
-            )
+            throw SdkValidationError(field: "end_index", code: "required", message: "Validation failed for 'end_index': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        fileCitation = try container.sdkDecodeRequired(.fileCitation)
-        startIndex = try container.sdkDecodeRequired(.startIndex)
-        endIndex = try container.sdkDecodeRequired(.endIndex)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            MessageContentTextAnnotationsFileCitationObjectType.allCases.map(\.rawValue)
-        )
-        try validateRange(
-            "start_index",
-            Double(startIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "end_index",
-            Double(endIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+        self.fileCitation = try container.sdkDecodeRequired(.fileCitation)
+        self.startIndex = try container.sdkDecodeRequired(.startIndex)
+        self.endIndex = try container.sdkDecodeRequired(.endIndex)
+            try sdkValidateRawEnum("type", self.type, MessageContentTextAnnotationsFileCitationObjectType.allCases.map(\.rawValue))
+            try validateRange("start_index", Double(self.startIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("end_index", Double(self.endIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension MessageContentTextAnnotationsFileCitationObject {
-    init(
-        type: MessageContentTextAnnotationsFileCitationObjectType,
-        text: String,
-        fileCitation: MessageContentTextAnnotationsFileCitationObjectFileCitation,
-        startIndex: Int,
-        endIndex: Int
-    ) throws {
+extension MessageContentTextAnnotationsFileCitationObject {
+    public init(type: MessageContentTextAnnotationsFileCitationObjectType, text: String, fileCitation: MessageContentTextAnnotationsFileCitationObjectFileCitation, startIndex: Int, endIndex: Int) throws {
         (self.type, self.text) = (type, text)
         (self.fileCitation, self.startIndex) = (fileCitation, startIndex)
         self.endIndex = endIndex
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            MessageContentTextAnnotationsFileCitationObjectType.allCases.map(\.rawValue)
-        )
-        try validateRange(
-            "start_index",
-            Double(self.startIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "end_index",
-            Double(self.endIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try sdkValidateRawEnum("type", self.type, MessageContentTextAnnotationsFileCitationObjectType.allCases.map(\.rawValue))
+            try validateRange("start_index", Double(self.startIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("end_index", Double(self.endIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -227,19 +143,19 @@ public struct MessageDeltaContentTextAnnotationsFilePathObjectFilePath: Codable 
     }
 
     init() {
-        fileId = nil
+        self.fileId = nil
     }
 }
 
-public extension MessageDeltaContentTextAnnotationsFilePathObjectFilePath {
-    init(from decoder: Decoder) throws {
+extension MessageDeltaContentTextAnnotationsFilePathObjectFilePath {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
     }
 }
 
-public extension MessageDeltaContentTextAnnotationsFilePathObjectFilePath {
-    init(fileId: String? = nil) {
+extension MessageDeltaContentTextAnnotationsFilePathObjectFilePath {
+    public init(fileId: String? = nil) {
         self.init()
         self.fileId = fileId
     }
@@ -260,20 +176,20 @@ public struct MessageDeltaContentImageFileObjectImageFile: Codable {
     }
 
     init() {
-        (fileId, detail) = (nil, nil)
+        (self.fileId, self.detail) = (nil, nil)
     }
 }
 
-public extension MessageDeltaContentImageFileObjectImageFile {
-    init(from decoder: Decoder) throws {
+extension MessageDeltaContentImageFileObjectImageFile {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        detail = try container.sdkDecodeIfPresent(.detail)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        self.detail = try container.sdkDecodeIfPresent(.detail)
     }
 }
 
-public extension MessageDeltaContentImageFileObjectImageFile {
-    init(fileId: String? = nil, detail: MessageDeltaContentImageFileObjectImageFileDetail? = nil) {
+extension MessageDeltaContentImageFileObjectImageFile {
+    public init(fileId: String? = nil, detail: MessageDeltaContentImageFileObjectImageFileDetail? = nil) {
         self.init()
         (self.fileId, self.detail) = (fileId, detail)
     }
@@ -292,20 +208,20 @@ public struct MessageObjectAttachmentsItem: Codable {
     }
 
     init() {
-        (fileId, tools) = (nil, nil)
+        (self.fileId, self.tools) = (nil, nil)
     }
 }
 
-public extension MessageObjectAttachmentsItem {
-    init(from decoder: Decoder) throws {
+extension MessageObjectAttachmentsItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        tools = try container.sdkDecodeIfPresent(.tools)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        self.tools = try container.sdkDecodeIfPresent(.tools)
     }
 }
 
-public extension MessageObjectAttachmentsItem {
-    init(fileId: String? = nil, tools: [MessageObjectAttachmentsItemToolsItem]? = nil) {
+extension MessageObjectAttachmentsItem {
+    public init(fileId: String? = nil, tools: [MessageObjectAttachmentsItemToolsItem]? = nil) {
         self.init()
         (self.fileId, self.tools) = (fileId, tools)
     }
@@ -323,38 +239,28 @@ public struct MessageContentImageUrlObject: Codable {
         case imageUrl = "image_url"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageContentImageUrlObject {
-    init(from decoder: Decoder) throws {
+extension MessageContentImageUrlObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.imageUrl) else {
-            throw SdkValidationError(
-                field: "image_url",
-                code: "required",
-                message: "Validation failed for 'image_url': value is required"
-            )
+            throw SdkValidationError(field: "image_url", code: "required", message: "Validation failed for 'image_url': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        imageUrl = try container.sdkDecodeRequired(.imageUrl)
-        try sdkValidateRawEnum("type", type, MessageContentImageUrlObjectType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.imageUrl = try container.sdkDecodeRequired(.imageUrl)
+            try sdkValidateRawEnum("type", self.type, MessageContentImageUrlObjectType.allCases.map(\.rawValue))
     }
 }
 
-public extension MessageContentImageUrlObject {
-    init(type: MessageContentImageUrlObjectType, imageUrl: MessageContentImageUrlObjectImageUrl) throws {
+extension MessageContentImageUrlObject {
+    public init(type: MessageContentImageUrlObjectType, imageUrl: MessageContentImageUrlObjectImageUrl) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
-        try sdkValidateRawEnum("type", self.type, MessageContentImageUrlObjectType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, MessageContentImageUrlObjectType.allCases.map(\.rawValue))
     }
 }
 
@@ -383,102 +289,45 @@ public struct MessageDeltaContentTextAnnotationsFileCitationObject: Codable {
         case endIndex = "end_index"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageDeltaContentTextAnnotationsFileCitationObject {
-    init(from decoder: Decoder) throws {
+extension MessageDeltaContentTextAnnotationsFileCitationObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.index) else {
-            throw SdkValidationError(
-                field: "index",
-                code: "required",
-                message: "Validation failed for 'index': value is required"
-            )
+            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        index = try container.sdkDecodeRequired(.index)
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeIfPresent(.text)
-        fileCitation = try container.sdkDecodeIfPresent(.fileCitation)
-        startIndex = try container.sdkDecodeIfPresent(.startIndex)
-        endIndex = try container.sdkDecodeIfPresent(.endIndex)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            MessageDeltaContentTextAnnotationsFileCitationObjectType.allCases.map(\.rawValue)
-        )
-        if let value = startIndex {
-            try validateRange(
-                "start_index",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.index = try container.sdkDecodeRequired(.index)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.fileCitation = try container.sdkDecodeIfPresent(.fileCitation)
+        self.startIndex = try container.sdkDecodeIfPresent(.startIndex)
+        self.endIndex = try container.sdkDecodeIfPresent(.endIndex)
+            try sdkValidateRawEnum("type", self.type, MessageDeltaContentTextAnnotationsFileCitationObjectType.allCases.map(\.rawValue))
+        if let value = self.startIndex {
+            try validateRange("start_index", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = endIndex {
-            try validateRange(
-                "end_index",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.endIndex {
+            try validateRange("end_index", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension MessageDeltaContentTextAnnotationsFileCitationObject {
-    init(
-        index: Int,
-        type: MessageDeltaContentTextAnnotationsFileCitationObjectType,
-        text: String? = nil,
-        fileCitation: MessageDeltaContentTextAnnotationsFileCitationObjectFileCitation? = nil,
-        startIndex: Int? = nil,
-        endIndex: Int? = nil
-    ) throws {
+extension MessageDeltaContentTextAnnotationsFileCitationObject {
+    public init(index: Int, type: MessageDeltaContentTextAnnotationsFileCitationObjectType, text: String? = nil, fileCitation: MessageDeltaContentTextAnnotationsFileCitationObjectFileCitation? = nil, startIndex: Int? = nil, endIndex: Int? = nil) throws {
         (self.index, self.type) = (index, type)
         (self.text, self.fileCitation) = (text, fileCitation)
         (self.startIndex, self.endIndex) = (startIndex, endIndex)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            MessageDeltaContentTextAnnotationsFileCitationObjectType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, MessageDeltaContentTextAnnotationsFileCitationObjectType.allCases.map(\.rawValue))
         if let value = self.startIndex {
-            try validateRange(
-                "start_index",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("start_index", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.endIndex {
-            try validateRange(
-                "end_index",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("end_index", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -534,48 +383,31 @@ public struct MessageObject: Codable {
         case metadata
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageObject {
-    init(from decoder: Decoder) throws {
+extension MessageObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        threadId = try container.sdkDecodeRequired(.threadId)
-        status = try container.sdkDecodeRequired(.status)
-        incompleteDetails = try container.sdkDecodeNullable(.incompleteDetails)
-        completedAt = try container.sdkDecodeNullable(.completedAt)
-        incompleteAt = try container.sdkDecodeNullable(.incompleteAt)
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        assistantId = try container.sdkDecodeNullable(.assistantId)
-        runId = try container.sdkDecodeNullable(.runId)
-        attachments = try container.sdkDecodeNullable(.attachments)
-        metadata = try container.sdkDecodeNullable(.metadata)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.threadId = try container.sdkDecodeRequired(.threadId)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.incompleteDetails = try container.sdkDecodeNullable(.incompleteDetails)
+        self.completedAt = try container.sdkDecodeNullable(.completedAt)
+        self.incompleteAt = try container.sdkDecodeNullable(.incompleteAt)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.assistantId = try container.sdkDecodeNullable(.assistantId)
+        self.runId = try container.sdkDecodeNullable(.runId)
+        self.attachments = try container.sdkDecodeNullable(.attachments)
+        self.metadata = try container.sdkDecodeNullable(.metadata)
     }
 }
 
-public extension MessageObject {
-    init(
-        id: String,
-        object: MessageObjectObject,
-        createdAt: Int,
-        threadId: String,
-        status: MessageObjectStatus,
-        incompleteDetails: MessageObjectIncompleteDetails?,
-        completedAt: Int?,
-        incompleteAt: Int?,
-        role: MessageObjectRole,
-        content: [MessageObjectContentItem],
-        assistantId: String?,
-        runId: String?,
-        attachments: [MessageObjectAttachmentsItem]?,
-        metadata: Metadata?
-    ) {
+extension MessageObject {
+    public init(id: String, object: MessageObjectObject, createdAt: Int, threadId: String, status: MessageObjectStatus, incompleteDetails: MessageObjectIncompleteDetails?, completedAt: Int?, incompleteAt: Int?, role: MessageObjectRole, content: [MessageObjectContentItem], assistantId: String?, runId: String?, attachments: [MessageObjectAttachmentsItem]?, metadata: Metadata?) {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.threadId) = (createdAt, threadId)
         (self.status, self.incompleteDetails) = (status, incompleteDetails)
@@ -599,20 +431,20 @@ public struct MessageDeltaContentTextAnnotationsFileCitationObjectFileCitation: 
     }
 
     init() {
-        (fileId, quote) = (nil, nil)
+        (self.fileId, self.quote) = (nil, nil)
     }
 }
 
-public extension MessageDeltaContentTextAnnotationsFileCitationObjectFileCitation {
-    init(from decoder: Decoder) throws {
+extension MessageDeltaContentTextAnnotationsFileCitationObjectFileCitation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        quote = try container.sdkDecodeIfPresent(.quote)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        self.quote = try container.sdkDecodeIfPresent(.quote)
     }
 }
 
-public extension MessageDeltaContentTextAnnotationsFileCitationObjectFileCitation {
-    init(fileId: String? = nil, quote: String? = nil) {
+extension MessageDeltaContentTextAnnotationsFileCitationObjectFileCitation {
+    public init(fileId: String? = nil, quote: String? = nil) {
         self.init()
         (self.fileId, self.quote) = (fileId, quote)
     }
@@ -630,7 +462,5 @@ public struct MessageRequestContentTextObject: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

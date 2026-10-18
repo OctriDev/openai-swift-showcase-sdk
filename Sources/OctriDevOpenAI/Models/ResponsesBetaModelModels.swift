@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaModel domain models
+// ResponsesBetaModel domain models
 public indirect enum BetaModelIdsCompaction {
     case betaModelIdsResponses(BetaModelIdsResponses)
     case stringValue(String)
@@ -11,35 +11,23 @@ public indirect enum BetaModelIdsCompaction {
 }
 
 extension BetaModelIdsCompaction: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for BetaModelIdsCompaction"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaModelIdsCompaction")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension BetaModelIdsCompaction {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(BetaModelIdsResponses.self) {
-            return .betaModelIdsResponses(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue(value)
-        }
+        if let value = try? container.decode(BetaModelIdsResponses.self) { return .betaModelIdsResponses(value) }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
         return nil
     }
 }
@@ -61,32 +49,22 @@ public indirect enum BetaModelIdsResponses {
 }
 
 extension BetaModelIdsResponses: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for BetaModelIdsResponses"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaModelIdsResponses")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension BetaModelIdsResponses {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(BetaModelIdsShared.self) {
-            return .betaModelIdsShared(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
+        if let value = try? container.decode(BetaModelIdsShared.self) { return .betaModelIdsShared(value) }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
         return nil
     }
 }
@@ -140,36 +118,27 @@ public struct BetaModelResponseProperties: Codable {
     }
 
     init() {
-        (metadata, topLogprobs, temperature, topP, user) = (nil, nil, nil, nil, nil)
-        (safetyIdentifier, promptCacheKey, promptCacheRetention) = (nil, nil, nil)
+        (self.metadata, self.topLogprobs, self.temperature, self.topP, self.user) = (nil, nil, nil, nil, nil)
+        (self.safetyIdentifier, self.promptCacheKey, self.promptCacheRetention) = (nil, nil, nil)
     }
 }
 
-public extension BetaModelResponseProperties {
-    init(from decoder: Decoder) throws {
+extension BetaModelResponseProperties {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        topP = try container.sdkDecodeIfPresent(.topP)
-        user = try container.sdkDecodeIfPresent(.user)
-        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        self.temperature = try container.sdkDecodeIfPresent(.temperature)
+        self.topP = try container.sdkDecodeIfPresent(.topP)
+        self.user = try container.sdkDecodeIfPresent(.user)
+        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
     }
 }
 
-public extension BetaModelResponseProperties {
-    init(
-        metadata: BetaMetadata? = nil,
-        topLogprobs: Int? = nil,
-        temperature: Double? = nil,
-        topP: Double? = nil,
-        user: String? = nil,
-        safetyIdentifier: String? = nil,
-        promptCacheKey: String? = nil,
-        promptCacheRetention: BetaModelResponsePropertiesPromptCacheRetentionVariant0? = nil
-    ) {
+extension BetaModelResponseProperties {
+    public init(metadata: BetaMetadata? = nil, topLogprobs: Int? = nil, temperature: Double? = nil, topP: Double? = nil, user: String? = nil, safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: BetaModelResponsePropertiesPromptCacheRetentionVariant0? = nil) {
         self.init()
         (self.metadata, self.topLogprobs) = (metadata, topLogprobs)
         (self.temperature, self.topP) = (temperature, topP)
@@ -182,10 +151,7 @@ public extension BetaModelResponseProperties {
 public struct BetaModelIdsResponsesVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let o1Pro = BetaModelIdsResponsesVariant1(rawValue: "o1-pro")
     public static let o1Pro20250319 = BetaModelIdsResponsesVariant1(rawValue: "o1-pro-2025-03-19")
     public static let o3Pro = BetaModelIdsResponsesVariant1(rawValue: "o3-pro")
@@ -193,11 +159,9 @@ public struct BetaModelIdsResponsesVariant1: RawRepresentable, Hashable, Codable
     public static let o3DeepResearch = BetaModelIdsResponsesVariant1(rawValue: "o3-deep-research")
     public static let o3DeepResearch20250626 = BetaModelIdsResponsesVariant1(rawValue: "o3-deep-research-2025-06-26")
     public static let o4MiniDeepResearch = BetaModelIdsResponsesVariant1(rawValue: "o4-mini-deep-research")
-    public static let o4MiniDeepResearch20250626 =
-        BetaModelIdsResponsesVariant1(rawValue: "o4-mini-deep-research-2025-06-26")
+    public static let o4MiniDeepResearch20250626 = BetaModelIdsResponsesVariant1(rawValue: "o4-mini-deep-research-2025-06-26")
     public static let computerUsePreview = BetaModelIdsResponsesVariant1(rawValue: "computer-use-preview")
-    public static let computerUsePreview20250311 =
-        BetaModelIdsResponsesVariant1(rawValue: "computer-use-preview-2025-03-11")
+    public static let computerUsePreview20250311 = BetaModelIdsResponsesVariant1(rawValue: "computer-use-preview-2025-03-11")
     public static let gpt55Pro = BetaModelIdsResponsesVariant1(rawValue: "gpt-5.5-pro")
     public static let gpt55Pro20260423 = BetaModelIdsResponsesVariant1(rawValue: "gpt-5.5-pro-2026-04-23")
     public static let gpt5Codex = BetaModelIdsResponsesVariant1(rawValue: "gpt-5-codex")
@@ -211,7 +175,7 @@ public struct BetaModelIdsResponsesVariant1: RawRepresentable, Hashable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -225,20 +189,16 @@ public struct BetaModelIdsResponsesVariant1: RawRepresentable, Hashable, Codable
 /// hours. Learn more. This field expresses a maximum retention policy, while `prompt_cache_options.ttl`
 /// expresses a minimum cache lifetime. The two fields are independent and do not interact. For `gpt-5.5`,
 /// `gpt-5.5-pro`, and future models, only `24h` is supported. For…
-public struct BetaModelResponsePropertiesPromptCacheRetentionVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct BetaModelResponsePropertiesPromptCacheRetentionVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inMemory = BetaModelResponsePropertiesPromptCacheRetentionVariant0(rawValue: "in_memory")
     public static let value24h = BetaModelResponsePropertiesPromptCacheRetentionVariant0(rawValue: "24h")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaCompact domain models
+// ResponsesBetaCompact domain models
 /// Typed representation of the `BetaCompactResource` API schema.
 public struct BetaCompactResource: Codable {
     /// The unique identifier for the compacted response.
@@ -25,65 +25,37 @@ public struct BetaCompactResource: Codable {
         case usage
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaCompactResource {
-    init(from decoder: Decoder) throws {
+extension BetaCompactResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.usage) else {
-            throw SdkValidationError(
-                field: "usage",
-                code: "required",
-                message: "Validation failed for 'usage': value is required"
-            )
+            throw SdkValidationError(field: "usage", code: "required", message: "Validation failed for 'usage': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        output = try container.sdkDecodeRequired(.output)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        usage = try container.sdkDecodeRequired(.usage)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.output = try container.sdkDecodeRequired(.output)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.usage = try container.sdkDecodeRequired(.usage)
     }
 }
 
-public extension BetaCompactResource {
-    init(
-        id: String,
-        object: BetaCompactResourceObject,
-        output: [BetaItemField],
-        createdAt: Int,
-        usage: BetaResponseUsage
-    ) {
+extension BetaCompactResource {
+    public init(id: String, object: BetaCompactResourceObject, output: [BetaItemField], createdAt: Int, usage: BetaResponseUsage) {
         (self.id, self.object) = (id, object)
         (self.output, self.createdAt) = (output, createdAt)
         self.usage = usage
@@ -96,32 +68,22 @@ public indirect enum BetaCompactResponseMethodPublicBodyInput {
 }
 
 extension BetaCompactResponseMethodPublicBodyInput: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for BetaCompactResponseMethodPublicBodyInput"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaCompactResponseMethodPublicBodyInput")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension BetaCompactResponseMethodPublicBodyInput {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode([BetaInputItem].self) {
-            return .betaInputItemList(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode([BetaInputItem].self) { return .betaInputItemList(value) }
         return nil
     }
 }
@@ -168,43 +130,28 @@ public struct BetaCompactResponseMethodPublicBody: Codable {
         case serviceTier = "service_tier"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaCompactResponseMethodPublicBody {
-    init(from decoder: Decoder) throws {
+extension BetaCompactResponseMethodPublicBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
-        model = try container.sdkDecodeNullable(.model)
-        input = try container.sdkDecodeIfPresent(.input)
-        previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
-        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        self.model = try container.sdkDecodeNullable(.model)
+        self.input = try container.sdkDecodeIfPresent(.input)
+        self.previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
     }
 }
 
-public extension BetaCompactResponseMethodPublicBody {
-    init(
-        model: BetaModelIdsCompaction?,
-        input: BetaCompactResponseMethodPublicBodyInput? = nil,
-        previousResponseId: String? = nil,
-        instructions: String? = nil,
-        promptCacheKey: String? = nil,
-        promptCacheRetention: BetaPromptCacheRetentionEnum? = nil,
-        promptCacheOptions: BetaPromptCacheOptionsParam? = nil,
-        serviceTier: BetaServiceTierEnum? = nil
-    ) {
+extension BetaCompactResponseMethodPublicBody {
+    public init(model: BetaModelIdsCompaction?, input: BetaCompactResponseMethodPublicBodyInput? = nil, previousResponseId: String? = nil, instructions: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: BetaPromptCacheRetentionEnum? = nil, promptCacheOptions: BetaPromptCacheOptionsParam? = nil, serviceTier: BetaServiceTierEnum? = nil) {
         (self.model, self.input) = (model, input)
         (self.previousResponseId, self.instructions) = (previousResponseId, instructions)
         (self.promptCacheKey, self.promptCacheRetention) = (promptCacheKey, promptCacheRetention)
@@ -216,15 +163,12 @@ public extension BetaCompactResponseMethodPublicBody {
 public struct BetaCompactResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let responseCompaction = BetaCompactResourceObject(rawValue: "response.compaction")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

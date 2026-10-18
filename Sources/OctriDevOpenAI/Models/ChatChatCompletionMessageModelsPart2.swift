@@ -3,31 +3,23 @@
 
 import Foundation
 
-/// ChatChatCompletionMessage domain models
-public extension ChatCompletionMessageToolCallFunction {
-    init(from decoder: Decoder) throws {
+// ChatChatCompletionMessage domain models
+extension ChatCompletionMessageToolCallFunction {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.arguments) else {
-            throw SdkValidationError(
-                field: "arguments",
-                code: "required",
-                message: "Validation failed for 'arguments': value is required"
-            )
+            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        arguments = try container.sdkDecodeRequired(.arguments)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.arguments = try container.sdkDecodeRequired(.arguments)
     }
 }
 
-public extension ChatCompletionMessageToolCallFunction {
-    init(name: String, arguments: String) {
+extension ChatCompletionMessageToolCallFunction {
+    public init(name: String, arguments: String) {
         (self.name, self.arguments) = (name, arguments)
     }
 }
@@ -53,37 +45,25 @@ public struct ChatCompletionMessageListDataItemContentPartsItem: Codable {
         case file
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatCompletionMessageListDataItemContentPartsItem {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionMessageListDataItemContentPartsItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeIfPresent(.text)
-        imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
-        inputAudio = try container.sdkDecodeIfPresent(.inputAudio)
-        file = try container.sdkDecodeIfPresent(.file)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
+        self.inputAudio = try container.sdkDecodeIfPresent(.inputAudio)
+        self.file = try container.sdkDecodeIfPresent(.file)
     }
 }
 
-public extension ChatCompletionMessageListDataItemContentPartsItem {
-    init(
-        type: ChatCompletionMessageListDataItemContentPartsItemType,
-        text: String? = nil,
-        imageUrl: ChatCompletionMessageListDataItemContentPartsItemImageUrl? = nil,
-        inputAudio: ChatCompletionMessageListDataItemContentPartsItemInputAudio? = nil,
-        file: ChatCompletionMessageListDataItemContentPartsItemFile? = nil
-    ) {
+extension ChatCompletionMessageListDataItemContentPartsItem {
+    public init(type: ChatCompletionMessageListDataItemContentPartsItemType, text: String? = nil, imageUrl: ChatCompletionMessageListDataItemContentPartsItemImageUrl? = nil, inputAudio: ChatCompletionMessageListDataItemContentPartsItemInputAudio? = nil, file: ChatCompletionMessageListDataItemContentPartsItemFile? = nil) {
         (self.type, self.text) = (type, text)
         (self.imageUrl, self.inputAudio) = (imageUrl, inputAudio)
         self.file = file
@@ -94,15 +74,12 @@ public extension ChatCompletionMessageListDataItemContentPartsItem {
 public struct ChatCompletionMessageListObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = ChatCompletionMessageListObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -130,14 +107,10 @@ public enum ChatCompletionMessageToolCallType: String, CaseIterable, Codable {
 }
 
 /// Required enumerated value serialized in the `type` wire field.
-public struct ChatCompletionMessageListDataItemContentPartsItemType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ChatCompletionMessageListDataItemContentPartsItemType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = ChatCompletionMessageListDataItemContentPartsItemType(rawValue: "text")
     public static let imageUrl = ChatCompletionMessageListDataItemContentPartsItemType(rawValue: "image_url")
     public static let inputAudio = ChatCompletionMessageListDataItemContentPartsItemType(rawValue: "input_audio")
@@ -145,7 +118,7 @@ public struct ChatCompletionMessageListDataItemContentPartsItemType: RawRepresen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -155,19 +128,15 @@ public struct ChatCompletionMessageListDataItemContentPartsItemType: RawRepresen
 }
 
 /// The type of the tool. Currently, only `function` is supported.
-public struct ChatCompletionMessageToolCallChunkType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ChatCompletionMessageToolCallChunkType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let function = ChatCompletionMessageToolCallChunkType(rawValue: "function")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -180,10 +149,7 @@ public struct ChatCompletionMessageToolCallChunkType: RawRepresentable, Hashable
 public struct ChatCompletionMessageListDataItemRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let user = ChatCompletionMessageListDataItemRole(rawValue: "user")
     public static let assistant = ChatCompletionMessageListDataItemRole(rawValue: "assistant")
     public static let tool = ChatCompletionMessageListDataItemRole(rawValue: "tool")
@@ -193,7 +159,7 @@ public struct ChatCompletionMessageListDataItemRole: RawRepresentable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

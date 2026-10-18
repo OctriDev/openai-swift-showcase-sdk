@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension CompletionsMethods {
-    struct CreateCompletionOptions: Codable {
+extension CompletionsMethods {
+    public struct CreateCompletionOptions: Codable {
         public var model: String
         public var prompt: CreateCompletionRequestPrompt?
         public var bestOf: SdkOptional<Int>?
@@ -33,12 +33,9 @@ public extension CompletionsMethods {
         }
     }
 
-    /// Creates a completion from a prompt using the specified model and generation parameters. Supply `model` and
-    /// `prompt`; use `stream` to receive partial results as server-sent events instead of a single response. The
-    /// response contains generated text choices and usage statistics.
+    /// Creates a completion from a prompt using the specified model and generation parameters. Supply `model` and `prompt`; use `stream` to receive partial results as server-sent events instead of a single response. The response contains generated text choices and usage statistics.
     ///
-    /// Creates a completion for the provided prompt and parameters. Returns a completion object, or a sequence of
-    /// completion objects if the request is streamed.
+    /// Creates a completion for the provided prompt and parameters. Returns a completion object, or a sequence of completion objects if the request is streamed.
     ///
     /// - Parameters:
     /// - model: ID of the model to use. You can use the [List
@@ -127,11 +124,7 @@ public extension CompletionsMethods {
     ///   OpenAI to monitor and detect abuse. [Learn
     ///   more](https://developers.openai.com/api/docs/guides/safety-best-practices#im
     ///   plement-safety-identifiers).
-    static func createCompletion(
-        config: ClientConfig,
-        options: CreateCompletionOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateCompletionResponse {
+    public static func createCompletion(config: ClientConfig, options: CreateCompletionOptions, requestOptions: RequestOptions? = nil) async throws -> CreateCompletionResponse {
         if let bestOf = options.bestOf?.valueOrNil {
             try validateRange("best_of", Double(bestOf), min: 0, max: 20)
         }
@@ -166,22 +159,6 @@ public extension CompletionsMethods {
 
         let requestBody = CreateCompletionRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "POST",
-            "/completions",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createCompletion",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "401": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-                "503": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/completions", config: config, body: requestBody, decoder: .json, operationId: "createCompletion", options: requestOptions, errors: ["400": ErrorResponse.self, "401": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self])).data
     }
 }

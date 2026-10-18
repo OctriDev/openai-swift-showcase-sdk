@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ResponsesMethods {
-    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream`
-    /// to receive server-sent events. When streaming, use `starting_after` to resume from an event sequence number.
+extension ResponsesMethods {
+    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream` to receive server-sent events. When streaming, use `starting_after` to resume from an event sequence number.
     ///
     /// Retrieves a model response with the given ID.
     ///
@@ -31,15 +30,8 @@ public extension ResponsesMethods {
     ///   add a small amount of overhead to the data stream. You can set
     ///   `include_obfuscation` to false to optimize for bandwidth if you trust the
     ///   network links between your application and the OpenAI API.
-    static func getResponseStream(
-        config: ClientConfig,
-        responseId: String,
-        include: [IncludeEnum]? = nil,
-        stream: Bool? = nil,
-        startingAfter: Int? = nil,
-        includeObfuscation: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<ResponseStreamEvent, Swift.Error> {
+    public static func getResponseStream(config: ClientConfig, responseId: String, include: [IncludeEnum]? = nil, stream: Bool? = nil, startingAfter: Int? = nil, includeObfuscation: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<ResponseStreamEvent, Swift.Error> {
+
         let upstream = try await sdkStream(
             "GET",
             ["/responses/", sdkEncodePathSegment(sdkWireString(responseId))].joined(),
@@ -65,11 +57,8 @@ public extension ResponsesMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
-                            ResponseStreamEvent.self,
-                            from: Data(event.data.utf8)
-                        ) }
-
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(ResponseStreamEvent.self, from: Data(event.data.utf8)) }
+                        
                         continuation.yield(payload)
                     }
                     continuation.finish()

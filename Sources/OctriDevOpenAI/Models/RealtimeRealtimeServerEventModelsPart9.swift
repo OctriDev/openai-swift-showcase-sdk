@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// RealtimeRealtimeServerEvent domain models
+// RealtimeRealtimeServerEvent domain models
 /// The event type, must be `conversation.item.input_audio_transcription.completed`.
 public enum RealtimeServerEventConversationItemInputAudioTranscriptionCompletedType: String, CaseIterable, Codable {
     case conversationItemInputAudioTranscriptionCompleted = "conversation.item.input_audio_transcription.completed"
@@ -113,20 +113,16 @@ public enum RealtimeServerEventResponseContentPartAddedType: String, CaseIterabl
 }
 
 /// The name of the rate limit (`requests`, `tokens`).
-public struct RealtimeServerEventRateLimitsUpdatedRateLimitsItemName: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeServerEventRateLimitsUpdatedRateLimitsItemName: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let requests = RealtimeServerEventRateLimitsUpdatedRateLimitsItemName(rawValue: "requests")
     public static let tokens = RealtimeServerEventRateLimitsUpdatedRateLimitsItemName(rawValue: "tokens")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -172,20 +168,16 @@ public enum RealtimeServerEventResponseCreatedType: String, CaseIterable, Codabl
 }
 
 /// The content type ("text", "audio").
-public struct RealtimeServerEventResponseContentPartDonePartType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeServerEventResponseContentPartDonePartType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let audio = RealtimeServerEventResponseContentPartDonePartType(rawValue: "audio")
     public static let text = RealtimeServerEventResponseContentPartDonePartType(rawValue: "text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -501,20 +493,16 @@ public enum RealtimeServerEventConversationItemCreatedType: String, CaseIterable
 }
 
 /// The content type ("text", "audio").
-public struct RealtimeServerEventResponseContentPartAddedPartType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeServerEventResponseContentPartAddedPartType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let audio = RealtimeServerEventResponseContentPartAddedPartType(rawValue: "audio")
     public static let text = RealtimeServerEventResponseContentPartAddedPartType(rawValue: "text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,47 +6,20 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectGroupRoleAssignmentsMethods {
+extension ProjectGroupRoleAssignmentsMethods {
     /// Assigns a project role to a group within a project.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project to update.
     /// - groupId: The ID of the group that should receive the project role.
     /// - roleId: Identifier of the role to assign.
-    static func assignProjectGroupRole(
-        config: ClientConfig,
-        projectId: String,
-        groupId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> GroupRoleAssignment {
+    public static func assignProjectGroupRole(config: ClientConfig, projectId: String, groupId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> GroupRoleAssignment {
         let requestBody = AssignProjectGroupRoleRequestBody(roleId: roleId)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/groups/",
-                sdkEncodePathSegment(sdkWireString(groupId)),
-                "/roles",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "assignProjectGroupRole",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/groups/", sdkEncodePathSegment(sdkWireString(groupId)), "/roles"].joined(), config: config, body: requestBody, decoder: .json, operationId: "assignProjectGroupRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Retrieves a role assigned to a group within a project. Use the project, group, and role identifiers to locate
-    /// the assignment and inspect its permissions and assignment details.
+    /// Retrieves a role assigned to a group within a project. Use the project, group, and role identifiers to locate the assignment and inspect its permissions and assignment details.
     ///
     /// Retrieves a project role assigned to a group.
     ///
@@ -54,33 +27,7 @@ public extension ProjectGroupRoleAssignmentsMethods {
     /// - projectId: The ID of the project to inspect.
     /// - groupId: The ID of the group to inspect.
     /// - roleId: The ID of the project role to retrieve for the group.
-    static func retrieveProjectGroupRole(
-        config: ClientConfig,
-        projectId: String,
-        groupId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AssignedRoleDetails {
-        try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/groups/",
-                sdkEncodePathSegment(sdkWireString(groupId)),
-                "/roles/",
-                sdkEncodePathSegment(sdkWireString(roleId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveProjectGroupRole",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func retrieveProjectGroupRole(config: ClientConfig, projectId: String, groupId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> AssignedRoleDetails {
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/groups/", sdkEncodePathSegment(sdkWireString(groupId)), "/roles/", sdkEncodePathSegment(sdkWireString(roleId))].joined(), config: config, decoder: .json, operationId: "retrieveProjectGroupRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

@@ -3,21 +3,17 @@
 
 import Foundation
 
-/// SpendLimit domain models
+// SpendLimit domain models
 /// The time interval for evaluating spend against the threshold. Currently, only `month` is supported.
-public struct UpdateOrganizationSpendLimitBodyInterval: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct UpdateOrganizationSpendLimitBodyInterval: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let month = UpdateOrganizationSpendLimitBodyInterval(rawValue: "month")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

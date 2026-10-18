@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedPrompt domain models
+// SharedPrompt domain models
 /// Reference to a prompt template and its variables. Learn more.
 public struct Prompt: Codable {
     /// The unique identifier of the prompt template to use.
@@ -20,29 +20,23 @@ public struct Prompt: Codable {
         case variables
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Prompt {
-    init(from decoder: Decoder) throws {
+extension Prompt {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        version = try container.sdkDecodeIfPresent(.version)
-        variables = try container.sdkDecodeIfPresent(.variables)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.version = try container.sdkDecodeIfPresent(.version)
+        self.variables = try container.sdkDecodeIfPresent(.variables)
     }
 }
 
-public extension Prompt {
-    init(id: String, version: String? = nil, variables: ResponsePromptVariables? = nil) {
+extension Prompt {
+    public init(id: String, version: String? = nil, variables: ResponsePromptVariables? = nil) {
         (self.id, self.version) = (id, version)
         self.variables = variables
     }
@@ -58,27 +52,21 @@ public struct PromptCacheBreakpointConfig: Codable {
         case mode
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension PromptCacheBreakpointConfig {
-    init(from decoder: Decoder) throws {
+extension PromptCacheBreakpointConfig {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.mode) else {
-            throw SdkValidationError(
-                field: "mode",
-                code: "required",
-                message: "Validation failed for 'mode': value is required"
-            )
+            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
         }
-        mode = try container.sdkDecodeRequired(.mode)
+        self.mode = try container.sdkDecodeRequired(.mode)
     }
 }
 
-public extension PromptCacheBreakpointConfig {
-    init(mode: PromptCacheBreakpointConfigMode) {
+extension PromptCacheBreakpointConfig {
+    public init(mode: PromptCacheBreakpointConfigMode) {
         self.mode = mode
     }
 }
@@ -93,27 +81,21 @@ public struct PromptCacheBreakpointParam: Codable {
         case mode
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension PromptCacheBreakpointParam {
-    init(from decoder: Decoder) throws {
+extension PromptCacheBreakpointParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.mode) else {
-            throw SdkValidationError(
-                field: "mode",
-                code: "required",
-                message: "Validation failed for 'mode': value is required"
-            )
+            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
         }
-        mode = try container.sdkDecodeRequired(.mode)
+        self.mode = try container.sdkDecodeRequired(.mode)
     }
 }
 
-public extension PromptCacheBreakpointParam {
-    init(mode: PromptCacheBreakpointParamMode) {
+extension PromptCacheBreakpointParam {
+    public init(mode: PromptCacheBreakpointParamMode) {
         self.mode = mode
     }
 }
@@ -140,20 +122,20 @@ public struct PromptCacheOptionsParam: Codable {
     }
 
     init() {
-        (ttl, mode) = (nil, nil)
+        (self.ttl, self.mode) = (nil, nil)
     }
 }
 
-public extension PromptCacheOptionsParam {
-    init(from decoder: Decoder) throws {
+extension PromptCacheOptionsParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        ttl = try container.sdkDecodeIfPresent(.ttl)
-        mode = try container.sdkDecodeIfPresent(.mode)
+        self.ttl = try container.sdkDecodeIfPresent(.ttl)
+        self.mode = try container.sdkDecodeIfPresent(.mode)
     }
 }
 
-public extension PromptCacheOptionsParam {
-    init(ttl: PromptCacheTTLEnum? = nil, mode: PromptCacheModeEnum? = nil) {
+extension PromptCacheOptionsParam {
+    public init(ttl: PromptCacheTTLEnum? = nil, mode: PromptCacheModeEnum? = nil) {
         self.init()
         (self.ttl, self.mode) = (ttl, mode)
     }
@@ -163,16 +145,13 @@ public extension PromptCacheOptionsParam {
 public struct PromptCacheModeEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let implicit = PromptCacheModeEnum(rawValue: "implicit")
     public static let explicit = PromptCacheModeEnum(rawValue: "explicit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -185,15 +164,12 @@ public struct PromptCacheModeEnum: RawRepresentable, Hashable, Codable, Sendable
 public struct PromptCacheBreakpointConfigMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let explicit = PromptCacheBreakpointConfigMode(rawValue: "explicit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -206,15 +182,12 @@ public struct PromptCacheBreakpointConfigMode: RawRepresentable, Hashable, Codab
 public struct PromptCacheTTLEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let value30m = PromptCacheTTLEnum(rawValue: "30m")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -227,15 +200,12 @@ public struct PromptCacheTTLEnum: RawRepresentable, Hashable, Codable, Sendable,
 public struct PromptCacheBreakpointParamMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let explicit = PromptCacheBreakpointParamMode(rawValue: "explicit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

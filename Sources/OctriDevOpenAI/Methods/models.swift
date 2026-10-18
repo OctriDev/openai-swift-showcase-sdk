@@ -7,69 +7,28 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum ModelsMethods {
-    /// Lists currently available models and basic information about each one, including its owner and availability. Use
-    /// the list to inspect model identifiers and ownership before selecting a model for another request.
+    /// Lists currently available models and basic information about each one, including its owner and availability. Use the list to inspect model identifiers and ownership before selecting a model for another request.
     ///
-    /// Lists the currently available models, and provides basic information about each one such as the owner and
-    /// availability.
-    public static func listModels(
-        config: ClientConfig,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListModelsResponse {
-        try await (sdkRequest(
-            "GET",
-            "/models",
-            config: config,
-            decoder: .json,
-            operationId: "listModels",
-            options: requestOptions,
-            errors: ["403": PermissionErrorResponse.self]
-        )).data
+    /// Lists the currently available models, and provides basic information about each one such as the owner and availability.
+    public static func listModels(config: ClientConfig, requestOptions: RequestOptions? = nil) async throws -> ListModelsResponse {
+        return try (await sdkRequest("GET", "/models", config: config, decoder: .json, operationId: "listModels", options: requestOptions, errors: ["403": PermissionErrorResponse.self])).data
     }
-
-    /// Retrieves information about a specific model, including its owner and permissioning details. Use the model
-    /// identifier to look up the model before referencing it in other API requests.
+    /// Retrieves information about a specific model, including its owner and permissioning details. Use the model identifier to look up the model before referencing it in other API requests.
     ///
     /// Retrieves a model instance, providing basic information about the model such as the owner and permissioning.
     ///
     /// - Parameters:
     /// - model: The ID of the model to use for this request
-    public static func retrieveModel(
-        config: ClientConfig,
-        model: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Model {
-        try await (sdkRequest(
-            "GET",
-            ["/models/", sdkEncodePathSegment(sdkWireString(model))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveModel",
-            options: requestOptions,
-            errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+    public static func retrieveModel(config: ClientConfig, model: String, requestOptions: RequestOptions? = nil) async throws -> Model {
+        return try (await sdkRequest("GET", ["/models/", sdkEncodePathSegment(sdkWireString(model))].joined(), config: config, decoder: .json, operationId: "retrieveModel", options: requestOptions, errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
     }
-
-    /// Deletes a fine-tuned model. The authenticated user must have the Owner role in the organization and a credential
-    /// that permits model deletion. Use `model` to identify the fine-tuned model to remove.
+    /// Deletes a fine-tuned model. The authenticated user must have the Owner role in the organization and a credential that permits model deletion. Use `model` to identify the fine-tuned model to remove.
     ///
     /// Delete a fine-tuned model. You must have the Owner role in your organization to delete a model.
     ///
     /// - Parameters:
     /// - model: The model to delete
-    public static func deleteModel(
-        config: ClientConfig,
-        model: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeleteModelResponse {
-        try await (sdkRequest(
-            "DELETE",
-            ["/models/", sdkEncodePathSegment(sdkWireString(model))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteModel",
-            options: requestOptions,
-            errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+    public static func deleteModel(config: ClientConfig, model: String, requestOptions: RequestOptions? = nil) async throws -> DeleteModelResponse {
+        return try (await sdkRequest("DELETE", ["/models/", sdkEncodePathSegment(sdkWireString(model))].joined(), config: config, decoder: .json, operationId: "deleteModel", options: requestOptions, errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
     }
 }

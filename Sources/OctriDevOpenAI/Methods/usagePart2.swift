@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension UsageMethods {
-    struct UsageCostsOptions: Codable {
+extension UsageMethods {
+    public struct UsageCostsOptions: Codable {
         public var startTime: Int
         public var endTime: Int?
         public var bucketWidth: UsageCostsParameter?
@@ -23,9 +23,7 @@ public extension UsageMethods {
         }
     }
 
-    /// Retrieves cost data for the organization over a specified time range. Set `start_time` and optionally use
-    /// project, API key, line item, or grouping filters to narrow the results; use the returned cursor to fetch
-    /// additional pages.
+    /// Retrieves cost data for the organization over a specified time range. Set `start_time` and optionally use project, API key, line item, or grouping filters to narrow the results; use the returned cursor to fetch additional pages.
     ///
     /// Get costs details for the organization.
     ///
@@ -50,36 +48,21 @@ public extension UsageMethods {
     ///   between 1 and 180, and the default is 7.
     /// - page: A cursor for use in pagination. Corresponding to the `next_page`
     ///   field from the previous response.
-    static func usageCosts(
-        config: ClientConfig,
-        options: UsageCostsOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> UsageResponse {
-        try await (sdkRequest(
-            "GET",
-            "/organization/costs",
-            config: config,
-            query: [
-                SdkQueryParameter("start_time", value: options.startTime),
-                SdkQueryParameter("end_time", value: options.endTime),
-                SdkQueryParameter("bucket_width", value: options.bucketWidth),
-                SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
-                SdkQueryParameter("api_key_ids", values: options.apiKeyIds, style: "form", explode: true),
-                SdkQueryParameter("line_items", values: options.lineItems, style: "form", explode: true),
-                SdkQueryParameter("group_by", values: options.groupBy, style: "form", explode: true),
-                SdkQueryParameter("limit", value: options.limit),
-                SdkQueryParameter("page", value: options.page),
-            ],
-            decoder: .json,
-            operationId: "usageCosts",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func usageCosts(config: ClientConfig, options: UsageCostsOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
+        return try (await sdkRequest("GET", "/organization/costs", config: config, query: [
+            SdkQueryParameter("start_time", value: options.startTime),
+            SdkQueryParameter("end_time", value: options.endTime),
+            SdkQueryParameter("bucket_width", value: options.bucketWidth),
+            SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
+            SdkQueryParameter("api_key_ids", values: options.apiKeyIds, style: "form", explode: true),
+            SdkQueryParameter("line_items", values: options.lineItems, style: "form", explode: true),
+            SdkQueryParameter("group_by", values: options.groupBy, style: "form", explode: true),
+            SdkQueryParameter("limit", value: options.limit),
+            SdkQueryParameter("page", value: options.page),
+        ], decoder: .json, operationId: "usageCosts", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Retrieves cost data for the organization over a specified time range. Set `start_time` and optionally use
-    /// project, API key, line item, or grouping filters to narrow the results; use the returned cursor to fetch
-    /// additional pages.
+    /// Retrieves cost data for the organization over a specified time range. Set `start_time` and optionally use project, API key, line item, or grouping filters to narrow the results; use the returned cursor to fetch additional pages.
     ///
     /// Get costs details for the organization.
     ///
@@ -104,40 +87,21 @@ public extension UsageMethods {
     ///   between 1 and 180, and the default is 7.
     /// - page: A cursor for use in pagination. Corresponding to the `next_page`
     ///   field from the previous response.
-    static func usageCostsPaginated(
-        config: ClientConfig,
-        options: UsageCostsOptions,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+    public static func usageCostsPaginated(config: ClientConfig, options: UsageCostsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
         let page = options.page
-        return AsyncThrowingStream<UsageTimeBucket, Swift.Error> { (continuation: AsyncThrowingStream<
-            UsageTimeBucket,
-            Swift.Error
-        >.Continuation) in
+        return AsyncThrowingStream<UsageTimeBucket, Swift.Error> { (continuation: AsyncThrowingStream<UsageTimeBucket, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = page
                     while true {
                         var nextOptions = options
                         nextOptions.page = pageCursor
-                        let pageResponse = try await usageCosts(
-                            config: config,
-                            options: nextOptions,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await usageCosts(config: config, options: nextOptions, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.nextPage else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.nextPage else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -150,45 +114,28 @@ public extension UsageMethods {
         }
     }
 
-    struct UsageCostsPage {
+    public struct UsageCostsPage {
         public let data: UsageResponse
         public let items: [UsageTimeBucket]
         public let hasMore: Bool
     }
 
-    static func usageCostsPages(
-        config: ClientConfig,
-        options: UsageCostsOptions,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<UsageCostsPage, Swift.Error> {
+    public static func usageCostsPages(config: ClientConfig, options: UsageCostsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageCostsPage, Swift.Error> {
         let page = options.page
-        return AsyncThrowingStream<UsageCostsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            UsageCostsPage,
-            Swift.Error
-        >.Continuation) in
+        return AsyncThrowingStream<UsageCostsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<UsageCostsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = page
                     while true {
                         var nextOptions = options
                         nextOptions.page = pageCursor
-                        let pageResponse = try await usageCosts(
-                            config: config,
-                            options: nextOptions,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await usageCosts(config: config, options: nextOptions, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.nextPage != nil
                         pageContinuation.yield(UsageCostsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.nextPage else {
-                            break
-                        }
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.nextPage else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

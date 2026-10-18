@@ -6,77 +6,34 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension FilesMethods {
+extension FilesMethods {
     /// Deletes a file and removes it from all vector stores. Use `file_id` to identify the file to remove.
     ///
     /// Delete a file and remove it from all vector stores.
     ///
     /// - Parameters:
     /// - fileId: The ID of the file to use for this request.
-    static func deleteFile(
-        config: ClientConfig,
-        fileId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeleteFileResponse {
-        try await (sdkRequest(
-            "DELETE",
-            ["/files/", sdkEncodePathSegment(sdkWireString(fileId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteFile",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func deleteFile(config: ClientConfig, fileId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteFileResponse {
+        return try (await sdkRequest("DELETE", ["/files/", sdkEncodePathSegment(sdkWireString(fileId))].joined(), config: config, decoder: .json, operationId: "deleteFile", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Retrieves metadata for a specific uploaded file. Use `file_id` to identify the file whose purpose, size, status,
-    /// and timestamps you need.
+    /// Retrieves metadata for a specific uploaded file. Use `file_id` to identify the file whose purpose, size, status, and timestamps you need.
     ///
     /// Returns information about a specific file.
     ///
     /// - Parameters:
     /// - fileId: The ID of the file to use for this request.
-    static func retrieveFile(
-        config: ClientConfig,
-        fileId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OpenAIFile {
-        try await (sdkRequest(
-            "GET",
-            ["/files/", sdkEncodePathSegment(sdkWireString(fileId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveFile",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func retrieveFile(config: ClientConfig, fileId: String, requestOptions: RequestOptions? = nil) async throws -> OpenAIFile {
+        return try (await sdkRequest("GET", ["/files/", sdkEncodePathSegment(sdkWireString(fileId))].joined(), config: config, decoder: .json, operationId: "retrieveFile", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Retrieves the contents of a specific uploaded file. Use `file_id` to identify the file, and note that some file
-    /// purposes or account permissions do not allow downloads.
+    /// Retrieves the contents of a specific uploaded file. Use `file_id` to identify the file, and note that some file purposes or account permissions do not allow downloads.
     ///
     /// Returns a response containing the contents of the specified file.
     ///
     /// - Parameters:
     /// - fileId: The ID of the file to use for this request.
-    static func downloadFile(
-        config: ClientConfig,
-        fileId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Data {
-        try await (sdkRequest(
-            "GET",
-            ["/files/", sdkEncodePathSegment(sdkWireString(fileId)), "/content"].joined(),
-            config: config,
-            decoder: .bytes,
-            operationId: "downloadFile",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+    public static func downloadFile(config: ClientConfig, fileId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
+        return try (await sdkRequest("GET", ["/files/", sdkEncodePathSegment(sdkWireString(fileId)), "/content"].joined(), config: config, decoder: .bytes, operationId: "downloadFile", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

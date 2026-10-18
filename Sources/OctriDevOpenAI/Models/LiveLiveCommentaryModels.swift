@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveCommentary domain models
+// LiveLiveCommentary domain models
 /// Provide context the Live model can communicate to the user, optionally for an existing client delegation.
 /// Rejected while an audio fixture is active.
 public struct LiveCommentaryAppendParam: Codable {
@@ -24,48 +24,34 @@ public struct LiveCommentaryAppendParam: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveCommentaryAppendParam {
-    init(from decoder: Decoder) throws {
+extension LiveCommentaryAppendParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.delegationId) else {
-            throw SdkValidationError(
-                field: "delegation_id",
-                code: "required",
-                message: "Validation failed for 'delegation_id': value is required"
-            )
+            throw SdkValidationError(field: "delegation_id", code: "required", message: "Validation failed for 'delegation_id': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        delegationId = try container.sdkDecodeNullable(.delegationId)
-        content = try container.sdkDecodeRequired(.content)
-        eventId = try container.sdkDecodeIfPresent(.eventId)
-        try sdkValidateRawEnum("type", type, LiveCommentaryAppendParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.delegationId = try container.sdkDecodeNullable(.delegationId)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.eventId = try container.sdkDecodeIfPresent(.eventId)
+            try sdkValidateRawEnum("type", self.type, LiveCommentaryAppendParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveCommentaryAppendParam {
-    init(type: LiveCommentaryAppendParamType, delegationId: String?, content: String, eventId: String? = nil) throws {
+extension LiveCommentaryAppendParam {
+    public init(type: LiveCommentaryAppendParamType, delegationId: String?, content: String, eventId: String? = nil) throws {
         (self.type, self.delegationId) = (type, delegationId)
         (self.content, self.eventId) = (content, eventId)
-        try sdkValidateRawEnum("type", self.type, LiveCommentaryAppendParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveCommentaryAppendParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -92,63 +78,39 @@ public struct LiveCommentaryAppended: Codable {
         case clientEventId = "client_event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveCommentaryAppended {
-    init(from decoder: Decoder) throws {
+extension LiveCommentaryAppended {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.startMs) else {
-            throw SdkValidationError(
-                field: "start_ms",
-                code: "required",
-                message: "Validation failed for 'start_ms': value is required"
-            )
+            throw SdkValidationError(field: "start_ms", code: "required", message: "Validation failed for 'start_ms': value is required")
         }
         guard container.contains(.endMs) else {
-            throw SdkValidationError(
-                field: "end_ms",
-                code: "required",
-                message: "Validation failed for 'end_ms': value is required"
-            )
+            throw SdkValidationError(field: "end_ms", code: "required", message: "Validation failed for 'end_ms': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        eventId = try container.sdkDecodeRequired(.eventId)
-        startMs = try container.sdkDecodeRequired(.startMs)
-        endMs = try container.sdkDecodeRequired(.endMs)
-        type = try container.sdkDecodeRequired(.type)
-        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
-        try sdkValidateRawEnum("type", type, LiveCommentaryAppendedType.allCases.map(\.rawValue))
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.startMs = try container.sdkDecodeRequired(.startMs)
+        self.endMs = try container.sdkDecodeRequired(.endMs)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+            try sdkValidateRawEnum("type", self.type, LiveCommentaryAppendedType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveCommentaryAppended {
-    init(
-        eventId: String,
-        startMs: Int,
-        endMs: Int,
-        type: LiveCommentaryAppendedType,
-        clientEventId: String? = nil
-    ) throws {
+extension LiveCommentaryAppended {
+    public init(eventId: String, startMs: Int, endMs: Int, type: LiveCommentaryAppendedType, clientEventId: String? = nil) throws {
         (self.eventId, self.startMs) = (eventId, startMs)
         (self.endMs, self.type) = (endMs, type)
         self.clientEventId = clientEventId
-        try sdkValidateRawEnum("type", self.type, LiveCommentaryAppendedType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveCommentaryAppendedType.allCases.map(\.rawValue))
     }
 }
 

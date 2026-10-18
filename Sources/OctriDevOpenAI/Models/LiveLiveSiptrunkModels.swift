@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveSiptrunk domain models
+// LiveLiveSiptrunk domain models
 /// Credentials for SIP Digest authentication with your trunk provider.
 public struct LiveSIPTrunkAuthRequest: Codable {
     /// Use `digest` for SIP Digest authentication. Handles 401 and 407 challenges.
@@ -20,49 +20,35 @@ public struct LiveSIPTrunkAuthRequest: Codable {
         case password
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSIPTrunkAuthRequest {
-    init(from decoder: Decoder) throws {
+extension LiveSIPTrunkAuthRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.username) else {
-            throw SdkValidationError(
-                field: "username",
-                code: "required",
-                message: "Validation failed for 'username': value is required"
-            )
+            throw SdkValidationError(field: "username", code: "required", message: "Validation failed for 'username': value is required")
         }
         guard container.contains(.password) else {
-            throw SdkValidationError(
-                field: "password",
-                code: "required",
-                message: "Validation failed for 'password': value is required"
-            )
+            throw SdkValidationError(field: "password", code: "required", message: "Validation failed for 'password': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        username = try container.sdkDecodeRequired(.username)
-        password = try container.sdkDecodeRequired(.password)
-        try validateLength("username", username, min: 1, max: nil)
-        try validateLength("password", password, min: 1, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.username = try container.sdkDecodeRequired(.username)
+        self.password = try container.sdkDecodeRequired(.password)
+            try validateLength("username", self.username, min: 1, max: nil)
+            try validateLength("password", self.password, min: 1, max: nil)
     }
 }
 
-public extension LiveSIPTrunkAuthRequest {
-    init(type: LiveSIPTrunkAuthRequestType, username: String, password: String) throws {
+extension LiveSIPTrunkAuthRequest {
+    public init(type: LiveSIPTrunkAuthRequestType, username: String, password: String) throws {
         (self.type, self.username) = (type, username)
         self.password = password
-        try validateLength("username", self.username, min: 1, max: nil)
-        try validateLength("password", self.password, min: 1, max: nil)
+            try validateLength("username", self.username, min: 1, max: nil)
+            try validateLength("password", self.password, min: 1, max: nil)
     }
 }
 
@@ -87,47 +73,33 @@ public struct LiveSIPTrunk: Codable {
         case callerNumber = "caller_number"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSIPTrunk {
-    init(from decoder: Decoder) throws {
+extension LiveSIPTrunk {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.providerUrl) else {
-            throw SdkValidationError(
-                field: "provider_url",
-                code: "required",
-                message: "Validation failed for 'provider_url': value is required"
-            )
+            throw SdkValidationError(field: "provider_url", code: "required", message: "Validation failed for 'provider_url': value is required")
         }
         guard container.contains(.auth) else {
-            throw SdkValidationError(
-                field: "auth",
-                code: "required",
-                message: "Validation failed for 'auth': value is required"
-            )
+            throw SdkValidationError(field: "auth", code: "required", message: "Validation failed for 'auth': value is required")
         }
         guard container.contains(.callerNumber) else {
-            throw SdkValidationError(
-                field: "caller_number",
-                code: "required",
-                message: "Validation failed for 'caller_number': value is required"
-            )
+            throw SdkValidationError(field: "caller_number", code: "required", message: "Validation failed for 'caller_number': value is required")
         }
-        providerUrl = try container.sdkDecodeRequired(.providerUrl)
-        auth = try container.sdkDecodeRequired(.auth)
-        callerNumber = try container.sdkDecodeRequired(.callerNumber)
-        try sdkValidatePattern("caller_number", callerNumber, sdkPattern5c9c06609f56)
+        self.providerUrl = try container.sdkDecodeRequired(.providerUrl)
+        self.auth = try container.sdkDecodeRequired(.auth)
+        self.callerNumber = try container.sdkDecodeRequired(.callerNumber)
+            try sdkValidatePattern("caller_number", self.callerNumber, sdkPattern5c9c06609f56)
     }
 }
 
-public extension LiveSIPTrunk {
-    init(providerUrl: String, auth: LiveSIPTrunkAuth, callerNumber: String) throws {
+extension LiveSIPTrunk {
+    public init(providerUrl: String, auth: LiveSIPTrunkAuth, callerNumber: String) throws {
         (self.providerUrl, self.auth) = (providerUrl, auth)
         self.callerNumber = callerNumber
-        try sdkValidatePattern("caller_number", self.callerNumber, sdkPattern5c9c06609f56)
+            try sdkValidatePattern("caller_number", self.callerNumber, sdkPattern5c9c06609f56)
     }
 }
 
@@ -144,38 +116,28 @@ public struct LiveSIPTrunkAuth: Codable {
         case username
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSIPTrunkAuth {
-    init(from decoder: Decoder) throws {
+extension LiveSIPTrunkAuth {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.username) else {
-            throw SdkValidationError(
-                field: "username",
-                code: "required",
-                message: "Validation failed for 'username': value is required"
-            )
+            throw SdkValidationError(field: "username", code: "required", message: "Validation failed for 'username': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        username = try container.sdkDecodeRequired(.username)
-        try validateLength("username", username, min: 1, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.username = try container.sdkDecodeRequired(.username)
+            try validateLength("username", self.username, min: 1, max: nil)
     }
 }
 
-public extension LiveSIPTrunkAuth {
-    init(type: LiveSIPTrunkAuthType, username: String) throws {
+extension LiveSIPTrunkAuth {
+    public init(type: LiveSIPTrunkAuthType, username: String) throws {
         (self.type, self.username) = (type, username)
-        try validateLength("username", self.username, min: 1, max: nil)
+            try validateLength("username", self.username, min: 1, max: nil)
     }
 }
 
@@ -200,47 +162,33 @@ public struct LiveSIPTrunkRequest: Codable {
         case callerNumber = "caller_number"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSIPTrunkRequest {
-    init(from decoder: Decoder) throws {
+extension LiveSIPTrunkRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.providerUrl) else {
-            throw SdkValidationError(
-                field: "provider_url",
-                code: "required",
-                message: "Validation failed for 'provider_url': value is required"
-            )
+            throw SdkValidationError(field: "provider_url", code: "required", message: "Validation failed for 'provider_url': value is required")
         }
         guard container.contains(.auth) else {
-            throw SdkValidationError(
-                field: "auth",
-                code: "required",
-                message: "Validation failed for 'auth': value is required"
-            )
+            throw SdkValidationError(field: "auth", code: "required", message: "Validation failed for 'auth': value is required")
         }
         guard container.contains(.callerNumber) else {
-            throw SdkValidationError(
-                field: "caller_number",
-                code: "required",
-                message: "Validation failed for 'caller_number': value is required"
-            )
+            throw SdkValidationError(field: "caller_number", code: "required", message: "Validation failed for 'caller_number': value is required")
         }
-        providerUrl = try container.sdkDecodeRequired(.providerUrl)
-        auth = try container.sdkDecodeRequired(.auth)
-        callerNumber = try container.sdkDecodeRequired(.callerNumber)
-        try sdkValidatePattern("caller_number", callerNumber, sdkPattern5c9c06609f56)
+        self.providerUrl = try container.sdkDecodeRequired(.providerUrl)
+        self.auth = try container.sdkDecodeRequired(.auth)
+        self.callerNumber = try container.sdkDecodeRequired(.callerNumber)
+            try sdkValidatePattern("caller_number", self.callerNumber, sdkPattern5c9c06609f56)
     }
 }
 
-public extension LiveSIPTrunkRequest {
-    init(providerUrl: String, auth: LiveSIPTrunkAuthRequest, callerNumber: String) throws {
+extension LiveSIPTrunkRequest {
+    public init(providerUrl: String, auth: LiveSIPTrunkAuthRequest, callerNumber: String) throws {
         (self.providerUrl, self.auth) = (providerUrl, auth)
         self.callerNumber = callerNumber
-        try sdkValidatePattern("caller_number", self.callerNumber, sdkPattern5c9c06609f56)
+            try sdkValidatePattern("caller_number", self.callerNumber, sdkPattern5c9c06609f56)
     }
 }
 
@@ -248,15 +196,12 @@ public extension LiveSIPTrunkRequest {
 public struct LiveSIPTrunkAuthType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let digest = LiveSIPTrunkAuthType(rawValue: "digest")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -269,15 +214,12 @@ public struct LiveSIPTrunkAuthType: RawRepresentable, Hashable, Codable, Sendabl
 public struct LiveSIPTrunkAuthRequestType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let digest = LiveSIPTrunkAuthRequestType(rawValue: "digest")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ImagesMethods {
-    struct CreateImageOptions: Codable {
+extension ImagesMethods {
+    public struct CreateImageOptions: Codable {
         public var prompt: String
         public var model: String
         public var n: SdkOptional<Int>?
@@ -30,12 +30,9 @@ public extension ImagesMethods {
         }
     }
 
-    /// Creates one or more images from a text prompt using the specified image model. Provide `model` and `prompt`; `n`
-    /// defaults to 1, and you can enable streaming with `stream`. Use `size`, `quality`, and `output_format` to control
-    /// the generated images.
+    /// Creates one or more images from a text prompt using the specified image model. Provide `model` and `prompt`; `n` defaults to 1, and you can enable streaming with `stream`. Use `size`, `quality`, and `output_format` to control the generated images.
     ///
-    /// Creates an image given a prompt using a GPT Image model. [Learn
-    /// more](https://developers.openai.com/api/docs/guides/images-vision).
+    /// Creates an image given a prompt using a GPT Image model. [Learn more](https://developers.openai.com/api/docs/guides/images-vision).
     ///
     /// - Parameters:
     /// - prompt: A text description of the desired image(s). The maximum length is
@@ -103,11 +100,7 @@ public extension ImagesMethods {
     ///   omitted, null, or empty. [Learn
     ///   more](https://developers.openai.com/api/docs/guides/safety-best-practices#im
     ///   plement-safety-identifiers).
-    static func createImage(
-        config: ClientConfig,
-        options: CreateImageOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ImagesResponse {
+    public static func createImage(config: ClientConfig, options: CreateImageOptions, requestOptions: RequestOptions? = nil) async throws -> ImagesResponse {
         if let n = options.n?.valueOrNil {
             try validateRange("n", Double(n), min: 1, max: 10)
         }
@@ -118,22 +111,6 @@ public extension ImagesMethods {
 
         let requestBody = CreateImageRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "POST",
-            "/images/generations",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createImage",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": ErrorResponse.self,
-                "410": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-                "503": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/images/generations", config: config, body: requestBody, decoder: .json, operationId: "createImage", options: requestOptions, errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "410": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self])).data
     }
 }

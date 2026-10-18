@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Threads domain models
+// Threads domain models
 public indirect enum ThreadResourceStatus {
     case activeStatus(ActiveStatus)
     case lockedStatus(LockedStatus)
@@ -13,6 +13,7 @@ public indirect enum ThreadResourceStatus {
 }
 
 extension ThreadResourceStatus: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension ThreadResourceStatus: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,10 +37,10 @@ extension ThreadResourceStatus: Codable {
 extension ThreadResourceStatus {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "active": try .activeStatus(ActiveStatus(from: decoder))
-        case "locked": try .lockedStatus(LockedStatus(from: decoder))
-        case "closed": try .closedStatus(ClosedStatus(from: decoder))
-        default: nil
+        case "active": return .activeStatus(try ActiveStatus(from: decoder))
+        case "locked": return .lockedStatus(try LockedStatus(from: decoder))
+        case "closed": return .closedStatus(try ClosedStatus(from: decoder))
+        default: return nil
         }
     }
 }
@@ -75,43 +72,29 @@ public struct DeletedThreadResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DeletedThreadResource {
-    init(from decoder: Decoder) throws {
+extension DeletedThreadResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension DeletedThreadResource {
-    init(id: String, object: DeletedThreadResourceObject, deleted: Bool) {
+extension DeletedThreadResource {
+    public init(id: String, object: DeletedThreadResourceObject, deleted: Bool) {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
     }
@@ -129,38 +112,28 @@ public struct ClosedStatus: Codable {
         case reason
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ClosedStatus {
-    init(from decoder: Decoder) throws {
+extension ClosedStatus {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.reason) else {
-            throw SdkValidationError(
-                field: "reason",
-                code: "required",
-                message: "Validation failed for 'reason': value is required"
-            )
+            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        reason = try container.sdkDecodeNullable(.reason)
-        try sdkValidateRawEnum("type", type, ClosedStatusType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.reason = try container.sdkDecodeNullable(.reason)
+            try sdkValidateRawEnum("type", self.type, ClosedStatusType.allCases.map(\.rawValue))
     }
 }
 
-public extension ClosedStatus {
-    init(type: ClosedStatusType, reason: String?) throws {
+extension ClosedStatus {
+    public init(type: ClosedStatusType, reason: String?) throws {
         (self.type, self.reason) = (type, reason)
-        try sdkValidateRawEnum("type", self.type, ClosedStatusType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ClosedStatusType.allCases.map(\.rawValue))
     }
 }
 
@@ -188,74 +161,41 @@ public struct ThreadResource: Codable {
         case user
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ThreadResource {
-    init(from decoder: Decoder) throws {
+extension ThreadResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.title) else {
-            throw SdkValidationError(
-                field: "title",
-                code: "required",
-                message: "Validation failed for 'title': value is required"
-            )
+            throw SdkValidationError(field: "title", code: "required", message: "Validation failed for 'title': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.user) else {
-            throw SdkValidationError(
-                field: "user",
-                code: "required",
-                message: "Validation failed for 'user': value is required"
-            )
+            throw SdkValidationError(field: "user", code: "required", message: "Validation failed for 'user': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        title = try container.sdkDecodeNullable(.title)
-        status = try container.sdkDecodeRequired(.status)
-        user = try container.sdkDecodeRequired(.user)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.title = try container.sdkDecodeNullable(.title)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.user = try container.sdkDecodeRequired(.user)
     }
 }
 
-public extension ThreadResource {
-    init(
-        id: String,
-        object: ThreadResourceObject,
-        createdAt: Int,
-        title: String?,
-        status: ThreadResourceStatus,
-        user: String
-    ) {
+extension ThreadResource {
+    public init(id: String, object: ThreadResourceObject, createdAt: Int, title: String?, status: ThreadResourceStatus, user: String) {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.title) = (createdAt, title)
         (self.status, self.user) = (status, user)
@@ -274,38 +214,28 @@ public struct LockedStatus: Codable {
         case reason
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LockedStatus {
-    init(from decoder: Decoder) throws {
+extension LockedStatus {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.reason) else {
-            throw SdkValidationError(
-                field: "reason",
-                code: "required",
-                message: "Validation failed for 'reason': value is required"
-            )
+            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        reason = try container.sdkDecodeNullable(.reason)
-        try sdkValidateRawEnum("type", type, LockedStatusType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.reason = try container.sdkDecodeNullable(.reason)
+            try sdkValidateRawEnum("type", self.type, LockedStatusType.allCases.map(\.rawValue))
     }
 }
 
-public extension LockedStatus {
-    init(type: LockedStatusType, reason: String?) throws {
+extension LockedStatus {
+    public init(type: LockedStatusType, reason: String?) throws {
         (self.type, self.reason) = (type, reason)
-        try sdkValidateRawEnum("type", self.type, LockedStatusType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LockedStatusType.allCases.map(\.rawValue))
     }
 }
 
@@ -330,59 +260,37 @@ public struct ThreadListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ThreadListResource {
-    init(from decoder: Decoder) throws {
+extension ThreadListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(
-                field: "first_id",
-                code: "required",
-                message: "Validation failed for 'first_id': value is required"
-            )
+            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(
-                field: "last_id",
-                code: "required",
-                message: "Validation failed for 'last_id': value is required"
-            )
+            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        firstId = try container.sdkDecodeNullable(.firstId)
-        lastId = try container.sdkDecodeNullable(.lastId)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.firstId = try container.sdkDecodeNullable(.firstId)
+        self.lastId = try container.sdkDecodeNullable(.lastId)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
     }
 }
 
-public extension ThreadListResource {
-    init(object: ThreadListResourceObject, data: [ThreadResource], firstId: String?, lastId: String?, hasMore: Bool) {
+extension ThreadListResource {
+    public init(object: ThreadListResourceObject, data: [ThreadResource], firstId: String?, lastId: String?, hasMore: Bool) {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
@@ -398,30 +306,24 @@ public struct ActiveStatus: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ActiveStatus {
-    init(from decoder: Decoder) throws {
+extension ActiveStatus {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, ActiveStatusType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, ActiveStatusType.allCases.map(\.rawValue))
     }
 }
 
-public extension ActiveStatus {
-    init(type: ActiveStatusType) throws {
+extension ActiveStatus {
+    public init(type: ActiveStatusType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, ActiveStatusType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ActiveStatusType.allCases.map(\.rawValue))
     }
 }
 
@@ -429,15 +331,12 @@ public extension ActiveStatus {
 public struct ThreadListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = ThreadListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -450,15 +349,12 @@ public struct ThreadListResourceObject: RawRepresentable, Hashable, Codable, Sen
 public struct ThreadResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let chatkitThread = ThreadResourceObject(rawValue: "chatkit.thread")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -507,15 +403,12 @@ public enum ClosedStatusType: String, CaseIterable, Codable {
 public struct DeletedThreadResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let chatkitThreadDeleted = DeletedThreadResourceObject(rawValue: "chatkit.thread.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

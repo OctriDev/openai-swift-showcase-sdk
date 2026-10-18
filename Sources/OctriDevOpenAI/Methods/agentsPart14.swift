@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AgentsMethods {
-    struct UpdateAgentOptions: Codable {
+extension AgentsMethods {
+    public struct UpdateAgentOptions: Codable {
         public var agentId: String
         public var model: String?
         public var reasoning: SdkOptional<ReasoningParam>?
@@ -24,8 +24,7 @@ public extension AgentsMethods {
         }
     }
 
-    /// Updates a reusable agent. See [agent
-    /// configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
+    /// Updates a reusable agent. See [agent configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
     ///
     /// - Parameters:
     /// - agentId: The ID of the reusable agent.
@@ -46,19 +45,15 @@ public extension AgentsMethods {
     /// - tools: Replaces the tool list. Omit to leave it unchanged, or pass null to
     ///   clear it. The replacement must fit within 3 MiB (3,145,728 bytes) of compact
     ///   UTF-8 JSON.
-    static func updateAgent(
-        config: ClientConfig,
-        options: UpdateAgentOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AgentResource {
-        try validateLength("agent_id", options.agentId, min: 0, max: 1_048_576)
+    public static func updateAgent(config: ClientConfig, options: UpdateAgentOptions, requestOptions: RequestOptions? = nil) async throws -> AgentResource {
+        try validateLength("agent_id", options.agentId, min: 0, max: 1048576)
 
         if let model = options.model {
-            try validateLength("model", model, min: 0, max: 1_048_576)
+            try validateLength("model", model, min: 0, max: 1048576)
         }
 
         if let instructions = options.instructions?.valueOrNil {
-            try validateLength("instructions", instructions, min: 0, max: 1_048_576)
+            try validateLength("instructions", instructions, min: 0, max: 1048576)
         }
 
         if let name = options.name?.valueOrNil {
@@ -71,23 +66,6 @@ public extension AgentsMethods {
 
         let requestBody = UpdateAgentRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/agents/", sdkEncodePathSegment(sdkWireString(options.agentId))].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateAgent",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse2.self,
-                "401": ErrorResponse2.self,
-                "403": ErrorResponse2.self,
-                "404": ErrorResponse2.self,
-                "409": ErrorResponse2.self,
-                "500": ErrorResponse2.self,
-                "503": ErrorResponse2.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/agents/", sdkEncodePathSegment(sdkWireString(options.agentId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateAgent", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
     }
 }

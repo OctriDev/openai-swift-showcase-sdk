@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// RealtimeRealtimeConversation domain models
+// RealtimeRealtimeConversation domain models
 public indirect enum RealtimeConversationItem {
     case realtimeConversationItemMessageSystem(RealtimeConversationItemMessageSystem)
     case realtimeConversationItemMessageUser(RealtimeConversationItemMessageUser)
@@ -19,6 +19,7 @@ public indirect enum RealtimeConversationItem {
 }
 
 extension RealtimeConversationItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -26,29 +27,20 @@ extension RealtimeConversationItem: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-                self = value; return
-            }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) {
-            self = value; return
-        }
+        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for RealtimeConversationItem"
-        )
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeConversationItem")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -59,16 +51,14 @@ extension RealtimeConversationItem: Codable {
 extension RealtimeConversationItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function_call": try .realtimeConversationItemFunctionCall(
-                RealtimeConversationItemFunctionCall(from: decoder)
-            )
+        case "function_call": return .realtimeConversationItemFunctionCall(try RealtimeConversationItemFunctionCall(from: decoder))
         case "function_call_output":
-            try .realtimeConversationItemFunctionCallOutput(RealtimeConversationItemFunctionCallOutput(from: decoder))
-        case "mcp_approval_response": try .realtimeMcpApprovalResponse(RealtimeMCPApprovalResponse(from: decoder))
-        case "mcp_list_tools": try .realtimeMcpListTools(RealtimeMCPListTools(from: decoder))
-        case "mcp_call": try .realtimeMcpToolCall(RealtimeMCPToolCall(from: decoder))
-        case "mcp_approval_request": try .realtimeMcpApprovalRequest(RealtimeMCPApprovalRequest(from: decoder))
-        default: nil
+        return .realtimeConversationItemFunctionCallOutput(try RealtimeConversationItemFunctionCallOutput(from: decoder))
+        case "mcp_approval_response": return .realtimeMcpApprovalResponse(try RealtimeMCPApprovalResponse(from: decoder))
+        case "mcp_list_tools": return .realtimeMcpListTools(try RealtimeMCPListTools(from: decoder))
+        case "mcp_call": return .realtimeMcpToolCall(try RealtimeMCPToolCall(from: decoder))
+        case "mcp_approval_request": return .realtimeMcpApprovalRequest(try RealtimeMCPApprovalRequest(from: decoder))
+        default: return nil
         }
     }
 }
@@ -78,17 +68,17 @@ extension RealtimeConversationItem {
         if let value = try? container.decode(
             RealtimeConversationItemMessageSystem.self
         ) {
-            return .realtimeConversationItemMessageSystem(value)
+            return             .realtimeConversationItemMessageSystem(value)
         }
         if let value = try? container.decode(
             RealtimeConversationItemMessageUser.self
         ) {
-            return .realtimeConversationItemMessageUser(value)
+            return             .realtimeConversationItemMessageUser(value)
         }
         if let value = try? container.decode(
             RealtimeConversationItemMessageAssistant.self
         ) {
-            return .realtimeConversationItemMessageAssistant(value)
+            return             .realtimeConversationItemMessageAssistant(value)
         }
         return nil
     }
@@ -125,20 +115,20 @@ public struct RealtimeConversationItemMessageSystemContentItem: Codable {
     }
 
     init() {
-        (type, text) = (nil, nil)
+        (self.type, self.text) = (nil, nil)
     }
 }
 
-public extension RealtimeConversationItemMessageSystemContentItem {
-    init(from decoder: Decoder) throws {
+extension RealtimeConversationItemMessageSystemContentItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        text = try container.sdkDecodeIfPresent(.text)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.text = try container.sdkDecodeIfPresent(.text)
     }
 }
 
-public extension RealtimeConversationItemMessageSystemContentItem {
-    init(type: RealtimeConversationItemMessageSystemContentItemType? = nil, text: String? = nil) {
+extension RealtimeConversationItemMessageSystemContentItem {
+    public init(type: RealtimeConversationItemMessageSystemContentItemType? = nil, text: String? = nil) {
         self.init()
         (self.type, self.text) = (type, text)
     }
@@ -168,58 +158,37 @@ public struct RealtimeConversationItemMessageUser: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeConversationItemMessageUser {
-    init(from decoder: Decoder) throws {
+extension RealtimeConversationItemMessageUser {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        id = try container.sdkDecodeIfPresent(.id)
-        object = try container.sdkDecodeIfPresent(.object)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("type", type, RealtimeConversationItemMessageUserType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.object = try container.sdkDecodeIfPresent(.object)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("type", self.type, RealtimeConversationItemMessageUserType.allCases.map(\.rawValue))
     }
 }
 
-public extension RealtimeConversationItemMessageUser {
-    init(
-        type: RealtimeConversationItemMessageUserType,
-        role: RealtimeConversationItemMessageUserRole,
-        content: [RealtimeConversationItemMessageUserContentItem],
-        id: String? = nil,
-        object: RealtimeConversationItemMessageUserObject? = nil,
-        status: RealtimeConversationItemMessageUserStatus? = nil
-    ) throws {
+extension RealtimeConversationItemMessageUser {
+    public init(type: RealtimeConversationItemMessageUserType, role: RealtimeConversationItemMessageUserRole, content: [RealtimeConversationItemMessageUserContentItem], id: String? = nil, object: RealtimeConversationItemMessageUserObject? = nil, status: RealtimeConversationItemMessageUserStatus? = nil) throws {
         (self.type, self.role) = (type, role)
         (self.content, self.id) = (content, id)
         (self.object, self.status) = (object, status)
-        try sdkValidateRawEnum("type", self.type, RealtimeConversationItemMessageUserType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, RealtimeConversationItemMessageUserType.allCases.map(\.rawValue))
     }
 }
 
@@ -244,27 +213,22 @@ public struct RealtimeConversationItemMessageAssistantContentItem: Codable {
     }
 
     init() {
-        (type, text, audio, transcript) = (nil, nil, nil, nil)
+        (self.type, self.text, self.audio, self.transcript) = (nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeConversationItemMessageAssistantContentItem {
-    init(from decoder: Decoder) throws {
+extension RealtimeConversationItemMessageAssistantContentItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        text = try container.sdkDecodeIfPresent(.text)
-        audio = try container.sdkDecodeIfPresent(.audio)
-        transcript = try container.sdkDecodeIfPresent(.transcript)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.audio = try container.sdkDecodeIfPresent(.audio)
+        self.transcript = try container.sdkDecodeIfPresent(.transcript)
     }
 }
 
-public extension RealtimeConversationItemMessageAssistantContentItem {
-    init(
-        type: RealtimeConversationItemMessageAssistantContentItemType? = nil,
-        text: String? = nil,
-        audio: String? = nil,
-        transcript: String? = nil
-    ) {
+extension RealtimeConversationItemMessageAssistantContentItem {
+    public init(type: RealtimeConversationItemMessageAssistantContentItemType? = nil, text: String? = nil, audio: String? = nil, transcript: String? = nil) {
         self.init()
         (self.type, self.text) = (type, text)
         (self.audio, self.transcript) = (audio, transcript)
@@ -295,62 +259,37 @@ public struct RealtimeConversationItemFunctionCallOutput: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeConversationItemFunctionCallOutput {
-    init(from decoder: Decoder) throws {
+extension RealtimeConversationItemFunctionCallOutput {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        callId = try container.sdkDecodeRequired(.callId)
-        output = try container.sdkDecodeRequired(.output)
-        id = try container.sdkDecodeIfPresent(.id)
-        object = try container.sdkDecodeIfPresent(.object)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("type", type, RealtimeConversationItemFunctionCallOutputType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.output = try container.sdkDecodeRequired(.output)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.object = try container.sdkDecodeIfPresent(.object)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("type", self.type, RealtimeConversationItemFunctionCallOutputType.allCases.map(\.rawValue))
     }
 }
 
-public extension RealtimeConversationItemFunctionCallOutput {
-    init(
-        type: RealtimeConversationItemFunctionCallOutputType,
-        callId: String,
-        output: String,
-        id: String? = nil,
-        object: RealtimeConversationItemFunctionCallOutputObject? = nil,
-        status: RealtimeConversationItemFunctionCallOutputStatus? = nil
-    ) throws {
+extension RealtimeConversationItemFunctionCallOutput {
+    public init(type: RealtimeConversationItemFunctionCallOutputType, callId: String, output: String, id: String? = nil, object: RealtimeConversationItemFunctionCallOutputObject? = nil, status: RealtimeConversationItemFunctionCallOutputStatus? = nil) throws {
         (self.type, self.callId) = (type, callId)
         (self.output, self.id) = (output, id)
         (self.object, self.status) = (object, status)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            RealtimeConversationItemFunctionCallOutputType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, RealtimeConversationItemFunctionCallOutputType.allCases.map(\.rawValue))
     }
 }
 
@@ -382,61 +321,39 @@ public struct RealtimeConversationItemFunctionCall: Codable {
         case callId = "call_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeConversationItemFunctionCall {
-    init(from decoder: Decoder) throws {
+extension RealtimeConversationItemFunctionCall {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.arguments) else {
-            throw SdkValidationError(
-                field: "arguments",
-                code: "required",
-                message: "Validation failed for 'arguments': value is required"
-            )
+            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeRequired(.name)
-        arguments = try container.sdkDecodeRequired(.arguments)
-        id = try container.sdkDecodeIfPresent(.id)
-        object = try container.sdkDecodeIfPresent(.object)
-        status = try container.sdkDecodeIfPresent(.status)
-        callId = try container.sdkDecodeIfPresent(.callId)
-        try sdkValidateRawEnum("type", type, RealtimeConversationItemFunctionCallType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.arguments = try container.sdkDecodeRequired(.arguments)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.object = try container.sdkDecodeIfPresent(.object)
+        self.status = try container.sdkDecodeIfPresent(.status)
+        self.callId = try container.sdkDecodeIfPresent(.callId)
+            try sdkValidateRawEnum("type", self.type, RealtimeConversationItemFunctionCallType.allCases.map(\.rawValue))
     }
 }
 
-public extension RealtimeConversationItemFunctionCall {
-    init(
-        type: RealtimeConversationItemFunctionCallType,
-        name: String,
-        arguments: String,
-        id: String? = nil,
-        object: RealtimeConversationItemFunctionCallObject? = nil,
-        status: RealtimeConversationItemFunctionCallStatus? = nil,
-        callId: String? = nil
-    ) throws {
+extension RealtimeConversationItemFunctionCall {
+    public init(type: RealtimeConversationItemFunctionCallType, name: String, arguments: String, id: String? = nil, object: RealtimeConversationItemFunctionCallObject? = nil, status: RealtimeConversationItemFunctionCallStatus? = nil, callId: String? = nil) throws {
         (self.type, self.name) = (type, name)
         (self.arguments, self.id) = (arguments, id)
         (self.object, self.status) = (object, status)
         self.callId = callId
-        try sdkValidateRawEnum("type", self.type, RealtimeConversationItemFunctionCallType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, RealtimeConversationItemFunctionCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -464,58 +381,37 @@ public struct RealtimeConversationItemMessageAssistant: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeConversationItemMessageAssistant {
-    init(from decoder: Decoder) throws {
+extension RealtimeConversationItemMessageAssistant {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        id = try container.sdkDecodeIfPresent(.id)
-        object = try container.sdkDecodeIfPresent(.object)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("type", type, RealtimeConversationItemMessageAssistantType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.object = try container.sdkDecodeIfPresent(.object)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("type", self.type, RealtimeConversationItemMessageAssistantType.allCases.map(\.rawValue))
     }
 }
 
-public extension RealtimeConversationItemMessageAssistant {
-    init(
-        type: RealtimeConversationItemMessageAssistantType,
-        role: RealtimeConversationItemMessageAssistantRole,
-        content: [RealtimeConversationItemMessageAssistantContentItem],
-        id: String? = nil,
-        object: RealtimeConversationItemMessageAssistantObject? = nil,
-        status: RealtimeConversationItemMessageAssistantStatus? = nil
-    ) throws {
+extension RealtimeConversationItemMessageAssistant {
+    public init(type: RealtimeConversationItemMessageAssistantType, role: RealtimeConversationItemMessageAssistantRole, content: [RealtimeConversationItemMessageAssistantContentItem], id: String? = nil, object: RealtimeConversationItemMessageAssistantObject? = nil, status: RealtimeConversationItemMessageAssistantStatus? = nil) throws {
         (self.type, self.role) = (type, role)
         (self.content, self.id) = (content, id)
         (self.object, self.status) = (object, status)
-        try sdkValidateRawEnum("type", self.type, RealtimeConversationItemMessageAssistantType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, RealtimeConversationItemMessageAssistantType.allCases.map(\.rawValue))
     }
 }
 
@@ -564,40 +460,29 @@ public struct RealtimeConversationItemWithReference: Codable {
     }
 
     init() {
-        (id, type, object, status, role) = (nil, nil, nil, nil, nil)
-        (content, callId, name, arguments, output) = (nil, nil, nil, nil, nil)
+        (self.id, self.type, self.object, self.status, self.role) = (nil, nil, nil, nil, nil)
+        (self.content, self.callId, self.name, self.arguments, self.output) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeConversationItemWithReference {
-    init(from decoder: Decoder) throws {
+extension RealtimeConversationItemWithReference {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        type = try container.sdkDecodeIfPresent(.type)
-        object = try container.sdkDecodeIfPresent(.object)
-        status = try container.sdkDecodeIfPresent(.status)
-        role = try container.sdkDecodeIfPresent(.role)
-        content = try container.sdkDecodeIfPresent(.content)
-        callId = try container.sdkDecodeIfPresent(.callId)
-        name = try container.sdkDecodeIfPresent(.name)
-        arguments = try container.sdkDecodeIfPresent(.arguments)
-        output = try container.sdkDecodeIfPresent(.output)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.object = try container.sdkDecodeIfPresent(.object)
+        self.status = try container.sdkDecodeIfPresent(.status)
+        self.role = try container.sdkDecodeIfPresent(.role)
+        self.content = try container.sdkDecodeIfPresent(.content)
+        self.callId = try container.sdkDecodeIfPresent(.callId)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.arguments = try container.sdkDecodeIfPresent(.arguments)
+        self.output = try container.sdkDecodeIfPresent(.output)
     }
 }
 
-public extension RealtimeConversationItemWithReference {
-    init(
-        id: String? = nil,
-        type: RealtimeConversationItemWithReferenceType? = nil,
-        object: RealtimeConversationItemWithReferenceObject? = nil,
-        status: RealtimeConversationItemWithReferenceStatus? = nil,
-        role: RealtimeConversationItemWithReferenceRole? = nil,
-        content: [RealtimeConversationItemWithReferenceContentItem]? = nil,
-        callId: String? = nil,
-        name: String? = nil,
-        arguments: String? = nil,
-        output: String? = nil
-    ) {
+extension RealtimeConversationItemWithReference {
+    public init(id: String? = nil, type: RealtimeConversationItemWithReferenceType? = nil, object: RealtimeConversationItemWithReferenceObject? = nil, status: RealtimeConversationItemWithReferenceStatus? = nil, role: RealtimeConversationItemWithReferenceRole? = nil, content: [RealtimeConversationItemWithReferenceContentItem]? = nil, callId: String? = nil, name: String? = nil, arguments: String? = nil, output: String? = nil) {
         self.init()
         (self.id, self.type) = (id, type)
         (self.object, self.status) = (object, status)

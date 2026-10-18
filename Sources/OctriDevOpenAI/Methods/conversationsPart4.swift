@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ConversationsMethods {
-    /// Retrieves a single item from a conversation. Use `conversation_id` and `item_id` to identify the conversation
-    /// and the item you want to inspect.
+extension ConversationsMethods {
+    /// Retrieves a single item from a conversation. Use `conversation_id` and `item_id` to identify the conversation and the item you want to inspect.
     ///
     /// Get a single item from a conversation with the given IDs.
     ///
@@ -21,30 +20,10 @@ public extension ConversationsMethods {
     ///   ubresources/items/methods/list#%28resource%29%20conversations.items%20%3E%20
     ///   %28method%29%20list%20%3E%20%28params%29%20default%20%3E%20%28param%29%20inc
     ///   lude%20%3E%20%28schema%29) for more information.
-    static func getConversationItem(
-        config: ClientConfig,
-        conversationId: String,
-        itemId: String,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationItem {
-        try await (sdkRequest(
-            "GET",
-            [
-                "/conversations/",
-                sdkEncodePathSegment(sdkWireString(conversationId)),
-                "/items/",
-                sdkEncodePathSegment(sdkWireString(itemId)),
-            ].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("include", values: include, style: "form", explode: true),
-            ],
-            decoder: .json,
-            operationId: "getConversationItem",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func getConversationItem(config: ClientConfig, conversationId: String, itemId: String, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) async throws -> ConversationItem {
+        return try (await sdkRequest("GET", ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId)), "/items/", sdkEncodePathSegment(sdkWireString(itemId))].joined(), config: config, query: [
+            SdkQueryParameter("include", values: include, style: "form", explode: true),
+        ], decoder: .json, operationId: "getConversationItem", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
     /// Deletes an item from a conversation. Use `conversation_id` and `item_id` to identify the item to remove.
@@ -54,30 +33,7 @@ public extension ConversationsMethods {
     /// - Parameters:
     /// - conversationId: The ID of the conversation that contains the item.
     /// - itemId: The ID of the item to delete.
-    static func deleteConversationItem(
-        config: ClientConfig,
-        conversationId: String,
-        itemId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationResource {
-        try await (sdkRequest(
-            "DELETE",
-            [
-                "/conversations/",
-                sdkEncodePathSegment(sdkWireString(conversationId)),
-                "/items/",
-                sdkEncodePathSegment(sdkWireString(itemId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteConversationItem",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+    public static func deleteConversationItem(config: ClientConfig, conversationId: String, itemId: String, requestOptions: RequestOptions? = nil) async throws -> ConversationResource {
+        return try (await sdkRequest("DELETE", ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId)), "/items/", sdkEncodePathSegment(sdkWireString(itemId))].joined(), config: config, decoder: .json, operationId: "deleteConversationItem", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

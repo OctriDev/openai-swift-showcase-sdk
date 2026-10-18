@@ -3,44 +3,9 @@
 
 import Foundation
 
-/// ResponsesResponses domain models
-public extension ResponsesClientEventResponseCreate {
-    init(
-        type: ResponsesClientEventResponseCreateVariant0Type,
-        streamId: String? = nil,
-        metadata: Metadata? = nil,
-        topLogprobs: Int? = nil,
-        temperature: Double? = nil,
-        topP: Double? = nil,
-        user: String? = nil,
-        safetyIdentifier: String? = nil,
-        promptCacheKey: String? = nil,
-        promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0? = nil,
-        promptCacheOptions: ResponsePromptCacheOptionsParam? = nil,
-        previousResponseId: String? = nil,
-        model: ModelIdsResponses? = nil,
-        background: Bool? = nil,
-        maxToolCalls: Int? = nil,
-        text: ResponseTextParam? = nil,
-        tools: ToolsArray? = nil,
-        toolChoice: ToolChoiceParam? = nil,
-        prompt: Prompt? = nil,
-        accessPrograms: AccessProgramsParam? = nil,
-        serviceTier: ServiceTierResponsesVariant0? = nil,
-        truncation: CreateResponseVariant2TruncationVariant0? = nil,
-        reasoning: Reasoning? = nil,
-        input: InputParam? = nil,
-        include: [IncludeEnum]? = nil,
-        parallelToolCalls: Bool? = nil,
-        store: Bool? = nil,
-        instructions: String? = nil,
-        moderation: ModerationParam? = nil,
-        stream: Bool? = nil,
-        streamOptions: ResponseStreamOptions? = nil,
-        conversation: ConversationParam? = nil,
-        contextManagement: [ContextManagementParam]? = nil,
-        maxOutputTokens: Int? = nil
-    ) throws {
+// ResponsesResponses domain models
+extension ResponsesClientEventResponseCreate {
+    public init(type: ResponsesClientEventResponseCreateVariant0Type, streamId: String? = nil, metadata: Metadata? = nil, topLogprobs: Int? = nil, temperature: Double? = nil, topP: Double? = nil, user: String? = nil, safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0? = nil, promptCacheOptions: ResponsePromptCacheOptionsParam? = nil, previousResponseId: String? = nil, model: ModelIdsResponses? = nil, background: Bool? = nil, maxToolCalls: Int? = nil, text: ResponseTextParam? = nil, tools: ToolsArray? = nil, toolChoice: ToolChoiceParam? = nil, prompt: Prompt? = nil, accessPrograms: AccessProgramsParam? = nil, serviceTier: ServiceTierResponsesVariant0? = nil, truncation: CreateResponseVariant2TruncationVariant0? = nil, reasoning: Reasoning? = nil, input: InputParam? = nil, include: [IncludeEnum]? = nil, parallelToolCalls: Bool? = nil, store: Bool? = nil, instructions: String? = nil, moderation: ModerationParam? = nil, stream: Bool? = nil, streamOptions: ResponseStreamOptions? = nil, conversation: ConversationParam? = nil, contextManagement: [ContextManagementParam]? = nil, maxOutputTokens: Int? = nil) throws {
         (self.type, self.streamId) = (type, streamId)
         (self.metadata, self.topLogprobs) = (metadata, topLogprobs)
         (self.temperature, self.topP) = (temperature, topP)
@@ -58,25 +23,13 @@ public extension ResponsesClientEventResponseCreate {
         (self.moderation, self.stream) = (moderation, stream)
         (self.streamOptions, self.conversation) = (streamOptions, conversation)
         (self.contextManagement, self.maxOutputTokens) = (contextManagement, maxOutputTokens)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            ResponsesClientEventResponseCreateVariant0Type.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, ResponsesClientEventResponseCreateVariant0Type.allCases.map(\.rawValue))
         if let value = self.streamId {
             try validateLength("stream_id", value, min: 1, max: 256)
             try sdkValidatePattern("stream_id", value, sdkPattern9d6a83b704ec)
         }
         if let value = self.topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.contextManagement {
             try validateItems("context_management", value, min: 1, max: nil)
@@ -94,19 +47,19 @@ public struct ResponsesServerEventVariant14Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant14Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant14Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant14Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant14Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -122,19 +75,19 @@ public struct ResponsesServerEventVariant12Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant12Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant12Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant12Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant12Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -150,19 +103,19 @@ public struct ResponsesServerEventVariant9Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant9Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant9Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant9Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant9Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -178,19 +131,19 @@ public struct ResponsesWebSocketStreamEventVariant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesWebSocketStreamEventVariant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesWebSocketStreamEventVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesWebSocketStreamEventVariant1 {
-    init(streamId: String? = nil) {
+extension ResponsesWebSocketStreamEventVariant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -206,19 +159,19 @@ public struct ResponsesServerEventVariant4Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant4Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant4Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant4Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant4Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -246,63 +199,39 @@ public struct ResponsesServerEventVariant40: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponsesServerEventVariant40 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant40 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseWebSearchCallInProgressEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseWebSearchCallInProgressEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponsesServerEventVariant40 {
-    init(
-        type: ResponseWebSearchCallInProgressEventType,
-        outputIndex: Int,
-        itemId: String,
-        sequenceNumber: Int,
-        streamId: String? = nil
-    ) throws {
+extension ResponsesServerEventVariant40 {
+    public init(type: ResponseWebSearchCallInProgressEventType, outputIndex: Int, itemId: String, sequenceNumber: Int, streamId: String? = nil) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.sequenceNumber) = (itemId, sequenceNumber)
         self.streamId = streamId
-        try sdkValidateRawEnum("type", self.type, ResponseWebSearchCallInProgressEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseWebSearchCallInProgressEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -328,63 +257,39 @@ public struct ResponsesServerEventVariant52: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponsesServerEventVariant52 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant52 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseMCPListToolsFailedEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseMCPListToolsFailedEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponsesServerEventVariant52 {
-    init(
-        type: ResponseMCPListToolsFailedEventType,
-        itemId: String,
-        outputIndex: Int,
-        sequenceNumber: Int,
-        streamId: String? = nil
-    ) throws {
+extension ResponsesServerEventVariant52 {
+    public init(type: ResponseMCPListToolsFailedEventType, itemId: String, outputIndex: Int, sequenceNumber: Int, streamId: String? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.sequenceNumber) = (outputIndex, sequenceNumber)
         self.streamId = streamId
-        try sdkValidateRawEnum("type", self.type, ResponseMCPListToolsFailedEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseMCPListToolsFailedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -398,19 +303,19 @@ public struct ResponsesServerEventVariant54Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant54Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant54Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant54Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant54Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -441,76 +346,43 @@ public struct ResponsesServerEventVariant4: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponsesServerEventVariant4 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant4 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.delta) else {
-            throw SdkValidationError(
-                field: "delta",
-                code: "required",
-                message: "Validation failed for 'delta': value is required"
-            )
+            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        delta = try container.sdkDecodeRequired(.delta)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseCodeInterpreterCallCodeDeltaEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.delta = try container.sdkDecodeRequired(.delta)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseCodeInterpreterCallCodeDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponsesServerEventVariant4 {
-    init(
-        type: ResponseCodeInterpreterCallCodeDeltaEventType,
-        outputIndex: Int,
-        itemId: String,
-        delta: String,
-        sequenceNumber: Int,
-        streamId: String? = nil
-    ) throws {
+extension ResponsesServerEventVariant4 {
+    public init(type: ResponseCodeInterpreterCallCodeDeltaEventType, outputIndex: Int, itemId: String, delta: String, sequenceNumber: Int, streamId: String? = nil) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.delta) = (itemId, delta)
         (self.sequenceNumber, self.streamId) = (sequenceNumber, streamId)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            ResponseCodeInterpreterCallCodeDeltaEventType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, ResponseCodeInterpreterCallCodeDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -524,19 +396,19 @@ public struct ResponsesServerEventVariant44Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant44Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant44Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant44Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant44Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -558,40 +430,30 @@ public struct ResponsesServerEventVariant1: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponsesServerEventVariant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseAudioDoneEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseAudioDoneEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponsesServerEventVariant1 {
-    init(type: ResponseAudioDoneEventType, sequenceNumber: Int, streamId: String? = nil) throws {
+extension ResponsesServerEventVariant1 {
+    public init(type: ResponseAudioDoneEventType, sequenceNumber: Int, streamId: String? = nil) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         self.streamId = streamId
-        try sdkValidateRawEnum("type", self.type, ResponseAudioDoneEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseAudioDoneEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -617,7 +479,5 @@ public struct ResponsesServerEventVariant16: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

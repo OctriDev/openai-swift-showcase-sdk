@@ -6,17 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectsMethods {
-    /// Updates the scopes and/or expiration of an existing API key in the project, including a service-account-owned
-    /// key. Requires permission to write project API keys. Provide at least one of `scopes` or `expires_in_seconds`.
-    /// Omitted fields stay unchanged; neither field accepts `null`. Both changes are saved together. `scopes` replaces
-    /// the key's scope restrictions using the same scope identifiers as the dashboard. An empty array means All
-    /// permissions, subject to the owner's effective access; it does not mean no access. Use `["api.all.read"]` for
-    /// read-only access or specific scopes such as `["api.files.read"]` for restricted access. This does not change
-    /// user or service-account roles or grant admin permissions. Scope changes follow the same authentication-cache
-    /// propagation as dashboard edits. Provide `expires_in_seconds` to set the expiration relative to this request. The
-    /// value must satisfy the organization's and project's expiry policies. Expired keys cannot be updated. Retrying
-    /// resets the expiration relative to the new request. The response contains only the redacted key, not its secret.
+extension ProjectsMethods {
+    /// Updates the scopes and/or expiration of an existing API key in the project, including a service-account-owned key. Requires permission to write project API keys. Provide at least one of `scopes` or `expires_in_seconds`. Omitted fields stay unchanged; neither field accepts `null`. Both changes are saved together. `scopes` replaces the key's scope restrictions using the same scope identifiers as the dashboard. An empty array means All permissions, subject to the owner's effective access; it does not mean no access. Use `["api.all.read"]` for read-only access or specific scopes such as `["api.files.read"]` for restricted access. This does not change user or service-account roles or grant admin permissions. Scope changes follow the same authentication-cache propagation as dashboard edits. Provide `expires_in_seconds` to set the expiration relative to this request. The value must satisfy the organization's and project's expiry policies. Expired keys cannot be updated. Retrying resets the expiration relative to the new request. The response contains only the redacted key, not its secret.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
@@ -30,64 +21,21 @@ public extension ProjectsMethods {
     ///   subject to the owner's effective permissions. Use ["api.all.read"] for
     ///   read-only access. Scopes do not change the owner's roles or grant
     ///   administrative permissions.
-    static func updateProjectApiKey(
-        config: ClientConfig,
-        projectId: String,
-        apiKeyId: String,
-        expiresInSeconds: Int? = nil,
-        scopes: [String]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectApiKey {
-        if let expiresInSeconds {
-            try validateRange("expires_in_seconds", Double(expiresInSeconds), min: 1, max: 31_536_000)
+    public static func updateProjectApiKey(config: ClientConfig, projectId: String, apiKeyId: String, expiresInSeconds: Int? = nil, scopes: [String]? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectApiKey {
+        if let expiresInSeconds = expiresInSeconds {
+            try validateRange("expires_in_seconds", Double(expiresInSeconds), min: 1, max: 31536000)
         }
 
         let requestBody = UpdateProjectApiKeyRequestBody(expiresInSeconds: expiresInSeconds, scopes: scopes)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/organization/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/api_keys/",
-                sdkEncodePathSegment(sdkWireString(apiKeyId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateProjectApiKey",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/api_keys/", sdkEncodePathSegment(sdkWireString(apiKeyId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateProjectApiKey", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
     /// Archives a project in the organization. Archived projects cannot be used or updated.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
-    static func archiveProject(
-        config: ClientConfig,
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Project {
-        try await (sdkRequest(
-            "POST",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/archive"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "archiveProject",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func archiveProject(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> Project {
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/archive"].joined(), config: config, decoder: .json, operationId: "archiveProject", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

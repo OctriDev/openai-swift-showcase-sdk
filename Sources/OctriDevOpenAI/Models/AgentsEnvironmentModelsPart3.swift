@@ -3,21 +3,18 @@
 
 import Foundation
 
-/// AgentsEnvironment domain models
+// AgentsEnvironment domain models
 /// The kind of execution environment.
 public struct EnvironmentTypeResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let openaiHosted = EnvironmentTypeResource(rawValue: "openai_hosted")
     public static let selfHosted = EnvironmentTypeResource(rawValue: "self_hosted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -30,15 +27,12 @@ public struct EnvironmentTypeResource: RawRepresentable, Hashable, Codable, Send
 public struct EnvironmentTemplateListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = EnvironmentTemplateListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -51,15 +45,12 @@ public struct EnvironmentTemplateListResourceObject: RawRepresentable, Hashable,
 public struct EnvironmentTypeParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let openaiHosted = EnvironmentTypeParam(rawValue: "openai_hosted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -72,15 +63,12 @@ public struct EnvironmentTypeParam: RawRepresentable, Hashable, Codable, Sendabl
 public struct EnvironmentFileResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let agentEnvironmentFile = EnvironmentFileResourceObject(rawValue: "agent.environment.file")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -129,16 +117,12 @@ public enum EnvironmentResourceNoneType: String, CaseIterable, Codable {
 public struct EnvironmentTemplateResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let agentEnvironmentTemplate =
-        EnvironmentTemplateResourceObject(rawValue: "agent.environment.template")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let agentEnvironmentTemplate = EnvironmentTemplateResourceObject(rawValue: "agent.environment.template")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -151,10 +135,7 @@ public struct EnvironmentTemplateResourceObject: RawRepresentable, Hashable, Cod
 public struct EnvironmentStatusResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let pending = EnvironmentStatusResource(rawValue: "pending")
     public static let ready = EnvironmentStatusResource(rawValue: "ready")
     public static let connected = EnvironmentStatusResource(rawValue: "connected")
@@ -165,7 +146,7 @@ public struct EnvironmentStatusResource: RawRepresentable, Hashable, Codable, Se
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

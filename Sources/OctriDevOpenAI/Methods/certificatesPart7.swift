@@ -6,82 +6,36 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension CertificatesMethods {
-    /// Activates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and
-    /// idempotent. The response contains the certificates with their updated activation state.
+extension CertificatesMethods {
+    /// Activates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and idempotent. The response contains the certificates with their updated activation state.
     ///
-    /// Activate certificates at the project level. You can atomically and idempotently activate up to 10 certificates
-    /// at a time.
+    /// Activate certificates at the project level. You can atomically and idempotently activate up to 10 certificates at a time.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
     /// - certificateIds: Required array value serialized in the `certificate_ids`
     ///   wire field.
-    static func activateCertificatesForProject(
-        config: ClientConfig,
-        projectId: String,
-        certificateIds: [String],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationProjectCertificateActivationResponse {
+    public static func activateCertificatesForProject(config: ClientConfig, projectId: String, certificateIds: [String], requestOptions: RequestOptions? = nil) async throws -> OrganizationProjectCertificateActivationResponse {
         try validateItems("certificate_ids", certificateIds, min: 1, max: 10)
 
         let requestBody = ActivateCertificatesForProjectRequestBody(certificateIds: certificateIds)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/certificates/activate"]
-                .joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "activateCertificatesForProject",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/certificates/activate"].joined(), config: config, body: requestBody, decoder: .json, operationId: "activateCertificatesForProject", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 
-    /// Deactivates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and
-    /// idempotent. The response contains the certificates with their updated activation state.
+    /// Deactivates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and idempotent. The response contains the certificates with their updated activation state.
     ///
-    /// Deactivate certificates at the project level. You can atomically and idempotently deactivate up to 10
-    /// certificates at a time.
+    /// Deactivate certificates at the project level. You can atomically and idempotently deactivate up to 10 certificates at a time.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
     /// - certificateIds: Required array value serialized in the `certificate_ids`
     ///   wire field.
-    static func deactivateCertificatesForProject(
-        config: ClientConfig,
-        projectId: String,
-        certificateIds: [String],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationProjectCertificateDeactivationResponse {
+    public static func deactivateCertificatesForProject(config: ClientConfig, projectId: String, certificateIds: [String], requestOptions: RequestOptions? = nil) async throws -> OrganizationProjectCertificateDeactivationResponse {
         try validateItems("certificate_ids", certificateIds, min: 1, max: 10)
 
         let requestBody = DeactivateCertificatesForProjectRequestBody(certificateIds: certificateIds)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/certificates/deactivate"]
-                .joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "deactivateCertificatesForProject",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/certificates/deactivate"].joined(), config: config, body: requestBody, decoder: .json, operationId: "deactivateCertificatesForProject", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

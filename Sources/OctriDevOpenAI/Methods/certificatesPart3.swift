@@ -6,67 +6,30 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension CertificatesMethods {
-    /// Upload a certificate to the organization. This does **not** automatically activate the certificate.
-    /// Organizations can upload up to 50 certificates.
+extension CertificatesMethods {
+    /// Upload a certificate to the organization. This does **not** automatically activate the certificate. Organizations can upload up to 50 certificates.
     ///
     /// - Parameters:
     /// - certificate: The certificate content in PEM format
     /// - name: An optional name for the certificate
-    static func uploadCertificate(
-        config: ClientConfig,
-        certificate: String,
-        name: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Certificate {
+    public static func uploadCertificate(config: ClientConfig, certificate: String, name: String? = nil, requestOptions: RequestOptions? = nil) async throws -> Certificate {
         let requestBody = UploadCertificateRequestBody(certificate: certificate, name: name)
 
-        return try await (sdkRequest(
-            "POST",
-            "/organization/certificates",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "uploadCertificate",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/organization/certificates", config: config, body: requestBody, decoder: .json, operationId: "uploadCertificate", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Activates certificates at the organization level. Provide the certificate IDs in `certificate_ids`; the
-    /// operation activates them atomically and idempotently. You can activate up to 10 certificates in a single
-    /// request.
+    /// Activates certificates at the organization level. Provide the certificate IDs in `certificate_ids`; the operation activates them atomically and idempotently. You can activate up to 10 certificates in a single request.
     ///
-    /// Activate certificates at the organization level. You can atomically and idempotently activate up to 10
-    /// certificates at a time.
+    /// Activate certificates at the organization level. You can atomically and idempotently activate up to 10 certificates at a time.
     ///
     /// - Parameters:
     /// - certificateIds: Required array value serialized in the `certificate_ids`
     ///   wire field.
-    static func activateCertificatesForOrganization(
-        config: ClientConfig,
-        certificateIds: [String],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationCertificateActivationResponse {
+    public static func activateCertificatesForOrganization(config: ClientConfig, certificateIds: [String], requestOptions: RequestOptions? = nil) async throws -> OrganizationCertificateActivationResponse {
         try validateItems("certificate_ids", certificateIds, min: 1, max: 10)
 
         let requestBody = ActivateCertificatesForOrganizationRequestBody(certificateIds: certificateIds)
 
-        return try await (sdkRequest(
-            "POST",
-            "/organization/certificates/activate",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "activateCertificatesForOrganization",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/organization/certificates/activate", config: config, body: requestBody, decoder: .json, operationId: "activateCertificatesForOrganization", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

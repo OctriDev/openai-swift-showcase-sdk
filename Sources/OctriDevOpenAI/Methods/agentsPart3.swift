@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AgentsMethods {
+extension AgentsMethods {
     /// Creates an OpenAI-hosted environment before creating a session. Requires access to the prewarming beta.
     ///
     /// - Parameters:
@@ -20,14 +20,8 @@ public extension AgentsMethods {
     ///   a new environment.
     /// - vaultIds: The IDs of up to 10 vaults made available to an OpenAI-hosted
     ///   environment.
-    static func createAgentEnvironment(
-        config: ClientConfig,
-        environment: CreateEnvironmentParam,
-        idempotencyKey: String? = nil,
-        vaultIds: SdkOptional<[String]>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> PublicEnvironmentResource {
-        if let idempotencyKey {
+    public static func createAgentEnvironment(config: ClientConfig, environment: CreateEnvironmentParam, idempotencyKey: String? = nil, vaultIds: SdkOptional<[String]>? = nil, requestOptions: RequestOptions? = nil) async throws -> PublicEnvironmentResource {
+        if let idempotencyKey = idempotencyKey {
             try validateLength("Idempotency-Key", idempotencyKey, min: 1, max: 256)
         }
 
@@ -37,58 +31,18 @@ public extension AgentsMethods {
 
         let requestBody = CreateAgentEnvironmentRequestBody(environment: environment, vaultIds: vaultIds)
 
-        return try await (sdkRequest(
-            "POST",
-            "/agents/environments",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createAgentEnvironment",
-            extraHeaders: sdkHeaders([
-                ("Idempotency-Key", sdkHeaderValue(idempotencyKey)),
-            ]),
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse2.self,
-                "401": ErrorResponse2.self,
-                "403": ErrorResponse2.self,
-                "404": ErrorResponse2.self,
-                "409": ErrorResponse2.self,
-                "429": ErrorResponse2.self,
-                "500": ErrorResponse2.self,
-                "503": ErrorResponse2.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/agents/environments", config: config, body: requestBody, decoder: .json, operationId: "createAgentEnvironment", extraHeaders: sdkHeaders([
+            ("Idempotency-Key", sdkHeaderValue(idempotencyKey)),
+        ]), options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "429": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
     }
 
-    /// Retrieves an execution environment's connection status and safe installed metadata. See [environment
-    /// lifecycle](https://developers.openai.com/api/docs/guides/agents-api/environments/lifecycle).
+    /// Retrieves an execution environment's connection status and safe installed metadata. See [environment lifecycle](https://developers.openai.com/api/docs/guides/agents-api/environments/lifecycle).
     ///
     /// - Parameters:
     /// - environmentId: The ID of the environment.
-    static func retrieveAgentEnvironment(
-        config: ClientConfig,
-        environmentId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> PublicEnvironmentResource {
-        try validateLength("environment_id", environmentId, min: 0, max: 1_048_576)
+    public static func retrieveAgentEnvironment(config: ClientConfig, environmentId: String, requestOptions: RequestOptions? = nil) async throws -> PublicEnvironmentResource {
+        try validateLength("environment_id", environmentId, min: 0, max: 1048576)
 
-        return try await (sdkRequest(
-            "GET",
-            ["/agents/environments/", sdkEncodePathSegment(sdkWireString(environmentId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveAgentEnvironment",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse2.self,
-                "401": ErrorResponse2.self,
-                "403": ErrorResponse2.self,
-                "404": ErrorResponse2.self,
-                "409": ErrorResponse2.self,
-                "500": ErrorResponse2.self,
-                "503": ErrorResponse2.self,
-            ]
-        )).data
+        return try (await sdkRequest("GET", ["/agents/environments/", sdkEncodePathSegment(sdkWireString(environmentId))].joined(), config: config, decoder: .json, operationId: "retrieveAgentEnvironment", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
     }
 }

@@ -3,33 +3,25 @@
 
 import Foundation
 
-/// SharedEval domain models
+// SharedEval domain models
 public indirect enum EvalItemContent {
     case evalItemContentItem(EvalItemContentItem)
     case evalItemContentArray(EvalItemContentArray)
 }
 
 extension EvalItemContent: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for EvalItemContent"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for EvalItemContent")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
@@ -47,12 +39,8 @@ extension EvalItemContent {
 
 extension EvalItemContent {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(EvalItemContentItem.self) {
-            return .evalItemContentItem(value)
-        }
-        if let value = try? container.decode(EvalItemContentArray.self) {
-            return .evalItemContentArray(value)
-        }
+        if let value = try? container.decode(EvalItemContentItem.self) { return .evalItemContentItem(value) }
+        if let value = try? container.decode(EvalItemContentArray.self) { return .evalItemContentArray(value) }
         return nil
     }
 }
@@ -80,6 +68,7 @@ public indirect enum EvalItemContentItem {
 }
 
 extension EvalItemContentItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -87,29 +76,20 @@ extension EvalItemContentItem: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-                self = value; return
-            }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) {
-            self = value; return
-        }
+        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for EvalItemContentItem"
-        )
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for EvalItemContentItem")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -120,33 +100,22 @@ extension EvalItemContentItem: Codable {
 extension EvalItemContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": try .inputTextContent(InputTextContent(from: decoder))
-        case "output_text": try .evalItemContentOutputText(EvalItemContentOutputText(from: decoder))
-        case "input_image": try .evalItemInputImage(EvalItemInputImage(from: decoder))
-        case "input_audio": try .inputAudio(InputAudio(from: decoder))
-        default: nil
+        case "input_text": return .inputTextContent(try InputTextContent(from: decoder))
+        case "output_text": return .evalItemContentOutputText(try EvalItemContentOutputText(from: decoder))
+        case "input_image": return .evalItemInputImage(try EvalItemInputImage(from: decoder))
+        case "input_audio": return .inputAudio(try InputAudio(from: decoder))
+        default: return nil
         }
     }
 }
 
 extension EvalItemContentItem {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(EvalItemContentText.self) {
-            return .evalItemContentText(value)
-        }
-        if let value = try? container.decode(InputTextContent.self) {
-            return .inputTextContent(value)
-        }
-        if let value = try? container
-            .decode(EvalItemContentOutputText.self) {
-            return .evalItemContentOutputText(value)
-        }
-        if let value = try? container.decode(EvalItemInputImage.self) {
-            return .evalItemInputImage(value)
-        }
-        if let value = try? container.decode(InputAudio.self) {
-            return .inputAudio(value)
-        }
+        if let value = try? container.decode(EvalItemContentText.self) { return .evalItemContentText(value) }
+        if let value = try? container.decode(InputTextContent.self) { return .inputTextContent(value) }
+        if let value = try? container.decode(EvalItemContentOutputText.self) { return .evalItemContentOutputText(value) }
+        if let value = try? container.decode(EvalItemInputImage.self) { return .evalItemInputImage(value) }
+        if let value = try? container.decode(InputAudio.self) { return .inputAudio(value) }
         return nil
     }
 }
@@ -179,40 +148,34 @@ public struct EvalItemContentOutputText: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EvalItemContentOutputText {
-    init(from decoder: Decoder) throws {
+extension EvalItemContentOutputText {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        try sdkValidateRawEnum("type", type, EvalItemContentOutputTextType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+            try sdkValidateRawEnum("type", self.type, EvalItemContentOutputTextType.allCases.map(\.rawValue))
     }
 }
 
-public extension EvalItemContentOutputText {
-    init(type: EvalItemContentOutputTextType, text: String) throws {
+extension EvalItemContentOutputText {
+    public init(type: EvalItemContentOutputTextType, text: String) throws {
         (self.type, self.text) = (type, text)
-        try sdkValidateRawEnum("type", self.type, EvalItemContentOutputTextType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, EvalItemContentOutputTextType.allCases.map(\.rawValue))
     }
 }
+
+
+
+
 
 /// A message input to the model with a role indicating instruction following hierarchy. Instructions given with the
 /// `developer` or `system` role take precedence over instructions given with the `user` role. Messages with the
@@ -232,36 +195,26 @@ public struct EvalItem: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EvalItem {
-    init(from decoder: Decoder) throws {
+extension EvalItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        type = try container.sdkDecodeIfPresent(.type)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.type = try container.sdkDecodeIfPresent(.type)
     }
 }
 
-public extension EvalItem {
-    init(role: EvalItemRole, content: EvalItemContent, type: EvalItemType? = nil) {
+extension EvalItem {
+    public init(role: EvalItemRole, content: EvalItemContent, type: EvalItemType? = nil) {
         (self.role, self.content) = (role, content)
         self.type = type
     }
@@ -282,42 +235,32 @@ public struct EvalItemInputImage: Codable {
         case detail
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EvalItemInputImage {
-    init(from decoder: Decoder) throws {
+extension EvalItemInputImage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.imageUrl) else {
-            throw SdkValidationError(
-                field: "image_url",
-                code: "required",
-                message: "Validation failed for 'image_url': value is required"
-            )
+            throw SdkValidationError(field: "image_url", code: "required", message: "Validation failed for 'image_url': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        imageUrl = try container.sdkDecodeRequired(.imageUrl)
-        detail = try container.sdkDecodeIfPresent(.detail)
-        try sdkValidateRawEnum("type", type, EvalItemInputImageType.allCases.map(\.rawValue))
-        try sdkValidateUri("image_url", imageUrl)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.imageUrl = try container.sdkDecodeRequired(.imageUrl)
+        self.detail = try container.sdkDecodeIfPresent(.detail)
+            try sdkValidateRawEnum("type", self.type, EvalItemInputImageType.allCases.map(\.rawValue))
+            try sdkValidateUri("image_url", self.imageUrl)
     }
 }
 
-public extension EvalItemInputImage {
-    init(type: EvalItemInputImageType, imageUrl: String, detail: String? = nil) throws {
+extension EvalItemInputImage {
+    public init(type: EvalItemInputImageType, imageUrl: String, detail: String? = nil) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
         self.detail = detail
-        try sdkValidateRawEnum("type", self.type, EvalItemInputImageType.allCases.map(\.rawValue))
-        try sdkValidateUri("image_url", self.imageUrl)
+            try sdkValidateRawEnum("type", self.type, EvalItemInputImageType.allCases.map(\.rawValue))
+            try sdkValidateUri("image_url", self.imageUrl)
     }
 }
 
@@ -325,10 +268,7 @@ public extension EvalItemInputImage {
 public struct EvalItemRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let user = EvalItemRole(rawValue: "user")
     public static let assistant = EvalItemRole(rawValue: "assistant")
     public static let system = EvalItemRole(rawValue: "system")
@@ -336,7 +276,7 @@ public struct EvalItemRole: RawRepresentable, Hashable, Codable, Sendable, SdkWi
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -385,15 +325,12 @@ public enum EvalItemInputImageType: String, CaseIterable, Codable {
 public struct EvalItemType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let message = EvalItemType(rawValue: "message")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

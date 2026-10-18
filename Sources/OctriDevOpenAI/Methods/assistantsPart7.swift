@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    /// Creates a thread that can contain messages and resources for assistant tools. Provide `messages` to seed the
-    /// thread, or `tool_resources` to make files or vector stores available to tools. You can also attach structured
-    /// `metadata` to the thread.
+extension AssistantsMethods {
+    /// Creates a thread that can contain messages and resources for assistant tools. Provide `messages` to seed the thread, or `tool_resources` to make files or vector stores available to tools. You can also attach structured `metadata` to the thread.
     ///
     /// Create a thread.
     ///
@@ -26,24 +24,9 @@ public extension AssistantsMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    static func createThread(
-        config: ClientConfig,
-        messages: [CreateMessageRequest]? = nil,
-        toolResources: SdkOptional<CreateThreadRequestToolResources>? = nil,
-        metadata: SdkOptional<Metadata>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ThreadObject {
+    public static func createThread(config: ClientConfig, messages: [CreateMessageRequest]? = nil, toolResources: SdkOptional<CreateThreadRequestToolResources>? = nil, metadata: SdkOptional<Metadata>? = nil, requestOptions: RequestOptions? = nil) async throws -> ThreadObject {
         let requestBody = CreateThreadRequestBody(messages: messages, toolResources: toolResources, metadata: metadata)
 
-        return try await (sdkRequest(
-            "POST",
-            "/threads",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createThread",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/threads", config: config, body: requestBody, decoder: .json, operationId: "createThread", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 }

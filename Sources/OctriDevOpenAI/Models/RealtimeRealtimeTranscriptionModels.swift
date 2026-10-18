@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// RealtimeRealtimeTranscription domain models
+// RealtimeRealtimeTranscription domain models
 /// A new Realtime transcription session configuration. When a session is created on the server via REST API, the
 /// session object also contains an ephemeral key. Default TTL for keys is 10 minutes. This property is not present
 /// when a session is updated via the WebSocket API.
@@ -28,37 +28,25 @@ public struct RealtimeTranscriptionSessionCreateResponse: Codable {
         case turnDetection = "turn_detection"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponse {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.clientSecret) else {
-            throw SdkValidationError(
-                field: "client_secret",
-                code: "required",
-                message: "Validation failed for 'client_secret': value is required"
-            )
+            throw SdkValidationError(field: "client_secret", code: "required", message: "Validation failed for 'client_secret': value is required")
         }
-        clientSecret = try container.sdkDecodeRequired(.clientSecret)
-        modalities = try container.sdkDecodeIfPresent(.modalities)
-        inputAudioFormat = try container.sdkDecodeIfPresent(.inputAudioFormat)
-        inputAudioTranscription = try container.sdkDecodeIfPresent(.inputAudioTranscription)
-        turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
+        self.clientSecret = try container.sdkDecodeRequired(.clientSecret)
+        self.modalities = try container.sdkDecodeIfPresent(.modalities)
+        self.inputAudioFormat = try container.sdkDecodeIfPresent(.inputAudioFormat)
+        self.inputAudioTranscription = try container.sdkDecodeIfPresent(.inputAudioTranscription)
+        self.turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponse {
-    init(
-        clientSecret: RealtimeTranscriptionSessionCreateResponseClientSecret,
-        modalities: [RealtimeTranscriptionSessionCreateResponseModalitiesItem]? = nil,
-        inputAudioFormat: String? = nil,
-        inputAudioTranscription: AudioTranscriptionResponse? = nil,
-        turnDetection: RealtimeTranscriptionSessionCreateResponseTurnDetection? = nil
-    ) {
+extension RealtimeTranscriptionSessionCreateResponse {
+    public init(clientSecret: RealtimeTranscriptionSessionCreateResponseClientSecret, modalities: [RealtimeTranscriptionSessionCreateResponseModalitiesItem]? = nil, inputAudioFormat: String? = nil, inputAudioTranscription: AudioTranscriptionResponse? = nil, turnDetection: RealtimeTranscriptionSessionCreateResponseTurnDetection? = nil) {
         (self.clientSecret, self.modalities) = (clientSecret, modalities)
         (self.inputAudioFormat, self.inputAudioTranscription) = (inputAudioFormat, inputAudioTranscription)
         self.turnDetection = turnDetection
@@ -94,35 +82,23 @@ public struct RealtimeTranscriptionSessionCreateRequest: Codable {
     }
 
     init() {
-        (turnDetection, inputAudioNoiseReduction, inputAudioFormat, inputAudioTranscription, include) = (
-            nil,
-            nil,
-            nil,
-            nil,
-            nil
-        )
+        (self.turnDetection, self.inputAudioNoiseReduction, self.inputAudioFormat, self.inputAudioTranscription, self.include) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequest {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
-        inputAudioNoiseReduction = try container.sdkDecodeIfPresent(.inputAudioNoiseReduction)
-        inputAudioFormat = try container.sdkDecodeIfPresent(.inputAudioFormat)
-        inputAudioTranscription = try container.sdkDecodeIfPresent(.inputAudioTranscription)
-        include = try container.sdkDecodeIfPresent(.include)
+        self.turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
+        self.inputAudioNoiseReduction = try container.sdkDecodeIfPresent(.inputAudioNoiseReduction)
+        self.inputAudioFormat = try container.sdkDecodeIfPresent(.inputAudioFormat)
+        self.inputAudioTranscription = try container.sdkDecodeIfPresent(.inputAudioTranscription)
+        self.include = try container.sdkDecodeIfPresent(.include)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequest {
-    init(
-        turnDetection: RealtimeTranscriptionSessionCreateRequestTurnDetection? = nil,
-        inputAudioNoiseReduction: RealtimeTranscriptionSessionCreateRequestInputAudioNoiseReduction? = nil,
-        inputAudioFormat: RealtimeTranscriptionSessionCreateRequestInputAudioFormat? = nil,
-        inputAudioTranscription: AudioTranscription? = nil,
-        include: [RealtimeTranscriptionSessionCreateRequestIncludeItem]? = nil
-    ) {
+extension RealtimeTranscriptionSessionCreateRequest {
+    public init(turnDetection: RealtimeTranscriptionSessionCreateRequestTurnDetection? = nil, inputAudioNoiseReduction: RealtimeTranscriptionSessionCreateRequestInputAudioNoiseReduction? = nil, inputAudioFormat: RealtimeTranscriptionSessionCreateRequestInputAudioFormat? = nil, inputAudioTranscription: AudioTranscription? = nil, include: [RealtimeTranscriptionSessionCreateRequestIncludeItem]? = nil) {
         self.init()
         (self.turnDetection, self.inputAudioNoiseReduction) = (turnDetection, inputAudioNoiseReduction)
         (self.inputAudioFormat, self.inputAudioTranscription) = (inputAudioFormat, inputAudioTranscription)
@@ -155,62 +131,37 @@ public struct RealtimeTranscriptionSessionCreateResponseGA: Codable {
         case audio
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseGA {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateResponseGA {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        include = try container.sdkDecodeIfPresent(.include)
-        audio = try container.sdkDecodeIfPresent(.audio)
-        try sdkValidateRawEnum("type", type, RealtimeTranscriptionSessionCreateResponseGAType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        self.include = try container.sdkDecodeIfPresent(.include)
+        self.audio = try container.sdkDecodeIfPresent(.audio)
+            try sdkValidateRawEnum("type", self.type, RealtimeTranscriptionSessionCreateResponseGAType.allCases.map(\.rawValue))
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseGA {
-    init(
-        type: RealtimeTranscriptionSessionCreateResponseGAType,
-        id: String,
-        object: String,
-        expiresAt: Int? = nil,
-        include: [RealtimeTranscriptionSessionCreateResponseGAIncludeItem]? = nil,
-        audio: RealtimeTranscriptionSessionCreateResponseGAAudio? = nil
-    ) throws {
+extension RealtimeTranscriptionSessionCreateResponseGA {
+    public init(type: RealtimeTranscriptionSessionCreateResponseGAType, id: String, object: String, expiresAt: Int? = nil, include: [RealtimeTranscriptionSessionCreateResponseGAIncludeItem]? = nil, audio: RealtimeTranscriptionSessionCreateResponseGAAudio? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.object, self.expiresAt) = (object, expiresAt)
         (self.include, self.audio) = (include, audio)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            RealtimeTranscriptionSessionCreateResponseGAType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, RealtimeTranscriptionSessionCreateResponseGAType.allCases.map(\.rawValue))
     }
 }
 
@@ -236,27 +187,22 @@ public struct RealtimeTranscriptionSessionCreateRequestTurnDetection: Codable {
     }
 
     init() {
-        (type, threshold, prefixPaddingMs, silenceDurationMs) = (nil, nil, nil, nil)
+        (self.type, self.threshold, self.prefixPaddingMs, self.silenceDurationMs) = (nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestTurnDetection {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateRequestTurnDetection {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        threshold = try container.sdkDecodeIfPresent(.threshold)
-        prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
-        silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.threshold = try container.sdkDecodeIfPresent(.threshold)
+        self.prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
+        self.silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestTurnDetection {
-    init(
-        type: RealtimeTranscriptionSessionCreateRequestTurnDetectionType? = nil,
-        threshold: Double? = nil,
-        prefixPaddingMs: Int? = nil,
-        silenceDurationMs: Int? = nil
-    ) {
+extension RealtimeTranscriptionSessionCreateRequestTurnDetection {
+    public init(type: RealtimeTranscriptionSessionCreateRequestTurnDetectionType? = nil, threshold: Double? = nil, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil) {
         self.init()
         (self.type, self.threshold) = (type, threshold)
         (self.prefixPaddingMs, self.silenceDurationMs) = (prefixPaddingMs, silenceDurationMs)
@@ -276,35 +222,25 @@ public struct RealtimeTranscriptionSessionCreateResponseClientSecret: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseClientSecret {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateResponseClientSecret {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.value) else {
-            throw SdkValidationError(
-                field: "value",
-                code: "required",
-                message: "Validation failed for 'value': value is required"
-            )
+            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
         }
         guard container.contains(.expiresAt) else {
-            throw SdkValidationError(
-                field: "expires_at",
-                code: "required",
-                message: "Validation failed for 'expires_at': value is required"
-            )
+            throw SdkValidationError(field: "expires_at", code: "required", message: "Validation failed for 'expires_at': value is required")
         }
-        value = try container.sdkDecodeRequired(.value)
-        expiresAt = try container.sdkDecodeRequired(.expiresAt)
+        self.value = try container.sdkDecodeRequired(.value)
+        self.expiresAt = try container.sdkDecodeRequired(.expiresAt)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseClientSecret {
-    init(value: String, expiresAt: Int) {
+extension RealtimeTranscriptionSessionCreateResponseClientSecret {
+    public init(value: String, expiresAt: Int) {
         (self.value, self.expiresAt) = (value, expiresAt)
     }
 }
@@ -339,27 +275,22 @@ public struct RealtimeTranscriptionSessionCreateRequestGAAudioInput: Codable {
     }
 
     init() {
-        (format, transcription, noiseReduction, turnDetection) = (nil, nil, nil, nil)
+        (self.format, self.transcription, self.noiseReduction, self.turnDetection) = (nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestGAAudioInput {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateRequestGAAudioInput {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        format = try container.sdkDecodeIfPresent(.format)
-        transcription = try container.sdkDecodeIfPresent(.transcription)
-        noiseReduction = try container.sdkDecodeIfPresent(.noiseReduction)
-        turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
+        self.format = try container.sdkDecodeIfPresent(.format)
+        self.transcription = try container.sdkDecodeIfPresent(.transcription)
+        self.noiseReduction = try container.sdkDecodeIfPresent(.noiseReduction)
+        self.turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestGAAudioInput {
-    init(
-        format: RealtimeAudioFormats? = nil,
-        transcription: AudioTranscription? = nil,
-        noiseReduction: RealtimeTranscriptionSessionCreateRequestGAAudioInputNoiseReduction? = nil,
-        turnDetection: RealtimeTurnDetection? = nil
-    ) {
+extension RealtimeTranscriptionSessionCreateRequestGAAudioInput {
+    public init(format: RealtimeAudioFormats? = nil, transcription: AudioTranscription? = nil, noiseReduction: RealtimeTranscriptionSessionCreateRequestGAAudioInputNoiseReduction? = nil, turnDetection: RealtimeTurnDetection? = nil) {
         self.init()
         (self.format, self.transcription) = (format, transcription)
         (self.noiseReduction, self.turnDetection) = (noiseReduction, turnDetection)
@@ -382,41 +313,27 @@ public struct RealtimeTranscriptionSessionCreateRequestGA: Codable {
         case include
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestGA {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateRequestGA {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        audio = try container.sdkDecodeIfPresent(.audio)
-        include = try container.sdkDecodeIfPresent(.include)
-        try sdkValidateRawEnum("type", type, RealtimeTranscriptionSessionCreateRequestGAType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.audio = try container.sdkDecodeIfPresent(.audio)
+        self.include = try container.sdkDecodeIfPresent(.include)
+            try sdkValidateRawEnum("type", self.type, RealtimeTranscriptionSessionCreateRequestGAType.allCases.map(\.rawValue))
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestGA {
-    init(
-        type: RealtimeTranscriptionSessionCreateRequestGAType,
-        audio: RealtimeTranscriptionSessionCreateRequestGAAudio? = nil,
-        include: [RealtimeTranscriptionSessionCreateRequestGAIncludeItem]? = nil
-    ) throws {
+extension RealtimeTranscriptionSessionCreateRequestGA {
+    public init(type: RealtimeTranscriptionSessionCreateRequestGAType, audio: RealtimeTranscriptionSessionCreateRequestGAAudio? = nil, include: [RealtimeTranscriptionSessionCreateRequestGAIncludeItem]? = nil) throws {
         (self.type, self.audio) = (type, audio)
         self.include = include
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            RealtimeTranscriptionSessionCreateRequestGAType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, RealtimeTranscriptionSessionCreateRequestGAType.allCases.map(\.rawValue))
     }
 }
 
@@ -439,27 +356,22 @@ public struct RealtimeTranscriptionSessionCreateResponseGAAudioInput: Codable {
     }
 
     init() {
-        (format, transcription, noiseReduction, turnDetection) = (nil, nil, nil, nil)
+        (self.format, self.transcription, self.noiseReduction, self.turnDetection) = (nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseGAAudioInput {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateResponseGAAudioInput {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        format = try container.sdkDecodeIfPresent(.format)
-        transcription = try container.sdkDecodeIfPresent(.transcription)
-        noiseReduction = try container.sdkDecodeIfPresent(.noiseReduction)
-        turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
+        self.format = try container.sdkDecodeIfPresent(.format)
+        self.transcription = try container.sdkDecodeIfPresent(.transcription)
+        self.noiseReduction = try container.sdkDecodeIfPresent(.noiseReduction)
+        self.turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseGAAudioInput {
-    init(
-        format: RealtimeAudioFormats? = nil,
-        transcription: AudioTranscriptionResponse? = nil,
-        noiseReduction: RealtimeTranscriptionSessionCreateResponseGAAudioInputNoiseReduction? = nil,
-        turnDetection: RealtimeTranscriptionSessionCreateResponseGAAudioInputTurnDetection? = nil
-    ) {
+extension RealtimeTranscriptionSessionCreateResponseGAAudioInput {
+    public init(format: RealtimeAudioFormats? = nil, transcription: AudioTranscriptionResponse? = nil, noiseReduction: RealtimeTranscriptionSessionCreateResponseGAAudioInputNoiseReduction? = nil, turnDetection: RealtimeTranscriptionSessionCreateResponseGAAudioInputTurnDetection? = nil) {
         self.init()
         (self.format, self.transcription) = (format, transcription)
         (self.noiseReduction, self.turnDetection) = (noiseReduction, turnDetection)
@@ -476,19 +388,19 @@ public struct RealtimeTranscriptionSessionCreateRequestGAAudio: Codable {
     }
 
     init() {
-        input = nil
+        self.input = nil
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestGAAudio {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateRequestGAAudio {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        input = try container.sdkDecodeIfPresent(.input)
+        self.input = try container.sdkDecodeIfPresent(.input)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestGAAudio {
-    init(input: RealtimeTranscriptionSessionCreateRequestGAAudioInput? = nil) {
+extension RealtimeTranscriptionSessionCreateRequestGAAudio {
+    public init(input: RealtimeTranscriptionSessionCreateRequestGAAudioInput? = nil) {
         self.init()
         self.input = input
     }
@@ -504,19 +416,19 @@ public struct RealtimeTranscriptionSessionCreateResponseGAAudio: Codable {
     }
 
     init() {
-        input = nil
+        self.input = nil
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseGAAudio {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateResponseGAAudio {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        input = try container.sdkDecodeIfPresent(.input)
+        self.input = try container.sdkDecodeIfPresent(.input)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseGAAudio {
-    init(input: RealtimeTranscriptionSessionCreateResponseGAAudioInput? = nil) {
+extension RealtimeTranscriptionSessionCreateResponseGAAudio {
+    public init(input: RealtimeTranscriptionSessionCreateResponseGAAudioInput? = nil) {
         self.init()
         self.input = input
     }
@@ -536,19 +448,19 @@ public struct RealtimeTranscriptionSessionCreateRequestGAAudioInputNoiseReductio
     }
 
     init() {
-        type = nil
+        self.type = nil
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestGAAudioInputNoiseReduction {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateRequestGAAudioInputNoiseReduction {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
+        self.type = try container.sdkDecodeIfPresent(.type)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestGAAudioInputNoiseReduction {
-    init(type: NoiseReductionType? = nil) {
+extension RealtimeTranscriptionSessionCreateRequestGAAudioInputNoiseReduction {
+    public init(type: NoiseReductionType? = nil) {
         self.init()
         self.type = type
     }
@@ -575,22 +487,22 @@ public struct RealtimeTranscriptionSessionCreateResponseGAAudioInputTurnDetectio
     }
 
     init() {
-        (type, threshold, prefixPaddingMs, silenceDurationMs) = (nil, nil, nil, nil)
+        (self.type, self.threshold, self.prefixPaddingMs, self.silenceDurationMs) = (nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseGAAudioInputTurnDetection {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateResponseGAAudioInputTurnDetection {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        threshold = try container.sdkDecodeIfPresent(.threshold)
-        prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
-        silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.threshold = try container.sdkDecodeIfPresent(.threshold)
+        self.prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
+        self.silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseGAAudioInputTurnDetection {
-    init(type: String? = nil, threshold: Double? = nil, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil) {
+extension RealtimeTranscriptionSessionCreateResponseGAAudioInputTurnDetection {
+    public init(type: String? = nil, threshold: Double? = nil, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil) {
         self.init()
         (self.type, self.threshold) = (type, threshold)
         (self.prefixPaddingMs, self.silenceDurationMs) = (prefixPaddingMs, silenceDurationMs)

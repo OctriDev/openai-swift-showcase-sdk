@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Images domain models
+// Images domain models
 public indirect enum ImageEditStreamEvent {
     case imageEditPartialImageEvent(ImageEditPartialImageEvent)
     case imageEditCompletedEvent(ImageEditCompletedEvent)
@@ -12,6 +12,7 @@ public indirect enum ImageEditStreamEvent {
 }
 
 extension ImageEditStreamEvent: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension ImageEditStreamEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension ImageEditStreamEvent: Codable {
 extension ImageEditStreamEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "image_edit.partial_image": try .imageEditPartialImageEvent(ImageEditPartialImageEvent(from: decoder))
-        case "image_edit.completed": try .imageEditCompletedEvent(ImageEditCompletedEvent(from: decoder))
-        default: nil
+        case "image_edit.partial_image": return .imageEditPartialImageEvent(try ImageEditPartialImageEvent(from: decoder))
+        case "image_edit.completed": return .imageEditCompletedEvent(try ImageEditCompletedEvent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -65,6 +62,7 @@ public indirect enum ImageGenStreamEvent {
 }
 
 extension ImageGenStreamEvent: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -72,16 +70,12 @@ extension ImageGenStreamEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -92,9 +86,9 @@ extension ImageGenStreamEvent: Codable {
 extension ImageGenStreamEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "image_generation.partial_image": try .imageGenPartialImageEvent(ImageGenPartialImageEvent(from: decoder))
-        case "image_generation.completed": try .imageGenCompletedEvent(ImageGenCompletedEvent(from: decoder))
-        default: nil
+        case "image_generation.partial_image": return .imageGenPartialImageEvent(try ImageGenPartialImageEvent(from: decoder))
+        case "image_generation.completed": return .imageGenCompletedEvent(try ImageGenCompletedEvent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -116,29 +110,22 @@ public indirect enum PartialImages {
 }
 
 extension PartialImages: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for PartialImages")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension PartialImages {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue(value)
-        }
+        if let value = try? container.decode(Int.self) { return .intValue(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
         return nil
     }
 }
@@ -177,28 +164,28 @@ public struct ImageRefParam: Codable {
     }
 
     init() {
-        (imageUrl, fileId) = (nil, nil)
+        (self.imageUrl, self.fileId) = (nil, nil)
     }
 }
 
-public extension ImageRefParam {
-    init(from decoder: Decoder) throws {
+extension ImageRefParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        if let value = imageUrl {
-            try validateLength("image_url", value, min: nil, max: 20_971_520)
+        self.imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        if let value = self.imageUrl {
+            try validateLength("image_url", value, min: nil, max: 20971520)
             try sdkValidateUri("image_url", value)
         }
     }
 }
 
-public extension ImageRefParam {
-    init(imageUrl: String? = nil, fileId: String? = nil) throws {
+extension ImageRefParam {
+    public init(imageUrl: String? = nil, fileId: String? = nil) throws {
         self.init()
         (self.imageUrl, self.fileId) = (imageUrl, fileId)
         if let value = self.imageUrl {
-            try validateLength("image_url", value, min: nil, max: 20_971_520)
+            try validateLength("image_url", value, min: nil, max: 20971520)
             try sdkValidateUri("image_url", value)
         }
     }
@@ -288,71 +275,44 @@ public struct EditImageBodyJsonParam: Codable {
         case partialImages = "partial_images"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EditImageBodyJsonParam {
-    init(from decoder: Decoder) throws {
+extension EditImageBodyJsonParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.images) else {
-            throw SdkValidationError(
-                field: "images",
-                code: "required",
-                message: "Validation failed for 'images': value is required"
-            )
+            throw SdkValidationError(field: "images", code: "required", message: "Validation failed for 'images': value is required")
         }
         guard container.contains(.prompt) else {
-            throw SdkValidationError(
-                field: "prompt",
-                code: "required",
-                message: "Validation failed for 'prompt': value is required"
-            )
+            throw SdkValidationError(field: "prompt", code: "required", message: "Validation failed for 'prompt': value is required")
         }
-        images = try container.sdkDecodeRequired(.images)
-        prompt = try container.sdkDecodeRequired(.prompt)
-        model = try container.sdkDecodeIfPresent(.model)
-        mask = try container.sdkDecodeIfPresent(.mask)
-        n = try container.sdkDecodeIfPresent(.n)
-        quality = try container.sdkDecodeIfPresent(.quality)
-        inputFidelity = try container.sdkDecodeIfPresent(.inputFidelity)
-        size = try container.sdkDecodeIfPresent(.size)
-        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        user = try container.sdkDecodeIfPresent(.user)
-        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-        outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
-        moderation = try container.sdkDecodeIfPresent(.moderation)
-        background = try container.sdkDecodeIfPresent(.background)
-        stream = try container.sdkDecodeIfPresent(.stream)
-        partialImages = try container.sdkDecodeIfPresent(.partialImages)
-        try validateItems("images", images, min: 1, max: 16)
-        try validateLength("prompt", prompt, min: 1, max: 32000)
-        if let value = safetyIdentifier {
+        self.images = try container.sdkDecodeRequired(.images)
+        self.prompt = try container.sdkDecodeRequired(.prompt)
+        self.model = try container.sdkDecodeIfPresent(.model)
+        self.mask = try container.sdkDecodeIfPresent(.mask)
+        self.n = try container.sdkDecodeIfPresent(.n)
+        self.quality = try container.sdkDecodeIfPresent(.quality)
+        self.inputFidelity = try container.sdkDecodeIfPresent(.inputFidelity)
+        self.size = try container.sdkDecodeIfPresent(.size)
+        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        self.user = try container.sdkDecodeIfPresent(.user)
+        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+        self.outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
+        self.moderation = try container.sdkDecodeIfPresent(.moderation)
+        self.background = try container.sdkDecodeIfPresent(.background)
+        self.stream = try container.sdkDecodeIfPresent(.stream)
+        self.partialImages = try container.sdkDecodeIfPresent(.partialImages)
+            try validateItems("images", self.images, min: 1, max: 16)
+            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+        if let value = self.safetyIdentifier {
             try validateLength("safety_identifier", value, min: nil, max: 128)
         }
     }
 }
 
-public extension EditImageBodyJsonParam {
-    init(
-        images: [ImageRefParam],
-        prompt: String,
-        model: String? = nil,
-        mask: ImageRefParam? = nil,
-        n: Int? = nil,
-        quality: EditImageBodyJsonParamQualityVariant0? = nil,
-        inputFidelity: EditImageBodyJsonParamInputFidelityVariant0? = nil,
-        size: String? = nil,
-        safetyIdentifier: String? = nil,
-        user: String? = nil,
-        outputFormat: EditImageBodyJsonParamOutputFormatVariant0? = nil,
-        outputCompression: Int? = nil,
-        moderation: EditImageBodyJsonParamModerationVariant0? = nil,
-        background: EditImageBodyJsonParamBackgroundVariant0? = nil,
-        stream: Bool? = nil,
-        partialImages: Int? = nil
-    ) throws {
+extension EditImageBodyJsonParam {
+    public init(images: [ImageRefParam], prompt: String, model: String? = nil, mask: ImageRefParam? = nil, n: Int? = nil, quality: EditImageBodyJsonParamQualityVariant0? = nil, inputFidelity: EditImageBodyJsonParamInputFidelityVariant0? = nil, size: String? = nil, safetyIdentifier: String? = nil, user: String? = nil, outputFormat: EditImageBodyJsonParamOutputFormatVariant0? = nil, outputCompression: Int? = nil, moderation: EditImageBodyJsonParamModerationVariant0? = nil, background: EditImageBodyJsonParamBackgroundVariant0? = nil, stream: Bool? = nil, partialImages: Int? = nil) throws {
         (self.images, self.prompt) = (images, prompt)
         (self.model, self.mask) = (model, mask)
         (self.n, self.quality) = (n, quality)
@@ -361,8 +321,8 @@ public extension EditImageBodyJsonParam {
         (self.outputFormat, self.outputCompression) = (outputFormat, outputCompression)
         (self.moderation, self.background) = (moderation, background)
         (self.stream, self.partialImages) = (stream, partialImages)
-        try validateItems("images", self.images, min: 1, max: 16)
-        try validateLength("prompt", self.prompt, min: 1, max: 32000)
+            try validateItems("images", self.images, min: 1, max: 16)
+            try validateLength("prompt", self.prompt, min: 1, max: 32000)
         if let value = self.safetyIdentifier {
             try validateLength("safety_identifier", value, min: nil, max: 128)
         }
@@ -400,63 +360,34 @@ public struct CreateImageVariationRequest: Codable {
         case user
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateImageVariationRequest {
-    init(from decoder: Decoder) throws {
+extension CreateImageVariationRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.image) else {
-            throw SdkValidationError(
-                field: "image",
-                code: "required",
-                message: "Validation failed for 'image': value is required"
-            )
+            throw SdkValidationError(field: "image", code: "required", message: "Validation failed for 'image': value is required")
         }
-        image = try container.sdkDecodeRequired(.image)
-        model = try container.sdkDecodeIfPresent(.model)
-        n = try container.sdkDecodeIfPresent(.n)
-        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        size = try container.sdkDecodeIfPresent(.size)
-        user = try container.sdkDecodeIfPresent(.user)
-        if let value = n {
-            try validateRange(
-                "n",
-                Double(value),
-                min: 1,
-                max: 10,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.image = try container.sdkDecodeRequired(.image)
+        self.model = try container.sdkDecodeIfPresent(.model)
+        self.n = try container.sdkDecodeIfPresent(.n)
+        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        self.size = try container.sdkDecodeIfPresent(.size)
+        self.user = try container.sdkDecodeIfPresent(.user)
+        if let value = self.n {
+            try validateRange("n", Double(value), min: 1, max: 10, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension CreateImageVariationRequest {
-    init(
-        image: Data,
-        model: String? = nil,
-        n: Int? = nil,
-        responseFormat: CreateImageVariationRequestResponseFormat? = nil,
-        size: CreateImageVariationRequestSize? = nil,
-        user: String? = nil
-    ) throws {
+extension CreateImageVariationRequest {
+    public init(image: Data, model: String? = nil, n: Int? = nil, responseFormat: CreateImageVariationRequestResponseFormat? = nil, size: CreateImageVariationRequestSize? = nil, user: String? = nil) throws {
         (self.image, self.model) = (image, model)
         (self.n, self.responseFormat) = (n, responseFormat)
         (self.size, self.user) = (size, user)
         if let value = self.n {
-            try validateRange(
-                "n",
-                Double(value),
-                min: 1,
-                max: 10,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("n", Double(value), min: 1, max: 10, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -491,42 +422,31 @@ public struct ImageGenPartialImageEvent: Codable {
         case partialImageIndex = "partial_image_index"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ImageGenPartialImageEvent {
-    init(from decoder: Decoder) throws {
+extension ImageGenPartialImageEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeRequired(.type)
-        b64Json = try container.sdkDecodeRequired(.b64Json)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        size = try container.sdkDecodeRequired(.size)
-        quality = try container.sdkDecodeRequired(.quality)
-        background = try container.sdkDecodeRequired(.background)
-        outputFormat = try container.sdkDecodeRequired(.outputFormat)
-        partialImageIndex = try container.sdkDecodeRequired(.partialImageIndex)
-        try sdkValidateRawEnum("type", type, ImageGenPartialImageEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.b64Json = try container.sdkDecodeRequired(.b64Json)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.size = try container.sdkDecodeRequired(.size)
+        self.quality = try container.sdkDecodeRequired(.quality)
+        self.background = try container.sdkDecodeRequired(.background)
+        self.outputFormat = try container.sdkDecodeRequired(.outputFormat)
+        self.partialImageIndex = try container.sdkDecodeRequired(.partialImageIndex)
+            try sdkValidateRawEnum("type", self.type, ImageGenPartialImageEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ImageGenPartialImageEvent {
-    init(
-        type: ImageGenPartialImageEventType,
-        b64Json: String,
-        createdAt: Int,
-        size: String,
-        quality: ImageGenPartialImageEventQuality,
-        background: ImageGenPartialImageEventBackground,
-        outputFormat: ImageGenPartialImageEventOutputFormat,
-        partialImageIndex: Int
-    ) throws {
+extension ImageGenPartialImageEvent {
+    public init(type: ImageGenPartialImageEventType, b64Json: String, createdAt: Int, size: String, quality: ImageGenPartialImageEventQuality, background: ImageGenPartialImageEventBackground, outputFormat: ImageGenPartialImageEventOutputFormat, partialImageIndex: Int) throws {
         (self.type, self.b64Json) = (type, b64Json)
         (self.createdAt, self.size) = (createdAt, size)
         (self.quality, self.background) = (quality, background)
         (self.outputFormat, self.partialImageIndex) = (outputFormat, partialImageIndex)
-        try sdkValidateRawEnum("type", self.type, ImageGenPartialImageEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ImageGenPartialImageEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -562,43 +482,28 @@ public struct ImagesResponse: Codable {
         case usage
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ImagesResponse {
-    init(from decoder: Decoder) throws {
+extension ImagesResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.created) else {
-            throw SdkValidationError(
-                field: "created",
-                code: "required",
-                message: "Validation failed for 'created': value is required"
-            )
+            throw SdkValidationError(field: "created", code: "required", message: "Validation failed for 'created': value is required")
         }
-        created = try container.sdkDecodeRequired(.created)
-        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        data = try container.sdkDecodeIfPresent(.data)
-        background = try container.sdkDecodeIfPresent(.background)
-        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-        size = try container.sdkDecodeIfPresent(.size)
-        quality = try container.sdkDecodeIfPresent(.quality)
-        usage = try container.sdkDecodeIfPresent(.usage)
+        self.created = try container.sdkDecodeRequired(.created)
+        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        self.data = try container.sdkDecodeIfPresent(.data)
+        self.background = try container.sdkDecodeIfPresent(.background)
+        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+        self.size = try container.sdkDecodeIfPresent(.size)
+        self.quality = try container.sdkDecodeIfPresent(.quality)
+        self.usage = try container.sdkDecodeIfPresent(.usage)
     }
 }
 
-public extension ImagesResponse {
-    init(
-        created: Int,
-        safetyIdentifier: String? = nil,
-        data: [Image]? = nil,
-        background: ImagesResponseBackground? = nil,
-        outputFormat: ImagesResponseOutputFormat? = nil,
-        size: String? = nil,
-        quality: ImagesResponseQuality? = nil,
-        usage: ImageGenUsage? = nil
-    ) {
+extension ImagesResponse {
+    public init(created: Int, safetyIdentifier: String? = nil, data: [Image]? = nil, background: ImagesResponseBackground? = nil, outputFormat: ImagesResponseOutputFormat? = nil, size: String? = nil, quality: ImagesResponseQuality? = nil, usage: ImageGenUsage? = nil) {
         (self.created, self.safetyIdentifier) = (created, safetyIdentifier)
         (self.data, self.background) = (data, background)
         (self.outputFormat, self.size) = (outputFormat, size)
@@ -618,7 +523,5 @@ public struct ImageGenOutputTokensDetails: Codable {
         case textTokens = "text_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

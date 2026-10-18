@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Items domain models
+// Items domain models
 /// Record of a client side tool invocation initiated by the assistant.
 public struct ClientToolCallItem: Codable {
     /// Identifier of the thread item.
@@ -40,47 +40,34 @@ public struct ClientToolCallItem: Codable {
         case output
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ClientToolCallItem {
-    init(from decoder: Decoder) throws {
+extension ClientToolCallItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        threadId = try container.sdkDecodeRequired(.threadId)
-        type = try container.sdkDecodeRequired(.type)
-        status = try container.sdkDecodeRequired(.status)
-        callId = try container.sdkDecodeRequired(.callId)
-        name = try container.sdkDecodeRequired(.name)
-        arguments = try container.sdkDecodeRequired(.arguments)
-        output = try container.sdkDecodeNullable(.output)
-        try sdkValidateRawEnum("type", type, ClientToolCallItemType.allCases.map(\.rawValue))
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.threadId = try container.sdkDecodeRequired(.threadId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.arguments = try container.sdkDecodeRequired(.arguments)
+        self.output = try container.sdkDecodeNullable(.output)
+            try sdkValidateRawEnum("type", self.type, ClientToolCallItemType.allCases.map(\.rawValue))
     }
 }
 
-public extension ClientToolCallItem {
-    init(
-        id: String,
-        object: ClientToolCallItemObject,
-        createdAt: Int,
-        threadId: String,
-        type: ClientToolCallItemType,
-        status: ClientToolCallStatus,
-        callId: String,
-        name: String,
-        arguments: String,
-        output: String?
-    ) throws {
+extension ClientToolCallItem {
+    public init(id: String, object: ClientToolCallItemObject, createdAt: Int, threadId: String, type: ClientToolCallItemType, status: ClientToolCallStatus, callId: String, name: String, arguments: String, output: String?) throws {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.threadId) = (createdAt, threadId)
         (self.type, self.status) = (type, status)
         (self.callId, self.name) = (callId, name)
         (self.arguments, self.output) = (arguments, output)
-        try sdkValidateRawEnum("type", self.type, ClientToolCallItemType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ClientToolCallItemType.allCases.map(\.rawValue))
     }
 }
 
@@ -88,15 +75,12 @@ public extension ClientToolCallItem {
 public struct TaskItemObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let chatkitThreadItem = TaskItemObject(rawValue: "chatkit.thread_item")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -109,15 +93,12 @@ public struct TaskItemObject: RawRepresentable, Hashable, Codable, Sendable, Sdk
 public struct AssistantMessageItemObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let chatkitThreadItem = AssistantMessageItemObject(rawValue: "chatkit.thread_item")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -148,15 +129,12 @@ public enum TaskItemType: String, CaseIterable, Codable {
 public struct UrlAnnotationSourceType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let url = UrlAnnotationSourceType(rawValue: "url")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -187,15 +165,12 @@ public enum FileAnnotationType: String, CaseIterable, Codable {
 public struct TaskGroupItemObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let chatkitThreadItem = TaskGroupItemObject(rawValue: "chatkit.thread_item")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -244,15 +219,12 @@ public enum WidgetMessageItemType: String, CaseIterable, Codable {
 public struct ResponseOutputTextType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let outputText = ResponseOutputTextType(rawValue: "output_text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -283,16 +255,13 @@ public enum UserMessageInputTextType: String, CaseIterable, Codable {
 public struct ClientToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = ClientToolCallStatus(rawValue: "in_progress")
     public static let completed = ClientToolCallStatus(rawValue: "completed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -341,16 +310,13 @@ public enum UserMessageQuotedTextType: String, CaseIterable, Codable {
 public struct AttachmentType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let image = AttachmentType(rawValue: "image")
     public static let file = AttachmentType(rawValue: "file")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -363,15 +329,12 @@ public struct AttachmentType: RawRepresentable, Hashable, Codable, Sendable, Sdk
 public struct ClientToolCallItemObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let chatkitThreadItem = ClientToolCallItemObject(rawValue: "chatkit.thread_item")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -384,15 +347,12 @@ public struct ClientToolCallItemObject: RawRepresentable, Hashable, Codable, Sen
 public struct FileAnnotationSourceType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let file = FileAnnotationSourceType(rawValue: "file")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -405,15 +365,12 @@ public struct FileAnnotationSourceType: RawRepresentable, Hashable, Codable, Sen
 public struct UserMessageItemObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let chatkitThreadItem = UserMessageItemObject(rawValue: "chatkit.thread_item")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -444,15 +401,12 @@ public enum UrlAnnotationType: String, CaseIterable, Codable {
 public struct ThreadItemListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = ThreadItemListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -483,15 +437,12 @@ public enum ClientToolCallItemType: String, CaseIterable, Codable {
 public struct WidgetMessageItemObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let chatkitThreadItem = WidgetMessageItemObject(rawValue: "chatkit.thread_item")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -522,16 +473,13 @@ public enum TaskGroupItemType: String, CaseIterable, Codable {
 public struct TaskType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let custom = TaskType(rawValue: "custom")
     public static let thought = TaskType(rawValue: "thought")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

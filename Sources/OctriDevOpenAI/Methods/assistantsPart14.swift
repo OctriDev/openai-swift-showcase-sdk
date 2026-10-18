@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    /// Retrieves a message from a thread. Provide both identifiers to select the thread and the message whose role,
-    /// content, status, and associated details you need.
+extension AssistantsMethods {
+    /// Retrieves a message from a thread. Provide both identifiers to select the thread and the message whose role, content, status, and associated details you need.
     ///
     /// Retrieve a message.
     ///
@@ -17,31 +16,11 @@ public extension AssistantsMethods {
     ///   [thread](https://developers.openai.com/api/docs/assistants/migration) to
     ///   which this message belongs.
     /// - messageId: The ID of the message to retrieve.
-    static func getMessage(
-        config: ClientConfig,
-        threadId: String,
-        messageId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> MessageObject {
-        try await (sdkRequest(
-            "GET",
-            [
-                "/threads/",
-                sdkEncodePathSegment(sdkWireString(threadId)),
-                "/messages/",
-                sdkEncodePathSegment(sdkWireString(messageId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getMessage",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+    public static func getMessage(config: ClientConfig, threadId: String, messageId: String, requestOptions: RequestOptions? = nil) async throws -> MessageObject {
+        return try (await sdkRequest("GET", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/messages/", sdkEncodePathSegment(sdkWireString(messageId))].joined(), config: config, decoder: .json, operationId: "getMessage", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 
-    /// Updates the metadata attached to a message in a thread. Provide the thread and message identifiers to select the
-    /// message, then supply metadata key-value pairs to change. Use this operation when you need to update message
-    /// metadata without changing its content.
+    /// Updates the metadata attached to a message in a thread. Provide the thread and message identifiers to select the message, then supply metadata key-value pairs to change. Use this operation when you need to update message metadata without changing its content.
     ///
     /// Modifies a message.
     ///
@@ -53,29 +32,9 @@ public extension AssistantsMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    static func modifyMessage(
-        config: ClientConfig,
-        threadId: String,
-        messageId: String,
-        metadata: SdkOptional<Metadata>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> MessageObject {
+    public static func modifyMessage(config: ClientConfig, threadId: String, messageId: String, metadata: SdkOptional<Metadata>? = nil, requestOptions: RequestOptions? = nil) async throws -> MessageObject {
         let requestBody = ModifyMessageRequestBody(metadata: metadata)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/threads/",
-                sdkEncodePathSegment(sdkWireString(threadId)),
-                "/messages/",
-                sdkEncodePathSegment(sdkWireString(messageId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "modifyMessage",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/messages/", sdkEncodePathSegment(sdkWireString(messageId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "modifyMessage", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 }

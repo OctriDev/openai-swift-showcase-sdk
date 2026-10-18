@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension EvalsMethods {
-    /// Lists output items for a specific evaluation run, with optional cursor pagination, status filtering, and
-    /// timestamp ordering. Use `after` to continue from a previous response and `status` to view only passing or
-    /// failing output items.
+extension EvalsMethods {
+    /// Lists output items for a specific evaluation run, with optional cursor pagination, status filtering, and timestamp ordering. Use `after` to continue from a previous response and `status` to view only passing or failing output items.
     ///
     /// Get a list of output items for an evaluation run.
     ///
@@ -23,42 +21,16 @@ public extension EvalsMethods {
     ///   output items or `pass` to filter by passed output items.
     /// - order: Sort order for output items by timestamp. Use `asc` for ascending
     ///   order or `desc` for descending order. Defaults to `asc`.
-    static func getEvalRunOutputItems(
-        config: ClientConfig,
-        evalId: String,
-        runId: String,
-        after: String? = nil,
-        limit: Int? = nil,
-        status: GetEvalRunOutputItemsParameter? = nil,
-        order: GetEvalRunOutputItemsParameterXddc2d540? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EvalRunOutputItemList {
-        try await (sdkRequest(
-            "GET",
-            [
-                "/evals/",
-                sdkEncodePathSegment(sdkWireString(evalId)),
-                "/runs/",
-                sdkEncodePathSegment(sdkWireString(runId)),
-                "/output_items",
-            ].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("status", value: status),
-                SdkQueryParameter("order", value: order),
-            ],
-            decoder: .json,
-            operationId: "getEvalRunOutputItems",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func getEvalRunOutputItems(config: ClientConfig, evalId: String, runId: String, after: String? = nil, limit: Int? = nil, status: GetEvalRunOutputItemsParameter? = nil, order: GetEvalRunOutputItemsParameterXddc2d540? = nil, requestOptions: RequestOptions? = nil) async throws -> EvalRunOutputItemList {
+        return try (await sdkRequest("GET", ["/evals/", sdkEncodePathSegment(sdkWireString(evalId)), "/runs/", sdkEncodePathSegment(sdkWireString(runId)), "/output_items"].joined(), config: config, query: [
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("status", value: status),
+            SdkQueryParameter("order", value: order),
+        ], decoder: .json, operationId: "getEvalRunOutputItems", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists output items for a specific evaluation run, with optional cursor pagination, status filtering, and
-    /// timestamp ordering. Use `after` to continue from a previous response and `status` to view only passing or
-    /// failing output items.
+    /// Lists output items for a specific evaluation run, with optional cursor pagination, status filtering, and timestamp ordering. Use `after` to continue from a previous response and `status` to view only passing or failing output items.
     ///
     /// Get a list of output items for an evaluation run.
     ///
@@ -72,44 +44,17 @@ public extension EvalsMethods {
     ///   output items or `pass` to filter by passed output items.
     /// - order: Sort order for output items by timestamp. Use `asc` for ascending
     ///   order or `desc` for descending order. Defaults to `asc`.
-    static func getEvalRunOutputItemsPaginated(
-        config: ClientConfig,
-        evalId: String,
-        runId: String,
-        after: String? = nil,
-        limit: Int? = nil,
-        status: GetEvalRunOutputItemsParameter? = nil,
-        order: GetEvalRunOutputItemsParameterXddc2d540? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<EvalRunOutputItem, Swift.Error> {
-        AsyncThrowingStream<EvalRunOutputItem, Swift.Error> { (continuation: AsyncThrowingStream<
-            EvalRunOutputItem,
-            Swift.Error
-        >.Continuation) in
+    public static func getEvalRunOutputItemsPaginated(config: ClientConfig, evalId: String, runId: String, after: String? = nil, limit: Int? = nil, status: GetEvalRunOutputItemsParameter? = nil, order: GetEvalRunOutputItemsParameterXddc2d540? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<EvalRunOutputItem, Swift.Error> {
+        return AsyncThrowingStream<EvalRunOutputItem, Swift.Error> { (continuation: AsyncThrowingStream<EvalRunOutputItem, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await getEvalRunOutputItems(
-                            config: config,
-                            evalId: evalId,
-                            runId: runId,
-                            after: pageCursor,
-                            limit: limit,
-                            status: status,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await getEvalRunOutputItems(config: config, evalId: evalId, runId: runId, after: pageCursor, limit: limit, status: status, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -122,53 +67,24 @@ public extension EvalsMethods {
         }
     }
 
-    struct GetEvalRunOutputItemsPage {
+    public struct GetEvalRunOutputItemsPage {
         public let data: EvalRunOutputItemList
         public let items: [EvalRunOutputItem]
         public let hasMore: Bool
     }
 
-    static func getEvalRunOutputItemsPages(
-        config: ClientConfig,
-        evalId: String,
-        runId: String,
-        after: String? = nil,
-        limit: Int? = nil,
-        status: GetEvalRunOutputItemsParameter? = nil,
-        order: GetEvalRunOutputItemsParameterXddc2d540? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<GetEvalRunOutputItemsPage, Swift.Error> {
-        AsyncThrowingStream<GetEvalRunOutputItemsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            GetEvalRunOutputItemsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func getEvalRunOutputItemsPages(config: ClientConfig, evalId: String, runId: String, after: String? = nil, limit: Int? = nil, status: GetEvalRunOutputItemsParameter? = nil, order: GetEvalRunOutputItemsParameterXddc2d540? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<GetEvalRunOutputItemsPage, Swift.Error> {
+        return AsyncThrowingStream<GetEvalRunOutputItemsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<GetEvalRunOutputItemsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await getEvalRunOutputItems(
-                            config: config,
-                            evalId: evalId,
-                            runId: runId,
-                            after: pageCursor,
-                            limit: limit,
-                            status: status,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await getEvalRunOutputItems(config: config, evalId: evalId, runId: runId, after: pageCursor, limit: limit, status: status, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && true
-                        pageContinuation.yield(GetEvalRunOutputItemsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
+                        pageContinuation.yield(GetEvalRunOutputItemsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

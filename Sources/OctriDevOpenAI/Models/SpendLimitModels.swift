@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SpendLimit domain models
+// SpendLimit domain models
 public typealias SpendLimitCurrency = String
 
 public typealias SpendLimitEnforcementStatus = String
@@ -19,27 +19,21 @@ public struct SpendLimitEnforcement: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SpendLimitEnforcement {
-    init(from decoder: Decoder) throws {
+extension SpendLimitEnforcement {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
-        status = try container.sdkDecodeRequired(.status)
+        self.status = try container.sdkDecodeRequired(.status)
     }
 }
 
-public extension SpendLimitEnforcement {
-    init(status: SpendLimitEnforcementStatus) {
+extension SpendLimitEnforcement {
+    public init(status: SpendLimitEnforcementStatus) {
         self.status = status
     }
 }
@@ -65,65 +59,37 @@ public struct ProjectSpendLimitResource: Codable {
         case enforcement
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectSpendLimitResource {
-    init(from decoder: Decoder) throws {
+extension ProjectSpendLimitResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(
-                field: "threshold_amount",
-                code: "required",
-                message: "Validation failed for 'threshold_amount': value is required"
-            )
+            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
         }
         guard container.contains(.currency) else {
-            throw SdkValidationError(
-                field: "currency",
-                code: "required",
-                message: "Validation failed for 'currency': value is required"
-            )
+            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
         }
         guard container.contains(.interval) else {
-            throw SdkValidationError(
-                field: "interval",
-                code: "required",
-                message: "Validation failed for 'interval': value is required"
-            )
+            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
         }
         guard container.contains(.enforcement) else {
-            throw SdkValidationError(
-                field: "enforcement",
-                code: "required",
-                message: "Validation failed for 'enforcement': value is required"
-            )
+            throw SdkValidationError(field: "enforcement", code: "required", message: "Validation failed for 'enforcement': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        currency = try container.sdkDecodeRequired(.currency)
-        interval = try container.sdkDecodeRequired(.interval)
-        enforcement = try container.sdkDecodeRequired(.enforcement)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        self.currency = try container.sdkDecodeRequired(.currency)
+        self.interval = try container.sdkDecodeRequired(.interval)
+        self.enforcement = try container.sdkDecodeRequired(.enforcement)
     }
 }
 
-public extension ProjectSpendLimitResource {
-    init(
-        object: ProjectSpendLimitResourceObject,
-        thresholdAmount: Int,
-        currency: SpendLimitCurrency,
-        interval: SpendLimitInterval,
-        enforcement: SpendLimitEnforcement
-    ) {
+extension ProjectSpendLimitResource {
+    public init(object: ProjectSpendLimitResourceObject, thresholdAmount: Int, currency: SpendLimitCurrency, interval: SpendLimitInterval, enforcement: SpendLimitEnforcement) {
         (self.object, self.thresholdAmount) = (object, thresholdAmount)
         (self.currency, self.interval) = (currency, interval)
         self.enforcement = enforcement
@@ -142,35 +108,25 @@ public struct ProjectSpendLimitDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectSpendLimitDeletedResource {
-    init(from decoder: Decoder) throws {
+extension ProjectSpendLimitDeletedResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension ProjectSpendLimitDeletedResource {
-    init(object: ProjectSpendLimitDeletedResourceObject, deleted: Bool) {
+extension ProjectSpendLimitDeletedResource {
+    public init(object: ProjectSpendLimitDeletedResourceObject, deleted: Bool) {
         (self.object, self.deleted) = (object, deleted)
     }
 }
@@ -190,67 +146,33 @@ public struct UpdateProjectSpendLimitBody: Codable {
         case interval
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateProjectSpendLimitBody {
-    init(from decoder: Decoder) throws {
+extension UpdateProjectSpendLimitBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(
-                field: "threshold_amount",
-                code: "required",
-                message: "Validation failed for 'threshold_amount': value is required"
-            )
+            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
         }
         guard container.contains(.currency) else {
-            throw SdkValidationError(
-                field: "currency",
-                code: "required",
-                message: "Validation failed for 'currency': value is required"
-            )
+            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
         }
         guard container.contains(.interval) else {
-            throw SdkValidationError(
-                field: "interval",
-                code: "required",
-                message: "Validation failed for 'interval': value is required"
-            )
+            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
         }
-        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        currency = try container.sdkDecodeRequired(.currency)
-        interval = try container.sdkDecodeRequired(.interval)
-        try validateRange(
-            "threshold_amount",
-            Double(thresholdAmount),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        self.currency = try container.sdkDecodeRequired(.currency)
+        self.interval = try container.sdkDecodeRequired(.interval)
+            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension UpdateProjectSpendLimitBody {
-    init(
-        thresholdAmount: Int,
-        currency: UpdateProjectSpendLimitBodyCurrency,
-        interval: UpdateProjectSpendLimitBodyInterval
-    ) throws {
+extension UpdateProjectSpendLimitBody {
+    public init(thresholdAmount: Int, currency: UpdateProjectSpendLimitBodyCurrency, interval: UpdateProjectSpendLimitBodyInterval) throws {
         (self.thresholdAmount, self.currency) = (thresholdAmount, currency)
         self.interval = interval
-        try validateRange(
-            "threshold_amount",
-            Double(self.thresholdAmount),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -275,65 +197,37 @@ public struct OrganizationSpendLimitResource: Codable {
         case enforcement
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationSpendLimitResource {
-    init(from decoder: Decoder) throws {
+extension OrganizationSpendLimitResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(
-                field: "threshold_amount",
-                code: "required",
-                message: "Validation failed for 'threshold_amount': value is required"
-            )
+            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
         }
         guard container.contains(.currency) else {
-            throw SdkValidationError(
-                field: "currency",
-                code: "required",
-                message: "Validation failed for 'currency': value is required"
-            )
+            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
         }
         guard container.contains(.interval) else {
-            throw SdkValidationError(
-                field: "interval",
-                code: "required",
-                message: "Validation failed for 'interval': value is required"
-            )
+            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
         }
         guard container.contains(.enforcement) else {
-            throw SdkValidationError(
-                field: "enforcement",
-                code: "required",
-                message: "Validation failed for 'enforcement': value is required"
-            )
+            throw SdkValidationError(field: "enforcement", code: "required", message: "Validation failed for 'enforcement': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        currency = try container.sdkDecodeRequired(.currency)
-        interval = try container.sdkDecodeRequired(.interval)
-        enforcement = try container.sdkDecodeRequired(.enforcement)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        self.currency = try container.sdkDecodeRequired(.currency)
+        self.interval = try container.sdkDecodeRequired(.interval)
+        self.enforcement = try container.sdkDecodeRequired(.enforcement)
     }
 }
 
-public extension OrganizationSpendLimitResource {
-    init(
-        object: OrganizationSpendLimitResourceObject,
-        thresholdAmount: Int,
-        currency: SpendLimitCurrency,
-        interval: SpendLimitInterval,
-        enforcement: SpendLimitEnforcement
-    ) {
+extension OrganizationSpendLimitResource {
+    public init(object: OrganizationSpendLimitResourceObject, thresholdAmount: Int, currency: SpendLimitCurrency, interval: SpendLimitInterval, enforcement: SpendLimitEnforcement) {
         (self.object, self.thresholdAmount) = (object, thresholdAmount)
         (self.currency, self.interval) = (currency, interval)
         self.enforcement = enforcement
@@ -352,35 +246,25 @@ public struct OrganizationSpendLimitDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationSpendLimitDeletedResource {
-    init(from decoder: Decoder) throws {
+extension OrganizationSpendLimitDeletedResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension OrganizationSpendLimitDeletedResource {
-    init(object: OrganizationSpendLimitDeletedResourceObject, deleted: Bool) {
+extension OrganizationSpendLimitDeletedResource {
+    public init(object: OrganizationSpendLimitDeletedResourceObject, deleted: Bool) {
         (self.object, self.deleted) = (object, deleted)
     }
 }
@@ -400,85 +284,46 @@ public struct UpdateOrganizationSpendLimitBody: Codable {
         case interval
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateOrganizationSpendLimitBody {
-    init(from decoder: Decoder) throws {
+extension UpdateOrganizationSpendLimitBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(
-                field: "threshold_amount",
-                code: "required",
-                message: "Validation failed for 'threshold_amount': value is required"
-            )
+            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
         }
         guard container.contains(.currency) else {
-            throw SdkValidationError(
-                field: "currency",
-                code: "required",
-                message: "Validation failed for 'currency': value is required"
-            )
+            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
         }
         guard container.contains(.interval) else {
-            throw SdkValidationError(
-                field: "interval",
-                code: "required",
-                message: "Validation failed for 'interval': value is required"
-            )
+            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
         }
-        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        currency = try container.sdkDecodeRequired(.currency)
-        interval = try container.sdkDecodeRequired(.interval)
-        try validateRange(
-            "threshold_amount",
-            Double(thresholdAmount),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        self.currency = try container.sdkDecodeRequired(.currency)
+        self.interval = try container.sdkDecodeRequired(.interval)
+            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension UpdateOrganizationSpendLimitBody {
-    init(
-        thresholdAmount: Int,
-        currency: UpdateOrganizationSpendLimitBodyCurrency,
-        interval: UpdateOrganizationSpendLimitBodyInterval
-    ) throws {
+extension UpdateOrganizationSpendLimitBody {
+    public init(thresholdAmount: Int, currency: UpdateOrganizationSpendLimitBodyCurrency, interval: UpdateOrganizationSpendLimitBodyInterval) throws {
         (self.thresholdAmount, self.currency) = (thresholdAmount, currency)
         self.interval = interval
-        try validateRange(
-            "threshold_amount",
-            Double(self.thresholdAmount),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
 /// The object type, which is always `organization.spend_limit.deleted`.
-public struct OrganizationSpendLimitDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct OrganizationSpendLimitDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let organizationSpendLimitDeleted =
-        OrganizationSpendLimitDeletedResourceObject(rawValue: "organization.spend_limit.deleted")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let organizationSpendLimitDeleted = OrganizationSpendLimitDeletedResourceObject(rawValue: "organization.spend_limit.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -491,15 +336,12 @@ public struct OrganizationSpendLimitDeletedResourceObject: RawRepresentable, Has
 public struct ProjectSpendLimitResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let projectSpendLimit = ProjectSpendLimitResourceObject(rawValue: "project.spend_limit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -512,16 +354,12 @@ public struct ProjectSpendLimitResourceObject: RawRepresentable, Hashable, Codab
 public struct OrganizationSpendLimitResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let organizationSpendLimit =
-        OrganizationSpendLimitResourceObject(rawValue: "organization.spend_limit")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let organizationSpendLimit = OrganizationSpendLimitResourceObject(rawValue: "organization.spend_limit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -534,15 +372,12 @@ public struct OrganizationSpendLimitResourceObject: RawRepresentable, Hashable, 
 public struct UpdateProjectSpendLimitBodyInterval: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let month = UpdateProjectSpendLimitBodyInterval(rawValue: "month")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -552,19 +387,15 @@ public struct UpdateProjectSpendLimitBodyInterval: RawRepresentable, Hashable, C
 }
 
 /// The currency for the threshold amount. Currently, only `USD` is supported.
-public struct UpdateOrganizationSpendLimitBodyCurrency: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct UpdateOrganizationSpendLimitBodyCurrency: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let usd = UpdateOrganizationSpendLimitBodyCurrency(rawValue: "USD")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -577,15 +408,12 @@ public struct UpdateOrganizationSpendLimitBodyCurrency: RawRepresentable, Hashab
 public struct UpdateProjectSpendLimitBodyCurrency: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let usd = UpdateProjectSpendLimitBodyCurrency(rawValue: "USD")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -595,20 +423,15 @@ public struct UpdateProjectSpendLimitBodyCurrency: RawRepresentable, Hashable, C
 }
 
 /// The object type, which is always `project.spend_limit.deleted`.
-public struct ProjectSpendLimitDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ProjectSpendLimitDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let projectSpendLimitDeleted =
-        ProjectSpendLimitDeletedResourceObject(rawValue: "project.spend_limit.deleted")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let projectSpendLimitDeleted = ProjectSpendLimitDeletedResourceObject(rawValue: "project.spend_limit.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

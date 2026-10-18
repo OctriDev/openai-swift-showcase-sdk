@@ -8,18 +8,7 @@ import Foundation
 #endif
 public enum WebhookEventTypesMethods {
     /// Returns webhook event types visible to the authenticated project.
-    public static func listWebhookEventTypes(
-        config: ClientConfig,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> WebhookEventTypeListResource {
-        try await (sdkRequest(
-            "GET",
-            "/webhook_event_types",
-            config: config,
-            decoder: .json,
-            operationId: "ListWebhookEventTypes",
-            options: requestOptions,
-            errors: ["401": ErrorResponse.self]
-        )).data
+    public static func listWebhookEventTypes(config: ClientConfig, requestOptions: RequestOptions? = nil) async throws -> WebhookEventTypeListResource {
+        return try (await sdkRequest("GET", "/webhook_event_types", config: config, decoder: .json, operationId: "ListWebhookEventTypes", options: requestOptions, errors: ["401": ErrorResponse.self])).data
     }
 }

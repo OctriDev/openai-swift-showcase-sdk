@@ -35,8 +35,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.cancelJob(
-                fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\"")
-            )
+            fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -81,8 +81,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.cancel(
-                responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\"")
-            )
+            responseId: decoded("\"resp_677efb5139a88190b512bc3fef8e535d\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -146,8 +146,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.uploads.cancel(
-                uploadId: decoded("\"upload_abc123\"")
-            )
+            uploadId: decoded("\"upload_abc123\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -193,9 +193,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.cancelFileBatch(
-                vectorStoreId: decoded("\"vector_store-1\""),
-                batchId: decoded("\"batch-1\"")
-            )
+            vectorStoreId: decoded("\"vector_store-1\""),
+            batchId: decoded("\"batch-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -256,8 +256,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.compact(
-                options: options
-            )
+            options: options
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -304,10 +304,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.uploads.complete(
-                uploadId: decoded("\"upload_abc123\""),
-                partIds: decoded("[\"part_ids\"]"),
-                md5: decoded("\"md5\"")
-            )
+            uploadId: decoded("\"upload_abc123\""),
+            partIds: decoded("[\"part_ids\"]"),
+            md5: decoded("\"md5\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -378,8 +378,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.countInputTokens(
-                options: options
-            )
+            options: options
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -425,9 +425,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.adminApiKeys.create(
-                name: decoded("\"New Admin Key\""),
-                expiresInSeconds: decoded("2592000")
-            )
+            name: decoded("\"New Admin Key\""),
+            expiresInSeconds: decoded("2592000")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -490,8 +490,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.create(
-                options: options
-            )
+            options: options
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -538,10 +538,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.createEnvironment(
-                environment: decoded(sdkMethodFixture66Value1),
-                idempotencyKey: decoded("\"x\""),
-                vaultIds: decoded("[\"vault_ids\"]")
-            )
+            environment: decoded(sdkMethodFixture66Value1),
+            idempotencyKey: decoded("\"x\""),
+            vaultIds: decoded("[\"vault_ids\"]")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

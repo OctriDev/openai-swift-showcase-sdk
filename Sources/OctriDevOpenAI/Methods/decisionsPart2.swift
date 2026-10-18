@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension DecisionsMethods {
-    /// Use this endpoint to quickly answer classification or scoring questions about some input. You can ask multiple
-    /// questions in one request.
+extension DecisionsMethods {
+    /// Use this endpoint to quickly answer classification or scoring questions about some input. You can ask multiple questions in one request.
     ///
     /// - Parameters:
     /// - model: The model to use. Only `gpt-6-luna` is supported.
@@ -36,17 +35,8 @@ public extension DecisionsMethods {
     ///   which is currently the only supported value. See the [prompt caching
     ///   guide](https://developers.openai.com/api/docs/guides/prompt-caching) for
     ///   current details.
-    static func createDecision(
-        config: ClientConfig,
-        model: String,
-        input: DecisionInput,
-        questions: [QuestionParam],
-        safetyIdentifier: SdkOptional<String>? = nil,
-        promptCacheKey: SdkOptional<String>? = nil,
-        promptCacheOptions: SdkOptional<DecisionRequestPromptCacheOptions>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DecisionResponse {
-        try validateLength("model", model, min: 0, max: 1_048_576)
+    public static func createDecision(config: ClientConfig, model: String, input: DecisionInput, questions: [QuestionParam], safetyIdentifier: SdkOptional<String>? = nil, promptCacheKey: SdkOptional<String>? = nil, promptCacheOptions: SdkOptional<DecisionRequestPromptCacheOptions>? = nil, requestOptions: RequestOptions? = nil) async throws -> DecisionResponse {
+        try validateLength("model", model, min: 0, max: 1048576)
 
         try validateItems("questions", questions, min: 1, max: 200)
 
@@ -58,23 +48,8 @@ public extension DecisionsMethods {
             try validateLength("prompt_cache_key", promptCacheKey, min: 0, max: 64)
         }
 
-        let requestBody = CreateDecisionRequestBody(
-            model: model,
-            input: input,
-            questions: questions,
-            safetyIdentifier: safetyIdentifier,
-            promptCacheKey: promptCacheKey,
-            promptCacheOptions: promptCacheOptions
-        )
+        let requestBody = CreateDecisionRequestBody(model: model, input: input, questions: questions, safetyIdentifier: safetyIdentifier, promptCacheKey: promptCacheKey, promptCacheOptions: promptCacheOptions)
 
-        return try await (sdkRequest(
-            "POST",
-            "/decisions",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createDecision",
-            options: requestOptions
-        )).data
+        return try (await sdkRequest("POST", "/decisions", config: config, body: requestBody, decoder: .json, operationId: "createDecision", options: requestOptions)).data
     }
 }

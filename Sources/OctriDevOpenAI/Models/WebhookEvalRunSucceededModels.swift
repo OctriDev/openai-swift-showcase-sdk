@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// WebhookEvalRunSucceeded domain models
+// WebhookEvalRunSucceeded domain models
 /// Event data payload.
 public struct WebhookEvalRunSucceededData: Codable {
     /// The unique ID of the eval run.
@@ -13,30 +13,28 @@ public struct WebhookEvalRunSucceededData: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookEvalRunSucceededData {
-    init(from decoder: Decoder) throws {
+extension WebhookEvalRunSucceededData {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension WebhookEvalRunSucceededData {
-    init(id: String) {
+extension WebhookEvalRunSucceededData {
+    public init(id: String) {
         self.id = id
     }
 }
+
+
+
+
 
 /// Sent when an eval run has succeeded.
 public struct WebhookEvalRunSucceeded: Codable {
@@ -59,58 +57,34 @@ public struct WebhookEvalRunSucceeded: Codable {
         case object
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookEvalRunSucceeded {
-    init(from decoder: Decoder) throws {
+extension WebhookEvalRunSucceeded {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        id = try container.sdkDecodeRequired(.id)
-        data = try container.sdkDecodeRequired(.data)
-        type = try container.sdkDecodeRequired(.type)
-        object = try container.sdkDecodeIfPresent(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.object = try container.sdkDecodeIfPresent(.object)
     }
 }
 
-public extension WebhookEvalRunSucceeded {
-    init(
-        createdAt: Int,
-        id: String,
-        data: WebhookEvalRunSucceededData,
-        type: WebhookEvalRunSucceededType,
-        object: WebhookEvalRunSucceededObject? = nil
-    ) {
+extension WebhookEvalRunSucceeded {
+    public init(createdAt: Int, id: String, data: WebhookEvalRunSucceededData, type: WebhookEvalRunSucceededType, object: WebhookEvalRunSucceededObject? = nil) {
         (self.createdAt, self.id) = (createdAt, id)
         (self.data, self.type) = (data, type)
         self.object = object
@@ -121,15 +95,12 @@ public extension WebhookEvalRunSucceeded {
 public struct WebhookEvalRunSucceededType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let evalRunSucceeded = WebhookEvalRunSucceededType(rawValue: "eval.run.succeeded")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -142,15 +113,12 @@ public struct WebhookEvalRunSucceededType: RawRepresentable, Hashable, Codable, 
 public struct WebhookEvalRunSucceededObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let event = WebhookEvalRunSucceededObject(rawValue: "event")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

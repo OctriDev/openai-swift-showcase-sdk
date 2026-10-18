@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaFunction domain models
+// ResponsesBetaFunction domain models
 public indirect enum BetaFunctionAndCustomToolCallOutput {
     case betaInputTextContent(BetaInputTextContent)
     case betaInputImageContent(BetaInputImageContent)
@@ -13,6 +13,7 @@ public indirect enum BetaFunctionAndCustomToolCallOutput {
 }
 
 extension BetaFunctionAndCustomToolCallOutput: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension BetaFunctionAndCustomToolCallOutput: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,10 +37,10 @@ extension BetaFunctionAndCustomToolCallOutput: Codable {
 extension BetaFunctionAndCustomToolCallOutput {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": try .betaInputTextContent(BetaInputTextContent(from: decoder))
-        case "input_image": try .betaInputImageContent(BetaInputImageContent(from: decoder))
-        case "input_file": try .betaInputFileContent(BetaInputFileContent(from: decoder))
-        default: nil
+        case "input_text": return .betaInputTextContent(try BetaInputTextContent(from: decoder))
+        case "input_image": return .betaInputImageContent(try BetaInputImageContent(from: decoder))
+        case "input_file": return .betaInputFileContent(try BetaInputFileContent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -69,6 +66,7 @@ public indirect enum BetaFunctionCallOutputItemParamOutputItem {
 }
 
 extension BetaFunctionCallOutputItemParamOutputItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -76,16 +74,12 @@ extension BetaFunctionCallOutputItemParamOutputItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -96,10 +90,10 @@ extension BetaFunctionCallOutputItemParamOutputItem: Codable {
 extension BetaFunctionCallOutputItemParamOutputItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": try .betaInputTextContentParam(BetaInputTextContentParam(from: decoder))
-        case "input_image": try .betaInputImageContentParamAutoParam(BetaInputImageContentParamAutoParam(from: decoder))
-        case "input_file": try .betaInputFileContentParam(BetaInputFileContentParam(from: decoder))
-        default: nil
+        case "input_text": return .betaInputTextContentParam(try BetaInputTextContentParam(from: decoder))
+        case "input_image": return .betaInputImageContentParamAutoParam(try BetaInputImageContentParamAutoParam(from: decoder))
+        case "input_file": return .betaInputFileContentParam(try BetaInputFileContentParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -124,6 +118,7 @@ public indirect enum BetaFunctionShellCallEnvironment {
 }
 
 extension BetaFunctionShellCallEnvironment: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -131,16 +126,12 @@ extension BetaFunctionShellCallEnvironment: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -151,9 +142,9 @@ extension BetaFunctionShellCallEnvironment: Codable {
 extension BetaFunctionShellCallEnvironment {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "local": try .betaLocalEnvironmentResource(BetaLocalEnvironmentResource(from: decoder))
-        case "container_reference": try .betaContainerReferenceResource(BetaContainerReferenceResource(from: decoder))
-        default: nil
+        case "local": return .betaLocalEnvironmentResource(try BetaLocalEnvironmentResource(from: decoder))
+        case "container_reference": return .betaContainerReferenceResource(try BetaContainerReferenceResource(from: decoder))
+        default: return nil
         }
     }
 }
@@ -177,6 +168,7 @@ public indirect enum BetaFunctionShellCallItemParamEnvironment {
 }
 
 extension BetaFunctionShellCallItemParamEnvironment: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -184,16 +176,12 @@ extension BetaFunctionShellCallItemParamEnvironment: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -204,9 +192,9 @@ extension BetaFunctionShellCallItemParamEnvironment: Codable {
 extension BetaFunctionShellCallItemParamEnvironment {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "local": try .betaLocalEnvironmentParam(BetaLocalEnvironmentParam(from: decoder))
-        case "container_reference": try .betaContainerReferenceParam(BetaContainerReferenceParam(from: decoder))
-        default: nil
+        case "local": return .betaLocalEnvironmentParam(try BetaLocalEnvironmentParam(from: decoder))
+        case "container_reference": return .betaContainerReferenceParam(try BetaContainerReferenceParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -230,6 +218,7 @@ public indirect enum BetaFunctionShellCallOutputContentOutcome {
 }
 
 extension BetaFunctionShellCallOutputContentOutcome: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -237,16 +226,12 @@ extension BetaFunctionShellCallOutputContentOutcome: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -257,11 +242,9 @@ extension BetaFunctionShellCallOutputContentOutcome: Codable {
 extension BetaFunctionShellCallOutputContentOutcome {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "timeout": try .betaFunctionShellCallOutputTimeoutOutcome(
-                BetaFunctionShellCallOutputTimeoutOutcome(from: decoder)
-            )
-        case "exit": try .betaFunctionShellCallOutputExitOutcome(BetaFunctionShellCallOutputExitOutcome(from: decoder))
-        default: nil
+        case "timeout": return .betaFunctionShellCallOutputTimeoutOutcome(try BetaFunctionShellCallOutputTimeoutOutcome(from: decoder))
+        case "exit": return .betaFunctionShellCallOutputExitOutcome(try BetaFunctionShellCallOutputExitOutcome(from: decoder))
+        default: return nil
         }
     }
 }
@@ -285,6 +268,7 @@ public indirect enum BetaFunctionShellCallOutputOutcomeParam {
 }
 
 extension BetaFunctionShellCallOutputOutcomeParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -292,16 +276,12 @@ extension BetaFunctionShellCallOutputOutcomeParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -313,13 +293,9 @@ extension BetaFunctionShellCallOutputOutcomeParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "timeout":
-            try .betaFunctionShellCallOutputTimeoutOutcomeParam(
-                BetaFunctionShellCallOutputTimeoutOutcomeParam(from: decoder)
-            )
-        case "exit": try .betaFunctionShellCallOutputExitOutcomeParam(
-                BetaFunctionShellCallOutputExitOutcomeParam(from: decoder)
-            )
-        default: nil
+        return .betaFunctionShellCallOutputTimeoutOutcomeParam(try BetaFunctionShellCallOutputTimeoutOutcomeParam(from: decoder))
+        case "exit": return .betaFunctionShellCallOutputExitOutcomeParam(try BetaFunctionShellCallOutputExitOutcomeParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -344,6 +320,7 @@ public indirect enum BetaFunctionShellToolParamEnvironment {
 }
 
 extension BetaFunctionShellToolParamEnvironment: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -351,16 +328,12 @@ extension BetaFunctionShellToolParamEnvironment: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -371,10 +344,10 @@ extension BetaFunctionShellToolParamEnvironment: Codable {
 extension BetaFunctionShellToolParamEnvironment {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "container_auto": try .betaContainerAutoParam(BetaContainerAutoParam(from: decoder))
-        case "local": try .betaLocalEnvironmentParam(BetaLocalEnvironmentParam(from: decoder))
-        case "container_reference": try .betaContainerReferenceParam(BetaContainerReferenceParam(from: decoder))
-        default: nil
+        case "container_auto": return .betaContainerAutoParam(try BetaContainerAutoParam(from: decoder))
+        case "local": return .betaLocalEnvironmentParam(try BetaLocalEnvironmentParam(from: decoder))
+        case "container_reference": return .betaContainerReferenceParam(try BetaContainerReferenceParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -397,33 +370,25 @@ public indirect enum BetaFunctionToolCallOutputOutput {
 }
 
 extension BetaFunctionToolCallOutputOutput: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for BetaFunctionToolCallOutputOutput"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaFunctionToolCallOutputOutput")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension BetaFunctionToolCallOutputOutput {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
         if let value = try? container.decode(
             [BetaFunctionAndCustomToolCallOutput].self
         ) {
-            return .betaFunctionAndCustomToolCallOutputList(value)
+            return             .betaFunctionAndCustomToolCallOutputList(value)
         }
         return nil
     }
@@ -472,59 +437,39 @@ public struct BetaFunctionCallOutputItemParam: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaFunctionCallOutputItemParam {
-    init(from decoder: Decoder) throws {
+extension BetaFunctionCallOutputItemParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        output = try container.sdkDecodeRequired(.output)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        id = try container.sdkDecodeIfPresent(.id)
-        callId = try container.sdkDecodeIfPresent(.callId)
-        name = try container.sdkDecodeIfPresent(.name)
-        namespace = try container.sdkDecodeIfPresent(.namespace)
-        caller = try container.sdkDecodeIfPresent(.caller)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("type", type, BetaFunctionCallOutputItemParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.output = try container.sdkDecodeRequired(.output)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.callId = try container.sdkDecodeIfPresent(.callId)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.namespace = try container.sdkDecodeIfPresent(.namespace)
+        self.caller = try container.sdkDecodeIfPresent(.caller)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("type", self.type, BetaFunctionCallOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaFunctionCallOutputItemParam {
-    init(
-        type: BetaFunctionCallOutputItemParamType,
-        output: BetaFunctionCallOutputItemParamOutput,
-        agent: BetaAgentTagParam? = nil,
-        id: String? = nil,
-        callId: String? = nil,
-        name: String? = nil,
-        namespace: String? = nil,
-        caller: BetaToolCallCallerParam? = nil,
-        status: BetaFunctionCallItemStatus? = nil
-    ) throws {
+extension BetaFunctionCallOutputItemParam {
+    public init(type: BetaFunctionCallOutputItemParamType, output: BetaFunctionCallOutputItemParamOutput, agent: BetaAgentTagParam? = nil, id: String? = nil, callId: String? = nil, name: String? = nil, namespace: String? = nil, caller: BetaToolCallCallerParam? = nil, status: BetaFunctionCallItemStatus? = nil) throws {
         (self.type, self.output) = (type, output)
         (self.agent, self.id) = (agent, id)
         (self.callId, self.name) = (callId, name)
         (self.namespace, self.caller) = (namespace, caller)
         self.status = status
-        try sdkValidateRawEnum("type", self.type, BetaFunctionCallOutputItemParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaFunctionCallOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -543,29 +488,23 @@ public struct BetaFunctionShellActionParam: Codable {
         case maxOutputLength = "max_output_length"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaFunctionShellActionParam {
-    init(from decoder: Decoder) throws {
+extension BetaFunctionShellActionParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.commands) else {
-            throw SdkValidationError(
-                field: "commands",
-                code: "required",
-                message: "Validation failed for 'commands': value is required"
-            )
+            throw SdkValidationError(field: "commands", code: "required", message: "Validation failed for 'commands': value is required")
         }
-        commands = try container.sdkDecodeRequired(.commands)
-        timeoutMs = try container.sdkDecodeIfPresent(.timeoutMs)
-        maxOutputLength = try container.sdkDecodeIfPresent(.maxOutputLength)
+        self.commands = try container.sdkDecodeRequired(.commands)
+        self.timeoutMs = try container.sdkDecodeIfPresent(.timeoutMs)
+        self.maxOutputLength = try container.sdkDecodeIfPresent(.maxOutputLength)
     }
 }
 
-public extension BetaFunctionShellActionParam {
-    init(commands: [String], timeoutMs: Int? = nil, maxOutputLength: Int? = nil) {
+extension BetaFunctionShellActionParam {
+    public init(commands: [String], timeoutMs: Int? = nil, maxOutputLength: Int? = nil) {
         (self.commands, self.timeoutMs) = (commands, timeoutMs)
         self.maxOutputLength = maxOutputLength
     }
@@ -577,20 +516,14 @@ public indirect enum BetaFunctionCallOutputItemParamOutput {
 }
 
 extension BetaFunctionCallOutputItemParamOutput: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for BetaFunctionCallOutputItemParamOutput"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaFunctionCallOutputItemParamOutput")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }

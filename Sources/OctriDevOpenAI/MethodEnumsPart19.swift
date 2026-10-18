@@ -19,27 +19,27 @@ struct CreateAgentRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
-        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(reasoning, forKey: SdkCodingKey("reasoning"))
-        try keyedContainer.encodeIfPresent(text, forKey: SdkCodingKey("text"))
-        try keyedContainer.encodeIfPresent(serviceTier, forKey: SdkCodingKey("service_tier"))
-        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(tools, forKey: SdkCodingKey("tools"))
-        try keyedContainer.encodeIfPresent(multiAgent, forKey: SdkCodingKey("multi_agent"))
+        try keyedContainer.encode(self.model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(self.reasoning, forKey: SdkCodingKey("reasoning"))
+        try keyedContainer.encodeIfPresent(self.text, forKey: SdkCodingKey("text"))
+        try keyedContainer.encodeIfPresent(self.serviceTier, forKey: SdkCodingKey("service_tier"))
+        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(self.tools, forKey: SdkCodingKey("tools"))
+        try keyedContainer.encodeIfPresent(self.multiAgent, forKey: SdkCodingKey("multi_agent"))
     }
 
     init(options: AgentsMethods.CreateAgentOptions) {
-        model = options.model
-        metadata = options.metadata
-        name = options.name
-        reasoning = options.reasoning
-        text = options.text
-        serviceTier = options.serviceTier
-        instructions = options.instructions
-        tools = options.tools
-        multiAgent = options.multiAgent
+        self.model = options.model
+        self.metadata = options.metadata
+        self.name = options.name
+        self.reasoning = options.reasoning
+        self.text = options.text
+        self.serviceTier = options.serviceTier
+        self.instructions = options.instructions
+        self.tools = options.tools
+        self.multiAgent = options.multiAgent
     }
 }
 
@@ -56,27 +56,27 @@ struct UpdateAgentRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(reasoning, forKey: SdkCodingKey("reasoning"))
-        try keyedContainer.encodeIfPresent(text, forKey: SdkCodingKey("text"))
-        try keyedContainer.encodeIfPresent(serviceTier, forKey: SdkCodingKey("service_tier"))
-        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(multiAgent, forKey: SdkCodingKey("multi_agent"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
-        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(tools, forKey: SdkCodingKey("tools"))
+        try keyedContainer.encodeIfPresent(self.model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(self.reasoning, forKey: SdkCodingKey("reasoning"))
+        try keyedContainer.encodeIfPresent(self.text, forKey: SdkCodingKey("text"))
+        try keyedContainer.encodeIfPresent(self.serviceTier, forKey: SdkCodingKey("service_tier"))
+        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(self.multiAgent, forKey: SdkCodingKey("multi_agent"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(self.tools, forKey: SdkCodingKey("tools"))
     }
 
     init(options: AgentsMethods.UpdateAgentOptions) {
-        model = options.model
-        reasoning = options.reasoning
-        text = options.text
-        serviceTier = options.serviceTier
-        instructions = options.instructions
-        multiAgent = options.multiAgent
-        metadata = options.metadata
-        name = options.name
-        tools = options.tools
+        self.model = options.model
+        self.reasoning = options.reasoning
+        self.text = options.text
+        self.serviceTier = options.serviceTier
+        self.instructions = options.instructions
+        self.multiAgent = options.multiAgent
+        self.metadata = options.metadata
+        self.name = options.name
+        self.tools = options.tools
     }
 }
 
@@ -94,29 +94,29 @@ struct CreateAgentEnvironmentTemplateRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(packages, forKey: SdkCodingKey("packages"))
-        try keyedContainer.encodeIfPresent(setupCommands, forKey: SdkCodingKey("setup_commands"))
-        try keyedContainer.encodeIfPresent(network, forKey: SdkCodingKey("network"))
-        try keyedContainer.encodeIfPresent(desktop, forKey: SdkCodingKey("desktop"))
-        try keyedContainer.encodeIfPresent(env, forKey: SdkCodingKey("env"))
-        try keyedContainer.encodeIfPresent(capabilityDirectories, forKey: SdkCodingKey("capability_directories"))
-        try keyedContainer.encodeIfPresent(skills, forKey: SdkCodingKey("skills"))
-        try keyedContainer.encodeIfPresent(plugins, forKey: SdkCodingKey("plugins"))
-        try keyedContainer.encodeIfPresent(files, forKey: SdkCodingKey("files"))
-        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(self.packages, forKey: SdkCodingKey("packages"))
+        try keyedContainer.encodeIfPresent(self.setupCommands, forKey: SdkCodingKey("setup_commands"))
+        try keyedContainer.encodeIfPresent(self.network, forKey: SdkCodingKey("network"))
+        try keyedContainer.encodeIfPresent(self.desktop, forKey: SdkCodingKey("desktop"))
+        try keyedContainer.encodeIfPresent(self.env, forKey: SdkCodingKey("env"))
+        try keyedContainer.encodeIfPresent(self.capabilityDirectories, forKey: SdkCodingKey("capability_directories"))
+        try keyedContainer.encodeIfPresent(self.skills, forKey: SdkCodingKey("skills"))
+        try keyedContainer.encodeIfPresent(self.plugins, forKey: SdkCodingKey("plugins"))
+        try keyedContainer.encodeIfPresent(self.files, forKey: SdkCodingKey("files"))
+        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
     }
 
     init(options: AgentsMethods.CreateAgentEnvironmentTemplateOptions) {
-        packages = options.packages
-        setupCommands = options.setupCommands
-        network = options.network
-        desktop = options.desktop
-        env = options.env
-        capabilityDirectories = options.capabilityDirectories
-        skills = options.skills
-        plugins = options.plugins
-        files = options.files
-        name = options.name
+        self.packages = options.packages
+        self.setupCommands = options.setupCommands
+        self.network = options.network
+        self.desktop = options.desktop
+        self.env = options.env
+        self.capabilityDirectories = options.capabilityDirectories
+        self.skills = options.skills
+        self.plugins = options.plugins
+        self.files = options.files
+        self.name = options.name
     }
 }
 
@@ -134,29 +134,29 @@ struct UpdateAgentEnvironmentTemplateRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(packages, forKey: SdkCodingKey("packages"))
-        try keyedContainer.encodeIfPresent(setupCommands, forKey: SdkCodingKey("setup_commands"))
-        try keyedContainer.encodeIfPresent(network, forKey: SdkCodingKey("network"))
-        try keyedContainer.encodeIfPresent(desktop, forKey: SdkCodingKey("desktop"))
-        try keyedContainer.encodeIfPresent(env, forKey: SdkCodingKey("env"))
-        try keyedContainer.encodeIfPresent(capabilityDirectories, forKey: SdkCodingKey("capability_directories"))
-        try keyedContainer.encodeIfPresent(skills, forKey: SdkCodingKey("skills"))
-        try keyedContainer.encodeIfPresent(plugins, forKey: SdkCodingKey("plugins"))
-        try keyedContainer.encodeIfPresent(files, forKey: SdkCodingKey("files"))
+        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(self.packages, forKey: SdkCodingKey("packages"))
+        try keyedContainer.encodeIfPresent(self.setupCommands, forKey: SdkCodingKey("setup_commands"))
+        try keyedContainer.encodeIfPresent(self.network, forKey: SdkCodingKey("network"))
+        try keyedContainer.encodeIfPresent(self.desktop, forKey: SdkCodingKey("desktop"))
+        try keyedContainer.encodeIfPresent(self.env, forKey: SdkCodingKey("env"))
+        try keyedContainer.encodeIfPresent(self.capabilityDirectories, forKey: SdkCodingKey("capability_directories"))
+        try keyedContainer.encodeIfPresent(self.skills, forKey: SdkCodingKey("skills"))
+        try keyedContainer.encodeIfPresent(self.plugins, forKey: SdkCodingKey("plugins"))
+        try keyedContainer.encodeIfPresent(self.files, forKey: SdkCodingKey("files"))
     }
 
     init(options: AgentsMethods.UpdateAgentEnvironmentTemplateOptions) {
-        name = options.name
-        packages = options.packages
-        setupCommands = options.setupCommands
-        network = options.network
-        desktop = options.desktop
-        env = options.env
-        capabilityDirectories = options.capabilityDirectories
-        skills = options.skills
-        plugins = options.plugins
-        files = options.files
+        self.name = options.name
+        self.packages = options.packages
+        self.setupCommands = options.setupCommands
+        self.network = options.network
+        self.desktop = options.desktop
+        self.env = options.env
+        self.capabilityDirectories = options.capabilityDirectories
+        self.skills = options.skills
+        self.plugins = options.plugins
+        self.files = options.files
     }
 }
 
@@ -172,24 +172,24 @@ struct CreateAgentSessionRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(environment, forKey: SdkCodingKey("environment"))
-        try keyedContainer.encodeIfPresent(spendControl, forKey: SdkCodingKey("spend_control"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
-        try keyedContainer.encodeIfPresent(agent, forKey: SdkCodingKey("agent"))
-        try keyedContainer.encodeIfPresent(agentId, forKey: SdkCodingKey("agent_id"))
-        try keyedContainer.encodeIfPresent(vaultIds, forKey: SdkCodingKey("vault_ids"))
-        try keyedContainer.encodeIfPresent(input, forKey: SdkCodingKey("input"))
-        try keyedContainer.encodeIfPresent(stream, forKey: SdkCodingKey("stream"))
+        try keyedContainer.encode(self.environment, forKey: SdkCodingKey("environment"))
+        try keyedContainer.encodeIfPresent(self.spendControl, forKey: SdkCodingKey("spend_control"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.agent, forKey: SdkCodingKey("agent"))
+        try keyedContainer.encodeIfPresent(self.agentId, forKey: SdkCodingKey("agent_id"))
+        try keyedContainer.encodeIfPresent(self.vaultIds, forKey: SdkCodingKey("vault_ids"))
+        try keyedContainer.encodeIfPresent(self.input, forKey: SdkCodingKey("input"))
+        try keyedContainer.encodeIfPresent(self.stream, forKey: SdkCodingKey("stream"))
     }
 
     init(options: AgentsMethods.CreateAgentSessionOptions) {
-        environment = options.environment
-        spendControl = options.spendControl
-        metadata = options.metadata
-        agent = options.agent
-        agentId = options.agentId
-        vaultIds = options.vaultIds
-        input = options.input
-        stream = options.stream
+        self.environment = options.environment
+        self.spendControl = options.spendControl
+        self.metadata = options.metadata
+        self.agent = options.agent
+        self.agentId = options.agentId
+        self.vaultIds = options.vaultIds
+        self.input = options.input
+        self.stream = options.stream
     }
 }

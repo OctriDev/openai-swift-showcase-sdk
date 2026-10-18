@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ResponsesMethods {
-    /// Lists the input items used to generate a model response. Use `limit` to control the number of returned items and
-    /// `order` to choose their sequence. Pass `after` with an item ID from a previous page to continue through the
-    /// list.
+extension ResponsesMethods {
+    /// Lists the input items used to generate a model response. Use `limit` to control the number of returned items and `order` to choose their sequence. Pass `after` with an item ID from a previous page to continue through the list.
     ///
     /// Returns a list of input items for a given response.
     ///
@@ -24,39 +22,18 @@ public extension ResponsesMethods {
     /// - include: Additional fields to include in the response. See the `include`
     ///   parameter for Response creation above for more information.
     /// - openaiBeta: Optional beta features to enable for this request.
-    static func betaListInputItems(
-        config: ClientConfig,
-        responseId: String,
-        limit: Int? = nil,
-        order: BetaListInputItemsParameter? = nil,
-        after: String? = nil,
-        include: [BetaIncludeEnum]? = nil,
-        openaiBeta: [BetaListInputItemsParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BetaResponseItemList {
-        try await (sdkRequest(
-            "GET",
-            ["/responses/", sdkEncodePathSegment(sdkWireString(responseId)), "/input_items?beta=true"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("include", values: include, style: "form", explode: true),
-            ],
-            decoder: .json,
-            operationId: "beta_listInputItems",
-            extraHeaders: sdkHeaders([
-                ("openai-beta", sdkHeaderValue(openaiBeta)),
-            ]),
-            options: requestOptions,
-            errors: ["404": BetaErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func betaListInputItems(config: ClientConfig, responseId: String, limit: Int? = nil, order: BetaListInputItemsParameter? = nil, after: String? = nil, include: [BetaIncludeEnum]? = nil, openaiBeta: [BetaListInputItemsParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> BetaResponseItemList {
+        return try (await sdkRequest("GET", ["/responses/", sdkEncodePathSegment(sdkWireString(responseId)), "/input_items?beta=true"].joined(), config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("include", values: include, style: "form", explode: true),
+        ], decoder: .json, operationId: "beta_listInputItems", extraHeaders: sdkHeaders([
+            ("openai-beta", sdkHeaderValue(openaiBeta)),
+        ]), options: requestOptions, errors: ["404": BetaErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists the input items used to generate a model response. Use `limit` to control the number of returned items and
-    /// `order` to choose their sequence. Pass `after` with an item ID from a previous page to continue through the
-    /// list.
+    /// Lists the input items used to generate a model response. Use `limit` to control the number of returned items and `order` to choose their sequence. Pass `after` with an item ID from a previous page to continue through the list.
     ///
     /// Returns a list of input items for a given response.
     ///
@@ -71,44 +48,17 @@ public extension ResponsesMethods {
     /// - include: Additional fields to include in the response. See the `include`
     ///   parameter for Response creation above for more information.
     /// - openaiBeta: Optional beta features to enable for this request.
-    static func betaListInputItemsPaginated(
-        config: ClientConfig,
-        responseId: String,
-        limit: Int? = nil,
-        order: BetaListInputItemsParameter? = nil,
-        after: String? = nil,
-        include: [BetaIncludeEnum]? = nil,
-        openaiBeta: [BetaListInputItemsParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<BetaItemResource, Swift.Error> {
-        AsyncThrowingStream<BetaItemResource, Swift.Error> { (continuation: AsyncThrowingStream<
-            BetaItemResource,
-            Swift.Error
-        >.Continuation) in
+    public static func betaListInputItemsPaginated(config: ClientConfig, responseId: String, limit: Int? = nil, order: BetaListInputItemsParameter? = nil, after: String? = nil, include: [BetaIncludeEnum]? = nil, openaiBeta: [BetaListInputItemsParameterItem]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<BetaItemResource, Swift.Error> {
+        return AsyncThrowingStream<BetaItemResource, Swift.Error> { (continuation: AsyncThrowingStream<BetaItemResource, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await betaListInputItems(
-                            config: config,
-                            responseId: responseId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            include: include,
-                            openaiBeta: openaiBeta,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await betaListInputItems(config: config, responseId: responseId, limit: limit, order: order, after: pageCursor, include: include, openaiBeta: openaiBeta, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -121,53 +71,24 @@ public extension ResponsesMethods {
         }
     }
 
-    struct BetaListInputItemsPage {
+    public struct BetaListInputItemsPage {
         public let data: BetaResponseItemList
         public let items: [BetaItemResource]
         public let hasMore: Bool
     }
 
-    static func betaListInputItemsPages(
-        config: ClientConfig,
-        responseId: String,
-        limit: Int? = nil,
-        order: BetaListInputItemsParameter? = nil,
-        after: String? = nil,
-        include: [BetaIncludeEnum]? = nil,
-        openaiBeta: [BetaListInputItemsParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<BetaListInputItemsPage, Swift.Error> {
-        AsyncThrowingStream<BetaListInputItemsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            BetaListInputItemsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func betaListInputItemsPages(config: ClientConfig, responseId: String, limit: Int? = nil, order: BetaListInputItemsParameter? = nil, after: String? = nil, include: [BetaIncludeEnum]? = nil, openaiBeta: [BetaListInputItemsParameterItem]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<BetaListInputItemsPage, Swift.Error> {
+        return AsyncThrowingStream<BetaListInputItemsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<BetaListInputItemsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await betaListInputItems(
-                            config: config,
-                            responseId: responseId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            include: include,
-                            openaiBeta: openaiBeta,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await betaListInputItems(config: config, responseId: responseId, limit: limit, order: order, after: pageCursor, include: include, openaiBeta: openaiBeta, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && true
-                        pageContinuation.yield(BetaListInputItemsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
+                        pageContinuation.yield(BetaListInputItemsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

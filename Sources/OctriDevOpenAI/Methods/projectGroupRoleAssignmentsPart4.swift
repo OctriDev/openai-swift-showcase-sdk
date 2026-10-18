@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectGroupRoleAssignmentsMethods {
+extension ProjectGroupRoleAssignmentsMethods {
     /// Unassigns a project role from a group within a project.
     ///
     /// - Parameters:
@@ -14,33 +14,7 @@ public extension ProjectGroupRoleAssignmentsMethods {
     /// - groupId: The ID of the group whose project role assignment should be
     ///   removed.
     /// - roleId: The ID of the project role to remove from the group.
-    static func unassignProjectGroupRole(
-        config: ClientConfig,
-        projectId: String,
-        groupId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedRoleAssignmentResource {
-        try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/groups/",
-                sdkEncodePathSegment(sdkWireString(groupId)),
-                "/roles/",
-                sdkEncodePathSegment(sdkWireString(roleId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "unassignProjectGroupRole",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func unassignProjectGroupRole(config: ClientConfig, projectId: String, groupId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedRoleAssignmentResource {
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/groups/", sdkEncodePathSegment(sdkWireString(groupId)), "/roles/", sdkEncodePathSegment(sdkWireString(roleId))].joined(), config: config, decoder: .json, operationId: "unassignProjectGroupRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

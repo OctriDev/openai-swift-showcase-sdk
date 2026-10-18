@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectsMethods {
-    /// Lists API keys in an organization project. Use `owner_project_access` to filter keys by their owner's effective
-    /// project access, and `limit` and `after` to control and continue through the results. The response includes
-    /// redacted key values, owner details, and a `has_more` flag for pagination.
+extension ProjectsMethods {
+    /// Lists API keys in an organization project. Use `owner_project_access` to filter keys by their owner's effective project access, and `limit` and `after` to control and continue through the results. The response includes redacted key values, owner details, and a `has_more` flag for pagination.
     ///
     /// Returns a list of API keys in the project.
     ///
@@ -26,38 +24,15 @@ public extension ProjectsMethods {
     ///   `inactive` for owners without access, or `any` for all enabled project API
     ///   keys. If omitted, the endpoint applies its existing membership-based
     ///   visibility rules, which may exclude some enabled keys.
-    static func listProjectApiKeys(
-        config: ClientConfig,
-        projectId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        ownerProjectAccess: ListProjectApiKeysParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectApiKeyListResponse {
-        try await (sdkRequest(
-            "GET",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/api_keys"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("owner_project_access", value: ownerProjectAccess),
-            ],
-            decoder: .json,
-            operationId: "listProjectApiKeys",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func listProjectApiKeys(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, ownerProjectAccess: ListProjectApiKeysParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectApiKeyListResponse {
+        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/api_keys"].joined(), config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("owner_project_access", value: ownerProjectAccess),
+        ], decoder: .json, operationId: "listProjectApiKeys", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists API keys in an organization project. Use `owner_project_access` to filter keys by their owner's effective
-    /// project access, and `limit` and `after` to control and continue through the results. The response includes
-    /// redacted key values, owner details, and a `has_more` flag for pagination.
+    /// Lists API keys in an organization project. Use `owner_project_access` to filter keys by their owner's effective project access, and `limit` and `after` to control and continue through the results. The response includes redacted key values, owner details, and a `has_more` flag for pagination.
     ///
     /// Returns a list of API keys in the project.
     ///
@@ -74,43 +49,18 @@ public extension ProjectsMethods {
     ///   `inactive` for owners without access, or `any` for all enabled project API
     ///   keys. If omitted, the endpoint applies its existing membership-based
     ///   visibility rules, which may exclude some enabled keys.
-    static func listProjectApiKeysPaginated(
-        config: ClientConfig,
-        projectId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        ownerProjectAccess: ListProjectApiKeysParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ProjectApiKey, Swift.Error> {
-        AsyncThrowingStream<ProjectApiKey, Swift.Error> { (continuation: AsyncThrowingStream<
-            ProjectApiKey,
-            Swift.Error
-        >.Continuation) in
+    public static func listProjectApiKeysPaginated(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, ownerProjectAccess: ListProjectApiKeysParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ProjectApiKey, Swift.Error> {
+        return AsyncThrowingStream<ProjectApiKey, Swift.Error> { (continuation: AsyncThrowingStream<ProjectApiKey, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectApiKeys(
-                            config: config,
-                            projectId: projectId,
-                            limit: limit,
-                            after: pageCursor,
-                            ownerProjectAccess: ownerProjectAccess,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listProjectApiKeys(config: config, projectId: projectId, limit: limit, after: pageCursor, ownerProjectAccess: ownerProjectAccess, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -123,52 +73,25 @@ public extension ProjectsMethods {
         }
     }
 
-    struct ListProjectApiKeysPage {
+    public struct ListProjectApiKeysPage {
         public let data: ProjectApiKeyListResponse
         public let items: [ProjectApiKey]
         public let hasMore: Bool
     }
 
-    static func listProjectApiKeysPages(
-        config: ClientConfig,
-        projectId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        ownerProjectAccess: ListProjectApiKeysParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListProjectApiKeysPage, Swift.Error> {
-        AsyncThrowingStream<ListProjectApiKeysPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListProjectApiKeysPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listProjectApiKeysPages(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, ownerProjectAccess: ListProjectApiKeysParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListProjectApiKeysPage, Swift.Error> {
+        return AsyncThrowingStream<ListProjectApiKeysPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListProjectApiKeysPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectApiKeys(
-                            config: config,
-                            projectId: projectId,
-                            limit: limit,
-                            after: pageCursor,
-                            ownerProjectAccess: ownerProjectAccess,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listProjectApiKeys(config: config, projectId: projectId, limit: limit, after: pageCursor, ownerProjectAccess: ownerProjectAccess, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListProjectApiKeysPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        pageContinuation.yield(ListProjectApiKeysPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension FineTuningMethods {
-    /// Lists status-update events for a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to
-    /// continue from an event on a previous page. Set `limit` to control the number of events retrieved.
+extension FineTuningMethods {
+    /// Lists status-update events for a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to continue from an event on a previous page. Set `limit` to control the number of events retrieved.
     ///
     /// Get status updates for a fine-tuning job.
     ///
@@ -16,48 +15,20 @@ public extension FineTuningMethods {
     /// - fineTuningJobId: The ID of the fine-tuning job to get events for.
     /// - after: Identifier for the last event from the previous pagination request.
     /// - limit: Number of events to retrieve.
-    static func listFineTuningEvents(
-        config: ClientConfig,
-        fineTuningJobId: String,
-        after: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListFineTuningJobEventsResponse {
-        try await (sdkRequest(
-            "GET",
-            ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId)), "/events"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("limit", value: limit),
-            ],
-            decoder: .json,
-            operationId: "listFineTuningEvents",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func listFineTuningEvents(config: ClientConfig, fineTuningJobId: String, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFineTuningJobEventsResponse {
+        return try (await sdkRequest("GET", ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId)), "/events"].joined(), config: config, query: [
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("limit", value: limit),
+        ], decoder: .json, operationId: "listFineTuningEvents", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Pauses a fine-tuning job that supports pausing. Use `fine_tuning_job_id` to identify the job you want to pause.
-    /// The response returns the job object and its current status.
+    /// Pauses a fine-tuning job that supports pausing. Use `fine_tuning_job_id` to identify the job you want to pause. The response returns the job object and its current status.
     ///
     /// Pause a fine-tune job.
     ///
     /// - Parameters:
     /// - fineTuningJobId: The ID of the fine-tuning job to pause.
-    static func pauseFineTuningJob(
-        config: ClientConfig,
-        fineTuningJobId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> FineTuningJob {
-        try await (sdkRequest(
-            "POST",
-            ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId)), "/pause"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "pauseFineTuningJob",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func pauseFineTuningJob(config: ClientConfig, fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
+        return try (await sdkRequest("POST", ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId)), "/pause"].joined(), config: config, decoder: .json, operationId: "pauseFineTuningJob", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

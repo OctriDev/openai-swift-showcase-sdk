@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaUrl domain models
+// ResponsesBetaUrl domain models
 /// Typed representation of the `BetaUrlCitationParam` API schema.
 public struct BetaUrlCitationParam: Codable {
     /// The citation type. Always `url_citation`.
@@ -25,102 +25,48 @@ public struct BetaUrlCitationParam: Codable {
         case title
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaUrlCitationParam {
-    init(from decoder: Decoder) throws {
+extension BetaUrlCitationParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.startIndex) else {
-            throw SdkValidationError(
-                field: "start_index",
-                code: "required",
-                message: "Validation failed for 'start_index': value is required"
-            )
+            throw SdkValidationError(field: "start_index", code: "required", message: "Validation failed for 'start_index': value is required")
         }
         guard container.contains(.endIndex) else {
-            throw SdkValidationError(
-                field: "end_index",
-                code: "required",
-                message: "Validation failed for 'end_index': value is required"
-            )
+            throw SdkValidationError(field: "end_index", code: "required", message: "Validation failed for 'end_index': value is required")
         }
         guard container.contains(.url) else {
-            throw SdkValidationError(
-                field: "url",
-                code: "required",
-                message: "Validation failed for 'url': value is required"
-            )
+            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
         }
         guard container.contains(.title) else {
-            throw SdkValidationError(
-                field: "title",
-                code: "required",
-                message: "Validation failed for 'title': value is required"
-            )
+            throw SdkValidationError(field: "title", code: "required", message: "Validation failed for 'title': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        startIndex = try container.sdkDecodeRequired(.startIndex)
-        endIndex = try container.sdkDecodeRequired(.endIndex)
-        url = try container.sdkDecodeRequired(.url)
-        title = try container.sdkDecodeRequired(.title)
-        try sdkValidateRawEnum("type", type, BetaUrlCitationParamType.allCases.map(\.rawValue))
-        try validateRange(
-            "start_index",
-            Double(startIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "end_index",
-            Double(endIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try sdkValidateUri("url", url)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.startIndex = try container.sdkDecodeRequired(.startIndex)
+        self.endIndex = try container.sdkDecodeRequired(.endIndex)
+        self.url = try container.sdkDecodeRequired(.url)
+        self.title = try container.sdkDecodeRequired(.title)
+            try sdkValidateRawEnum("type", self.type, BetaUrlCitationParamType.allCases.map(\.rawValue))
+            try validateRange("start_index", Double(self.startIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("end_index", Double(self.endIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try sdkValidateUri("url", self.url)
     }
 }
 
-public extension BetaUrlCitationParam {
-    init(type: BetaUrlCitationParamType, startIndex: Int, endIndex: Int, url: String, title: String) throws {
+extension BetaUrlCitationParam {
+    public init(type: BetaUrlCitationParamType, startIndex: Int, endIndex: Int, url: String, title: String) throws {
         (self.type, self.startIndex) = (type, startIndex)
         (self.endIndex, self.url) = (endIndex, url)
         self.title = title
-        try sdkValidateRawEnum("type", self.type, BetaUrlCitationParamType.allCases.map(\.rawValue))
-        try validateRange(
-            "start_index",
-            Double(self.startIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "end_index",
-            Double(self.endIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try sdkValidateUri("url", self.url)
+            try sdkValidateRawEnum("type", self.type, BetaUrlCitationParamType.allCases.map(\.rawValue))
+            try validateRange("start_index", Double(self.startIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("end_index", Double(self.endIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try sdkValidateUri("url", self.url)
     }
 }
 
@@ -145,66 +91,44 @@ public struct BetaUrlCitationBody: Codable {
         case title
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaUrlCitationBody {
-    init(from decoder: Decoder) throws {
+extension BetaUrlCitationBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.url) else {
-            throw SdkValidationError(
-                field: "url",
-                code: "required",
-                message: "Validation failed for 'url': value is required"
-            )
+            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
         }
         guard container.contains(.startIndex) else {
-            throw SdkValidationError(
-                field: "start_index",
-                code: "required",
-                message: "Validation failed for 'start_index': value is required"
-            )
+            throw SdkValidationError(field: "start_index", code: "required", message: "Validation failed for 'start_index': value is required")
         }
         guard container.contains(.endIndex) else {
-            throw SdkValidationError(
-                field: "end_index",
-                code: "required",
-                message: "Validation failed for 'end_index': value is required"
-            )
+            throw SdkValidationError(field: "end_index", code: "required", message: "Validation failed for 'end_index': value is required")
         }
         guard container.contains(.title) else {
-            throw SdkValidationError(
-                field: "title",
-                code: "required",
-                message: "Validation failed for 'title': value is required"
-            )
+            throw SdkValidationError(field: "title", code: "required", message: "Validation failed for 'title': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        url = try container.sdkDecodeRequired(.url)
-        startIndex = try container.sdkDecodeRequired(.startIndex)
-        endIndex = try container.sdkDecodeRequired(.endIndex)
-        title = try container.sdkDecodeRequired(.title)
-        try sdkValidateRawEnum("type", type, BetaUrlCitationBodyType.allCases.map(\.rawValue))
-        try sdkValidateUri("url", url)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.url = try container.sdkDecodeRequired(.url)
+        self.startIndex = try container.sdkDecodeRequired(.startIndex)
+        self.endIndex = try container.sdkDecodeRequired(.endIndex)
+        self.title = try container.sdkDecodeRequired(.title)
+            try sdkValidateRawEnum("type", self.type, BetaUrlCitationBodyType.allCases.map(\.rawValue))
+            try sdkValidateUri("url", self.url)
     }
 }
 
-public extension BetaUrlCitationBody {
-    init(type: BetaUrlCitationBodyType, url: String, startIndex: Int, endIndex: Int, title: String) throws {
+extension BetaUrlCitationBody {
+    public init(type: BetaUrlCitationBodyType, url: String, startIndex: Int, endIndex: Int, title: String) throws {
         (self.type, self.url) = (type, url)
         (self.startIndex, self.endIndex) = (startIndex, endIndex)
         self.title = title
-        try sdkValidateRawEnum("type", self.type, BetaUrlCitationBodyType.allCases.map(\.rawValue))
-        try sdkValidateUri("url", self.url)
+            try sdkValidateRawEnum("type", self.type, BetaUrlCitationBodyType.allCases.map(\.rawValue))
+            try sdkValidateUri("url", self.url)
     }
 }
 

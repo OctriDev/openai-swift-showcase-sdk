@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsOutput domain models
+// AgentsOutput domain models
 /// A breakdown of output token usage for a session or turn.
 public struct OutputTokensDetailsResource2: Codable {
     /// The number of output tokens used for reasoning.
@@ -13,27 +13,21 @@ public struct OutputTokensDetailsResource2: Codable {
         case reasoningTokens = "reasoning_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OutputTokensDetailsResource2 {
-    init(from decoder: Decoder) throws {
+extension OutputTokensDetailsResource2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.reasoningTokens) else {
-            throw SdkValidationError(
-                field: "reasoning_tokens",
-                code: "required",
-                message: "Validation failed for 'reasoning_tokens': value is required"
-            )
+            throw SdkValidationError(field: "reasoning_tokens", code: "required", message: "Validation failed for 'reasoning_tokens': value is required")
         }
-        reasoningTokens = try container.sdkDecodeRequired(.reasoningTokens)
+        self.reasoningTokens = try container.sdkDecodeRequired(.reasoningTokens)
     }
 }
 
-public extension OutputTokensDetailsResource2 {
-    init(reasoningTokens: Int) {
+extension OutputTokensDetailsResource2 {
+    public init(reasoningTokens: Int) {
         self.reasoningTokens = reasoningTokens
     }
 }
@@ -50,40 +44,30 @@ public struct OutputTextResource: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OutputTextResource {
-    init(from decoder: Decoder) throws {
+extension OutputTextResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        try sdkValidateRawEnum("type", type, OutputTextResourceType.allCases.map(\.rawValue))
-        try validateLength("text", text, min: 0, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+            try sdkValidateRawEnum("type", self.type, OutputTextResourceType.allCases.map(\.rawValue))
+            try validateLength("text", self.text, min: 0, max: nil)
     }
 }
 
-public extension OutputTextResource {
-    init(type: OutputTextResourceType, text: String) throws {
+extension OutputTextResource {
+    public init(type: OutputTextResourceType, text: String) throws {
         (self.type, self.text) = (type, text)
-        try sdkValidateRawEnum("type", self.type, OutputTextResourceType.allCases.map(\.rawValue))
-        try validateLength("text", self.text, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, OutputTextResourceType.allCases.map(\.rawValue))
+            try validateLength("text", self.text, min: 0, max: nil)
     }
 }
 
@@ -109,17 +93,14 @@ public enum OutputTextResourceType: String, CaseIterable, Codable {
 public struct OutputItemStatusResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = OutputItemStatusResource(rawValue: "in_progress")
     public static let completed = OutputItemStatusResource(rawValue: "completed")
     public static let incomplete = OutputItemStatusResource(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

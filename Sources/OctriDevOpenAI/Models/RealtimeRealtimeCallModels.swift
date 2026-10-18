@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// RealtimeRealtimeCall domain models
+// RealtimeRealtimeCall domain models
 /// Parameters used to decline an incoming SIP call handled by the Realtime API.
 public struct RealtimeCallRejectRequest: Codable {
     /// SIP response code to send back to the caller. Defaults to `603` (Decline) when omitted.
@@ -15,19 +15,19 @@ public struct RealtimeCallRejectRequest: Codable {
     }
 
     init() {
-        statusCode = nil
+        self.statusCode = nil
     }
 }
 
-public extension RealtimeCallRejectRequest {
-    init(from decoder: Decoder) throws {
+extension RealtimeCallRejectRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        statusCode = try container.sdkDecodeIfPresent(.statusCode)
+        self.statusCode = try container.sdkDecodeIfPresent(.statusCode)
     }
 }
 
-public extension RealtimeCallRejectRequest {
-    init(statusCode: Int? = nil) {
+extension RealtimeCallRejectRequest {
+    public init(statusCode: Int? = nil) {
         self.init()
         self.statusCode = statusCode
     }
@@ -44,27 +44,21 @@ public struct RealtimeCallReferRequest: Codable {
         case targetUri = "target_uri"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeCallReferRequest {
-    init(from decoder: Decoder) throws {
+extension RealtimeCallReferRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.targetUri) else {
-            throw SdkValidationError(
-                field: "target_uri",
-                code: "required",
-                message: "Validation failed for 'target_uri': value is required"
-            )
+            throw SdkValidationError(field: "target_uri", code: "required", message: "Validation failed for 'target_uri': value is required")
         }
-        targetUri = try container.sdkDecodeRequired(.targetUri)
+        self.targetUri = try container.sdkDecodeRequired(.targetUri)
     }
 }
 
-public extension RealtimeCallReferRequest {
-    init(targetUri: String) {
+extension RealtimeCallReferRequest {
+    public init(targetUri: String) {
         self.targetUri = targetUri
     }
 }
@@ -84,28 +78,22 @@ public struct RealtimeCallCreateRequest: Codable {
         case session
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeCallCreateRequest {
-    init(from decoder: Decoder) throws {
+extension RealtimeCallCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.sdp) else {
-            throw SdkValidationError(
-                field: "sdp",
-                code: "required",
-                message: "Validation failed for 'sdp': value is required"
-            )
+            throw SdkValidationError(field: "sdp", code: "required", message: "Validation failed for 'sdp': value is required")
         }
-        sdp = try container.sdkDecodeRequired(.sdp)
-        session = try container.sdkDecodeIfPresent(.session)
+        self.sdp = try container.sdkDecodeRequired(.sdp)
+        self.session = try container.sdkDecodeIfPresent(.session)
     }
 }
 
-public extension RealtimeCallCreateRequest {
-    init(sdp: String, session: RealtimeSessionCreateRequestGA? = nil) {
+extension RealtimeCallCreateRequest {
+    public init(sdp: String, session: RealtimeSessionCreateRequestGA? = nil) {
         (self.sdp, self.session) = (sdp, session)
     }
 }

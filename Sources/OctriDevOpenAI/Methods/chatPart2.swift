@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ChatMethods {
-    /// List stored Chat Completions. Only Chat Completions that have been stored with the `store` parameter set to
-    /// `true` will be returned.
+extension ChatMethods {
+    /// List stored Chat Completions. Only Chat Completions that have been stored with the `store` parameter set to `true` will be returned.
     ///
     /// - Parameters:
     /// - model: The model used to generate the Chat Completions.
@@ -19,35 +18,17 @@ public extension ChatMethods {
     /// - limit: Number of Chat Completions to retrieve.
     /// - order: Sort order for Chat Completions by timestamp. Use `asc` for
     ///   ascending order or `desc` for descending order. Defaults to `asc`.
-    static func listChatCompletions(
-        config: ClientConfig,
-        model: String? = nil,
-        metadata: Metadata? = nil,
-        after: String? = nil,
-        limit: Int? = nil,
-        order: ListChatCompletionsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ChatCompletionList {
-        try await (sdkRequest(
-            "GET",
-            "/chat/completions",
-            config: config,
-            query: [
-                SdkQueryParameter("model", value: model),
-                SdkQueryParameter("metadata", object: metadata, style: "form", explode: true),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-            ],
-            decoder: .json,
-            operationId: "listChatCompletions",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self]
-        )).data
+    public static func listChatCompletions(config: ClientConfig, model: String? = nil, metadata: Metadata? = nil, after: String? = nil, limit: Int? = nil, order: ListChatCompletionsParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ChatCompletionList {
+        return try (await sdkRequest("GET", "/chat/completions", config: config, query: [
+            SdkQueryParameter("model", value: model),
+            SdkQueryParameter("metadata", object: metadata, style: "form", explode: true),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+        ], decoder: .json, operationId: "listChatCompletions", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 
-    /// List stored Chat Completions. Only Chat Completions that have been stored with the `store` parameter set to
-    /// `true` will be returned.
+    /// List stored Chat Completions. Only Chat Completions that have been stored with the `store` parameter set to `true` will be returned.
     ///
     /// - Parameters:
     /// - model: The model used to generate the Chat Completions.
@@ -58,45 +39,18 @@ public extension ChatMethods {
     /// - limit: Number of Chat Completions to retrieve.
     /// - order: Sort order for Chat Completions by timestamp. Use `asc` for
     ///   ascending order or `desc` for descending order. Defaults to `asc`.
-    static func listChatCompletionsPaginated(
-        config: ClientConfig,
-        model: String? = nil,
-        metadata: Metadata? = nil,
-        after: String? = nil,
-        limit: Int? = nil,
-        order: ListChatCompletionsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<CreateChatCompletionResponse, Swift.Error> {
-        AsyncThrowingStream<CreateChatCompletionResponse, Swift.Error> { (continuation: AsyncThrowingStream<
-            CreateChatCompletionResponse,
-            Swift.Error
-        >.Continuation) in
+    public static func listChatCompletionsPaginated(config: ClientConfig, model: String? = nil, metadata: Metadata? = nil, after: String? = nil, limit: Int? = nil, order: ListChatCompletionsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<CreateChatCompletionResponse, Swift.Error> {
+        return AsyncThrowingStream<CreateChatCompletionResponse, Swift.Error> { (continuation: AsyncThrowingStream<CreateChatCompletionResponse, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listChatCompletions(
-                            config: config,
-                            model: model,
-                            metadata: metadata,
-                            after: pageCursor,
-                            limit: limit,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listChatCompletions(config: config, model: model, metadata: metadata, after: pageCursor, limit: limit, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -109,54 +63,25 @@ public extension ChatMethods {
         }
     }
 
-    struct ListChatCompletionsPage {
+    public struct ListChatCompletionsPage {
         public let data: ChatCompletionList
         public let items: [CreateChatCompletionResponse]
         public let hasMore: Bool
     }
 
-    static func listChatCompletionsPages(
-        config: ClientConfig,
-        model: String? = nil,
-        metadata: Metadata? = nil,
-        after: String? = nil,
-        limit: Int? = nil,
-        order: ListChatCompletionsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListChatCompletionsPage, Swift.Error> {
-        AsyncThrowingStream<ListChatCompletionsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListChatCompletionsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listChatCompletionsPages(config: ClientConfig, model: String? = nil, metadata: Metadata? = nil, after: String? = nil, limit: Int? = nil, order: ListChatCompletionsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListChatCompletionsPage, Swift.Error> {
+        return AsyncThrowingStream<ListChatCompletionsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListChatCompletionsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listChatCompletions(
-                            config: config,
-                            model: model,
-                            metadata: metadata,
-                            after: pageCursor,
-                            limit: limit,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listChatCompletions(config: config, model: model, metadata: metadata, after: pageCursor, limit: limit, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListChatCompletionsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        pageContinuation.yield(ListChatCompletionsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ChatChatCompletionRequest domain models
+// ChatChatCompletionRequest domain models
 public indirect enum ChatCompletionRequestAssistantMessageContentPart {
     case chatCompletionRequestMessageContentPartText(ChatCompletionRequestMessageContentPartText)
     case chatCompletionRequestMessageContentPartRefusal(ChatCompletionRequestMessageContentPartRefusal)
@@ -12,6 +12,7 @@ public indirect enum ChatCompletionRequestAssistantMessageContentPart {
 }
 
 extension ChatCompletionRequestAssistantMessageContentPart: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension ChatCompletionRequestAssistantMessageContentPart: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,14 +36,10 @@ extension ChatCompletionRequestAssistantMessageContentPart: Codable {
 extension ChatCompletionRequestAssistantMessageContentPart {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "text": try .chatCompletionRequestMessageContentPartText(
-                ChatCompletionRequestMessageContentPartText(from: decoder)
-            )
+        case "text": return .chatCompletionRequestMessageContentPartText(try ChatCompletionRequestMessageContentPartText(from: decoder))
         case "refusal":
-            try .chatCompletionRequestMessageContentPartRefusal(
-                ChatCompletionRequestMessageContentPartRefusal(from: decoder)
-            )
-        default: nil
+        return .chatCompletionRequestMessageContentPartRefusal(try ChatCompletionRequestMessageContentPartRefusal(from: decoder))
+        default: return nil
         }
     }
 }
@@ -74,6 +67,7 @@ public indirect enum ChatCompletionRequestMessage {
 }
 
 extension ChatCompletionRequestMessage: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "role"
     }
@@ -81,16 +75,12 @@ extension ChatCompletionRequestMessage: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -101,17 +91,13 @@ extension ChatCompletionRequestMessage: Codable {
 extension ChatCompletionRequestMessage {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "developer": try .chatCompletionRequestDeveloperMessage(
-                ChatCompletionRequestDeveloperMessage(from: decoder)
-            )
-        case "system": try .chatCompletionRequestSystemMessage(ChatCompletionRequestSystemMessage(from: decoder))
-        case "user": try .chatCompletionRequestUserMessage(ChatCompletionRequestUserMessage(from: decoder))
-        case "assistant": try .chatCompletionRequestAssistantMessage(
-                ChatCompletionRequestAssistantMessage(from: decoder)
-            )
-        case "tool": try .chatCompletionRequestToolMessage(ChatCompletionRequestToolMessage(from: decoder))
-        case "function": try .chatCompletionRequestFunctionMessage(ChatCompletionRequestFunctionMessage(from: decoder))
-        default: nil
+        case "developer": return .chatCompletionRequestDeveloperMessage(try ChatCompletionRequestDeveloperMessage(from: decoder))
+        case "system": return .chatCompletionRequestSystemMessage(try ChatCompletionRequestSystemMessage(from: decoder))
+        case "user": return .chatCompletionRequestUserMessage(try ChatCompletionRequestUserMessage(from: decoder))
+        case "assistant": return .chatCompletionRequestAssistantMessage(try ChatCompletionRequestAssistantMessage(from: decoder))
+        case "tool": return .chatCompletionRequestToolMessage(try ChatCompletionRequestToolMessage(from: decoder))
+        case "function": return .chatCompletionRequestFunctionMessage(try ChatCompletionRequestFunctionMessage(from: decoder))
+        default: return nil
         }
     }
 }
@@ -136,21 +122,15 @@ public indirect enum ChatCompletionRequestSystemMessageContentPart {
 }
 
 extension ChatCompletionRequestSystemMessageContentPart: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ChatCompletionRequestSystemMessageContentPart"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ChatCompletionRequestSystemMessageContentPart")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
@@ -159,7 +139,7 @@ extension ChatCompletionRequestSystemMessageContentPart {
         if let value = try? container.decode(
             ChatCompletionRequestMessageContentPartText.self
         ) {
-            return .chatCompletionRequestMessageContentPartText(value)
+            return             .chatCompletionRequestMessageContentPartText(value)
         }
         return nil
     }
@@ -179,21 +159,15 @@ public indirect enum ChatCompletionRequestToolMessageContentPart {
 }
 
 extension ChatCompletionRequestToolMessageContentPart: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ChatCompletionRequestToolMessageContentPart"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ChatCompletionRequestToolMessageContentPart")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
@@ -202,7 +176,7 @@ extension ChatCompletionRequestToolMessageContentPart {
         if let value = try? container.decode(
             ChatCompletionRequestMessageContentPartText.self
         ) {
-            return .chatCompletionRequestMessageContentPartText(value)
+            return             .chatCompletionRequestMessageContentPartText(value)
         }
         return nil
     }
@@ -227,6 +201,7 @@ public indirect enum ChatCompletionRequestUserMessageContentPart {
 }
 
 extension ChatCompletionRequestUserMessageContentPart: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -234,16 +209,12 @@ extension ChatCompletionRequestUserMessageContentPart: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -254,21 +225,13 @@ extension ChatCompletionRequestUserMessageContentPart: Codable {
 extension ChatCompletionRequestUserMessageContentPart {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "text": try .chatCompletionRequestMessageContentPartText(
-                ChatCompletionRequestMessageContentPartText(from: decoder)
-            )
+        case "text": return .chatCompletionRequestMessageContentPartText(try ChatCompletionRequestMessageContentPartText(from: decoder))
         case "image_url":
-            try .chatCompletionRequestMessageContentPartImage(
-                ChatCompletionRequestMessageContentPartImage(from: decoder)
-            )
+        return .chatCompletionRequestMessageContentPartImage(try ChatCompletionRequestMessageContentPartImage(from: decoder))
         case "input_audio":
-            try .chatCompletionRequestMessageContentPartAudio(
-                ChatCompletionRequestMessageContentPartAudio(from: decoder)
-            )
-        case "file": try .chatCompletionRequestMessageContentPartFile(
-                ChatCompletionRequestMessageContentPartFile(from: decoder)
-            )
-        default: nil
+        return .chatCompletionRequestMessageContentPartAudio(try ChatCompletionRequestMessageContentPartAudio(from: decoder))
+        case "file": return .chatCompletionRequestMessageContentPartFile(try ChatCompletionRequestMessageContentPartFile(from: decoder))
+        default: return nil
         }
     }
 }
@@ -298,46 +261,28 @@ public struct ChatCompletionRequestMessageContentPartRefusal: Codable {
         case refusal
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatCompletionRequestMessageContentPartRefusal {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionRequestMessageContentPartRefusal {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.refusal) else {
-            throw SdkValidationError(
-                field: "refusal",
-                code: "required",
-                message: "Validation failed for 'refusal': value is required"
-            )
+            throw SdkValidationError(field: "refusal", code: "required", message: "Validation failed for 'refusal': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        refusal = try container.sdkDecodeRequired(.refusal)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            ChatCompletionRequestMessageContentPartRefusalType.allCases.map(\.rawValue)
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.refusal = try container.sdkDecodeRequired(.refusal)
+            try sdkValidateRawEnum("type", self.type, ChatCompletionRequestMessageContentPartRefusalType.allCases.map(\.rawValue))
     }
 }
 
-public extension ChatCompletionRequestMessageContentPartRefusal {
-    init(type: ChatCompletionRequestMessageContentPartRefusalType, refusal: String) throws {
+extension ChatCompletionRequestMessageContentPartRefusal {
+    public init(type: ChatCompletionRequestMessageContentPartRefusalType, refusal: String) throws {
         (self.type, self.refusal) = (type, refusal)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            ChatCompletionRequestMessageContentPartRefusalType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, ChatCompletionRequestMessageContentPartRefusalType.allCases.map(\.rawValue))
     }
 }
 
@@ -357,48 +302,30 @@ public struct ChatCompletionRequestMessageContentPartFile: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatCompletionRequestMessageContentPartFile {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionRequestMessageContentPartFile {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.file) else {
-            throw SdkValidationError(
-                field: "file",
-                code: "required",
-                message: "Validation failed for 'file': value is required"
-            )
+            throw SdkValidationError(field: "file", code: "required", message: "Validation failed for 'file': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        file = try container.sdkDecodeRequired(.file)
-        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-        try sdkValidateRawEnum("type", type, ChatCompletionRequestMessageContentPartFileType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.file = try container.sdkDecodeRequired(.file)
+        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+            try sdkValidateRawEnum("type", self.type, ChatCompletionRequestMessageContentPartFileType.allCases.map(\.rawValue))
     }
 }
 
-public extension ChatCompletionRequestMessageContentPartFile {
-    init(
-        type: ChatCompletionRequestMessageContentPartFileType,
-        file: ChatCompletionRequestMessageContentPartFileFile,
-        promptCacheBreakpoint: PromptCacheBreakpointParam? = nil
-    ) throws {
+extension ChatCompletionRequestMessageContentPartFile {
+    public init(type: ChatCompletionRequestMessageContentPartFileType, file: ChatCompletionRequestMessageContentPartFileFile, promptCacheBreakpoint: PromptCacheBreakpointParam? = nil) throws {
         (self.type, self.file) = (type, file)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            ChatCompletionRequestMessageContentPartFileType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, ChatCompletionRequestMessageContentPartFileType.allCases.map(\.rawValue))
     }
 }
 
@@ -414,31 +341,25 @@ public struct ChatCompletionRequestMessageContentPartImageImageUrl: Codable {
         case detail
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatCompletionRequestMessageContentPartImageImageUrl {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionRequestMessageContentPartImageImageUrl {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.url) else {
-            throw SdkValidationError(
-                field: "url",
-                code: "required",
-                message: "Validation failed for 'url': value is required"
-            )
+            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
         }
-        url = try container.sdkDecodeRequired(.url)
-        detail = try container.sdkDecodeIfPresent(.detail)
-        try sdkValidateUri("url", url)
+        self.url = try container.sdkDecodeRequired(.url)
+        self.detail = try container.sdkDecodeIfPresent(.detail)
+            try sdkValidateUri("url", self.url)
     }
 }
 
-public extension ChatCompletionRequestMessageContentPartImageImageUrl {
-    init(url: String, detail: ChatCompletionRequestMessageContentPartImageImageUrlDetail? = nil) throws {
+extension ChatCompletionRequestMessageContentPartImageImageUrl {
+    public init(url: String, detail: ChatCompletionRequestMessageContentPartImageImageUrlDetail? = nil) throws {
         (self.url, self.detail) = (url, detail)
-        try sdkValidateUri("url", self.url)
+            try sdkValidateUri("url", self.url)
     }
 }
 
@@ -448,33 +369,25 @@ public indirect enum ChatCompletionRequestDeveloperMessageContent {
 }
 
 extension ChatCompletionRequestDeveloperMessageContent: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ChatCompletionRequestDeveloperMessageContent"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ChatCompletionRequestDeveloperMessageContent")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension ChatCompletionRequestDeveloperMessageContent {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
         if let value = try? container.decode(
             [ChatCompletionRequestMessageContentPartText].self
         ) {
-            return .chatCompletionRequestMessageContentPartTextList(value)
+            return             .chatCompletionRequestMessageContentPartTextList(value)
         }
         return nil
     }
@@ -505,35 +418,25 @@ public struct ChatCompletionRequestAssistantMessageFunctionCall: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatCompletionRequestAssistantMessageFunctionCall {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionRequestAssistantMessageFunctionCall {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.arguments) else {
-            throw SdkValidationError(
-                field: "arguments",
-                code: "required",
-                message: "Validation failed for 'arguments': value is required"
-            )
+            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        arguments = try container.sdkDecodeRequired(.arguments)
-        name = try container.sdkDecodeRequired(.name)
+        self.arguments = try container.sdkDecodeRequired(.arguments)
+        self.name = try container.sdkDecodeRequired(.name)
     }
 }
 
-public extension ChatCompletionRequestAssistantMessageFunctionCall {
-    init(arguments: String, name: String) {
+extension ChatCompletionRequestAssistantMessageFunctionCall {
+    public init(arguments: String, name: String) {
         (self.arguments, self.name) = (arguments, name)
     }
 }
@@ -554,48 +457,30 @@ public struct ChatCompletionRequestMessageContentPartText: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatCompletionRequestMessageContentPartText {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionRequestMessageContentPartText {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-        try sdkValidateRawEnum("type", type, ChatCompletionRequestMessageContentPartTextType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+            try sdkValidateRawEnum("type", self.type, ChatCompletionRequestMessageContentPartTextType.allCases.map(\.rawValue))
     }
 }
 
-public extension ChatCompletionRequestMessageContentPartText {
-    init(
-        type: ChatCompletionRequestMessageContentPartTextType,
-        text: String,
-        promptCacheBreakpoint: PromptCacheBreakpointParam? = nil
-    ) throws {
+extension ChatCompletionRequestMessageContentPartText {
+    public init(type: ChatCompletionRequestMessageContentPartTextType, text: String, promptCacheBreakpoint: PromptCacheBreakpointParam? = nil) throws {
         (self.type, self.text) = (type, text)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            ChatCompletionRequestMessageContentPartTextType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, ChatCompletionRequestMessageContentPartTextType.allCases.map(\.rawValue))
     }
 }
 

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaFunction domain models
+// ResponsesBetaFunction domain models
 /// The type of the function tool. Always `function`.
 public enum BetaFunctionToolType: String, CaseIterable, Codable {
     case function
@@ -44,17 +44,14 @@ public enum BetaFunctionShellCallType: String, CaseIterable, Codable {
 public struct BetaFunctionShellCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaFunctionShellCallStatus(rawValue: "in_progress")
     public static let completed = BetaFunctionShellCallStatus(rawValue: "completed")
     public static let incomplete = BetaFunctionShellCallStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -67,17 +64,14 @@ public struct BetaFunctionShellCallStatus: RawRepresentable, Hashable, Codable, 
 public struct BetaFunctionShellCallItemStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaFunctionShellCallItemStatus(rawValue: "in_progress")
     public static let completed = BetaFunctionShellCallItemStatus(rawValue: "completed")
     public static let incomplete = BetaFunctionShellCallItemStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -90,17 +84,14 @@ public struct BetaFunctionShellCallItemStatus: RawRepresentable, Hashable, Codab
 public struct BetaFunctionCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaFunctionCallStatus(rawValue: "in_progress")
     public static let completed = BetaFunctionCallStatus(rawValue: "completed")
     public static let incomplete = BetaFunctionCallStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -113,17 +104,14 @@ public struct BetaFunctionCallStatus: RawRepresentable, Hashable, Codable, Senda
 public struct BetaFunctionShellCallOutputStatusEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaFunctionShellCallOutputStatusEnum(rawValue: "in_progress")
     public static let completed = BetaFunctionShellCallOutputStatusEnum(rawValue: "completed")
     public static let incomplete = BetaFunctionShellCallOutputStatusEnum(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -154,17 +142,14 @@ public enum BetaFunctionShellCallOutputTimeoutOutcomeType: String, CaseIterable,
 public struct BetaFunctionCallOutputStatusEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaFunctionCallOutputStatusEnum(rawValue: "in_progress")
     public static let completed = BetaFunctionCallOutputStatusEnum(rawValue: "completed")
     public static let incomplete = BetaFunctionCallOutputStatusEnum(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

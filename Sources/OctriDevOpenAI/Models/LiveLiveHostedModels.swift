@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveHosted domain models
+// LiveLiveHosted domain models
 public indirect enum LiveHostedShellContainerAutoParamNetworkPolicy {
     case liveContainerNetworkPolicyDisabledParam(LiveContainerNetworkPolicyDisabledParam)
     case liveHostedShellNetworkPolicyAllowlistParam(LiveHostedShellNetworkPolicyAllowlistParam)
@@ -12,6 +12,7 @@ public indirect enum LiveHostedShellContainerAutoParamNetworkPolicy {
 }
 
 extension LiveHostedShellContainerAutoParamNetworkPolicy: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension LiveHostedShellContainerAutoParamNetworkPolicy: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,13 +36,9 @@ extension LiveHostedShellContainerAutoParamNetworkPolicy: Codable {
 extension LiveHostedShellContainerAutoParamNetworkPolicy {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "disabled": try .liveContainerNetworkPolicyDisabledParam(
-                LiveContainerNetworkPolicyDisabledParam(from: decoder)
-            )
-        case "allowlist": try .liveHostedShellNetworkPolicyAllowlistParam(
-                LiveHostedShellNetworkPolicyAllowlistParam(from: decoder)
-            )
-        default: nil
+        case "disabled": return .liveContainerNetworkPolicyDisabledParam(try LiveContainerNetworkPolicyDisabledParam(from: decoder))
+        case "allowlist": return .liveHostedShellNetworkPolicyAllowlistParam(try LiveHostedShellNetworkPolicyAllowlistParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -69,6 +62,7 @@ public indirect enum LiveHostedShellContainerAutoParamSkillsItem {
 }
 
 extension LiveHostedShellContainerAutoParamSkillsItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -76,16 +70,12 @@ extension LiveHostedShellContainerAutoParamSkillsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -96,9 +86,9 @@ extension LiveHostedShellContainerAutoParamSkillsItem: Codable {
 extension LiveHostedShellContainerAutoParamSkillsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "skill_reference": try .liveSkillReferenceParam(LiveSkillReferenceParam(from: decoder))
-        case "inline": try .liveInlineSkillParam(LiveInlineSkillParam(from: decoder))
-        default: nil
+        case "skill_reference": return .liveSkillReferenceParam(try LiveSkillReferenceParam(from: decoder))
+        case "inline": return .liveInlineSkillParam(try LiveInlineSkillParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -123,6 +113,7 @@ public indirect enum LiveHostedShellToolInputParamEnvironment {
 }
 
 extension LiveHostedShellToolInputParamEnvironment: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -130,16 +121,12 @@ extension LiveHostedShellToolInputParamEnvironment: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -150,10 +137,10 @@ extension LiveHostedShellToolInputParamEnvironment: Codable {
 extension LiveHostedShellToolInputParamEnvironment {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "container_auto": try .liveHostedShellContainerAutoParam(LiveHostedShellContainerAutoParam(from: decoder))
-        case "container_reference": try .liveContainerReferenceParam(LiveContainerReferenceParam(from: decoder))
-        case "local": try .liveLocalEnvironmentParam(LiveLocalEnvironmentParam(from: decoder))
-        default: nil
+        case "container_auto": return .liveHostedShellContainerAutoParam(try LiveHostedShellContainerAutoParam(from: decoder))
+        case "container_reference": return .liveContainerReferenceParam(try LiveContainerReferenceParam(from: decoder))
+        case "local": return .liveLocalEnvironmentParam(try LiveLocalEnvironmentParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -182,44 +169,30 @@ public struct LiveHostedShellNetworkPolicyAllowlistParam: Codable {
         case allowedDomains = "allowed_domains"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveHostedShellNetworkPolicyAllowlistParam {
-    init(from decoder: Decoder) throws {
+extension LiveHostedShellNetworkPolicyAllowlistParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.allowedDomains) else {
-            throw SdkValidationError(
-                field: "allowed_domains",
-                code: "required",
-                message: "Validation failed for 'allowed_domains': value is required"
-            )
+            throw SdkValidationError(field: "allowed_domains", code: "required", message: "Validation failed for 'allowed_domains': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        allowedDomains = try container.sdkDecodeRequired(.allowedDomains)
-        try sdkValidateRawEnum("type", type, LiveHostedShellNetworkPolicyAllowlistParamType.allCases.map(\.rawValue))
-        try validateItems("allowed_domains", allowedDomains, min: 1, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.allowedDomains = try container.sdkDecodeRequired(.allowedDomains)
+            try sdkValidateRawEnum("type", self.type, LiveHostedShellNetworkPolicyAllowlistParamType.allCases.map(\.rawValue))
+            try validateItems("allowed_domains", self.allowedDomains, min: 1, max: nil)
     }
 }
 
-public extension LiveHostedShellNetworkPolicyAllowlistParam {
-    init(type: LiveHostedShellNetworkPolicyAllowlistParamType, allowedDomains: [String]) throws {
+extension LiveHostedShellNetworkPolicyAllowlistParam {
+    public init(type: LiveHostedShellNetworkPolicyAllowlistParamType, allowedDomains: [String]) throws {
         (self.type, self.allowedDomains) = (type, allowedDomains)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            LiveHostedShellNetworkPolicyAllowlistParamType.allCases.map(\.rawValue)
-        )
-        try validateItems("allowed_domains", self.allowedDomains, min: 1, max: nil)
+            try sdkValidateRawEnum("type", self.type, LiveHostedShellNetworkPolicyAllowlistParamType.allCases.map(\.rawValue))
+            try validateItems("allowed_domains", self.allowedDomains, min: 1, max: nil)
     }
 }
 
@@ -236,31 +209,25 @@ public struct LiveHostedShellToolInputParam: Codable {
         case environment
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveHostedShellToolInputParam {
-    init(from decoder: Decoder) throws {
+extension LiveHostedShellToolInputParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        environment = try container.sdkDecodeIfPresent(.environment)
-        try sdkValidateRawEnum("type", type, LiveHostedShellToolInputParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.environment = try container.sdkDecodeIfPresent(.environment)
+            try sdkValidateRawEnum("type", self.type, LiveHostedShellToolInputParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveHostedShellToolInputParam {
-    init(type: LiveHostedShellToolInputParamType, environment: LiveHostedShellToolInputParamEnvironment? = nil) throws {
+extension LiveHostedShellToolInputParam {
+    public init(type: LiveHostedShellToolInputParamType, environment: LiveHostedShellToolInputParamEnvironment? = nil) throws {
         (self.type, self.environment) = (type, environment)
-        try sdkValidateRawEnum("type", self.type, LiveHostedShellToolInputParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveHostedShellToolInputParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -285,48 +252,36 @@ public struct LiveHostedShellContainerAutoParam: Codable {
         case skills
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveHostedShellContainerAutoParam {
-    init(from decoder: Decoder) throws {
+extension LiveHostedShellContainerAutoParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        memoryLimit = try container.sdkDecodeIfPresent(.memoryLimit)
-        networkPolicy = try container.sdkDecodeIfPresent(.networkPolicy)
-        skills = try container.sdkDecodeIfPresent(.skills)
-        try sdkValidateRawEnum("type", type, LiveHostedShellContainerAutoParamType.allCases.map(\.rawValue))
-        if let value = fileIds {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        self.memoryLimit = try container.sdkDecodeIfPresent(.memoryLimit)
+        self.networkPolicy = try container.sdkDecodeIfPresent(.networkPolicy)
+        self.skills = try container.sdkDecodeIfPresent(.skills)
+            try sdkValidateRawEnum("type", self.type, LiveHostedShellContainerAutoParamType.allCases.map(\.rawValue))
+        if let value = self.fileIds {
             try validateItems("file_ids", value, min: nil, max: 50)
         }
-        if let value = skills {
+        if let value = self.skills {
             try validateItems("skills", value, min: nil, max: 200)
         }
     }
 }
 
-public extension LiveHostedShellContainerAutoParam {
-    init(
-        type: LiveHostedShellContainerAutoParamType,
-        fileIds: [String]? = nil,
-        memoryLimit: LiveContainerMemoryLimit? = nil,
-        networkPolicy: LiveHostedShellContainerAutoParamNetworkPolicy? = nil,
-        skills: [LiveHostedShellContainerAutoParamSkillsItem]? = nil
-    ) throws {
+extension LiveHostedShellContainerAutoParam {
+    public init(type: LiveHostedShellContainerAutoParamType, fileIds: [String]? = nil, memoryLimit: LiveContainerMemoryLimit? = nil, networkPolicy: LiveHostedShellContainerAutoParamNetworkPolicy? = nil, skills: [LiveHostedShellContainerAutoParamSkillsItem]? = nil) throws {
         (self.type, self.fileIds) = (type, fileIds)
         (self.memoryLimit, self.networkPolicy) = (memoryLimit, networkPolicy)
         self.skills = skills
-        try sdkValidateRawEnum("type", self.type, LiveHostedShellContainerAutoParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveHostedShellContainerAutoParamType.allCases.map(\.rawValue))
         if let value = self.fileIds {
             try validateItems("file_ids", value, min: nil, max: 50)
         }

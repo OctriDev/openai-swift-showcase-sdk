@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Test domain models
+// Test domain models
 /// Typed representation of the `PublicTestEndpointBody` API schema.
 public struct PublicTestEndpointBody: Codable {
     /// The event type to send as a sample delivery.
@@ -13,27 +13,21 @@ public struct PublicTestEndpointBody: Codable {
         case eventType = "event_type"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension PublicTestEndpointBody {
-    init(from decoder: Decoder) throws {
+extension PublicTestEndpointBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventType) else {
-            throw SdkValidationError(
-                field: "event_type",
-                code: "required",
-                message: "Validation failed for 'event_type': value is required"
-            )
+            throw SdkValidationError(field: "event_type", code: "required", message: "Validation failed for 'event_type': value is required")
         }
-        eventType = try container.sdkDecodeRequired(.eventType)
+        self.eventType = try container.sdkDecodeRequired(.eventType)
     }
 }
 
-public extension PublicTestEndpointBody {
-    init(eventType: ProjectEventTypeEnum) {
+extension PublicTestEndpointBody {
+    public init(eventType: ProjectEventTypeEnum) {
         self.eventType = eventType
     }
 }
@@ -60,65 +54,37 @@ public struct WebhookEndpointTestResultResource: Codable {
         case success
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookEndpointTestResultResource {
-    init(from decoder: Decoder) throws {
+extension WebhookEndpointTestResultResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.webhookEndpointId) else {
-            throw SdkValidationError(
-                field: "webhook_endpoint_id",
-                code: "required",
-                message: "Validation failed for 'webhook_endpoint_id': value is required"
-            )
+            throw SdkValidationError(field: "webhook_endpoint_id", code: "required", message: "Validation failed for 'webhook_endpoint_id': value is required")
         }
         guard container.contains(.eventType) else {
-            throw SdkValidationError(
-                field: "event_type",
-                code: "required",
-                message: "Validation failed for 'event_type': value is required"
-            )
+            throw SdkValidationError(field: "event_type", code: "required", message: "Validation failed for 'event_type': value is required")
         }
         guard container.contains(.statusCode) else {
-            throw SdkValidationError(
-                field: "status_code",
-                code: "required",
-                message: "Validation failed for 'status_code': value is required"
-            )
+            throw SdkValidationError(field: "status_code", code: "required", message: "Validation failed for 'status_code': value is required")
         }
         guard container.contains(.success) else {
-            throw SdkValidationError(
-                field: "success",
-                code: "required",
-                message: "Validation failed for 'success': value is required"
-            )
+            throw SdkValidationError(field: "success", code: "required", message: "Validation failed for 'success': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        webhookEndpointId = try container.sdkDecodeRequired(.webhookEndpointId)
-        eventType = try container.sdkDecodeRequired(.eventType)
-        statusCode = try container.sdkDecodeRequired(.statusCode)
-        success = try container.sdkDecodeRequired(.success)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.webhookEndpointId = try container.sdkDecodeRequired(.webhookEndpointId)
+        self.eventType = try container.sdkDecodeRequired(.eventType)
+        self.statusCode = try container.sdkDecodeRequired(.statusCode)
+        self.success = try container.sdkDecodeRequired(.success)
     }
 }
 
-public extension WebhookEndpointTestResultResource {
-    init(
-        object: WebhookEndpointTestResultResourceObject,
-        webhookEndpointId: String,
-        eventType: String,
-        statusCode: Int,
-        success: Bool
-    ) {
+extension WebhookEndpointTestResultResource {
+    public init(object: WebhookEndpointTestResultResourceObject, webhookEndpointId: String, eventType: String, statusCode: Int, success: Bool) {
         (self.object, self.webhookEndpointId) = (object, webhookEndpointId)
         (self.eventType, self.statusCode) = (eventType, statusCode)
         self.success = success
@@ -126,19 +92,15 @@ public extension WebhookEndpointTestResultResource {
 }
 
 /// The object type, which is always webhook_endpoint.test.
-public struct WebhookEndpointTestResultResourceObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct WebhookEndpointTestResultResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let webhookEndpointTest = WebhookEndpointTestResultResourceObject(rawValue: "webhook_endpoint.test")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

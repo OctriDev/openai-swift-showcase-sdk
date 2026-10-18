@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaResponseRefusal domain models
+// ResponsesBetaResponseRefusal domain models
 /// Emitted when there is a partial refusal text.
 public struct BetaResponseRefusalDeltaEvent: Codable {
     /// The type of the event. Always `response.refusal.delta`.
@@ -31,82 +31,48 @@ public struct BetaResponseRefusalDeltaEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseRefusalDeltaEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseRefusalDeltaEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.contentIndex) else {
-            throw SdkValidationError(
-                field: "content_index",
-                code: "required",
-                message: "Validation failed for 'content_index': value is required"
-            )
+            throw SdkValidationError(field: "content_index", code: "required", message: "Validation failed for 'content_index': value is required")
         }
         guard container.contains(.delta) else {
-            throw SdkValidationError(
-                field: "delta",
-                code: "required",
-                message: "Validation failed for 'delta': value is required"
-            )
+            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        contentIndex = try container.sdkDecodeRequired(.contentIndex)
-        delta = try container.sdkDecodeRequired(.delta)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseRefusalDeltaEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.contentIndex = try container.sdkDecodeRequired(.contentIndex)
+        self.delta = try container.sdkDecodeRequired(.delta)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseRefusalDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseRefusalDeltaEvent {
-    init(
-        type: BetaResponseRefusalDeltaEventType,
-        itemId: String,
-        outputIndex: Int,
-        contentIndex: Int,
-        delta: String,
-        sequenceNumber: Int,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseRefusalDeltaEvent {
+    public init(type: BetaResponseRefusalDeltaEventType, itemId: String, outputIndex: Int, contentIndex: Int, delta: String, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.contentIndex) = (outputIndex, contentIndex)
         (self.delta, self.sequenceNumber) = (delta, sequenceNumber)
         self.agent = agent
-        try sdkValidateRawEnum("type", self.type, BetaResponseRefusalDeltaEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaResponseRefusalDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -137,82 +103,48 @@ public struct BetaResponseRefusalDoneEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseRefusalDoneEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseRefusalDoneEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.contentIndex) else {
-            throw SdkValidationError(
-                field: "content_index",
-                code: "required",
-                message: "Validation failed for 'content_index': value is required"
-            )
+            throw SdkValidationError(field: "content_index", code: "required", message: "Validation failed for 'content_index': value is required")
         }
         guard container.contains(.refusal) else {
-            throw SdkValidationError(
-                field: "refusal",
-                code: "required",
-                message: "Validation failed for 'refusal': value is required"
-            )
+            throw SdkValidationError(field: "refusal", code: "required", message: "Validation failed for 'refusal': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        contentIndex = try container.sdkDecodeRequired(.contentIndex)
-        refusal = try container.sdkDecodeRequired(.refusal)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseRefusalDoneEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.contentIndex = try container.sdkDecodeRequired(.contentIndex)
+        self.refusal = try container.sdkDecodeRequired(.refusal)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseRefusalDoneEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseRefusalDoneEvent {
-    init(
-        type: BetaResponseRefusalDoneEventType,
-        itemId: String,
-        outputIndex: Int,
-        contentIndex: Int,
-        refusal: String,
-        sequenceNumber: Int,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseRefusalDoneEvent {
+    public init(type: BetaResponseRefusalDoneEventType, itemId: String, outputIndex: Int, contentIndex: Int, refusal: String, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.contentIndex) = (outputIndex, contentIndex)
         (self.refusal, self.sequenceNumber) = (refusal, sequenceNumber)
         self.agent = agent
-        try sdkValidateRawEnum("type", self.type, BetaResponseRefusalDoneEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaResponseRefusalDoneEventType.allCases.map(\.rawValue))
     }
 }
 

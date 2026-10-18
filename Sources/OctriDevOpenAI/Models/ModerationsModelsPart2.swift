@@ -3,34 +3,26 @@
 
 import Foundation
 
-/// Moderations domain models
-public extension CreateModerationRequestInputItemVariant1 {
-    init(from decoder: Decoder) throws {
+// Moderations domain models
+extension CreateModerationRequestInputItemVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        try sdkValidateRawEnum("type", type, CreateModerationRequestInputItemVariant1Type.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+            try sdkValidateRawEnum("type", self.type, CreateModerationRequestInputItemVariant1Type.allCases.map(\.rawValue))
     }
 }
 
-public extension CreateModerationRequestInputItemVariant1 {
-    init(type: CreateModerationRequestInputItemVariant1Type, text: String) throws {
+extension CreateModerationRequestInputItemVariant1 {
+    public init(type: CreateModerationRequestInputItemVariant1Type, text: String) throws {
         (self.type, self.text) = (type, text)
-        try sdkValidateRawEnum("type", self.type, CreateModerationRequestInputItemVariant1Type.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, CreateModerationRequestInputItemVariant1Type.allCases.map(\.rawValue))
     }
 }
 
@@ -49,43 +41,29 @@ public struct CreateModerationResponse: Codable {
         case results
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateModerationResponse {
-    init(from decoder: Decoder) throws {
+extension CreateModerationResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
         guard container.contains(.results) else {
-            throw SdkValidationError(
-                field: "results",
-                code: "required",
-                message: "Validation failed for 'results': value is required"
-            )
+            throw SdkValidationError(field: "results", code: "required", message: "Validation failed for 'results': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        model = try container.sdkDecodeRequired(.model)
-        results = try container.sdkDecodeRequired(.results)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.model = try container.sdkDecodeRequired(.model)
+        self.results = try container.sdkDecodeRequired(.results)
     }
 }
 
-public extension CreateModerationResponse {
-    init(id: String, model: String, results: [CreateModerationResponseResultsItem]) {
+extension CreateModerationResponse {
+    public init(id: String, model: String, results: [CreateModerationResponseResultsItem]) {
         (self.id, self.model) = (id, model)
         self.results = results
     }
@@ -98,36 +76,26 @@ public indirect enum CreateModerationRequestInput {
 }
 
 extension CreateModerationRequestInput: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateModerationRequestInput"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateModerationRequestInput")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateModerationRequestInput {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode([String].self) {
-            return .stringList(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode([String].self) { return .stringList(value) }
         if let value = try? container.decode(
             [CreateModerationRequestInputItem].self
         ) {
-            return .createModerationRequestInputItemList(value)
+            return             .createModerationRequestInputItemList(value)
         }
         return nil
     }
@@ -154,49 +122,38 @@ public struct CreateModerationRequestInputItemVariant0ImageUrl: Codable {
         case url
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateModerationRequestInputItemVariant0ImageUrl {
-    init(from decoder: Decoder) throws {
+extension CreateModerationRequestInputItemVariant0ImageUrl {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.url) else {
-            throw SdkValidationError(
-                field: "url",
-                code: "required",
-                message: "Validation failed for 'url': value is required"
-            )
+            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
         }
-        url = try container.sdkDecodeRequired(.url)
-        try sdkValidateUri("url", url)
+        self.url = try container.sdkDecodeRequired(.url)
+            try sdkValidateUri("url", self.url)
     }
 }
 
-public extension CreateModerationRequestInputItemVariant0ImageUrl {
-    init(url: String) throws {
+extension CreateModerationRequestInputItemVariant0ImageUrl {
+    public init(url: String) throws {
         self.url = url
-        try sdkValidateUri("url", self.url)
+            try sdkValidateUri("url", self.url)
     }
 }
 
 /// Required enumerated value serialized in the `self-harm/instructions[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSXa7e87222b1: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSXa7e87222b1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesSXa7e87222b1(rawValue: "text")
-    public static let image =
-        CreateModerationResponseResultsItemCategoryAppliedInputTypesSXa7e87222b1(rawValue: "image")
+    public static let image = CreateModerationResponseResultsItemCategoryAppliedInputTypesSXa7e87222b1(rawValue: "image")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -206,21 +163,16 @@ public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSXa7e8
 }
 
 /// Required enumerated value serialized in the `violence[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesViolenceItem: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesViolenceItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesViolenceItem(rawValue: "text")
-    public static let image =
-        CreateModerationResponseResultsItemCategoryAppliedInputTypesViolenceItem(rawValue: "image")
+    public static let image = CreateModerationResponseResultsItemCategoryAppliedInputTypesViolenceItem(rawValue: "image")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -230,19 +182,15 @@ public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesViolen
 }
 
 /// Required enumerated value serialized in the `illicit/violent[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesIX82388b00ec: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesIX82388b00ec: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesIX82388b00ec(rawValue: "text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -252,19 +200,15 @@ public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesIX8238
 }
 
 /// Required enumerated value serialized in the `hate/threatening[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHX49743aaa37: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHX49743aaa37: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesHX49743aaa37(rawValue: "text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -274,19 +218,15 @@ public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHX4974
 }
 
 /// Required enumerated value serialized in the `illicit[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesIllicitItem: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesIllicitItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesIllicitItem(rawValue: "text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -296,19 +236,15 @@ public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesIllici
 }
 
 /// Required enumerated value serialized in the `harassment[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHX0d9889c15d: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHX0d9889c15d: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesHX0d9889c15d(rawValue: "text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -318,20 +254,16 @@ public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHX0d98
 }
 
 /// Required enumerated value serialized in the `sexual[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSexualItem: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSexualItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesSexualItem(rawValue: "text")
     public static let image = CreateModerationResponseResultsItemCategoryAppliedInputTypesSexualItem(rawValue: "image")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -359,19 +291,15 @@ public enum CreateModerationRequestInputItemVariant0Type: String, CaseIterable, 
 }
 
 /// Required enumerated value serialized in the `hate[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHateItem: RawRepresentable, Hashable, Codable,
-    Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHateItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesHateItem(rawValue: "text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -381,21 +309,16 @@ public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHateIt
 }
 
 /// Required enumerated value serialized in the `violence/graphic[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesVX143234c62c: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesVX143234c62c: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesVX143234c62c(rawValue: "text")
-    public static let image =
-        CreateModerationResponseResultsItemCategoryAppliedInputTypesVX143234c62c(rawValue: "image")
+    public static let image = CreateModerationResponseResultsItemCategoryAppliedInputTypesVX143234c62c(rawValue: "image")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -405,21 +328,16 @@ public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesVX1432
 }
 
 /// Required enumerated value serialized in the `self-harm/intent[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSX95bf977d69: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSX95bf977d69: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesSX95bf977d69(rawValue: "text")
-    public static let image =
-        CreateModerationResponseResultsItemCategoryAppliedInputTypesSX95bf977d69(rawValue: "image")
+    public static let image = CreateModerationResponseResultsItemCategoryAppliedInputTypesSX95bf977d69(rawValue: "image")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -447,19 +365,15 @@ public enum CreateModerationRequestInputItemVariant1Type: String, CaseIterable, 
 }
 
 /// Required enumerated value serialized in the `harassment/threatening[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHX364dbb7f7f: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHX364dbb7f7f: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesHX364dbb7f7f(rawValue: "text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -469,19 +383,15 @@ public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesHX364d
 }
 
 /// Required enumerated value serialized in the `sexual/minors[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSX612f28e753: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSX612f28e753: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesSX612f28e753(rawValue: "text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -491,21 +401,16 @@ public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSX612f
 }
 
 /// Required enumerated value serialized in the `self-harm[]` wire field.
-public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSelfHarmItem: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct CreateModerationResponseResultsItemCategoryAppliedInputTypesSelfHarmItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = CreateModerationResponseResultsItemCategoryAppliedInputTypesSelfHarmItem(rawValue: "text")
-    public static let image =
-        CreateModerationResponseResultsItemCategoryAppliedInputTypesSelfHarmItem(rawValue: "image")
+    public static let image = CreateModerationResponseResultsItemCategoryAppliedInputTypesSelfHarmItem(rawValue: "image")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AudioMethods {
-    /// Translates an audio file into English and returns the result in a selected format. Provide the `file` and
-    /// `model`, then optionally use `prompt` to guide the translation style. Send the file as multipart form data with
-    /// metadata that lets the service identify its audio format.
+extension AudioMethods {
+    /// Translates an audio file into English and returns the result in a selected format. Provide the `file` and `model`, then optionally use `prompt` to guide the translation style. Send the file as multipart form data with metadata that lets the service identify its audio format.
     ///
     /// Translates audio into English.
     ///
@@ -31,47 +29,21 @@ public extension AudioMethods {
     ///   it more focused and deterministic. If set to 0, the model will use [log
     ///   probability](https://en.wikipedia.org/wiki/Log_probability) to automatically
     ///   increase the temperature until certain thresholds are hit.
-    static func createTranslation(
-        config: ClientConfig,
-        file: SdkUploadFile,
-        model: String,
-        prompt: String? = nil,
-        responseFormat: CreateTranslationRequestResponseFormat? = nil,
-        temperature: Double? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateTranslationResponse {
+    public static func createTranslation(config: ClientConfig, file: SdkUploadFile, model: String, prompt: String? = nil, responseFormat: CreateTranslationRequestResponseFormat? = nil, temperature: Double? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateTranslationResponse {
         var multipartParts: [SdkMultipartField] = []
         multipartParts.append(.file("file", file))
         multipartParts.append(.scalar("model", model))
-        if let prompt {
+        if let prompt = prompt {
             multipartParts.append(.scalar("prompt", prompt))
         }
-        if let responseFormat {
+        if let responseFormat = responseFormat {
             multipartParts.append(.scalar("response_format", responseFormat))
         }
-        if let temperature {
+        if let temperature = temperature {
             multipartParts.append(.scalar("temperature", temperature))
         }
         let multipart = sdkEncodeMultipart(multipartParts)
 
-        return try await (sdkRequest(
-            "POST",
-            "/audio/translations",
-            config: config,
-            rawBody: multipart.data,
-            contentType: multipart.contentType,
-            decoder: .json,
-            operationId: "createTranslation",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "401": ErrorResponse.self,
-                "413": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-                "502": ErrorResponse.self,
-                "503": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/audio/translations", config: config, rawBody: multipart.data, contentType: multipart.contentType, decoder: .json, operationId: "createTranslation", options: requestOptions, errors: ["400": ErrorResponse.self, "401": ErrorResponse.self, "413": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "502": ErrorResponse.self, "503": ErrorResponse.self])).data
     }
 }

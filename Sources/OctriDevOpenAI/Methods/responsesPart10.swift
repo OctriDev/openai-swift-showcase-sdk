@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ResponsesMethods {
-    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream`
-    /// to receive response events as server-sent events. Use `starting_after` to begin streaming after a particular
-    /// event sequence number.
+extension ResponsesMethods {
+    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream` to receive response events as server-sent events. Use `starting_after` to begin streaming after a particular event sequence number.
     ///
     /// Retrieves a model response with the given ID.
     ///
@@ -33,33 +31,14 @@ public extension ResponsesMethods {
     ///   `include_obfuscation` to false to optimize for bandwidth if you trust the
     ///   network links between your application and the OpenAI API.
     /// - openaiBeta: Optional beta features to enable for this request.
-    static func betaGetResponse(
-        config: ClientConfig,
-        responseId: String,
-        include: [BetaIncludeEnum]? = nil,
-        stream: Bool? = nil,
-        startingAfter: Int? = nil,
-        includeObfuscation: Bool? = nil,
-        openaiBeta: [BetaGetResponseParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BetaResponse {
-        try await (sdkRequest(
-            "GET",
-            ["/responses/", sdkEncodePathSegment(sdkWireString(responseId)), "?beta=true"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("include", values: include, style: "form", explode: true),
-                SdkQueryParameter("stream", value: stream),
-                SdkQueryParameter("starting_after", value: startingAfter),
-                SdkQueryParameter("include_obfuscation", value: includeObfuscation),
-            ],
-            decoder: .json,
-            operationId: "beta_getResponse",
-            extraHeaders: sdkHeaders([
-                ("openai-beta", sdkHeaderValue(openaiBeta)),
-            ]),
-            options: requestOptions,
-            errors: ["404": BetaErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func betaGetResponse(config: ClientConfig, responseId: String, include: [BetaIncludeEnum]? = nil, stream: Bool? = nil, startingAfter: Int? = nil, includeObfuscation: Bool? = nil, openaiBeta: [BetaGetResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> BetaResponse {
+        return try (await sdkRequest("GET", ["/responses/", sdkEncodePathSegment(sdkWireString(responseId)), "?beta=true"].joined(), config: config, query: [
+            SdkQueryParameter("include", values: include, style: "form", explode: true),
+            SdkQueryParameter("stream", value: stream),
+            SdkQueryParameter("starting_after", value: startingAfter),
+            SdkQueryParameter("include_obfuscation", value: includeObfuscation),
+        ], decoder: .json, operationId: "beta_getResponse", extraHeaders: sdkHeaders([
+            ("openai-beta", sdkHeaderValue(openaiBeta)),
+        ]), options: requestOptions, errors: ["404": BetaErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

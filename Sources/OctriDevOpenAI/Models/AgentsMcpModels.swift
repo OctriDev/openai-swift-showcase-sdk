@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsMcp domain models
+// AgentsMcp domain models
 public indirect enum McpTransportConfigParam {
     case mcpTransportConfigParamHttp(McpTransportConfigParamHttp)
     case mcpTransportConfigParamStdio(McpTransportConfigParamStdio)
@@ -12,6 +12,7 @@ public indirect enum McpTransportConfigParam {
 }
 
 extension McpTransportConfigParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension McpTransportConfigParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension McpTransportConfigParam: Codable {
 extension McpTransportConfigParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "http": try .mcpTransportConfigParamHttp(McpTransportConfigParamHttp(from: decoder))
-        case "stdio": try .mcpTransportConfigParamStdio(McpTransportConfigParamStdio(from: decoder))
-        default: nil
+        case "http": return .mcpTransportConfigParamHttp(try McpTransportConfigParamHttp(from: decoder))
+        case "stdio": return .mcpTransportConfigParamStdio(try McpTransportConfigParamStdio(from: decoder))
+        default: return nil
         }
     }
 }
@@ -65,6 +62,7 @@ public indirect enum McpTransportResource {
 }
 
 extension McpTransportResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -72,16 +70,12 @@ extension McpTransportResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -92,9 +86,9 @@ extension McpTransportResource: Codable {
 extension McpTransportResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "http": try .mcpTransportResourceHttp(McpTransportResourceHttp(from: decoder))
-        case "stdio": try .mcpTransportResourceStdio(McpTransportResourceStdio(from: decoder))
-        default: nil
+        case "http": return .mcpTransportResourceHttp(try McpTransportResourceHttp(from: decoder))
+        case "stdio": return .mcpTransportResourceStdio(try McpTransportResourceStdio(from: decoder))
+        default: return nil
         }
     }
 }
@@ -143,53 +137,41 @@ public struct McpCallItemResource: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension McpCallItemResource {
-    init(from decoder: Decoder) throws {
+extension McpCallItemResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        turnId = try container.sdkDecodeRequired(.turnId)
-        serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        name = try container.sdkDecodeRequired(.name)
-        arguments = try container.sdkDecodeRequired(.arguments)
-        status = try container.sdkDecodeRequired(.status)
-        output = try container.sdkDecodeNullable(.output)
-        error = try container.sdkDecodeNullable(.error)
-        try sdkValidateRawEnum("type", type, McpCallItemResourceType.allCases.map(\.rawValue))
-        try validateLength("id", id, min: 0, max: nil)
-        try validateLength("turn_id", turnId, min: 0, max: nil)
-        try validateLength("server_label", serverLabel, min: 0, max: nil)
-        try validateLength("name", name, min: 0, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.turnId = try container.sdkDecodeRequired(.turnId)
+        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.arguments = try container.sdkDecodeRequired(.arguments)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.output = try container.sdkDecodeNullable(.output)
+        self.error = try container.sdkDecodeNullable(.error)
+            try sdkValidateRawEnum("type", self.type, McpCallItemResourceType.allCases.map(\.rawValue))
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try validateLength("server_label", self.serverLabel, min: 0, max: nil)
+            try validateLength("name", self.name, min: 0, max: nil)
     }
 }
 
-public extension McpCallItemResource {
-    init(
-        type: McpCallItemResourceType,
-        id: String,
-        turnId: String,
-        serverLabel: String,
-        name: String,
-        arguments: JSONValue,
-        status: FunctionCallStatusResource,
-        output: JSONValue?,
-        error: JSONValue?
-    ) throws {
+extension McpCallItemResource {
+    public init(type: McpCallItemResourceType, id: String, turnId: String, serverLabel: String, name: String, arguments: JSONValue, status: FunctionCallStatusResource, output: JSONValue?, error: JSONValue?) throws {
         (self.type, self.id) = (type, id)
         (self.turnId, self.serverLabel) = (turnId, serverLabel)
         (self.name, self.arguments) = (name, arguments)
         (self.status, self.output) = (status, output)
         self.error = error
-        try sdkValidateRawEnum("type", self.type, McpCallItemResourceType.allCases.map(\.rawValue))
-        try validateLength("id", self.id, min: 0, max: nil)
-        try validateLength("turn_id", self.turnId, min: 0, max: nil)
-        try validateLength("server_label", self.serverLabel, min: 0, max: nil)
-        try validateLength("name", self.name, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, McpCallItemResourceType.allCases.map(\.rawValue))
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try validateLength("server_label", self.serverLabel, min: 0, max: nil)
+            try validateLength("name", self.name, min: 0, max: nil)
     }
 }
 
@@ -205,40 +187,30 @@ public struct McpTransportResourceHttp: Codable {
         case serverUrl = "server_url"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension McpTransportResourceHttp {
-    init(from decoder: Decoder) throws {
+extension McpTransportResourceHttp {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.serverUrl) else {
-            throw SdkValidationError(
-                field: "server_url",
-                code: "required",
-                message: "Validation failed for 'server_url': value is required"
-            )
+            throw SdkValidationError(field: "server_url", code: "required", message: "Validation failed for 'server_url': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        serverUrl = try container.sdkDecodeRequired(.serverUrl)
-        try sdkValidateRawEnum("type", type, McpTransportResourceHttpType.allCases.map(\.rawValue))
-        try validateLength("server_url", serverUrl, min: 0, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.serverUrl = try container.sdkDecodeRequired(.serverUrl)
+            try sdkValidateRawEnum("type", self.type, McpTransportResourceHttpType.allCases.map(\.rawValue))
+            try validateLength("server_url", self.serverUrl, min: 0, max: nil)
     }
 }
 
-public extension McpTransportResourceHttp {
-    init(type: McpTransportResourceHttpType, serverUrl: String) throws {
+extension McpTransportResourceHttp {
+    public init(type: McpTransportResourceHttpType, serverUrl: String) throws {
         (self.type, self.serverUrl) = (type, serverUrl)
-        try sdkValidateRawEnum("type", self.type, McpTransportResourceHttpType.allCases.map(\.rawValue))
-        try validateLength("server_url", self.serverUrl, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, McpTransportResourceHttpType.allCases.map(\.rawValue))
+            try validateLength("server_url", self.serverUrl, min: 0, max: nil)
     }
 }
 
@@ -263,72 +235,50 @@ public struct McpTransportResourceStdio: Codable {
         case envVars = "env_vars"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension McpTransportResourceStdio {
-    init(from decoder: Decoder) throws {
+extension McpTransportResourceStdio {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.command) else {
-            throw SdkValidationError(
-                field: "command",
-                code: "required",
-                message: "Validation failed for 'command': value is required"
-            )
+            throw SdkValidationError(field: "command", code: "required", message: "Validation failed for 'command': value is required")
         }
         guard container.contains(.args) else {
-            throw SdkValidationError(
-                field: "args",
-                code: "required",
-                message: "Validation failed for 'args': value is required"
-            )
+            throw SdkValidationError(field: "args", code: "required", message: "Validation failed for 'args': value is required")
         }
         guard container.contains(.cwd) else {
-            throw SdkValidationError(
-                field: "cwd",
-                code: "required",
-                message: "Validation failed for 'cwd': value is required"
-            )
+            throw SdkValidationError(field: "cwd", code: "required", message: "Validation failed for 'cwd': value is required")
         }
         guard container.contains(.envVars) else {
-            throw SdkValidationError(
-                field: "env_vars",
-                code: "required",
-                message: "Validation failed for 'env_vars': value is required"
-            )
+            throw SdkValidationError(field: "env_vars", code: "required", message: "Validation failed for 'env_vars': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        command = try container.sdkDecodeRequired(.command)
-        args = try container.sdkDecodeRequired(.args)
-        cwd = try container.sdkDecodeRequired(.cwd)
-        envVars = try container.sdkDecodeRequired(.envVars)
-        try sdkValidateRawEnum("type", type, McpTransportResourceStdioType.allCases.map(\.rawValue))
-        try validateLength("command", command, min: 0, max: nil)
-        try validateItems("args", args, min: 0, max: 2000)
-        try validateLength("cwd", cwd, min: 0, max: nil)
-        try validateItems("env_vars", envVars, min: 0, max: 2000)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.command = try container.sdkDecodeRequired(.command)
+        self.args = try container.sdkDecodeRequired(.args)
+        self.cwd = try container.sdkDecodeRequired(.cwd)
+        self.envVars = try container.sdkDecodeRequired(.envVars)
+            try sdkValidateRawEnum("type", self.type, McpTransportResourceStdioType.allCases.map(\.rawValue))
+            try validateLength("command", self.command, min: 0, max: nil)
+            try validateItems("args", self.args, min: 0, max: 2000)
+            try validateLength("cwd", self.cwd, min: 0, max: nil)
+            try validateItems("env_vars", self.envVars, min: 0, max: 2000)
     }
 }
 
-public extension McpTransportResourceStdio {
-    init(type: McpTransportResourceStdioType, command: String, args: [String], cwd: String, envVars: [String]) throws {
+extension McpTransportResourceStdio {
+    public init(type: McpTransportResourceStdioType, command: String, args: [String], cwd: String, envVars: [String]) throws {
         (self.type, self.command) = (type, command)
         (self.args, self.cwd) = (args, cwd)
         self.envVars = envVars
-        try sdkValidateRawEnum("type", self.type, McpTransportResourceStdioType.allCases.map(\.rawValue))
-        try validateLength("command", self.command, min: 0, max: nil)
-        try validateItems("args", self.args, min: 0, max: 2000)
-        try validateLength("cwd", self.cwd, min: 0, max: nil)
-        try validateItems("env_vars", self.envVars, min: 0, max: 2000)
+            try sdkValidateRawEnum("type", self.type, McpTransportResourceStdioType.allCases.map(\.rawValue))
+            try validateLength("command", self.command, min: 0, max: nil)
+            try validateItems("args", self.args, min: 0, max: 2000)
+            try validateLength("cwd", self.cwd, min: 0, max: nil)
+            try validateItems("env_vars", self.envVars, min: 0, max: 2000)
     }
 }
 
@@ -356,68 +306,47 @@ public struct McpTransportConfigParamStdio: Codable {
         case envVars = "env_vars"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension McpTransportConfigParamStdio {
-    init(from decoder: Decoder) throws {
+extension McpTransportConfigParamStdio {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.command) else {
-            throw SdkValidationError(
-                field: "command",
-                code: "required",
-                message: "Validation failed for 'command': value is required"
-            )
+            throw SdkValidationError(field: "command", code: "required", message: "Validation failed for 'command': value is required")
         }
         guard container.contains(.cwd) else {
-            throw SdkValidationError(
-                field: "cwd",
-                code: "required",
-                message: "Validation failed for 'cwd': value is required"
-            )
+            throw SdkValidationError(field: "cwd", code: "required", message: "Validation failed for 'cwd': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        command = try container.sdkDecodeRequired(.command)
-        cwd = try container.sdkDecodeRequired(.cwd)
-        args = try container.sdkDecodeIfPresent(.args)
-        env = try container.sdkDecodeIfPresent(.env)
-        envVars = try container.sdkDecodeIfPresent(.envVars)
-        try sdkValidateRawEnum("type", type, McpTransportConfigParamStdioType.allCases.map(\.rawValue))
-        try validateLength("command", command, min: 0, max: 1_048_576)
-        try validateLength("cwd", cwd, min: 0, max: 1_048_576)
-        if let value = args {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.command = try container.sdkDecodeRequired(.command)
+        self.cwd = try container.sdkDecodeRequired(.cwd)
+        self.args = try container.sdkDecodeIfPresent(.args)
+        self.env = try container.sdkDecodeIfPresent(.env)
+        self.envVars = try container.sdkDecodeIfPresent(.envVars)
+            try sdkValidateRawEnum("type", self.type, McpTransportConfigParamStdioType.allCases.map(\.rawValue))
+            try validateLength("command", self.command, min: 0, max: 1048576)
+            try validateLength("cwd", self.cwd, min: 0, max: 1048576)
+        if let value = self.args {
             try validateItems("args", value, min: 0, max: 16384)
         }
-        if let value = envVars {
+        if let value = self.envVars {
             try validateItems("env_vars", value, min: 0, max: 16384)
         }
     }
 }
 
-public extension McpTransportConfigParamStdio {
-    init(
-        type: McpTransportConfigParamStdioType,
-        command: String,
-        cwd: String,
-        args: [String]? = nil,
-        env: [String: String]? = nil,
-        envVars: [String]? = nil
-    ) throws {
+extension McpTransportConfigParamStdio {
+    public init(type: McpTransportConfigParamStdioType, command: String, cwd: String, args: [String]? = nil, env: [String: String]? = nil, envVars: [String]? = nil) throws {
         (self.type, self.command) = (type, command)
         (self.cwd, self.args) = (cwd, args)
         (self.env, self.envVars) = (env, envVars)
-        try sdkValidateRawEnum("type", self.type, McpTransportConfigParamStdioType.allCases.map(\.rawValue))
-        try validateLength("command", self.command, min: 0, max: 1_048_576)
-        try validateLength("cwd", self.cwd, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, McpTransportConfigParamStdioType.allCases.map(\.rawValue))
+            try validateLength("command", self.command, min: 0, max: 1048576)
+            try validateLength("cwd", self.cwd, min: 0, max: 1048576)
         if let value = self.args {
             try validateItems("args", value, min: 0, max: 16384)
         }
@@ -445,53 +374,38 @@ public struct McpTransportConfigParamHttp: Codable {
         case headers
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension McpTransportConfigParamHttp {
-    init(from decoder: Decoder) throws {
+extension McpTransportConfigParamHttp {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.serverUrl) else {
-            throw SdkValidationError(
-                field: "server_url",
-                code: "required",
-                message: "Validation failed for 'server_url': value is required"
-            )
+            throw SdkValidationError(field: "server_url", code: "required", message: "Validation failed for 'server_url': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        serverUrl = try container.sdkDecodeRequired(.serverUrl)
-        authorization = try container.sdkDecodeIfPresent(.authorization)
-        headers = try container.sdkDecodeIfPresent(.headers)
-        try sdkValidateRawEnum("type", type, McpTransportConfigParamHttpType.allCases.map(\.rawValue))
-        try validateLength("server_url", serverUrl, min: 0, max: 1_048_576)
-        if let value = authorization {
-            try validateLength("authorization", value, min: 0, max: 1_048_576)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.serverUrl = try container.sdkDecodeRequired(.serverUrl)
+        self.authorization = try container.sdkDecodeIfPresent(.authorization)
+        self.headers = try container.sdkDecodeIfPresent(.headers)
+            try sdkValidateRawEnum("type", self.type, McpTransportConfigParamHttpType.allCases.map(\.rawValue))
+            try validateLength("server_url", self.serverUrl, min: 0, max: 1048576)
+        if let value = self.authorization {
+            try validateLength("authorization", value, min: 0, max: 1048576)
         }
     }
 }
 
-public extension McpTransportConfigParamHttp {
-    init(
-        type: McpTransportConfigParamHttpType,
-        serverUrl: String,
-        authorization: String? = nil,
-        headers: [String: String]? = nil
-    ) throws {
+extension McpTransportConfigParamHttp {
+    public init(type: McpTransportConfigParamHttpType, serverUrl: String, authorization: String? = nil, headers: [String: String]? = nil) throws {
         (self.type, self.serverUrl) = (type, serverUrl)
         (self.authorization, self.headers) = (authorization, headers)
-        try sdkValidateRawEnum("type", self.type, McpTransportConfigParamHttpType.allCases.map(\.rawValue))
-        try validateLength("server_url", self.serverUrl, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, McpTransportConfigParamHttpType.allCases.map(\.rawValue))
+            try validateLength("server_url", self.serverUrl, min: 0, max: 1048576)
         if let value = self.authorization {
-            try validateLength("authorization", value, min: 0, max: 1_048_576)
+            try validateLength("authorization", value, min: 0, max: 1048576)
         }
     }
 }
@@ -536,16 +450,13 @@ public enum McpTransportConfigParamStdioType: String, CaseIterable, Codable {
 public struct McpConnectionOriginResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let service = McpConnectionOriginResource(rawValue: "service")
     public static let environment = McpConnectionOriginResource(rawValue: "environment")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -558,16 +469,13 @@ public struct McpConnectionOriginResource: RawRepresentable, Hashable, Codable, 
 public struct McpConnectionOriginParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let service = McpConnectionOriginParam(rawValue: "service")
     public static let environment = McpConnectionOriginParam(rawValue: "environment")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

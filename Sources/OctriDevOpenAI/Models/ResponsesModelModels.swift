@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesModel domain models
+// ResponsesModel domain models
 public indirect enum ModelIdsCompaction {
     case modelIdsResponses(ModelIdsResponses)
     case stringValue(String)
@@ -11,35 +11,23 @@ public indirect enum ModelIdsCompaction {
 }
 
 extension ModelIdsCompaction: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ModelIdsCompaction"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ModelIdsCompaction")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension ModelIdsCompaction {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(ModelIdsResponses.self) {
-            return .modelIdsResponses(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue(value)
-        }
+        if let value = try? container.decode(ModelIdsResponses.self) { return .modelIdsResponses(value) }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
         return nil
     }
 }
@@ -61,32 +49,22 @@ public indirect enum ModelIdsResponses {
 }
 
 extension ModelIdsResponses: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ModelIdsResponses"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ModelIdsResponses")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension ModelIdsResponses {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(ModelIdsShared.self) {
-            return .modelIdsShared(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
+        if let value = try? container.decode(ModelIdsShared.self) { return .modelIdsShared(value) }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
         return nil
     }
 }
@@ -105,10 +83,7 @@ extension ModelIdsResponses {
 public struct ModelIdsResponsesVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let o1Pro = ModelIdsResponsesVariant1(rawValue: "o1-pro")
     public static let o1Pro20250319 = ModelIdsResponsesVariant1(rawValue: "o1-pro-2025-03-19")
     public static let o3Pro = ModelIdsResponsesVariant1(rawValue: "o3-pro")
@@ -116,11 +91,9 @@ public struct ModelIdsResponsesVariant1: RawRepresentable, Hashable, Codable, Se
     public static let o3DeepResearch = ModelIdsResponsesVariant1(rawValue: "o3-deep-research")
     public static let o3DeepResearch20250626 = ModelIdsResponsesVariant1(rawValue: "o3-deep-research-2025-06-26")
     public static let o4MiniDeepResearch = ModelIdsResponsesVariant1(rawValue: "o4-mini-deep-research")
-    public static let o4MiniDeepResearch20250626 =
-        ModelIdsResponsesVariant1(rawValue: "o4-mini-deep-research-2025-06-26")
+    public static let o4MiniDeepResearch20250626 = ModelIdsResponsesVariant1(rawValue: "o4-mini-deep-research-2025-06-26")
     public static let computerUsePreview = ModelIdsResponsesVariant1(rawValue: "computer-use-preview")
-    public static let computerUsePreview20250311 =
-        ModelIdsResponsesVariant1(rawValue: "computer-use-preview-2025-03-11")
+    public static let computerUsePreview20250311 = ModelIdsResponsesVariant1(rawValue: "computer-use-preview-2025-03-11")
     public static let gpt55Pro = ModelIdsResponsesVariant1(rawValue: "gpt-5.5-pro")
     public static let gpt55Pro20260423 = ModelIdsResponsesVariant1(rawValue: "gpt-5.5-pro-2026-04-23")
     public static let gpt5Codex = ModelIdsResponsesVariant1(rawValue: "gpt-5-codex")
@@ -134,7 +107,7 @@ public struct ModelIdsResponsesVariant1: RawRepresentable, Hashable, Codable, Se
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

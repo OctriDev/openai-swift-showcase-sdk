@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Response domain models
+// Response domain models
 /// Typed representation of the `ResponseCompactionCompactingEvent` API schema.
 public struct ResponseCompactionCompactingEvent: Codable {
     /// The type of the event, always `response.compaction.compacting`.
@@ -22,64 +22,37 @@ public struct ResponseCompactionCompactingEvent: Codable {
         case itemId = "item_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseCompactionCompactingEvent {
-    init(from decoder: Decoder) throws {
+extension ResponseCompactionCompactingEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        try sdkValidateRawEnum("type", type, ResponseCompactionCompactingStreamingEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+            try sdkValidateRawEnum("type", self.type, ResponseCompactionCompactingStreamingEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseCompactionCompactingEvent {
-    init(
-        type: ResponseCompactionCompactingStreamingEventType,
-        sequenceNumber: Int,
-        outputIndex: Int,
-        itemId: String
-    ) throws {
+extension ResponseCompactionCompactingEvent {
+    public init(type: ResponseCompactionCompactingStreamingEventType, sequenceNumber: Int, outputIndex: Int, itemId: String) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.outputIndex, self.itemId) = (outputIndex, itemId)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            ResponseCompactionCompactingStreamingEventType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, ResponseCompactionCompactingStreamingEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -105,49 +78,33 @@ public struct ResponseWsError: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseWsError {
-    init(from decoder: Decoder) throws {
+extension ResponseWsError {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.error) else {
-            throw SdkValidationError(
-                field: "error",
-                code: "required",
-                message: "Validation failed for 'error': value is required"
-            )
+            throw SdkValidationError(field: "error", code: "required", message: "Validation failed for 'error': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        error = try container.sdkDecodeRequired(.error)
-        status = try container.sdkDecodeIfPresent(.status)
-        sequenceNumber = try container.sdkDecodeIfPresent(.sequenceNumber)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseWsErrorType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.error = try container.sdkDecodeRequired(.error)
+        self.status = try container.sdkDecodeIfPresent(.status)
+        self.sequenceNumber = try container.sdkDecodeIfPresent(.sequenceNumber)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseWsErrorType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseWsError {
-    init(
-        type: ResponseWsErrorType,
-        error: ErrorPayload,
-        status: Int? = nil,
-        sequenceNumber: Int? = nil,
-        streamId: String? = nil
-    ) throws {
+extension ResponseWsError {
+    public init(type: ResponseWsErrorType, error: ErrorPayload, status: Int? = nil, sequenceNumber: Int? = nil, streamId: String? = nil) throws {
         (self.type, self.error) = (type, error)
         (self.status, self.sequenceNumber) = (status, sequenceNumber)
         self.streamId = streamId
-        try sdkValidateRawEnum("type", self.type, ResponseWsErrorType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseWsErrorType.allCases.map(\.rawValue))
     }
 }
 

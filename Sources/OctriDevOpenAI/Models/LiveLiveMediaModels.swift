@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveMedia domain models
+// LiveLiveMedia domain models
 /// Startup configuration for a Live media session. Follow the Live prompting guide when writing frontend
 /// instructions and the backend prompt under delegation.responses.instructions.
 public struct LiveMediaSessionCreateParams: Codable {
@@ -42,55 +42,40 @@ public struct LiveMediaSessionCreateParams: Codable {
         case client
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveMediaSessionCreateParams {
-    init(from decoder: Decoder) throws {
+extension LiveMediaSessionCreateParams {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
-        model = try container.sdkDecodeRequired(.model)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        audio = try container.sdkDecodeIfPresent(.audio)
-        delegation = try container.sdkDecodeIfPresent(.delegation)
-        triggers = try container.sdkDecodeIfPresent(.triggers)
-        store = try container.sdkDecodeIfPresent(.store)
-        input = try container.sdkDecodeIfPresent(.input)
-        client = try container.sdkDecodeIfPresent(.client)
-        try validateLength("model", sdkWireString(model), min: 1, max: nil)
-        if let value = triggers {
+        self.model = try container.sdkDecodeRequired(.model)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.audio = try container.sdkDecodeIfPresent(.audio)
+        self.delegation = try container.sdkDecodeIfPresent(.delegation)
+        self.triggers = try container.sdkDecodeIfPresent(.triggers)
+        self.store = try container.sdkDecodeIfPresent(.store)
+        self.input = try container.sdkDecodeIfPresent(.input)
+        self.client = try container.sdkDecodeIfPresent(.client)
+            try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
+        if let value = self.triggers {
             try validateItems("triggers", value, min: nil, max: 2)
         }
-        if let value = input {
+        if let value = self.input {
             try validateItems("input", value, min: nil, max: 128)
         }
     }
 }
 
-public extension LiveMediaSessionCreateParams {
-    init(
-        model: ModelIdsLive,
-        instructions: Instructions? = nil,
-        audio: LiveMediaSessionAudioParam? = nil,
-        delegation: Delegation? = nil,
-        triggers: Triggers? = nil,
-        store: Store? = nil,
-        input: Input? = nil,
-        client: LiveClientConfigParam? = nil
-    ) throws {
+extension LiveMediaSessionCreateParams {
+    public init(model: ModelIdsLive, instructions: Instructions? = nil, audio: LiveMediaSessionAudioParam? = nil, delegation: Delegation? = nil, triggers: Triggers? = nil, store: Store? = nil, input: Input? = nil, client: LiveClientConfigParam? = nil) throws {
         (self.model, self.instructions) = (model, instructions)
         (self.audio, self.delegation) = (audio, delegation)
         (self.triggers, self.store) = (triggers, store)
         (self.input, self.client) = (input, client)
-        try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
+            try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
         if let value = self.triggers {
             try validateItems("triggers", value, min: nil, max: 2)
         }
@@ -111,19 +96,19 @@ public struct LiveMediaSessionAudioParam: Codable {
     }
 
     init() {
-        output = nil
+        self.output = nil
     }
 }
 
-public extension LiveMediaSessionAudioParam {
-    init(from decoder: Decoder) throws {
+extension LiveMediaSessionAudioParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        output = try container.sdkDecodeIfPresent(.output)
+        self.output = try container.sdkDecodeIfPresent(.output)
     }
 }
 
-public extension LiveMediaSessionAudioParam {
-    init(output: LiveInitialSessionAudioOutputParam? = nil) {
+extension LiveMediaSessionAudioParam {
+    public init(output: LiveInitialSessionAudioOutputParam? = nil) {
         self.init()
         self.output = output
     }
@@ -148,25 +133,21 @@ public struct LiveMediaSessionForkParams: Codable {
     }
 
     init() {
-        (store, delegation, client) = (nil, nil, nil)
+        (self.store, self.delegation, self.client) = (nil, nil, nil)
     }
 }
 
-public extension LiveMediaSessionForkParams {
-    init(from decoder: Decoder) throws {
+extension LiveMediaSessionForkParams {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        store = try container.sdkDecodeIfPresent(.store)
-        delegation = try container.sdkDecodeIfPresent(.delegation)
-        client = try container.sdkDecodeIfPresent(.client)
+        self.store = try container.sdkDecodeIfPresent(.store)
+        self.delegation = try container.sdkDecodeIfPresent(.delegation)
+        self.client = try container.sdkDecodeIfPresent(.client)
     }
 }
 
-public extension LiveMediaSessionForkParams {
-    init(
-        store: PropertiesStore? = nil,
-        delegation: LiveResponsesDelegationUpdateParam? = nil,
-        client: LiveClientConfigParam? = nil
-    ) {
+extension LiveMediaSessionForkParams {
+    public init(store: PropertiesStore? = nil, delegation: LiveResponsesDelegationUpdateParam? = nil, client: LiveClientConfigParam? = nil) {
         self.init()
         (self.store, self.delegation) = (store, delegation)
         self.client = client

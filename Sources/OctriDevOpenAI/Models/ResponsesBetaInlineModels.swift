@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaInline domain models
+// ResponsesBetaInline domain models
 /// Inline skill payload
 public struct BetaInlineSkillSourceParam: Codable {
     /// The type of the inline skill source. Must be `base64`.
@@ -19,47 +19,33 @@ public struct BetaInlineSkillSourceParam: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaInlineSkillSourceParam {
-    init(from decoder: Decoder) throws {
+extension BetaInlineSkillSourceParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.mediaType) else {
-            throw SdkValidationError(
-                field: "media_type",
-                code: "required",
-                message: "Validation failed for 'media_type': value is required"
-            )
+            throw SdkValidationError(field: "media_type", code: "required", message: "Validation failed for 'media_type': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        mediaType = try container.sdkDecodeRequired(.mediaType)
-        data = try container.sdkDecodeRequired(.data)
-        try validateLength("data", data, min: 1, max: 70_254_592)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.mediaType = try container.sdkDecodeRequired(.mediaType)
+        self.data = try container.sdkDecodeRequired(.data)
+            try validateLength("data", self.data, min: 1, max: 70254592)
     }
 }
 
-public extension BetaInlineSkillSourceParam {
-    init(type: BetaInlineSkillSourceParamType, mediaType: BetaInlineSkillSourceParamMediaType, data: String) throws {
+extension BetaInlineSkillSourceParam {
+    public init(type: BetaInlineSkillSourceParamType, mediaType: BetaInlineSkillSourceParamMediaType, data: String) throws {
         (self.type, self.mediaType) = (type, mediaType)
         self.data = data
-        try validateLength("data", self.data, min: 1, max: 70_254_592)
+            try validateLength("data", self.data, min: 1, max: 70254592)
     }
 }
 
@@ -81,55 +67,37 @@ public struct BetaInlineSkillParam: Codable {
         case source
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaInlineSkillParam {
-    init(from decoder: Decoder) throws {
+extension BetaInlineSkillParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.description) else {
-            throw SdkValidationError(
-                field: "description",
-                code: "required",
-                message: "Validation failed for 'description': value is required"
-            )
+            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
         }
         guard container.contains(.source) else {
-            throw SdkValidationError(
-                field: "source",
-                code: "required",
-                message: "Validation failed for 'source': value is required"
-            )
+            throw SdkValidationError(field: "source", code: "required", message: "Validation failed for 'source': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeRequired(.name)
-        description = try container.sdkDecodeRequired(.description)
-        source = try container.sdkDecodeRequired(.source)
-        try sdkValidateRawEnum("type", type, BetaInlineSkillParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.description = try container.sdkDecodeRequired(.description)
+        self.source = try container.sdkDecodeRequired(.source)
+            try sdkValidateRawEnum("type", self.type, BetaInlineSkillParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaInlineSkillParam {
-    init(type: BetaInlineSkillParamType, name: String, description: String, source: BetaInlineSkillSourceParam) throws {
+extension BetaInlineSkillParam {
+    public init(type: BetaInlineSkillParamType, name: String, description: String, source: BetaInlineSkillSourceParam) throws {
         (self.type, self.name) = (type, name)
         (self.description, self.source) = (description, source)
-        try sdkValidateRawEnum("type", self.type, BetaInlineSkillParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaInlineSkillParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -137,15 +105,12 @@ public extension BetaInlineSkillParam {
 public struct BetaInlineSkillSourceParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let base64 = BetaInlineSkillSourceParamType(rawValue: "base64")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -158,15 +123,12 @@ public struct BetaInlineSkillSourceParamType: RawRepresentable, Hashable, Codabl
 public struct BetaInlineSkillSourceParamMediaType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let applicationZip = BetaInlineSkillSourceParamMediaType(rawValue: "application/zip")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

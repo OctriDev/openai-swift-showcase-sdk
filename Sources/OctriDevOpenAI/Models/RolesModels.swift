@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Roles domain models
+// Roles domain models
 /// Confirmation payload returned after deleting a role.
 public struct RoleDeletedResource: Codable {
     /// Always `role.deleted`.
@@ -19,43 +19,29 @@ public struct RoleDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RoleDeletedResource {
-    init(from decoder: Decoder) throws {
+extension RoleDeletedResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        id = try container.sdkDecodeRequired(.id)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension RoleDeletedResource {
-    init(object: RoleDeletedResourceObject, id: String, deleted: Bool) {
+extension RoleDeletedResource {
+    public init(object: RoleDeletedResourceObject, id: String, deleted: Bool) {
         (self.object, self.id) = (object, id)
         self.deleted = deleted
     }
@@ -79,51 +65,33 @@ public struct PublicRoleListResource: Codable {
         case next
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension PublicRoleListResource {
-    init(from decoder: Decoder) throws {
+extension PublicRoleListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
         guard container.contains(.next) else {
-            throw SdkValidationError(
-                field: "next",
-                code: "required",
-                message: "Validation failed for 'next': value is required"
-            )
+            throw SdkValidationError(field: "next", code: "required", message: "Validation failed for 'next': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        next = try container.sdkDecodeNullable(.next)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.next = try container.sdkDecodeNullable(.next)
     }
 }
 
-public extension PublicRoleListResource {
-    init(object: PublicRoleListResourceObject, data: [Role], hasMore: Bool, next: String?) {
+extension PublicRoleListResource {
+    public init(object: PublicRoleListResourceObject, data: [Role], hasMore: Bool, next: String?) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.next) = (hasMore, next)
     }
@@ -145,21 +113,21 @@ public struct PublicUpdateOrganizationRoleBody: Codable {
     }
 
     init() {
-        (permissions, description, roleName) = (nil, nil, nil)
+        (self.permissions, self.description, self.roleName) = (nil, nil, nil)
     }
 }
 
-public extension PublicUpdateOrganizationRoleBody {
-    init(from decoder: Decoder) throws {
+extension PublicUpdateOrganizationRoleBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        permissions = try container.sdkDecodeIfPresent(.permissions)
-        description = try container.sdkDecodeIfPresent(.description)
-        roleName = try container.sdkDecodeIfPresent(.roleName)
+        self.permissions = try container.sdkDecodeIfPresent(.permissions)
+        self.description = try container.sdkDecodeIfPresent(.description)
+        self.roleName = try container.sdkDecodeIfPresent(.roleName)
     }
 }
 
-public extension PublicUpdateOrganizationRoleBody {
-    init(permissions: [String]? = nil, description: String? = nil, roleName: String? = nil) {
+extension PublicUpdateOrganizationRoleBody {
+    public init(permissions: [String]? = nil, description: String? = nil, roleName: String? = nil) {
         self.init()
         (self.permissions, self.description) = (permissions, description)
         self.roleName = roleName
@@ -181,36 +149,26 @@ public struct PublicCreateOrganizationRoleBody: Codable {
         case description
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension PublicCreateOrganizationRoleBody {
-    init(from decoder: Decoder) throws {
+extension PublicCreateOrganizationRoleBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.roleName) else {
-            throw SdkValidationError(
-                field: "role_name",
-                code: "required",
-                message: "Validation failed for 'role_name': value is required"
-            )
+            throw SdkValidationError(field: "role_name", code: "required", message: "Validation failed for 'role_name': value is required")
         }
         guard container.contains(.permissions) else {
-            throw SdkValidationError(
-                field: "permissions",
-                code: "required",
-                message: "Validation failed for 'permissions': value is required"
-            )
+            throw SdkValidationError(field: "permissions", code: "required", message: "Validation failed for 'permissions': value is required")
         }
-        roleName = try container.sdkDecodeRequired(.roleName)
-        permissions = try container.sdkDecodeRequired(.permissions)
-        description = try container.sdkDecodeIfPresent(.description)
+        self.roleName = try container.sdkDecodeRequired(.roleName)
+        self.permissions = try container.sdkDecodeRequired(.permissions)
+        self.description = try container.sdkDecodeIfPresent(.description)
     }
 }
 
-public extension PublicCreateOrganizationRoleBody {
-    init(roleName: String, permissions: [String], description: String? = nil) {
+extension PublicCreateOrganizationRoleBody {
+    public init(roleName: String, permissions: [String], description: String? = nil) {
         (self.roleName, self.permissions) = (roleName, permissions)
         self.description = description
     }
@@ -220,15 +178,12 @@ public extension PublicCreateOrganizationRoleBody {
 public struct RoleDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let roleDeleted = RoleDeletedResourceObject(rawValue: "role.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -241,15 +196,12 @@ public struct RoleDeletedResourceObject: RawRepresentable, Hashable, Codable, Se
 public struct PublicRoleListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = PublicRoleListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

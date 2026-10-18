@@ -9,103 +9,46 @@ public class FilesNamespace {
         self.config = config
     }
 
-    /// Lists uploaded files, with optional filtering, sorting, and cursor-based pagination. Use `purpose` to filter the
-    /// results, and use `after` with the last file ID from a page to retrieve the next page.
+/// Lists uploaded files, with optional filtering, sorting, and cursor-based pagination. Use `purpose` to filter the results, and use `after` with the last file ID from a page to retrieve the next page.
     ///
     /// Returns a list of files.
-    public func list(
-        purpose: String? = nil,
-        limit: Int? = nil,
-        order: ListFilesParameter? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListFilesResponse {
-        try await FilesMethods.listFiles(
-            config: config,
-            purpose: purpose,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+    public func list(purpose: String? = nil, limit: Int? = nil, order: ListFilesParameter? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFilesResponse {
+        return try await FilesMethods.listFiles(config: config, purpose: purpose, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists uploaded files, with optional filtering, sorting, and cursor-based pagination. Use `purpose` to filter the
-    /// results, and use `after` with the last file ID from a page to retrieve the next page.
+/// Lists uploaded files, with optional filtering, sorting, and cursor-based pagination. Use `purpose` to filter the results, and use `after` with the last file ID from a page to retrieve the next page.
     ///
     /// Returns a list of files.
-    public func listPaginated(
-        purpose: String? = nil,
-        limit: Int? = nil,
-        order: ListFilesParameter? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<OpenAIFile, Swift.Error> {
-        FilesMethods.listFilesPaginated(
-            config: config,
-            purpose: purpose,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+    public func listPaginated(purpose: String? = nil, limit: Int? = nil, order: ListFilesParameter? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<OpenAIFile, Swift.Error> {
+        return FilesMethods.listFilesPaginated(config: config, purpose: purpose, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Uploads a file for use across supported API endpoints. Send the file and its `purpose` as multipart form data,
-    /// and use `expires_after` when you want to set an expiration policy. File uploads are limited to 512 MB per file
-    /// and 2.5 TB of storage per project.
+/// Uploads a file for use across supported API endpoints. Send the file and its `purpose` as multipart form data, and use `expires_after` when you want to set an expiration policy. File uploads are limited to 512 MB per file and 2.5 TB of storage per project.
     ///
-    /// Upload a file that can be used across various endpoints. Individual files can be up to 512 MB, and each project
-    /// can store up to 2.5 TB of files in total. There is no organization-wide storage limit. Uploads to this endpoint
-    /// are rate-limited to 1,000 requests per minute per authenticated user. - The Assistants API supports files up to
-    /// 2 million tokens and of specific file types. See the [Assistants Tools
-    /// guide](https://developers.openai.com/api/docs/guides/tools) for details. - The Fine-tuning API only supports
-    /// `.jsonl` files. The input also has certain required formats for fine-tuning
-    /// [chat](https://developers.openai.com/api/docs/guides/supervised-fine-tuning#formatting-your-data) or
-    /// [completions](https://developers.openai.com/api/docs/guides/supervised-fine-tuning#formatting-your-data) models.
-    /// - The Batch API only supports `.jsonl` files up to 200 MB in size. The input also has a specific required
-    /// [format](https://developers.openai.com/api/docs/guides/batch#1-prepare-your-batch-file). - For Retrieval or
-    /// `file_search` ingestion, upload files here first. If you need to attach multiple uploaded files to the same
-    /// vector store, use [`/vector_stores/{vector_store_id}/file_batches`](https://developers.openai.com/api/reference/resources/vector_stores/subresources/file_batches/methods/create)
-    /// instead of attaching them one by one. Vector store attachment has separate limits from file upload, including
-    /// 2,000 attached files per minute per organization. Please [contact us](https://help.openai.com/) if you need to
-    /// increase these storage limits.
-    public func create(
-        file: SdkUploadFile,
-        purpose: CreateFileRequestPurpose,
-        expiresAfter: FileExpirationAfter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OpenAIFile {
-        try await FilesMethods.createFile(
-            config: config,
-            file: file,
-            purpose: purpose,
-            expiresAfter: expiresAfter,
-            requestOptions: requestOptions
-        )
+    /// Upload a file that can be used across various endpoints. Individual files can be up to 512 MB, and each project can store up to 2.5 TB of files in total. There is no organization-wide storage limit. Uploads to this endpoint are rate-limited to 1,000 requests per minute per authenticated user. - The Assistants API supports files up to 2 million tokens and of specific file types. See the [Assistants Tools guide](https://developers.openai.com/api/docs/guides/tools) for details. - The Fine-tuning API only supports `.jsonl` files. The input also has certain required formats for fine-tuning [chat](https://developers.openai.com/api/docs/guides/supervised-fine-tuning#formatting-your-data) or [completions](https://developers.openai.com/api/docs/guides/supervised-fine-tuning#formatting-your-data) models. - The Batch API only supports `.jsonl` files up to 200 MB in size. The input also has a specific required [format](https://developers.openai.com/api/docs/guides/batch#1-prepare-your-batch-file). - For Retrieval or `file_search` ingestion, upload files here first. If you need to attach multiple uploaded files to the same vector store, use [`/vector_stores/{vector_store_id}/file_batches`](https://developers.openai.com/api/reference/resources/vector_stores/subresources/file_batches/methods/create) instead of attaching them one by one. Vector store attachment has separate limits from file upload, including 2,000 attached files per minute per organization. Please [contact us](https://help.openai.com/) if you need to increase these storage limits.
+    public func create(file: SdkUploadFile, purpose: CreateFileRequestPurpose, expiresAfter: FileExpirationAfter? = nil, requestOptions: RequestOptions? = nil) async throws -> OpenAIFile {
+        return try await FilesMethods.createFile(config: config, file: file, purpose: purpose, expiresAfter: expiresAfter, requestOptions: requestOptions)
     }
 
-    /// Deletes a file and removes it from all vector stores. Use `file_id` to identify the file to remove.
+/// Deletes a file and removes it from all vector stores. Use `file_id` to identify the file to remove.
     ///
     /// Delete a file and remove it from all vector stores.
     public func delete(fileId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteFileResponse {
-        try await FilesMethods.deleteFile(config: config, fileId: fileId, requestOptions: requestOptions)
+        return try await FilesMethods.deleteFile(config: config, fileId: fileId, requestOptions: requestOptions)
     }
 
-    /// Retrieves metadata for a specific uploaded file. Use `file_id` to identify the file whose purpose, size, status,
-    /// and timestamps you need.
+/// Retrieves metadata for a specific uploaded file. Use `file_id` to identify the file whose purpose, size, status, and timestamps you need.
     ///
     /// Returns information about a specific file.
     public func retrieve(fileId: String, requestOptions: RequestOptions? = nil) async throws -> OpenAIFile {
-        try await FilesMethods.retrieveFile(config: config, fileId: fileId, requestOptions: requestOptions)
+        return try await FilesMethods.retrieveFile(config: config, fileId: fileId, requestOptions: requestOptions)
     }
 
-    /// Retrieves the contents of a specific uploaded file. Use `file_id` to identify the file, and note that some file
-    /// purposes or account permissions do not allow downloads.
+/// Retrieves the contents of a specific uploaded file. Use `file_id` to identify the file, and note that some file purposes or account permissions do not allow downloads.
     ///
     /// Returns a response containing the contents of the specified file.
     public func download(fileId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
-        try await FilesMethods.downloadFile(config: config, fileId: fileId, requestOptions: requestOptions)
+        return try await FilesMethods.downloadFile(config: config, fileId: fileId, requestOptions: requestOptions)
     }
 }
 
@@ -115,264 +58,111 @@ public class FineTuningNamespace {
         self.config = config
     }
 
-    /// Runs a grader against a model sample and, optionally, a data source item. Supply a grader definition and
-    /// `model_sample` to receive the overall reward, grader metadata, and any sub-rewards.
+/// Runs a grader against a model sample and, optionally, a data source item. Supply a grader definition and `model_sample` to receive the overall reward, grader metadata, and any sub-rewards.
     ///
     /// Run a grader.
-    public func runGrader(
-        grader: RunGraderRequestGrader,
-        modelSample: String,
-        item: [String: JSONValue]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RunGraderResponse {
-        try await FineTuningMethods.runGrader(
-            config: config,
-            grader: grader,
-            modelSample: modelSample,
-            item: item,
-            requestOptions: requestOptions
-        )
+    public func runGrader(grader: RunGraderRequestGrader, modelSample: String, item: [String: JSONValue]? = nil, requestOptions: RequestOptions? = nil) async throws -> RunGraderResponse {
+        return try await FineTuningMethods.runGrader(config: config, grader: grader, modelSample: modelSample, item: item, requestOptions: requestOptions)
     }
 
-    /// Validates a grader definition without running it against a model sample. Supply a `grader` that matches one of
-    /// the supported grader types to receive the validated definition.
+/// Validates a grader definition without running it against a model sample. Supply a `grader` that matches one of the supported grader types to receive the validated definition.
     ///
     /// Validate a grader.
-    public func validateGrader(
-        grader: ValidateGraderRequestGrader,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ValidateGraderResponse {
-        try await FineTuningMethods.validateGrader(config: config, grader: grader, requestOptions: requestOptions)
+    public func validateGrader(grader: ValidateGraderRequestGrader, requestOptions: RequestOptions? = nil) async throws -> ValidateGraderResponse {
+        return try await FineTuningMethods.validateGrader(config: config, grader: grader, requestOptions: requestOptions)
     }
 
-    /// Lists permissions for a fine-tuned model checkpoint. Use `project_id` to filter permissions by project and
-    /// `after` to continue from a permission ID; this endpoint requires an admin API key.
+/// Lists permissions for a fine-tuned model checkpoint. Use `project_id` to filter permissions by project and `after` to continue from a permission ID; this endpoint requires an admin API key.
     ///
-    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys).
-    /// Organization owners can use this endpoint to view all permissions for a fine-tuned model checkpoint.
-    public func listCheckpointPermissions(
-        fineTunedModelCheckpoint: String,
-        projectId: String? = nil,
-        after: String? = nil,
-        limit: Int? = nil,
-        order: ListFineTuningCheckpointPermissionsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListFineTuningCheckpointPermissionResponse {
-        try await FineTuningMethods.listFineTuningCheckpointPermissions(
-            config: config,
-            fineTunedModelCheckpoint: fineTunedModelCheckpoint,
-            projectId: projectId,
-            after: after,
-            limit: limit,
-            order: order,
-            requestOptions: requestOptions
-        )
+    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys). Organization owners can use this endpoint to view all permissions for a fine-tuned model checkpoint.
+    public func listCheckpointPermissions(fineTunedModelCheckpoint: String, projectId: String? = nil, after: String? = nil, limit: Int? = nil, order: ListFineTuningCheckpointPermissionsParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFineTuningCheckpointPermissionResponse {
+        return try await FineTuningMethods.listFineTuningCheckpointPermissions(config: config, fineTunedModelCheckpoint: fineTunedModelCheckpoint, projectId: projectId, after: after, limit: limit, order: order, requestOptions: requestOptions)
     }
 
-    /// Lists permissions for a fine-tuned model checkpoint. Use `project_id` to filter permissions by project and
-    /// `after` to continue from a permission ID; this endpoint requires an admin API key.
+/// Lists permissions for a fine-tuned model checkpoint. Use `project_id` to filter permissions by project and `after` to continue from a permission ID; this endpoint requires an admin API key.
     ///
-    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys).
-    /// Organization owners can use this endpoint to view all permissions for a fine-tuned model checkpoint.
-    public func listCheckpointPermissionsPaginated(
-        fineTunedModelCheckpoint: String,
-        projectId: String? = nil,
-        after: String? = nil,
-        limit: Int? = nil,
-        order: ListFineTuningCheckpointPermissionsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<FineTuningCheckpointPermission, Swift.Error> {
-        FineTuningMethods.listFineTuningCheckpointPermissionsPaginated(
-            config: config,
-            fineTunedModelCheckpoint: fineTunedModelCheckpoint,
-            projectId: projectId,
-            after: after,
-            limit: limit,
-            order: order,
-            requestOptions: requestOptions
-        )
+    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys). Organization owners can use this endpoint to view all permissions for a fine-tuned model checkpoint.
+    public func listCheckpointPermissionsPaginated(fineTunedModelCheckpoint: String, projectId: String? = nil, after: String? = nil, limit: Int? = nil, order: ListFineTuningCheckpointPermissionsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<FineTuningCheckpointPermission, Swift.Error> {
+        return FineTuningMethods.listFineTuningCheckpointPermissionsPaginated(config: config, fineTunedModelCheckpoint: fineTunedModelCheckpoint, projectId: projectId, after: after, limit: limit, order: order, requestOptions: requestOptions)
     }
 
-    /// Creates permissions that let other projects in the organization access a fine-tuned model checkpoint. Supply the
-    /// target project IDs in `project_ids`; this operation requires an admin API key.
+/// Creates permissions that let other projects in the organization access a fine-tuned model checkpoint. Supply the target project IDs in `project_ids`; this operation requires an admin API key.
     ///
-    /// **NOTE:** Calling this endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys).
-    /// This enables organization owners to share fine-tuned models with other projects in their organization.
-    public func createCheckpointPermission(
-        fineTunedModelCheckpoint: String,
-        projectIds: [String],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListFineTuningCheckpointPermissionResponse {
-        try await FineTuningMethods.createFineTuningCheckpointPermission(
-            config: config,
-            fineTunedModelCheckpoint: fineTunedModelCheckpoint,
-            projectIds: projectIds,
-            requestOptions: requestOptions
-        )
+    /// **NOTE:** Calling this endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys). This enables organization owners to share fine-tuned models with other projects in their organization.
+    public func createCheckpointPermission(fineTunedModelCheckpoint: String, projectIds: [String], requestOptions: RequestOptions? = nil) async throws -> ListFineTuningCheckpointPermissionResponse {
+        return try await FineTuningMethods.createFineTuningCheckpointPermission(config: config, fineTunedModelCheckpoint: fineTunedModelCheckpoint, projectIds: projectIds, requestOptions: requestOptions)
     }
 
-    /// Deletes a permission for a fine-tuned model checkpoint. Use an admin API key as an organization owner, and
-    /// provide both identifiers to target the permission. The response confirms whether the permission was deleted.
+/// Deletes a permission for a fine-tuned model checkpoint. Use an admin API key as an organization owner, and provide both identifiers to target the permission. The response confirms whether the permission was deleted.
     ///
-    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys).
-    /// Organization owners can use this endpoint to delete a permission for a fine-tuned model checkpoint.
-    public func deleteCheckpointPermission(
-        fineTunedModelCheckpoint: String,
-        permissionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeleteFineTuningCheckpointPermissionResponse {
-        try await FineTuningMethods.deleteFineTuningCheckpointPermission(
-            config: config,
-            fineTunedModelCheckpoint: fineTunedModelCheckpoint,
-            permissionId: permissionId,
-            requestOptions: requestOptions
-        )
+    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys). Organization owners can use this endpoint to delete a permission for a fine-tuned model checkpoint.
+    public func deleteCheckpointPermission(fineTunedModelCheckpoint: String, permissionId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteFineTuningCheckpointPermissionResponse {
+        return try await FineTuningMethods.deleteFineTuningCheckpointPermission(config: config, fineTunedModelCheckpoint: fineTunedModelCheckpoint, permissionId: permissionId, requestOptions: requestOptions)
     }
 
-    /// Creates and queues a fine-tuning job to train a model on a dataset. Supply `model` and `training_file`, and
-    /// optionally configure the training method, validation data, integrations, and metadata. The job runs
-    /// asynchronously; retrieve it with GET /fine_tuning/jobs/{fine_tuning_job_id} to check its status.
+/// Creates and queues a fine-tuning job to train a model on a dataset. Supply `model` and `training_file`, and optionally configure the training method, validation data, integrations, and metadata. The job runs asynchronously; retrieve it with GET /fine_tuning/jobs/{fine_tuning_job_id} to check its status.
     ///
-    /// Creates a fine-tuning job which begins the process of creating a new model from a given dataset. Response
-    /// includes details of the enqueued job including job status and the name of the fine-tuned models once complete.
-    /// [Learn more about fine-tuning](https://developers.openai.com/api/docs/guides/model-optimization)
-    public func createJob(
-        options: FineTuningMethods.CreateFineTuningJobOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> FineTuningJob {
-        try await FineTuningMethods.createFineTuningJob(
-            config: config,
-            options: options,
-            requestOptions: requestOptions
-        )
+    /// Creates a fine-tuning job which begins the process of creating a new model from a given dataset. Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete. [Learn more about fine-tuning](https://developers.openai.com/api/docs/guides/model-optimization)
+    public func createJob(options: FineTuningMethods.CreateFineTuningJobOptions, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
+        return try await FineTuningMethods.createFineTuningJob(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Lists fine-tuning jobs belonging to your organization. Use `after` to continue from the last job in a previous
-    /// page, and use `limit` to control how many jobs to retrieve. You can filter jobs by metadata using the
-    /// `metadata[k]=v` query syntax.
+/// Lists fine-tuning jobs belonging to your organization. Use `after` to continue from the last job in a previous page, and use `limit` to control how many jobs to retrieve. You can filter jobs by metadata using the `metadata[k]=v` query syntax.
     ///
     /// List your organization's fine-tuning jobs
-    public func listJobs(
-        after: String? = nil,
-        limit: Int? = nil,
-        metadata: [String: String]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListPaginatedFineTuningJobsResponse {
-        try await FineTuningMethods.listFineTuningJobs(
-            config: config,
-            after: after,
-            limit: limit,
-            metadata: metadata,
-            requestOptions: requestOptions
-        )
+    public func listJobs(after: String? = nil, limit: Int? = nil, metadata: [String: String]? = nil, requestOptions: RequestOptions? = nil) async throws -> ListPaginatedFineTuningJobsResponse {
+        return try await FineTuningMethods.listFineTuningJobs(config: config, after: after, limit: limit, metadata: metadata, requestOptions: requestOptions)
     }
 }
 
-public extension FineTuningNamespace {
-    /// Retrieves details for a fine-tuning job. Use `fine_tuning_job_id` to identify the job whose status, model, and
-    /// training details you need. The response includes result file IDs when they are available.
+extension FineTuningNamespace {
+/// Retrieves details for a fine-tuning job. Use `fine_tuning_job_id` to identify the job whose status, model, and training details you need. The response includes result file IDs when they are available.
     ///
-    /// Get info about a fine-tuning job. [Learn more about
-    /// fine-tuning](https://developers.openai.com/api/docs/guides/model-optimization)
-    func retrieveJob(fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
-        try await FineTuningMethods.retrieveFineTuningJob(
-            config: config,
-            fineTuningJobId: fineTuningJobId,
-            requestOptions: requestOptions
-        )
+    /// Get info about a fine-tuning job. [Learn more about fine-tuning](https://developers.openai.com/api/docs/guides/model-optimization)
+    public func retrieveJob(fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
+        return try await FineTuningMethods.retrieveFineTuningJob(config: config, fineTuningJobId: fineTuningJobId, requestOptions: requestOptions)
     }
 
-    /// Cancels a fine-tuning job immediately. Use `fine_tuning_job_id` to identify the job you want to stop. The
-    /// response returns the job object with its current status.
+/// Cancels a fine-tuning job immediately. Use `fine_tuning_job_id` to identify the job you want to stop. The response returns the job object with its current status.
     ///
     /// Immediately cancel a fine-tune job.
-    func cancelJob(fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
-        try await FineTuningMethods.cancelFineTuningJob(
-            config: config,
-            fineTuningJobId: fineTuningJobId,
-            requestOptions: requestOptions
-        )
+    public func cancelJob(fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
+        return try await FineTuningMethods.cancelFineTuningJob(config: config, fineTuningJobId: fineTuningJobId, requestOptions: requestOptions)
     }
 
-    /// Lists checkpoints produced by a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to
-    /// continue from a checkpoint on a previous page. Set `limit` to control the number of checkpoints retrieved.
+/// Lists checkpoints produced by a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to continue from a checkpoint on a previous page. Set `limit` to control the number of checkpoints retrieved.
     ///
     /// List checkpoints for a fine-tuning job.
-    func listJobCheckpoints(
-        fineTuningJobId: String,
-        after: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListFineTuningJobCheckpointsResponse {
-        try await FineTuningMethods.listFineTuningJobCheckpoints(
-            config: config,
-            fineTuningJobId: fineTuningJobId,
-            after: after,
-            limit: limit,
-            requestOptions: requestOptions
-        )
+    public func listJobCheckpoints(fineTuningJobId: String, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFineTuningJobCheckpointsResponse {
+        return try await FineTuningMethods.listFineTuningJobCheckpoints(config: config, fineTuningJobId: fineTuningJobId, after: after, limit: limit, requestOptions: requestOptions)
     }
 
-    /// Lists checkpoints produced by a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to
-    /// continue from a checkpoint on a previous page. Set `limit` to control the number of checkpoints retrieved.
+/// Lists checkpoints produced by a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to continue from a checkpoint on a previous page. Set `limit` to control the number of checkpoints retrieved.
     ///
     /// List checkpoints for a fine-tuning job.
-    func listJobCheckpointsPaginated(
-        fineTuningJobId: String,
-        after: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<FineTuningJobCheckpoint, Swift.Error> {
-        FineTuningMethods.listFineTuningJobCheckpointsPaginated(
-            config: config,
-            fineTuningJobId: fineTuningJobId,
-            after: after,
-            limit: limit,
-            requestOptions: requestOptions
-        )
+    public func listJobCheckpointsPaginated(fineTuningJobId: String, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<FineTuningJobCheckpoint, Swift.Error> {
+        return FineTuningMethods.listFineTuningJobCheckpointsPaginated(config: config, fineTuningJobId: fineTuningJobId, after: after, limit: limit, requestOptions: requestOptions)
     }
 
-    /// Lists status-update events for a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to
-    /// continue from an event on a previous page. Set `limit` to control the number of events retrieved.
+/// Lists status-update events for a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to continue from an event on a previous page. Set `limit` to control the number of events retrieved.
     ///
     /// Get status updates for a fine-tuning job.
-    func listEvents(
-        fineTuningJobId: String,
-        after: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListFineTuningJobEventsResponse {
-        try await FineTuningMethods.listFineTuningEvents(
-            config: config,
-            fineTuningJobId: fineTuningJobId,
-            after: after,
-            limit: limit,
-            requestOptions: requestOptions
-        )
+    public func listEvents(fineTuningJobId: String, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFineTuningJobEventsResponse {
+        return try await FineTuningMethods.listFineTuningEvents(config: config, fineTuningJobId: fineTuningJobId, after: after, limit: limit, requestOptions: requestOptions)
     }
 
-    /// Pauses a fine-tuning job that supports pausing. Use `fine_tuning_job_id` to identify the job you want to pause.
-    /// The response returns the job object and its current status.
+/// Pauses a fine-tuning job that supports pausing. Use `fine_tuning_job_id` to identify the job you want to pause. The response returns the job object and its current status.
     ///
     /// Pause a fine-tune job.
-    func pauseJob(fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
-        try await FineTuningMethods.pauseFineTuningJob(
-            config: config,
-            fineTuningJobId: fineTuningJobId,
-            requestOptions: requestOptions
-        )
+    public func pauseJob(fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
+        return try await FineTuningMethods.pauseFineTuningJob(config: config, fineTuningJobId: fineTuningJobId, requestOptions: requestOptions)
     }
 
-    /// Resumes a paused fine-tuning job that supports resuming. Use `fine_tuning_job_id` to identify the job you want
-    /// to resume. The response returns the job object and its current status.
+/// Resumes a paused fine-tuning job that supports resuming. Use `fine_tuning_job_id` to identify the job you want to resume. The response returns the job object and its current status.
     ///
     /// Resume a fine-tune job.
-    func resumeJob(fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
-        try await FineTuningMethods.resumeFineTuningJob(
-            config: config,
-            fineTuningJobId: fineTuningJobId,
-            requestOptions: requestOptions
-        )
+    public func resumeJob(fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
+        return try await FineTuningMethods.resumeFineTuningJob(config: config, fineTuningJobId: fineTuningJobId, requestOptions: requestOptions)
     }
 }
 
@@ -382,96 +172,40 @@ public class ImagesNamespace {
         self.config = config
     }
 
-    /// Creates an edited image from one or more source images and a text prompt. Send multipart form data with uploaded
-    /// image files, or JSON with image references; use `mask` to limit edits to designated areas. You can choose the
-    /// output format, size, and quality, and optionally stream partial image results.
+/// Creates an edited image from one or more source images and a text prompt. Send multipart form data with uploaded image files, or JSON with image references; use `mask` to limit edits to designated areas. You can choose the output format, size, and quality, and optionally stream partial image results.
     ///
-    /// Creates an edited or extended image given one or more source images and a prompt. This endpoint supports GPT
-    /// Image models.
-    public func createEdit(
-        body: CreateImageEditBody,
-        contentType: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ImagesResponse {
-        try await ImagesMethods.createImageEdit(
-            config: config,
-            body: body,
-            contentType: contentType,
-            requestOptions: requestOptions
-        )
+    /// Creates an edited or extended image given one or more source images and a prompt. This endpoint supports GPT Image models.
+    public func createEdit(body: CreateImageEditBody, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ImagesResponse {
+        return try await ImagesMethods.createImageEdit(config: config, body: body, contentType: contentType, requestOptions: requestOptions)
     }
 
-    /// Creates an edited image from one or more source images and a text prompt. Send multipart form data with uploaded
-    /// image files, or JSON with image references; use `mask` to limit edits to designated areas. You can choose the
-    /// output format, size, and quality, and optionally stream partial image results.
+/// Creates an edited image from one or more source images and a text prompt. Send multipart form data with uploaded image files, or JSON with image references; use `mask` to limit edits to designated areas. You can choose the output format, size, and quality, and optionally stream partial image results.
     ///
-    /// Creates an edited or extended image given one or more source images and a prompt. This endpoint supports GPT
-    /// Image models.
-    public func createEditStream(
-        body: CreateImageEditStreamBody,
-        contentType: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<ImageEditStreamEvent, Swift.Error> {
-        try await ImagesMethods.createImageEditStream(
-            config: config,
-            body: body,
-            contentType: contentType,
-            requestOptions: requestOptions
-        )
+    /// Creates an edited or extended image given one or more source images and a prompt. This endpoint supports GPT Image models.
+    public func createEditStream(body: CreateImageEditStreamBody, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<ImageEditStreamEvent, Swift.Error> {
+        return try await ImagesMethods.createImageEditStream(config: config, body: body, contentType: contentType, requestOptions: requestOptions)
     }
 
-    /// Creates one or more images from a text prompt using the specified image model. Provide `model` and `prompt`; `n`
-    /// defaults to 1, and you can enable streaming with `stream`. Use `size`, `quality`, and `output_format` to control
-    /// the generated images.
+/// Creates one or more images from a text prompt using the specified image model. Provide `model` and `prompt`; `n` defaults to 1, and you can enable streaming with `stream`. Use `size`, `quality`, and `output_format` to control the generated images.
     ///
-    /// Creates an image given a prompt using a GPT Image model. [Learn
-    /// more](https://developers.openai.com/api/docs/guides/images-vision).
-    public func create(
-        options: ImagesMethods.CreateImageOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ImagesResponse {
-        try await ImagesMethods.createImage(config: config, options: options, requestOptions: requestOptions)
+    /// Creates an image given a prompt using a GPT Image model. [Learn more](https://developers.openai.com/api/docs/guides/images-vision).
+    public func create(options: ImagesMethods.CreateImageOptions, requestOptions: RequestOptions? = nil) async throws -> ImagesResponse {
+        return try await ImagesMethods.createImage(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Creates one or more images from a text prompt using the specified image model. Provide `model` and `prompt`; `n`
-    /// defaults to 1, and you can enable streaming with `stream`. Use `size`, `quality`, and `output_format` to control
-    /// the generated images.
+/// Creates one or more images from a text prompt using the specified image model. Provide `model` and `prompt`; `n` defaults to 1, and you can enable streaming with `stream`. Use `size`, `quality`, and `output_format` to control the generated images.
     ///
-    /// Creates an image given a prompt using a GPT Image model. [Learn
-    /// more](https://developers.openai.com/api/docs/guides/images-vision).
-    public func createStream(
-        options: ImagesMethods.CreateImageStreamOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<ImageGenStreamEvent, Swift.Error> {
-        try await ImagesMethods.createImageStream(config: config, options: options, requestOptions: requestOptions)
+    /// Creates an image given a prompt using a GPT Image model. [Learn more](https://developers.openai.com/api/docs/guides/images-vision).
+    public func createStream(options: ImagesMethods.CreateImageStreamOptions, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<ImageGenStreamEvent, Swift.Error> {
+        return try await ImagesMethods.createImageStream(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Creates image variations based on an uploaded image using the legacy image variations contract. This operation
-    /// is retired and no longer available; use the image edits endpoint with a GPT Image model and a prompt to create a
-    /// variation. The legacy request schema requires a square PNG image smaller than 4 MB.
+/// Creates image variations based on an uploaded image using the legacy image variations contract. This operation is retired and no longer available; use the image edits endpoint with a GPT Image model and a prompt to create a variation. The legacy request schema requires a square PNG image smaller than 4 MB.
     ///
-    /// This endpoint is retired and no longer available. Use the image edits endpoint with a GPT Image model and a
-    /// prompt to create a variation of an image. The request and response schemas below describe the legacy contract.
+    /// This endpoint is retired and no longer available. Use the image edits endpoint with a GPT Image model and a prompt to create a variation of an image. The request and response schemas below describe the legacy contract.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func createVariation(
-        image: SdkUploadFile,
-        model: SdkOptional<String>? = nil,
-        n: SdkOptional<Int>? = nil,
-        responseFormat: SdkOptional<CreateImageVariationRequestResponseFormat>? = nil,
-        size: SdkOptional<CreateImageVariationRequestSize>? = nil,
-        user: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ImagesResponse {
-        try await ImagesMethods.createImageVariation(
-            config: config,
-            image: image,
-            model: model,
-            n: n,
-            responseFormat: responseFormat,
-            size: size,
-            user: user,
-            requestOptions: requestOptions
-        )
+    public func createVariation(image: SdkUploadFile, model: SdkOptional<String>? = nil, n: SdkOptional<Int>? = nil, responseFormat: SdkOptional<CreateImageVariationRequestResponseFormat>? = nil, size: SdkOptional<CreateImageVariationRequestSize>? = nil, user: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ImagesResponse {
+        return try await ImagesMethods.createImageVariation(config: config, image: image, model: model, n: n, responseFormat: responseFormat, size: size, user: user, requestOptions: requestOptions)
     }
 }

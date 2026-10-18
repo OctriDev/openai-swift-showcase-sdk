@@ -6,68 +6,31 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension FineTuningMethods {
-    /// Creates permissions that let other projects in the organization access a fine-tuned model checkpoint. Supply the
-    /// target project IDs in `project_ids`; this operation requires an admin API key.
+extension FineTuningMethods {
+    /// Creates permissions that let other projects in the organization access a fine-tuned model checkpoint. Supply the target project IDs in `project_ids`; this operation requires an admin API key.
     ///
-    /// **NOTE:** Calling this endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys).
-    /// This enables organization owners to share fine-tuned models with other projects in their organization.
+    /// **NOTE:** Calling this endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys). This enables organization owners to share fine-tuned models with other projects in their organization.
     ///
     /// - Parameters:
     /// - fineTunedModelCheckpoint: The ID of the fine-tuned model checkpoint to
     ///   create a permission for.
     /// - projectIds: The project identifiers to grant access to.
-    static func createFineTuningCheckpointPermission(
-        config: ClientConfig,
-        fineTunedModelCheckpoint: String,
-        projectIds: [String],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListFineTuningCheckpointPermissionResponse {
+    public static func createFineTuningCheckpointPermission(config: ClientConfig, fineTunedModelCheckpoint: String, projectIds: [String], requestOptions: RequestOptions? = nil) async throws -> ListFineTuningCheckpointPermissionResponse {
         let requestBody = CreateFineTuningCheckpointPermissionRequestBody(projectIds: projectIds)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/fine_tuning/checkpoints/", sdkEncodePathSegment(sdkWireString(fineTunedModelCheckpoint)), "/permissions"]
-                .joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createFineTuningCheckpointPermission",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/fine_tuning/checkpoints/", sdkEncodePathSegment(sdkWireString(fineTunedModelCheckpoint)), "/permissions"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createFineTuningCheckpointPermission", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Deletes a permission for a fine-tuned model checkpoint. Use an admin API key as an organization owner, and
-    /// provide both identifiers to target the permission. The response confirms whether the permission was deleted.
+    /// Deletes a permission for a fine-tuned model checkpoint. Use an admin API key as an organization owner, and provide both identifiers to target the permission. The response confirms whether the permission was deleted.
     ///
-    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys).
-    /// Organization owners can use this endpoint to delete a permission for a fine-tuned model checkpoint.
+    /// **NOTE:** This endpoint requires an [admin API key](https://developers.openai.com/api/reference/resources/admin/subresources/organization/subresources/admin_api_keys). Organization owners can use this endpoint to delete a permission for a fine-tuned model checkpoint.
     ///
     /// - Parameters:
     /// - fineTunedModelCheckpoint: The ID of the fine-tuned model checkpoint to
     ///   delete a permission for.
     /// - permissionId: The ID of the fine-tuned model checkpoint permission to
     ///   delete.
-    static func deleteFineTuningCheckpointPermission(
-        config: ClientConfig,
-        fineTunedModelCheckpoint: String,
-        permissionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeleteFineTuningCheckpointPermissionResponse {
-        try await (sdkRequest(
-            "DELETE",
-            [
-                "/fine_tuning/checkpoints/",
-                sdkEncodePathSegment(sdkWireString(fineTunedModelCheckpoint)),
-                "/permissions/",
-                sdkEncodePathSegment(sdkWireString(permissionId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteFineTuningCheckpointPermission",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func deleteFineTuningCheckpointPermission(config: ClientConfig, fineTunedModelCheckpoint: String, permissionId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteFineTuningCheckpointPermissionResponse {
+        return try (await sdkRequest("DELETE", ["/fine_tuning/checkpoints/", sdkEncodePathSegment(sdkWireString(fineTunedModelCheckpoint)), "/permissions/", sdkEncodePathSegment(sdkWireString(permissionId))].joined(), config: config, decoder: .json, operationId: "deleteFineTuningCheckpointPermission", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

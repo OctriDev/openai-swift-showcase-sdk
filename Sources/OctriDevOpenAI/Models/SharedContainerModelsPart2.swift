@@ -3,15 +3,12 @@
 
 import Foundation
 
-/// SharedContainer domain models
+// SharedContainer domain models
 /// Typed representation of the `ContainerMemoryLimit` API schema.
 public struct ContainerMemoryLimit: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let value1g = ContainerMemoryLimit(rawValue: "1g")
     public static let value4g = ContainerMemoryLimit(rawValue: "4g")
     public static let value16g = ContainerMemoryLimit(rawValue: "16g")
@@ -19,7 +16,7 @@ public struct ContainerMemoryLimit: RawRepresentable, Hashable, Codable, Sendabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

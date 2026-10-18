@@ -6,16 +6,16 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AgentsMethods {
-    struct CreateAgentSessionStreamOptions {
+extension AgentsMethods {
+    public struct CreateAgentSessionStreamOptions {
         public var environment: EnvironmentParam
         public var stream: Bool
-        public var spendControl: SdkOptional<SessionSpendControlParam>?
-        public var metadata: SdkOptional<[String: String]>?
-        public var agent: SessionAgentConfigParam?
-        public var agentId: String?
-        public var vaultIds: SdkOptional<[String]>?
-        public var input: SdkOptional<CreateSessionInputParam>?
+        public var spendControl: SdkOptional<SessionSpendControlParam>? = nil
+        public var metadata: SdkOptional<[String: String]>? = nil
+        public var agent: SessionAgentConfigParam? = nil
+        public var agentId: String? = nil
+        public var vaultIds: SdkOptional<[String]>? = nil
+        public var input: SdkOptional<CreateSessionInputParam>? = nil
 
         public init(environment: EnvironmentParam, stream: Bool) {
             self.environment = environment
@@ -23,8 +23,7 @@ public extension AgentsMethods {
         }
     }
 
-    /// Creates a managed agent session, optionally submits initial input, and returns the session or streams its events
-    /// when stream is true. See [running sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions).
+    /// Creates a managed agent session, optionally submits initial input, and returns the session or streams its events when stream is true. See [running sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions).
     ///
     /// - Parameters:
     /// - environment: An inline execution environment or a reference to an
@@ -45,12 +44,9 @@ public extension AgentsMethods {
     ///   `none`, or when `stream` is `true` for an environment that is not
     ///   `self_hosted`; optional for self-hosted and non-streaming execution
     ///   environments.
-    static func createAgentSessionStream(
-        config: ClientConfig,
-        options: CreateAgentSessionStreamOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
+    public static func createAgentSessionStream(config: ClientConfig, options: CreateAgentSessionStreamOptions, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
         let requestBody = CreateAgentSessionStreamStreamRequestBody(options: options)
+
 
         let upstream = try await sdkStream(
             "POST",
@@ -62,16 +58,7 @@ public extension AgentsMethods {
             streamMediaType: "text/event-stream",
             chunkDomain: "bytes",
             options: requestOptions,
-            errors: [
-                "400": ErrorResponse2.self,
-                "401": ErrorResponse2.self,
-                "403": ErrorResponse2.self,
-                "404": ErrorResponse2.self,
-                "409": ErrorResponse2.self,
-                "429": ErrorResponse2.self,
-                "500": ErrorResponse2.self,
-                "503": ErrorResponse2.self,
-            ]
+            errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "429": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self]
         )
         return AsyncThrowingStream { continuation in
             let streamTask = _Concurrency.Task {
@@ -81,11 +68,8 @@ public extension AgentsMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
-                            SessionEvent.self,
-                            from: Data(event.data.utf8)
-                        ) }
-
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(SessionEvent.self, from: Data(event.data.utf8)) }
+                        
                         continuation.yield(payload)
                     }
                     continuation.finish()

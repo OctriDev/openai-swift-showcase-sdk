@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// DecisionsAnswer domain models
+// DecisionsAnswer domain models
 public indirect enum AnswerResource {
     case answerResourcePredicate(AnswerResourcePredicate)
     case answerResourceChoice(AnswerResourceChoice)
@@ -14,6 +14,7 @@ public indirect enum AnswerResource {
 }
 
 extension AnswerResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,16 +22,12 @@ extension AnswerResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -41,11 +38,11 @@ extension AnswerResource: Codable {
 extension AnswerResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "predicate": try .answerResourcePredicate(AnswerResourcePredicate(from: decoder))
-        case "choice": try .answerResourceChoice(AnswerResourceChoice(from: decoder))
-        case "score": try .answerResourceScore(AnswerResourceScore(from: decoder))
-        case "refusal": try .answerResourceRefusal(AnswerResourceRefusal(from: decoder))
-        default: nil
+        case "predicate": return .answerResourcePredicate(try AnswerResourcePredicate(from: decoder))
+        case "choice": return .answerResourceChoice(try AnswerResourceChoice(from: decoder))
+        case "score": return .answerResourceScore(try AnswerResourceScore(from: decoder))
+        case "refusal": return .answerResourceRefusal(try AnswerResourceRefusal(from: decoder))
+        default: return nil
         }
     }
 }
@@ -84,78 +81,50 @@ public struct AnswerResourceChoice: Codable {
         case confidence
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AnswerResourceChoice {
-    init(from decoder: Decoder) throws {
+extension AnswerResourceChoice {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.choice) else {
-            throw SdkValidationError(
-                field: "choice",
-                code: "required",
-                message: "Validation failed for 'choice': value is required"
-            )
+            throw SdkValidationError(field: "choice", code: "required", message: "Validation failed for 'choice': value is required")
         }
         guard container.contains(.probabilities) else {
-            throw SdkValidationError(
-                field: "probabilities",
-                code: "required",
-                message: "Validation failed for 'probabilities': value is required"
-            )
+            throw SdkValidationError(field: "probabilities", code: "required", message: "Validation failed for 'probabilities': value is required")
         }
         guard container.contains(.confidence) else {
-            throw SdkValidationError(
-                field: "confidence",
-                code: "required",
-                message: "Validation failed for 'confidence': value is required"
-            )
+            throw SdkValidationError(field: "confidence", code: "required", message: "Validation failed for 'confidence': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeNullable(.name)
-        choice = try container.sdkDecodeRequired(.choice)
-        probabilities = try container.sdkDecodeRequired(.probabilities)
-        confidence = try container.sdkDecodeRequired(.confidence)
-        try sdkValidateRawEnum("type", type, AnswerResourceChoiceType.allCases.map(\.rawValue))
-        if let value = name {
-            try validateLength("name", value, min: 0, max: nil)
-        }
-        try validateItems("probabilities", probabilities, min: 0, max: 2000)
-    }
-}
-
-public extension AnswerResourceChoice {
-    init(
-        type: AnswerResourceChoiceType,
-        name: String?,
-        choice: ChoiceValueResource,
-        probabilities: [ChoiceProbabilityResource],
-        confidence: Double
-    ) throws {
-        (self.type, self.name) = (type, name)
-        (self.choice, self.probabilities) = (choice, probabilities)
-        self.confidence = confidence
-        try sdkValidateRawEnum("type", self.type, AnswerResourceChoiceType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeNullable(.name)
+        self.choice = try container.sdkDecodeRequired(.choice)
+        self.probabilities = try container.sdkDecodeRequired(.probabilities)
+        self.confidence = try container.sdkDecodeRequired(.confidence)
+            try sdkValidateRawEnum("type", self.type, AnswerResourceChoiceType.allCases.map(\.rawValue))
         if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }
-        try validateItems("probabilities", self.probabilities, min: 0, max: 2000)
+            try validateItems("probabilities", self.probabilities, min: 0, max: 2000)
+    }
+}
+
+extension AnswerResourceChoice {
+    public init(type: AnswerResourceChoiceType, name: String?, choice: ChoiceValueResource, probabilities: [ChoiceProbabilityResource], confidence: Double) throws {
+        (self.type, self.name) = (type, name)
+        (self.choice, self.probabilities) = (choice, probabilities)
+        self.confidence = confidence
+            try sdkValidateRawEnum("type", self.type, AnswerResourceChoiceType.allCases.map(\.rawValue))
+        if let value = self.name {
+            try validateLength("name", value, min: 0, max: nil)
+        }
+            try validateItems("probabilities", self.probabilities, min: 0, max: 2000)
     }
 }
 
@@ -180,78 +149,50 @@ public struct AnswerResourceScore: Codable {
         case confidence
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AnswerResourceScore {
-    init(from decoder: Decoder) throws {
+extension AnswerResourceScore {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.score) else {
-            throw SdkValidationError(
-                field: "score",
-                code: "required",
-                message: "Validation failed for 'score': value is required"
-            )
+            throw SdkValidationError(field: "score", code: "required", message: "Validation failed for 'score': value is required")
         }
         guard container.contains(.probabilities) else {
-            throw SdkValidationError(
-                field: "probabilities",
-                code: "required",
-                message: "Validation failed for 'probabilities': value is required"
-            )
+            throw SdkValidationError(field: "probabilities", code: "required", message: "Validation failed for 'probabilities': value is required")
         }
         guard container.contains(.confidence) else {
-            throw SdkValidationError(
-                field: "confidence",
-                code: "required",
-                message: "Validation failed for 'confidence': value is required"
-            )
+            throw SdkValidationError(field: "confidence", code: "required", message: "Validation failed for 'confidence': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeNullable(.name)
-        score = try container.sdkDecodeRequired(.score)
-        probabilities = try container.sdkDecodeRequired(.probabilities)
-        confidence = try container.sdkDecodeRequired(.confidence)
-        try sdkValidateRawEnum("type", type, AnswerResourceScoreType.allCases.map(\.rawValue))
-        if let value = name {
-            try validateLength("name", value, min: 0, max: nil)
-        }
-        try validateItems("probabilities", probabilities, min: 0, max: 2000)
-    }
-}
-
-public extension AnswerResourceScore {
-    init(
-        type: AnswerResourceScoreType,
-        name: String?,
-        score: Double,
-        probabilities: [ScoreProbabilityResource],
-        confidence: Double
-    ) throws {
-        (self.type, self.name) = (type, name)
-        (self.score, self.probabilities) = (score, probabilities)
-        self.confidence = confidence
-        try sdkValidateRawEnum("type", self.type, AnswerResourceScoreType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeNullable(.name)
+        self.score = try container.sdkDecodeRequired(.score)
+        self.probabilities = try container.sdkDecodeRequired(.probabilities)
+        self.confidence = try container.sdkDecodeRequired(.confidence)
+            try sdkValidateRawEnum("type", self.type, AnswerResourceScoreType.allCases.map(\.rawValue))
         if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }
-        try validateItems("probabilities", self.probabilities, min: 0, max: 2000)
+            try validateItems("probabilities", self.probabilities, min: 0, max: 2000)
+    }
+}
+
+extension AnswerResourceScore {
+    public init(type: AnswerResourceScoreType, name: String?, score: Double, probabilities: [ScoreProbabilityResource], confidence: Double) throws {
+        (self.type, self.name) = (type, name)
+        (self.score, self.probabilities) = (score, probabilities)
+        self.confidence = confidence
+            try sdkValidateRawEnum("type", self.type, AnswerResourceScoreType.allCases.map(\.rawValue))
+        if let value = self.name {
+            try validateLength("name", value, min: 0, max: nil)
+        }
+            try validateItems("probabilities", self.probabilities, min: 0, max: 2000)
     }
 }
 
@@ -270,50 +211,36 @@ public struct AnswerResourcePredicate: Codable {
         case probability
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AnswerResourcePredicate {
-    init(from decoder: Decoder) throws {
+extension AnswerResourcePredicate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.probability) else {
-            throw SdkValidationError(
-                field: "probability",
-                code: "required",
-                message: "Validation failed for 'probability': value is required"
-            )
+            throw SdkValidationError(field: "probability", code: "required", message: "Validation failed for 'probability': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeNullable(.name)
-        probability = try container.sdkDecodeRequired(.probability)
-        try sdkValidateRawEnum("type", type, AnswerResourcePredicateType.allCases.map(\.rawValue))
-        if let value = name {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeNullable(.name)
+        self.probability = try container.sdkDecodeRequired(.probability)
+            try sdkValidateRawEnum("type", self.type, AnswerResourcePredicateType.allCases.map(\.rawValue))
+        if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }
     }
 }
 
-public extension AnswerResourcePredicate {
-    init(type: AnswerResourcePredicateType, name: String?, probability: Double) throws {
+extension AnswerResourcePredicate {
+    public init(type: AnswerResourcePredicateType, name: String?, probability: Double) throws {
         (self.type, self.name) = (type, name)
         self.probability = probability
-        try sdkValidateRawEnum("type", self.type, AnswerResourcePredicateType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, AnswerResourcePredicateType.allCases.map(\.rawValue))
         if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }
@@ -332,41 +259,31 @@ public struct AnswerResourceRefusal: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AnswerResourceRefusal {
-    init(from decoder: Decoder) throws {
+extension AnswerResourceRefusal {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeNullable(.name)
-        try sdkValidateRawEnum("type", type, AnswerResourceRefusalType.allCases.map(\.rawValue))
-        if let value = name {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeNullable(.name)
+            try sdkValidateRawEnum("type", self.type, AnswerResourceRefusalType.allCases.map(\.rawValue))
+        if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }
     }
 }
 
-public extension AnswerResourceRefusal {
-    init(type: AnswerResourceRefusalType, name: String?) throws {
+extension AnswerResourceRefusal {
+    public init(type: AnswerResourceRefusalType, name: String?) throws {
         (self.type, self.name) = (type, name)
-        try sdkValidateRawEnum("type", self.type, AnswerResourceRefusalType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, AnswerResourceRefusalType.allCases.map(\.rawValue))
         if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }

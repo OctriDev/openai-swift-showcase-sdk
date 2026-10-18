@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AssistantsFile domain models
+// AssistantsFile domain models
 /// The ranking options for the file search. If not specified, the file search tool will use the `auto` ranker and a
 /// score_threshold of 0. See the file search tool documentation for more information.
 public struct FileSearchRankingOptions: Codable {
@@ -17,47 +17,25 @@ public struct FileSearchRankingOptions: Codable {
         case ranker
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension FileSearchRankingOptions {
-    init(from decoder: Decoder) throws {
+extension FileSearchRankingOptions {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.scoreThreshold) else {
-            throw SdkValidationError(
-                field: "score_threshold",
-                code: "required",
-                message: "Validation failed for 'score_threshold': value is required"
-            )
+            throw SdkValidationError(field: "score_threshold", code: "required", message: "Validation failed for 'score_threshold': value is required")
         }
-        scoreThreshold = try container.sdkDecodeRequired(.scoreThreshold)
-        ranker = try container.sdkDecodeIfPresent(.ranker)
-        try validateRange(
-            "score_threshold",
-            Double(scoreThreshold),
-            min: 0,
-            max: 1,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.scoreThreshold = try container.sdkDecodeRequired(.scoreThreshold)
+        self.ranker = try container.sdkDecodeIfPresent(.ranker)
+            try validateRange("score_threshold", Double(self.scoreThreshold), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension FileSearchRankingOptions {
-    init(scoreThreshold: Double, ranker: FileSearchRanker? = nil) throws {
+extension FileSearchRankingOptions {
+    public init(scoreThreshold: Double, ranker: FileSearchRanker? = nil) throws {
         (self.scoreThreshold, self.ranker) = (scoreThreshold, ranker)
-        try validateRange(
-            "score_threshold",
-            Double(self.scoreThreshold),
-            min: 0,
-            max: 1,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("score_threshold", Double(self.scoreThreshold), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -65,16 +43,13 @@ public extension FileSearchRankingOptions {
 public struct FileSearchRanker: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = FileSearchRanker(rawValue: "auto")
     public static let default20240821 = FileSearchRanker(rawValue: "default_2024_08_21")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

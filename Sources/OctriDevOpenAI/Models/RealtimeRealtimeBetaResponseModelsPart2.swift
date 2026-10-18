@@ -3,23 +3,9 @@
 
 import Foundation
 
-/// RealtimeRealtimeBetaResponse domain models
-public extension RealtimeBetaResponse {
-    init(
-        id: String? = nil,
-        object: RealtimeBetaResponseObject? = nil,
-        status: RealtimeBetaResponseStatus? = nil,
-        statusDetails: RealtimeBetaResponseStatusDetails? = nil,
-        output: [RealtimeConversationItem]? = nil,
-        metadata: Metadata? = nil,
-        usage: RealtimeBetaResponseUsage? = nil,
-        conversationId: String? = nil,
-        voice: VoiceIdsShared? = nil,
-        modalities: [RealtimeBetaResponseModalitiesItem]? = nil,
-        outputAudioFormat: RealtimeBetaResponseOutputAudioFormat? = nil,
-        temperature: Double? = nil,
-        maxOutputTokens: RealtimeBetaResponseMaxOutputTokens? = nil
-    ) {
+// RealtimeRealtimeBetaResponse domain models
+extension RealtimeBetaResponse {
+    public init(id: String? = nil, object: RealtimeBetaResponseObject? = nil, status: RealtimeBetaResponseStatus? = nil, statusDetails: RealtimeBetaResponseStatusDetails? = nil, output: [RealtimeConversationItem]? = nil, metadata: Metadata? = nil, usage: RealtimeBetaResponseUsage? = nil, conversationId: String? = nil, voice: VoiceIdsShared? = nil, modalities: [RealtimeBetaResponseModalitiesItem]? = nil, outputAudioFormat: RealtimeBetaResponseOutputAudioFormat? = nil, temperature: Double? = nil, maxOutputTokens: RealtimeBetaResponseMaxOutputTokens? = nil) {
         self.init()
         (self.id, self.object) = (id, object)
         (self.status, self.statusDetails) = (status, statusDetails)
@@ -37,32 +23,22 @@ public indirect enum RealtimeBetaResponseCreateParamsConversation {
 }
 
 extension RealtimeBetaResponseCreateParamsConversation: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for RealtimeBetaResponseCreateParamsConversation"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeBetaResponseCreateParamsConversation")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension RealtimeBetaResponseCreateParamsConversation {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue1(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(String.self) { return .stringValue1(value) }
         return nil
     }
 }
@@ -97,25 +73,21 @@ public struct RealtimeBetaResponseStatusDetails: Codable {
     }
 
     init() {
-        (type, reason, error) = (nil, nil, nil)
+        (self.type, self.reason, self.error) = (nil, nil, nil)
     }
 }
 
-public extension RealtimeBetaResponseStatusDetails {
-    init(from decoder: Decoder) throws {
+extension RealtimeBetaResponseStatusDetails {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        reason = try container.sdkDecodeIfPresent(.reason)
-        error = try container.sdkDecodeIfPresent(.error)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.reason = try container.sdkDecodeIfPresent(.reason)
+        self.error = try container.sdkDecodeIfPresent(.error)
     }
 }
 
-public extension RealtimeBetaResponseStatusDetails {
-    init(
-        type: RealtimeBetaResponseStatusDetailsType? = nil,
-        reason: RealtimeBetaResponseStatusDetailsReason? = nil,
-        error: RealtimeBetaResponseStatusDetailsError? = nil
-    ) {
+extension RealtimeBetaResponseStatusDetails {
+    public init(type: RealtimeBetaResponseStatusDetailsType? = nil, reason: RealtimeBetaResponseStatusDetailsReason? = nil, error: RealtimeBetaResponseStatusDetailsError? = nil) {
         self.init()
         (self.type, self.reason) = (type, reason)
         self.error = error
@@ -144,29 +116,23 @@ public struct RealtimeBetaResponseUsageInputTokenDetails: Codable {
     }
 
     init() {
-        (cachedTokens, textTokens, imageTokens, audioTokens, cachedTokensDetails) = (nil, nil, nil, nil, nil)
+        (self.cachedTokens, self.textTokens, self.imageTokens, self.audioTokens, self.cachedTokensDetails) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeBetaResponseUsageInputTokenDetails {
-    init(from decoder: Decoder) throws {
+extension RealtimeBetaResponseUsageInputTokenDetails {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        cachedTokens = try container.sdkDecodeIfPresent(.cachedTokens)
-        textTokens = try container.sdkDecodeIfPresent(.textTokens)
-        imageTokens = try container.sdkDecodeIfPresent(.imageTokens)
-        audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
-        cachedTokensDetails = try container.sdkDecodeIfPresent(.cachedTokensDetails)
+        self.cachedTokens = try container.sdkDecodeIfPresent(.cachedTokens)
+        self.textTokens = try container.sdkDecodeIfPresent(.textTokens)
+        self.imageTokens = try container.sdkDecodeIfPresent(.imageTokens)
+        self.audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
+        self.cachedTokensDetails = try container.sdkDecodeIfPresent(.cachedTokensDetails)
     }
 }
 
-public extension RealtimeBetaResponseUsageInputTokenDetails {
-    init(
-        cachedTokens: Int? = nil,
-        textTokens: Int? = nil,
-        imageTokens: Int? = nil,
-        audioTokens: Int? = nil,
-        cachedTokensDetails: RealtimeBetaResponseUsageInputTokenDetailsCachedTokensDetails? = nil
-    ) {
+extension RealtimeBetaResponseUsageInputTokenDetails {
+    public init(cachedTokens: Int? = nil, textTokens: Int? = nil, imageTokens: Int? = nil, audioTokens: Int? = nil, cachedTokensDetails: RealtimeBetaResponseUsageInputTokenDetailsCachedTokensDetails? = nil) {
         self.init()
         (self.cachedTokens, self.textTokens) = (cachedTokens, textTokens)
         (self.imageTokens, self.audioTokens) = (imageTokens, audioTokens)
@@ -175,19 +141,15 @@ public extension RealtimeBetaResponseUsageInputTokenDetails {
 }
 
 /// Optional enumerated value serialized in the `max_output_tokens` wire field.
-public struct RealtimeBetaResponseCreateParamsMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaResponseCreateParamsMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inf = RealtimeBetaResponseCreateParamsMaxOutputTokensVariant1(rawValue: "inf")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -200,15 +162,12 @@ public struct RealtimeBetaResponseCreateParamsMaxOutputTokensVariant1: RawRepres
 public struct RealtimeBetaResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let realtimeResponse = RealtimeBetaResponseObject(rawValue: "realtime.response")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -218,19 +177,15 @@ public struct RealtimeBetaResponseObject: RawRepresentable, Hashable, Codable, S
 }
 
 /// The type of the tool, i.e. `function`.
-public struct RealtimeBetaResponseCreateParamsToolsItemType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaResponseCreateParamsToolsItemType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let function = RealtimeBetaResponseCreateParamsToolsItemType(rawValue: "function")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -244,10 +199,7 @@ public struct RealtimeBetaResponseCreateParamsToolsItemType: RawRepresentable, H
 public struct RealtimeBetaResponseStatusDetailsType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let completed = RealtimeBetaResponseStatusDetailsType(rawValue: "completed")
     public static let cancelled = RealtimeBetaResponseStatusDetailsType(rawValue: "cancelled")
     public static let failed = RealtimeBetaResponseStatusDetailsType(rawValue: "failed")
@@ -255,7 +207,7 @@ public struct RealtimeBetaResponseStatusDetailsType: RawRepresentable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -265,20 +217,16 @@ public struct RealtimeBetaResponseStatusDetailsType: RawRepresentable, Hashable,
 }
 
 /// Required enumerated value serialized in the `modalities[]` wire field.
-public struct RealtimeBetaResponseCreateParamsModalitiesItem: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaResponseCreateParamsModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = RealtimeBetaResponseCreateParamsModalitiesItem(rawValue: "text")
     public static let audio = RealtimeBetaResponseCreateParamsModalitiesItem(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -288,20 +236,16 @@ public struct RealtimeBetaResponseCreateParamsModalitiesItem: RawRepresentable, 
 }
 
 /// Optional enumerated value serialized in the `conversation` wire field.
-public struct RealtimeBetaResponseCreateParamsConversationVariant1: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaResponseCreateParamsConversationVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = RealtimeBetaResponseCreateParamsConversationVariant1(rawValue: "auto")
     public static let none = RealtimeBetaResponseCreateParamsConversationVariant1(rawValue: "none")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -311,21 +255,17 @@ public struct RealtimeBetaResponseCreateParamsConversationVariant1: RawRepresent
 }
 
 /// The format of output audio. Options are `pcm16`, `g711_ulaw`, or `g711_alaw`.
-public struct RealtimeBetaResponseCreateParamsOutputAudioFormat: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaResponseCreateParamsOutputAudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let pcm16 = RealtimeBetaResponseCreateParamsOutputAudioFormat(rawValue: "pcm16")
     public static let g711Ulaw = RealtimeBetaResponseCreateParamsOutputAudioFormat(rawValue: "g711_ulaw")
     public static let g711Alaw = RealtimeBetaResponseCreateParamsOutputAudioFormat(rawValue: "g711_alaw")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -338,10 +278,7 @@ public struct RealtimeBetaResponseCreateParamsOutputAudioFormat: RawRepresentabl
 public struct RealtimeBetaResponseStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let completed = RealtimeBetaResponseStatus(rawValue: "completed")
     public static let cancelled = RealtimeBetaResponseStatus(rawValue: "cancelled")
     public static let failed = RealtimeBetaResponseStatus(rawValue: "failed")
@@ -350,7 +287,7 @@ public struct RealtimeBetaResponseStatus: RawRepresentable, Hashable, Codable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -363,14 +300,10 @@ public struct RealtimeBetaResponseStatus: RawRepresentable, Hashable, Codable, S
 /// detected a new start of speech) or `client_cancelled` (the client sent a cancel event). For an `incomplete`
 /// Response, one of `max_output_tokens` or `content_filter` (the server-side safety filter activated and cut
 /// off the response).
-public struct RealtimeBetaResponseStatusDetailsReason: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaResponseStatusDetailsReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let turnDetected = RealtimeBetaResponseStatusDetailsReason(rawValue: "turn_detected")
     public static let clientCancelled = RealtimeBetaResponseStatusDetailsReason(rawValue: "client_cancelled")
     public static let maxOutputTokens = RealtimeBetaResponseStatusDetailsReason(rawValue: "max_output_tokens")
@@ -378,7 +311,7 @@ public struct RealtimeBetaResponseStatusDetailsReason: RawRepresentable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -391,16 +324,13 @@ public struct RealtimeBetaResponseStatusDetailsReason: RawRepresentable, Hashabl
 public struct RealtimeBetaResponseModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = RealtimeBetaResponseModalitiesItem(rawValue: "text")
     public static let audio = RealtimeBetaResponseModalitiesItem(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -413,17 +343,14 @@ public struct RealtimeBetaResponseModalitiesItem: RawRepresentable, Hashable, Co
 public struct RealtimeBetaResponseOutputAudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let pcm16 = RealtimeBetaResponseOutputAudioFormat(rawValue: "pcm16")
     public static let g711Ulaw = RealtimeBetaResponseOutputAudioFormat(rawValue: "g711_ulaw")
     public static let g711Alaw = RealtimeBetaResponseOutputAudioFormat(rawValue: "g711_alaw")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -433,19 +360,15 @@ public struct RealtimeBetaResponseOutputAudioFormat: RawRepresentable, Hashable,
 }
 
 /// Optional enumerated value serialized in the `max_output_tokens` wire field.
-public struct RealtimeBetaResponseMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaResponseMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inf = RealtimeBetaResponseMaxOutputTokensVariant1(rawValue: "inf")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

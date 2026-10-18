@@ -6,34 +6,15 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    /// Deletes a message from a thread. Provide both identifiers to select the thread and the message to remove; the
-    /// response confirms the deletion.
+extension AssistantsMethods {
+    /// Deletes a message from a thread. Provide both identifiers to select the thread and the message to remove; the response confirms the deletion.
     ///
     /// Deletes a message.
     ///
     /// - Parameters:
     /// - threadId: The ID of the thread to which this message belongs.
     /// - messageId: The ID of the message to delete.
-    static func deleteMessage(
-        config: ClientConfig,
-        threadId: String,
-        messageId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeleteMessageResponse {
-        try await (sdkRequest(
-            "DELETE",
-            [
-                "/threads/",
-                sdkEncodePathSegment(sdkWireString(threadId)),
-                "/messages/",
-                sdkEncodePathSegment(sdkWireString(messageId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteMessage",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+    public static func deleteMessage(config: ClientConfig, threadId: String, messageId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteMessageResponse {
+        return try (await sdkRequest("DELETE", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/messages/", sdkEncodePathSegment(sdkWireString(messageId))].joined(), config: config, decoder: .json, operationId: "deleteMessage", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 }

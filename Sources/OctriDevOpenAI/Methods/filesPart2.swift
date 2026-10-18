@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension FilesMethods {
-    /// Lists uploaded files, with optional filtering, sorting, and cursor-based pagination. Use `purpose` to filter the
-    /// results, and use `after` with the last file ID from a page to retrieve the next page.
+extension FilesMethods {
+    /// Lists uploaded files, with optional filtering, sorting, and cursor-based pagination. Use `purpose` to filter the results, and use `after` with the last file ID from a page to retrieve the next page.
     ///
     /// Returns a list of files.
     ///
@@ -22,33 +21,16 @@ public extension FilesMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
-    static func listFiles(
-        config: ClientConfig,
-        purpose: String? = nil,
-        limit: Int? = nil,
-        order: ListFilesParameter? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListFilesResponse {
-        try await (sdkRequest(
-            "GET",
-            "/files",
-            config: config,
-            query: [
-                SdkQueryParameter("purpose", value: purpose),
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-                SdkQueryParameter("after", value: after),
-            ],
-            decoder: .json,
-            operationId: "listFiles",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func listFiles(config: ClientConfig, purpose: String? = nil, limit: Int? = nil, order: ListFilesParameter? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFilesResponse {
+        return try (await sdkRequest("GET", "/files", config: config, query: [
+            SdkQueryParameter("purpose", value: purpose),
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("after", value: after),
+        ], decoder: .json, operationId: "listFiles", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists uploaded files, with optional filtering, sorting, and cursor-based pagination. Use `purpose` to filter the
-    /// results, and use `after` with the last file ID from a page to retrieve the next page.
+    /// Lists uploaded files, with optional filtering, sorting, and cursor-based pagination. Use `purpose` to filter the results, and use `after` with the last file ID from a page to retrieve the next page.
     ///
     /// Returns a list of files.
     ///
@@ -62,40 +44,17 @@ public extension FilesMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
-    static func listFilesPaginated(
-        config: ClientConfig,
-        purpose: String? = nil,
-        limit: Int? = nil,
-        order: ListFilesParameter? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<OpenAIFile, Swift.Error> {
-        AsyncThrowingStream<OpenAIFile, Swift.Error> { (continuation: AsyncThrowingStream<
-            OpenAIFile,
-            Swift.Error
-        >.Continuation) in
+    public static func listFilesPaginated(config: ClientConfig, purpose: String? = nil, limit: Int? = nil, order: ListFilesParameter? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<OpenAIFile, Swift.Error> {
+        return AsyncThrowingStream<OpenAIFile, Swift.Error> { (continuation: AsyncThrowingStream<OpenAIFile, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listFiles(
-                            config: config,
-                            purpose: purpose,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listFiles(config: config, purpose: purpose, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -108,45 +67,24 @@ public extension FilesMethods {
         }
     }
 
-    struct ListFilesPage {
+    public struct ListFilesPage {
         public let data: ListFilesResponse
         public let items: [OpenAIFile]
         public let hasMore: Bool
     }
 
-    static func listFilesPages(
-        config: ClientConfig,
-        purpose: String? = nil,
-        limit: Int? = nil,
-        order: ListFilesParameter? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListFilesPage, Swift.Error> {
-        AsyncThrowingStream<ListFilesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListFilesPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listFilesPages(config: ClientConfig, purpose: String? = nil, limit: Int? = nil, order: ListFilesParameter? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListFilesPage, Swift.Error> {
+        return AsyncThrowingStream<ListFilesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListFilesPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listFiles(
-                            config: config,
-                            purpose: purpose,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listFiles(config: config, purpose: purpose, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && true
                         pageContinuation.yield(ListFilesPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore {
-                            break
-                        }
+                        if !hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

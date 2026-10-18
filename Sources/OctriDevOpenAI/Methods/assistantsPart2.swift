@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    /// Lists assistant configurations available to the authenticated user. Use `after` or `before` to navigate the
-    /// list, and `limit` and `order` to control page size and sorting. This operation is closing down and will be
-    /// removed on a date not specified here.
+extension AssistantsMethods {
+    /// Lists assistant configurations available to the authenticated user. Use `after` or `before` to navigate the list, and `limit` and `order` to control page size and sorting. This operation is closing down and will be removed on a date not specified here.
     ///
     /// Returns a list of assistants.
     ///
@@ -28,26 +26,16 @@ public extension AssistantsMethods {
     ///   before=obj_foo in order to fetch the previous page of the list.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func listAssistants(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: ListAssistantsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListAssistantsResponse {
-        try await (sdkRequest("GET", "/assistants", config: config, query: [
+    public static func listAssistants(config: ClientConfig, limit: Int? = nil, order: ListAssistantsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListAssistantsResponse {
+        return try (await sdkRequest("GET", "/assistants", config: config, query: [
             SdkQueryParameter("limit", value: limit),
             SdkQueryParameter("order", value: order),
             SdkQueryParameter("after", value: after),
             SdkQueryParameter("before", value: before),
-        ], decoder: .json, operationId: "listAssistants", options: requestOptions, errors: ["429": ErrorResponse.self]))
-            .data
+        ], decoder: .json, operationId: "listAssistants", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 
-    /// Lists assistant configurations available to the authenticated user. Use `after` or `before` to navigate the
-    /// list, and `limit` and `order` to control page size and sorting. This operation is closing down and will be
-    /// removed on a date not specified here.
+    /// Lists assistant configurations available to the authenticated user. Use `after` or `before` to navigate the list, and `limit` and `order` to control page size and sorting. This operation is closing down and will be removed on a date not specified here.
     ///
     /// Returns a list of assistants.
     ///
@@ -66,40 +54,17 @@ public extension AssistantsMethods {
     ///   before=obj_foo in order to fetch the previous page of the list.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func listAssistantsPaginated(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: ListAssistantsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<AssistantObject, Swift.Error> {
-        AsyncThrowingStream<AssistantObject, Swift.Error> { (continuation: AsyncThrowingStream<
-            AssistantObject,
-            Swift.Error
-        >.Continuation) in
+    public static func listAssistantsPaginated(config: ClientConfig, limit: Int? = nil, order: ListAssistantsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<AssistantObject, Swift.Error> {
+        return AsyncThrowingStream<AssistantObject, Swift.Error> { (continuation: AsyncThrowingStream<AssistantObject, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAssistants(
-                            config: config,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listAssistants(config: config, limit: limit, order: order, after: pageCursor, before: before, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -112,49 +77,24 @@ public extension AssistantsMethods {
         }
     }
 
-    struct ListAssistantsPage {
+    public struct ListAssistantsPage {
         public let data: ListAssistantsResponse
         public let items: [AssistantObject]
         public let hasMore: Bool
     }
 
-    static func listAssistantsPages(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: ListAssistantsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListAssistantsPage, Swift.Error> {
-        AsyncThrowingStream<ListAssistantsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListAssistantsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listAssistantsPages(config: ClientConfig, limit: Int? = nil, order: ListAssistantsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListAssistantsPage, Swift.Error> {
+        return AsyncThrowingStream<ListAssistantsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListAssistantsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAssistants(
-                            config: config,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listAssistants(config: config, limit: limit, order: order, after: pageCursor, before: before, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && true
-                        pageContinuation.yield(ListAssistantsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
+                        pageContinuation.yield(ListAssistantsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

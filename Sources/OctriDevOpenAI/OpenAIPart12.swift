@@ -9,95 +9,31 @@ public class ProjectUserRoleAssignmentsNamespace {
         self.config = config
     }
 
-    /// Lists the project roles assigned to a user within a project.
-    public func list(
-        projectId: String,
-        userId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListProjectUserRoleAssignmentsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RoleListResource {
-        try await ProjectUserRoleAssignmentsMethods.listProjectUserRoleAssignments(
-            config: config,
-            projectId: projectId,
-            userId: userId,
-            limit: limit,
-            after: after,
-            order: order,
-            requestOptions: requestOptions
-        )
+/// Lists the project roles assigned to a user within a project.
+    public func list(projectId: String, userId: String, limit: Int? = nil, after: String? = nil, order: ListProjectUserRoleAssignmentsParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> RoleListResource {
+        return try await ProjectUserRoleAssignmentsMethods.listProjectUserRoleAssignments(config: config, projectId: projectId, userId: userId, limit: limit, after: after, order: order, requestOptions: requestOptions)
     }
 
-    /// Lists the project roles assigned to a user within a project.
-    public func listPaginated(
-        projectId: String,
-        userId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListProjectUserRoleAssignmentsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<AssignedRoleDetails, Swift.Error> {
-        ProjectUserRoleAssignmentsMethods.listProjectUserRoleAssignmentsPaginated(
-            config: config,
-            projectId: projectId,
-            userId: userId,
-            limit: limit,
-            after: after,
-            order: order,
-            requestOptions: requestOptions
-        )
+/// Lists the project roles assigned to a user within a project.
+    public func listPaginated(projectId: String, userId: String, limit: Int? = nil, after: String? = nil, order: ListProjectUserRoleAssignmentsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<AssignedRoleDetails, Swift.Error> {
+        return ProjectUserRoleAssignmentsMethods.listProjectUserRoleAssignmentsPaginated(config: config, projectId: projectId, userId: userId, limit: limit, after: after, order: order, requestOptions: requestOptions)
     }
 
-    /// Assigns a project role to a user within a project.
-    public func assignProjectUserRole(
-        projectId: String,
-        userId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> UserRoleAssignment {
-        try await ProjectUserRoleAssignmentsMethods.assignProjectUserRole(
-            config: config,
-            projectId: projectId,
-            userId: userId,
-            roleId: roleId,
-            requestOptions: requestOptions
-        )
+/// Assigns a project role to a user within a project.
+    public func assignProjectUserRole(projectId: String, userId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> UserRoleAssignment {
+        return try await ProjectUserRoleAssignmentsMethods.assignProjectUserRole(config: config, projectId: projectId, userId: userId, roleId: roleId, requestOptions: requestOptions)
     }
 
-    /// Retrieves a project role assigned to a user. Use `project_id`, `user_id`, and `role_id` to identify the role
-    /// assignment and its project context.
+/// Retrieves a project role assigned to a user. Use `project_id`, `user_id`, and `role_id` to identify the role assignment and its project context.
     ///
     /// Retrieves a project role assigned to a user.
-    public func retrieveProjectUserRole(
-        projectId: String,
-        userId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AssignedRoleDetails {
-        try await ProjectUserRoleAssignmentsMethods.retrieveProjectUserRole(
-            config: config,
-            projectId: projectId,
-            userId: userId,
-            roleId: roleId,
-            requestOptions: requestOptions
-        )
+    public func retrieveProjectUserRole(projectId: String, userId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> AssignedRoleDetails {
+        return try await ProjectUserRoleAssignmentsMethods.retrieveProjectUserRole(config: config, projectId: projectId, userId: userId, roleId: roleId, requestOptions: requestOptions)
     }
 
-    /// Unassigns a project role from a user within a project.
-    public func unassignProjectUserRole(
-        projectId: String,
-        userId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedRoleAssignmentResource {
-        try await ProjectUserRoleAssignmentsMethods.unassignProjectUserRole(
-            config: config,
-            projectId: projectId,
-            userId: userId,
-            roleId: roleId,
-            requestOptions: requestOptions
-        )
+/// Unassigns a project role from a user within a project.
+    public func unassignProjectUserRole(projectId: String, userId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedRoleAssignmentResource {
+        return try await ProjectUserRoleAssignmentsMethods.unassignProjectUserRole(config: config, projectId: projectId, userId: userId, roleId: roleId, requestOptions: requestOptions)
     }
 }
 
@@ -107,137 +43,55 @@ public class RealtimeNamespace {
         self.config = config
     }
 
-    /// Create a new Realtime API call over WebRTC and receive the SDP answer needed to complete the peer connection.
+/// Create a new Realtime API call over WebRTC and receive the SDP answer needed to complete the peer connection.
     public func createCall(body: CreateRealtimeCallBody, requestOptions: RequestOptions? = nil) async throws -> String {
-        try await RealtimeMethods.createRealtimeCall(config: config, body: body, requestOptions: requestOptions)
+        return try await RealtimeMethods.createRealtimeCall(config: config, body: body, requestOptions: requestOptions)
     }
 
-    /// Accepts an incoming SIP call and configures the Realtime session that handles it. Set `type` to `realtime` and
-    /// configure session behavior through fields such as `model`, `audio`, and `tools`; `output_modalities` supports
-    /// text or audio, but not both. The caller is bridged to the model after the session configuration is applied.
+/// Accepts an incoming SIP call and configures the Realtime session that handles it. Set `type` to `realtime` and configure session behavior through fields such as `model`, `audio`, and `tools`; `output_modalities` supports text or audio, but not both. The caller is bridged to the model after the session configuration is applied.
     ///
     /// Accept an incoming SIP call and configure the realtime session that will handle it.
-    public func acceptCall(
-        options: RealtimeMethods.AcceptRealtimeCallOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await RealtimeMethods.acceptRealtimeCall(config: config, options: options, requestOptions: requestOptions)
+    public func acceptCall(options: RealtimeMethods.AcceptRealtimeCallOptions, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await RealtimeMethods.acceptRealtimeCall(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// End an active Realtime API call, whether it was initiated over SIP or WebRTC.
+/// End an active Realtime API call, whether it was initiated over SIP or WebRTC.
     public func hangupCall(callId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
-        try await RealtimeMethods.hangupRealtimeCall(config: config, callId: callId, requestOptions: requestOptions)
+        return try await RealtimeMethods.hangupRealtimeCall(config: config, callId: callId, requestOptions: requestOptions)
     }
 
-    /// Transfer an active SIP call to a new destination using the SIP REFER verb.
-    public func referCall(
-        callId: String,
-        targetUri: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await RealtimeMethods.referRealtimeCall(
-            config: config,
-            callId: callId,
-            targetUri: targetUri,
-            requestOptions: requestOptions
-        )
+/// Transfer an active SIP call to a new destination using the SIP REFER verb.
+    public func referCall(callId: String, targetUri: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await RealtimeMethods.referRealtimeCall(config: config, callId: callId, targetUri: targetUri, requestOptions: requestOptions)
     }
 
-    /// Decline an incoming SIP call by returning a SIP status code to the caller.
-    public func rejectCall(
-        callId: String,
-        statusCode: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await RealtimeMethods.rejectRealtimeCall(
-            config: config,
-            callId: callId,
-            statusCode: statusCode,
-            requestOptions: requestOptions
-        )
+/// Decline an incoming SIP call by returning a SIP status code to the caller.
+    public func rejectCall(callId: String, statusCode: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await RealtimeMethods.rejectRealtimeCall(config: config, callId: callId, statusCode: statusCode, requestOptions: requestOptions)
     }
 
-    /// Create a Realtime client secret with an associated session configuration. Client secrets are short-lived tokens
-    /// that can be passed to a client app, such as a web frontend or mobile client, which grants access to the Realtime
-    /// API without leaking your main API key. You can configure a custom TTL for each client secret. You can also
-    /// attach session configuration options to the client secret, which will be applied to any sessions created using
-    /// that client secret, but these can also be overridden by the client connection. [Learn more about authentication
-    /// with client secrets over WebRTC](https://developers.openai.com/api/docs/guides/realtime-webrtc). Returns the
-    /// created client secret and the effective session object. The client secret is a string that looks like `ek_1234`.
-    public func createClientSecret(
-        expiresAfter: RealtimeCreateClientSecretRequestExpiresAfter? = nil,
-        session: RealtimeCreateClientSecretRequestSession? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RealtimeCreateClientSecretResponse {
-        try await RealtimeMethods.createRealtimeClientSecret(
-            config: config,
-            expiresAfter: expiresAfter,
-            session: session,
-            requestOptions: requestOptions
-        )
+/// Create a Realtime client secret with an associated session configuration. Client secrets are short-lived tokens that can be passed to a client app, such as a web frontend or mobile client, which grants access to the Realtime API without leaking your main API key. You can configure a custom TTL for each client secret. You can also attach session configuration options to the client secret, which will be applied to any sessions created using that client secret, but these can also be overridden by the client connection. [Learn more about authentication with client secrets over WebRTC](https://developers.openai.com/api/docs/guides/realtime-webrtc). Returns the created client secret and the effective session object. The client secret is a string that looks like `ek_1234`.
+    public func createClientSecret(expiresAfter: RealtimeCreateClientSecretRequestExpiresAfter? = nil, session: RealtimeCreateClientSecretRequestSession? = nil, requestOptions: RequestOptions? = nil) async throws -> RealtimeCreateClientSecretResponse {
+        return try await RealtimeMethods.createRealtimeClientSecret(config: config, expiresAfter: expiresAfter, session: session, requestOptions: requestOptions)
     }
 
-    /// Creates a Realtime session and an ephemeral API key for authenticating client-side connections. Configure the
-    /// session with fields such as `modalities`, `instructions`, and `tools`; the key expires after one minute. Use the
-    /// returned `client_secret.value` in client environments instead of a standard API token.
+/// Creates a Realtime session and an ephemeral API key for authenticating client-side connections. Configure the session with fields such as `modalities`, `instructions`, and `tools`; the key expires after one minute. Use the returned `client_secret.value` in client environments instead of a standard API token.
     ///
-    /// Create an ephemeral API token for use in client-side applications with the Realtime API. Can be configured with
-    /// the same session parameters as the `session.update` client event. It responds with a session object, plus a
-    /// `client_secret` key which contains a usable ephemeral API token that can be used to authenticate browser clients
-    /// for the Realtime API. Returns the created Realtime session object, plus an ephemeral key.
-    public func createSession(
-        options: RealtimeMethods.CreateRealtimeSessionOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RealtimeSessionCreateResponse {
-        try await RealtimeMethods.createRealtimeSession(
-            config: config,
-            options: options,
-            requestOptions: requestOptions
-        )
+    /// Create an ephemeral API token for use in client-side applications with the Realtime API. Can be configured with the same session parameters as the `session.update` client event. It responds with a session object, plus a `client_secret` key which contains a usable ephemeral API token that can be used to authenticate browser clients for the Realtime API. Returns the created Realtime session object, plus an ephemeral key.
+    public func createSession(options: RealtimeMethods.CreateRealtimeSessionOptions, requestOptions: RequestOptions? = nil) async throws -> RealtimeSessionCreateResponse {
+        return try await RealtimeMethods.createRealtimeSession(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Create an ephemeral API token for use in client-side applications with the Realtime API specifically for
-    /// realtime transcriptions. Can be configured with the same session parameters as the
-    /// `transcription_session.update` client event. It responds with a session object, plus a `client_secret` key which
-    /// contains a usable ephemeral API token that can be used to authenticate browser clients for the Realtime API.
-    /// Returns the created Realtime transcription session object, plus an ephemeral key.
-    public func createTranscriptionSession(
-        turnDetection: RealtimeTranscriptionSessionCreateRequestTurnDetection? = nil,
-        inputAudioNoiseReduction: RealtimeTranscriptionSessionCreateRequestInputAudioNoiseReduction? = nil,
-        inputAudioFormat: RealtimeTranscriptionSessionCreateRequestInputAudioFormat? = nil,
-        inputAudioTranscription: AudioTranscription? = nil,
-        include: [RealtimeTranscriptionSessionCreateRequestIncludeItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RealtimeTranscriptionSessionCreateResponse {
-        try await RealtimeMethods.createRealtimeTranscriptionSession(
-            config: config,
-            turnDetection: turnDetection,
-            inputAudioNoiseReduction: inputAudioNoiseReduction,
-            inputAudioFormat: inputAudioFormat,
-            inputAudioTranscription: inputAudioTranscription,
-            include: include,
-            requestOptions: requestOptions
-        )
+/// Create an ephemeral API token for use in client-side applications with the Realtime API specifically for realtime transcriptions. Can be configured with the same session parameters as the `transcription_session.update` client event. It responds with a session object, plus a `client_secret` key which contains a usable ephemeral API token that can be used to authenticate browser clients for the Realtime API. Returns the created Realtime transcription session object, plus an ephemeral key.
+    public func createTranscriptionSession(turnDetection: RealtimeTranscriptionSessionCreateRequestTurnDetection? = nil, inputAudioNoiseReduction: RealtimeTranscriptionSessionCreateRequestInputAudioNoiseReduction? = nil, inputAudioFormat: RealtimeTranscriptionSessionCreateRequestInputAudioFormat? = nil, inputAudioTranscription: AudioTranscription? = nil, include: [RealtimeTranscriptionSessionCreateRequestIncludeItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> RealtimeTranscriptionSessionCreateResponse {
+        return try await RealtimeMethods.createRealtimeTranscriptionSession(config: config, turnDetection: turnDetection, inputAudioNoiseReduction: inputAudioNoiseReduction, inputAudioFormat: inputAudioFormat, inputAudioTranscription: inputAudioTranscription, include: include, requestOptions: requestOptions)
     }
 }
 
-public extension RealtimeNamespace {
-    /// Create a Realtime translation client secret with an associated translation session configuration. Client secrets
-    /// are short-lived tokens that can be passed to a client app, such as a web frontend or mobile client, which grants
-    /// access to the Realtime Translation API without leaking your main API key. You can configure a custom TTL for
-    /// each client secret. Returns the created client secret and the effective translation session object. The client
-    /// secret is a string that looks like `ek_1234`.
-    func createTranslationClientSecret(
-        session: RealtimeTranslationSessionCreateRequest,
-        expiresAfter: RealtimeTranslationClientSecretCreateRequestExpiresAfter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RealtimeTranslationClientSecretCreateResponse {
-        try await RealtimeMethods.createRealtimeTranslationClientSecret(
-            config: config,
-            session: session,
-            expiresAfter: expiresAfter,
-            requestOptions: requestOptions
-        )
+extension RealtimeNamespace {
+/// Create a Realtime translation client secret with an associated translation session configuration. Client secrets are short-lived tokens that can be passed to a client app, such as a web frontend or mobile client, which grants access to the Realtime Translation API without leaking your main API key. You can configure a custom TTL for each client secret. Returns the created client secret and the effective translation session object. The client secret is a string that looks like `ek_1234`.
+    public func createTranslationClientSecret(session: RealtimeTranslationSessionCreateRequest, expiresAfter: RealtimeTranslationClientSecretCreateRequestExpiresAfter? = nil, requestOptions: RequestOptions? = nil) async throws -> RealtimeTranslationClientSecretCreateResponse {
+        return try await RealtimeMethods.createRealtimeTranslationClientSecret(config: config, session: session, expiresAfter: expiresAfter, requestOptions: requestOptions)
     }
 }
 
@@ -247,339 +101,117 @@ public class ResponsesNamespace {
         self.config = config
     }
 
-    /// Creates a model response from text, image, or file input and can produce text or JSON output. Provide `input`
-    /// and `model`, and configure `tools` and `tool_choice` when you want the model to use custom code or built-in
-    /// tools. Set `background` to run the response asynchronously or `stream` to receive generated events as they are
-    /// produced.
+/// Creates a model response from text, image, or file input and can produce text or JSON output. Provide `input` and `model`, and configure `tools` and `tool_choice` when you want the model to use custom code or built-in tools. Set `background` to run the response asynchronously or `stream` to receive generated events as they are produced.
     ///
-    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or
-    /// [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate
-    /// [text](https://developers.openai.com/api/docs/guides/text) or
-    /// [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own
-    /// [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in
-    /// [tools](https://developers.openai.com/api/docs/guides/tools) like [web
-    /// search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file
-    /// search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the
-    /// model's response.
+    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate [text](https://developers.openai.com/api/docs/guides/text) or [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in [tools](https://developers.openai.com/api/docs/guides/tools) like [web search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the model's response.
     public func create(body: CreateResponse, requestOptions: RequestOptions? = nil) async throws -> Response {
-        try await ResponsesMethods.createResponse(config: config, body: body, requestOptions: requestOptions)
+        return try await ResponsesMethods.createResponse(config: config, body: body, requestOptions: requestOptions)
     }
 
-    /// Creates a model response from text, image, or file input and can produce text or JSON output. Provide `input`
-    /// and `model`, and configure `tools` and `tool_choice` when you want the model to use custom code or built-in
-    /// tools. Set `background` to run the response asynchronously or `stream` to receive generated events as they are
-    /// produced.
+/// Creates a model response from text, image, or file input and can produce text or JSON output. Provide `input` and `model`, and configure `tools` and `tool_choice` when you want the model to use custom code or built-in tools. Set `background` to run the response asynchronously or `stream` to receive generated events as they are produced.
     ///
-    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or
-    /// [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate
-    /// [text](https://developers.openai.com/api/docs/guides/text) or
-    /// [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own
-    /// [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in
-    /// [tools](https://developers.openai.com/api/docs/guides/tools) like [web
-    /// search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file
-    /// search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the
-    /// model's response.
-    public func createStream(
-        body: CreateResponse,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<ResponseStreamEvent, Swift.Error> {
-        try await ResponsesMethods.createResponseStream(config: config, body: body, requestOptions: requestOptions)
+    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate [text](https://developers.openai.com/api/docs/guides/text) or [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in [tools](https://developers.openai.com/api/docs/guides/tools) like [web search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the model's response.
+    public func createStream(body: CreateResponse, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<ResponseStreamEvent, Swift.Error> {
+        return try await ResponsesMethods.createResponseStream(config: config, body: body, requestOptions: requestOptions)
     }
 
-    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream`
-    /// to receive server-sent events. When streaming, use `starting_after` to resume from an event sequence number.
+/// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream` to receive server-sent events. When streaming, use `starting_after` to resume from an event sequence number.
     ///
     /// Retrieves a model response with the given ID.
-    public func get(
-        responseId: String,
-        include: [IncludeEnum]? = nil,
-        stream: Bool? = nil,
-        startingAfter: Int? = nil,
-        includeObfuscation: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Response {
-        try await ResponsesMethods.getResponse(
-            config: config,
-            responseId: responseId,
-            include: include,
-            stream: stream,
-            startingAfter: startingAfter,
-            includeObfuscation: includeObfuscation,
-            requestOptions: requestOptions
-        )
+    public func get(responseId: String, include: [IncludeEnum]? = nil, stream: Bool? = nil, startingAfter: Int? = nil, includeObfuscation: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> Response {
+        return try await ResponsesMethods.getResponse(config: config, responseId: responseId, include: include, stream: stream, startingAfter: startingAfter, includeObfuscation: includeObfuscation, requestOptions: requestOptions)
     }
 
-    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream`
-    /// to receive server-sent events. When streaming, use `starting_after` to resume from an event sequence number.
+/// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream` to receive server-sent events. When streaming, use `starting_after` to resume from an event sequence number.
     ///
     /// Retrieves a model response with the given ID.
-    public func getStream(
-        responseId: String,
-        include: [IncludeEnum]? = nil,
-        stream: Bool? = nil,
-        startingAfter: Int? = nil,
-        includeObfuscation: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<ResponseStreamEvent, Swift.Error> {
-        try await ResponsesMethods.getResponseStream(
-            config: config,
-            responseId: responseId,
-            include: include,
-            stream: stream,
-            startingAfter: startingAfter,
-            includeObfuscation: includeObfuscation,
-            requestOptions: requestOptions
-        )
+    public func getStream(responseId: String, include: [IncludeEnum]? = nil, stream: Bool? = nil, startingAfter: Int? = nil, includeObfuscation: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<ResponseStreamEvent, Swift.Error> {
+        return try await ResponsesMethods.getResponseStream(config: config, responseId: responseId, include: include, stream: stream, startingAfter: startingAfter, includeObfuscation: includeObfuscation, requestOptions: requestOptions)
     }
 
-    /// Deletes a model response by its identifier. Use this operation when you no longer need to retain the response.
-    /// The successful result confirms deletion and includes the response identifier.
+/// Deletes a model response by its identifier. Use this operation when you no longer need to retain the response. The successful result confirms deletion and includes the response identifier.
     ///
     /// Deletes a model response with the given ID.
-    public func delete(
-        responseId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeleteResponseResponse {
-        try await ResponsesMethods.deleteResponse(
-            config: config,
-            responseId: responseId,
-            requestOptions: requestOptions
-        )
+    public func delete(responseId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteResponseResponse {
+        return try await ResponsesMethods.deleteResponse(config: config, responseId: responseId, requestOptions: requestOptions)
     }
 
-    /// Cancels a model response that is running in the background. Use this operation when you need to stop background
-    /// generation before it completes. Only responses created with `background` set to `true` can be cancelled.
+/// Cancels a model response that is running in the background. Use this operation when you need to stop background generation before it completes. Only responses created with `background` set to `true` can be cancelled.
     ///
-    /// Cancels a model response with the given ID. Only responses created with the `background` parameter set to `true`
-    /// can be cancelled. [Learn more](https://developers.openai.com/api/docs/guides/background).
+    /// Cancels a model response with the given ID. Only responses created with the `background` parameter set to `true` can be cancelled. [Learn more](https://developers.openai.com/api/docs/guides/background).
     public func cancel(responseId: String, requestOptions: RequestOptions? = nil) async throws -> Response {
-        try await ResponsesMethods.cancelResponse(
-            config: config,
-            responseId: responseId,
-            requestOptions: requestOptions
-        )
+        return try await ResponsesMethods.cancelResponse(config: config, responseId: responseId, requestOptions: requestOptions)
     }
 
-    /// Lists the input items used to generate a model response. Use `limit` to set the page size and `order` to choose
-    /// the item order. Use `after` with an item identifier to continue through the results; check `has_more` to
-    /// determine whether additional items are available.
+/// Lists the input items used to generate a model response. Use `limit` to set the page size and `order` to choose the item order. Use `after` with an item identifier to continue through the results; check `has_more` to determine whether additional items are available.
     ///
     /// Returns a list of input items for a given response.
-    public func listInputItems(
-        responseId: String,
-        limit: Int? = nil,
-        order: ListInputItemsParameter? = nil,
-        after: String? = nil,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ResponseItemList {
-        try await ResponsesMethods.listInputItems(
-            config: config,
-            responseId: responseId,
-            limit: limit,
-            order: order,
-            after: after,
-            include: include,
-            requestOptions: requestOptions
-        )
+    public func listInputItems(responseId: String, limit: Int? = nil, order: ListInputItemsParameter? = nil, after: String? = nil, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) async throws -> ResponseItemList {
+        return try await ResponsesMethods.listInputItems(config: config, responseId: responseId, limit: limit, order: order, after: after, include: include, requestOptions: requestOptions)
     }
 
-    /// Lists the input items used to generate a model response. Use `limit` to set the page size and `order` to choose
-    /// the item order. Use `after` with an item identifier to continue through the results; check `has_more` to
-    /// determine whether additional items are available.
+/// Lists the input items used to generate a model response. Use `limit` to set the page size and `order` to choose the item order. Use `after` with an item identifier to continue through the results; check `has_more` to determine whether additional items are available.
     ///
     /// Returns a list of input items for a given response.
-    public func listInputItemsPaginated(
-        responseId: String,
-        limit: Int? = nil,
-        order: ListInputItemsParameter? = nil,
-        after: String? = nil,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ItemResource, Swift.Error> {
-        ResponsesMethods.listInputItemsPaginated(
-            config: config,
-            responseId: responseId,
-            limit: limit,
-            order: order,
-            after: after,
-            include: include,
-            requestOptions: requestOptions
-        )
+    public func listInputItemsPaginated(responseId: String, limit: Int? = nil, order: ListInputItemsParameter? = nil, after: String? = nil, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ItemResource, Swift.Error> {
+        return ResponsesMethods.listInputItemsPaginated(config: config, responseId: responseId, limit: limit, order: order, after: after, include: include, requestOptions: requestOptions)
     }
 }
 
-public extension ResponsesNamespace {
-    /// Counts the input tokens for a response request. Provide the model and any input or conversation context to
-    /// count, and use `input_tokens` in the result to inspect the count. Do not combine `previous_response_id` with
-    /// `conversation`.
+extension ResponsesNamespace {
+/// Counts the input tokens for a response request. Provide the model and any input or conversation context to count, and use `input_tokens` in the result to inspect the count. Do not combine `previous_response_id` with `conversation`.
     ///
-    /// Returns input token counts of the request. Returns an object with `object` set to `response.input_tokens` and an
-    /// `input_tokens` count.
-    func countInputTokens(
-        options: ResponsesMethods.CountResponsesInputTokensOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> TokenCountsResource {
-        try await ResponsesMethods.countResponsesInputTokens(
-            config: config,
-            options: options,
-            requestOptions: requestOptions
-        )
+    /// Returns input token counts of the request. Returns an object with `object` set to `response.input_tokens` and an `input_tokens` count.
+    public func countInputTokens(options: ResponsesMethods.CountResponsesInputTokensOptions, requestOptions: RequestOptions? = nil) async throws -> TokenCountsResource {
+        return try await ResponsesMethods.countResponsesInputTokens(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Compacts conversation input and returns a compacted response object with output items and token usage. Provide
-    /// the required `model` and any input or conversation context to compact. Do not combine `previous_response_id`
-    /// with `conversation`.
+/// Compacts conversation input and returns a compacted response object with output items and token usage. Provide the required `model` and any input or conversation context to compact. Do not combine `previous_response_id` with `conversation`.
     ///
-    /// Compact a conversation. Returns a compacted response object. Learn when and how to compact long-running
-    /// conversations in the [conversation state
-    /// guide](https://developers.openai.com/api/docs/guides/conversation-state#managing-the-context-window). For
-    /// ZDR-compatible compaction details, see [Compaction
-    /// (advanced)](https://developers.openai.com/api/docs/guides/conversation-state#compaction-advanced).
-    func compact(
-        options: ResponsesMethods.CompactResponsesOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CompactResource {
-        try await ResponsesMethods.compactResponses(config: config, options: options, requestOptions: requestOptions)
+    /// Compact a conversation. Returns a compacted response object. Learn when and how to compact long-running conversations in the [conversation state guide](https://developers.openai.com/api/docs/guides/conversation-state#managing-the-context-window). For ZDR-compatible compaction details, see [Compaction (advanced)](https://developers.openai.com/api/docs/guides/conversation-state#compaction-advanced).
+    public func compact(options: ResponsesMethods.CompactResponsesOptions, requestOptions: RequestOptions? = nil) async throws -> CompactResource {
+        return try await ResponsesMethods.compactResponses(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Creates a model response from text, image, or file input, with optional tools and output configuration. Use
-    /// `input`, `model`, and `tools` to control what the model processes and how it generates the response. Set
-    /// `background` to true if you need to cancel the response later.
+/// Creates a model response from text, image, or file input, with optional tools and output configuration. Use `input`, `model`, and `tools` to control what the model processes and how it generates the response. Set `background` to true if you need to cancel the response later.
     ///
-    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or
-    /// [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate
-    /// [text](https://developers.openai.com/api/docs/guides/text) or
-    /// [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own
-    /// [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in
-    /// [tools](https://developers.openai.com/api/docs/guides/tools) like [web
-    /// search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file
-    /// search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the
-    /// model's response.
-    func betaCreate(
-        body: BetaCreateResponse,
-        openaiBeta: [BetaCreateResponseParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BetaResponse {
-        try await ResponsesMethods.betaCreateResponse(
-            config: config,
-            body: body,
-            openaiBeta: openaiBeta,
-            requestOptions: requestOptions
-        )
+    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate [text](https://developers.openai.com/api/docs/guides/text) or [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in [tools](https://developers.openai.com/api/docs/guides/tools) like [web search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the model's response.
+    public func betaCreate(body: BetaCreateResponse, openaiBeta: [BetaCreateResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> BetaResponse {
+        return try await ResponsesMethods.betaCreateResponse(config: config, body: body, openaiBeta: openaiBeta, requestOptions: requestOptions)
     }
 
-    /// Creates a model response from text, image, or file input, with optional tools and output configuration. Use
-    /// `input`, `model`, and `tools` to control what the model processes and how it generates the response. Set
-    /// `background` to true if you need to cancel the response later.
+/// Creates a model response from text, image, or file input, with optional tools and output configuration. Use `input`, `model`, and `tools` to control what the model processes and how it generates the response. Set `background` to true if you need to cancel the response later.
     ///
-    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or
-    /// [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate
-    /// [text](https://developers.openai.com/api/docs/guides/text) or
-    /// [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own
-    /// [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in
-    /// [tools](https://developers.openai.com/api/docs/guides/tools) like [web
-    /// search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file
-    /// search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the
-    /// model's response.
-    func betaCreateStream(
-        body: BetaCreateResponse,
-        openaiBeta: [BetaCreateResponseParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<BetaResponseStreamEvent, Swift.Error> {
-        try await ResponsesMethods.betaCreateResponseStream(
-            config: config,
-            body: body,
-            openaiBeta: openaiBeta,
-            requestOptions: requestOptions
-        )
+    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate [text](https://developers.openai.com/api/docs/guides/text) or [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in [tools](https://developers.openai.com/api/docs/guides/tools) like [web search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the model's response.
+    public func betaCreateStream(body: BetaCreateResponse, openaiBeta: [BetaCreateResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<BetaResponseStreamEvent, Swift.Error> {
+        return try await ResponsesMethods.betaCreateResponseStream(config: config, body: body, openaiBeta: openaiBeta, requestOptions: requestOptions)
     }
 
-    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream`
-    /// to receive response events as server-sent events. Use `starting_after` to begin streaming after a particular
-    /// event sequence number.
+/// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream` to receive response events as server-sent events. Use `starting_after` to begin streaming after a particular event sequence number.
     ///
     /// Retrieves a model response with the given ID.
-    func betaGet(
-        responseId: String,
-        include: [BetaIncludeEnum]? = nil,
-        stream: Bool? = nil,
-        startingAfter: Int? = nil,
-        includeObfuscation: Bool? = nil,
-        openaiBeta: [BetaGetResponseParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BetaResponse {
-        try await ResponsesMethods.betaGetResponse(
-            config: config,
-            responseId: responseId,
-            include: include,
-            stream: stream,
-            startingAfter: startingAfter,
-            includeObfuscation: includeObfuscation,
-            openaiBeta: openaiBeta,
-            requestOptions: requestOptions
-        )
+    public func betaGet(responseId: String, include: [BetaIncludeEnum]? = nil, stream: Bool? = nil, startingAfter: Int? = nil, includeObfuscation: Bool? = nil, openaiBeta: [BetaGetResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> BetaResponse {
+        return try await ResponsesMethods.betaGetResponse(config: config, responseId: responseId, include: include, stream: stream, startingAfter: startingAfter, includeObfuscation: includeObfuscation, openaiBeta: openaiBeta, requestOptions: requestOptions)
     }
 
-    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream`
-    /// to receive response events as server-sent events. Use `starting_after` to begin streaming after a particular
-    /// event sequence number.
+/// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream` to receive response events as server-sent events. Use `starting_after` to begin streaming after a particular event sequence number.
     ///
     /// Retrieves a model response with the given ID.
-    func betaGetStream(
-        responseId: String,
-        include: [BetaIncludeEnum]? = nil,
-        stream: Bool? = nil,
-        startingAfter: Int? = nil,
-        includeObfuscation: Bool? = nil,
-        openaiBeta: [BetaGetResponseParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<BetaResponseStreamEvent, Swift.Error> {
-        try await ResponsesMethods.betaGetResponseStream(
-            config: config,
-            responseId: responseId,
-            include: include,
-            stream: stream,
-            startingAfter: startingAfter,
-            includeObfuscation: includeObfuscation,
-            openaiBeta: openaiBeta,
-            requestOptions: requestOptions
-        )
+    public func betaGetStream(responseId: String, include: [BetaIncludeEnum]? = nil, stream: Bool? = nil, startingAfter: Int? = nil, includeObfuscation: Bool? = nil, openaiBeta: [BetaGetResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<BetaResponseStreamEvent, Swift.Error> {
+        return try await ResponsesMethods.betaGetResponseStream(config: config, responseId: responseId, include: include, stream: stream, startingAfter: startingAfter, includeObfuscation: includeObfuscation, openaiBeta: openaiBeta, requestOptions: requestOptions)
     }
 
-    /// Deletes a model response by its identifier. Use this operation when you no longer need the response to remain
-    /// available. The response identifies the deleted object and indicates that deletion occurred.
+/// Deletes a model response by its identifier. Use this operation when you no longer need the response to remain available. The response identifies the deleted object and indicates that deletion occurred.
     ///
     /// Deletes a model response with the given ID.
-    func betaDelete(
-        responseId: String,
-        openaiBeta: [BetaDeleteResponseParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BetaDeleteResponseResponse {
-        try await ResponsesMethods.betaDeleteResponse(
-            config: config,
-            responseId: responseId,
-            openaiBeta: openaiBeta,
-            requestOptions: requestOptions
-        )
+    public func betaDelete(responseId: String, openaiBeta: [BetaDeleteResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> BetaDeleteResponseResponse {
+        return try await ResponsesMethods.betaDeleteResponse(config: config, responseId: responseId, openaiBeta: openaiBeta, requestOptions: requestOptions)
     }
 
-    /// Cancels a background model response by its identifier. Use this operation only for responses created with
-    /// `background` set to true; responses created without background processing cannot be cancelled. The response
-    /// includes the model response object and its current status.
+/// Cancels a background model response by its identifier. Use this operation only for responses created with `background` set to true; responses created without background processing cannot be cancelled. The response includes the model response object and its current status.
     ///
-    /// Cancels a model response with the given ID. Only responses created with the `background` parameter set to `true`
-    /// can be cancelled. [Learn more](https://developers.openai.com/api/docs/guides/background).
-    func betaCancel(
-        responseId: String,
-        openaiBeta: [BetaCancelResponseParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> BetaResponse {
-        try await ResponsesMethods.betaCancelResponse(
-            config: config,
-            responseId: responseId,
-            openaiBeta: openaiBeta,
-            requestOptions: requestOptions
-        )
+    /// Cancels a model response with the given ID. Only responses created with the `background` parameter set to `true` can be cancelled. [Learn more](https://developers.openai.com/api/docs/guides/background).
+    public func betaCancel(responseId: String, openaiBeta: [BetaCancelResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> BetaResponse {
+        return try await ResponsesMethods.betaCancelResponse(config: config, responseId: responseId, openaiBeta: openaiBeta, requestOptions: requestOptions)
     }
 }

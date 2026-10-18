@@ -3,19 +3,16 @@
 
 import Foundation
 
-/// AgentsComputer domain models
+// AgentsComputer domain models
 public indirect enum ComputerUseApprovalRequestKindResource {
-    case computerUseApprovalRequestKindResourceBrowserAuthentication(
-        ComputerUseApprovalRequestKindResourceBrowserAuthentication
-    )
-    case computerUseApprovalRequestKindResourceBrowserOriginAccess(
-        ComputerUseApprovalRequestKindResourceBrowserOriginAccess
-    )
+    case computerUseApprovalRequestKindResourceBrowserAuthentication(ComputerUseApprovalRequestKindResourceBrowserAuthentication)
+    case computerUseApprovalRequestKindResourceBrowserOriginAccess(ComputerUseApprovalRequestKindResourceBrowserOriginAccess)
     /// A member whose `type` names no branch this SDK knows, kept as received.
     case unknown(tag: String, raw: JSONValue)
 }
 
 extension ComputerUseApprovalRequestKindResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -23,16 +20,12 @@ extension ComputerUseApprovalRequestKindResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -44,14 +37,14 @@ extension ComputerUseApprovalRequestKindResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "browser_authentication":
-            try .computerUseApprovalRequestKindResourceBrowserAuthentication(
-                ComputerUseApprovalRequestKindResourceBrowserAuthentication(from: decoder)
-            )
+        return .computerUseApprovalRequestKindResourceBrowserAuthentication(
+            try ComputerUseApprovalRequestKindResourceBrowserAuthentication(from: decoder)
+        )
         case "browser_origin_access":
-            try .computerUseApprovalRequestKindResourceBrowserOriginAccess(
-                ComputerUseApprovalRequestKindResourceBrowserOriginAccess(from: decoder)
-            )
-        default: nil
+        return .computerUseApprovalRequestKindResourceBrowserOriginAccess(
+            try ComputerUseApprovalRequestKindResourceBrowserOriginAccess(from: decoder)
+        )
+        default: return nil
         }
     }
 }
@@ -60,10 +53,8 @@ extension ComputerUseApprovalRequestKindResource {
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .computerUseApprovalRequestKindResourceBrowserAuthentication(value): try container
-            .encode(value); return true
-        case let .computerUseApprovalRequestKindResourceBrowserOriginAccess(value): try container
-            .encode(value); return true
+        case let .computerUseApprovalRequestKindResourceBrowserAuthentication(value): try container.encode(value); return true
+        case let .computerUseApprovalRequestKindResourceBrowserOriginAccess(value): try container.encode(value); return true
         default: return false
         }
     }
@@ -81,6 +72,7 @@ public indirect enum ComputerUseApprovalResponseKindResource {
 }
 
 extension ComputerUseApprovalResponseKindResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "action"
     }
@@ -88,16 +80,12 @@ extension ComputerUseApprovalResponseKindResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -109,14 +97,14 @@ extension ComputerUseApprovalResponseKindResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "submit":
-            try .computerUseApprovalResponseKindResourceBrowserAuthenticationSx5df0861662(
-                ComputerUseApprovalResponseKindResourceBrowserAuthenticationSX5df0861662(from: decoder)
-            )
+        return .computerUseApprovalResponseKindResourceBrowserAuthenticationSx5df0861662(
+            try ComputerUseApprovalResponseKindResourceBrowserAuthenticationSX5df0861662(from: decoder)
+        )
         case "cancel":
-            try .computerUseApprovalResponseKindResourceBrowserAuthenticationCx3daf232742(
-                ComputerUseApprovalResponseKindResourceBrowserAuthenticationCX3daf232742(from: decoder)
-            )
-        default: nil
+        return .computerUseApprovalResponseKindResourceBrowserAuthenticationCx3daf232742(
+            try ComputerUseApprovalResponseKindResourceBrowserAuthenticationCX3daf232742(from: decoder)
+        )
+        default: return nil
         }
     }
 }
@@ -125,10 +113,8 @@ extension ComputerUseApprovalResponseKindResource {
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .computerUseApprovalResponseKindResourceBrowserAuthenticationSx5df0861662(value): try container
-            .encode(value); return true
-        case let .computerUseApprovalResponseKindResourceBrowserAuthenticationCx3daf232742(value): try container
-            .encode(value); return true
+        case let .computerUseApprovalResponseKindResourceBrowserAuthenticationSx5df0861662(value): try container.encode(value); return true
+        case let .computerUseApprovalResponseKindResourceBrowserAuthenticationCx3daf232742(value): try container.encode(value); return true
         default: return false
         }
     }
@@ -136,14 +122,13 @@ extension ComputerUseApprovalResponseKindResource {
 
 public indirect enum ComputerUseApprovalResponseParam {
     case computerUseApprovalResponseParamBrowserAuthentication(ComputerUseApprovalResponseParamBrowserAuthentication)
-    case computerUseApprovalResponseParamBrowserOriginAccessParam(
-        ComputerUseApprovalResponseParamBrowserOriginAccessParam
-    )
+    case computerUseApprovalResponseParamBrowserOriginAccessParam(ComputerUseApprovalResponseParamBrowserOriginAccessParam)
     /// A member whose `type` names no branch this SDK knows, kept as received.
     case unknown(tag: String, raw: JSONValue)
 }
 
 extension ComputerUseApprovalResponseParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -151,16 +136,12 @@ extension ComputerUseApprovalResponseParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -172,14 +153,14 @@ extension ComputerUseApprovalResponseParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "browser_authentication":
-            try .computerUseApprovalResponseParamBrowserAuthentication(
-                ComputerUseApprovalResponseParamBrowserAuthentication(from: decoder)
-            )
+        return .computerUseApprovalResponseParamBrowserAuthentication(
+            try ComputerUseApprovalResponseParamBrowserAuthentication(from: decoder)
+        )
         case "browser_origin_access":
-            try .computerUseApprovalResponseParamBrowserOriginAccessParam(
-                ComputerUseApprovalResponseParamBrowserOriginAccessParam(from: decoder)
-            )
-        default: nil
+        return .computerUseApprovalResponseParamBrowserOriginAccessParam(
+            try ComputerUseApprovalResponseParamBrowserOriginAccessParam(from: decoder)
+        )
+        default: return nil
         }
     }
 }
@@ -189,25 +170,21 @@ extension ComputerUseApprovalResponseParam {
         var container = encoder.singleValueContainer()
         switch self {
         case let .computerUseApprovalResponseParamBrowserAuthentication(value): try container.encode(value); return true
-        case let .computerUseApprovalResponseParamBrowserOriginAccessParam(value): try container
-            .encode(value); return true
+        case let .computerUseApprovalResponseParamBrowserOriginAccessParam(value): try container.encode(value); return true
         default: return false
         }
     }
 }
 
 public indirect enum ComputerUseApprovalResponseParamBrowserAuthentication {
-    case computerUseApprovalResponseParamBrowserAuthenticationSubmitParam(
-        ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParam
-    )
-    case computerUseApprovalResponseParamBrowserAuthenticationCancelParam(
-        ComputerUseApprovalResponseParamBrowserAuthenticationCancelParam
-    )
+    case computerUseApprovalResponseParamBrowserAuthenticationSubmitParam(ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParam)
+    case computerUseApprovalResponseParamBrowserAuthenticationCancelParam(ComputerUseApprovalResponseParamBrowserAuthenticationCancelParam)
     /// A member whose `action` names no branch this SDK knows, kept as received.
     case unknown(tag: String, raw: JSONValue)
 }
 
 extension ComputerUseApprovalResponseParamBrowserAuthentication: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "action"
     }
@@ -215,16 +192,12 @@ extension ComputerUseApprovalResponseParamBrowserAuthentication: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -236,14 +209,14 @@ extension ComputerUseApprovalResponseParamBrowserAuthentication {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "submit":
-            try .computerUseApprovalResponseParamBrowserAuthenticationSubmitParam(
-                ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParam(from: decoder)
-            )
+        return .computerUseApprovalResponseParamBrowserAuthenticationSubmitParam(
+            try ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParam(from: decoder)
+        )
         case "cancel":
-            try .computerUseApprovalResponseParamBrowserAuthenticationCancelParam(
-                ComputerUseApprovalResponseParamBrowserAuthenticationCancelParam(from: decoder)
-            )
-        default: nil
+        return .computerUseApprovalResponseParamBrowserAuthenticationCancelParam(
+            try ComputerUseApprovalResponseParamBrowserAuthenticationCancelParam(from: decoder)
+        )
+        default: return nil
         }
     }
 }
@@ -252,10 +225,8 @@ extension ComputerUseApprovalResponseParamBrowserAuthentication {
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .computerUseApprovalResponseParamBrowserAuthenticationSubmitParam(value): try container
-            .encode(value); return true
-        case let .computerUseApprovalResponseParamBrowserAuthenticationCancelParam(value): try container
-            .encode(value); return true
+        case let .computerUseApprovalResponseParamBrowserAuthenticationSubmitParam(value): try container.encode(value); return true
+        case let .computerUseApprovalResponseParamBrowserAuthenticationCancelParam(value): try container.encode(value); return true
         default: return false
         }
     }
@@ -286,86 +257,53 @@ public struct ComputerUseCallItemResource: Codable {
         case output
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ComputerUseCallItemResource {
-    init(from decoder: Decoder) throws {
+extension ComputerUseCallItemResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.turnId) else {
-            throw SdkValidationError(
-                field: "turn_id",
-                code: "required",
-                message: "Validation failed for 'turn_id': value is required"
-            )
+            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
         }
         guard container.contains(.title) else {
-            throw SdkValidationError(
-                field: "title",
-                code: "required",
-                message: "Validation failed for 'title': value is required"
-            )
+            throw SdkValidationError(field: "title", code: "required", message: "Validation failed for 'title': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        turnId = try container.sdkDecodeRequired(.turnId)
-        title = try container.sdkDecodeNullable(.title)
-        status = try container.sdkDecodeRequired(.status)
-        output = try container.sdkDecodeNullable(.output)
-        try sdkValidateRawEnum("type", type, ComputerUseCallItemResourceType.allCases.map(\.rawValue))
-        try validateLength("id", id, min: 0, max: nil)
-        try validateLength("turn_id", turnId, min: 0, max: nil)
-        if let value = title {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.turnId = try container.sdkDecodeRequired(.turnId)
+        self.title = try container.sdkDecodeNullable(.title)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.output = try container.sdkDecodeNullable(.output)
+            try sdkValidateRawEnum("type", self.type, ComputerUseCallItemResourceType.allCases.map(\.rawValue))
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+        if let value = self.title {
             try validateLength("title", value, min: 0, max: nil)
         }
     }
 }
 
-public extension ComputerUseCallItemResource {
-    init(
-        type: ComputerUseCallItemResourceType,
-        id: String,
-        turnId: String,
-        title: String?,
-        status: FunctionCallStatusResource,
-        output: ComputerScreenshotResource?
-    ) throws {
+extension ComputerUseCallItemResource {
+    public init(type: ComputerUseCallItemResourceType, id: String, turnId: String, title: String?, status: FunctionCallStatusResource, output: ComputerScreenshotResource?) throws {
         (self.type, self.id) = (type, id)
         (self.turnId, self.title) = (turnId, title)
         (self.status, self.output) = (status, output)
-        try sdkValidateRawEnum("type", self.type, ComputerUseCallItemResourceType.allCases.map(\.rawValue))
-        try validateLength("id", self.id, min: 0, max: nil)
-        try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, ComputerUseCallItemResourceType.allCases.map(\.rawValue))
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
         if let value = self.title {
             try validateLength("title", value, min: 0, max: nil)
         }
@@ -384,49 +322,28 @@ public struct ComputerUseApprovalResponseParamBrowserOriginAccessParam: Codable 
         case decision
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ComputerUseApprovalResponseParamBrowserOriginAccessParam {
-    init(from decoder: Decoder) throws {
+extension ComputerUseApprovalResponseParamBrowserOriginAccessParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.decision) else {
-            throw SdkValidationError(
-                field: "decision",
-                code: "required",
-                message: "Validation failed for 'decision': value is required"
-            )
+            throw SdkValidationError(field: "decision", code: "required", message: "Validation failed for 'decision': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        decision = try container.sdkDecodeRequired(.decision)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            ComputerUseApprovalResponseParamBrowserOriginAccessParamType.allCases.map(\.rawValue)
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.decision = try container.sdkDecodeRequired(.decision)
+            try sdkValidateRawEnum("type", self.type, ComputerUseApprovalResponseParamBrowserOriginAccessParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension ComputerUseApprovalResponseParamBrowserOriginAccessParam {
-    init(
-        type: ComputerUseApprovalResponseParamBrowserOriginAccessParamType,
-        decision: BrowserOriginAccessDecisionParam
-    ) throws {
+extension ComputerUseApprovalResponseParamBrowserOriginAccessParam {
+    public init(type: ComputerUseApprovalResponseParamBrowserOriginAccessParamType, decision: BrowserOriginAccessDecisionParam) throws {
         (self.type, self.decision) = (type, decision)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            ComputerUseApprovalResponseParamBrowserOriginAccessParamType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, ComputerUseApprovalResponseParamBrowserOriginAccessParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -442,38 +359,28 @@ public struct ComputerScreenshotResource: Codable {
         case imageUrl = "image_url"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ComputerScreenshotResource {
-    init(from decoder: Decoder) throws {
+extension ComputerScreenshotResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.imageUrl) else {
-            throw SdkValidationError(
-                field: "image_url",
-                code: "required",
-                message: "Validation failed for 'image_url': value is required"
-            )
+            throw SdkValidationError(field: "image_url", code: "required", message: "Validation failed for 'image_url': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        imageUrl = try container.sdkDecodeRequired(.imageUrl)
-        try validateLength("image_url", imageUrl, min: 0, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.imageUrl = try container.sdkDecodeRequired(.imageUrl)
+            try validateLength("image_url", self.imageUrl, min: 0, max: nil)
     }
 }
 
-public extension ComputerScreenshotResource {
-    init(type: ComputerScreenshotResourceType, imageUrl: String) throws {
+extension ComputerScreenshotResource {
+    public init(type: ComputerScreenshotResourceType, imageUrl: String) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
-        try validateLength("image_url", self.imageUrl, min: 0, max: nil)
+            try validateLength("image_url", self.imageUrl, min: 0, max: nil)
     }
 }
 
@@ -498,80 +405,48 @@ public struct ComputerUseApprovalRequestResultItemResource: Codable {
         case response
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ComputerUseApprovalRequestResultItemResource {
-    init(from decoder: Decoder) throws {
+extension ComputerUseApprovalRequestResultItemResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.turnId) else {
-            throw SdkValidationError(
-                field: "turn_id",
-                code: "required",
-                message: "Validation failed for 'turn_id': value is required"
-            )
+            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
         }
         guard container.contains(.requestId) else {
-            throw SdkValidationError(
-                field: "request_id",
-                code: "required",
-                message: "Validation failed for 'request_id': value is required"
-            )
+            throw SdkValidationError(field: "request_id", code: "required", message: "Validation failed for 'request_id': value is required")
         }
         guard container.contains(.response) else {
-            throw SdkValidationError(
-                field: "response",
-                code: "required",
-                message: "Validation failed for 'response': value is required"
-            )
+            throw SdkValidationError(field: "response", code: "required", message: "Validation failed for 'response': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        type = try container.sdkDecodeRequired(.type)
-        turnId = try container.sdkDecodeRequired(.turnId)
-        requestId = try container.sdkDecodeRequired(.requestId)
-        response = try container.sdkDecodeRequired(.response)
-        try validateLength("id", id, min: 0, max: nil)
-        try sdkValidateRawEnum("type", type, ComputerUseApprovalRequestResultItemResourceType.allCases.map(\.rawValue))
-        try validateLength("turn_id", turnId, min: 0, max: nil)
-        try validateLength("request_id", requestId, min: 0, max: nil)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.turnId = try container.sdkDecodeRequired(.turnId)
+        self.requestId = try container.sdkDecodeRequired(.requestId)
+        self.response = try container.sdkDecodeRequired(.response)
+            try validateLength("id", self.id, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, ComputerUseApprovalRequestResultItemResourceType.allCases.map(\.rawValue))
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try validateLength("request_id", self.requestId, min: 0, max: nil)
     }
 }
 
-public extension ComputerUseApprovalRequestResultItemResource {
-    init(
-        id: String,
-        type: ComputerUseApprovalRequestResultItemResourceType,
-        turnId: String,
-        requestId: String,
-        response: ComputerUseApprovalResponseKindResource
-    ) throws {
+extension ComputerUseApprovalRequestResultItemResource {
+    public init(id: String, type: ComputerUseApprovalRequestResultItemResourceType, turnId: String, requestId: String, response: ComputerUseApprovalResponseKindResource) throws {
         (self.id, self.type) = (id, type)
         (self.turnId, self.requestId) = (turnId, requestId)
         self.response = response
-        try validateLength("id", self.id, min: 0, max: nil)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            ComputerUseApprovalRequestResultItemResourceType.allCases.map(\.rawValue)
-        )
-        try validateLength("turn_id", self.turnId, min: 0, max: nil)
-        try validateLength("request_id", self.requestId, min: 0, max: nil)
+            try validateLength("id", self.id, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, ComputerUseApprovalRequestResultItemResourceType.allCases.map(\.rawValue))
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try validateLength("request_id", self.requestId, min: 0, max: nil)
     }
 }
 
@@ -588,7 +463,5 @@ public struct ComputerUseApprovalResponseKindResourceBrowserAuthenticationCX3daf
         case action
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

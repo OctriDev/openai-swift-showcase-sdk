@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsNetwork domain models
+// AgentsNetwork domain models
 /// Network access for an OpenAI-hosted environment.
 public struct NetworkPolicyParam: Codable {
     /// The environment's network access mode.
@@ -20,35 +20,29 @@ public struct NetworkPolicyParam: Codable {
         case blockedDomains = "blocked_domains"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NetworkPolicyParam {
-    init(from decoder: Decoder) throws {
+extension NetworkPolicyParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.access) else {
-            throw SdkValidationError(
-                field: "access",
-                code: "required",
-                message: "Validation failed for 'access': value is required"
-            )
+            throw SdkValidationError(field: "access", code: "required", message: "Validation failed for 'access': value is required")
         }
-        access = try container.sdkDecodeRequired(.access)
-        allowedDomains = try container.sdkDecodeIfPresent(.allowedDomains)
-        blockedDomains = try container.sdkDecodeIfPresent(.blockedDomains)
-        if let value = allowedDomains {
+        self.access = try container.sdkDecodeRequired(.access)
+        self.allowedDomains = try container.sdkDecodeIfPresent(.allowedDomains)
+        self.blockedDomains = try container.sdkDecodeIfPresent(.blockedDomains)
+        if let value = self.allowedDomains {
             try validateItems("allowed_domains", value, min: 0, max: 16384)
         }
-        if let value = blockedDomains {
+        if let value = self.blockedDomains {
             try validateItems("blocked_domains", value, min: 0, max: 100)
         }
     }
 }
 
-public extension NetworkPolicyParam {
-    init(access: NetworkAccessParam, allowedDomains: [String]? = nil, blockedDomains: [String]? = nil) throws {
+extension NetworkPolicyParam {
+    public init(access: NetworkAccessParam, allowedDomains: [String]? = nil, blockedDomains: [String]? = nil) throws {
         (self.access, self.allowedDomains) = (access, allowedDomains)
         self.blockedDomains = blockedDomains
         if let value = self.allowedDomains {
@@ -72,38 +66,28 @@ public struct NetworkPolicyResource: Codable {
         case allowedDomains = "allowed_domains"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension NetworkPolicyResource {
-    init(from decoder: Decoder) throws {
+extension NetworkPolicyResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.access) else {
-            throw SdkValidationError(
-                field: "access",
-                code: "required",
-                message: "Validation failed for 'access': value is required"
-            )
+            throw SdkValidationError(field: "access", code: "required", message: "Validation failed for 'access': value is required")
         }
         guard container.contains(.allowedDomains) else {
-            throw SdkValidationError(
-                field: "allowed_domains",
-                code: "required",
-                message: "Validation failed for 'allowed_domains': value is required"
-            )
+            throw SdkValidationError(field: "allowed_domains", code: "required", message: "Validation failed for 'allowed_domains': value is required")
         }
-        access = try container.sdkDecodeRequired(.access)
-        allowedDomains = try container.sdkDecodeRequired(.allowedDomains)
-        try validateItems("allowed_domains", allowedDomains, min: 0, max: 2000)
+        self.access = try container.sdkDecodeRequired(.access)
+        self.allowedDomains = try container.sdkDecodeRequired(.allowedDomains)
+            try validateItems("allowed_domains", self.allowedDomains, min: 0, max: 2000)
     }
 }
 
-public extension NetworkPolicyResource {
-    init(access: NetworkAccessResource, allowedDomains: [String]) throws {
+extension NetworkPolicyResource {
+    public init(access: NetworkAccessResource, allowedDomains: [String]) throws {
         (self.access, self.allowedDomains) = (access, allowedDomains)
-        try validateItems("allowed_domains", self.allowedDomains, min: 0, max: 2000)
+            try validateItems("allowed_domains", self.allowedDomains, min: 0, max: 2000)
     }
 }
 
@@ -111,17 +95,14 @@ public extension NetworkPolicyResource {
 public struct NetworkAccessParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let enabled = NetworkAccessParam(rawValue: "enabled")
     public static let disabled = NetworkAccessParam(rawValue: "disabled")
     public static let restricted = NetworkAccessParam(rawValue: "restricted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -134,17 +115,14 @@ public struct NetworkAccessParam: RawRepresentable, Hashable, Codable, Sendable,
 public struct NetworkAccessResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let enabled = NetworkAccessResource(rawValue: "enabled")
     public static let disabled = NetworkAccessResource(rawValue: "disabled")
     public static let restricted = NetworkAccessResource(rawValue: "restricted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

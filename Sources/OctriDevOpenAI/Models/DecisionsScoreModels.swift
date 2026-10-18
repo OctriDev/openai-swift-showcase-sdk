@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// DecisionsScore domain models
+// DecisionsScore domain models
 /// Typed representation of the `ScoreProbabilityResource` API schema.
 public struct ScoreProbabilityResource: Codable {
     /// Required `int64`-formatted value serialized in the `value` wire field.
@@ -19,47 +19,33 @@ public struct ScoreProbabilityResource: Codable {
         case probability
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ScoreProbabilityResource {
-    init(from decoder: Decoder) throws {
+extension ScoreProbabilityResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.value) else {
-            throw SdkValidationError(
-                field: "value",
-                code: "required",
-                message: "Validation failed for 'value': value is required"
-            )
+            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
         }
         guard container.contains(.label) else {
-            throw SdkValidationError(
-                field: "label",
-                code: "required",
-                message: "Validation failed for 'label': value is required"
-            )
+            throw SdkValidationError(field: "label", code: "required", message: "Validation failed for 'label': value is required")
         }
         guard container.contains(.probability) else {
-            throw SdkValidationError(
-                field: "probability",
-                code: "required",
-                message: "Validation failed for 'probability': value is required"
-            )
+            throw SdkValidationError(field: "probability", code: "required", message: "Validation failed for 'probability': value is required")
         }
-        value = try container.sdkDecodeRequired(.value)
-        label = try container.sdkDecodeRequired(.label)
-        probability = try container.sdkDecodeRequired(.probability)
-        try validateLength("label", label, min: 0, max: nil)
+        self.value = try container.sdkDecodeRequired(.value)
+        self.label = try container.sdkDecodeRequired(.label)
+        self.probability = try container.sdkDecodeRequired(.probability)
+            try validateLength("label", self.label, min: 0, max: nil)
     }
 }
 
-public extension ScoreProbabilityResource {
-    init(value: Int, label: String, probability: Double) throws {
+extension ScoreProbabilityResource {
+    public init(value: Int, label: String, probability: Double) throws {
         (self.value, self.label) = (value, label)
         self.probability = probability
-        try validateLength("label", self.label, min: 0, max: nil)
+            try validateLength("label", self.label, min: 0, max: nil)
     }
 }
 
@@ -75,36 +61,30 @@ public struct ScoreLevelParam: Codable {
         case description
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ScoreLevelParam {
-    init(from decoder: Decoder) throws {
+extension ScoreLevelParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.label) else {
-            throw SdkValidationError(
-                field: "label",
-                code: "required",
-                message: "Validation failed for 'label': value is required"
-            )
+            throw SdkValidationError(field: "label", code: "required", message: "Validation failed for 'label': value is required")
         }
-        label = try container.sdkDecodeRequired(.label)
-        description = try container.sdkDecodeIfPresent(.description)
-        try validateLength("label", label, min: 0, max: 1_048_576)
-        if let value = description {
-            try validateLength("description", value, min: 0, max: 1_048_576)
+        self.label = try container.sdkDecodeRequired(.label)
+        self.description = try container.sdkDecodeIfPresent(.description)
+            try validateLength("label", self.label, min: 0, max: 1048576)
+        if let value = self.description {
+            try validateLength("description", value, min: 0, max: 1048576)
         }
     }
 }
 
-public extension ScoreLevelParam {
-    init(label: String, description: String? = nil) throws {
+extension ScoreLevelParam {
+    public init(label: String, description: String? = nil) throws {
         (self.label, self.description) = (label, description)
-        try validateLength("label", self.label, min: 0, max: 1_048_576)
+            try validateLength("label", self.label, min: 0, max: 1048576)
         if let value = self.description {
-            try validateLength("description", value, min: 0, max: 1_048_576)
+            try validateLength("description", value, min: 0, max: 1048576)
         }
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// RealtimeRealtimeTranscription domain models
+// RealtimeRealtimeTranscription domain models
 /// Configuration for turn detection. Can be set to `null` to turn off. Server VAD means that the model will detect
 /// the start and end of speech based on audio volume and respond at the end of user speech.
 public struct RealtimeTranscriptionSessionCreateResponseTurnDetection: Codable {
@@ -26,22 +26,22 @@ public struct RealtimeTranscriptionSessionCreateResponseTurnDetection: Codable {
     }
 
     init() {
-        (type, threshold, prefixPaddingMs, silenceDurationMs) = (nil, nil, nil, nil)
+        (self.type, self.threshold, self.prefixPaddingMs, self.silenceDurationMs) = (nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseTurnDetection {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateResponseTurnDetection {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        threshold = try container.sdkDecodeIfPresent(.threshold)
-        prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
-        silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.threshold = try container.sdkDecodeIfPresent(.threshold)
+        self.prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
+        self.silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseTurnDetection {
-    init(type: String? = nil, threshold: Double? = nil, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil) {
+extension RealtimeTranscriptionSessionCreateResponseTurnDetection {
+    public init(type: String? = nil, threshold: Double? = nil, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil) {
         self.init()
         (self.type, self.threshold) = (type, threshold)
         (self.prefixPaddingMs, self.silenceDurationMs) = (prefixPaddingMs, silenceDurationMs)
@@ -62,19 +62,19 @@ public struct RealtimeTranscriptionSessionCreateRequestInputAudioNoiseReduction:
     }
 
     init() {
-        type = nil
+        self.type = nil
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestInputAudioNoiseReduction {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateRequestInputAudioNoiseReduction {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
+        self.type = try container.sdkDecodeIfPresent(.type)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateRequestInputAudioNoiseReduction {
-    init(type: NoiseReductionType? = nil) {
+extension RealtimeTranscriptionSessionCreateRequestInputAudioNoiseReduction {
+    public init(type: NoiseReductionType? = nil) {
         self.init()
         self.type = type
     }
@@ -91,19 +91,19 @@ public struct RealtimeTranscriptionSessionCreateResponseGAAudioInputNoiseReducti
     }
 
     init() {
-        type = nil
+        self.type = nil
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseGAAudioInputNoiseReduction {
-    init(from decoder: Decoder) throws {
+extension RealtimeTranscriptionSessionCreateResponseGAAudioInputNoiseReduction {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
+        self.type = try container.sdkDecodeIfPresent(.type)
     }
 }
 
-public extension RealtimeTranscriptionSessionCreateResponseGAAudioInputNoiseReduction {
-    init(type: NoiseReductionType? = nil) {
+extension RealtimeTranscriptionSessionCreateResponseGAAudioInputNoiseReduction {
+    public init(type: NoiseReductionType? = nil) {
         self.init()
         self.type = type
     }
@@ -111,21 +111,17 @@ public extension RealtimeTranscriptionSessionCreateResponseGAAudioInputNoiseRedu
 
 /// The format of input audio. Options are `pcm16`, `g711_ulaw`, or `g711_alaw`. For `pcm16`, input audio must
 /// be 16-bit PCM at a 24kHz sample rate, single channel (mono), and little-endian byte order.
-public struct RealtimeTranscriptionSessionCreateRequestInputAudioFormat: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeTranscriptionSessionCreateRequestInputAudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let pcm16 = RealtimeTranscriptionSessionCreateRequestInputAudioFormat(rawValue: "pcm16")
     public static let g711Ulaw = RealtimeTranscriptionSessionCreateRequestInputAudioFormat(rawValue: "g711_ulaw")
     public static let g711Alaw = RealtimeTranscriptionSessionCreateRequestInputAudioFormat(rawValue: "g711_alaw")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -135,20 +131,16 @@ public struct RealtimeTranscriptionSessionCreateRequestInputAudioFormat: RawRepr
 }
 
 /// Required enumerated value serialized in the `modalities[]` wire field.
-public struct RealtimeTranscriptionSessionCreateResponseModalitiesItem: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeTranscriptionSessionCreateResponseModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = RealtimeTranscriptionSessionCreateResponseModalitiesItem(rawValue: "text")
     public static let audio = RealtimeTranscriptionSessionCreateResponseModalitiesItem(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -158,20 +150,15 @@ public struct RealtimeTranscriptionSessionCreateResponseModalitiesItem: RawRepre
 }
 
 /// Required enumerated value serialized in the `include[]` wire field.
-public struct RealtimeTranscriptionSessionCreateResponseGAIncludeItem: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeTranscriptionSessionCreateResponseGAIncludeItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let itemInputAudioTranscriptionLogprobs =
-        RealtimeTranscriptionSessionCreateResponseGAIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let itemInputAudioTranscriptionLogprobs = RealtimeTranscriptionSessionCreateResponseGAIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -181,20 +168,15 @@ public struct RealtimeTranscriptionSessionCreateResponseGAIncludeItem: RawRepres
 }
 
 /// Required enumerated value serialized in the `include[]` wire field.
-public struct RealtimeTranscriptionSessionCreateRequestGAIncludeItem: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeTranscriptionSessionCreateRequestGAIncludeItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let itemInputAudioTranscriptionLogprobs =
-        RealtimeTranscriptionSessionCreateRequestGAIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let itemInputAudioTranscriptionLogprobs = RealtimeTranscriptionSessionCreateRequestGAIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -204,19 +186,15 @@ public struct RealtimeTranscriptionSessionCreateRequestGAIncludeItem: RawReprese
 }
 
 /// Type of turn detection. Only `server_vad` is currently supported for transcription sessions.
-public struct RealtimeTranscriptionSessionCreateRequestTurnDetectionType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeTranscriptionSessionCreateRequestTurnDetectionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let serverVad = RealtimeTranscriptionSessionCreateRequestTurnDetectionType(rawValue: "server_vad")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -226,20 +204,15 @@ public struct RealtimeTranscriptionSessionCreateRequestTurnDetectionType: RawRep
 }
 
 /// Required enumerated value serialized in the `include[]` wire field.
-public struct RealtimeTranscriptionSessionCreateRequestIncludeItem: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeTranscriptionSessionCreateRequestIncludeItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let itemInputAudioTranscriptionLogprobs =
-        RealtimeTranscriptionSessionCreateRequestIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let itemInputAudioTranscriptionLogprobs = RealtimeTranscriptionSessionCreateRequestIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

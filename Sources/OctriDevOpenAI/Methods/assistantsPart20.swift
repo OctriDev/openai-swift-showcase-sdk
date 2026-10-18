@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    /// Updates the metadata attached to a run. Send the key-value pairs you want associated with the run; the metadata
-    /// object supports up to 16 pairs, with string values and keys of up to 64 characters.
+extension AssistantsMethods {
+    /// Updates the metadata attached to a run. Send the key-value pairs you want associated with the run; the metadata object supports up to 16 pairs, with string values and keys of up to 64 characters.
     ///
     /// Modifies a run.
     ///
@@ -22,60 +21,20 @@ public extension AssistantsMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    static func modifyRun(
-        config: ClientConfig,
-        threadId: String,
-        runId: String,
-        metadata: SdkOptional<Metadata>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RunObject {
+    public static func modifyRun(config: ClientConfig, threadId: String, runId: String, metadata: SdkOptional<Metadata>? = nil, requestOptions: RequestOptions? = nil) async throws -> RunObject {
         let requestBody = ModifyRunRequestBody(metadata: metadata)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/threads/",
-                sdkEncodePathSegment(sdkWireString(threadId)),
-                "/runs/",
-                sdkEncodePathSegment(sdkWireString(runId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "modifyRun",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/runs/", sdkEncodePathSegment(sdkWireString(runId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "modifyRun", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 
-    /// Cancels a run that is in progress on a thread. Use this operation when you need to stop the run before it
-    /// completes; the returned run object reports its current status.
+    /// Cancels a run that is in progress on a thread. Use this operation when you need to stop the run before it completes; the returned run object reports its current status.
     ///
     /// Cancels a run that is `in_progress`.
     ///
     /// - Parameters:
     /// - threadId: The ID of the thread to which this run belongs.
     /// - runId: The ID of the run to cancel.
-    static func cancelRun(
-        config: ClientConfig,
-        threadId: String,
-        runId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RunObject {
-        try await (sdkRequest(
-            "POST",
-            [
-                "/threads/",
-                sdkEncodePathSegment(sdkWireString(threadId)),
-                "/runs/",
-                sdkEncodePathSegment(sdkWireString(runId)),
-                "/cancel",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "cancelRun",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+    public static func cancelRun(config: ClientConfig, threadId: String, runId: String, requestOptions: RequestOptions? = nil) async throws -> RunObject {
+        return try (await sdkRequest("POST", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/runs/", sdkEncodePathSegment(sdkWireString(runId)), "/cancel"].joined(), config: config, decoder: .json, operationId: "cancelRun", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 }

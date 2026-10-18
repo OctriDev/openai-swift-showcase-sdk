@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension InvitesMethods {
-    /// Create an invite for a user to the organization. The invite must be accepted by the user before they have access
-    /// to the organization.
+extension InvitesMethods {
+    /// Create an invite for a user to the organization. The invite must be accepted by the user before they have access to the organization.
     ///
     /// - Parameters:
     /// - email: Send an email to this address
@@ -18,53 +17,19 @@ public extension InvitesMethods {
     ///   default project for compatibility with legacy behavior. If empty list is
     ///   passed, the user will not be invited to any projects, including the default
     ///   one.
-    static func createInvites(
-        config: ClientConfig,
-        email: String,
-        role: InviteRequestRole,
-        projects: [InviteRequestProjectsItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Invite {
+    public static func createInvites(config: ClientConfig, email: String, role: InviteRequestRole, projects: [InviteRequestProjectsItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> Invite {
         let requestBody = CreateInvitesRequestBody(email: email, role: role, projects: projects)
 
-        return try await (sdkRequest(
-            "POST",
-            "/organization/invites",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createInvites",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/organization/invites", config: config, body: requestBody, decoder: .json, operationId: "createInvites", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Retrieves an organization invite by its identifier. Use `invite_id` to select the invite whose email address,
-    /// role, status, and project access you need to inspect.
+    /// Retrieves an organization invite by its identifier. Use `invite_id` to select the invite whose email address, role, status, and project access you need to inspect.
     ///
     /// Retrieves an invite.
     ///
     /// - Parameters:
     /// - inviteId: The ID of the invite to retrieve.
-    static func retrieveInvite(
-        config: ClientConfig,
-        inviteId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Invite {
-        try await (sdkRequest(
-            "GET",
-            ["/organization/invites/", sdkEncodePathSegment(sdkWireString(inviteId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveInvite",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+    public static func retrieveInvite(config: ClientConfig, inviteId: String, requestOptions: RequestOptions? = nil) async throws -> Invite {
+        return try (await sdkRequest("GET", ["/organization/invites/", sdkEncodePathSegment(sdkWireString(inviteId))].joined(), config: config, decoder: .json, operationId: "retrieveInvite", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

@@ -6,34 +6,13 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension VideosMethods {
+extension VideosMethods {
     /// Create a new video generation job from a prompt and optional reference assets.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func createVideo(
-        config: ClientConfig,
-        body: CreateVideoBody? = nil,
-        contentType: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VideoResource {
+    public static func createVideo(config: ClientConfig, body: CreateVideoBody? = nil, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> VideoResource {
         let encodedBody = try body?.encoded(contentType: contentType)
 
-        return try await (sdkRequest(
-            "POST",
-            "/videos",
-            config: config,
-            rawBody: encodedBody?.data,
-            contentType: encodedBody?.contentType ?? "application/json",
-            decoder: .json,
-            operationId: "createVideo",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-                "503": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/videos", config: config, rawBody: encodedBody?.data, contentType: encodedBody?.contentType ?? "application/json", decoder: .json, operationId: "createVideo", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self])).data
     }
 }

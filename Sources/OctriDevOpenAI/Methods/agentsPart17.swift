@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AgentsMethods {
-    struct CreateAgentEnvironmentTemplateOptions: Codable {
+extension AgentsMethods {
+    public struct CreateAgentEnvironmentTemplateOptions: Codable {
         public var packages: SdkOptional<EnvironmentPackagesParam>?
         public var setupCommands: SdkOptional<[SetupCommandParam]>?
         public var network: SdkOptional<NetworkPolicyParam>?
@@ -22,9 +22,7 @@ public extension AgentsMethods {
         public init() {}
     }
 
-    /// Creates reusable environment configuration without returning confidential setup commands or environment values.
-    /// See [reusing a hosted
-    /// setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
+    /// Creates reusable environment configuration without returning confidential setup commands or environment values. See [reusing a hosted setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
     ///
     /// - Parameters:
     /// - packages: Packages to install in the environment. Defaults to empty
@@ -44,11 +42,7 @@ public extension AgentsMethods {
     ///   list.
     /// - files: Files available before the agent starts. Defaults to an empty list.
     /// - name: An optional human-readable display name for the template.
-    static func createAgentEnvironmentTemplate(
-        config: ClientConfig,
-        options: CreateAgentEnvironmentTemplateOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EnvironmentTemplateResource {
+    public static func createAgentEnvironmentTemplate(config: ClientConfig, options: CreateAgentEnvironmentTemplateOptions, requestOptions: RequestOptions? = nil) async throws -> EnvironmentTemplateResource {
         if let setupCommands = options.setupCommands?.valueOrNil {
             try validateItems("setup_commands", setupCommands, min: 0, max: 16)
         }
@@ -75,22 +69,6 @@ public extension AgentsMethods {
 
         let requestBody = CreateAgentEnvironmentTemplateRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "POST",
-            "/agents/environments/templates",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createAgentEnvironmentTemplate",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse2.self,
-                "401": ErrorResponse2.self,
-                "403": ErrorResponse2.self,
-                "404": ErrorResponse2.self,
-                "500": ErrorResponse2.self,
-                "503": ErrorResponse2.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/agents/environments/templates", config: config, body: requestBody, decoder: .json, operationId: "createAgentEnvironmentTemplate", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
     }
 }

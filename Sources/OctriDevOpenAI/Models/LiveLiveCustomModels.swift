@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveCustom domain models
+// LiveLiveCustom domain models
 /// Typed representation of the `LiveCustomVoiceParam` API schema.
 public struct LiveCustomVoiceParam: Codable {
     /// Required `string` value serialized in the `id` wire field.
@@ -13,30 +13,24 @@ public struct LiveCustomVoiceParam: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveCustomVoiceParam {
-    init(from decoder: Decoder) throws {
+extension LiveCustomVoiceParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        try validateLength("id", id, min: 1, max: 128)
+        self.id = try container.sdkDecodeRequired(.id)
+            try validateLength("id", self.id, min: 1, max: 128)
     }
 }
 
-public extension LiveCustomVoiceParam {
-    init(id: String) throws {
+extension LiveCustomVoiceParam {
+    public init(id: String) throws {
         self.id = id
-        try validateLength("id", self.id, min: 1, max: 128)
+            try validateLength("id", self.id, min: 1, max: 128)
     }
 }
 
@@ -49,30 +43,24 @@ public struct LiveCustomToolInputParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveCustomToolInputParam {
-    init(from decoder: Decoder) throws {
+extension LiveCustomToolInputParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveCustomToolInputParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveCustomToolInputParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveCustomToolInputParam {
-    init(type: LiveCustomToolInputParamType) throws {
+extension LiveCustomToolInputParam {
+    public init(type: LiveCustomToolInputParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveCustomToolInputParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveCustomToolInputParamType.allCases.map(\.rawValue))
     }
 }
 

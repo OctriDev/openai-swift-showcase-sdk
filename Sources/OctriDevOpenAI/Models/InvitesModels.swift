@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Invites domain models
+// Invites domain models
 /// Required object value serialized in the `projects[]` wire field.
 public struct InviteProjectsItem: Codable {
     /// Project's public ID
@@ -16,35 +16,25 @@ public struct InviteProjectsItem: Codable {
         case role
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InviteProjectsItem {
-    init(from decoder: Decoder) throws {
+extension InviteProjectsItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        role = try container.sdkDecodeRequired(.role)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.role = try container.sdkDecodeRequired(.role)
     }
 }
 
-public extension InviteProjectsItem {
-    init(id: String, role: InviteProjectsItemRole) {
+extension InviteProjectsItem {
+    public init(id: String, role: InviteProjectsItemRole) {
         (self.id, self.role) = (id, role)
     }
 }
@@ -66,36 +56,26 @@ public struct InviteRequest: Codable {
         case projects
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InviteRequest {
-    init(from decoder: Decoder) throws {
+extension InviteRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.email) else {
-            throw SdkValidationError(
-                field: "email",
-                code: "required",
-                message: "Validation failed for 'email': value is required"
-            )
+            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
-        email = try container.sdkDecodeRequired(.email)
-        role = try container.sdkDecodeRequired(.role)
-        projects = try container.sdkDecodeIfPresent(.projects)
+        self.email = try container.sdkDecodeRequired(.email)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.projects = try container.sdkDecodeIfPresent(.projects)
     }
 }
 
-public extension InviteRequest {
-    init(email: String, role: InviteRequestRole, projects: [InviteRequestProjectsItem]? = nil) {
+extension InviteRequest {
+    public init(email: String, role: InviteRequestRole, projects: [InviteRequestProjectsItem]? = nil) {
         (self.email, self.role) = (email, role)
         self.projects = projects
     }
@@ -116,47 +96,39 @@ public struct InviteDeleteResponse: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InviteDeleteResponse {
-    init(from decoder: Decoder) throws {
+extension InviteDeleteResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        id = try container.sdkDecodeRequired(.id)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension InviteDeleteResponse {
-    init(object: InviteDeleteResponseObject, id: String, deleted: Bool) {
+extension InviteDeleteResponse {
+    public init(object: InviteDeleteResponseObject, id: String, deleted: Bool) {
         (self.object, self.id) = (object, id)
         self.deleted = deleted
     }
 }
+
+
+
+
+
+
 
 /// Represents an individual `invite` to the organization.
 public struct Invite: Codable {
@@ -191,87 +163,47 @@ public struct Invite: Codable {
         case acceptedAt = "accepted_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Invite {
-    init(from decoder: Decoder) throws {
+extension Invite {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.email) else {
-            throw SdkValidationError(
-                field: "email",
-                code: "required",
-                message: "Validation failed for 'email': value is required"
-            )
+            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.projects) else {
-            throw SdkValidationError(
-                field: "projects",
-                code: "required",
-                message: "Validation failed for 'projects': value is required"
-            )
+            throw SdkValidationError(field: "projects", code: "required", message: "Validation failed for 'projects': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        id = try container.sdkDecodeRequired(.id)
-        email = try container.sdkDecodeRequired(.email)
-        role = try container.sdkDecodeRequired(.role)
-        status = try container.sdkDecodeRequired(.status)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        projects = try container.sdkDecodeRequired(.projects)
-        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        acceptedAt = try container.sdkDecodeIfPresent(.acceptedAt)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.email = try container.sdkDecodeRequired(.email)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.projects = try container.sdkDecodeRequired(.projects)
+        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        self.acceptedAt = try container.sdkDecodeIfPresent(.acceptedAt)
     }
 }
 
-public extension Invite {
-    init(
-        object: InviteObject,
-        id: String,
-        email: String,
-        role: InviteRole,
-        status: InviteStatus,
-        createdAt: Int,
-        projects: [InviteProjectsItem],
-        expiresAt: Int? = nil,
-        acceptedAt: Int? = nil
-    ) {
+extension Invite {
+    public init(object: InviteObject, id: String, email: String, role: InviteRole, status: InviteStatus, createdAt: Int, projects: [InviteProjectsItem], expiresAt: Int? = nil, acceptedAt: Int? = nil) {
         (self.object, self.id) = (object, id)
         (self.email, self.role) = (email, role)
         (self.status, self.createdAt) = (status, createdAt)
@@ -301,51 +233,31 @@ public struct InviteListResponse: Codable {
         case lastId = "last_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InviteListResponse {
-    init(from decoder: Decoder) throws {
+extension InviteListResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        firstId = try container.sdkDecodeIfPresent(.firstId)
-        lastId = try container.sdkDecodeIfPresent(.lastId)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.firstId = try container.sdkDecodeIfPresent(.firstId)
+        self.lastId = try container.sdkDecodeIfPresent(.lastId)
     }
 }
 
-public extension InviteListResponse {
-    init(
-        object: InviteListResponseObject,
-        data: [Invite],
-        hasMore: Bool,
-        firstId: String? = nil,
-        lastId: String? = nil
-    ) {
+extension InviteListResponse {
+    public init(object: InviteListResponseObject, data: [Invite], hasMore: Bool, firstId: String? = nil, lastId: String? = nil) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.firstId) = (hasMore, firstId)
         self.lastId = lastId
@@ -364,35 +276,25 @@ public struct InviteRequestProjectsItem: Codable {
         case role
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InviteRequestProjectsItem {
-    init(from decoder: Decoder) throws {
+extension InviteRequestProjectsItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        role = try container.sdkDecodeRequired(.role)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.role = try container.sdkDecodeRequired(.role)
     }
 }
 
-public extension InviteRequestProjectsItem {
-    init(id: String, role: InviteRequestProjectsItemRole) {
+extension InviteRequestProjectsItem {
+    public init(id: String, role: InviteRequestProjectsItemRole) {
         (self.id, self.role) = (id, role)
     }
 }
@@ -401,15 +303,12 @@ public extension InviteRequestProjectsItem {
 public struct InviteListResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = InviteListResponseObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -422,16 +321,13 @@ public struct InviteListResponseObject: RawRepresentable, Hashable, Codable, Sen
 public struct InviteRequestRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let reader = InviteRequestRole(rawValue: "reader")
     public static let owner = InviteRequestRole(rawValue: "owner")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -444,15 +340,12 @@ public struct InviteRequestRole: RawRepresentable, Hashable, Codable, Sendable, 
 public struct InviteDeleteResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let organizationInviteDeleted = InviteDeleteResponseObject(rawValue: "organization.invite.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -465,16 +358,13 @@ public struct InviteDeleteResponseObject: RawRepresentable, Hashable, Codable, S
 public struct InviteRequestProjectsItemRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let member = InviteRequestProjectsItemRole(rawValue: "member")
     public static let owner = InviteRequestProjectsItemRole(rawValue: "owner")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -487,16 +377,13 @@ public struct InviteRequestProjectsItemRole: RawRepresentable, Hashable, Codable
 public struct InviteProjectsItemRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let member = InviteProjectsItemRole(rawValue: "member")
     public static let owner = InviteProjectsItemRole(rawValue: "owner")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -509,17 +396,14 @@ public struct InviteProjectsItemRole: RawRepresentable, Hashable, Codable, Senda
 public struct InviteStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let accepted = InviteStatus(rawValue: "accepted")
     public static let expired = InviteStatus(rawValue: "expired")
     public static let pending = InviteStatus(rawValue: "pending")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -532,16 +416,13 @@ public struct InviteStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWi
 public struct InviteRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let owner = InviteRole(rawValue: "owner")
     public static let reader = InviteRole(rawValue: "reader")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -554,15 +435,12 @@ public struct InviteRole: RawRepresentable, Hashable, Codable, Sendable, SdkWire
 public struct InviteObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let organizationInvite = InviteObject(rawValue: "organization.invite")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
