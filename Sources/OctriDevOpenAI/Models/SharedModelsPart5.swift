@@ -4,43 +4,6 @@
 import Foundation
 
 /// Shared domain models
-public extension TopLogProb {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.token) else {
-            throw SdkValidationError(
-                field: "token",
-                code: "required",
-                message: "Validation failed for 'token': value is required"
-            )
-        }
-        guard container.contains(.logprob) else {
-            throw SdkValidationError(
-                field: "logprob",
-                code: "required",
-                message: "Validation failed for 'logprob': value is required"
-            )
-        }
-        guard container.contains(.bytes) else {
-            throw SdkValidationError(
-                field: "bytes",
-                code: "required",
-                message: "Validation failed for 'bytes': value is required"
-            )
-        }
-        token = try container.sdkDecodeRequired(.token)
-        logprob = try container.sdkDecodeRequired(.logprob)
-        bytes = try container.sdkDecodeRequired(.bytes)
-    }
-}
-
-public extension TopLogProb {
-    init(token: String, logprob: Double, bytes: [Int]) {
-        (self.token, self.logprob) = (token, logprob)
-        self.bytes = bytes
-    }
-}
-
 /// Typed representation of the `OciExternalStorageProviderResponse` API schema.
 public struct OciExternalStorageProviderResponse: Codable {
     /// Required enumerated value serialized in the `type` wire field.
@@ -628,6 +591,46 @@ public enum TypeParamType: String, CaseIterable, Codable {
         let rawValue = try container.decode(String.self)
         guard let value = Self(rawValue: rawValue) else {
             let field = decoder.codingPath.last?.stringValue ?? "TypeParamType"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
+    }
+}
+
+/// The order in which paginated resources are returned.
+public struct ListOrderParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let asc = ListOrderParam(rawValue: "asc")
+    public static let desc = ListOrderParam(rawValue: "desc")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Specifies the event type. For a wait action, this property is always set to `wait`.
+public enum WaitParamType: String, CaseIterable, Codable {
+    case wait
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "WaitParamType"
             throw SdkValidationError(
                 field: field,
                 code: "enum",

@@ -52,11 +52,12 @@ let sdkMethodFixture3Value1 = String(
         "eyJpbnB1dCI6eyJmb3JtYXQiOnsidHlwZSI6ImF1ZGlvL3BjbSIsInJhdGUiOjI0MDAwfSwidHJhbnNj",
         "cmlwdGlvbiI6eyJtb2RlbCI6Im1vZGVsIiwibGFuZ3VhZ2UiOiJsYW5ndWFnZSIsImxhbmd1YWdlcyI6",
         "WyJsYW5ndWFnZXMiXSwia2V5d29yZHMiOlsia2V5d29yZHMiXSwicHJvbXB0IjoicHJvbXB0IiwiZGVs",
-        "YXkiOiJtaW5pbWFsIn0sIm5vaXNlX3JlZHVjdGlvbiI6bnVsbCwidHVybl9kZXRlY3Rpb24iOnsidHlw",
-        "ZSI6InNlcnZlcl92YWQiLCJ0aHJlc2hvbGQiOjEsInByZWZpeF9wYWRkaW5nX21zIjoxLCJzaWxlbmNl",
-        "X2R1cmF0aW9uX21zIjoxLCJjcmVhdGVfcmVzcG9uc2UiOnRydWUsImludGVycnVwdF9yZXNwb25zZSI6",
-        "dHJ1ZSwiaWRsZV90aW1lb3V0X21zIjo1MDAwfX0sIm91dHB1dCI6eyJmb3JtYXQiOnsidHlwZSI6ImF1",
-        "ZGlvL3BjbSIsInJhdGUiOjI0MDAwfSwidm9pY2UiOiJhbGxveSIsInNwZWVkIjoxfX0=",
+        "YXkiOiJtaW5pbWFsIn0sIm5vaXNlX3JlZHVjdGlvbiI6eyJ0eXBlIjoibmVhcl9maWVsZCJ9LCJ0dXJu",
+        "X2RldGVjdGlvbiI6eyJ0eXBlIjoic2VydmVyX3ZhZCIsInRocmVzaG9sZCI6MSwicHJlZml4X3BhZGRp",
+        "bmdfbXMiOjEsInNpbGVuY2VfZHVyYXRpb25fbXMiOjEsImNyZWF0ZV9yZXNwb25zZSI6dHJ1ZSwiaW50",
+        "ZXJydXB0X3Jlc3BvbnNlIjp0cnVlLCJpZGxlX3RpbWVvdXRfbXMiOjUwMDB9fSwib3V0cHV0Ijp7ImZv",
+        "cm1hdCI6eyJ0eXBlIjoiYXVkaW8vcGNtIiwicmF0ZSI6MjQwMDB9LCJ2b2ljZSI6ImFsbG95Iiwic3Bl",
+        "ZWQiOjF9fQ==",
     ].joined())!,
     encoding: .utf8
 )!
@@ -83,11 +84,12 @@ let sdkMethodFixture4Value1 = String(
         "eyJpbnB1dCI6eyJmb3JtYXQiOnsidHlwZSI6ImF1ZGlvL3BjbSIsInJhdGUiOjI0MDAwfSwidHJhbnNj",
         "cmlwdGlvbiI6eyJtb2RlbCI6Im1vZGVsIiwibGFuZ3VhZ2UiOiJsYW5ndWFnZSIsImxhbmd1YWdlcyI6",
         "WyJsYW5ndWFnZXMiXSwia2V5d29yZHMiOlsia2V5d29yZHMiXSwicHJvbXB0IjoicHJvbXB0IiwiZGVs",
-        "YXkiOiJtaW5pbWFsIn0sIm5vaXNlX3JlZHVjdGlvbiI6bnVsbCwidHVybl9kZXRlY3Rpb24iOnsidHlw",
-        "ZSI6InNlcnZlcl92YWQiLCJ0aHJlc2hvbGQiOjEsInByZWZpeF9wYWRkaW5nX21zIjoxLCJzaWxlbmNl",
-        "X2R1cmF0aW9uX21zIjoxLCJjcmVhdGVfcmVzcG9uc2UiOnRydWUsImludGVycnVwdF9yZXNwb25zZSI6",
-        "dHJ1ZSwiaWRsZV90aW1lb3V0X21zIjo1MDAwfX0sIm91dHB1dCI6eyJmb3JtYXQiOnsidHlwZSI6ImF1",
-        "ZGlvL3BjbSIsInJhdGUiOjI0MDAwfSwidm9pY2UiOiJhbGxveSIsInNwZWVkIjoxfX0=",
+        "YXkiOiJtaW5pbWFsIn0sIm5vaXNlX3JlZHVjdGlvbiI6eyJ0eXBlIjoibmVhcl9maWVsZCJ9LCJ0dXJu",
+        "X2RldGVjdGlvbiI6eyJ0eXBlIjoic2VydmVyX3ZhZCIsInRocmVzaG9sZCI6MSwicHJlZml4X3BhZGRp",
+        "bmdfbXMiOjEsInNpbGVuY2VfZHVyYXRpb25fbXMiOjEsImNyZWF0ZV9yZXNwb25zZSI6dHJ1ZSwiaW50",
+        "ZXJydXB0X3Jlc3BvbnNlIjp0cnVlLCJpZGxlX3RpbWVvdXRfbXMiOjUwMDB9fSwib3V0cHV0Ijp7ImZv",
+        "cm1hdCI6eyJ0eXBlIjoiYXVkaW8vcGNtIiwicmF0ZSI6MjQwMDB9LCJ2b2ljZSI6ImFsbG95Iiwic3Bl",
+        "ZWQiOjF9fQ==",
     ].joined())!,
     encoding: .utf8
 )!
@@ -575,10 +577,10 @@ let sdkMethodFixture34Expected = String(
 let sdkMethodFixture35Expected = String(
     data: Data(base64Encoded: [
         "eyJvYmplY3QiOiJsaXN0IiwiZGF0YSI6W3siYWdlbnQiOnsiYWdlbnRfbmFtZSI6IkV4YW1wbGUgTmFt",
-        "ZSJ9LCJ0eXBlIjoiQmV0YUlucHV0TWVzc2FnZVJlc291cmNlIiwicm9sZSI6InVzZXIiLCJzdGF0dXMi",
-        "OiJpbl9wcm9ncmVzcyIsImNvbnRlbnQiOlt7InR5cGUiOiJpbnB1dF90ZXh0IiwidGV4dCI6InRleHQi",
-        "LCJwcm9tcHRfY2FjaGVfYnJlYWtwb2ludCI6eyJtb2RlIjoiZXhwbGljaXQifX1dLCJpZCI6ImlkLTEi",
-        "fV0sImhhc19tb3JlIjpmYWxzZSwiZmlyc3RfaWQiOiJmaXJzdC0xIiwibGFzdF9pZCI6Imxhc3QtMSJ9",
+        "ZSJ9LCJ0eXBlIjoibWVzc2FnZSIsInJvbGUiOiJ1c2VyIiwic3RhdHVzIjoiaW5fcHJvZ3Jlc3MiLCJj",
+        "b250ZW50IjpbeyJ0eXBlIjoiaW5wdXRfdGV4dCIsInRleHQiOiJ0ZXh0IiwicHJvbXB0X2NhY2hlX2Jy",
+        "ZWFrcG9pbnQiOnsibW9kZSI6ImV4cGxpY2l0In19XSwiaWQiOiJpZC0xIn1dLCJoYXNfbW9yZSI6ZmFs",
+        "c2UsImZpcnN0X2lkIjoiZmlyc3QtMSIsImxhc3RfaWQiOiJsYXN0LTEifQ==",
     ].joined())!,
     encoding: .utf8
 )!
@@ -642,16 +644,6 @@ let sdkMethodFixture39Value2 = String(
 let sdkMethodFixture39Expected = String(
     data: Data(base64Encoded: [
         "eyJvYmplY3QiOiJyZXNwb25zZS5pbnB1dF90b2tlbnMiLCJpbnB1dF90b2tlbnMiOjEyM30=",
-    ].joined())!,
-    encoding: .utf8
-)!
-
-let sdkMethodFixture40Value1 = String(
-    data: Data(base64Encoded: [
-        "W3sidHlwZSI6ImZ1bmN0aW9uIiwibmFtZSI6IkV4YW1wbGUgTmFtZSIsImFzeW5jIjpmYWxzZSwiZGVz",
-        "Y3JpcHRpb24iOiJleGFtcGxlIHRleHQiLCJwYXJhbWV0ZXJzIjp7ImtleSI6bnVsbH0sIm91dHB1dF9z",
-        "Y2hlbWEiOnsia2V5IjpudWxsfSwic3RyaWN0IjpmYWxzZSwiZGVmZXJfbG9hZGluZyI6ZmFsc2UsImFs",
-        "bG93ZWRfY2FsbGVycyI6WyJkaXJlY3QiXX1d",
     ].joined())!,
     encoding: .utf8
 )!

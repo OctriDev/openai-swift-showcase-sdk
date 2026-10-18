@@ -4,6 +4,8 @@
 import Foundation
 
 /// Chat domain models
+public typealias ResponseModalities = [String]
+
 public indirect enum ServiceTier {
     case stringValue(String)
     case jsonValue(JSONValue)
@@ -43,59 +45,6 @@ extension ServiceTier {
         switch self {
         case let .stringValue(value): try container.encode(value); return true
         case let .jsonValue(value): try container.encode(value); return true
-        }
-    }
-}
-
-public indirect enum ToolsItem {
-    case chatCompletionTool(ChatCompletionTool)
-    case customToolChatCompletions(CustomToolChatCompletions)
-    /// A member whose `type` names no branch this SDK knows, kept as received.
-    case unknown(tag: String, raw: JSONValue)
-}
-
-extension ToolsItem: Codable {
-    private enum CodingKeys: String, CodingKey {
-        case discriminator = "type"
-    }
-
-    public init(from decoder: Decoder) throws {
-        let tagged = try decoder.container(keyedBy: CodingKeys.self)
-        let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
-        self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-        if case let .unknown(_, raw) = self {
-            var container = encoder.singleValueContainer()
-            try container.encode(raw)
-        }
-    }
-}
-
-extension ToolsItem {
-    static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
-        switch discriminator {
-        case "function": try .chatCompletionTool(ChatCompletionTool(from: decoder))
-        case "custom": try .customToolChatCompletions(CustomToolChatCompletions(from: decoder))
-        default: nil
-        }
-    }
-}
-
-extension ToolsItem {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .chatCompletionTool(value): try container.encode(value); return true
-        case let .customToolChatCompletions(value): try container.encode(value); return true
-        default: return false
         }
     }
 }
@@ -191,6 +140,27 @@ extension PredictionContentContent {
         case let .stringValue(value): try container.encode(value); return true
         case let .chatCompletionRequestMessageContentPartTextList(value): try container.encode(value); return true
         }
+    }
+}
+
+public struct ResponseModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let text = ResponseModalitiesItem(rawValue: "text")
+    public static let audio = ResponseModalitiesItem(rawValue: "audio")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
     }
 }
 

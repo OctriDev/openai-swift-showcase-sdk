@@ -4,44 +4,6 @@
 import Foundation
 
 /// Shared domain models
-public extension EasyInputMessage {
-    init(
-        role: EasyInputMessageRole,
-        content: EasyInputMessageContent,
-        phase: MessagePhase? = nil,
-        type: EasyInputMessageType? = nil
-    ) throws {
-        (self.role, self.content) = (role, content)
-        (self.phase, self.type) = (phase, type)
-        if let value = self.type {
-            try sdkValidateRawEnum("type", value, EasyInputMessageType.allCases.map(\.rawValue))
-        }
-    }
-}
-
-/// A double click action.
-public struct DoubleClickAction: Codable {
-    /// Specifies the event type. For a double click action, this property is always set to `double_click`.
-    public var type: DoubleClickActionType
-    /// The x-coordinate where the double click occurred.
-    public var x: Int
-    /// The y-coordinate where the double click occurred.
-    public var y: Int
-    /// The keys being held while double-clicking.
-    public var keys: [String]?
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case x
-        case y
-        case keys
-    }
-
-    private init(sdkCopy value: Self) {
-        self = value
-    }
-}
-
 public extension DoubleClickAction {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -619,5 +581,42 @@ public struct TopLogProb: Codable {
 
     private init(sdkCopy value: Self) {
         self = value
+    }
+}
+
+public extension TopLogProb {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.token) else {
+            throw SdkValidationError(
+                field: "token",
+                code: "required",
+                message: "Validation failed for 'token': value is required"
+            )
+        }
+        guard container.contains(.logprob) else {
+            throw SdkValidationError(
+                field: "logprob",
+                code: "required",
+                message: "Validation failed for 'logprob': value is required"
+            )
+        }
+        guard container.contains(.bytes) else {
+            throw SdkValidationError(
+                field: "bytes",
+                code: "required",
+                message: "Validation failed for 'bytes': value is required"
+            )
+        }
+        token = try container.sdkDecodeRequired(.token)
+        logprob = try container.sdkDecodeRequired(.logprob)
+        bytes = try container.sdkDecodeRequired(.bytes)
+    }
+}
+
+public extension TopLogProb {
+    init(token: String, logprob: Double, bytes: [Int]) {
+        (self.token, self.logprob) = (token, logprob)
+        self.bytes = bytes
     }
 }

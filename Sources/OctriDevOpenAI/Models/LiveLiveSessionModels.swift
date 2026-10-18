@@ -195,6 +195,11 @@ public indirect enum LiveSessionCreateResponseTransport {
 extension LiveSessionCreateResponseTransport: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -208,6 +213,21 @@ extension LiveSessionCreateResponseTransport: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension LiveSessionCreateResponseTransport {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(LiveWebRTCTransport.self), sdkKeepsEveryKey(value, of: raw) {
+            return .liveWebRtcTransport(value)
+        }
+        if let value = try? container.decode(LiveSessionCreateResponseTransportVariant1.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
+            return .liveSessionCreateResponseTransportVariant1(value)
+        }
+        return nil
     }
 }
 

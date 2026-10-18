@@ -3,6 +3,112 @@
 
 import Foundation
 
+public class FilesNamespace {
+    let config: ClientConfig
+    public init(config: ClientConfig) {
+        self.config = config
+    }
+
+    /// Lists uploaded files, with optional filtering, sorting, and cursor-based pagination. Use `purpose` to filter the
+    /// results, and use `after` with the last file ID from a page to retrieve the next page.
+    ///
+    /// Returns a list of files.
+    public func list(
+        purpose: String? = nil,
+        limit: Int? = nil,
+        order: ListFilesParameter? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListFilesResponse {
+        try await FilesMethods.listFiles(
+            config: config,
+            purpose: purpose,
+            limit: limit,
+            order: order,
+            after: after,
+            requestOptions: requestOptions
+        )
+    }
+
+    /// Lists uploaded files, with optional filtering, sorting, and cursor-based pagination. Use `purpose` to filter the
+    /// results, and use `after` with the last file ID from a page to retrieve the next page.
+    ///
+    /// Returns a list of files.
+    public func listPaginated(
+        purpose: String? = nil,
+        limit: Int? = nil,
+        order: ListFilesParameter? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<OpenAIFile, Swift.Error> {
+        FilesMethods.listFilesPaginated(
+            config: config,
+            purpose: purpose,
+            limit: limit,
+            order: order,
+            after: after,
+            requestOptions: requestOptions
+        )
+    }
+
+    /// Uploads a file for use across supported API endpoints. Send the file and its `purpose` as multipart form data,
+    /// and use `expires_after` when you want to set an expiration policy. File uploads are limited to 512 MB per file
+    /// and 2.5 TB of storage per project.
+    ///
+    /// Upload a file that can be used across various endpoints. Individual files can be up to 512 MB, and each project
+    /// can store up to 2.5 TB of files in total. There is no organization-wide storage limit. Uploads to this endpoint
+    /// are rate-limited to 1,000 requests per minute per authenticated user. - The Assistants API supports files up to
+    /// 2 million tokens and of specific file types. See the [Assistants Tools
+    /// guide](https://developers.openai.com/api/docs/guides/tools) for details. - The Fine-tuning API only supports
+    /// `.jsonl` files. The input also has certain required formats for fine-tuning
+    /// [chat](https://developers.openai.com/api/docs/guides/supervised-fine-tuning#formatting-your-data) or
+    /// [completions](https://developers.openai.com/api/docs/guides/supervised-fine-tuning#formatting-your-data) models.
+    /// - The Batch API only supports `.jsonl` files up to 200 MB in size. The input also has a specific required
+    /// [format](https://developers.openai.com/api/docs/guides/batch#1-prepare-your-batch-file). - For Retrieval or
+    /// `file_search` ingestion, upload files here first. If you need to attach multiple uploaded files to the same
+    /// vector store, use [`/vector_stores/{vector_store_id}/file_batches`](https://developers.openai.com/api/reference/resources/vector_stores/subresources/file_batches/methods/create)
+    /// instead of attaching them one by one. Vector store attachment has separate limits from file upload, including
+    /// 2,000 attached files per minute per organization. Please [contact us](https://help.openai.com/) if you need to
+    /// increase these storage limits.
+    public func create(
+        file: SdkUploadFile,
+        purpose: CreateFileRequestPurpose,
+        expiresAfter: FileExpirationAfter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OpenAIFile {
+        try await FilesMethods.createFile(
+            config: config,
+            file: file,
+            purpose: purpose,
+            expiresAfter: expiresAfter,
+            requestOptions: requestOptions
+        )
+    }
+
+    /// Deletes a file and removes it from all vector stores. Use `file_id` to identify the file to remove.
+    ///
+    /// Delete a file and remove it from all vector stores.
+    public func delete(fileId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteFileResponse {
+        try await FilesMethods.deleteFile(config: config, fileId: fileId, requestOptions: requestOptions)
+    }
+
+    /// Retrieves metadata for a specific uploaded file. Use `file_id` to identify the file whose purpose, size, status,
+    /// and timestamps you need.
+    ///
+    /// Returns information about a specific file.
+    public func retrieve(fileId: String, requestOptions: RequestOptions? = nil) async throws -> OpenAIFile {
+        try await FilesMethods.retrieveFile(config: config, fileId: fileId, requestOptions: requestOptions)
+    }
+
+    /// Retrieves the contents of a specific uploaded file. Use `file_id` to identify the file, and note that some file
+    /// purposes or account permissions do not allow downloads.
+    ///
+    /// Returns a response containing the contents of the specified file.
+    public func download(fileId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
+        try await FilesMethods.downloadFile(config: config, fileId: fileId, requestOptions: requestOptions)
+    }
+}
+
 public class FineTuningNamespace {
     let config: ClientConfig
     public init(config: ClientConfig) {
@@ -365,122 +471,6 @@ public class ImagesNamespace {
             responseFormat: responseFormat,
             size: size,
             user: user,
-            requestOptions: requestOptions
-        )
-    }
-}
-
-public class LiveNamespace {
-    let config: ClientConfig
-    public init(config: ClientConfig) {
-        self.config = config
-    }
-
-    /// Create a Live WebRTC session or place an outbound SIP call. Start with the [Live prompting
-    /// guide](https://developers.openai.com/api/docs/guides/live-prompting) for session configuration and [Telephony
-    /// and SIP](https://developers.openai.com/api/docs/guides/voice-sip?api=live#place-an-outbound-call) for trunk
-    /// setup and call monitoring. Set transport.type to `webrtc` and supply an SDP offer, or set it to `sip` and supply
-    /// an E.164 destination and trunk credentials. Outbound SIP calling must be enabled for your organization. Ringing
-    /// is limited to 3 minutes and connected calls to 2 hours; these limits are not configurable in the request.
-    /// Returns `201 Created` after session initialization. WebRTC responses include an SDP answer. SIP responses do not
-    /// wait for the callee to answer. Attach a sideband connection using session.id to monitor SIP call progress. Each
-    /// SIP request creates a new call. If a request times out or the connection fails, retry with caution: the original
-    /// request may have succeeded, and a retry can place another call.
-    public func create(
-        session: LiveMediaSessionCreateParams,
-        transport: LiveSessionCreateRequestTransportRequest,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> LiveSessionCreateResponse {
-        try await LiveMethods.createLive(
-            config: config,
-            session: session,
-            transport: transport,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Accept an incoming SIP call. Supply session with type live, the model, and startup configuration. Before
-    /// accepting calls, follow the [Live prompting guide](https://developers.openai.com/api/docs/guides/live-prompting)
-    /// to write frontend conversation instructions and a separate backend prompt. SIP media format is negotiated; omit
-    /// audio.format.
-    public func acceptSession(
-        sessionId: String,
-        session: LiveCallAcceptSession,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await LiveMethods.acceptLiveSession(
-            config: config,
-            sessionId: sessionId,
-            session: session,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Fork a stored Live session onto a new WebRTC connection.
-    public func forkSession(
-        sessionId: String,
-        transport: LiveWebRTCTransport,
-        session: LiveMediaSessionForkParams? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> LiveCreateResponse {
-        try await LiveMethods.forkLiveSession(
-            config: config,
-            sessionId: sessionId,
-            transport: transport,
-            session: session,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Ends a SIP call associated with a Live session by submitting a hangup request. Use the opaque `session_id`
-    /// returned when the session was created or supplied in an incoming-call webhook, preserving its prefix and value
-    /// unchanged. A 200 response confirms that the hangup request was accepted.
-    ///
-    /// End a SIP call identified by session_id.
-    public func hangupSession(
-        sessionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await LiveMethods.hangupLiveSession(config: config, sessionId: sessionId, requestOptions: requestOptions)
-    }
-
-    /// Transfer a SIP call to another destination. Supply a nonblank target_uri for the SIP Refer-To header.
-    public func referSession(
-        sessionId: String,
-        targetUri: TargetUri,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await LiveMethods.referLiveSession(
-            config: config,
-            sessionId: sessionId,
-            targetUri: targetUri,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Reject an incoming SIP call. Send a required SIP rejection status_code between 300 and 699.
-    public func rejectSession(
-        sessionId: String,
-        statusCode: Int,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await LiveMethods.rejectLiveSession(
-            config: config,
-            sessionId: sessionId,
-            statusCode: statusCode,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Downloads the stored audio recording for a Live session. Use the `session_id` returned when the session started
-    /// with storage enabled. The recording is a stereo WAV file, with input audio in the left channel and output audio
-    /// in the right channel.
-    ///
-    /// Get Live session content
-    public func downloadRecording(sessionId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
-        try await LiveMethods.downloadLiveRecording(
-            config: config,
-            sessionId: sessionId,
             requestOptions: requestOptions
         )
     }

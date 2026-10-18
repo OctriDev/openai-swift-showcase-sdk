@@ -4,6 +4,19 @@
 import Foundation
 
 public extension AssistantsNamespace {
+    /// Cancels a run that is in progress on a thread. Use this operation when you need to stop the run before it
+    /// completes; the returned run object reports its current status.
+    ///
+    /// Cancels a run that is `in_progress`.
+    func cancelRun(threadId: String, runId: String, requestOptions: RequestOptions? = nil) async throws -> RunObject {
+        try await AssistantsMethods.cancelRun(
+            config: config,
+            threadId: threadId,
+            runId: runId,
+            requestOptions: requestOptions
+        )
+    }
+
     /// Lists the steps belonging to a run on a thread. Use cursor parameters to page through the steps, and set `order`
     /// to control their order by creation time.
     ///
@@ -19,6 +32,33 @@ public extension AssistantsNamespace {
         requestOptions: RequestOptions? = nil
     ) async throws -> ListRunStepsResponse {
         try await AssistantsMethods.listRunSteps(
+            config: config,
+            threadId: threadId,
+            runId: runId,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            include: include,
+            requestOptions: requestOptions
+        )
+    }
+
+    /// Lists the steps belonging to a run on a thread. Use cursor parameters to page through the steps, and set `order`
+    /// to control their order by creation time.
+    ///
+    /// Returns a list of run steps belonging to a run.
+    func listRunStepsPaginated(
+        threadId: String,
+        runId: String,
+        limit: Int? = nil,
+        order: ListRunStepsParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        include: [ListRunStepsParameterItem]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<RunStepObject, Swift.Error> {
+        AssistantsMethods.listRunStepsPaginated(
             config: config,
             threadId: threadId,
             runId: runId,
@@ -396,165 +436,5 @@ public class BatchNamespace {
     /// `cancelled`, where it will have partial results (if any) available in the output file.
     public func cancel(batchId: String, requestOptions: RequestOptions? = nil) async throws -> Batch {
         try await BatchMethods.cancelBatch(config: config, batchId: batchId, requestOptions: requestOptions)
-    }
-}
-
-public class ChatNamespace {
-    let config: ClientConfig
-    public init(config: ClientConfig) {
-        self.config = config
-    }
-
-    /// List stored Chat Completions. Only Chat Completions that have been stored with the `store` parameter set to
-    /// `true` will be returned.
-    public func listCompletions(
-        model: String? = nil,
-        metadata: Metadata? = nil,
-        after: String? = nil,
-        limit: Int? = nil,
-        order: ListChatCompletionsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ChatCompletionList {
-        try await ChatMethods.listChatCompletions(
-            config: config,
-            model: model,
-            metadata: metadata,
-            after: after,
-            limit: limit,
-            order: order,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// List stored Chat Completions. Only Chat Completions that have been stored with the `store` parameter set to
-    /// `true` will be returned.
-    public func listCompletionsPaginated(
-        model: String? = nil,
-        metadata: Metadata? = nil,
-        after: String? = nil,
-        limit: Int? = nil,
-        order: ListChatCompletionsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<CreateChatCompletionResponse, Swift.Error> {
-        ChatMethods.listChatCompletionsPaginated(
-            config: config,
-            model: model,
-            metadata: metadata,
-            after: after,
-            limit: limit,
-            order: order,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Creates a model response for a chat conversation. Supply `model` and at least one item in `messages`; set
-    /// `stream` to receive server-sent events instead of a single response object. The response contains completion
-    /// choices and usage information when available.
-    ///
-    /// **Starting a new project?** We recommend trying
-    /// [Responses](https://developers.openai.com/api/reference/resources/responses) to take advantage of the latest
-    /// OpenAI platform features. Compare [Chat Completions with
-    /// Responses](https://developers.openai.com/api/docs/guides/migrate-to-responses?api-mode=responses). --- Creates a
-    /// model response for the given chat conversation. Learn more in the [text
-    /// generation](https://developers.openai.com/api/docs/guides/text),
-    /// [vision](https://developers.openai.com/api/docs/guides/images-vision), and
-    /// [audio](https://developers.openai.com/api/docs/guides/audio) guides. Parameter support can differ depending on
-    /// the model used to generate the response, particularly for newer reasoning models. Parameters that are only
-    /// supported for reasoning models are noted below. For the current state of unsupported parameters in reasoning
-    /// models, [refer to the reasoning guide](https://developers.openai.com/api/docs/guides/reasoning). Returns a chat
-    /// completion object, or a streamed sequence of chat completion chunk objects if the request is streamed.
-    public func createCompletion(
-        body: CreateChatCompletionRequest,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateChatCompletionResponse {
-        try await ChatMethods.createChatCompletion(config: config, body: body, requestOptions: requestOptions)
-    }
-
-    /// Creates a model response for a chat conversation. Supply `model` and at least one item in `messages`; set
-    /// `stream` to receive server-sent events instead of a single response object. The response contains completion
-    /// choices and usage information when available.
-    ///
-    /// **Starting a new project?** We recommend trying
-    /// [Responses](https://developers.openai.com/api/reference/resources/responses) to take advantage of the latest
-    /// OpenAI platform features. Compare [Chat Completions with
-    /// Responses](https://developers.openai.com/api/docs/guides/migrate-to-responses?api-mode=responses). --- Creates a
-    /// model response for the given chat conversation. Learn more in the [text
-    /// generation](https://developers.openai.com/api/docs/guides/text),
-    /// [vision](https://developers.openai.com/api/docs/guides/images-vision), and
-    /// [audio](https://developers.openai.com/api/docs/guides/audio) guides. Parameter support can differ depending on
-    /// the model used to generate the response, particularly for newer reasoning models. Parameters that are only
-    /// supported for reasoning models are noted below. For the current state of unsupported parameters in reasoning
-    /// models, [refer to the reasoning guide](https://developers.openai.com/api/docs/guides/reasoning). Returns a chat
-    /// completion object, or a streamed sequence of chat completion chunk objects if the request is streamed.
-    public func createCompletionStream(
-        body: CreateChatCompletionRequest,
-        requestOptions: RequestOptions? = nil
-    ) async throws
-        -> AsyncThrowingStream<CreateChatCompletionStreamResponse, Swift.Error> {
-        try await ChatMethods.createChatCompletionStream(config: config, body: body, requestOptions: requestOptions)
-    }
-
-    /// Get a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to
-    /// `true` will be returned.
-    public func getCompletion(
-        completionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateChatCompletionResponse {
-        try await ChatMethods.getChatCompletion(
-            config: config,
-            completionId: completionId,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Updates the metadata on a stored chat completion. The completion must have been created with `store` set to
-    /// `true`, and metadata is the only supported modification. Use this operation to attach or replace structured
-    /// key-value metadata on the completion.
-    ///
-    /// Modify a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to
-    /// `true` can be modified. Currently, the only supported modification is to update the `metadata` field.
-    public func updateCompletion(
-        completionId: String,
-        metadata: Metadata?,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateChatCompletionResponse {
-        try await ChatMethods.updateChatCompletion(
-            config: config,
-            completionId: completionId,
-            metadata: metadata,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Delete a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to
-    /// `true` can be deleted.
-    public func deleteCompletion(
-        completionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ChatCompletionDeleted {
-        try await ChatMethods.deleteChatCompletion(
-            config: config,
-            completionId: completionId,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Get the messages in a stored chat completion. Only Chat Completions that have been created with the `store`
-    /// parameter set to `true` will be returned.
-    public func getCompletionMessages(
-        completionId: String,
-        after: String? = nil,
-        limit: Int? = nil,
-        order: GetChatCompletionMessagesParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ChatCompletionMessageList {
-        try await ChatMethods.getChatCompletionMessages(
-            config: config,
-            completionId: completionId,
-            after: after,
-            limit: limit,
-            order: order,
-            requestOptions: requestOptions
-        )
     }
 }

@@ -57,53 +57,6 @@ extension CodeInterpreterToolCallOutputsItem {
     }
 }
 
-/// The logs output from the code interpreter.
-public struct CodeInterpreterOutputLogs: Codable {
-    /// The type of the output. Always `logs`.
-    public var type: CodeInterpreterOutputLogsType
-    /// The logs output from the code interpreter.
-    public var logs: String
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case logs
-    }
-
-    private init(sdkCopy value: Self) {
-        self = value
-    }
-}
-
-public extension CodeInterpreterOutputLogs {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
-        }
-        guard container.contains(.logs) else {
-            throw SdkValidationError(
-                field: "logs",
-                code: "required",
-                message: "Validation failed for 'logs': value is required"
-            )
-        }
-        type = try container.sdkDecodeRequired(.type)
-        logs = try container.sdkDecodeRequired(.logs)
-        try sdkValidateRawEnum("type", type, CodeInterpreterOutputLogsType.allCases.map(\.rawValue))
-    }
-}
-
-public extension CodeInterpreterOutputLogs {
-    init(type: CodeInterpreterOutputLogsType, logs: String) throws {
-        (self.type, self.logs) = (type, logs)
-        try sdkValidateRawEnum("type", self.type, CodeInterpreterOutputLogsType.allCases.map(\.rawValue))
-    }
-}
-
 public indirect enum CodeInterpreterToolContainer {
     case stringValue(String)
     case autoCodeInterpreterToolParam(AutoCodeInterpreterToolParam)
@@ -148,6 +101,53 @@ extension CodeInterpreterToolContainer {
         case let .stringValue(value): try container.encode(value); return true
         case let .autoCodeInterpreterToolParam(value): try container.encode(value); return true
         }
+    }
+}
+
+/// The logs output from the code interpreter.
+public struct CodeInterpreterOutputLogs: Codable {
+    /// The type of the output. Always `logs`.
+    public var type: CodeInterpreterOutputLogsType
+    /// The logs output from the code interpreter.
+    public var logs: String
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case logs
+    }
+
+    private init(sdkCopy value: Self) {
+        self = value
+    }
+}
+
+public extension CodeInterpreterOutputLogs {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.logs) else {
+            throw SdkValidationError(
+                field: "logs",
+                code: "required",
+                message: "Validation failed for 'logs': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        logs = try container.sdkDecodeRequired(.logs)
+        try sdkValidateRawEnum("type", type, CodeInterpreterOutputLogsType.allCases.map(\.rawValue))
+    }
+}
+
+public extension CodeInterpreterOutputLogs {
+    init(type: CodeInterpreterOutputLogsType, logs: String) throws {
+        (self.type, self.logs) = (type, logs)
+        try sdkValidateRawEnum("type", self.type, CodeInterpreterOutputLogsType.allCases.map(\.rawValue))
     }
 }
 

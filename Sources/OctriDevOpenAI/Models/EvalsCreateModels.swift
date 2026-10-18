@@ -16,6 +16,11 @@ public indirect enum CreateEvalCompletionsRunDataSourceInputMessages {
 extension CreateEvalCompletionsRunDataSourceInputMessages: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -29,6 +34,20 @@ extension CreateEvalCompletionsRunDataSourceInputMessages: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension CreateEvalCompletionsRunDataSourceInputMessages {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(CreateEvalCompletionsRunDataSourceInputMessagesVariant0.self),
+           sdkKeepsEveryKey(value, of: raw) {
+            return .createEvalCompletionsRunDataSourceInputMessagesVariant0(value)
+        }
+        if let value = try? container.decode(CreateEvalCompletionsRunDataSourceInputMessagesVariant1.self),
+           sdkKeepsEveryKey(value, of: raw) {
+            return .createEvalCompletionsRunDataSourceInputMessagesVariant1(value)
+        }
+        return nil
     }
 }
 
@@ -180,6 +199,11 @@ public indirect enum CreateEvalItem {
 extension CreateEvalItem: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -190,6 +214,18 @@ extension CreateEvalItem: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension CreateEvalItem {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(CreateEvalItemVariant0.self), sdkKeepsEveryKey(value, of: raw) {
+            return .createEvalItemVariant0(value)
+        }
+        if let value = try? container.decode(EvalItem.self), sdkKeepsEveryKey(value, of: raw) {
+            return .evalItem(value)
+        }
+        return nil
     }
 }
 
@@ -395,6 +431,11 @@ public indirect enum CreateEvalResponsesRunDataSourceInputMessages {
 extension CreateEvalResponsesRunDataSourceInputMessages: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -408,6 +449,26 @@ extension CreateEvalResponsesRunDataSourceInputMessages: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension CreateEvalResponsesRunDataSourceInputMessages {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(CreateEvalResponsesRunDataSourceInputMessagesVariant0.self),
+           sdkKeepsEveryKey(
+               value,
+               of: raw
+           ) {
+            return .createEvalResponsesRunDataSourceInputMessagesVariant0(value)
+        }
+        if let value = try? container.decode(CreateEvalResponsesRunDataSourceInputMessagesVariant1.self),
+           sdkKeepsEveryKey(
+               value,
+               of: raw
+           ) {
+            return .createEvalResponsesRunDataSourceInputMessagesVariant1(value)
+        }
+        return nil
     }
 }
 
@@ -534,55 +595,5 @@ extension CreateEvalRunRequestDataSource {
         case "responses": try .createEvalResponsesRunDataSource(CreateEvalResponsesRunDataSource(from: decoder))
         default: nil
         }
-    }
-}
-
-extension CreateEvalRunRequestDataSource {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .createEvalJsonlRunDataSource(value): try container.encode(value); return true
-        case let .createEvalCompletionsRunDataSource(value): try container.encode(value); return true
-        case let .createEvalResponsesRunDataSource(value): try container.encode(value); return true
-        default: return false
-        }
-    }
-}
-
-/// Optional object value serialized in the `sampling_params` wire field.
-public struct CreateEvalResponsesRunDataSourceSamplingParams: Codable {
-    /// Optional API value serialized in the `reasoning_effort` wire field.
-    public var reasoningEffort: ReasoningEffortVariant0?
-    /// A higher temperature increases randomness in the outputs.
-    public var temperature: Double?
-    /// The maximum number of tokens in the generated output.
-    public var maxCompletionTokens: Int?
-    /// An alternative to temperature for nucleus sampling; 1.0 includes all tokens.
-    public var topP: Double?
-    /// A seed value to initialize the randomness, during sampling.
-    public var seed: Int?
-    /// An array of tools the model may call while generating a response. You can specify which tool to use by
-    /// setting the `tool_choice` parameter. The two categories of tools you can provide the model are: - **Built-in
-    /// tools**: Tools that are provided by OpenAI that extend the model's capabilities, like web search or file
-    /// search. Learn more about built-in tools. - **Function calls (custom tools)**: Functions that are defined by
-    /// you, enabling the model to call your own code. Learn…
-    public var tools: [Tool]?
-    /// Configuration options for a text response from the model. Can be plain text or structured JSON data. Learn
-    /// more: - Text inputs and outputs - Structured Outputs
-    public var text: CreateEvalResponsesRunDataSourceSamplingParamsText?
-
-    enum CodingKeys: String, CodingKey {
-        case reasoningEffort = "reasoning_effort"
-        case temperature
-        case maxCompletionTokens = "max_completion_tokens"
-        case topP = "top_p"
-        case seed
-        case tools
-        case text
-    }
-
-    init() {
-        (reasoningEffort, temperature, maxCompletionTokens, topP, seed) = (nil, nil, nil, nil, nil)
-        (tools, text) = (nil, nil)
     }
 }

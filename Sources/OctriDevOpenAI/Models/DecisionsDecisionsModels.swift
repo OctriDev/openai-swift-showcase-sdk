@@ -4,6 +4,53 @@
 import Foundation
 
 /// DecisionsDecisions domain models
+public indirect enum DecisionsUsagePermissionErrorResponseError {
+    case decisionsUsageErrorDetails(DecisionsUsageErrorDetails)
+    case stringValue(String)
+}
+
+extension DecisionsUsagePermissionErrorResponseError: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for DecisionsUsagePermissionErrorResponseError"
+        )
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+    }
+}
+
+extension DecisionsUsagePermissionErrorResponseError {
+    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
+        if let value = try? container
+            .decode(DecisionsUsageErrorDetails.self) {
+            return .decisionsUsageErrorDetails(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        return nil
+    }
+}
+
+extension DecisionsUsagePermissionErrorResponseError {
+    func encodeGroup1(to encoder: Encoder) throws -> Bool {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .decisionsUsageErrorDetails(value): try container.encode(value); return true
+        case let .stringValue(value): try container.encode(value); return true
+        }
+    }
+}
+
 /// Typed representation of the `DecisionsUsagePermissionErrorResponse` API schema.
 public struct DecisionsUsagePermissionErrorResponse: Codable {
     /// Details about the permission error.
@@ -171,53 +218,6 @@ public extension DecisionsUsageErrorDetails {
     init(code: String?, message: String, param: String?, type: String) {
         (self.code, self.message) = (code, message)
         (self.param, self.type) = (param, type)
-    }
-}
-
-public indirect enum DecisionsUsagePermissionErrorResponseError {
-    case decisionsUsageErrorDetails(DecisionsUsageErrorDetails)
-    case stringValue(String)
-}
-
-extension DecisionsUsagePermissionErrorResponseError: Codable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for DecisionsUsagePermissionErrorResponseError"
-        )
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-    }
-}
-
-extension DecisionsUsagePermissionErrorResponseError {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(DecisionsUsageErrorDetails.self) {
-            return .decisionsUsageErrorDetails(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        return nil
-    }
-}
-
-extension DecisionsUsagePermissionErrorResponseError {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .decisionsUsageErrorDetails(value): try container.encode(value); return true
-        case let .stringValue(value): try container.encode(value); return true
-        }
     }
 }
 

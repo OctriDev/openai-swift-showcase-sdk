@@ -72,6 +72,11 @@ public indirect enum BetaInputItem {
 extension BetaInputItem: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -82,6 +87,30 @@ extension BetaInputItem: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension BetaInputItem {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(BetaEasyInputMessage.self), sdkKeepsEveryKey(value, of: raw) {
+            return .betaEasyInputMessage(value)
+        }
+        if let value = try? container.decode(BetaItem.self), sdkKeepsEveryKey(value, of: raw) {
+            return .betaItem(value)
+        }
+        if let value = try? container.decode(BetaCompactionTriggerItemParam.self), sdkKeepsEveryKey(value, of: raw) {
+            return .betaCompactionTriggerItemParam(value)
+        }
+        if let value = try? container.decode(BetaItemReferenceParam.self), sdkKeepsEveryKey(value, of: raw) {
+            return .betaItemReferenceParam(value)
+        }
+        if let value = try? container.decode(BetaProgramItemParam.self), sdkKeepsEveryKey(value, of: raw) {
+            return .betaProgramItemParam(value)
+        }
+        if let value = try? container.decode(BetaProgramOutputItemParam.self), sdkKeepsEveryKey(value, of: raw) {
+            return .betaProgramOutputItemParam(value)
+        }
+        return nil
     }
 }
 
@@ -591,43 +620,5 @@ public extension BetaInputFileContentParam {
         detail = try container.sdkDecodeIfPresent(.detail)
         promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
         try sdkValidateRawEnum("type", type, BetaInputFileContentParamType.allCases.map(\.rawValue))
-    }
-}
-
-public extension BetaInputFileContentParam {
-    init(
-        type: BetaInputFileContentParamType,
-        fileId: String? = nil,
-        filename: String? = nil,
-        fileData: String? = nil,
-        fileUrl: String? = nil,
-        detail: BetaFileDetailEnum? = nil,
-        promptCacheBreakpoint: BetaPromptCacheBreakpointParam? = nil
-    ) throws {
-        (self.type, self.fileId) = (type, fileId)
-        (self.filename, self.fileData) = (filename, fileData)
-        (self.fileUrl, self.detail) = (fileUrl, detail)
-        self.promptCacheBreakpoint = promptCacheBreakpoint
-        try sdkValidateRawEnum("type", self.type, BetaInputFileContentParamType.allCases.map(\.rawValue))
-    }
-}
-
-/// A text input to the model.
-public struct BetaInputTextContentParam: Codable {
-    /// The type of the input item. Always `input_text`.
-    public var type: BetaInputTextContentParamType
-    /// The text input to the model.
-    public var text: String
-    /// Optional API value serialized in the `prompt_cache_breakpoint` wire field.
-    public var promptCacheBreakpoint: BetaPromptCacheBreakpointParam?
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case text
-        case promptCacheBreakpoint = "prompt_cache_breakpoint"
-    }
-
-    private init(sdkCopy value: Self) {
-        self = value
     }
 }

@@ -221,6 +221,28 @@ public class VectorStoresNamespace {
         )
     }
 
+    /// Lists vector stores, which are collections of processed files that you can use with the `file_search` tool. Use
+    /// the cursor parameters to move forward or backward through the results, and set `order` to control sorting by
+    /// creation time.
+    ///
+    /// Returns a list of vector stores.
+    public func listPaginated(
+        limit: Int? = nil,
+        order: ListVectorStoresParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<VectorStoreObject, Swift.Error> {
+        VectorStoresMethods.listVectorStoresPaginated(
+            config: config,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            requestOptions: requestOptions
+        )
+    }
+
     /// Creates a vector store to collect processed files for use with the `file_search` tool. Supply `file_ids` to add
     /// files at creation, and optionally set a name, description, expiration policy, chunking strategy, or metadata.
     ///
@@ -334,13 +356,15 @@ public class VectorStoresNamespace {
             requestOptions: requestOptions
         )
     }
+}
 
+public extension VectorStoresNamespace {
     /// Attempts to stop processing files in a vector store file batch as soon as possible. Check the returned batch
     /// status to see whether processing has been cancelled.
     ///
     /// Cancel a vector store file batch. This attempts to cancel the processing of files in this batch as soon as
     /// possible.
-    public func cancelFileBatch(
+    func cancelFileBatch(
         vectorStoreId: String,
         batchId: String,
         requestOptions: RequestOptions? = nil
@@ -352,9 +376,7 @@ public class VectorStoresNamespace {
             requestOptions: requestOptions
         )
     }
-}
 
-public extension VectorStoresNamespace {
     /// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor
     /// parameters to navigate through the batch's files.
     ///
@@ -382,6 +404,33 @@ public extension VectorStoresNamespace {
         )
     }
 
+    /// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor
+    /// parameters to navigate through the batch's files.
+    ///
+    /// Returns a list of vector store files in a batch.
+    func listFilesInBatchPaginated(
+        vectorStoreId: String,
+        batchId: String,
+        limit: Int? = nil,
+        order: ListFilesInVectorStoreBatchParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<VectorStoreFileObject, Swift.Error> {
+        VectorStoresMethods.listFilesInVectorStoreBatchPaginated(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            batchId: batchId,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            filter: filter,
+            requestOptions: requestOptions
+        )
+    }
+
     /// Lists files attached to a vector store, with pagination and an optional status filter. Use `after` or `before`
     /// to navigate the list, and `filter` to select files by processing status.
     ///
@@ -396,6 +445,31 @@ public extension VectorStoresNamespace {
         requestOptions: RequestOptions? = nil
     ) async throws -> ListVectorStoreFilesResponse {
         try await VectorStoresMethods.listVectorStoreFiles(
+            config: config,
+            vectorStoreId: vectorStoreId,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            filter: filter,
+            requestOptions: requestOptions
+        )
+    }
+
+    /// Lists files attached to a vector store, with pagination and an optional status filter. Use `after` or `before`
+    /// to navigate the list, and `filter` to select files by processing status.
+    ///
+    /// Returns a list of vector store files.
+    func listFilesPaginated(
+        vectorStoreId: String,
+        limit: Int? = nil,
+        order: ListVectorStoreFilesParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        filter: ListVectorStoreFilesParameterX63027327? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<VectorStoreFileObject, Swift.Error> {
+        VectorStoresMethods.listVectorStoreFilesPaginated(
             config: config,
             vectorStoreId: vectorStoreId,
             limit: limit,
@@ -465,7 +539,9 @@ public extension VectorStoresNamespace {
             requestOptions: requestOptions
         )
     }
+}
 
+public extension VectorStoresNamespace {
     /// Updates the attributes attached to a file in a vector store. Supply `attributes` to replace the file's attribute
     /// set, or use `null` to clear it.
     ///
@@ -526,25 +602,5 @@ public extension VectorStoresNamespace {
             rankingOptions: rankingOptions,
             requestOptions: requestOptions
         )
-    }
-}
-
-public class SafetyNamespace {
-    let config: ClientConfig
-    public init(config: ClientConfig) {
-        self.config = config
-    }
-
-    /// Retrieves a safety case by its identifier. Use `id` to specify the safety case you want to inspect; it can
-    /// contain at most 128 characters.
-    ///
-    /// Get a safety case by ID.
-    public func retrieveCase(id: String, requestOptions: RequestOptions? = nil) async throws -> SafetyCaseResource {
-        try await SafetyMethods.retrieveSafetyCase(config: config, id: id, requestOptions: requestOptions)
-    }
-
-    /// Get a safety alert belonging to the authenticated API project.
-    public func retrieveAlert(id: String, requestOptions: RequestOptions? = nil) async throws -> SafetyAlertResource {
-        try await SafetyMethods.retrieveSafetyAlert(config: config, id: id, requestOptions: requestOptions)
     }
 }

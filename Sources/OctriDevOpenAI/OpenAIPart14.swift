@@ -3,6 +3,26 @@
 
 import Foundation
 
+public class SafetyNamespace {
+    let config: ClientConfig
+    public init(config: ClientConfig) {
+        self.config = config
+    }
+
+    /// Retrieves a safety case by its identifier. Use `id` to specify the safety case you want to inspect; it can
+    /// contain at most 128 characters.
+    ///
+    /// Get a safety case by ID.
+    public func retrieveCase(id: String, requestOptions: RequestOptions? = nil) async throws -> SafetyCaseResource {
+        try await SafetyMethods.retrieveSafetyCase(config: config, id: id, requestOptions: requestOptions)
+    }
+
+    /// Get a safety alert belonging to the authenticated API project.
+    public func retrieveAlert(id: String, requestOptions: RequestOptions? = nil) async throws -> SafetyAlertResource {
+        try await SafetyMethods.retrieveSafetyAlert(config: config, id: id, requestOptions: requestOptions)
+    }
+}
+
 public class ExternalStorageNamespace {
     let config: ClientConfig
     public init(config: ClientConfig) {
@@ -370,49 +390,5 @@ public class VideosNamespace {
     /// - Warning: This operation is deprecated and may be removed in a future release.
     public func get(videoId: String, requestOptions: RequestOptions? = nil) async throws -> VideoResource {
         try await VideosMethods.getVideo(config: config, videoId: videoId, requestOptions: requestOptions)
-    }
-}
-
-public extension VideosNamespace {
-    /// Permanently delete a completed or failed video and its stored assets.
-    ///
-    /// - Warning: This operation is deprecated and may be removed in a future release.
-    func delete(videoId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedVideoResource {
-        try await VideosMethods.deleteVideo(config: config, videoId: videoId, requestOptions: requestOptions)
-    }
-
-    /// Download the generated video bytes or a derived preview asset. Streams the rendered video content for the
-    /// specified video job.
-    ///
-    /// - Warning: This operation is deprecated and may be removed in a future release.
-    func retrieveContent(
-        videoId: String,
-        variant: VideoContentVariant? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Data {
-        try await VideosMethods.retrieveVideoContent(
-            config: config,
-            videoId: videoId,
-            variant: variant,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Create a remix of a completed video using a refreshed prompt.
-    ///
-    /// - Warning: This operation is deprecated and may be removed in a future release.
-    func createRemix(
-        videoId: String,
-        prompt: String,
-        contentType: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VideoResource {
-        try await VideosMethods.createVideoRemix(
-            config: config,
-            videoId: videoId,
-            prompt: prompt,
-            contentType: contentType,
-            requestOptions: requestOptions
-        )
     }
 }

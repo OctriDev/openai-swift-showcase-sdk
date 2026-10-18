@@ -4,48 +4,6 @@
 import Foundation
 
 /// AssistantsThread domain models
-public indirect enum ThreadStreamEvent {
-    case threadStreamEventVariant0(ThreadStreamEventVariant0)
-}
-
-extension ThreadStreamEvent: Codable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ThreadStreamEvent"
-        )
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-    }
-}
-
-extension ThreadStreamEvent {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(ThreadStreamEventVariant0.self) {
-            return .threadStreamEventVariant0(value)
-        }
-        return nil
-    }
-}
-
-extension ThreadStreamEvent {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .threadStreamEventVariant0(value): try container.encode(value); return true
-        }
-    }
-}
-
 /// Optional object value serialized in the `code_interpreter` wire field.
 public struct ThreadObjectToolResourcesCodeInterpreter: Codable {
     /// A list of file IDs made available to the `code_interpreter` tool. There can be a maximum of 20 files
@@ -82,8 +40,9 @@ public extension ThreadObjectToolResourcesCodeInterpreter {
 }
 
 /// Occurs when a new thread is created.
-public struct ThreadStreamEventVariant0: Codable {
-    public var event: ThreadStreamEventVariant0Event
+public struct ThreadStreamEvent: Codable {
+    /// Required enumerated value serialized in the `event` wire field.
+    public var event: ThreadStreamEventEvent
     /// Represents a thread that contains messages.
     public var data: ThreadObject
     /// Whether to enable input audio transcription.
@@ -100,7 +59,7 @@ public struct ThreadStreamEventVariant0: Codable {
     }
 }
 
-public extension ThreadStreamEventVariant0 {
+public extension ThreadStreamEvent {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.event) else {
@@ -120,13 +79,15 @@ public extension ThreadStreamEventVariant0 {
         event = try container.sdkDecodeRequired(.event)
         data = try container.sdkDecodeRequired(.data)
         enabled = try container.sdkDecodeIfPresent(.enabled)
+        try sdkValidateRawEnum("event", event, ThreadStreamEventEvent.allCases.map(\.rawValue))
     }
 }
 
-public extension ThreadStreamEventVariant0 {
-    init(event: ThreadStreamEventVariant0Event, data: ThreadObject, enabled: Bool? = nil) {
+public extension ThreadStreamEvent {
+    init(event: ThreadStreamEventEvent, data: ThreadObject, enabled: Bool? = nil) throws {
         (self.event, self.data) = (event, data)
         self.enabled = enabled
+        try sdkValidateRawEnum("event", self.event, ThreadStreamEventEvent.allCases.map(\.rawValue))
     }
 }
 
@@ -292,23 +253,21 @@ public extension ThreadObjectToolResourcesFileSearch {
     }
 }
 
-public struct ThreadStreamEventVariant0Event: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
-    public let rawValue: String
-
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let threadCreated = ThreadStreamEventVariant0Event(rawValue: "thread.created")
-
+/// Required enumerated value serialized in the `event` wire field.
+public enum ThreadStreamEventEvent: String, CaseIterable, Codable {
+    case threadCreated = "thread.created"
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "ThreadStreamEventEvent"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
     }
 }
 

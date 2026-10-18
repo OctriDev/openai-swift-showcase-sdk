@@ -4,153 +4,131 @@
 import Foundation
 
 public extension AgentsNamespace {
-    /// Streams live events for an agent session. See [session
-    /// events](https://developers.openai.com/api/docs/guides/agents-api/sessions/events).
-    func listSessionEvents(
-        sessionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
-        try await AgentsMethods.listAgentSessionEvents(
+    /// Retrieves the current state of a managed agent session. See [managing
+    /// sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
+    func retrieveSession(sessionId: String, requestOptions: RequestOptions? = nil) async throws -> SessionResource {
+        try await AgentsMethods.retrieveAgentSession(
             config: config,
             sessionId: sessionId,
             requestOptions: requestOptions
         )
     }
 
-    /// Submits message, cancellation, tool-result, or computer-use approval-response events to a managed agent session.
-    /// Cancellation can recover a still-open turn whose backend execution has ended by marking it cancelled and
-    /// abandoning unpublished outputs. Saved results, published files, and existing terminal outcomes are preserved.
-    /// HTTP 202 confirms acceptance, not durable completion. See [session
-    /// events](https://developers.openai.com/api/docs/guides/agents-api/sessions/events).
-    func createSessionEvents(
+    /// Updates session metadata, model, reasoning effort, or service tier. Model settings apply to subsequent turns.
+    /// Omitted fields are unchanged. See [managing
+    /// sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
+    func updateSession(
         sessionId: String,
-        events: [SessionInputParam],
-        idempotencyKey: String? = nil,
+        spendControl: SdkOptional<SessionSpendControlParam>? = nil,
+        agent: UpdateSessionAgentParam? = nil,
+        metadata: SdkOptional<[String: String]>? = nil,
         requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await AgentsMethods.createAgentSessionEvents(
+    ) async throws -> SessionResource {
+        try await AgentsMethods.updateAgentSession(
             config: config,
             sessionId: sessionId,
-            events: events,
-            idempotencyKey: idempotencyKey,
+            spendControl: spendControl,
+            agent: agent,
+            metadata: metadata,
             requestOptions: requestOptions
         )
     }
 
-    /// Lists items produced by the session's root agent, including its interactions with subagents. Each subagent has
-    /// its own item history. See [inspecting agent
-    /// output](https://developers.openai.com/api/docs/guides/agents-api/observability).
-    func listSessionItems(
+    /// Removes a managed agent session from the public API and returns a deletion confirmation. If backend execution
+    /// has ended, deletion can cancel a still-open public turn and abandon unpublished outputs. Running execution must
+    /// be cancelled first. Physical cleanup may continue asynchronously. See [managing
+    /// sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
+    func deleteSession(
+        sessionId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeletedSessionResource {
+        try await AgentsMethods.deleteAgentSession(config: config, sessionId: sessionId, requestOptions: requestOptions)
+    }
+
+    /// Lists immutable artifacts published by completed hosted session turns. See [session
+    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+    func listSessionArtifacts(
         sessionId: String,
         limit: Int? = nil,
         order: ListOrderParam? = nil,
         after: String? = nil,
+        environmentId: String? = nil,
         requestOptions: RequestOptions? = nil
-    ) async throws -> SessionItemListResource {
-        try await AgentsMethods.listAgentSessionItems(
+    ) async throws -> SessionArtifactListResource {
+        try await AgentsMethods.listAgentSessionArtifacts(
             config: config,
             sessionId: sessionId,
             limit: limit,
             order: order,
             after: after,
+            environmentId: environmentId,
             requestOptions: requestOptions
         )
     }
 
-    /// Lists items produced by the session's root agent, including its interactions with subagents. Each subagent has
-    /// its own item history. See [inspecting agent
-    /// output](https://developers.openai.com/api/docs/guides/agents-api/observability).
-    func listSessionItemsPaginated(
+    /// Lists immutable artifacts published by completed hosted session turns. See [session
+    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+    func listSessionArtifactsPaginated(
         sessionId: String,
         limit: Int? = nil,
         order: ListOrderParam? = nil,
         after: String? = nil,
+        environmentId: String? = nil,
         requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<SessionTurnItemResource, Swift.Error> {
-        AgentsMethods.listAgentSessionItemsPaginated(
+    ) -> AsyncThrowingStream<SessionArtifactResource, Swift.Error> {
+        AgentsMethods.listAgentSessionArtifactsPaginated(
             config: config,
             sessionId: sessionId,
             limit: limit,
             order: order,
             after: after,
+            environmentId: environmentId,
             requestOptions: requestOptions
         )
     }
 
-    /// Lists published root-turn traces as OTLP JSON, ordered by turn creation time and ID. Unpublished traces are
-    /// skipped. Each page returns data available when read; it does not wait for late traces. Trace reads and the JSON
-    /// response are limited to 16 MiB per request. If the limit is exceeded, request fewer traces.
-    func listSessionTraces(
+    /// Retrieves immutable metadata for one durable session artifact. See [session
+    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+    func retrieveSessionArtifact(
         sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
+        artifactId: String,
         requestOptions: RequestOptions? = nil
-    ) async throws -> SessionTraceListResource {
-        try await AgentsMethods.listAgentSessionTraces(
+    ) async throws -> SessionArtifactResource {
+        try await AgentsMethods.retrieveAgentSessionArtifact(
             config: config,
             sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
+            artifactId: artifactId,
             requestOptions: requestOptions
         )
     }
 
-    /// Lists published root-turn traces as OTLP JSON, ordered by turn creation time and ID. Unpublished traces are
-    /// skipped. Each page returns data available when read; it does not wait for late traces. Trace reads and the JSON
-    /// response are limited to 16 MiB per request. If the limit is exceeded, request fewer traces.
-    func listSessionTracesPaginated(
+    /// Deletes an immutable session artifact without deleting its live environment file or original Files API object.
+    /// See [session
+    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+    func deleteSessionArtifact(
         sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
+        artifactId: String,
         requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<SessionTurnTraceResource, Swift.Error> {
-        AgentsMethods.listAgentSessionTracesPaginated(
+    ) async throws -> DeletedSessionArtifactResource {
+        try await AgentsMethods.deleteAgentSessionArtifact(
             config: config,
             sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
+            artifactId: artifactId,
             requestOptions: requestOptions
         )
     }
 
-    /// Lists turns by creation time and turn ID. The after cursor is exclusive in the selected order. See [session
-    /// turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
-    func listSessionTurns(
+    /// Downloads immutable session artifact bytes after the execution environment expires. See [session
+    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+    func retrieveSessionArtifactContent(
         sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
+        artifactId: String,
         requestOptions: RequestOptions? = nil
-    ) async throws -> SessionTurnListResource {
-        try await AgentsMethods.listAgentSessionTurns(
+    ) async throws -> Data {
+        try await AgentsMethods.retrieveAgentSessionArtifactContent(
             config: config,
             sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Lists turns by creation time and turn ID. The after cursor is exclusive in the selected order. See [session
-    /// turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
-    func listSessionTurnsPaginated(
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<TurnResource, Swift.Error> {
-        AgentsMethods.listAgentSessionTurnsPaginated(
-            config: config,
-            sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
+            artifactId: artifactId,
             requestOptions: requestOptions
         )
     }

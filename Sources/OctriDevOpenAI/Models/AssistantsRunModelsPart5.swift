@@ -4,6 +4,55 @@
 import Foundation
 
 /// AssistantsRun domain models
+/// Occurs when a new run is created.
+public struct RunStreamEventVariant0: Codable {
+    public var event: RunStreamEventVariant0Event
+    /// Represents an execution run on a thread.
+    public var data: RunObject
+
+    enum CodingKeys: String, CodingKey {
+        case event
+        case data
+    }
+
+    private init(sdkCopy value: Self) {
+        self = value
+    }
+}
+
+public extension RunStreamEventVariant0 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.event) else {
+            throw SdkValidationError(
+                field: "event",
+                code: "required",
+                message: "Validation failed for 'event': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        event = try container.sdkDecodeRequired(.event)
+        data = try container.sdkDecodeRequired(.data)
+        try sdkValidateRawEnum("event", event, RunStreamEventVariant0Event.allCases.map(\.rawValue))
+    }
+}
+
+public extension RunStreamEventVariant0 {
+    init(event: RunStreamEventVariant0Event, data: RunObject) throws {
+        (self.event, self.data) = (event, data)
+        try sdkValidateRawEnum("event", self.event, RunStreamEventVariant0Event.allCases.map(\.rawValue))
+    }
+}
+
+public typealias RunStepDeltaStepDetailsToolCallsCodeObjectCodeInterpreterOutputsList =
+    [RunStepDeltaStepDetailsToolCallsCodeObjectCodeInterpreterOutputsItem]
+
 /// The Code Interpreter tool call definition.
 public struct RunStepDeltaStepDetailsToolCallsCodeObjectCodeInterpreter: Codable {
     /// The input to the Code Interpreter tool call.
@@ -566,62 +615,5 @@ public extension RunStepDeltaObject {
     init(id: String, object: RunStepDeltaObjectObject, delta: RunStepDeltaObjectDelta) {
         (self.id, self.object) = (id, object)
         self.delta = delta
-    }
-}
-
-/// Optional object value serialized in the `message_creation` wire field.
-public struct RunStepDeltaStepDetailsMessageCreationObjectMessageCreation: Codable {
-    /// The ID of the message that was created by this run step.
-    public var messageId: String?
-
-    enum CodingKeys: String, CodingKey {
-        case messageId = "message_id"
-    }
-
-    init() {
-        messageId = nil
-    }
-}
-
-public extension RunStepDeltaStepDetailsMessageCreationObjectMessageCreation {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        messageId = try container.sdkDecodeIfPresent(.messageId)
-    }
-}
-
-public extension RunStepDeltaStepDetailsMessageCreationObjectMessageCreation {
-    init(messageId: String? = nil) {
-        self.init()
-        self.messageId = messageId
-    }
-}
-
-/// Details on why the run is incomplete. Will be `null` if the run is not incomplete.
-public struct RunObjectIncompleteDetails: Codable {
-    /// The reason why the run is incomplete. This will point to which specific token limit was reached over the
-    /// course of the run.
-    public var reason: RunObjectIncompleteDetailsReason?
-
-    enum CodingKeys: String, CodingKey {
-        case reason
-    }
-
-    init() {
-        reason = nil
-    }
-}
-
-public extension RunObjectIncompleteDetails {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        reason = try container.sdkDecodeIfPresent(.reason)
-    }
-}
-
-public extension RunObjectIncompleteDetails {
-    init(reason: RunObjectIncompleteDetailsReason? = nil) {
-        self.init()
-        self.reason = reason
     }
 }

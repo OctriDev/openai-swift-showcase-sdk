@@ -4,6 +4,56 @@
 import Foundation
 
 /// EvalsCreate domain models
+extension CreateEvalRunRequestDataSource {
+    func encodeGroup1(to encoder: Encoder) throws -> Bool {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .createEvalJsonlRunDataSource(value): try container.encode(value); return true
+        case let .createEvalCompletionsRunDataSource(value): try container.encode(value); return true
+        case let .createEvalResponsesRunDataSource(value): try container.encode(value); return true
+        default: return false
+        }
+    }
+}
+
+/// Optional object value serialized in the `sampling_params` wire field.
+public struct CreateEvalResponsesRunDataSourceSamplingParams: Codable {
+    /// Optional API value serialized in the `reasoning_effort` wire field.
+    public var reasoningEffort: ReasoningEffortVariant0?
+    /// A higher temperature increases randomness in the outputs.
+    public var temperature: Double?
+    /// The maximum number of tokens in the generated output.
+    public var maxCompletionTokens: Int?
+    /// An alternative to temperature for nucleus sampling; 1.0 includes all tokens.
+    public var topP: Double?
+    /// A seed value to initialize the randomness, during sampling.
+    public var seed: Int?
+    /// An array of tools the model may call while generating a response. You can specify which tool to use by
+    /// setting the `tool_choice` parameter. The two categories of tools you can provide the model are: - **Built-in
+    /// tools**: Tools that are provided by OpenAI that extend the model's capabilities, like web search or file
+    /// search. Learn more about built-in tools. - **Function calls (custom tools)**: Functions that are defined by
+    /// you, enabling the model to call your own code. Learn…
+    public var tools: [Tool]?
+    /// Configuration options for a text response from the model. Can be plain text or structured JSON data. Learn
+    /// more: - Text inputs and outputs - Structured Outputs
+    public var text: CreateEvalResponsesRunDataSourceSamplingParamsText?
+
+    enum CodingKeys: String, CodingKey {
+        case reasoningEffort = "reasoning_effort"
+        case temperature
+        case maxCompletionTokens = "max_completion_tokens"
+        case topP = "top_p"
+        case seed
+        case tools
+        case text
+    }
+
+    init() {
+        (reasoningEffort, temperature, maxCompletionTokens, topP, seed) = (nil, nil, nil, nil, nil)
+        (tools, text) = (nil, nil)
+    }
+}
+
 public extension CreateEvalResponsesRunDataSourceSamplingParams {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -35,13 +85,16 @@ public extension CreateEvalResponsesRunDataSourceSamplingParams {
     }
 }
 
+public typealias CreateEvalCompletionsRunDataSourceInputMessagesVariant0TemplateList =
+    [CreateEvalCompletionsRunDataSourceInputMessagesVariant0TemplateItem]
+
 /// Optional object value serialized in the `input_messages` wire field.
 public struct CreateEvalCompletionsRunDataSourceInputMessagesVariant0: Codable {
     /// The type of input messages. Always `template`.
     public var type: CreateEvalCompletionsRunDataSourceInputMessagesVariant0Type
     /// A list of chat messages forming the prompt or context. May include variable references to the `item`
     /// namespace, ie {{item.name}}.
-    public var template: [TemplateItem]
+    public var template: CreateEvalCompletionsRunDataSourceInputMessagesVariant0TemplateList
 
     enum CodingKeys: String, CodingKey {
         case type
@@ -81,13 +134,86 @@ public extension CreateEvalCompletionsRunDataSourceInputMessagesVariant0 {
 }
 
 public extension CreateEvalCompletionsRunDataSourceInputMessagesVariant0 {
-    init(type: CreateEvalCompletionsRunDataSourceInputMessagesVariant0Type, template: [TemplateItem]) throws {
+    init(
+        type: CreateEvalCompletionsRunDataSourceInputMessagesVariant0Type,
+        template: CreateEvalCompletionsRunDataSourceInputMessagesVariant0TemplateList
+    ) throws {
         (self.type, self.template) = (type, template)
         try sdkValidateRawEnum(
             "type",
             self.type,
             CreateEvalCompletionsRunDataSourceInputMessagesVariant0Type.allCases.map(\.rawValue)
         )
+    }
+}
+
+public indirect enum CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem {
+    case createEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553(
+        CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553
+    )
+    case evalItem(EvalItem)
+}
+
+extension CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem"
+        )
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+    }
+}
+
+extension CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container
+            .decode(CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553.self),
+            sdkKeepsEveryKey(value, of: raw) {
+            return .createEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553(value)
+        }
+        if let value = try? container.decode(EvalItem.self), sdkKeepsEveryKey(value, of: raw) {
+            return .evalItem(value)
+        }
+        return nil
+    }
+}
+
+extension CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem {
+    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
+        if let value = try? container.decode(
+            CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553.self
+        ) {
+            return .createEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553(value)
+        }
+        if let value = try? container.decode(EvalItem.self) {
+            return .evalItem(value)
+        }
+        return nil
+    }
+}
+
+extension CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem {
+    func encodeGroup1(to encoder: Encoder) throws -> Bool {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .createEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553(value): try container
+            .encode(value); return true
+        case let .evalItem(value): try container.encode(value); return true
+        }
     }
 }
 
@@ -207,13 +333,61 @@ public extension CreateEvalJsonlRunDataSource {
     }
 }
 
+/// Required object value serialized in the `template[]` wire field.
+public struct CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553: Codable {
+    /// The role of the message (e.g. "system", "assistant", "user").
+    public var role: String
+    /// The content of the message.
+    public var content: String
+
+    enum CodingKeys: String, CodingKey {
+        case role
+        case content
+    }
+
+    private init(sdkCopy value: Self) {
+        self = value
+    }
+}
+
+public extension CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        role = try container.sdkDecodeRequired(.role)
+        content = try container.sdkDecodeRequired(.content)
+    }
+}
+
+public extension CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553 {
+    init(role: String, content: String) {
+        (self.role, self.content) = (role, content)
+    }
+}
+
+public typealias CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateList =
+    [CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem]
+
 /// Optional object value serialized in the `input_messages` wire field.
 public struct CreateEvalResponsesRunDataSourceInputMessagesVariant0: Codable {
     /// The type of input messages. Always `template`.
     public var type: CreateEvalResponsesRunDataSourceInputMessagesVariant0Type
     /// A list of chat messages forming the prompt or context. May include variable references to the `item`
     /// namespace, ie {{item.name}}.
-    public var template: [TemplateItem2]
+    public var template: CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateList
 
     enum CodingKeys: String, CodingKey {
         case type
@@ -253,7 +427,10 @@ public extension CreateEvalResponsesRunDataSourceInputMessagesVariant0 {
 }
 
 public extension CreateEvalResponsesRunDataSourceInputMessagesVariant0 {
-    init(type: CreateEvalResponsesRunDataSourceInputMessagesVariant0Type, template: [TemplateItem2]) throws {
+    init(
+        type: CreateEvalResponsesRunDataSourceInputMessagesVariant0Type,
+        template: CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateList
+    ) throws {
         (self.type, self.template) = (type, template)
         try sdkValidateRawEnum(
             "type",
@@ -442,188 +619,5 @@ public struct CreateEvalLabelModelGrader: Codable {
 
     private init(sdkCopy value: Self) {
         self = value
-    }
-}
-
-public extension CreateEvalLabelModelGrader {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
-        }
-        guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
-        }
-        guard container.contains(.input) else {
-            throw SdkValidationError(
-                field: "input",
-                code: "required",
-                message: "Validation failed for 'input': value is required"
-            )
-        }
-        guard container.contains(.labels) else {
-            throw SdkValidationError(
-                field: "labels",
-                code: "required",
-                message: "Validation failed for 'labels': value is required"
-            )
-        }
-        guard container.contains(.passingLabels) else {
-            throw SdkValidationError(
-                field: "passing_labels",
-                code: "required",
-                message: "Validation failed for 'passing_labels': value is required"
-            )
-        }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeRequired(.name)
-        model = try container.sdkDecodeRequired(.model)
-        input = try container.sdkDecodeRequired(.input)
-        labels = try container.sdkDecodeRequired(.labels)
-        passingLabels = try container.sdkDecodeRequired(.passingLabels)
-        try sdkValidateRawEnum("type", type, CreateEvalLabelModelGraderType.allCases.map(\.rawValue))
-    }
-}
-
-public extension CreateEvalLabelModelGrader {
-    init(
-        type: CreateEvalLabelModelGraderType,
-        name: String,
-        model: String,
-        input: [CreateEvalItem],
-        labels: [String],
-        passingLabels: [String]
-    ) throws {
-        (self.type, self.name) = (type, name)
-        (self.model, self.input) = (model, input)
-        (self.labels, self.passingLabels) = (labels, passingLabels)
-        try sdkValidateRawEnum("type", self.type, CreateEvalLabelModelGraderType.allCases.map(\.rawValue))
-    }
-}
-
-/// A CustomDataSourceConfig object that defines the schema for the data source used for the evaluation runs. This
-/// schema is used to define the shape of the data that will be: - Used to define your testing criteria and - What
-/// data is required when creating a run
-public struct CreateEvalCustomDataSourceConfig: Codable {
-    /// The type of data source. Always `custom`.
-    public var type: CreateEvalCustomDataSourceConfigType
-    /// The json schema for each row in the data source.
-    /// - Example: "{\n \"type\": \"object\",\n \"properties\": {\n \"name\": {\"type\": \"string\"},\n \"age\":
-    /// {\"type\": \"integer\"}\n },\n \"required\": [\"name\", \"age\"]\n}\n"
-    public var itemSchema: [String: JSONValue]
-    /// Whether the eval should expect you to populate the sample namespace (ie, by generating responses off of your
-    /// data source)
-    public var includeSampleSchema: Bool?
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case itemSchema = "item_schema"
-        case includeSampleSchema = "include_sample_schema"
-    }
-
-    private init(sdkCopy value: Self) {
-        self = value
-    }
-}
-
-public extension CreateEvalCustomDataSourceConfig {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
-        }
-        guard container.contains(.itemSchema) else {
-            throw SdkValidationError(
-                field: "item_schema",
-                code: "required",
-                message: "Validation failed for 'item_schema': value is required"
-            )
-        }
-        type = try container.sdkDecodeRequired(.type)
-        itemSchema = try container.sdkDecodeRequired(.itemSchema)
-        includeSampleSchema = try container.sdkDecodeIfPresent(.includeSampleSchema)
-        try sdkValidateRawEnum("type", type, CreateEvalCustomDataSourceConfigType.allCases.map(\.rawValue))
-    }
-}
-
-public extension CreateEvalCustomDataSourceConfig {
-    init(
-        type: CreateEvalCustomDataSourceConfigType,
-        itemSchema: [String: JSONValue],
-        includeSampleSchema: Bool? = nil
-    ) throws {
-        (self.type, self.itemSchema) = (type, itemSchema)
-        self.includeSampleSchema = includeSampleSchema
-        try sdkValidateRawEnum("type", self.type, CreateEvalCustomDataSourceConfigType.allCases.map(\.rawValue))
-    }
-}
-
-/// Optional object value serialized in the `sampling_params` wire field.
-public struct CreateEvalCompletionsRunDataSourceSamplingParams: Codable {
-    /// Optional API value serialized in the `reasoning_effort` wire field.
-    public var reasoningEffort: ReasoningEffortVariant0?
-    /// A higher temperature increases randomness in the outputs.
-    public var temperature: Double?
-    /// The maximum number of tokens in the generated output.
-    public var maxCompletionTokens: Int?
-    /// An alternative to temperature for nucleus sampling; 1.0 includes all tokens.
-    public var topP: Double?
-    /// A seed value to initialize the randomness, during sampling.
-    public var seed: Int?
-    /// An object specifying the format that the model must output. Setting to `{ "type": "json_schema",
-    /// "json_schema": {...} }` enables Structured Outputs which ensures the model will match your supplied JSON
-    /// schema. Learn more in the [Structured Outputs guide](developers.openai.com). Setting to `{ "type":
-    /// "json_object" }` enables the older JSON mode, which ensures the message the model generates is valid JSON.
-    /// Using `json_schema` is preferred for models that support it.
-    public var responseFormat: CreateEvalCompletionsRunDataSourceSamplingParamsResponseFormat?
-    /// A list of tools the model may call. Currently, only functions are supported as a tool. Use this to provide a
-    /// list of functions the model may generate JSON inputs for. A max of 128 functions are supported.
-    public var tools: [ChatCompletionTool]?
-
-    enum CodingKeys: String, CodingKey {
-        case reasoningEffort = "reasoning_effort"
-        case temperature
-        case maxCompletionTokens = "max_completion_tokens"
-        case topP = "top_p"
-        case seed
-        case responseFormat = "response_format"
-        case tools
-    }
-
-    init() {
-        (reasoningEffort, temperature, maxCompletionTokens, topP, seed) = (nil, nil, nil, nil, nil)
-        (responseFormat, tools) = (nil, nil)
-    }
-}
-
-public extension CreateEvalCompletionsRunDataSourceSamplingParams {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        maxCompletionTokens = try container.sdkDecodeIfPresent(.maxCompletionTokens)
-        topP = try container.sdkDecodeIfPresent(.topP)
-        seed = try container.sdkDecodeIfPresent(.seed)
-        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        tools = try container.sdkDecodeIfPresent(.tools)
     }
 }

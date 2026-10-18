@@ -3,6 +3,166 @@
 
 import Foundation
 
+public class ChatNamespace {
+    let config: ClientConfig
+    public init(config: ClientConfig) {
+        self.config = config
+    }
+
+    /// List stored Chat Completions. Only Chat Completions that have been stored with the `store` parameter set to
+    /// `true` will be returned.
+    public func listCompletions(
+        model: String? = nil,
+        metadata: Metadata? = nil,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: ListChatCompletionsParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ChatCompletionList {
+        try await ChatMethods.listChatCompletions(
+            config: config,
+            model: model,
+            metadata: metadata,
+            after: after,
+            limit: limit,
+            order: order,
+            requestOptions: requestOptions
+        )
+    }
+
+    /// List stored Chat Completions. Only Chat Completions that have been stored with the `store` parameter set to
+    /// `true` will be returned.
+    public func listCompletionsPaginated(
+        model: String? = nil,
+        metadata: Metadata? = nil,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: ListChatCompletionsParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<CreateChatCompletionResponse, Swift.Error> {
+        ChatMethods.listChatCompletionsPaginated(
+            config: config,
+            model: model,
+            metadata: metadata,
+            after: after,
+            limit: limit,
+            order: order,
+            requestOptions: requestOptions
+        )
+    }
+
+    /// Creates a model response for a chat conversation. Supply `model` and at least one item in `messages`; set
+    /// `stream` to receive server-sent events instead of a single response object. The response contains completion
+    /// choices and usage information when available.
+    ///
+    /// **Starting a new project?** We recommend trying
+    /// [Responses](https://developers.openai.com/api/reference/resources/responses) to take advantage of the latest
+    /// OpenAI platform features. Compare [Chat Completions with
+    /// Responses](https://developers.openai.com/api/docs/guides/migrate-to-responses?api-mode=responses). --- Creates a
+    /// model response for the given chat conversation. Learn more in the [text
+    /// generation](https://developers.openai.com/api/docs/guides/text),
+    /// [vision](https://developers.openai.com/api/docs/guides/images-vision), and
+    /// [audio](https://developers.openai.com/api/docs/guides/audio) guides. Parameter support can differ depending on
+    /// the model used to generate the response, particularly for newer reasoning models. Parameters that are only
+    /// supported for reasoning models are noted below. For the current state of unsupported parameters in reasoning
+    /// models, [refer to the reasoning guide](https://developers.openai.com/api/docs/guides/reasoning). Returns a chat
+    /// completion object, or a streamed sequence of chat completion chunk objects if the request is streamed.
+    public func createCompletion(
+        body: CreateChatCompletionRequest,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> CreateChatCompletionResponse {
+        try await ChatMethods.createChatCompletion(config: config, body: body, requestOptions: requestOptions)
+    }
+
+    /// Creates a model response for a chat conversation. Supply `model` and at least one item in `messages`; set
+    /// `stream` to receive server-sent events instead of a single response object. The response contains completion
+    /// choices and usage information when available.
+    ///
+    /// **Starting a new project?** We recommend trying
+    /// [Responses](https://developers.openai.com/api/reference/resources/responses) to take advantage of the latest
+    /// OpenAI platform features. Compare [Chat Completions with
+    /// Responses](https://developers.openai.com/api/docs/guides/migrate-to-responses?api-mode=responses). --- Creates a
+    /// model response for the given chat conversation. Learn more in the [text
+    /// generation](https://developers.openai.com/api/docs/guides/text),
+    /// [vision](https://developers.openai.com/api/docs/guides/images-vision), and
+    /// [audio](https://developers.openai.com/api/docs/guides/audio) guides. Parameter support can differ depending on
+    /// the model used to generate the response, particularly for newer reasoning models. Parameters that are only
+    /// supported for reasoning models are noted below. For the current state of unsupported parameters in reasoning
+    /// models, [refer to the reasoning guide](https://developers.openai.com/api/docs/guides/reasoning). Returns a chat
+    /// completion object, or a streamed sequence of chat completion chunk objects if the request is streamed.
+    public func createCompletionStream(
+        body: CreateChatCompletionRequest,
+        requestOptions: RequestOptions? = nil
+    ) async throws
+        -> AsyncThrowingStream<CreateChatCompletionStreamResponse, Swift.Error> {
+        try await ChatMethods.createChatCompletionStream(config: config, body: body, requestOptions: requestOptions)
+    }
+
+    /// Get a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to
+    /// `true` will be returned.
+    public func getCompletion(
+        completionId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> CreateChatCompletionResponse {
+        try await ChatMethods.getChatCompletion(
+            config: config,
+            completionId: completionId,
+            requestOptions: requestOptions
+        )
+    }
+
+    /// Updates the metadata on a stored chat completion. The completion must have been created with `store` set to
+    /// `true`, and metadata is the only supported modification. Use this operation to attach or replace structured
+    /// key-value metadata on the completion.
+    ///
+    /// Modify a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to
+    /// `true` can be modified. Currently, the only supported modification is to update the `metadata` field.
+    public func updateCompletion(
+        completionId: String,
+        metadata: Metadata?,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> CreateChatCompletionResponse {
+        try await ChatMethods.updateChatCompletion(
+            config: config,
+            completionId: completionId,
+            metadata: metadata,
+            requestOptions: requestOptions
+        )
+    }
+
+    /// Delete a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to
+    /// `true` can be deleted.
+    public func deleteCompletion(
+        completionId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ChatCompletionDeleted {
+        try await ChatMethods.deleteChatCompletion(
+            config: config,
+            completionId: completionId,
+            requestOptions: requestOptions
+        )
+    }
+
+    /// Get the messages in a stored chat completion. Only Chat Completions that have been created with the `store`
+    /// parameter set to `true` will be returned.
+    public func getCompletionMessages(
+        completionId: String,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: GetChatCompletionMessagesParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ChatCompletionMessageList {
+        try await ChatMethods.getChatCompletionMessages(
+            config: config,
+            completionId: completionId,
+            after: after,
+            limit: limit,
+            order: order,
+            requestOptions: requestOptions
+        )
+    }
+}
+
 public extension ChatNamespace {
     /// Get the messages in a stored chat completion. Only Chat Completions that have been created with the `store`
     /// parameter set to `true` will be returned.
@@ -275,207 +435,6 @@ public extension ContainersNamespace {
             config: config,
             containerId: containerId,
             fileId: fileId,
-            requestOptions: requestOptions
-        )
-    }
-}
-
-public class ConversationsNamespace {
-    let config: ClientConfig
-    public init(config: ClientConfig) {
-        self.config = config
-    }
-
-    /// Adds items to a conversation. Supply up to 20 items in `items`; a compaction trigger, if included, must be the
-    /// final item in the request.
-    ///
-    /// Create items in a conversation with the given ID.
-    public func createItems(
-        conversationId: String,
-        items: [InputItem],
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationItemList {
-        try await ConversationsMethods.createConversationItems(
-            config: config,
-            conversationId: conversationId,
-            items: items,
-            include: include,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Lists the items in a conversation. Use `after` to continue from an item ID, `limit` to control the number of
-    /// results, and `order` to choose the direction of the results.
-    ///
-    /// List all items for a conversation with the given ID.
-    public func listItems(
-        conversationId: String,
-        limit: Int? = nil,
-        order: ListConversationItemsParameter? = nil,
-        after: String? = nil,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationItemList {
-        try await ConversationsMethods.listConversationItems(
-            config: config,
-            conversationId: conversationId,
-            limit: limit,
-            order: order,
-            after: after,
-            include: include,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Lists the items in a conversation. Use `after` to continue from an item ID, `limit` to control the number of
-    /// results, and `order` to choose the direction of the results.
-    ///
-    /// List all items for a conversation with the given ID.
-    public func listItemsPaginated(
-        conversationId: String,
-        limit: Int? = nil,
-        order: ListConversationItemsParameter? = nil,
-        after: String? = nil,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ConversationItem, Swift.Error> {
-        ConversationsMethods.listConversationItemsPaginated(
-            config: config,
-            conversationId: conversationId,
-            limit: limit,
-            order: order,
-            after: after,
-            include: include,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Retrieves a single item from a conversation. Use `conversation_id` and `item_id` to identify the conversation
-    /// and the item you want to inspect.
-    ///
-    /// Get a single item from a conversation with the given IDs.
-    public func getItem(
-        conversationId: String,
-        itemId: String,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationItem {
-        try await ConversationsMethods.getConversationItem(
-            config: config,
-            conversationId: conversationId,
-            itemId: itemId,
-            include: include,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Deletes an item from a conversation. Use `conversation_id` and `item_id` to identify the item to remove.
-    ///
-    /// Delete an item from a conversation with the given IDs.
-    public func deleteItem(
-        conversationId: String,
-        itemId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationResource {
-        try await ConversationsMethods.deleteConversationItem(
-            config: config,
-            conversationId: conversationId,
-            itemId: itemId,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Creates a conversation that can include metadata and initial context items. Use `items` to seed the conversation
-    /// with up to 20 items; metadata can store additional key-value information.
-    ///
-    /// Create a conversation.
-    public func create(
-        metadata: SdkOptional<Metadata>? = nil,
-        items: SdkOptional<[InputItem]>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationResource {
-        try await ConversationsMethods.createConversation(
-            config: config,
-            metadata: metadata,
-            items: items,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Retrieves a conversation by its identifier. Use `conversation_id` to get the conversation's metadata and
-    /// creation time.
-    ///
-    /// Get a conversation
-    public func get(
-        conversationId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationResource {
-        try await ConversationsMethods.getConversation(
-            config: config,
-            conversationId: conversationId,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Delete a conversation. Items in the conversation will not be deleted.
-    public func delete(
-        conversationId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedConversationResource {
-        try await ConversationsMethods.deleteConversation(
-            config: config,
-            conversationId: conversationId,
-            requestOptions: requestOptions
-        )
-    }
-}
-
-public extension ConversationsNamespace {
-    /// Updates the metadata associated with a conversation. Supply the complete `metadata` value to replace the
-    /// conversation's existing metadata, or use `null` to clear it.
-    ///
-    /// Update a conversation
-    func update(
-        conversationId: String,
-        metadata: Metadata?,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationResource {
-        try await ConversationsMethods.updateConversation(
-            config: config,
-            conversationId: conversationId,
-            metadata: metadata,
-            requestOptions: requestOptions
-        )
-    }
-}
-
-public class EmbeddingsNamespace {
-    let config: ClientConfig
-    public init(config: ClientConfig) {
-        self.config = config
-    }
-
-    /// Creates embedding vectors for the supplied text or token input. Provide `model` and `input`, and use
-    /// `encoding_format` or `dimensions` to control the returned vectors when the selected model supports those
-    /// options.
-    ///
-    /// Creates an embedding vector representing the input text.
-    public func create(
-        input: CreateEmbeddingRequestInput,
-        model: String,
-        encodingFormat: CreateEmbeddingRequestEncodingFormat? = nil,
-        dimensions: Int? = nil,
-        user: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateEmbeddingResponse {
-        try await EmbeddingsMethods.createEmbedding(
-            config: config,
-            input: input,
-            model: model,
-            encodingFormat: encodingFormat,
-            dimensions: dimensions,
-            user: user,
             requestOptions: requestOptions
         )
     }

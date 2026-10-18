@@ -5,6 +5,23 @@ import Foundation
 
 /// RealtimeRealtimeResponse domain models
 public extension RealtimeResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.sdkDecodeIfPresent(.id)
+        object = try container.sdkDecodeIfPresent(.object)
+        status = try container.sdkDecodeIfPresent(.status)
+        statusDetails = try container.sdkDecodeIfPresent(.statusDetails)
+        output = try container.sdkDecodeIfPresent(.output)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        usage = try container.sdkDecodeIfPresent(.usage)
+        conversationId = try container.sdkDecodeIfPresent(.conversationId)
+        outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
+        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+    }
+}
+
+public extension RealtimeResponse {
     init(
         id: String? = nil,
         object: RealtimeResponseObject? = nil,

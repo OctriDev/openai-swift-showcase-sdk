@@ -427,6 +427,11 @@ public indirect enum RunStepStreamEvent {
 extension RunStepStreamEvent: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -440,6 +445,33 @@ extension RunStepStreamEvent: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension RunStepStreamEvent {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(RunStepStreamEventVariant0.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStepStreamEventVariant0(value)
+        }
+        if let value = try? container.decode(RunStepStreamEventVariant1.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStepStreamEventVariant1(value)
+        }
+        if let value = try? container.decode(RunStepStreamEventVariant2.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStepStreamEventVariant2(value)
+        }
+        if let value = try? container.decode(RunStepStreamEventVariant3.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStepStreamEventVariant3(value)
+        }
+        if let value = try? container.decode(RunStepStreamEventVariant4.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStepStreamEventVariant4(value)
+        }
+        if let value = try? container.decode(RunStepStreamEventVariant5.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStepStreamEventVariant5(value)
+        }
+        if let value = try? container.decode(RunStepStreamEventVariant6.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStepStreamEventVariant6(value)
+        }
+        return nil
     }
 }
 
@@ -508,6 +540,14 @@ public indirect enum RunStreamEvent {
 extension RunStreamEvent: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+            if let value = Self.decodeLossless2(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -517,60 +557,6 @@ extension RunStreamEvent: Codable {
     public func encode(to encoder: Encoder) throws {
         if try encodeGroup1(to: encoder) {
             return
-        }
-    }
-}
-
-extension RunStreamEvent {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(RunStreamEventVariant0.self) {
-            return .runStreamEventVariant0(value)
-        }
-        if let value = try? container.decode(RunStreamEventVariant1.self) {
-            return .runStreamEventVariant1(value)
-        }
-        if let value = try? container.decode(RunStreamEventVariant2.self) {
-            return .runStreamEventVariant2(value)
-        }
-        if let value = try? container.decode(RunStreamEventVariant3.self) {
-            return .runStreamEventVariant3(value)
-        }
-        if let value = try? container.decode(RunStreamEventVariant4.self) {
-            return .runStreamEventVariant4(value)
-        }
-        if let value = try? container.decode(RunStreamEventVariant5.self) {
-            return .runStreamEventVariant5(value)
-        }
-        if let value = try? container.decode(RunStreamEventVariant6.self) {
-            return .runStreamEventVariant6(value)
-        }
-        if let value = try? container.decode(RunStreamEventVariant7.self) {
-            return .runStreamEventVariant7(value)
-        }
-        if let value = try? container.decode(RunStreamEventVariant8.self) {
-            return .runStreamEventVariant8(value)
-        }
-        if let value = try? container.decode(RunStreamEventVariant9.self) {
-            return .runStreamEventVariant9(value)
-        }
-        return nil
-    }
-}
-
-extension RunStreamEvent {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .runStreamEventVariant0(value): try container.encode(value); return true
-        case let .runStreamEventVariant1(value): try container.encode(value); return true
-        case let .runStreamEventVariant2(value): try container.encode(value); return true
-        case let .runStreamEventVariant3(value): try container.encode(value); return true
-        case let .runStreamEventVariant4(value): try container.encode(value); return true
-        case let .runStreamEventVariant5(value): try container.encode(value); return true
-        case let .runStreamEventVariant6(value): try container.encode(value); return true
-        case let .runStreamEventVariant7(value): try container.encode(value); return true
-        case let .runStreamEventVariant8(value): try container.encode(value); return true
-        case let .runStreamEventVariant9(value): try container.encode(value); return true
         }
     }
 }

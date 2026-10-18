@@ -12,6 +12,11 @@ public indirect enum VoiceIdsOrCustomVoice {
 extension VoiceIdsOrCustomVoice: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -25,6 +30,18 @@ extension VoiceIdsOrCustomVoice: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension VoiceIdsOrCustomVoice {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(VoiceIdsShared.self), sdkKeepsEveryKey(value, of: raw) {
+            return .voiceIdsShared(value)
+        }
+        if let value = try? container.decode(VoiceIdsOrCustomVoiceVariant1.self), sdkKeepsEveryKey(value, of: raw) {
+            return .voiceIdsOrCustomVoiceVariant1(value)
+        }
+        return nil
     }
 }
 

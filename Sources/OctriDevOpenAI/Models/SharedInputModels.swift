@@ -72,6 +72,11 @@ public indirect enum InputItem {
 extension InputItem: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -82,6 +87,30 @@ extension InputItem: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension InputItem {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(EasyInputMessage.self), sdkKeepsEveryKey(value, of: raw) {
+            return .easyInputMessage(value)
+        }
+        if let value = try? container.decode(Item.self), sdkKeepsEveryKey(value, of: raw) {
+            return .item(value)
+        }
+        if let value = try? container.decode(CompactionTriggerItemParam.self), sdkKeepsEveryKey(value, of: raw) {
+            return .compactionTriggerItemParam(value)
+        }
+        if let value = try? container.decode(ItemReferenceParam.self), sdkKeepsEveryKey(value, of: raw) {
+            return .itemReferenceParam(value)
+        }
+        if let value = try? container.decode(ProgramItemParam.self), sdkKeepsEveryKey(value, of: raw) {
+            return .programItemParam(value)
+        }
+        if let value = try? container.decode(ProgramOutputItemParam.self), sdkKeepsEveryKey(value, of: raw) {
+            return .programOutputItemParam(value)
+        }
+        return nil
     }
 }
 
@@ -592,43 +621,5 @@ public struct InputTextContentParam: Codable {
 
     private init(sdkCopy value: Self) {
         self = value
-    }
-}
-
-public extension InputTextContentParam {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
-        }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-        try sdkValidateRawEnum("type", type, InputTextContentParamType.allCases.map(\.rawValue))
-        try validateLength("text", text, min: nil, max: 10_485_760)
-    }
-}
-
-public extension InputTextContentParam {
-    init(
-        type: InputTextContentParamType,
-        text: String,
-        promptCacheBreakpoint: PromptCacheBreakpointParam? = nil
-    ) throws {
-        (self.type, self.text) = (type, text)
-        self.promptCacheBreakpoint = promptCacheBreakpoint
-        try sdkValidateRawEnum("type", self.type, InputTextContentParamType.allCases.map(\.rawValue))
-        try validateLength("text", self.text, min: nil, max: 10_485_760)
     }
 }

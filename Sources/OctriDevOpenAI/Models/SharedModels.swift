@@ -394,52 +394,6 @@ public extension AzureExternalStorageProviderResponse {
     }
 }
 
-public indirect enum PermissionErrorResponseError {
-    case error3(Error3)
-    case stringValue(String)
-}
-
-extension PermissionErrorResponseError: Codable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for PermissionErrorResponseError"
-        )
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-    }
-}
-
-extension PermissionErrorResponseError {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Error3.self) {
-            return .error3(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        return nil
-    }
-}
-
-extension PermissionErrorResponseError {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .error3(value): try container.encode(value); return true
-        case let .stringValue(value): try container.encode(value); return true
-        }
-    }
-}
-
 /// A wait action.
 public struct WaitParam: Codable {
     /// Specifies the event type. For a wait action, this property is always set to `wait`.
@@ -615,5 +569,40 @@ public extension HybridSearchOptions {
         }
         embeddingWeight = try container.sdkDecodeRequired(.embeddingWeight)
         textWeight = try container.sdkDecodeRequired(.textWeight)
+    }
+}
+
+public extension HybridSearchOptions {
+    init(embeddingWeight: Double, textWeight: Double) {
+        (self.embeddingWeight, self.textWeight) = (embeddingWeight, textWeight)
+    }
+}
+
+/// A scroll action.
+public struct ScrollParam: Codable {
+    /// Specifies the event type. For a scroll action, this property is always set to `scroll`.
+    public var type: ScrollParamType
+    /// The x-coordinate where the scroll occurred.
+    public var x: Int
+    /// The y-coordinate where the scroll occurred.
+    public var y: Int
+    /// The horizontal scroll distance.
+    public var scrollX: Int
+    /// The vertical scroll distance.
+    public var scrollY: Int
+    /// The keys being held while scrolling.
+    public var keys: [String]?
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case x
+        case y
+        case scrollX = "scroll_x"
+        case scrollY = "scroll_y"
+        case keys
+    }
+
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }

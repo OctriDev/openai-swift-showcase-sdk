@@ -4,6 +4,44 @@
 import Foundation
 
 /// SharedInput domain models
+public extension InputTextContentParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+        try sdkValidateRawEnum("type", type, InputTextContentParamType.allCases.map(\.rawValue))
+        try validateLength("text", text, min: nil, max: 10_485_760)
+    }
+}
+
+public extension InputTextContentParam {
+    init(
+        type: InputTextContentParamType,
+        text: String,
+        promptCacheBreakpoint: PromptCacheBreakpointParam? = nil
+    ) throws {
+        (self.type, self.text) = (type, text)
+        self.promptCacheBreakpoint = promptCacheBreakpoint
+        try sdkValidateRawEnum("type", self.type, InputTextContentParamType.allCases.map(\.rawValue))
+        try validateLength("text", self.text, min: nil, max: 10_485_760)
+    }
+}
+
 /// Required object value serialized in the `input_audio` wire field.
 public struct InputAudioInputAudio: Codable {
     /// Base64-encoded audio data.

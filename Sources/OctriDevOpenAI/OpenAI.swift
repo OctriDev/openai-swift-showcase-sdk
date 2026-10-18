@@ -229,6 +229,31 @@ public extension AssistantsNamespace {
         )
     }
 
+    /// Lists messages belonging to a thread. Use `run_id` to filter by the run that generated the messages and `order`
+    /// to control their creation-time order. Use `after` or `before` cursors to navigate the results.
+    ///
+    /// Returns a list of messages for a given thread.
+    func listMessagesPaginated(
+        threadId: String,
+        limit: Int? = nil,
+        order: ListMessagesParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        runId: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<MessageObject, Swift.Error> {
+        AssistantsMethods.listMessagesPaginated(
+            config: config,
+            threadId: threadId,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            runId: runId,
+            requestOptions: requestOptions
+        )
+    }
+
     /// Creates a message in a thread. Provide the message `role` and `content`, and optionally include file attachments
     /// or metadata. Use this operation to add a user or assistant message to an existing conversation thread.
     ///
@@ -268,7 +293,9 @@ public extension AssistantsNamespace {
             requestOptions: requestOptions
         )
     }
+}
 
+public extension AssistantsNamespace {
     /// Updates the metadata attached to a message in a thread. Provide the thread and message identifiers to select the
     /// message, then supply metadata key-value pairs to change. Use this operation when you need to update message
     /// metadata without changing its content.
@@ -288,9 +315,7 @@ public extension AssistantsNamespace {
             requestOptions: requestOptions
         )
     }
-}
 
-public extension AssistantsNamespace {
     /// Deletes a message from a thread. Provide both identifiers to select the thread and the message to remove; the
     /// response confirms the deletion.
     ///
@@ -408,19 +433,6 @@ public extension AssistantsNamespace {
             threadId: threadId,
             runId: runId,
             metadata: metadata,
-            requestOptions: requestOptions
-        )
-    }
-
-    /// Cancels a run that is in progress on a thread. Use this operation when you need to stop the run before it
-    /// completes; the returned run object reports its current status.
-    ///
-    /// Cancels a run that is `in_progress`.
-    func cancelRun(threadId: String, runId: String, requestOptions: RequestOptions? = nil) async throws -> RunObject {
-        try await AssistantsMethods.cancelRun(
-            config: config,
-            threadId: threadId,
-            runId: runId,
             requestOptions: requestOptions
         )
     }

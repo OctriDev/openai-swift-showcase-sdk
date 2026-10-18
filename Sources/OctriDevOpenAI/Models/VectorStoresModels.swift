@@ -57,52 +57,6 @@ extension ChunkingStrategyRequestParam {
     }
 }
 
-public indirect enum CreateVectorStoreFileBatchRequest {
-    case jsonValue(JSONValue)
-    case jsonValue1(JSONValue)
-}
-
-extension CreateVectorStoreFileBatchRequest: Codable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateVectorStoreFileBatchRequest"
-        )
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-    }
-}
-
-extension CreateVectorStoreFileBatchRequest {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue1(value)
-        }
-        return nil
-    }
-}
-
-extension CreateVectorStoreFileBatchRequest {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .jsonValue(value): try container.encode(value); return true
-        case let .jsonValue1(value): try container.encode(value); return true
-        }
-    }
-}
-
 public indirect enum CreateVectorStoreRequestChunkingStrategy {
     case autoChunkingStrategyRequestParam(AutoChunkingStrategyRequestParam)
     case staticChunkingStrategyRequestParam(StaticChunkingStrategyRequestParam)
@@ -593,5 +547,65 @@ public struct VectorStoreSearchResultsPage: Codable {
 
     private init(sdkCopy value: Self) {
         self = value
+    }
+}
+
+public extension VectorStoreSearchResultsPage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.searchQuery) else {
+            throw SdkValidationError(
+                field: "search_query",
+                code: "required",
+                message: "Validation failed for 'search_query': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        guard container.contains(.nextPage) else {
+            throw SdkValidationError(
+                field: "next_page",
+                code: "required",
+                message: "Validation failed for 'next_page': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        searchQuery = try container.sdkDecodeRequired(.searchQuery)
+        data = try container.sdkDecodeRequired(.data)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        nextPage = try container.sdkDecodeNullable(.nextPage)
+    }
+}
+
+public extension VectorStoreSearchResultsPage {
+    init(
+        object: VectorStoreSearchResultsPageObject,
+        searchQuery: [String],
+        data: [VectorStoreSearchResultItem],
+        hasMore: Bool,
+        nextPage: String?
+    ) {
+        (self.object, self.searchQuery) = (object, searchQuery)
+        (self.data, self.hasMore) = (data, hasMore)
+        self.nextPage = nextPage
     }
 }

@@ -5,6 +5,82 @@ import Foundation
 
 /// ResponseSteer domain models
 /// Required enumerated value serialized in the `type` wire field.
+public enum ResponseSteerRequiredInputVariant1Type: String, CaseIterable, Codable {
+    case customToolCallOutput = "custom_tool_call_output"
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "ResponseSteerRequiredInputVariant1Type"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
+    }
+}
+
+/// The event discriminator. Always `response.steer.pending`.
+public enum ResponseSteerPendingEventType: String, CaseIterable, Codable {
+    case responseSteerPending = "response.steer.pending"
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "ResponseSteerPendingEventType"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
+    }
+}
+
+/// Required enumerated value serialized in the `execution` wire field.
+public struct ResponseSteerRequiredInputVariant5Execution: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let client = ResponseSteerRequiredInputVariant5Execution(rawValue: "client")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// The event discriminator. Always `response.steer.failed`.
+public enum ResponseSteerFailedEventType: String, CaseIterable, Codable {
+    case responseSteerFailed = "response.steer.failed"
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "ResponseSteerFailedEventType"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
+    }
+}
+
+/// Required enumerated value serialized in the `type` wire field.
 public enum ResponseSteerRequiredInputVariant0Type: String, CaseIterable, Codable {
     case functionCallOutput = "function_call_output"
     public init(from decoder: Decoder) throws {

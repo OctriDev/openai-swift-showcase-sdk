@@ -4,46 +4,6 @@
 import Foundation
 
 /// Shared domain models
-/// The order in which paginated resources are returned.
-public struct ListOrderParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
-    public let rawValue: String
-
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let asc = ListOrderParam(rawValue: "asc")
-    public static let desc = ListOrderParam(rawValue: "desc")
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
-/// Specifies the event type. For a wait action, this property is always set to `wait`.
-public enum WaitParamType: String, CaseIterable, Codable {
-    case wait
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "WaitParamType"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
-    }
-}
-
 /// Specifies the event type. For a move action, this property is always set to `move`.
 public enum MoveParamType: String, CaseIterable, Codable {
     case move
@@ -638,6 +598,46 @@ public struct IncludeEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWir
     public static let codeInterpreterCallOutputs = IncludeEnum(rawValue: "code_interpreter_call.outputs")
     public static let reasoningEncryptedContent = IncludeEnum(rawValue: "reasoning.encrypted_content")
     public static let messageOutputTextLogprobs = IncludeEnum(rawValue: "message.output_text.logprobs")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Required enumerated value serialized in the `type` wire field.
+public enum OciExternalStorageProviderResponseType: String, CaseIterable, Codable {
+    case oci
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "OciExternalStorageProviderResponseType"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
+    }
+}
+
+/// Typed representation of the `GrammarSyntax1` API schema.
+public struct GrammarSyntax1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let lark = GrammarSyntax1(rawValue: "lark")
+    public static let regex = GrammarSyntax1(rawValue: "regex")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()

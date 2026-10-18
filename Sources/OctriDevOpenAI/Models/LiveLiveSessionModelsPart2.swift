@@ -46,6 +46,7 @@ public extension LiveSessionResourceParam {
         triggers = try container.sdkDecodeIfPresent(.triggers)
         store = try container.sdkDecodeIfPresent(.store)
         client = try container.sdkDecodeIfPresent(.client)
+        try validateLength("model", sdkWireString(model), min: 1, max: nil)
         if let value = input {
             try validateItems("input", value, min: nil, max: 128)
         }
@@ -75,6 +76,7 @@ public extension LiveSessionResourceParam {
         (self.audio, self.delegation) = (audio, delegation)
         (self.triggers, self.store) = (triggers, store)
         self.client = client
+        try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
         if let value = self.input {
             try validateItems("input", value, min: nil, max: 128)
         }

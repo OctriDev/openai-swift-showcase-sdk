@@ -64,48 +64,7 @@ public typealias Input = [LiveInitialItem]
 
 public typealias Instructions = String
 
-public indirect enum ModelIdsLive {
-    case stringValue(String)
-    case stringValue1(String)
-}
-
-extension ModelIdsLive: Codable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ModelIdsLive")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-    }
-}
-
-extension ModelIdsLive {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue1(value)
-        }
-        return nil
-    }
-}
-
-extension ModelIdsLive {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .stringValue(value): try container.encode(value); return true
-        case let .stringValue1(value): try container.encode(value); return true
-        }
-    }
-}
+public typealias ModelIdsLive = String
 
 public typealias PropertiesStore = Bool
 
@@ -146,26 +105,5 @@ public extension Session {
 public extension Session {
     init(id: String) {
         self.id = id
-    }
-}
-
-/// Required enumerated value serialized in the `model` wire field.
-public struct ModelIdsLiveVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
-    public let rawValue: String
-
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let gptLive1 = ModelIdsLiveVariant1(rawValue: "gpt-live-1")
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
     }
 }

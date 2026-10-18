@@ -4,6 +4,67 @@
 import Foundation
 
 /// BetaResponse domain models
+public extension BetaResponseSteerRequiredInputVariant5 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.execution) else {
+            throw SdkValidationError(
+                field: "execution",
+                code: "required",
+                message: "Validation failed for 'execution': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        execution = try container.sdkDecodeRequired(.execution)
+        try sdkValidateRawEnum("type", type, BetaResponseSteerRequiredInputVariant5Type.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseSteerRequiredInputVariant5 {
+    init(
+        type: BetaResponseSteerRequiredInputVariant5Type,
+        callId: String,
+        execution: BetaResponseSteerRequiredInputVariant5Execution
+    ) throws {
+        (self.type, self.callId) = (type, callId)
+        self.execution = execution
+        try sdkValidateRawEnum("type", self.type, BetaResponseSteerRequiredInputVariant5Type.allCases.map(\.rawValue))
+    }
+}
+
+/// Supply `output` using the computer tool call output input schema, including any required
+/// `acknowledged_safety_checks`.
+public struct BetaResponseSteerRequiredInputVariant2: Codable {
+    /// Required enumerated value serialized in the `type` wire field.
+    public var type: BetaResponseSteerRequiredInputVariant2Type
+    /// Required `string` value serialized in the `call_id` wire field.
+    public var callId: String
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case callId = "call_id"
+    }
+
+    private init(sdkCopy value: Self) {
+        self = value
+    }
+}
+
 public extension BetaResponseSteerRequiredInputVariant2 {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -525,24 +586,6 @@ public enum BetaResponseSteerRequiredInputVariant2Type: String, CaseIterable, Co
         let rawValue = try container.decode(String.self)
         guard let value = Self(rawValue: rawValue) else {
             let field = decoder.codingPath.last?.stringValue ?? "BetaResponseSteerRequiredInputVariant2Type"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
-    }
-}
-
-/// Required enumerated value serialized in the `type` wire field.
-public enum BetaResponseSteerRequiredInputVariant6Type: String, CaseIterable, Codable {
-    case mcpApprovalResponse = "mcp_approval_response"
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "BetaResponseSteerRequiredInputVariant6Type"
             throw SdkValidationError(
                 field: field,
                 code: "enum",

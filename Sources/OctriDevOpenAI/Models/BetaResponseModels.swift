@@ -125,6 +125,11 @@ public indirect enum BetaResponseSteerRequiredInput {
 extension BetaResponseSteerRequiredInput: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -138,6 +143,54 @@ extension BetaResponseSteerRequiredInput: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension BetaResponseSteerRequiredInput {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(BetaResponseSteerRequiredInputVariant0.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
+            return .betaResponseSteerRequiredInputVariant0(value)
+        }
+        if let value = try? container.decode(BetaResponseSteerRequiredInputVariant1.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
+            return .betaResponseSteerRequiredInputVariant1(value)
+        }
+        if let value = try? container.decode(BetaResponseSteerRequiredInputVariant2.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
+            return .betaResponseSteerRequiredInputVariant2(value)
+        }
+        if let value = try? container.decode(BetaResponseSteerRequiredInputVariant3.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
+            return .betaResponseSteerRequiredInputVariant3(value)
+        }
+        if let value = try? container.decode(BetaResponseSteerRequiredInputVariant4.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
+            return .betaResponseSteerRequiredInputVariant4(value)
+        }
+        if let value = try? container.decode(BetaResponseSteerRequiredInputVariant5.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
+            return .betaResponseSteerRequiredInputVariant5(value)
+        }
+        if let value = try? container.decode(BetaResponseSteerRequiredInputVariant6.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
+            return .betaResponseSteerRequiredInputVariant6(value)
+        }
+        return nil
     }
 }
 
@@ -549,69 +602,6 @@ public struct BetaResponseInjectCreatedEvent: Codable {
         case responseId = "response_id"
         case sequenceNumber = "sequence_number"
         case streamId = "stream_id"
-    }
-
-    private init(sdkCopy value: Self) {
-        self = value
-    }
-}
-
-public extension BetaResponseInjectCreatedEvent {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
-        }
-        guard container.contains(.responseId) else {
-            throw SdkValidationError(
-                field: "response_id",
-                code: "required",
-                message: "Validation failed for 'response_id': value is required"
-            )
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
-        }
-        type = try container.sdkDecodeRequired(.type)
-        responseId = try container.sdkDecodeRequired(.responseId)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, BetaResponseInjectCreatedEventType.allCases.map(\.rawValue))
-    }
-}
-
-public extension BetaResponseInjectCreatedEvent {
-    init(
-        type: BetaResponseInjectCreatedEventType,
-        responseId: String,
-        sequenceNumber: Int,
-        streamId: String? = nil
-    ) throws {
-        (self.type, self.responseId) = (type, responseId)
-        (self.sequenceNumber, self.streamId) = (sequenceNumber, streamId)
-        try sdkValidateRawEnum("type", self.type, BetaResponseInjectCreatedEventType.allCases.map(\.rawValue))
-    }
-}
-
-/// Supply `output` using the custom tool call output input schema. The original custom tool call supplies the
-/// tool's name.
-public struct BetaResponseSteerRequiredInputVariant1: Codable {
-    /// Required enumerated value serialized in the `type` wire field.
-    public var type: BetaResponseSteerRequiredInputVariant1Type
-    /// Required `string` value serialized in the `call_id` wire field.
-    public var callId: String
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case callId = "call_id"
     }
 
     private init(sdkCopy value: Self) {

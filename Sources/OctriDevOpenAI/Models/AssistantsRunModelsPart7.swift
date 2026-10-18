@@ -4,6 +4,58 @@
 import Foundation
 
 /// AssistantsRun domain models
+public enum RunStreamEventVariant3Event: String, CaseIterable, Codable {
+    case threadRunRequiresAction = "thread.run.requires_action"
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "RunStreamEventVariant3Event"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
+    }
+}
+
+/// Always `logs`.
+public enum RunStepDeltaStepDetailsToolCallsCodeOutputLogsObjectType: String, CaseIterable, Codable {
+    case logs
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "RunStepDeltaStepDetailsToolCallsCodeOutputLogsObjectType"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
+    }
+}
+
+public enum RunStreamEventVariant4Event: String, CaseIterable, Codable {
+    case threadRunCompleted = "thread.run.completed"
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "RunStreamEventVariant4Event"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
+    }
+}
+
 /// The object type, which is always `thread.run.step`.
 public struct RunStepObjectObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
@@ -576,62 +628,5 @@ public enum RunStreamEventVariant2Event: String, CaseIterable, Codable {
             )
         }
         self = value
-    }
-}
-
-/// The type of tool call. This is always going to be `file_search` for this type of tool call.
-public enum RunStepDeltaStepDetailsToolCallsFileSearchObjectType: String, CaseIterable, Codable {
-    case fileSearch = "file_search"
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "RunStepDeltaStepDetailsToolCallsFileSearchObjectType"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
-    }
-}
-
-public enum RunStepStreamEventVariant4Event: String, CaseIterable, Codable {
-    case threadRunStepFailed = "thread.run.step.failed"
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "RunStepStreamEventVariant4Event"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
-    }
-}
-
-/// One of `server_error` or `rate_limit_exceeded`.
-public struct RunStepObjectLastErrorCode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
-    public let rawValue: String
-
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let serverError = RunStepObjectLastErrorCode(rawValue: "server_error")
-    public static let rateLimitExceeded = RunStepObjectLastErrorCode(rawValue: "rate_limit_exceeded")
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
     }
 }

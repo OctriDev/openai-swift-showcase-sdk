@@ -302,6 +302,11 @@ public indirect enum MessageStreamEvent {
 extension MessageStreamEvent: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -315,6 +320,27 @@ extension MessageStreamEvent: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension MessageStreamEvent {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(MessageStreamEventVariant0.self), sdkKeepsEveryKey(value, of: raw) {
+            return .messageStreamEventVariant0(value)
+        }
+        if let value = try? container.decode(MessageStreamEventVariant1.self), sdkKeepsEveryKey(value, of: raw) {
+            return .messageStreamEventVariant1(value)
+        }
+        if let value = try? container.decode(MessageStreamEventVariant2.self), sdkKeepsEveryKey(value, of: raw) {
+            return .messageStreamEventVariant2(value)
+        }
+        if let value = try? container.decode(MessageStreamEventVariant3.self), sdkKeepsEveryKey(value, of: raw) {
+            return .messageStreamEventVariant3(value)
+        }
+        if let value = try? container.decode(MessageStreamEventVariant4.self), sdkKeepsEveryKey(value, of: raw) {
+            return .messageStreamEventVariant4(value)
+        }
+        return nil
     }
 }
 
@@ -564,21 +590,5 @@ public extension MessageDeltaContentImageUrlObjectImageUrl {
         if let value = self.url {
             try sdkValidateUri("url", value)
         }
-    }
-}
-
-/// Occurs when a message is completed.
-public struct MessageStreamEventVariant3: Codable {
-    public var event: MessageStreamEventVariant3Event
-    /// Represents a message within a thread.
-    public var data: MessageObject
-
-    enum CodingKeys: String, CodingKey {
-        case event
-        case data
-    }
-
-    private init(sdkCopy value: Self) {
-        self = value
     }
 }

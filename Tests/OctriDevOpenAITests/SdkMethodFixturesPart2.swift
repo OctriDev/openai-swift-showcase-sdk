@@ -5,6 +5,16 @@ import Foundation
 @testable import OctriDevOpenAI
 import XCTest
 
+let sdkMethodFixture40Value1 = String(
+    data: Data(base64Encoded: [
+        "W3sidHlwZSI6ImZ1bmN0aW9uIiwibmFtZSI6IkV4YW1wbGUgTmFtZSIsImFzeW5jIjpmYWxzZSwiZGVz",
+        "Y3JpcHRpb24iOiJleGFtcGxlIHRleHQiLCJwYXJhbWV0ZXJzIjp7ImtleSI6bnVsbH0sIm91dHB1dF9z",
+        "Y2hlbWEiOnsia2V5IjpudWxsfSwic3RyaWN0IjpmYWxzZSwiZGVmZXJfbG9hZGluZyI6ZmFsc2UsImFs",
+        "bG93ZWRfY2FsbGVycyI6WyJkaXJlY3QiXX1d",
+    ].joined())!,
+    encoding: .utf8
+)!
+
 let sdkMethodFixture40Value2 = String(
     data: Data(base64Encoded: [
         "eyJtb2RlIjoibW9kZSIsImVmZm9ydCI6Im1lZGl1bSIsInN1bW1hcnkiOiJhdXRvIiwiY29udGV4dCI6",
@@ -634,14 +644,6 @@ let sdkMethodFixture75Expected = String(
         "eyJ0eXBlIjoiZXJyb3IiLCJldmVudF9pZCI6ImV2ZW50LTEiLCJzZXNzaW9uX2lkIjoic2Vzc2lvbi0x",
         "IiwiZXJyb3IiOnsidHlwZSI6InR5cGUiLCJjb2RlIjoiY29kZSIsIm1lc3NhZ2UiOiJleGFtcGxlIHRl",
         "eHQiLCJwYXJhbSI6InBhcmFtIn19",
-    ].joined())!,
-    encoding: .utf8
-)!
-
-let sdkMethodFixture76Value1 = String(
-    data: Data(base64Encoded: [
-        "eyJjb2RlX2ludGVycHJldGVyIjp7ImZpbGVfaWRzIjpbXX0sImZpbGVfc2VhcmNoIjp7InZlY3Rvcl9z",
-        "dG9yZV9pZHMiOlsidmVjdG9yX3N0b3JlX2lkcyJdfX0=",
     ].joined())!,
     encoding: .utf8
 )!

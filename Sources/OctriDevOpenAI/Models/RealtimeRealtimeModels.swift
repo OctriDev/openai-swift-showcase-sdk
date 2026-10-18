@@ -13,6 +13,11 @@ public indirect enum RealtimeAudioFormats {
 extension RealtimeAudioFormats: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -26,6 +31,21 @@ extension RealtimeAudioFormats: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension RealtimeAudioFormats {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(RealtimeAudioFormatsVariant0.self), sdkKeepsEveryKey(value, of: raw) {
+            return .realtimeAudioFormatsVariant0(value)
+        }
+        if let value = try? container.decode(RealtimeAudioFormatsVariant1.self), sdkKeepsEveryKey(value, of: raw) {
+            return .realtimeAudioFormatsVariant1(value)
+        }
+        if let value = try? container.decode(RealtimeAudioFormatsVariant2.self), sdkKeepsEveryKey(value, of: raw) {
+            return .realtimeAudioFormatsVariant2(value)
+        }
+        return nil
     }
 }
 
@@ -113,6 +133,11 @@ public indirect enum RealtimeTurnDetection {
 extension RealtimeTurnDetection: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -126,6 +151,18 @@ extension RealtimeTurnDetection: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension RealtimeTurnDetection {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(RealtimeTurnDetectionVariant0.self), sdkKeepsEveryKey(value, of: raw) {
+            return .realtimeTurnDetectionVariant0(value)
+        }
+        if let value = try? container.decode(RealtimeTurnDetectionVariant1.self), sdkKeepsEveryKey(value, of: raw) {
+            return .realtimeTurnDetectionVariant1(value)
+        }
+        return nil
     }
 }
 
@@ -562,29 +599,5 @@ public extension RealtimeAudioFormatsVariant0 {
         if let value = self.type {
             try sdkValidateRawEnum("type", value, RealtimeAudioFormatsVariant0Type.allCases.map(\.rawValue))
         }
-    }
-}
-
-/// Retain a fraction of the conversation tokens when the conversation exceeds the input token limit. This allows
-/// you to amortize truncations across multiple turns, which can help improve cached token usage.
-public struct RealtimeTruncationVariant1: Codable {
-    /// Use retention ratio truncation.
-    public var type: RealtimeTruncationVariant1Type
-    /// Fraction of post-instruction conversation tokens to retain (`0.0` - `1.0`) when the conversation exceeds the
-    /// input token limit. Setting this to `0.8` means that messages will be dropped until 80% of the maximum
-    /// allowed tokens are used. This helps reduce the frequency of truncations and improve cache rates.
-    public var retentionRatio: Double
-    /// Optional custom token limits for this truncation strategy. If not provided, the model's default token limits
-    /// will be used.
-    public var tokenLimits: RealtimeTruncationVariant1TokenLimits?
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case retentionRatio = "retention_ratio"
-        case tokenLimits = "token_limits"
-    }
-
-    private init(sdkCopy value: Self) {
-        self = value
     }
 }

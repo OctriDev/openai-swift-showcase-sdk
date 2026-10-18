@@ -95,6 +95,11 @@ public indirect enum RealtimeResponseCreateParamsToolsItem {
 extension RealtimeResponseCreateParamsToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
+        }
         if let value = Self.decodeGroup1(from: container) {
             self = value; return
         }
@@ -108,6 +113,18 @@ extension RealtimeResponseCreateParamsToolsItem: Codable {
         if try encodeGroup1(to: encoder) {
             return
         }
+    }
+}
+
+extension RealtimeResponseCreateParamsToolsItem {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(RealtimeFunctionTool.self), sdkKeepsEveryKey(value, of: raw) {
+            return .realtimeFunctionTool(value)
+        }
+        if let value = try? container.decode(MCPTool.self), sdkKeepsEveryKey(value, of: raw) {
+            return .mCpTool(value)
+        }
+        return nil
     }
 }
 
@@ -588,22 +605,5 @@ public struct RealtimeResponse: Codable {
         (id, object, status, statusDetails, output) = (nil, nil, nil, nil, nil)
         (metadata, audio, usage, conversationId, outputModalities) = (nil, nil, nil, nil, nil)
         maxOutputTokens = nil
-    }
-}
-
-public extension RealtimeResponse {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        object = try container.sdkDecodeIfPresent(.object)
-        status = try container.sdkDecodeIfPresent(.status)
-        statusDetails = try container.sdkDecodeIfPresent(.statusDetails)
-        output = try container.sdkDecodeIfPresent(.output)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        audio = try container.sdkDecodeIfPresent(.audio)
-        usage = try container.sdkDecodeIfPresent(.usage)
-        conversationId = try container.sdkDecodeIfPresent(.conversationId)
-        outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
-        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
     }
 }
