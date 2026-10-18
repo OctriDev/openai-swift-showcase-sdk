@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ResponsesMethods {
-    public struct BetaResponsesCompactOptions: Codable {
+public extension ResponsesMethods {
+    struct BetaResponsesCompactOptions: Codable {
         public var model: BetaModelIdsCompaction?
         public var openaiBeta: [BetaResponsesCompactParameterItem]?
         public var input: SdkOptional<BetaCompactResponseMethodPublicBodyInput>?
@@ -23,9 +23,15 @@ extension ResponsesMethods {
         }
     }
 
-    /// Compacts a conversation and returns a compacted response object. Provide the required `model` and conversation content through `input` or `previous_response_id` to produce a compacted representation. Use the result to manage the context window in a long-running conversation.
+    /// Compacts a conversation and returns a compacted response object. Provide the required `model` and conversation
+    /// content through `input` or `previous_response_id` to produce a compacted representation. Use the result to
+    /// manage the context window in a long-running conversation.
     ///
-    /// Compact a conversation. Returns a compacted response object. Learn when and how to compact long-running conversations in the [conversation state guide](https://developers.openai.com/api/docs/guides/conversation-state#managing-the-context-window). For ZDR-compatible compaction details, see [Compaction (advanced)](https://developers.openai.com/api/docs/guides/conversation-state#compaction-advanced).
+    /// Compact a conversation. Returns a compacted response object. Learn when and how to compact long-running
+    /// conversations in the [conversation state
+    /// guide](https://developers.openai.com/api/docs/guides/conversation-state#managing-the-context-window). For
+    /// ZDR-compatible compaction details, see [Compaction
+    /// (advanced)](https://developers.openai.com/api/docs/guides/conversation-state#compaction-advanced).
     ///
     /// - Parameters:
     /// - model: Model ID used to generate the response, like `gpt-6-astra`. OpenAI
@@ -48,11 +54,25 @@ extension ResponsesMethods {
     ///   `prompt_cache_options` wire field.
     /// - serviceTier: Optional API value serialized in the `service_tier` wire
     ///   field.
-    public static func betaResponsesCompact(config: ClientConfig, options: BetaResponsesCompactOptions, requestOptions: RequestOptions? = nil) async throws -> BetaCompactResource {
+    static func betaResponsesCompact(
+        config: ClientConfig,
+        options: BetaResponsesCompactOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BetaCompactResource {
         let requestBody = BetaResponsesCompactRequestBody(options: options)
 
-        return try (await sdkRequest("POST", "/responses/compact?beta=true", config: config, body: requestBody, decoder: .json, operationId: "betaResponsesCompact", extraHeaders: sdkHeaders([
-            ("openai-beta", sdkHeaderValue(options.openaiBeta)),
-        ]), options: requestOptions, errors: ["400": BetaErrorResponse.self, "429": ErrorResponse.self, "503": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/responses/compact?beta=true",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "betaResponsesCompact",
+            extraHeaders: sdkHeaders([
+                ("openai-beta", sdkHeaderValue(options.openaiBeta)),
+            ]),
+            options: requestOptions,
+            errors: ["400": BetaErrorResponse.self, "429": ErrorResponse.self, "503": ErrorResponse.self]
+        )).data
     }
 }

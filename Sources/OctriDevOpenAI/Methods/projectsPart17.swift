@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectsMethods {
+public extension ProjectsMethods {
     /// Adds a user to the project. Users must already be members of the organization to be added to a project.
     ///
     /// - Parameters:
@@ -14,20 +14,66 @@ extension ProjectsMethods {
     /// - role: `owner` or `member`
     /// - userId: The ID of the user.
     /// - email: Email of the user to add.
-    public static func createProjectUser(config: ClientConfig, projectId: String, role: String, userId: SdkOptional<String>? = nil, email: SdkOptional<String>? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectUser {
+    static func createProjectUser(
+        config: ClientConfig,
+        projectId: String,
+        role: String,
+        userId: SdkOptional<String>? = nil,
+        email: SdkOptional<String>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectUser {
         let requestBody = CreateProjectUserRequestBody(role: role, userId: userId, email: email)
 
-        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/users"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createProjectUser", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/users"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createProjectUser",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "409": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 
-    /// Retrieves a user's membership details for a project. Use `project_id` and `user_id` to identify the project and user, and review the returned role and membership timestamp.
+    /// Retrieves a user's membership details for a project. Use `project_id` and `user_id` to identify the project and
+    /// user, and review the returned role and membership timestamp.
     ///
     /// Retrieves a user in the project.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
     /// - userId: The ID of the user.
-    public static func retrieveProjectUser(config: ClientConfig, projectId: String, userId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectUser {
-        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/users/", sdkEncodePathSegment(sdkWireString(userId))].joined(), config: config, decoder: .json, operationId: "retrieveProjectUser", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func retrieveProjectUser(
+        config: ClientConfig,
+        projectId: String,
+        userId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectUser {
+        try await (sdkRequest(
+            "GET",
+            [
+                "/organization/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/users/",
+                sdkEncodePathSegment(sdkWireString(userId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "retrieveProjectUser",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

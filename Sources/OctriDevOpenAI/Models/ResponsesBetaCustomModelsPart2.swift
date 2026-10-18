@@ -3,15 +3,25 @@
 
 import Foundation
 
-// ResponsesBetaCustom domain models
-extension BetaCustomToolCall {
-    public init(type: BetaCustomToolCallType, callId: String, name: String, input: String, agent: BetaAgentTag? = nil, id: String? = nil, caller: BetaToolCallCaller? = nil, namespace: String? = nil, async: Bool? = nil) throws {
+/// ResponsesBetaCustom domain models
+public extension BetaCustomToolCall {
+    init(
+        type: BetaCustomToolCallType,
+        callId: String,
+        name: String,
+        input: String,
+        agent: BetaAgentTag? = nil,
+        id: String? = nil,
+        caller: BetaToolCallCaller? = nil,
+        namespace: String? = nil,
+        async: Bool? = nil
+    ) throws {
         (self.type, self.callId) = (type, callId)
         (self.name, self.input) = (name, input)
         (self.agent, self.id) = (agent, id)
         (self.caller, self.namespace) = (caller, namespace)
         self.async = async
-            try sdkValidateRawEnum("type", self.type, BetaCustomToolCallType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaCustomToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -24,24 +34,30 @@ public struct BetaCustomTextFormatParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaCustomTextFormatParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, BetaCustomTextFormatParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaCustomTextFormatParam {
-    public init(type: BetaCustomTextFormatParamType) throws {
+public extension BetaCustomTextFormatParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, BetaCustomTextFormatParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaCustomTextFormatParam {
+    init(type: BetaCustomTextFormatParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, BetaCustomTextFormatParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaCustomTextFormatParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -61,26 +77,36 @@ public struct BetaCustomToolCallOutputResourceVariant1: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaCustomToolCallOutputResourceVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaCustomToolCallOutputResourceVariant1 {
-    public init(id: String, status: BetaFunctionCallOutputStatusEnum, createdBy: String? = nil) {
+public extension BetaCustomToolCallOutputResourceVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        status = try container.sdkDecodeRequired(.status)
+        createdBy = try container.sdkDecodeIfPresent(.createdBy)
+    }
+}
+
+public extension BetaCustomToolCallOutputResourceVariant1 {
+    init(id: String, status: BetaFunctionCallOutputStatusEnum, createdBy: String? = nil) {
         (self.id, self.status) = (id, status)
         self.createdBy = createdBy
     }
@@ -110,37 +136,58 @@ public struct BetaCustomToolCallOutput: Codable {
         case caller
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaCustomToolCallOutput {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.output = try container.sdkDecodeRequired(.output)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-            try sdkValidateRawEnum("type", self.type, BetaCustomToolCallOutputType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaCustomToolCallOutput {
-    public init(type: BetaCustomToolCallOutputType, callId: String, output: BetaCustomToolCallOutputOutput, agent: BetaAgentTag? = nil, id: String? = nil, caller: BetaToolCallCallerParam? = nil) throws {
+public extension BetaCustomToolCallOutput {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        output = try container.sdkDecodeRequired(.output)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        id = try container.sdkDecodeIfPresent(.id)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        try sdkValidateRawEnum("type", type, BetaCustomToolCallOutputType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaCustomToolCallOutput {
+    init(
+        type: BetaCustomToolCallOutputType,
+        callId: String,
+        output: BetaCustomToolCallOutputOutput,
+        agent: BetaAgentTag? = nil,
+        id: String? = nil,
+        caller: BetaToolCallCallerParam? = nil
+    ) throws {
         (self.type, self.callId) = (type, callId)
         (self.output, self.agent) = (output, agent)
         (self.id, self.caller) = (id, caller)
-            try sdkValidateRawEnum("type", self.type, BetaCustomToolCallOutputType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaCustomToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 

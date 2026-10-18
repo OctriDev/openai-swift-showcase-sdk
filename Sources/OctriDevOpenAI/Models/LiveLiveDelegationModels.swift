@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveDelegation domain models
+/// LiveLiveDelegation domain models
 /// Text generation options for the Live session’s Responses backend.
 public struct LiveDelegationTextInputParam: Codable {
     /// Optional API value serialized in the `verbosity` wire field.
@@ -14,19 +14,19 @@ public struct LiveDelegationTextInputParam: Codable {
     }
 
     init() {
-        self.verbosity = nil
+        verbosity = nil
     }
 }
 
-extension LiveDelegationTextInputParam {
-    public init(from decoder: Decoder) throws {
+public extension LiveDelegationTextInputParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.verbosity = try container.sdkDecodeIfPresent(.verbosity)
+        verbosity = try container.sdkDecodeIfPresent(.verbosity)
     }
 }
 
-extension LiveDelegationTextInputParam {
-    public init(verbosity: LiveTextVerbosity? = nil) {
+public extension LiveDelegationTextInputParam {
+    init(verbosity: LiveTextVerbosity? = nil) {
         self.init()
         self.verbosity = verbosity
     }
@@ -55,39 +55,63 @@ public struct LiveDelegationCreated: Codable {
         case clientEventId = "client_event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDelegationCreated {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.offsetMs) else {
-            throw SdkValidationError(field: "offset_ms", code: "required", message: "Validation failed for 'offset_ms': value is required")
-        }
-        guard container.contains(.delegation) else {
-            throw SdkValidationError(field: "delegation", code: "required", message: "Validation failed for 'delegation': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.offsetMs = try container.sdkDecodeRequired(.offsetMs)
-        self.delegation = try container.sdkDecodeRequired(.delegation)
-        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
-            try sdkValidateRawEnum("type", self.type, LiveDelegationCreatedType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDelegationCreated {
-    public init(eventId: String, type: LiveDelegationCreatedType, offsetMs: Int, delegation: LiveDelegationItem, clientEventId: String? = nil) throws {
+public extension LiveDelegationCreated {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.offsetMs) else {
+            throw SdkValidationError(
+                field: "offset_ms",
+                code: "required",
+                message: "Validation failed for 'offset_ms': value is required"
+            )
+        }
+        guard container.contains(.delegation) else {
+            throw SdkValidationError(
+                field: "delegation",
+                code: "required",
+                message: "Validation failed for 'delegation': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        offsetMs = try container.sdkDecodeRequired(.offsetMs)
+        delegation = try container.sdkDecodeRequired(.delegation)
+        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+        try sdkValidateRawEnum("type", type, LiveDelegationCreatedType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveDelegationCreated {
+    init(
+        eventId: String,
+        type: LiveDelegationCreatedType,
+        offsetMs: Int,
+        delegation: LiveDelegationItem,
+        clientEventId: String? = nil
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.offsetMs, self.delegation) = (offsetMs, delegation)
         self.clientEventId = clientEventId
-            try sdkValidateRawEnum("type", self.type, LiveDelegationCreatedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveDelegationCreatedType.allCases.map(\.rawValue))
     }
 }
 
@@ -98,23 +122,35 @@ public indirect enum LiveDelegationItemTarget {
 }
 
 extension LiveDelegationItemTarget: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for LiveDelegationItemTarget")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for LiveDelegationItemTarget"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension LiveDelegationItemTarget {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(String.self) { return .stringValue1(value) }
-        if let value = try? container.decode(String.self) { return .stringValue2(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue1(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue2(value)
+        }
         return nil
     }
 }
@@ -149,30 +185,44 @@ public struct LiveDelegationItem: Codable {
         case responseId = "response_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDelegationItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.target) else {
-            throw SdkValidationError(field: "target", code: "required", message: "Validation failed for 'target': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.target = try container.sdkDecodeRequired(.target)
-        self.responseId = try container.sdkDecodeIfPresent(.responseId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDelegationItem {
-    public init(id: String, type: LiveDelegationItemType, target: LiveDelegationItemTarget, responseId: String? = nil) {
+public extension LiveDelegationItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.target) else {
+            throw SdkValidationError(
+                field: "target",
+                code: "required",
+                message: "Validation failed for 'target': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        target = try container.sdkDecodeRequired(.target)
+        responseId = try container.sdkDecodeIfPresent(.responseId)
+    }
+}
+
+public extension LiveDelegationItem {
+    init(id: String, type: LiveDelegationItemType, target: LiveDelegationItemTarget, responseId: String? = nil) {
         (self.id, self.type) = (id, type)
         (self.target, self.responseId) = (target, responseId)
     }
@@ -191,20 +241,20 @@ public struct LiveDelegationReasoningInputParam: Codable {
     }
 
     init() {
-        (self.effort, self.summary) = (nil, nil)
+        (effort, summary) = (nil, nil)
     }
 }
 
-extension LiveDelegationReasoningInputParam {
-    public init(from decoder: Decoder) throws {
+public extension LiveDelegationReasoningInputParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.effort = try container.sdkDecodeIfPresent(.effort)
-        self.summary = try container.sdkDecodeIfPresent(.summary)
+        effort = try container.sdkDecodeIfPresent(.effort)
+        summary = try container.sdkDecodeIfPresent(.summary)
     }
 }
 
-extension LiveDelegationReasoningInputParam {
-    public init(effort: LiveReasoningEffort? = nil, summary: LiveReasoningSummary? = nil) {
+public extension LiveDelegationReasoningInputParam {
+    init(effort: LiveReasoningEffort? = nil, summary: LiveReasoningSummary? = nil) {
         self.init()
         (self.effort, self.summary) = (effort, summary)
     }
@@ -214,12 +264,15 @@ extension LiveDelegationReasoningInputParam {
 public struct LiveDelegationItemTargetVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let responses = LiveDelegationItemTargetVariant1(rawValue: "responses")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -232,12 +285,15 @@ public struct LiveDelegationItemTargetVariant1: RawRepresentable, Hashable, Coda
 public struct LiveDelegationItemTargetVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let client = LiveDelegationItemTargetVariant0(rawValue: "client")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -250,12 +306,15 @@ public struct LiveDelegationItemTargetVariant0: RawRepresentable, Hashable, Coda
 public struct LiveDelegationItemType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let delegation = LiveDelegationItemType(rawValue: "delegation")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -286,12 +345,15 @@ public enum LiveDelegationCreatedType: String, CaseIterable, Codable {
 public struct LiveDelegationItemTargetVariant2: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let decisions = LiveDelegationItemTargetVariant2(rawValue: "decisions")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

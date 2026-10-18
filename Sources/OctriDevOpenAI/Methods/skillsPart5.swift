@@ -6,18 +6,32 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension SkillsMethods {
+public extension SkillsMethods {
     /// Retrieves the ZIP bundle for a skill. Use `skill_id` to select the skill whose files you want to download.
     ///
     /// Download a skill zip bundle by its ID.
     ///
     /// - Parameters:
     /// - skillId: The identifier of the skill to download.
-    public static func getSkillContent(config: ClientConfig, skillId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
-        return try (await sdkRequest("GET", ["/skills/", sdkEncodePathSegment(sdkWireString(skillId)), "/content"].joined(), config: config, decoder: .bytes, operationId: "GetSkillContent", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func getSkillContent(
+        config: ClientConfig,
+        skillId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Data {
+        try await (sdkRequest(
+            "GET",
+            ["/skills/", sdkEncodePathSegment(sdkWireString(skillId)), "/content"].joined(),
+            config: config,
+            decoder: .bytes,
+            operationId: "GetSkillContent",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Creates a new immutable version of a skill from uploaded files or a ZIP archive. Include `files` with the version contents and optionally set `default` to make the new version the default. The response contains the created version details.
+    /// Creates a new immutable version of a skill from uploaded files or a ZIP archive. Include `files` with the
+    /// version contents and optionally set `default` to make the new version the default. The response contains the
+    /// created version details.
     ///
     /// Create a new immutable skill version.
     ///
@@ -25,13 +39,39 @@ extension SkillsMethods {
     /// - skillId: The identifier of the skill to version.
     /// - files: Skill files to upload (directory upload) or a single zip file.
     /// - `default`: Whether to set this version as the default.
-    public static func createSkillVersion(config: ClientConfig, skillId: String, files: [Data], default: Bool? = nil, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SkillVersionResource {
+    static func createSkillVersion(
+        config: ClientConfig,
+        skillId: String,
+        files: [Data],
+        default: Bool? = nil,
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SkillVersionResource {
         try validateItems("files", files, max: 500)
 
         let requestBody = CreateSkillVersionRequestBody(files: files, default: `default`)
 
-        let encodedBody = try sdkEncodeStructuredBody(requestBody, contentType: contentType ?? "application/json", files: ["files"])
+        let encodedBody = try sdkEncodeStructuredBody(
+            requestBody,
+            contentType: contentType ?? "application/json",
+            files: ["files"]
+        )
 
-        return try (await sdkRequest("POST", ["/skills/", sdkEncodePathSegment(sdkWireString(skillId)), "/versions"].joined(), config: config, rawBody: encodedBody.data, contentType: encodedBody.contentType, decoder: .json, operationId: "CreateSkillVersion", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/skills/", sdkEncodePathSegment(sdkWireString(skillId)), "/versions"].joined(),
+            config: config,
+            rawBody: encodedBody.data,
+            contentType: encodedBody.contentType,
+            decoder: .json,
+            operationId: "CreateSkillVersion",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+            ]
+        )).data
     }
 }

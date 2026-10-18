@@ -6,14 +6,27 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VectorStoresMethods {
-    /// Deletes a vector store. Use this operation when you no longer need the store or its associated collection of processed files.
+public extension VectorStoresMethods {
+    /// Deletes a vector store. Use this operation when you no longer need the store or its associated collection of
+    /// processed files.
     ///
     /// Delete a vector store.
     ///
     /// - Parameters:
     /// - vectorStoreId: The ID of the vector store to delete.
-    public static func deleteVectorStore(config: ClientConfig, vectorStoreId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteVectorStoreResponse {
-        return try (await sdkRequest("DELETE", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId))].joined(), config: config, decoder: .json, operationId: "deleteVectorStore", options: requestOptions, errors: ["404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func deleteVectorStore(
+        config: ClientConfig,
+        vectorStoreId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeleteVectorStoreResponse {
+        try await (sdkRequest(
+            "DELETE",
+            ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteVectorStore",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

@@ -3,39 +3,59 @@
 
 import Foundation
 
-// ResponsesBetaApply domain models
-extension BetaApplyPatchToolCallOutputItemParam {
-    public init(from decoder: Decoder) throws {
+/// ResponsesBetaApply domain models
+public extension BetaApplyPatchToolCallOutputItemParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-        self.output = try container.sdkDecodeIfPresent(.output)
-            try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallOutputItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        status = try container.sdkDecodeRequired(.status)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        id = try container.sdkDecodeIfPresent(.id)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        output = try container.sdkDecodeIfPresent(.output)
+        try sdkValidateRawEnum("type", type, BetaApplyPatchToolCallOutputItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", callId, min: 1, max: 64)
     }
 }
 
-extension BetaApplyPatchToolCallOutputItemParam {
-    public init(type: BetaApplyPatchToolCallOutputItemParamType, callId: String, status: BetaApplyPatchCallOutputStatusParam, agent: BetaAgentTagParam? = nil, id: String? = nil, caller: BetaToolCallCallerParam? = nil, output: String? = nil) throws {
+public extension BetaApplyPatchToolCallOutputItemParam {
+    init(
+        type: BetaApplyPatchToolCallOutputItemParamType,
+        callId: String,
+        status: BetaApplyPatchCallOutputStatusParam,
+        agent: BetaAgentTagParam? = nil,
+        id: String? = nil,
+        caller: BetaToolCallCallerParam? = nil,
+        output: String? = nil
+    ) throws {
         (self.type, self.callId) = (type, callId)
         (self.status, self.agent) = (status, agent)
         (self.id, self.caller) = (id, caller)
         self.output = output
-            try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallOutputItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallOutputItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
     }
 }
 
@@ -66,44 +86,70 @@ public struct BetaApplyPatchToolCallItemParam: Codable {
         case caller
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaApplyPatchToolCallItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.operation) else {
-            throw SdkValidationError(field: "operation", code: "required", message: "Validation failed for 'operation': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.operation = try container.sdkDecodeRequired(.operation)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-            try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaApplyPatchToolCallItemParam {
-    public init(type: BetaApplyPatchToolCallItemParamType, callId: String, status: BetaApplyPatchCallStatusParam, operation: BetaApplyPatchOperationParam, agent: BetaAgentTagParam? = nil, id: String? = nil, caller: BetaToolCallCallerParam? = nil) throws {
+public extension BetaApplyPatchToolCallItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        guard container.contains(.operation) else {
+            throw SdkValidationError(
+                field: "operation",
+                code: "required",
+                message: "Validation failed for 'operation': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        status = try container.sdkDecodeRequired(.status)
+        operation = try container.sdkDecodeRequired(.operation)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        id = try container.sdkDecodeIfPresent(.id)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        try sdkValidateRawEnum("type", type, BetaApplyPatchToolCallItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", callId, min: 1, max: 64)
+    }
+}
+
+public extension BetaApplyPatchToolCallItemParam {
+    init(
+        type: BetaApplyPatchToolCallItemParamType,
+        callId: String,
+        status: BetaApplyPatchCallStatusParam,
+        operation: BetaApplyPatchOperationParam,
+        agent: BetaAgentTagParam? = nil,
+        id: String? = nil,
+        caller: BetaToolCallCallerParam? = nil
+    ) throws {
         (self.type, self.callId) = (type, callId)
         (self.status, self.operation) = (status, operation)
         (self.agent, self.id) = (agent, id)
         self.caller = caller
-            try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
     }
 }
 
@@ -122,37 +168,51 @@ public struct BetaApplyPatchUpdateFileOperationParam: Codable {
         case diff
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaApplyPatchUpdateFileOperationParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.path) else {
-            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
-        }
-        guard container.contains(.diff) else {
-            throw SdkValidationError(field: "diff", code: "required", message: "Validation failed for 'diff': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.path = try container.sdkDecodeRequired(.path)
-        self.diff = try container.sdkDecodeRequired(.diff)
-            try sdkValidateRawEnum("type", self.type, BetaApplyPatchUpdateFileOperationParamType.allCases.map(\.rawValue))
-            try validateLength("path", self.path, min: 1, max: nil)
-            try validateLength("diff", self.diff, min: nil, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaApplyPatchUpdateFileOperationParam {
-    public init(type: BetaApplyPatchUpdateFileOperationParamType, path: String, diff: String) throws {
+public extension BetaApplyPatchUpdateFileOperationParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.path) else {
+            throw SdkValidationError(
+                field: "path",
+                code: "required",
+                message: "Validation failed for 'path': value is required"
+            )
+        }
+        guard container.contains(.diff) else {
+            throw SdkValidationError(
+                field: "diff",
+                code: "required",
+                message: "Validation failed for 'diff': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        path = try container.sdkDecodeRequired(.path)
+        diff = try container.sdkDecodeRequired(.diff)
+        try sdkValidateRawEnum("type", type, BetaApplyPatchUpdateFileOperationParamType.allCases.map(\.rawValue))
+        try validateLength("path", path, min: 1, max: nil)
+        try validateLength("diff", diff, min: nil, max: 10_485_760)
+    }
+}
+
+public extension BetaApplyPatchUpdateFileOperationParam {
+    init(type: BetaApplyPatchUpdateFileOperationParamType, path: String, diff: String) throws {
         (self.type, self.path) = (type, path)
         self.diff = diff
-            try sdkValidateRawEnum("type", self.type, BetaApplyPatchUpdateFileOperationParamType.allCases.map(\.rawValue))
-            try validateLength("path", self.path, min: 1, max: nil)
-            try validateLength("diff", self.diff, min: nil, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, BetaApplyPatchUpdateFileOperationParamType.allCases.map(\.rawValue))
+        try validateLength("path", self.path, min: 1, max: nil)
+        try validateLength("diff", self.diff, min: nil, max: 10_485_760)
     }
 }
 
@@ -186,46 +246,77 @@ public struct BetaApplyPatchToolCall: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaApplyPatchToolCall {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.operation) else {
-            throw SdkValidationError(field: "operation", code: "required", message: "Validation failed for 'operation': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.operation = try container.sdkDecodeRequired(.operation)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
-            try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaApplyPatchToolCall {
-    public init(type: BetaApplyPatchToolCallType, id: String, callId: String, status: BetaApplyPatchCallStatus, operation: BetaApplyPatchToolCallOperation, agent: BetaAgentTag? = nil, caller: BetaToolCallCaller? = nil, createdBy: String? = nil) throws {
+public extension BetaApplyPatchToolCall {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        guard container.contains(.operation) else {
+            throw SdkValidationError(
+                field: "operation",
+                code: "required",
+                message: "Validation failed for 'operation': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        callId = try container.sdkDecodeRequired(.callId)
+        status = try container.sdkDecodeRequired(.status)
+        operation = try container.sdkDecodeRequired(.operation)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        createdBy = try container.sdkDecodeIfPresent(.createdBy)
+        try sdkValidateRawEnum("type", type, BetaApplyPatchToolCallType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaApplyPatchToolCall {
+    init(
+        type: BetaApplyPatchToolCallType,
+        id: String,
+        callId: String,
+        status: BetaApplyPatchCallStatus,
+        operation: BetaApplyPatchToolCallOperation,
+        agent: BetaAgentTag? = nil,
+        caller: BetaToolCallCaller? = nil,
+        createdBy: String? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.status) = (callId, status)
         (self.operation, self.agent) = (operation, agent)
         (self.caller, self.createdBy) = (caller, createdBy)
-            try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -359,13 +450,16 @@ public enum BetaApplyPatchToolCallItemParamType: String, CaseIterable, Codable {
 public struct BetaApplyPatchCallOutputStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = BetaApplyPatchCallOutputStatus(rawValue: "completed")
     public static let failed = BetaApplyPatchCallOutputStatus(rawValue: "failed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -414,13 +508,16 @@ public enum BetaApplyPatchToolParamType: String, CaseIterable, Codable {
 public struct BetaApplyPatchCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = BetaApplyPatchCallStatus(rawValue: "in_progress")
     public static let completed = BetaApplyPatchCallStatus(rawValue: "completed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -451,13 +548,16 @@ public enum BetaApplyPatchDeleteFileOperationParamType: String, CaseIterable, Co
 public struct BetaApplyPatchCallOutputStatusParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = BetaApplyPatchCallOutputStatusParam(rawValue: "completed")
     public static let failed = BetaApplyPatchCallOutputStatusParam(rawValue: "failed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -470,13 +570,16 @@ public struct BetaApplyPatchCallOutputStatusParam: RawRepresentable, Hashable, C
 public struct BetaApplyPatchCallStatusParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = BetaApplyPatchCallStatusParam(rawValue: "in_progress")
     public static let completed = BetaApplyPatchCallStatusParam(rawValue: "completed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

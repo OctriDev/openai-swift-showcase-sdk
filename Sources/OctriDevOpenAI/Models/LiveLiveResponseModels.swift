@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveResponse domain models
+/// LiveLiveResponse domain models
 /// A streaming Responses API event from a backend delegated to by the Live session. Use the outer delegation_id to
 /// associate the nested stream with its Live delegation.
 public struct LiveResponseEvent: Codable {
@@ -28,36 +28,56 @@ public struct LiveResponseEvent: Codable {
         case delegationId = "delegation_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveResponseEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.event) else {
-            throw SdkValidationError(field: "event", code: "required", message: "Validation failed for 'event': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.event = try container.sdkDecodeRequired(.event)
-        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
-        self.delegationId = try container.sdkDecodeIfPresent(.delegationId)
-            try sdkValidateRawEnum("type", self.type, LiveResponseEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveResponseEvent {
-    public init(eventId: String, type: LiveResponseEventType, event: [String: JSONValue], clientEventId: String? = nil, delegationId: String? = nil) throws {
+public extension LiveResponseEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.event) else {
+            throw SdkValidationError(
+                field: "event",
+                code: "required",
+                message: "Validation failed for 'event': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        event = try container.sdkDecodeRequired(.event)
+        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+        delegationId = try container.sdkDecodeIfPresent(.delegationId)
+        try sdkValidateRawEnum("type", type, LiveResponseEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveResponseEvent {
+    init(
+        eventId: String,
+        type: LiveResponseEventType,
+        event: [String: JSONValue],
+        clientEventId: String? = nil,
+        delegationId: String? = nil
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.event, self.clientEventId) = (event, clientEventId)
         self.delegationId = delegationId
-            try sdkValidateRawEnum("type", self.type, LiveResponseEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveResponseEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -78,30 +98,40 @@ public struct LiveResponseItemCreateParam: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveResponseItemCreateParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.item) else {
-            throw SdkValidationError(field: "item", code: "required", message: "Validation failed for 'item': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.item = try container.sdkDecodeRequired(.item)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-            try sdkValidateRawEnum("type", self.type, LiveResponseItemCreateParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveResponseItemCreateParam {
-    public init(type: LiveResponseItemCreateParamType, item: InputItem, eventId: String? = nil) throws {
+public extension LiveResponseItemCreateParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.item) else {
+            throw SdkValidationError(
+                field: "item",
+                code: "required",
+                message: "Validation failed for 'item': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        item = try container.sdkDecodeRequired(.item)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        try sdkValidateRawEnum("type", type, LiveResponseItemCreateParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveResponseItemCreateParam {
+    init(type: LiveResponseItemCreateParamType, item: InputItem, eventId: String? = nil) throws {
         (self.type, self.item) = (type, item)
         self.eventId = eventId
-            try sdkValidateRawEnum("type", self.type, LiveResponseItemCreateParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveResponseItemCreateParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -118,25 +148,31 @@ public struct LiveResponseCreateParam: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveResponseCreateParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-            try sdkValidateRawEnum("type", self.type, LiveResponseCreateParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveResponseCreateParam {
-    public init(type: LiveResponseCreateParamType, eventId: String? = nil) throws {
+public extension LiveResponseCreateParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        try sdkValidateRawEnum("type", type, LiveResponseCreateParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveResponseCreateParam {
+    init(type: LiveResponseCreateParamType, eventId: String? = nil) throws {
         (self.type, self.eventId) = (type, eventId)
-            try sdkValidateRawEnum("type", self.type, LiveResponseCreateParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveResponseCreateParamType.allCases.map(\.rawValue))
     }
 }
 

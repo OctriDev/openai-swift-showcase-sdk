@@ -14,10 +14,10 @@ struct CreateEvalRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.dataSourceConfig, forKey: SdkCodingKey("data_source_config"))
-        try keyedContainer.encode(self.testingCriteria, forKey: SdkCodingKey("testing_criteria"))
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encode(dataSourceConfig, forKey: SdkCodingKey("data_source_config"))
+        try keyedContainer.encode(testingCriteria, forKey: SdkCodingKey("testing_criteria"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -27,8 +27,8 @@ struct UpdateEvalRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -39,9 +39,9 @@ struct CreateEvalRunRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.dataSource, forKey: SdkCodingKey("data_source"))
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encode(dataSource, forKey: SdkCodingKey("data_source"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -52,9 +52,9 @@ struct RunGraderRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.grader, forKey: SdkCodingKey("grader"))
-        try keyedContainer.encode(self.modelSample, forKey: SdkCodingKey("model_sample"))
-        try keyedContainer.encodeIfPresent(self.item, forKey: SdkCodingKey("item"))
+        try keyedContainer.encode(grader, forKey: SdkCodingKey("grader"))
+        try keyedContainer.encode(modelSample, forKey: SdkCodingKey("model_sample"))
+        try keyedContainer.encodeIfPresent(item, forKey: SdkCodingKey("item"))
     }
 }
 
@@ -63,7 +63,7 @@ struct ValidateGraderRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.grader, forKey: SdkCodingKey("grader"))
+        try keyedContainer.encode(grader, forKey: SdkCodingKey("grader"))
     }
 }
 
@@ -72,7 +72,7 @@ struct CreateFineTuningCheckpointPermissionRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.projectIds, forKey: SdkCodingKey("project_ids"))
+        try keyedContainer.encode(projectIds, forKey: SdkCodingKey("project_ids"))
     }
 }
 
@@ -89,27 +89,27 @@ struct CreateFineTuningJobRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encode(self.trainingFile, forKey: SdkCodingKey("training_file"))
-        try keyedContainer.encodeIfPresent(self.hyperparameters, forKey: SdkCodingKey("hyperparameters"))
-        try keyedContainer.encodeIfPresent(self.suffix, forKey: SdkCodingKey("suffix"))
-        try keyedContainer.encodeIfPresent(self.validationFile, forKey: SdkCodingKey("validation_file"))
-        try keyedContainer.encodeIfPresent(self.integrations, forKey: SdkCodingKey("integrations"))
-        try keyedContainer.encodeIfPresent(self.seed, forKey: SdkCodingKey("seed"))
-        try keyedContainer.encodeIfPresent(self.method, forKey: SdkCodingKey("method"))
-        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encode(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encode(trainingFile, forKey: SdkCodingKey("training_file"))
+        try keyedContainer.encodeIfPresent(hyperparameters, forKey: SdkCodingKey("hyperparameters"))
+        try keyedContainer.encodeIfPresent(suffix, forKey: SdkCodingKey("suffix"))
+        try keyedContainer.encodeIfPresent(validationFile, forKey: SdkCodingKey("validation_file"))
+        try keyedContainer.encodeIfPresent(integrations, forKey: SdkCodingKey("integrations"))
+        try keyedContainer.encodeIfPresent(seed, forKey: SdkCodingKey("seed"))
+        try keyedContainer.encodeIfPresent(method, forKey: SdkCodingKey("method"))
+        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
     }
 
     init(options: FineTuningMethods.CreateFineTuningJobOptions) {
-        self.model = options.model
-        self.trainingFile = options.trainingFile
-        self.hyperparameters = options.hyperparameters
-        self.suffix = options.suffix
-        self.validationFile = options.validationFile
-        self.integrations = options.integrations
-        self.seed = options.seed
-        self.method = options.method
-        self.metadata = options.metadata
+        model = options.model
+        trainingFile = options.trainingFile
+        hyperparameters = options.hyperparameters
+        suffix = options.suffix
+        validationFile = options.validationFile
+        integrations = options.integrations
+        seed = options.seed
+        method = options.method
+        metadata = options.metadata
     }
 }
 
@@ -124,9 +124,13 @@ public enum CreateImageEditBody {
     func encoded(contentType: String?) throws -> (data: Data, contentType: String) {
         switch self {
         case let .editImageBodyJsonParam(value):
-            return try sdkEncodeStructuredBody(value, contentType: contentType ?? "application/json")
+            try sdkEncodeStructuredBody(value, contentType: contentType ?? "application/json")
         case let .createImageEditRequest(value):
-            return try sdkEncodeStructuredBody(value, contentType: contentType ?? "multipart/form-data", files: ["image", "mask"])
+            try sdkEncodeStructuredBody(
+                value,
+                contentType: contentType ?? "multipart/form-data",
+                files: ["image", "mask"]
+            )
         }
     }
 }
@@ -142,9 +146,13 @@ public enum CreateImageEditStreamBody {
     func encoded(contentType: String?) throws -> (data: Data, contentType: String) {
         switch self {
         case let .editImageBodyJsonParam(value):
-            return try sdkEncodeStructuredBody(value, contentType: contentType ?? "application/json")
+            try sdkEncodeStructuredBody(value, contentType: contentType ?? "application/json")
         case let .createImageEditRequest(value):
-            return try sdkEncodeStructuredBody(value, contentType: contentType ?? "multipart/form-data", files: ["image", "mask"])
+            try sdkEncodeStructuredBody(
+                value,
+                contentType: contentType ?? "multipart/form-data",
+                files: ["image", "mask"]
+            )
         }
     }
 }
@@ -168,38 +176,38 @@ struct CreateImageRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.prompt, forKey: SdkCodingKey("prompt"))
-        try keyedContainer.encode(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(self.n, forKey: SdkCodingKey("n"))
-        try keyedContainer.encodeIfPresent(self.quality, forKey: SdkCodingKey("quality"))
-        try keyedContainer.encodeIfPresent(self.responseFormat, forKey: SdkCodingKey("response_format"))
-        try keyedContainer.encodeIfPresent(self.outputFormat, forKey: SdkCodingKey("output_format"))
-        try keyedContainer.encodeIfPresent(self.outputCompression, forKey: SdkCodingKey("output_compression"))
-        try keyedContainer.encodeIfPresent(self.stream, forKey: SdkCodingKey("stream"))
-        try keyedContainer.encodeIfPresent(self.partialImages, forKey: SdkCodingKey("partial_images"))
-        try keyedContainer.encodeIfPresent(self.size, forKey: SdkCodingKey("size"))
-        try keyedContainer.encodeIfPresent(self.moderation, forKey: SdkCodingKey("moderation"))
-        try keyedContainer.encodeIfPresent(self.background, forKey: SdkCodingKey("background"))
-        try keyedContainer.encodeIfPresent(self.style, forKey: SdkCodingKey("style"))
-        try keyedContainer.encodeIfPresent(self.safetyIdentifier, forKey: SdkCodingKey("safety_identifier"))
-        try keyedContainer.encodeIfPresent(self.user, forKey: SdkCodingKey("user"))
+        try keyedContainer.encode(prompt, forKey: SdkCodingKey("prompt"))
+        try keyedContainer.encode(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(n, forKey: SdkCodingKey("n"))
+        try keyedContainer.encodeIfPresent(quality, forKey: SdkCodingKey("quality"))
+        try keyedContainer.encodeIfPresent(responseFormat, forKey: SdkCodingKey("response_format"))
+        try keyedContainer.encodeIfPresent(outputFormat, forKey: SdkCodingKey("output_format"))
+        try keyedContainer.encodeIfPresent(outputCompression, forKey: SdkCodingKey("output_compression"))
+        try keyedContainer.encodeIfPresent(stream, forKey: SdkCodingKey("stream"))
+        try keyedContainer.encodeIfPresent(partialImages, forKey: SdkCodingKey("partial_images"))
+        try keyedContainer.encodeIfPresent(size, forKey: SdkCodingKey("size"))
+        try keyedContainer.encodeIfPresent(moderation, forKey: SdkCodingKey("moderation"))
+        try keyedContainer.encodeIfPresent(background, forKey: SdkCodingKey("background"))
+        try keyedContainer.encodeIfPresent(style, forKey: SdkCodingKey("style"))
+        try keyedContainer.encodeIfPresent(safetyIdentifier, forKey: SdkCodingKey("safety_identifier"))
+        try keyedContainer.encodeIfPresent(user, forKey: SdkCodingKey("user"))
     }
 
     init(options: ImagesMethods.CreateImageOptions) {
-        self.prompt = options.prompt
-        self.model = options.model
-        self.n = options.n
-        self.quality = options.quality
-        self.responseFormat = options.responseFormat
-        self.outputFormat = options.outputFormat
-        self.outputCompression = options.outputCompression
-        self.stream = options.stream
-        self.partialImages = options.partialImages
-        self.size = options.size
-        self.moderation = options.moderation
-        self.background = options.background
-        self.style = options.style
-        self.safetyIdentifier = options.safetyIdentifier
-        self.user = options.user
+        prompt = options.prompt
+        model = options.model
+        n = options.n
+        quality = options.quality
+        responseFormat = options.responseFormat
+        outputFormat = options.outputFormat
+        outputCompression = options.outputCompression
+        stream = options.stream
+        partialImages = options.partialImages
+        size = options.size
+        moderation = options.moderation
+        background = options.background
+        style = options.style
+        safetyIdentifier = options.safetyIdentifier
+        user = options.user
     }
 }

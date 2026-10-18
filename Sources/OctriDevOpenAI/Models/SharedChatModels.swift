@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedChat domain models
+/// SharedChat domain models
 /// Options for streaming response. Only set this when you set `stream: true`.
 public struct ChatCompletionStreamOptions: Codable {
     /// If set, an additional chunk will be streamed before the `data: [DONE]` message. The `usage` field on this
@@ -25,20 +25,20 @@ public struct ChatCompletionStreamOptions: Codable {
     }
 
     init() {
-        (self.includeUsage, self.includeObfuscation) = (nil, nil)
+        (includeUsage, includeObfuscation) = (nil, nil)
     }
 }
 
-extension ChatCompletionStreamOptions {
-    public init(from decoder: Decoder) throws {
+public extension ChatCompletionStreamOptions {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.includeUsage = try container.sdkDecodeIfPresent(.includeUsage)
-        self.includeObfuscation = try container.sdkDecodeIfPresent(.includeObfuscation)
+        includeUsage = try container.sdkDecodeIfPresent(.includeUsage)
+        includeObfuscation = try container.sdkDecodeIfPresent(.includeObfuscation)
     }
 }
 
-extension ChatCompletionStreamOptions {
-    public init(includeUsage: Bool? = nil, includeObfuscation: Bool? = nil) {
+public extension ChatCompletionStreamOptions {
+    init(includeUsage: Bool? = nil, includeObfuscation: Bool? = nil) {
         self.init()
         (self.includeUsage, self.includeObfuscation) = (includeUsage, includeObfuscation)
     }
@@ -59,29 +59,47 @@ public struct ChatSessionChatkitConfiguration: Codable {
         case history
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatSessionChatkitConfiguration {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.automaticThreadTitling) else {
-            throw SdkValidationError(field: "automatic_thread_titling", code: "required", message: "Validation failed for 'automatic_thread_titling': value is required")
-        }
-        guard container.contains(.fileUpload) else {
-            throw SdkValidationError(field: "file_upload", code: "required", message: "Validation failed for 'file_upload': value is required")
-        }
-        guard container.contains(.history) else {
-            throw SdkValidationError(field: "history", code: "required", message: "Validation failed for 'history': value is required")
-        }
-        self.automaticThreadTitling = try container.sdkDecodeRequired(.automaticThreadTitling)
-        self.fileUpload = try container.sdkDecodeRequired(.fileUpload)
-        self.history = try container.sdkDecodeRequired(.history)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatSessionChatkitConfiguration {
-    public init(automaticThreadTitling: ChatSessionAutomaticThreadTitling, fileUpload: ChatSessionFileUpload, history: ChatSessionHistory) {
+public extension ChatSessionChatkitConfiguration {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.automaticThreadTitling) else {
+            throw SdkValidationError(
+                field: "automatic_thread_titling",
+                code: "required",
+                message: "Validation failed for 'automatic_thread_titling': value is required"
+            )
+        }
+        guard container.contains(.fileUpload) else {
+            throw SdkValidationError(
+                field: "file_upload",
+                code: "required",
+                message: "Validation failed for 'file_upload': value is required"
+            )
+        }
+        guard container.contains(.history) else {
+            throw SdkValidationError(
+                field: "history",
+                code: "required",
+                message: "Validation failed for 'history': value is required"
+            )
+        }
+        automaticThreadTitling = try container.sdkDecodeRequired(.automaticThreadTitling)
+        fileUpload = try container.sdkDecodeRequired(.fileUpload)
+        history = try container.sdkDecodeRequired(.history)
+    }
+}
+
+public extension ChatSessionChatkitConfiguration {
+    init(
+        automaticThreadTitling: ChatSessionAutomaticThreadTitling,
+        fileUpload: ChatSessionFileUpload,
+        history: ChatSessionHistory
+    ) {
         (self.automaticThreadTitling, self.fileUpload) = (automaticThreadTitling, fileUpload)
         self.history = history
     }
@@ -99,28 +117,38 @@ public struct ChatCompletionTool: Codable {
         case function
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatCompletionTool {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.function) else {
-            throw SdkValidationError(field: "function", code: "required", message: "Validation failed for 'function': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.function = try container.sdkDecodeRequired(.function)
-            try sdkValidateRawEnum("type", self.type, ChatCompletionToolType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatCompletionTool {
-    public init(type: ChatCompletionToolType, function: FunctionObject) throws {
+public extension ChatCompletionTool {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.function) else {
+            throw SdkValidationError(
+                field: "function",
+                code: "required",
+                message: "Validation failed for 'function': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        function = try container.sdkDecodeRequired(.function)
+        try sdkValidateRawEnum("type", type, ChatCompletionToolType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ChatCompletionTool {
+    init(type: ChatCompletionToolType, function: FunctionObject) throws {
         (self.type, self.function) = (type, function)
-            try sdkValidateRawEnum("type", self.type, ChatCompletionToolType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ChatCompletionToolType.allCases.map(\.rawValue))
     }
 }
 
@@ -136,25 +164,35 @@ public struct ChatSessionHistory: Codable {
         case recentThreads = "recent_threads"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatSessionHistory {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.enabled) else {
-            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
-        }
-        guard container.contains(.recentThreads) else {
-            throw SdkValidationError(field: "recent_threads", code: "required", message: "Validation failed for 'recent_threads': value is required")
-        }
-        self.enabled = try container.sdkDecodeRequired(.enabled)
-        self.recentThreads = try container.sdkDecodeNullable(.recentThreads)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatSessionHistory {
-    public init(enabled: Bool, recentThreads: Int?) {
+public extension ChatSessionHistory {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.enabled) else {
+            throw SdkValidationError(
+                field: "enabled",
+                code: "required",
+                message: "Validation failed for 'enabled': value is required"
+            )
+        }
+        guard container.contains(.recentThreads) else {
+            throw SdkValidationError(
+                field: "recent_threads",
+                code: "required",
+                message: "Validation failed for 'recent_threads': value is required"
+            )
+        }
+        enabled = try container.sdkDecodeRequired(.enabled)
+        recentThreads = try container.sdkDecodeNullable(.recentThreads)
+    }
+}
+
+public extension ChatSessionHistory {
+    init(enabled: Bool, recentThreads: Int?) {
         (self.enabled, self.recentThreads) = (enabled, recentThreads)
     }
 }
@@ -168,21 +206,27 @@ public struct ChatSessionRateLimits: Codable {
         case maxRequestsPer1Minute = "max_requests_per_1_minute"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatSessionRateLimits {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.maxRequestsPer1Minute) else {
-            throw SdkValidationError(field: "max_requests_per_1_minute", code: "required", message: "Validation failed for 'max_requests_per_1_minute': value is required")
-        }
-        self.maxRequestsPer1Minute = try container.sdkDecodeRequired(.maxRequestsPer1Minute)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatSessionRateLimits {
-    public init(maxRequestsPer1Minute: Int) {
+public extension ChatSessionRateLimits {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.maxRequestsPer1Minute) else {
+            throw SdkValidationError(
+                field: "max_requests_per_1_minute",
+                code: "required",
+                message: "Validation failed for 'max_requests_per_1_minute': value is required"
+            )
+        }
+        maxRequestsPer1Minute = try container.sdkDecodeRequired(.maxRequestsPer1Minute)
+    }
+}
+
+public extension ChatSessionRateLimits {
+    init(maxRequestsPer1Minute: Int) {
         self.maxRequestsPer1Minute = maxRequestsPer1Minute
     }
 }
@@ -223,27 +267,40 @@ public struct ChatSessionResource: Codable {
         case chatkitConfiguration = "chatkit_configuration"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatSessionResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.expiresAt = try container.sdkDecodeRequired(.expiresAt)
-        self.clientSecret = try container.sdkDecodeRequired(.clientSecret)
-        self.workflow = try container.sdkDecodeRequired(.workflow)
-        self.user = try container.sdkDecodeRequired(.user)
-        self.rateLimits = try container.sdkDecodeRequired(.rateLimits)
-        self.maxRequestsPer1Minute = try container.sdkDecodeRequired(.maxRequestsPer1Minute)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.chatkitConfiguration = try container.sdkDecodeRequired(.chatkitConfiguration)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatSessionResource {
-    public init(id: String, object: ChatSessionResourceObject, expiresAt: Int, clientSecret: String, workflow: ChatkitWorkflow, user: String, rateLimits: ChatSessionRateLimits, maxRequestsPer1Minute: Int, status: ChatSessionStatus, chatkitConfiguration: ChatSessionChatkitConfiguration) {
+public extension ChatSessionResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        expiresAt = try container.sdkDecodeRequired(.expiresAt)
+        clientSecret = try container.sdkDecodeRequired(.clientSecret)
+        workflow = try container.sdkDecodeRequired(.workflow)
+        user = try container.sdkDecodeRequired(.user)
+        rateLimits = try container.sdkDecodeRequired(.rateLimits)
+        maxRequestsPer1Minute = try container.sdkDecodeRequired(.maxRequestsPer1Minute)
+        status = try container.sdkDecodeRequired(.status)
+        chatkitConfiguration = try container.sdkDecodeRequired(.chatkitConfiguration)
+    }
+}
+
+public extension ChatSessionResource {
+    init(
+        id: String,
+        object: ChatSessionResourceObject,
+        expiresAt: Int,
+        clientSecret: String,
+        workflow: ChatkitWorkflow,
+        user: String,
+        rateLimits: ChatSessionRateLimits,
+        maxRequestsPer1Minute: Int,
+        status: ChatSessionStatus,
+        chatkitConfiguration: ChatSessionChatkitConfiguration
+    ) {
         (self.id, self.object) = (id, object)
         (self.expiresAt, self.clientSecret) = (expiresAt, clientSecret)
         (self.workflow, self.user) = (workflow, user)
@@ -267,29 +324,43 @@ public struct ChatSessionFileUpload: Codable {
         case maxFiles = "max_files"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatSessionFileUpload {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.enabled) else {
-            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
-        }
-        guard container.contains(.maxFileSize) else {
-            throw SdkValidationError(field: "max_file_size", code: "required", message: "Validation failed for 'max_file_size': value is required")
-        }
-        guard container.contains(.maxFiles) else {
-            throw SdkValidationError(field: "max_files", code: "required", message: "Validation failed for 'max_files': value is required")
-        }
-        self.enabled = try container.sdkDecodeRequired(.enabled)
-        self.maxFileSize = try container.sdkDecodeNullable(.maxFileSize)
-        self.maxFiles = try container.sdkDecodeNullable(.maxFiles)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatSessionFileUpload {
-    public init(enabled: Bool, maxFileSize: Int?, maxFiles: Int?) {
+public extension ChatSessionFileUpload {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.enabled) else {
+            throw SdkValidationError(
+                field: "enabled",
+                code: "required",
+                message: "Validation failed for 'enabled': value is required"
+            )
+        }
+        guard container.contains(.maxFileSize) else {
+            throw SdkValidationError(
+                field: "max_file_size",
+                code: "required",
+                message: "Validation failed for 'max_file_size': value is required"
+            )
+        }
+        guard container.contains(.maxFiles) else {
+            throw SdkValidationError(
+                field: "max_files",
+                code: "required",
+                message: "Validation failed for 'max_files': value is required"
+            )
+        }
+        enabled = try container.sdkDecodeRequired(.enabled)
+        maxFileSize = try container.sdkDecodeNullable(.maxFileSize)
+        maxFiles = try container.sdkDecodeNullable(.maxFiles)
+    }
+}
+
+public extension ChatSessionFileUpload {
+    init(enabled: Bool, maxFileSize: Int?, maxFiles: Int?) {
         (self.enabled, self.maxFileSize) = (enabled, maxFileSize)
         self.maxFiles = maxFiles
     }
@@ -304,21 +375,27 @@ public struct ChatSessionAutomaticThreadTitling: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatSessionAutomaticThreadTitling {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.enabled) else {
-            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
-        }
-        self.enabled = try container.sdkDecodeRequired(.enabled)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatSessionAutomaticThreadTitling {
-    public init(enabled: Bool) {
+public extension ChatSessionAutomaticThreadTitling {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.enabled) else {
+            throw SdkValidationError(
+                field: "enabled",
+                code: "required",
+                message: "Validation failed for 'enabled': value is required"
+            )
+        }
+        enabled = try container.sdkDecodeRequired(.enabled)
+    }
+}
+
+public extension ChatSessionAutomaticThreadTitling {
+    init(enabled: Bool) {
         self.enabled = enabled
     }
 }
@@ -345,14 +422,17 @@ public enum ChatCompletionToolType: String, CaseIterable, Codable {
 public struct ChatSessionStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let active = ChatSessionStatus(rawValue: "active")
     public static let expired = ChatSessionStatus(rawValue: "expired")
     public static let cancelled = ChatSessionStatus(rawValue: "cancelled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -365,12 +445,15 @@ public struct ChatSessionStatus: RawRepresentable, Hashable, Codable, Sendable, 
 public struct ChatSessionResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let chatkitSession = ChatSessionResourceObject(rawValue: "chatkit.session")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

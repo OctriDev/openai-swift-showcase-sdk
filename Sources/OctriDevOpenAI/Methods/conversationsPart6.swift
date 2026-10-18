@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ConversationsMethods {
-    /// Updates the metadata associated with a conversation. Supply the complete `metadata` value to replace the conversation's existing metadata, or use `null` to clear it.
+public extension ConversationsMethods {
+    /// Updates the metadata associated with a conversation. Supply the complete `metadata` value to replace the
+    /// conversation's existing metadata, or use `null` to clear it.
     ///
     /// Update a conversation
     ///
@@ -18,9 +19,28 @@ extension ConversationsMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    public static func updateConversation(config: ClientConfig, conversationId: String, metadata: Metadata?, requestOptions: RequestOptions? = nil) async throws -> ConversationResource {
+    static func updateConversation(
+        config: ClientConfig,
+        conversationId: String,
+        metadata: Metadata?,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ConversationResource {
         let requestBody = UpdateConversationRequestBody(metadata: metadata)
 
-        return try (await sdkRequest("POST", ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateConversation", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId))].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "updateConversation",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+            ]
+        )).data
     }
 }

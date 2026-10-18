@@ -17,8 +17,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.pauseJob(
-            fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\"")
-        )
+                fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -57,9 +57,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.live.referSession(
-            sessionId: decoded("\"session-1\""),
-            targetUri: decoded("\"tel:+14155550123\"")
-        )
+                sessionId: decoded("\"session-1\""),
+                targetUri: decoded("\"tel:+14155550123\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -98,9 +98,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.realtime.referCall(
-            callId: decoded("\"call-1\""),
-            targetUri: decoded("\"tel:+14155550123\"")
-        )
+                callId: decoded("\"call-1\""),
+                targetUri: decoded("\"tel:+14155550123\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -139,9 +139,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.live.rejectSession(
-            sessionId: decoded("\"session-1\""),
-            statusCode: decoded("486")
-        )
+                sessionId: decoded("\"session-1\""),
+                statusCode: decoded("486")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -180,9 +180,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.realtime.rejectCall(
-            callId: decoded("\"call-1\""),
-            statusCode: decoded("486")
-        )
+                callId: decoded("\"call-1\""),
+                statusCode: decoded("486")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -228,9 +228,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.groupUsers.remove(
-            groupId: decoded("\"group-1\""),
-            userId: decoded("\"user-1\"")
-        )
+                groupId: decoded("\"group-1\""),
+                userId: decoded("\"user-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -276,9 +276,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projectGroups.remove(
-            projectId: decoded("\"project-1\""),
-            groupId: decoded("\"group-1\"")
-        )
+                projectId: decoded("\"project-1\""),
+                groupId: decoded("\"group-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -323,8 +323,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.resumeJob(
-            fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\"")
-        )
+                fineTuningJobId: decoded("\"ft-AF1WoRqd3aJAHsqc9NY7iL8F\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -369,8 +369,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.adminApiKeys.retrieve(
-            keyId: decoded("\"key-1\"")
-        )
+                keyId: decoded("\"key-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -415,8 +415,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.retrieve(
-            agentId: decoded("\"agent-1\"")
-        )
+                agentId: decoded("\"agent-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -461,8 +461,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.retrieveEnvironment(
-            environmentId: decoded("\"environment-1\"")
-        )
+                environmentId: decoded("\"environment-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -478,7 +478,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testRetrieveAgentEnvironmentTemplateRetrieveAgentEnvironmentTemplateReachesMockAndDecodesResponse() async throws {
+    func testRetrieveAgentEnvironmentTemplateRetrieveAgentEnvironmentTemplateReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -496,7 +497,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testRetrieveAgentEnvironmentTemplateRetrieveAgentEnvironmentTemplate400ReachesMockAndDecodesResponse() async throws {
+    func testRetrieveAgentEnvironmentTemplateRetrieveAgentEnvironmentTemplate400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -507,8 +509,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.retrieveEnvironmentTemplate(
-            environmentTemplateId: decoded("\"environment_template-1\"")
-        )
+                environmentTemplateId: decoded("\"environment_template-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -553,8 +555,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.retrieveSession(
-            sessionId: decoded("\"session-1\"")
-        )
+                sessionId: decoded("\"session-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

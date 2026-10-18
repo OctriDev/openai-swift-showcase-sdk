@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectGroupsMethods {
-    /// Lists the groups that have access to a project. Use `after` to continue from the last group in a previous response, and set `limit` and `order` to control the page size and sort order.
+public extension ProjectGroupsMethods {
+    /// Lists the groups that have access to a project. Use `after` to continue from the last group in a previous
+    /// response, and set `limit` and `order` to control the page size and sort order.
     ///
     /// Lists the groups that have access to a project.
     ///
@@ -17,19 +18,41 @@ extension ProjectGroupsMethods {
     /// - after: Cursor for pagination. Provide the ID of the last group from the
     ///   previous response to fetch the next page.
     /// - order: Sort order for the returned groups.
-    public static func listProjectGroups(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, order: ListProjectGroupsParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectGroupListResource {
-        if let limit = limit {
+    static func listProjectGroups(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        order: ListProjectGroupsParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectGroupListResource {
+        if let limit {
             try validateRange("limit", Double(limit), min: 0, max: 100)
         }
 
-        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/groups"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("order", value: order),
-        ], decoder: .json, operationId: "listProjectGroups", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/groups"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("order", value: order),
+            ],
+            decoder: .json,
+            operationId: "listProjectGroups",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 
-    /// Lists the groups that have access to a project. Use `after` to continue from the last group in a previous response, and set `limit` and `order` to control the page size and sort order.
+    /// Lists the groups that have access to a project. Use `after` to continue from the last group in a previous
+    /// response, and set `limit` and `order` to control the page size and sort order.
     ///
     /// Lists the groups that have access to a project.
     ///
@@ -39,18 +62,43 @@ extension ProjectGroupsMethods {
     /// - after: Cursor for pagination. Provide the ID of the last group from the
     ///   previous response to fetch the next page.
     /// - order: Sort order for the returned groups.
-    public static func listProjectGroupsPaginated(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, order: ListProjectGroupsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ProjectGroup, Swift.Error> {
-        return AsyncThrowingStream<ProjectGroup, Swift.Error> { (continuation: AsyncThrowingStream<ProjectGroup, Swift.Error>.Continuation) in
+    static func listProjectGroupsPaginated(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        order: ListProjectGroupsParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ProjectGroup, Swift.Error> {
+        AsyncThrowingStream<ProjectGroup, Swift.Error> { (continuation: AsyncThrowingStream<
+            ProjectGroup,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectGroups(config: config, projectId: projectId, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
+                        let pageResponse = try await listProjectGroups(
+                            config: config,
+                            projectId: projectId,
+                            limit: limit,
+                            after: pageCursor,
+                            order: order,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.next else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.next else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -63,25 +111,52 @@ extension ProjectGroupsMethods {
         }
     }
 
-    public struct ListProjectGroupsPage {
+    struct ListProjectGroupsPage {
         public let data: ProjectGroupListResource
         public let items: [ProjectGroup]
         public let hasMore: Bool
     }
 
-    public static func listProjectGroupsPages(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, order: ListProjectGroupsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListProjectGroupsPage, Swift.Error> {
-        return AsyncThrowingStream<ListProjectGroupsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListProjectGroupsPage, Swift.Error>.Continuation) in
+    static func listProjectGroupsPages(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        order: ListProjectGroupsParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListProjectGroupsPage, Swift.Error> {
+        AsyncThrowingStream<ListProjectGroupsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListProjectGroupsPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectGroups(config: config, projectId: projectId, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
+                        let pageResponse = try await listProjectGroups(
+                            config: config,
+                            projectId: projectId,
+                            limit: limit,
+                            after: pageCursor,
+                            order: order,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.next != nil
-                        pageContinuation.yield(ListProjectGroupsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.next else { break }
+                        pageContinuation.yield(ListProjectGroupsPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.next else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

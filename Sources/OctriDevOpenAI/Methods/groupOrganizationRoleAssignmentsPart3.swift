@@ -6,16 +6,35 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension GroupOrganizationRoleAssignmentsMethods {
+public extension GroupOrganizationRoleAssignmentsMethods {
     /// Assigns an organization role to a group within the organization.
     ///
     /// - Parameters:
     /// - groupId: The ID of the group that should receive the organization role.
     /// - roleId: Identifier of the role to assign.
-    public static func assignGroupRole(config: ClientConfig, groupId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> GroupRoleAssignment {
+    static func assignGroupRole(
+        config: ClientConfig,
+        groupId: String,
+        roleId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> GroupRoleAssignment {
         let requestBody = AssignGroupRoleRequestBody(roleId: roleId)
 
-        return try (await sdkRequest("POST", ["/organization/groups/", sdkEncodePathSegment(sdkWireString(groupId)), "/roles"].joined(), config: config, body: requestBody, decoder: .json, operationId: "assignGroupRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/organization/groups/", sdkEncodePathSegment(sdkWireString(groupId)), "/roles"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "assignGroupRole",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 
     /// Retrieves an organization role assigned to a group.
@@ -23,8 +42,31 @@ extension GroupOrganizationRoleAssignmentsMethods {
     /// - Parameters:
     /// - groupId: The ID of the group to inspect.
     /// - roleId: The ID of the organization role to retrieve for the group.
-    public static func retrieveGroupRole(config: ClientConfig, groupId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> AssignedRoleDetails {
-        return try (await sdkRequest("GET", ["/organization/groups/", sdkEncodePathSegment(sdkWireString(groupId)), "/roles/", sdkEncodePathSegment(sdkWireString(roleId))].joined(), config: config, decoder: .json, operationId: "retrieveGroupRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func retrieveGroupRole(
+        config: ClientConfig,
+        groupId: String,
+        roleId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AssignedRoleDetails {
+        try await (sdkRequest(
+            "GET",
+            [
+                "/organization/groups/",
+                sdkEncodePathSegment(sdkWireString(groupId)),
+                "/roles/",
+                sdkEncodePathSegment(sdkWireString(roleId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "retrieveGroupRole",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 
     /// Unassigns an organization role from a group within the organization.
@@ -32,7 +74,30 @@ extension GroupOrganizationRoleAssignmentsMethods {
     /// - Parameters:
     /// - groupId: The ID of the group to modify.
     /// - roleId: The ID of the organization role to remove from the group.
-    public static func unassignGroupRole(config: ClientConfig, groupId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedRoleAssignmentResource {
-        return try (await sdkRequest("DELETE", ["/organization/groups/", sdkEncodePathSegment(sdkWireString(groupId)), "/roles/", sdkEncodePathSegment(sdkWireString(roleId))].joined(), config: config, decoder: .json, operationId: "unassignGroupRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func unassignGroupRole(
+        config: ClientConfig,
+        groupId: String,
+        roleId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeletedRoleAssignmentResource {
+        try await (sdkRequest(
+            "DELETE",
+            [
+                "/organization/groups/",
+                sdkEncodePathSegment(sdkWireString(groupId)),
+                "/roles/",
+                sdkEncodePathSegment(sdkWireString(roleId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "unassignGroupRole",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

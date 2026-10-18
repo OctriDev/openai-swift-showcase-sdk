@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Live domain models
+/// Live domain models
 public indirect enum Delegation {
     case liveClientDelegationParam(LiveClientDelegationParam)
     case liveResponsesDelegationParam(LiveResponsesDelegationParam)
@@ -13,7 +13,6 @@ public indirect enum Delegation {
 }
 
 extension Delegation: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension Delegation: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension Delegation: Codable {
 extension Delegation {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "client": return .liveClientDelegationParam(try LiveClientDelegationParam(from: decoder))
-        case "responses": return .liveResponsesDelegationParam(try LiveResponsesDelegationParam(from: decoder))
-        case "decisions": return .liveDecisionsDelegationParam(try LiveDecisionsDelegationParam(from: decoder))
-        default: return nil
+        case "client": try .liveClientDelegationParam(LiveClientDelegationParam(from: decoder))
+        case "responses": try .liveResponsesDelegationParam(LiveResponsesDelegationParam(from: decoder))
+        case "decisions": try .liveDecisionsDelegationParam(LiveDecisionsDelegationParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -80,21 +83,27 @@ public struct Session: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension Session {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension Session {
-    public init(id: String) {
+public extension Session {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+    }
+}
+
+public extension Session {
+    init(id: String) {
         self.id = id
     }
 }

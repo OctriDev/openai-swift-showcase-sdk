@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ContentProvenanceChecks domain models
+/// ContentProvenanceChecks domain models
 public indirect enum ProvenanceResourceResultsItem {
     case c2PaProvenanceResult(C2PAProvenanceResult)
     case synthIdProvenanceResult(SynthIDProvenanceResult)
@@ -12,7 +12,6 @@ public indirect enum ProvenanceResourceResultsItem {
 }
 
 extension ProvenanceResourceResultsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension ProvenanceResourceResultsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,9 @@ extension ProvenanceResourceResultsItem: Codable {
 extension ProvenanceResourceResultsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "c2pa": return .c2PaProvenanceResult(try C2PAProvenanceResult(from: decoder))
-        case "synthid": return .synthIdProvenanceResult(try SynthIDProvenanceResult(from: decoder))
-        default: return nil
+        case "c2pa": try .c2PaProvenanceResult(C2PAProvenanceResult(from: decoder))
+        case "synthid": try .synthIdProvenanceResult(SynthIDProvenanceResult(from: decoder))
+        default: nil
         }
     }
 }
@@ -63,21 +66,27 @@ public struct CreateContentProvenanceBody: Codable {
         case file
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateContentProvenanceBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.file) else {
-            throw SdkValidationError(field: "file", code: "required", message: "Validation failed for 'file': value is required")
-        }
-        self.file = try container.sdkDecodeRequired(.file)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateContentProvenanceBody {
-    public init(file: Data) {
+public extension CreateContentProvenanceBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.file) else {
+            throw SdkValidationError(
+                field: "file",
+                code: "required",
+                message: "Validation failed for 'file': value is required"
+            )
+        }
+        file = try container.sdkDecodeRequired(.file)
+    }
+}
+
+public extension CreateContentProvenanceBody {
+    init(file: Data) {
         self.file = file
     }
 }
@@ -98,29 +107,43 @@ public struct ProvenanceResource: Codable {
         case results
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProvenanceResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.results) else {
-            throw SdkValidationError(field: "results", code: "required", message: "Validation failed for 'results': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.results = try container.sdkDecodeRequired(.results)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProvenanceResource {
-    public init(object: ProvenanceCheckObject, createdAt: Int, results: [ProvenanceResourceResultsItem]) {
+public extension ProvenanceResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.results) else {
+            throw SdkValidationError(
+                field: "results",
+                code: "required",
+                message: "Validation failed for 'results': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        results = try container.sdkDecodeRequired(.results)
+    }
+}
+
+public extension ProvenanceResource {
+    init(object: ProvenanceCheckObject, createdAt: Int, results: [ProvenanceResourceResultsItem]) {
         (self.object, self.createdAt) = (object, createdAt)
         self.results = results
     }
@@ -154,46 +177,79 @@ public struct C2PAProvenanceResult: Codable {
         case generatedAt = "generated_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension C2PAProvenanceResult {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.outcome) else {
-            throw SdkValidationError(field: "outcome", code: "required", message: "Validation failed for 'outcome': value is required")
-        }
-        guard container.contains(.validationState) else {
-            throw SdkValidationError(field: "validation_state", code: "required", message: "Validation failed for 'validation_state': value is required")
-        }
-        guard container.contains(.issuer) else {
-            throw SdkValidationError(field: "issuer", code: "required", message: "Validation failed for 'issuer': value is required")
-        }
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        guard container.contains(.generatedAt) else {
-            throw SdkValidationError(field: "generated_at", code: "required", message: "Validation failed for 'generated_at': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.outcome = try container.sdkDecodeRequired(.outcome)
-        self.validationState = try container.sdkDecodeRequired(.validationState)
-        self.issuer = try container.sdkDecodeNullable(.issuer)
-        self.model = try container.sdkDecodeNullable(.model)
-        self.generatedAt = try container.sdkDecodeNullable(.generatedAt)
-            try sdkValidateRawEnum("type", self.type, C2PAProvenanceResultType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension C2PAProvenanceResult {
-    public init(type: C2PAProvenanceResultType, outcome: ProvenanceDetectionResultApi, validationState: C2PAValidationStateApi, issuer: String?, model: String?, generatedAt: String?) throws {
+public extension C2PAProvenanceResult {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.outcome) else {
+            throw SdkValidationError(
+                field: "outcome",
+                code: "required",
+                message: "Validation failed for 'outcome': value is required"
+            )
+        }
+        guard container.contains(.validationState) else {
+            throw SdkValidationError(
+                field: "validation_state",
+                code: "required",
+                message: "Validation failed for 'validation_state': value is required"
+            )
+        }
+        guard container.contains(.issuer) else {
+            throw SdkValidationError(
+                field: "issuer",
+                code: "required",
+                message: "Validation failed for 'issuer': value is required"
+            )
+        }
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        guard container.contains(.generatedAt) else {
+            throw SdkValidationError(
+                field: "generated_at",
+                code: "required",
+                message: "Validation failed for 'generated_at': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        outcome = try container.sdkDecodeRequired(.outcome)
+        validationState = try container.sdkDecodeRequired(.validationState)
+        issuer = try container.sdkDecodeNullable(.issuer)
+        model = try container.sdkDecodeNullable(.model)
+        generatedAt = try container.sdkDecodeNullable(.generatedAt)
+        try sdkValidateRawEnum("type", type, C2PAProvenanceResultType.allCases.map(\.rawValue))
+    }
+}
+
+public extension C2PAProvenanceResult {
+    init(
+        type: C2PAProvenanceResultType,
+        outcome: ProvenanceDetectionResultApi,
+        validationState: C2PAValidationStateApi,
+        issuer: String?,
+        model: String?,
+        generatedAt: String?
+    ) throws {
         (self.type, self.outcome) = (type, outcome)
         (self.validationState, self.issuer) = (validationState, issuer)
         (self.model, self.generatedAt) = (model, generatedAt)
-            try sdkValidateRawEnum("type", self.type, C2PAProvenanceResultType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, C2PAProvenanceResultType.allCases.map(\.rawValue))
     }
 }
 
@@ -219,37 +275,60 @@ public struct SynthIDProvenanceResult: Codable {
         case generatedAt = "generated_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SynthIDProvenanceResult {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.outcome) else {
-            throw SdkValidationError(field: "outcome", code: "required", message: "Validation failed for 'outcome': value is required")
-        }
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        guard container.contains(.generatedAt) else {
-            throw SdkValidationError(field: "generated_at", code: "required", message: "Validation failed for 'generated_at': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.outcome = try container.sdkDecodeRequired(.outcome)
-        self.model = try container.sdkDecodeNullable(.model)
-        self.generatedAt = try container.sdkDecodeNullable(.generatedAt)
-            try sdkValidateRawEnum("type", self.type, SynthIDProvenanceResultType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SynthIDProvenanceResult {
-    public init(type: SynthIDProvenanceResultType, outcome: ProvenanceDetectionResultApi, model: String?, generatedAt: String?) throws {
+public extension SynthIDProvenanceResult {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.outcome) else {
+            throw SdkValidationError(
+                field: "outcome",
+                code: "required",
+                message: "Validation failed for 'outcome': value is required"
+            )
+        }
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        guard container.contains(.generatedAt) else {
+            throw SdkValidationError(
+                field: "generated_at",
+                code: "required",
+                message: "Validation failed for 'generated_at': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        outcome = try container.sdkDecodeRequired(.outcome)
+        model = try container.sdkDecodeNullable(.model)
+        generatedAt = try container.sdkDecodeNullable(.generatedAt)
+        try sdkValidateRawEnum("type", type, SynthIDProvenanceResultType.allCases.map(\.rawValue))
+    }
+}
+
+public extension SynthIDProvenanceResult {
+    init(
+        type: SynthIDProvenanceResultType,
+        outcome: ProvenanceDetectionResultApi,
+        model: String?,
+        generatedAt: String?
+    ) throws {
         (self.type, self.outcome) = (type, outcome)
         (self.model, self.generatedAt) = (model, generatedAt)
-            try sdkValidateRawEnum("type", self.type, SynthIDProvenanceResultType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, SynthIDProvenanceResultType.allCases.map(\.rawValue))
     }
 }
 
@@ -275,13 +354,16 @@ public enum C2PAProvenanceResultType: String, CaseIterable, Codable {
 public struct ProvenanceDetectionResultApi: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let detected = ProvenanceDetectionResultApi(rawValue: "detected")
     public static let notDetected = ProvenanceDetectionResultApi(rawValue: "not_detected")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -312,12 +394,15 @@ public enum SynthIDProvenanceResultType: String, CaseIterable, Codable {
 public struct ProvenanceCheckObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let contentProvenanceCheck = ProvenanceCheckObject(rawValue: "content_provenance_check")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -330,7 +415,10 @@ public struct ProvenanceCheckObject: RawRepresentable, Hashable, Codable, Sendab
 public struct C2PAValidationStateApi: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let trusted = C2PAValidationStateApi(rawValue: "trusted")
     public static let valid = C2PAValidationStateApi(rawValue: "valid")
     public static let invalid = C2PAValidationStateApi(rawValue: "invalid")
@@ -338,7 +426,7 @@ public struct C2PAValidationStateApi: RawRepresentable, Hashable, Codable, Senda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

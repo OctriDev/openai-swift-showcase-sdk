@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AssistantsMethods {
-    /// Retrieves a run associated with a thread. Use the thread and run IDs to inspect the run’s current status, timestamps, and any required action or error.
+public extension AssistantsMethods {
+    /// Retrieves a run associated with a thread. Use the thread and run IDs to inspect the run’s current status,
+    /// timestamps, and any required action or error.
     ///
     /// Retrieves a run.
     ///
@@ -16,7 +17,25 @@ extension AssistantsMethods {
     ///   [thread](https://developers.openai.com/api/docs/assistants/migration) that
     ///   was run.
     /// - runId: The ID of the run to retrieve.
-    public static func getRun(config: ClientConfig, threadId: String, runId: String, requestOptions: RequestOptions? = nil) async throws -> RunObject {
-        return try (await sdkRequest("GET", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/runs/", sdkEncodePathSegment(sdkWireString(runId))].joined(), config: config, decoder: .json, operationId: "getRun", options: requestOptions, errors: ["429": ErrorResponse.self])).data
+    static func getRun(
+        config: ClientConfig,
+        threadId: String,
+        runId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> RunObject {
+        try await (sdkRequest(
+            "GET",
+            [
+                "/threads/",
+                sdkEncodePathSegment(sdkWireString(threadId)),
+                "/runs/",
+                sdkEncodePathSegment(sdkWireString(runId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getRun",
+            options: requestOptions,
+            errors: ["429": ErrorResponse.self]
+        )).data
     }
 }

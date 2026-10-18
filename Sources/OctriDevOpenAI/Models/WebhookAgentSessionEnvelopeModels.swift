@@ -3,7 +3,7 @@
 
 import Foundation
 
-// WebhookAgentSessionEnvelope domain models
+/// WebhookAgentSessionEnvelope domain models
 /// Typed representation of the `WebhookAgentSessionEnvelope` API schema.
 public struct WebhookAgentSessionEnvelope: Codable {
     /// The unique ID of the event.
@@ -19,29 +19,43 @@ public struct WebhookAgentSessionEnvelope: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebhookAgentSessionEnvelope {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebhookAgentSessionEnvelope {
-    public init(id: String, object: WebhookAgentSessionEnvelopeObject, createdAt: Int) {
+public extension WebhookAgentSessionEnvelope {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+    }
+}
+
+public extension WebhookAgentSessionEnvelope {
+    init(id: String, object: WebhookAgentSessionEnvelopeObject, createdAt: Int) {
         (self.id, self.object) = (id, object)
         self.createdAt = createdAt
     }
@@ -51,12 +65,15 @@ extension WebhookAgentSessionEnvelope {
 public struct WebhookAgentSessionEnvelopeObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let event = WebhookAgentSessionEnvelopeObject(rawValue: "event")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

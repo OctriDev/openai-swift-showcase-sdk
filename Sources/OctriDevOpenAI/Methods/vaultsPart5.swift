@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VaultsMethods {
-    /// Lists a vault's credentials using ID-based pagination without returning secret values. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+public extension VaultsMethods {
+    /// Lists a vault's credentials using ID-based pagination without returning secret values. See
+    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
     ///
     /// - Parameters:
     /// - vaultId: The ID of the vault.
@@ -21,27 +22,54 @@ extension VaultsMethods {
     ///   metadata changes may take time to appear.
     /// - status: Filter by one status or a list, such as `status=active` or
     ///   `status[]=active&status[]=archived`. Both statuses are included by default.
-    public static func listVaultCredentials(config: ClientConfig, vaultId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, metadata: [String: String]? = nil, status: VaultStatusFilterParam? = nil, requestOptions: RequestOptions? = nil) async throws -> VaultCredentialListResource {
-        try validateLength("vault_id", vaultId, min: 0, max: 1048576)
+    static func listVaultCredentials(
+        config: ClientConfig,
+        vaultId: String,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        metadata: [String: String]? = nil,
+        status: VaultStatusFilterParam? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VaultCredentialListResource {
+        try validateLength("vault_id", vaultId, min: 0, max: 1_048_576)
 
-        if let limit = limit {
+        if let limit {
             try validateRange("limit", Double(limit), min: 1, max: 100)
         }
 
-        if let after = after {
-            try validateLength("after", after, min: 0, max: 1048576)
+        if let after {
+            try validateLength("after", after, min: 0, max: 1_048_576)
         }
 
-        return try (await sdkRequest("GET", ["/vaults/", sdkEncodePathSegment(sdkWireString(vaultId)), "/credentials"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("metadata", object: metadata, style: "deepObject", explode: true),
-            SdkQueryParameter("status", value: status),
-        ], decoder: .json, operationId: "listVaultCredentials", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/vaults/", sdkEncodePathSegment(sdkWireString(vaultId)), "/credentials"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("metadata", object: metadata, style: "deepObject", explode: true),
+                SdkQueryParameter("status", value: status),
+            ],
+            decoder: .json,
+            operationId: "listVaultCredentials",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 
-    /// Lists a vault's credentials using ID-based pagination without returning secret values. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    /// Lists a vault's credentials using ID-based pagination without returning secret values. See
+    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
     ///
     /// - Parameters:
     /// - vaultId: The ID of the vault.
@@ -55,18 +83,47 @@ extension VaultsMethods {
     ///   metadata changes may take time to appear.
     /// - status: Filter by one status or a list, such as `status=active` or
     ///   `status[]=active&status[]=archived`. Both statuses are included by default.
-    public static func listVaultCredentialsPaginated(config: ClientConfig, vaultId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, metadata: [String: String]? = nil, status: VaultStatusFilterParam? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<VaultCredentialResource, Swift.Error> {
-        return AsyncThrowingStream<VaultCredentialResource, Swift.Error> { (continuation: AsyncThrowingStream<VaultCredentialResource, Swift.Error>.Continuation) in
+    static func listVaultCredentialsPaginated(
+        config: ClientConfig,
+        vaultId: String,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        metadata: [String: String]? = nil,
+        status: VaultStatusFilterParam? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<VaultCredentialResource, Swift.Error> {
+        AsyncThrowingStream<VaultCredentialResource, Swift.Error> { (continuation: AsyncThrowingStream<
+            VaultCredentialResource,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listVaultCredentials(config: config, vaultId: vaultId, limit: limit, order: order, after: pageCursor, metadata: metadata, status: status, requestOptions: requestOptions)
+                        let pageResponse = try await listVaultCredentials(
+                            config: config,
+                            vaultId: vaultId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            metadata: metadata,
+                            status: status,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -79,25 +136,56 @@ extension VaultsMethods {
         }
     }
 
-    public struct ListVaultCredentialsPage {
+    struct ListVaultCredentialsPage {
         public let data: VaultCredentialListResource
         public let items: [VaultCredentialResource]
         public let hasMore: Bool
     }
 
-    public static func listVaultCredentialsPages(config: ClientConfig, vaultId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, metadata: [String: String]? = nil, status: VaultStatusFilterParam? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListVaultCredentialsPage, Swift.Error> {
-        return AsyncThrowingStream<ListVaultCredentialsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListVaultCredentialsPage, Swift.Error>.Continuation) in
+    static func listVaultCredentialsPages(
+        config: ClientConfig,
+        vaultId: String,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        metadata: [String: String]? = nil,
+        status: VaultStatusFilterParam? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListVaultCredentialsPage, Swift.Error> {
+        AsyncThrowingStream<ListVaultCredentialsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListVaultCredentialsPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listVaultCredentials(config: config, vaultId: vaultId, limit: limit, order: order, after: pageCursor, metadata: metadata, status: status, requestOptions: requestOptions)
+                        let pageResponse = try await listVaultCredentials(
+                            config: config,
+                            vaultId: vaultId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            metadata: metadata,
+                            status: status,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListVaultCredentialsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageContinuation.yield(ListVaultCredentialsPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

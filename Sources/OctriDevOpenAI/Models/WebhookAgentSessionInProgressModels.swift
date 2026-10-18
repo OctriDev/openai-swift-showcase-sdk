@@ -3,7 +3,7 @@
 
 import Foundation
 
-// WebhookAgentSessionInProgress domain models
+/// WebhookAgentSessionInProgress domain models
 /// Sent when an agent session enters the in-progress state.
 public struct WebhookAgentSessionInProgress: Codable {
     /// The unique ID of the event.
@@ -24,37 +24,65 @@ public struct WebhookAgentSessionInProgress: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebhookAgentSessionInProgress {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.data = try container.sdkDecodeRequired(.data)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebhookAgentSessionInProgress {
-    public init(id: String, object: WebhookAgentSessionEnvelopeObject, createdAt: Int, type: WebhookAgentSessionInProgressVariant1Type, data: AgentSessionEnvironmentPayloadResource) {
+public extension WebhookAgentSessionInProgress {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        type = try container.sdkDecodeRequired(.type)
+        data = try container.sdkDecodeRequired(.data)
+    }
+}
+
+public extension WebhookAgentSessionInProgress {
+    init(
+        id: String,
+        object: WebhookAgentSessionEnvelopeObject,
+        createdAt: Int,
+        type: WebhookAgentSessionInProgressVariant1Type,
+        data: AgentSessionEnvironmentPayloadResource
+    ) {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.type) = (createdAt, type)
         self.data = data
@@ -71,39 +99,54 @@ public struct WebhookAgentSessionInProgressVariant1: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebhookAgentSessionInProgressVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.data = try container.sdkDecodeRequired(.data)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebhookAgentSessionInProgressVariant1 {
-    public init(type: WebhookAgentSessionInProgressVariant1Type, data: AgentSessionEnvironmentPayloadResource) {
+public extension WebhookAgentSessionInProgressVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        data = try container.sdkDecodeRequired(.data)
+    }
+}
+
+public extension WebhookAgentSessionInProgressVariant1 {
+    init(type: WebhookAgentSessionInProgressVariant1Type, data: AgentSessionEnvironmentPayloadResource) {
         (self.type, self.data) = (type, data)
     }
 }
 
 /// The event type. Always `agent.session.in_progress`.
-public struct WebhookAgentSessionInProgressVariant1Type: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct WebhookAgentSessionInProgressVariant1Type: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let agentSessionInProgress = WebhookAgentSessionInProgressVariant1Type(rawValue: "agent.session.in_progress")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let agentSessionInProgress =
+        WebhookAgentSessionInProgressVariant1Type(rawValue: "agent.session.in_progress")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

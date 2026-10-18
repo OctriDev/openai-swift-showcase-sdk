@@ -3,20 +3,28 @@
 
 import Foundation
 
-// DecisionsDecision domain models
-extension DecisionInputFunctionCall {
-    public init(callId: String, name: String, arguments: String, type: DecisionInputFunctionCallType, id: String? = nil, namespace: String? = nil, status: FunctionCallStatusParam? = nil) throws {
+/// DecisionsDecision domain models
+public extension DecisionInputFunctionCall {
+    init(
+        callId: String,
+        name: String,
+        arguments: String,
+        type: DecisionInputFunctionCallType,
+        id: String? = nil,
+        namespace: String? = nil,
+        status: FunctionCallStatusParam? = nil
+    ) throws {
         (self.callId, self.name) = (callId, name)
         (self.arguments, self.type) = (arguments, type)
         (self.id, self.namespace) = (id, namespace)
         self.status = status
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("name", self.name, min: 1, max: 128)
-            try sdkValidatePattern("name", self.name, sdkPatterneb0f36186b1b)
-            try validateLength("arguments", self.arguments, min: 0, max: 1048576)
-            try sdkValidateRawEnum("type", self.type, DecisionInputFunctionCallType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try validateLength("name", self.name, min: 1, max: 128)
+        try sdkValidatePattern("name", self.name, sdkPatterneb0f36186b1b)
+        try validateLength("arguments", self.arguments, min: 0, max: 1_048_576)
+        try sdkValidateRawEnum("type", self.type, DecisionInputFunctionCallType.allCases.map(\.rawValue))
         if let value = self.id {
-            try validateLength("id", value, min: 0, max: 1048576)
+            try validateLength("id", value, min: 0, max: 1_048_576)
         }
         if let value = self.namespace {
             try validateLength("namespace", value, min: 1, max: 64)
@@ -41,32 +49,46 @@ public struct DecisionInputText: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DecisionInputText {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-            try sdkValidateRawEnum("type", self.type, DecisionInputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DecisionInputText {
-    public init(type: DecisionInputTextType, text: String, promptCacheBreakpoint: DecisionInputTextPromptCacheBreakpoint? = nil) throws {
+public extension DecisionInputText {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+        try sdkValidateRawEnum("type", type, DecisionInputTextType.allCases.map(\.rawValue))
+        try validateLength("text", text, min: 0, max: 10_485_760)
+    }
+}
+
+public extension DecisionInputText {
+    init(
+        type: DecisionInputTextType,
+        text: String,
+        promptCacheBreakpoint: DecisionInputTextPromptCacheBreakpoint? = nil
+    ) throws {
         (self.type, self.text) = (type, text)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-            try sdkValidateRawEnum("type", self.type, DecisionInputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, DecisionInputTextType.allCases.map(\.rawValue))
+        try validateLength("text", self.text, min: 0, max: 10_485_760)
     }
 }
 
@@ -92,7 +114,10 @@ public enum DecisionInputRefusalType: String, CaseIterable, Codable {
 public struct DecisionInputMessageRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = DecisionInputMessageRole(rawValue: "user")
     public static let developer = DecisionInputMessageRole(rawValue: "developer")
     public static let system = DecisionInputMessageRole(rawValue: "system")
@@ -100,7 +125,7 @@ public struct DecisionInputMessageRole: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -110,15 +135,19 @@ public struct DecisionInputMessageRole: RawRepresentable, Hashable, Codable, Sen
 }
 
 /// The breakpoint mode. Always `explicit`.
-public struct DecisionInputTextPromptCacheBreakpointMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct DecisionInputTextPromptCacheBreakpointMode: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let explicit = DecisionInputTextPromptCacheBreakpointMode(rawValue: "explicit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -170,13 +199,16 @@ public enum DecisionInputOutputTextType: String, CaseIterable, Codable {
 public struct DecisionRequestPromptCacheOptionsMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let implicit = DecisionRequestPromptCacheOptionsMode(rawValue: "implicit")
     public static let explicit = DecisionRequestPromptCacheOptionsMode(rawValue: "explicit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -245,12 +277,15 @@ public enum DecisionInputFunctionCallType: String, CaseIterable, Codable {
 public struct DecisionRequestPromptCacheOptionsTtl: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let value30m = DecisionRequestPromptCacheOptionsTtl(rawValue: "30m")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -260,15 +295,19 @@ public struct DecisionRequestPromptCacheOptionsTtl: RawRepresentable, Hashable, 
 }
 
 /// The breakpoint mode. Always `explicit`.
-public struct DecisionInputImagePromptCacheBreakpointMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct DecisionInputImagePromptCacheBreakpointMode: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let explicit = DecisionInputImagePromptCacheBreakpointMode(rawValue: "explicit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

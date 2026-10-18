@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedGrader domain models
+/// SharedGrader domain models
 /// A StringCheckGrader object that performs a string comparison between input and reference using a specified
 /// operation.
 public struct GraderStringCheck: Codable {
@@ -26,42 +26,70 @@ public struct GraderStringCheck: Codable {
         case operation
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GraderStringCheck {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.input) else {
-            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
-        }
-        guard container.contains(.reference) else {
-            throw SdkValidationError(field: "reference", code: "required", message: "Validation failed for 'reference': value is required")
-        }
-        guard container.contains(.operation) else {
-            throw SdkValidationError(field: "operation", code: "required", message: "Validation failed for 'operation': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.input = try container.sdkDecodeRequired(.input)
-        self.reference = try container.sdkDecodeRequired(.reference)
-        self.operation = try container.sdkDecodeRequired(.operation)
-            try sdkValidateRawEnum("type", self.type, GraderStringCheckType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GraderStringCheck {
-    public init(type: GraderStringCheckType, name: String, input: String, reference: String, operation: GraderStringCheckOperation) throws {
+public extension GraderStringCheck {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.input) else {
+            throw SdkValidationError(
+                field: "input",
+                code: "required",
+                message: "Validation failed for 'input': value is required"
+            )
+        }
+        guard container.contains(.reference) else {
+            throw SdkValidationError(
+                field: "reference",
+                code: "required",
+                message: "Validation failed for 'reference': value is required"
+            )
+        }
+        guard container.contains(.operation) else {
+            throw SdkValidationError(
+                field: "operation",
+                code: "required",
+                message: "Validation failed for 'operation': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        input = try container.sdkDecodeRequired(.input)
+        reference = try container.sdkDecodeRequired(.reference)
+        operation = try container.sdkDecodeRequired(.operation)
+        try sdkValidateRawEnum("type", type, GraderStringCheckType.allCases.map(\.rawValue))
+    }
+}
+
+public extension GraderStringCheck {
+    init(
+        type: GraderStringCheckType,
+        name: String,
+        input: String,
+        reference: String,
+        operation: GraderStringCheckOperation
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.input, self.reference) = (input, reference)
         self.operation = operation
-            try sdkValidateRawEnum("type", self.type, GraderStringCheckType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, GraderStringCheckType.allCases.map(\.rawValue))
     }
 }
 
@@ -90,40 +118,65 @@ public struct GraderScoreModel: Codable {
         case range
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GraderScoreModel {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        guard container.contains(.input) else {
-            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.input = try container.sdkDecodeRequired(.input)
-        self.samplingParams = try container.sdkDecodeIfPresent(.samplingParams)
-        self.range = try container.sdkDecodeIfPresent(.range)
-            try sdkValidateRawEnum("type", self.type, GraderScoreModelType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GraderScoreModel {
-    public init(type: GraderScoreModelType, name: String, model: String, input: [EvalItem], samplingParams: GraderScoreModelSamplingParams? = nil, range: [Double]? = nil) throws {
+public extension GraderScoreModel {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        guard container.contains(.input) else {
+            throw SdkValidationError(
+                field: "input",
+                code: "required",
+                message: "Validation failed for 'input': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        model = try container.sdkDecodeRequired(.model)
+        input = try container.sdkDecodeRequired(.input)
+        samplingParams = try container.sdkDecodeIfPresent(.samplingParams)
+        range = try container.sdkDecodeIfPresent(.range)
+        try sdkValidateRawEnum("type", type, GraderScoreModelType.allCases.map(\.rawValue))
+    }
+}
+
+public extension GraderScoreModel {
+    init(
+        type: GraderScoreModelType,
+        name: String,
+        model: String,
+        input: [EvalItem],
+        samplingParams: GraderScoreModelSamplingParams? = nil,
+        range: [Double]? = nil
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.model, self.input) = (model, input)
         (self.samplingParams, self.range) = (samplingParams, range)
-            try sdkValidateRawEnum("type", self.type, GraderScoreModelType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, GraderScoreModelType.allCases.map(\.rawValue))
     }
 }
 
@@ -145,34 +198,48 @@ public struct GraderPython: Codable {
         case imageTag = "image_tag"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GraderPython {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.source) else {
-            throw SdkValidationError(field: "source", code: "required", message: "Validation failed for 'source': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.source = try container.sdkDecodeRequired(.source)
-        self.imageTag = try container.sdkDecodeIfPresent(.imageTag)
-            try sdkValidateRawEnum("type", self.type, GraderPythonType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GraderPython {
-    public init(type: GraderPythonType, name: String, source: String, imageTag: String? = nil) throws {
+public extension GraderPython {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.source) else {
+            throw SdkValidationError(
+                field: "source",
+                code: "required",
+                message: "Validation failed for 'source': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        source = try container.sdkDecodeRequired(.source)
+        imageTag = try container.sdkDecodeIfPresent(.imageTag)
+        try sdkValidateRawEnum("type", type, GraderPythonType.allCases.map(\.rawValue))
+    }
+}
+
+public extension GraderPython {
+    init(type: GraderPythonType, name: String, source: String, imageTag: String? = nil) throws {
         (self.type, self.name) = (type, name)
         (self.source, self.imageTag) = (source, imageTag)
-            try sdkValidateRawEnum("type", self.type, GraderPythonType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, GraderPythonType.allCases.map(\.rawValue))
     }
 }
 
@@ -198,42 +265,70 @@ public struct GraderTextSimilarity: Codable {
         case evaluationMetric = "evaluation_metric"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GraderTextSimilarity {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.input) else {
-            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
-        }
-        guard container.contains(.reference) else {
-            throw SdkValidationError(field: "reference", code: "required", message: "Validation failed for 'reference': value is required")
-        }
-        guard container.contains(.evaluationMetric) else {
-            throw SdkValidationError(field: "evaluation_metric", code: "required", message: "Validation failed for 'evaluation_metric': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.input = try container.sdkDecodeRequired(.input)
-        self.reference = try container.sdkDecodeRequired(.reference)
-        self.evaluationMetric = try container.sdkDecodeRequired(.evaluationMetric)
-            try sdkValidateRawEnum("type", self.type, GraderTextSimilarityType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GraderTextSimilarity {
-    public init(type: GraderTextSimilarityType, name: String, input: String, reference: String, evaluationMetric: GraderTextSimilarityEvaluationMetric) throws {
+public extension GraderTextSimilarity {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.input) else {
+            throw SdkValidationError(
+                field: "input",
+                code: "required",
+                message: "Validation failed for 'input': value is required"
+            )
+        }
+        guard container.contains(.reference) else {
+            throw SdkValidationError(
+                field: "reference",
+                code: "required",
+                message: "Validation failed for 'reference': value is required"
+            )
+        }
+        guard container.contains(.evaluationMetric) else {
+            throw SdkValidationError(
+                field: "evaluation_metric",
+                code: "required",
+                message: "Validation failed for 'evaluation_metric': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        input = try container.sdkDecodeRequired(.input)
+        reference = try container.sdkDecodeRequired(.reference)
+        evaluationMetric = try container.sdkDecodeRequired(.evaluationMetric)
+        try sdkValidateRawEnum("type", type, GraderTextSimilarityType.allCases.map(\.rawValue))
+    }
+}
+
+public extension GraderTextSimilarity {
+    init(
+        type: GraderTextSimilarityType,
+        name: String,
+        input: String,
+        reference: String,
+        evaluationMetric: GraderTextSimilarityEvaluationMetric
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.input, self.reference) = (input, reference)
         self.evaluationMetric = evaluationMetric
-            try sdkValidateRawEnum("type", self.type, GraderTextSimilarityType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, GraderTextSimilarityType.allCases.map(\.rawValue))
     }
 }
 
@@ -261,46 +356,79 @@ public struct GraderLabelModel: Codable {
         case passingLabels = "passing_labels"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GraderLabelModel {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        guard container.contains(.input) else {
-            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
-        }
-        guard container.contains(.labels) else {
-            throw SdkValidationError(field: "labels", code: "required", message: "Validation failed for 'labels': value is required")
-        }
-        guard container.contains(.passingLabels) else {
-            throw SdkValidationError(field: "passing_labels", code: "required", message: "Validation failed for 'passing_labels': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.input = try container.sdkDecodeRequired(.input)
-        self.labels = try container.sdkDecodeRequired(.labels)
-        self.passingLabels = try container.sdkDecodeRequired(.passingLabels)
-            try sdkValidateRawEnum("type", self.type, GraderLabelModelType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GraderLabelModel {
-    public init(type: GraderLabelModelType, name: String, model: String, input: [EvalItem], labels: [String], passingLabels: [String]) throws {
+public extension GraderLabelModel {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        guard container.contains(.input) else {
+            throw SdkValidationError(
+                field: "input",
+                code: "required",
+                message: "Validation failed for 'input': value is required"
+            )
+        }
+        guard container.contains(.labels) else {
+            throw SdkValidationError(
+                field: "labels",
+                code: "required",
+                message: "Validation failed for 'labels': value is required"
+            )
+        }
+        guard container.contains(.passingLabels) else {
+            throw SdkValidationError(
+                field: "passing_labels",
+                code: "required",
+                message: "Validation failed for 'passing_labels': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        model = try container.sdkDecodeRequired(.model)
+        input = try container.sdkDecodeRequired(.input)
+        labels = try container.sdkDecodeRequired(.labels)
+        passingLabels = try container.sdkDecodeRequired(.passingLabels)
+        try sdkValidateRawEnum("type", type, GraderLabelModelType.allCases.map(\.rawValue))
+    }
+}
+
+public extension GraderLabelModel {
+    init(
+        type: GraderLabelModelType,
+        name: String,
+        model: String,
+        input: [EvalItem],
+        labels: [String],
+        passingLabels: [String]
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.model, self.input) = (model, input)
         (self.labels, self.passingLabels) = (labels, passingLabels)
-            try sdkValidateRawEnum("type", self.type, GraderLabelModelType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, GraderLabelModelType.allCases.map(\.rawValue))
     }
 }
 
@@ -326,23 +454,29 @@ public struct GraderScoreModelSamplingParams: Codable {
     }
 
     init() {
-        (self.seed, self.topP, self.temperature, self.maxCompletionsTokens, self.reasoningEffort) = (nil, nil, nil, nil, nil)
+        (seed, topP, temperature, maxCompletionsTokens, reasoningEffort) = (nil, nil, nil, nil, nil)
     }
 }
 
-extension GraderScoreModelSamplingParams {
-    public init(from decoder: Decoder) throws {
+public extension GraderScoreModelSamplingParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.seed = try container.sdkDecodeIfPresent(.seed)
-        self.topP = try container.sdkDecodeIfPresent(.topP)
-        self.temperature = try container.sdkDecodeIfPresent(.temperature)
-        self.maxCompletionsTokens = try container.sdkDecodeIfPresent(.maxCompletionsTokens)
-        self.reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
+        seed = try container.sdkDecodeIfPresent(.seed)
+        topP = try container.sdkDecodeIfPresent(.topP)
+        temperature = try container.sdkDecodeIfPresent(.temperature)
+        maxCompletionsTokens = try container.sdkDecodeIfPresent(.maxCompletionsTokens)
+        reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
     }
 }
 
-extension GraderScoreModelSamplingParams {
-    public init(seed: Int? = nil, topP: Double? = nil, temperature: Double? = nil, maxCompletionsTokens: Int? = nil, reasoningEffort: ReasoningEffortVariant0? = nil) {
+public extension GraderScoreModelSamplingParams {
+    init(
+        seed: Int? = nil,
+        topP: Double? = nil,
+        temperature: Double? = nil,
+        maxCompletionsTokens: Int? = nil,
+        reasoningEffort: ReasoningEffortVariant0? = nil
+    ) {
         self.init()
         (self.seed, self.topP) = (seed, topP)
         (self.temperature, self.maxCompletionsTokens) = (temperature, maxCompletionsTokens)
@@ -427,7 +561,10 @@ public enum GraderPythonType: String, CaseIterable, Codable {
 public struct GraderTextSimilarityEvaluationMetric: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let cosine = GraderTextSimilarityEvaluationMetric(rawValue: "cosine")
     public static let fuzzyMatch = GraderTextSimilarityEvaluationMetric(rawValue: "fuzzy_match")
     public static let bleu = GraderTextSimilarityEvaluationMetric(rawValue: "bleu")
@@ -442,7 +579,7 @@ public struct GraderTextSimilarityEvaluationMetric: RawRepresentable, Hashable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -455,7 +592,10 @@ public struct GraderTextSimilarityEvaluationMetric: RawRepresentable, Hashable, 
 public struct GraderStringCheckOperation: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let eq = GraderStringCheckOperation(rawValue: "eq")
     public static let ne = GraderStringCheckOperation(rawValue: "ne")
     public static let like = GraderStringCheckOperation(rawValue: "like")
@@ -463,7 +603,7 @@ public struct GraderStringCheckOperation: RawRepresentable, Hashable, Codable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

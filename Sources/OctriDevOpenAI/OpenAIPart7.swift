@@ -3,33 +3,83 @@
 
 import Foundation
 
-extension CertificatesNamespace {
-/// Lists certificates configured for a project. Use `after` to continue from a certificate ID in a previous response, and set `limit` and `order` to control the page size and sort direction.
+public extension CertificatesNamespace {
+    /// Lists certificates configured for a project. Use `after` to continue from a certificate ID in a previous
+    /// response, and set `limit` and `order` to control the page size and sort direction.
     ///
     /// List certificates for this project.
-    public func listForProject(projectId: String, limit: Int? = nil, after: String? = nil, order: ListCertificatesForProjectParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ListProjectCertificatesResponse {
-        return try await CertificatesMethods.listCertificatesForProject(config: config, projectId: projectId, limit: limit, after: after, order: order, requestOptions: requestOptions)
+    func listForProject(
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        order: ListCertificatesForProjectParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListProjectCertificatesResponse {
+        try await CertificatesMethods.listCertificatesForProject(
+            config: config,
+            projectId: projectId,
+            limit: limit,
+            after: after,
+            order: order,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists certificates configured for a project. Use `after` to continue from a certificate ID in a previous response, and set `limit` and `order` to control the page size and sort direction.
+    /// Lists certificates configured for a project. Use `after` to continue from a certificate ID in a previous
+    /// response, and set `limit` and `order` to control the page size and sort direction.
     ///
     /// List certificates for this project.
-    public func listForProjectPaginated(projectId: String, limit: Int? = nil, after: String? = nil, order: ListCertificatesForProjectParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<OrganizationProjectCertificate, Swift.Error> {
-        return CertificatesMethods.listCertificatesForProjectPaginated(config: config, projectId: projectId, limit: limit, after: after, order: order, requestOptions: requestOptions)
+    func listForProjectPaginated(
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        order: ListCertificatesForProjectParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<OrganizationProjectCertificate, Swift.Error> {
+        CertificatesMethods.listCertificatesForProjectPaginated(
+            config: config,
+            projectId: projectId,
+            limit: limit,
+            after: after,
+            order: order,
+            requestOptions: requestOptions
+        )
     }
 
-/// Activates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and idempotent. The response contains the certificates with their updated activation state.
+    /// Activates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and
+    /// idempotent. The response contains the certificates with their updated activation state.
     ///
-    /// Activate certificates at the project level. You can atomically and idempotently activate up to 10 certificates at a time.
-    public func activateForProject(projectId: String, certificateIds: [String], requestOptions: RequestOptions? = nil) async throws -> OrganizationProjectCertificateActivationResponse {
-        return try await CertificatesMethods.activateCertificatesForProject(config: config, projectId: projectId, certificateIds: certificateIds, requestOptions: requestOptions)
+    /// Activate certificates at the project level. You can atomically and idempotently activate up to 10 certificates
+    /// at a time.
+    func activateForProject(
+        projectId: String,
+        certificateIds: [String],
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OrganizationProjectCertificateActivationResponse {
+        try await CertificatesMethods.activateCertificatesForProject(
+            config: config,
+            projectId: projectId,
+            certificateIds: certificateIds,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deactivates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and idempotent. The response contains the certificates with their updated activation state.
+    /// Deactivates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and
+    /// idempotent. The response contains the certificates with their updated activation state.
     ///
-    /// Deactivate certificates at the project level. You can atomically and idempotently deactivate up to 10 certificates at a time.
-    public func deactivateForProject(projectId: String, certificateIds: [String], requestOptions: RequestOptions? = nil) async throws -> OrganizationProjectCertificateDeactivationResponse {
-        return try await CertificatesMethods.deactivateCertificatesForProject(config: config, projectId: projectId, certificateIds: certificateIds, requestOptions: requestOptions)
+    /// Deactivate certificates at the project level. You can atomically and idempotently deactivate up to 10
+    /// certificates at a time.
+    func deactivateForProject(
+        projectId: String,
+        certificateIds: [String],
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OrganizationProjectCertificateDeactivationResponse {
+        try await CertificatesMethods.deactivateCertificatesForProject(
+            config: config,
+            projectId: projectId,
+            certificateIds: certificateIds,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -39,136 +89,284 @@ public class UsageNamespace {
         self.config = config
     }
 
-/// Retrieves cost data for the organization over a specified time range. Set `start_time` and optionally use project, API key, line item, or grouping filters to narrow the results; use the returned cursor to fetch additional pages.
+    /// Retrieves cost data for the organization over a specified time range. Set `start_time` and optionally use
+    /// project, API key, line item, or grouping filters to narrow the results; use the returned cursor to fetch
+    /// additional pages.
     ///
     /// Get costs details for the organization.
-    public func costs(options: UsageMethods.UsageCostsOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try await UsageMethods.usageCosts(config: config, options: options, requestOptions: requestOptions)
+    public func costs(
+        options: UsageMethods.UsageCostsOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await UsageMethods.usageCosts(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Retrieves cost data for the organization over a specified time range. Set `start_time` and optionally use project, API key, line item, or grouping filters to narrow the results; use the returned cursor to fetch additional pages.
+    /// Retrieves cost data for the organization over a specified time range. Set `start_time` and optionally use
+    /// project, API key, line item, or grouping filters to narrow the results; use the returned cursor to fetch
+    /// additional pages.
     ///
     /// Get costs details for the organization.
-    public func costsPaginated(options: UsageMethods.UsageCostsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
-        return UsageMethods.usageCostsPaginated(config: config, options: options, requestOptions: requestOptions)
+    public func costsPaginated(
+        options: UsageMethods.UsageCostsOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+        UsageMethods.usageCostsPaginated(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get audio speeches usage details for the organization.
-    public func audioSpeeches(options: UsageMethods.UsageAudioSpeechesOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try await UsageMethods.usageAudioSpeeches(config: config, options: options, requestOptions: requestOptions)
+    /// Get audio speeches usage details for the organization.
+    public func audioSpeeches(
+        options: UsageMethods.UsageAudioSpeechesOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await UsageMethods.usageAudioSpeeches(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get audio speeches usage details for the organization.
-    public func audioSpeechesPaginated(options: UsageMethods.UsageAudioSpeechesOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
-        return UsageMethods.usageAudioSpeechesPaginated(config: config, options: options, requestOptions: requestOptions)
+    /// Get audio speeches usage details for the organization.
+    public func audioSpeechesPaginated(
+        options: UsageMethods.UsageAudioSpeechesOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+        UsageMethods.usageAudioSpeechesPaginated(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get audio transcriptions usage details for the organization.
-    public func audioTranscriptions(options: UsageMethods.UsageAudioTranscriptionsOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try await UsageMethods.usageAudioTranscriptions(config: config, options: options, requestOptions: requestOptions)
+    /// Get audio transcriptions usage details for the organization.
+    public func audioTranscriptions(
+        options: UsageMethods.UsageAudioTranscriptionsOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await UsageMethods.usageAudioTranscriptions(
+            config: config,
+            options: options,
+            requestOptions: requestOptions
+        )
     }
 
-/// Get audio transcriptions usage details for the organization.
-    public func audioTranscriptionsPaginated(options: UsageMethods.UsageAudioTranscriptionsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
-        return UsageMethods.usageAudioTranscriptionsPaginated(config: config, options: options, requestOptions: requestOptions)
+    /// Get audio transcriptions usage details for the organization.
+    public func audioTranscriptionsPaginated(
+        options: UsageMethods.UsageAudioTranscriptionsOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+        UsageMethods.usageAudioTranscriptionsPaginated(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get code interpreter sessions usage details for the organization.
-    public func codeInterpreterSessions(startTime: Int, endTime: Int? = nil, bucketWidth: UsageCodeInterpreterSessionsParameter? = nil, projectIds: [String]? = nil, groupBy: [UsageCodeInterpreterSessionsParameterItem]? = nil, limit: Int? = nil, page: String? = nil, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try await UsageMethods.usageCodeInterpreterSessions(config: config, startTime: startTime, endTime: endTime, bucketWidth: bucketWidth, projectIds: projectIds, groupBy: groupBy, limit: limit, page: page, requestOptions: requestOptions)
+    /// Get code interpreter sessions usage details for the organization.
+    public func codeInterpreterSessions(
+        startTime: Int,
+        endTime: Int? = nil,
+        bucketWidth: UsageCodeInterpreterSessionsParameter? = nil,
+        projectIds: [String]? = nil,
+        groupBy: [UsageCodeInterpreterSessionsParameterItem]? = nil,
+        limit: Int? = nil,
+        page: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await UsageMethods.usageCodeInterpreterSessions(
+            config: config,
+            startTime: startTime,
+            endTime: endTime,
+            bucketWidth: bucketWidth,
+            projectIds: projectIds,
+            groupBy: groupBy,
+            limit: limit,
+            page: page,
+            requestOptions: requestOptions
+        )
     }
 
-/// Get code interpreter sessions usage details for the organization.
-    public func codeInterpreterSessionsPaginated(startTime: Int, endTime: Int? = nil, bucketWidth: UsageCodeInterpreterSessionsParameter? = nil, projectIds: [String]? = nil, groupBy: [UsageCodeInterpreterSessionsParameterItem]? = nil, limit: Int? = nil, page: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
-        return UsageMethods.usageCodeInterpreterSessionsPaginated(config: config, startTime: startTime, endTime: endTime, bucketWidth: bucketWidth, projectIds: projectIds, groupBy: groupBy, limit: limit, page: page, requestOptions: requestOptions)
+    /// Get code interpreter sessions usage details for the organization.
+    public func codeInterpreterSessionsPaginated(
+        startTime: Int,
+        endTime: Int? = nil,
+        bucketWidth: UsageCodeInterpreterSessionsParameter? = nil,
+        projectIds: [String]? = nil,
+        groupBy: [UsageCodeInterpreterSessionsParameterItem]? = nil,
+        limit: Int? = nil,
+        page: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+        UsageMethods.usageCodeInterpreterSessionsPaginated(
+            config: config,
+            startTime: startTime,
+            endTime: endTime,
+            bucketWidth: bucketWidth,
+            projectIds: projectIds,
+            groupBy: groupBy,
+            limit: limit,
+            page: page,
+            requestOptions: requestOptions
+        )
     }
 }
 
-extension UsageNamespace {
-/// Get completions usage details for the organization.
-    public func completions(options: UsageMethods.UsageCompletionsOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try await UsageMethods.usageCompletions(config: config, options: options, requestOptions: requestOptions)
+public extension UsageNamespace {
+    /// Get completions usage details for the organization.
+    func completions(
+        options: UsageMethods.UsageCompletionsOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await UsageMethods.usageCompletions(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get completions usage details for the organization.
-    public func completionsPaginated(options: UsageMethods.UsageCompletionsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
-        return UsageMethods.usageCompletionsPaginated(config: config, options: options, requestOptions: requestOptions)
+    /// Get completions usage details for the organization.
+    func completionsPaginated(
+        options: UsageMethods.UsageCompletionsOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+        UsageMethods.usageCompletionsPaginated(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get embeddings usage details for the organization.
-    public func embeddings(options: UsageMethods.UsageEmbeddingsOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try await UsageMethods.usageEmbeddings(config: config, options: options, requestOptions: requestOptions)
+    /// Get embeddings usage details for the organization.
+    func embeddings(
+        options: UsageMethods.UsageEmbeddingsOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await UsageMethods.usageEmbeddings(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get embeddings usage details for the organization.
-    public func embeddingsPaginated(options: UsageMethods.UsageEmbeddingsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
-        return UsageMethods.usageEmbeddingsPaginated(config: config, options: options, requestOptions: requestOptions)
+    /// Get embeddings usage details for the organization.
+    func embeddingsPaginated(
+        options: UsageMethods.UsageEmbeddingsOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+        UsageMethods.usageEmbeddingsPaginated(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get file search calls usage details for the organization.
-    public func fileSearchCalls(options: UsageMethods.UsageFileSearchCallsOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try await UsageMethods.usageFileSearchCalls(config: config, options: options, requestOptions: requestOptions)
+    /// Get file search calls usage details for the organization.
+    func fileSearchCalls(
+        options: UsageMethods.UsageFileSearchCallsOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await UsageMethods.usageFileSearchCalls(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get file search calls usage details for the organization.
-    public func fileSearchCallsPaginated(options: UsageMethods.UsageFileSearchCallsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
-        return UsageMethods.usageFileSearchCallsPaginated(config: config, options: options, requestOptions: requestOptions)
+    /// Get file search calls usage details for the organization.
+    func fileSearchCallsPaginated(
+        options: UsageMethods.UsageFileSearchCallsOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+        UsageMethods.usageFileSearchCallsPaginated(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Lists image usage for the organization in time buckets. Use `start_time` to set the inclusive start of the range, and filter by sources, image sizes, projects, users, API keys, or models as needed. Use the `next_page` value to retrieve the next page of results.
+    /// Lists image usage for the organization in time buckets. Use `start_time` to set the inclusive start of the
+    /// range, and filter by sources, image sizes, projects, users, API keys, or models as needed. Use the `next_page`
+    /// value to retrieve the next page of results.
     ///
     /// Get images usage details for the organization.
-    public func images(options: UsageMethods.UsageImagesOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try await UsageMethods.usageImages(config: config, options: options, requestOptions: requestOptions)
+    func images(
+        options: UsageMethods.UsageImagesOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await UsageMethods.usageImages(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Lists image usage for the organization in time buckets. Use `start_time` to set the inclusive start of the range, and filter by sources, image sizes, projects, users, API keys, or models as needed. Use the `next_page` value to retrieve the next page of results.
+    /// Lists image usage for the organization in time buckets. Use `start_time` to set the inclusive start of the
+    /// range, and filter by sources, image sizes, projects, users, API keys, or models as needed. Use the `next_page`
+    /// value to retrieve the next page of results.
     ///
     /// Get images usage details for the organization.
-    public func imagesPaginated(options: UsageMethods.UsageImagesOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
-        return UsageMethods.usageImagesPaginated(config: config, options: options, requestOptions: requestOptions)
+    func imagesPaginated(
+        options: UsageMethods.UsageImagesOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+        UsageMethods.usageImagesPaginated(config: config, options: options, requestOptions: requestOptions)
     }
 }
 
-extension UsageNamespace {
-/// Get moderations usage details for the organization.
-    public func moderations(options: UsageMethods.UsageModerationsOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try await UsageMethods.usageModerations(config: config, options: options, requestOptions: requestOptions)
+public extension UsageNamespace {
+    /// Get moderations usage details for the organization.
+    func moderations(
+        options: UsageMethods.UsageModerationsOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await UsageMethods.usageModerations(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get moderations usage details for the organization.
-    public func moderationsPaginated(options: UsageMethods.UsageModerationsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
-        return UsageMethods.usageModerationsPaginated(config: config, options: options, requestOptions: requestOptions)
+    /// Get moderations usage details for the organization.
+    func moderationsPaginated(
+        options: UsageMethods.UsageModerationsOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+        UsageMethods.usageModerationsPaginated(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get vector stores usage details for the organization.
-    public func vectorStores(startTime: Int, endTime: Int? = nil, bucketWidth: UsageVectorStoresParameter? = nil, projectIds: [String]? = nil, groupBy: [UsageVectorStoresParameterItem]? = nil, limit: Int? = nil, page: String? = nil, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try await UsageMethods.usageVectorStores(config: config, startTime: startTime, endTime: endTime, bucketWidth: bucketWidth, projectIds: projectIds, groupBy: groupBy, limit: limit, page: page, requestOptions: requestOptions)
+    /// Get vector stores usage details for the organization.
+    func vectorStores(
+        startTime: Int,
+        endTime: Int? = nil,
+        bucketWidth: UsageVectorStoresParameter? = nil,
+        projectIds: [String]? = nil,
+        groupBy: [UsageVectorStoresParameterItem]? = nil,
+        limit: Int? = nil,
+        page: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await UsageMethods.usageVectorStores(
+            config: config,
+            startTime: startTime,
+            endTime: endTime,
+            bucketWidth: bucketWidth,
+            projectIds: projectIds,
+            groupBy: groupBy,
+            limit: limit,
+            page: page,
+            requestOptions: requestOptions
+        )
     }
 
-/// Get vector stores usage details for the organization.
-    public func vectorStoresPaginated(startTime: Int, endTime: Int? = nil, bucketWidth: UsageVectorStoresParameter? = nil, projectIds: [String]? = nil, groupBy: [UsageVectorStoresParameterItem]? = nil, limit: Int? = nil, page: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
-        return UsageMethods.usageVectorStoresPaginated(config: config, startTime: startTime, endTime: endTime, bucketWidth: bucketWidth, projectIds: projectIds, groupBy: groupBy, limit: limit, page: page, requestOptions: requestOptions)
+    /// Get vector stores usage details for the organization.
+    func vectorStoresPaginated(
+        startTime: Int,
+        endTime: Int? = nil,
+        bucketWidth: UsageVectorStoresParameter? = nil,
+        projectIds: [String]? = nil,
+        groupBy: [UsageVectorStoresParameterItem]? = nil,
+        limit: Int? = nil,
+        page: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+        UsageMethods.usageVectorStoresPaginated(
+            config: config,
+            startTime: startTime,
+            endTime: endTime,
+            bucketWidth: bucketWidth,
+            projectIds: projectIds,
+            groupBy: groupBy,
+            limit: limit,
+            page: page,
+            requestOptions: requestOptions
+        )
     }
 
-/// Get web search calls usage details for the organization.
-    public func webSearchCalls(options: UsageMethods.UsageWebSearchCallsOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try await UsageMethods.usageWebSearchCalls(config: config, options: options, requestOptions: requestOptions)
+    /// Get web search calls usage details for the organization.
+    func webSearchCalls(
+        options: UsageMethods.UsageWebSearchCallsOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await UsageMethods.usageWebSearchCalls(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get web search calls usage details for the organization.
-    public func webSearchCallsPaginated(options: UsageMethods.UsageWebSearchCallsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
-        return UsageMethods.usageWebSearchCallsPaginated(config: config, options: options, requestOptions: requestOptions)
+    /// Get web search calls usage details for the organization.
+    func webSearchCallsPaginated(
+        options: UsageMethods.UsageWebSearchCallsOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+        UsageMethods.usageWebSearchCallsPaginated(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get Decisions API usage details for the organization.
-    public func decisions(options: UsageMethods.DecisionsUsageOptions, requestOptions: RequestOptions? = nil) async throws -> PublicDecisionsUsageResponseResource {
-        return try await UsageMethods.decisionsUsage(config: config, options: options, requestOptions: requestOptions)
+    /// Get Decisions API usage details for the organization.
+    func decisions(
+        options: UsageMethods.DecisionsUsageOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> PublicDecisionsUsageResponseResource {
+        try await UsageMethods.decisionsUsage(config: config, options: options, requestOptions: requestOptions)
     }
 
-/// Get Decisions API usage details for the organization.
-    public func decisionsPaginated(options: UsageMethods.DecisionsUsageOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<DecisionsUsageBucket, Swift.Error> {
-        return UsageMethods.decisionsUsagePaginated(config: config, options: options, requestOptions: requestOptions)
+    /// Get Decisions API usage details for the organization.
+    func decisionsPaginated(
+        options: UsageMethods.DecisionsUsageOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<DecisionsUsageBucket, Swift.Error> {
+        UsageMethods.decisionsUsagePaginated(config: config, options: options, requestOptions: requestOptions)
     }
 }
 
@@ -178,31 +376,58 @@ public class DataRetentionNamespace {
         self.config = config
     }
 
-/// Retrieves the organization's data retention controls. Use this endpoint to inspect the configured retention type, such as zero data retention or modified abuse monitoring.
+    /// Retrieves the organization's data retention controls. Use this endpoint to inspect the configured retention
+    /// type, such as zero data retention or modified abuse monitoring.
     ///
     /// Retrieves organization data retention controls.
     public func retrieveOrganization(requestOptions: RequestOptions? = nil) async throws -> OrganizationDataRetention {
-        return try await DataRetentionMethods.retrieveOrganizationDataRetention(config: config, requestOptions: requestOptions)
+        try await DataRetentionMethods.retrieveOrganizationDataRetention(config: config, requestOptions: requestOptions)
     }
 
-/// Updates the organization's data retention controls. Set `retention_type` to one of the supported retention modes; the requested setting or transition must be valid for the organization.
+    /// Updates the organization's data retention controls. Set `retention_type` to one of the supported retention
+    /// modes; the requested setting or transition must be valid for the organization.
     ///
     /// Updates organization data retention controls.
-    public func updateOrganization(retentionType: UpdateOrganizationDataRetentionBodyRetentionType, requestOptions: RequestOptions? = nil) async throws -> OrganizationDataRetention {
-        return try await DataRetentionMethods.updateOrganizationDataRetention(config: config, retentionType: retentionType, requestOptions: requestOptions)
+    public func updateOrganization(
+        retentionType: UpdateOrganizationDataRetentionBodyRetentionType,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OrganizationDataRetention {
+        try await DataRetentionMethods.updateOrganizationDataRetention(
+            config: config,
+            retentionType: retentionType,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves the data retention controls configured for a project. Use this operation to inspect the project's current retention type before changing its settings.
+    /// Retrieves the data retention controls configured for a project. Use this operation to inspect the project's
+    /// current retention type before changing its settings.
     ///
     /// Retrieves project data retention controls.
-    public func retrieve(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectDataRetention {
-        return try await DataRetentionMethods.retrieveProjectDataRetention(config: config, projectId: projectId, requestOptions: requestOptions)
+    public func retrieve(
+        projectId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectDataRetention {
+        try await DataRetentionMethods.retrieveProjectDataRetention(
+            config: config,
+            projectId: projectId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates the data retention controls for a project. Set `retention_type` to one of the supported retention settings to configure the project.
+    /// Updates the data retention controls for a project. Set `retention_type` to one of the supported retention
+    /// settings to configure the project.
     ///
     /// Updates project data retention controls.
-    public func update(projectId: String, retentionType: UpdateProjectDataRetentionBodyRetentionType, requestOptions: RequestOptions? = nil) async throws -> ProjectDataRetention {
-        return try await DataRetentionMethods.updateProjectDataRetention(config: config, projectId: projectId, retentionType: retentionType, requestOptions: requestOptions)
+    public func update(
+        projectId: String,
+        retentionType: UpdateProjectDataRetentionBodyRetentionType,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectDataRetention {
+        try await DataRetentionMethods.updateProjectDataRetention(
+            config: config,
+            projectId: projectId,
+            retentionType: retentionType,
+            requestOptions: requestOptions
+        )
     }
 }

@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AssistantsMethods {
-    /// Lists messages belonging to a thread. Use `run_id` to filter by the run that generated the messages and `order` to control their creation-time order. Use `after` or `before` cursors to navigate the results.
+public extension AssistantsMethods {
+    /// Lists messages belonging to a thread. Use `run_id` to filter by the run that generated the messages and `order`
+    /// to control their creation-time order. Use `after` or `before` cursors to navigate the results.
     ///
     /// Returns a list of messages for a given thread.
     ///
@@ -28,17 +29,37 @@ extension AssistantsMethods {
     ///   receive 100 objects, starting with obj_foo, your subsequent call can include
     ///   before=obj_foo in order to fetch the previous page of the list.
     /// - runId: Filter messages by the run ID that generated them.
-    public static func listMessages(config: ClientConfig, threadId: String, limit: Int? = nil, order: ListMessagesParameter? = nil, after: String? = nil, before: String? = nil, runId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListMessagesResponse {
-        return try (await sdkRequest("GET", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/messages"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("before", value: before),
-            SdkQueryParameter("run_id", value: runId),
-        ], decoder: .json, operationId: "listMessages", options: requestOptions, errors: ["429": ErrorResponse.self])).data
+    static func listMessages(
+        config: ClientConfig,
+        threadId: String,
+        limit: Int? = nil,
+        order: ListMessagesParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        runId: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListMessagesResponse {
+        try await (sdkRequest(
+            "GET",
+            ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/messages"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("before", value: before),
+                SdkQueryParameter("run_id", value: runId),
+            ],
+            decoder: .json,
+            operationId: "listMessages",
+            options: requestOptions,
+            errors: ["429": ErrorResponse.self]
+        ))
+        .data
     }
 
-    /// Lists messages belonging to a thread. Use `run_id` to filter by the run that generated the messages and `order` to control their creation-time order. Use `after` or `before` cursors to navigate the results.
+    /// Lists messages belonging to a thread. Use `run_id` to filter by the run that generated the messages and `order`
+    /// to control their creation-time order. Use `after` or `before` cursors to navigate the results.
     ///
     /// Returns a list of messages for a given thread.
     ///
@@ -59,17 +80,44 @@ extension AssistantsMethods {
     ///   receive 100 objects, starting with obj_foo, your subsequent call can include
     ///   before=obj_foo in order to fetch the previous page of the list.
     /// - runId: Filter messages by the run ID that generated them.
-    public static func listMessagesPaginated(config: ClientConfig, threadId: String, limit: Int? = nil, order: ListMessagesParameter? = nil, after: String? = nil, before: String? = nil, runId: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<MessageObject, Swift.Error> {
-        return AsyncThrowingStream<MessageObject, Swift.Error> { (continuation: AsyncThrowingStream<MessageObject, Swift.Error>.Continuation) in
+    static func listMessagesPaginated(
+        config: ClientConfig,
+        threadId: String,
+        limit: Int? = nil,
+        order: ListMessagesParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        runId: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<MessageObject, Swift.Error> {
+        AsyncThrowingStream<MessageObject, Swift.Error> { (continuation: AsyncThrowingStream<
+            MessageObject,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listMessages(config: config, threadId: threadId, limit: limit, order: order, after: pageCursor, before: before, runId: runId, requestOptions: requestOptions)
+                        let pageResponse = try await listMessages(
+                            config: config,
+                            threadId: threadId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            before: before,
+                            runId: runId,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -82,24 +130,49 @@ extension AssistantsMethods {
         }
     }
 
-    public struct ListMessagesPage {
+    struct ListMessagesPage {
         public let data: ListMessagesResponse
         public let items: [MessageObject]
         public let hasMore: Bool
     }
 
-    public static func listMessagesPages(config: ClientConfig, threadId: String, limit: Int? = nil, order: ListMessagesParameter? = nil, after: String? = nil, before: String? = nil, runId: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListMessagesPage, Swift.Error> {
-        return AsyncThrowingStream<ListMessagesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListMessagesPage, Swift.Error>.Continuation) in
+    static func listMessagesPages(
+        config: ClientConfig,
+        threadId: String,
+        limit: Int? = nil,
+        order: ListMessagesParameter? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        runId: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListMessagesPage, Swift.Error> {
+        AsyncThrowingStream<ListMessagesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListMessagesPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listMessages(config: config, threadId: threadId, limit: limit, order: order, after: pageCursor, before: before, runId: runId, requestOptions: requestOptions)
+                        let pageResponse = try await listMessages(
+                            config: config,
+                            threadId: threadId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            before: before,
+                            runId: runId,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && true
                         pageContinuation.yield(ListMessagesPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
+                        if !hasMore {
+                            break
+                        }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

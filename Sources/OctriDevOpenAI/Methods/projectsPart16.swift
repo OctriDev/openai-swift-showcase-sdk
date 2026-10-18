@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectsMethods {
-    /// Lists users in a project using cursor-based pagination. Set `limit` to control the number of results and pass an `after` cursor from a previous response to continue through the list.
+public extension ProjectsMethods {
+    /// Lists users in a project using cursor-based pagination. Set `limit` to control the number of results and pass an
+    /// `after` cursor from a previous response to continue through the list.
     ///
     /// Returns a list of users in the project.
     ///
@@ -19,14 +20,35 @@ extension ProjectsMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
-    public static func listProjectUsers(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectUserListResponse {
-        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/users"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("after", value: after),
-        ], decoder: .json, operationId: "listProjectUsers", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func listProjectUsers(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectUserListResponse {
+        try await (sdkRequest(
+            "GET",
+            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/users"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("after", value: after),
+            ],
+            decoder: .json,
+            operationId: "listProjectUsers",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 
-    /// Lists users in a project using cursor-based pagination. Set `limit` to control the number of results and pass an `after` cursor from a previous response to continue through the list.
+    /// Lists users in a project using cursor-based pagination. Set `limit` to control the number of results and pass an
+    /// `after` cursor from a previous response to continue through the list.
     ///
     /// Returns a list of users in the project.
     ///
@@ -38,18 +60,41 @@ extension ProjectsMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
-    public static func listProjectUsersPaginated(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ProjectUser, Swift.Error> {
-        return AsyncThrowingStream<ProjectUser, Swift.Error> { (continuation: AsyncThrowingStream<ProjectUser, Swift.Error>.Continuation) in
+    static func listProjectUsersPaginated(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ProjectUser, Swift.Error> {
+        AsyncThrowingStream<ProjectUser, Swift.Error> { (continuation: AsyncThrowingStream<
+            ProjectUser,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectUsers(config: config, projectId: projectId, limit: limit, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listProjectUsers(
+                            config: config,
+                            projectId: projectId,
+                            limit: limit,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -62,25 +107,50 @@ extension ProjectsMethods {
         }
     }
 
-    public struct ListProjectUsersPage {
+    struct ListProjectUsersPage {
         public let data: ProjectUserListResponse
         public let items: [ProjectUser]
         public let hasMore: Bool
     }
 
-    public static func listProjectUsersPages(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListProjectUsersPage, Swift.Error> {
-        return AsyncThrowingStream<ListProjectUsersPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListProjectUsersPage, Swift.Error>.Continuation) in
+    static func listProjectUsersPages(
+        config: ClientConfig,
+        projectId: String,
+        limit: Int? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListProjectUsersPage, Swift.Error> {
+        AsyncThrowingStream<ListProjectUsersPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListProjectUsersPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectUsers(config: config, projectId: projectId, limit: limit, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listProjectUsers(
+                            config: config,
+                            projectId: projectId,
+                            limit: limit,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListProjectUsersPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageContinuation.yield(ListProjectUsersPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

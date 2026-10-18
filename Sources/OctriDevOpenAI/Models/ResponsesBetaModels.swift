@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBeta domain models
+/// ResponsesBeta domain models
 public indirect enum BetaAnnotation {
     case betaFileCitationBody(BetaFileCitationBody)
     case betaUrlCitationBody(BetaUrlCitationBody)
@@ -14,7 +14,6 @@ public indirect enum BetaAnnotation {
 }
 
 extension BetaAnnotation: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -22,12 +21,16 @@ extension BetaAnnotation: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -38,11 +41,11 @@ extension BetaAnnotation: Codable {
 extension BetaAnnotation {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file_citation": return .betaFileCitationBody(try BetaFileCitationBody(from: decoder))
-        case "url_citation": return .betaUrlCitationBody(try BetaUrlCitationBody(from: decoder))
-        case "container_file_citation": return .betaContainerFileCitationBody(try BetaContainerFileCitationBody(from: decoder))
-        case "file_path": return .betaFilePath(try BetaFilePath(from: decoder))
-        default: return nil
+        case "file_citation": try .betaFileCitationBody(BetaFileCitationBody(from: decoder))
+        case "url_citation": try .betaUrlCitationBody(BetaUrlCitationBody(from: decoder))
+        case "container_file_citation": try .betaContainerFileCitationBody(BetaContainerFileCitationBody(from: decoder))
+        case "file_path": try .betaFilePath(BetaFilePath(from: decoder))
+        default: nil
         }
     }
 }
@@ -70,7 +73,6 @@ public indirect enum BetaFilters {
 }
 
 extension BetaFilters: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -78,12 +80,16 @@ extension BetaFilters: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -94,9 +100,10 @@ extension BetaFilters: Codable {
 extension BetaFilters {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "eq", "ne", "gt", "gte", "lt", "lte", "in", "nin": return .betaComparisonFilter(try BetaComparisonFilter(from: decoder))
-        case "and", "or": return .betaCompoundFilter(try BetaCompoundFilter(from: decoder))
-        default: return nil
+        case "eq", "ne", "gt", "gte", "lt", "lte", "in",
+             "nin": try .betaComparisonFilter(BetaComparisonFilter(from: decoder))
+        case "and", "or": try .betaCompoundFilter(BetaCompoundFilter(from: decoder))
+        default: nil
         }
     }
 }
@@ -126,22 +133,29 @@ public indirect enum BetaVerbosity {
 }
 
 extension BetaVerbosity: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaVerbosity")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension BetaVerbosity {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(JSONValue.self) {
+            return .jsonValue(value)
+        }
         return nil
     }
 }
@@ -174,33 +188,51 @@ public struct BetaLogProb: Codable {
         case topLogprobs = "top_logprobs"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaLogProb {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.token) else {
-            throw SdkValidationError(field: "token", code: "required", message: "Validation failed for 'token': value is required")
-        }
-        guard container.contains(.logprob) else {
-            throw SdkValidationError(field: "logprob", code: "required", message: "Validation failed for 'logprob': value is required")
-        }
-        guard container.contains(.bytes) else {
-            throw SdkValidationError(field: "bytes", code: "required", message: "Validation failed for 'bytes': value is required")
-        }
-        guard container.contains(.topLogprobs) else {
-            throw SdkValidationError(field: "top_logprobs", code: "required", message: "Validation failed for 'top_logprobs': value is required")
-        }
-        self.token = try container.sdkDecodeRequired(.token)
-        self.logprob = try container.sdkDecodeRequired(.logprob)
-        self.bytes = try container.sdkDecodeRequired(.bytes)
-        self.topLogprobs = try container.sdkDecodeRequired(.topLogprobs)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaLogProb {
-    public init(token: String, logprob: Double, bytes: [Int], topLogprobs: [BetaTopLogProb]) {
+public extension BetaLogProb {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.token) else {
+            throw SdkValidationError(
+                field: "token",
+                code: "required",
+                message: "Validation failed for 'token': value is required"
+            )
+        }
+        guard container.contains(.logprob) else {
+            throw SdkValidationError(
+                field: "logprob",
+                code: "required",
+                message: "Validation failed for 'logprob': value is required"
+            )
+        }
+        guard container.contains(.bytes) else {
+            throw SdkValidationError(
+                field: "bytes",
+                code: "required",
+                message: "Validation failed for 'bytes': value is required"
+            )
+        }
+        guard container.contains(.topLogprobs) else {
+            throw SdkValidationError(
+                field: "top_logprobs",
+                code: "required",
+                message: "Validation failed for 'top_logprobs': value is required"
+            )
+        }
+        token = try container.sdkDecodeRequired(.token)
+        logprob = try container.sdkDecodeRequired(.logprob)
+        bytes = try container.sdkDecodeRequired(.bytes)
+        topLogprobs = try container.sdkDecodeRequired(.topLogprobs)
+    }
+}
+
+public extension BetaLogProb {
+    init(token: String, logprob: Double, bytes: [Int], topLogprobs: [BetaTopLogProb]) {
         (self.token, self.logprob) = (token, logprob)
         (self.bytes, self.topLogprobs) = (bytes, topLogprobs)
     }
@@ -227,25 +259,37 @@ public struct BetaApproximateLocation: Codable {
         case timezone
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaApproximateLocation {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.country = try container.sdkDecodeIfPresent(.country)
-        self.region = try container.sdkDecodeIfPresent(.region)
-        self.city = try container.sdkDecodeIfPresent(.city)
-        self.timezone = try container.sdkDecodeIfPresent(.timezone)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaApproximateLocation {
-    public init(type: BetaApproximateLocationType, country: String? = nil, region: String? = nil, city: String? = nil, timezone: String? = nil) {
+public extension BetaApproximateLocation {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        country = try container.sdkDecodeIfPresent(.country)
+        region = try container.sdkDecodeIfPresent(.region)
+        city = try container.sdkDecodeIfPresent(.city)
+        timezone = try container.sdkDecodeIfPresent(.timezone)
+    }
+}
+
+public extension BetaApproximateLocation {
+    init(
+        type: BetaApproximateLocationType,
+        country: String? = nil,
+        region: String? = nil,
+        city: String? = nil,
+        timezone: String? = nil
+    ) {
         (self.type, self.country) = (type, country)
         (self.region, self.city) = (region, city)
         self.timezone = timezone
@@ -265,28 +309,38 @@ public struct BetaKeyPressAction: Codable {
         case keys
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaKeyPressAction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.keys) else {
-            throw SdkValidationError(field: "keys", code: "required", message: "Validation failed for 'keys': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.keys = try container.sdkDecodeRequired(.keys)
-            try sdkValidateRawEnum("type", self.type, BetaKeyPressActionType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaKeyPressAction {
-    public init(type: BetaKeyPressActionType, keys: [String]) throws {
+public extension BetaKeyPressAction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.keys) else {
+            throw SdkValidationError(
+                field: "keys",
+                code: "required",
+                message: "Validation failed for 'keys': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        keys = try container.sdkDecodeRequired(.keys)
+        try sdkValidateRawEnum("type", type, BetaKeyPressActionType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaKeyPressAction {
+    init(type: BetaKeyPressActionType, keys: [String]) throws {
         (self.type, self.keys) = (type, keys)
-            try sdkValidateRawEnum("type", self.type, BetaKeyPressActionType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaKeyPressActionType.allCases.map(\.rawValue))
     }
 }
 
@@ -305,33 +359,47 @@ public struct BetaHTTPError: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaHTTPError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.code = try container.sdkDecodeRequired(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-            try sdkValidateRawEnum("type", self.type, BetaHTTPErrorType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaHTTPError {
-    public init(type: BetaHTTPErrorType, code: Int, message: String) throws {
+public extension BetaHTTPError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        code = try container.sdkDecodeRequired(.code)
+        message = try container.sdkDecodeRequired(.message)
+        try sdkValidateRawEnum("type", type, BetaHTTPErrorType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaHTTPError {
+    init(type: BetaHTTPErrorType, code: Int, message: String) throws {
         (self.type, self.code) = (type, code)
         self.message = message
-            try sdkValidateRawEnum("type", self.type, BetaHTTPErrorType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaHTTPErrorType.allCases.map(\.rawValue))
     }
 }
 
@@ -350,32 +418,42 @@ public struct BetaSkillReferenceParam: Codable {
         case version
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaSkillReferenceParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.skillId) else {
-            throw SdkValidationError(field: "skill_id", code: "required", message: "Validation failed for 'skill_id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.skillId = try container.sdkDecodeRequired(.skillId)
-        self.version = try container.sdkDecodeIfPresent(.version)
-            try sdkValidateRawEnum("type", self.type, BetaSkillReferenceParamType.allCases.map(\.rawValue))
-            try validateLength("skill_id", self.skillId, min: 1, max: 64)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaSkillReferenceParam {
-    public init(type: BetaSkillReferenceParamType, skillId: String, version: String? = nil) throws {
+public extension BetaSkillReferenceParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.skillId) else {
+            throw SdkValidationError(
+                field: "skill_id",
+                code: "required",
+                message: "Validation failed for 'skill_id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        skillId = try container.sdkDecodeRequired(.skillId)
+        version = try container.sdkDecodeIfPresent(.version)
+        try sdkValidateRawEnum("type", type, BetaSkillReferenceParamType.allCases.map(\.rawValue))
+        try validateLength("skill_id", skillId, min: 1, max: 64)
+    }
+}
+
+public extension BetaSkillReferenceParam {
+    init(type: BetaSkillReferenceParamType, skillId: String, version: String? = nil) throws {
         (self.type, self.skillId) = (type, skillId)
         self.version = version
-            try sdkValidateRawEnum("type", self.type, BetaSkillReferenceParamType.allCases.map(\.rawValue))
-            try validateLength("skill_id", self.skillId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, BetaSkillReferenceParamType.allCases.map(\.rawValue))
+        try validateLength("skill_id", self.skillId, min: 1, max: 64)
     }
 }
 
@@ -397,37 +475,55 @@ public struct BetaDoubleClickAction: Codable {
         case keys
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaDoubleClickAction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.x) else {
-            throw SdkValidationError(field: "x", code: "required", message: "Validation failed for 'x': value is required")
-        }
-        guard container.contains(.y) else {
-            throw SdkValidationError(field: "y", code: "required", message: "Validation failed for 'y': value is required")
-        }
-        guard container.contains(.keys) else {
-            throw SdkValidationError(field: "keys", code: "required", message: "Validation failed for 'keys': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.x = try container.sdkDecodeRequired(.x)
-        self.y = try container.sdkDecodeRequired(.y)
-        self.keys = try container.sdkDecodeNullable(.keys)
-            try sdkValidateRawEnum("type", self.type, BetaDoubleClickActionType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaDoubleClickAction {
-    public init(type: BetaDoubleClickActionType, x: Int, y: Int, keys: [String]?) throws {
+public extension BetaDoubleClickAction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.x) else {
+            throw SdkValidationError(
+                field: "x",
+                code: "required",
+                message: "Validation failed for 'x': value is required"
+            )
+        }
+        guard container.contains(.y) else {
+            throw SdkValidationError(
+                field: "y",
+                code: "required",
+                message: "Validation failed for 'y': value is required"
+            )
+        }
+        guard container.contains(.keys) else {
+            throw SdkValidationError(
+                field: "keys",
+                code: "required",
+                message: "Validation failed for 'keys': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        x = try container.sdkDecodeRequired(.x)
+        y = try container.sdkDecodeRequired(.y)
+        keys = try container.sdkDecodeNullable(.keys)
+        try sdkValidateRawEnum("type", type, BetaDoubleClickActionType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaDoubleClickAction {
+    init(type: BetaDoubleClickActionType, x: Int, y: Int, keys: [String]?) throws {
         (self.type, self.x) = (type, x)
         (self.y, self.keys) = (y, keys)
-            try sdkValidateRawEnum("type", self.type, BetaDoubleClickActionType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaDoubleClickActionType.allCases.map(\.rawValue))
     }
 }
 
@@ -446,33 +542,47 @@ public struct BetaMCPProtocolError: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaMCPProtocolError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.code = try container.sdkDecodeRequired(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-            try sdkValidateRawEnum("type", self.type, BetaMCPProtocolErrorType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaMCPProtocolError {
-    public init(type: BetaMCPProtocolErrorType, code: Int, message: String) throws {
+public extension BetaMCPProtocolError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        code = try container.sdkDecodeRequired(.code)
+        message = try container.sdkDecodeRequired(.message)
+        try sdkValidateRawEnum("type", type, BetaMCPProtocolErrorType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaMCPProtocolError {
+    init(type: BetaMCPProtocolErrorType, code: Int, message: String) throws {
         (self.type, self.code) = (type, code)
         self.message = message
-            try sdkValidateRawEnum("type", self.type, BetaMCPProtocolErrorType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaMCPProtocolErrorType.allCases.map(\.rawValue))
     }
 }
 
@@ -483,14 +593,20 @@ public indirect enum BetaVectorStoreFileAttributesValue {
 }
 
 extension BetaVectorStoreFileAttributesValue: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaVectorStoreFileAttributesValue")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for BetaVectorStoreFileAttributesValue"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }

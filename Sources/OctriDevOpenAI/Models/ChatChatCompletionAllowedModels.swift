@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ChatChatCompletionAllowed domain models
+/// ChatChatCompletionAllowed domain models
 /// Constrains the tools available to the model to a pre-defined set.
 public struct ChatCompletionAllowedTools: Codable {
     /// Constrains the tools available to the model to a pre-defined set. `auto` allows the model to pick from among
@@ -20,25 +20,35 @@ public struct ChatCompletionAllowedTools: Codable {
         case tools
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatCompletionAllowedTools {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.mode) else {
-            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
-        }
-        guard container.contains(.tools) else {
-            throw SdkValidationError(field: "tools", code: "required", message: "Validation failed for 'tools': value is required")
-        }
-        self.mode = try container.sdkDecodeRequired(.mode)
-        self.tools = try container.sdkDecodeRequired(.tools)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatCompletionAllowedTools {
-    public init(mode: ChatCompletionAllowedToolsMode, tools: [[String: JSONValue]]) {
+public extension ChatCompletionAllowedTools {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.mode) else {
+            throw SdkValidationError(
+                field: "mode",
+                code: "required",
+                message: "Validation failed for 'mode': value is required"
+            )
+        }
+        guard container.contains(.tools) else {
+            throw SdkValidationError(
+                field: "tools",
+                code: "required",
+                message: "Validation failed for 'tools': value is required"
+            )
+        }
+        mode = try container.sdkDecodeRequired(.mode)
+        tools = try container.sdkDecodeRequired(.tools)
+    }
+}
+
+public extension ChatCompletionAllowedTools {
+    init(mode: ChatCompletionAllowedToolsMode, tools: [[String: JSONValue]]) {
         (self.mode, self.tools) = (mode, tools)
     }
 }
@@ -55,28 +65,38 @@ public struct ChatCompletionAllowedToolsChoice: Codable {
         case allowedTools = "allowed_tools"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatCompletionAllowedToolsChoice {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.allowedTools) else {
-            throw SdkValidationError(field: "allowed_tools", code: "required", message: "Validation failed for 'allowed_tools': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.allowedTools = try container.sdkDecodeRequired(.allowedTools)
-            try sdkValidateRawEnum("type", self.type, ChatCompletionAllowedToolsChoiceType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatCompletionAllowedToolsChoice {
-    public init(type: ChatCompletionAllowedToolsChoiceType, allowedTools: ChatCompletionAllowedTools) throws {
+public extension ChatCompletionAllowedToolsChoice {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.allowedTools) else {
+            throw SdkValidationError(
+                field: "allowed_tools",
+                code: "required",
+                message: "Validation failed for 'allowed_tools': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        allowedTools = try container.sdkDecodeRequired(.allowedTools)
+        try sdkValidateRawEnum("type", type, ChatCompletionAllowedToolsChoiceType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ChatCompletionAllowedToolsChoice {
+    init(type: ChatCompletionAllowedToolsChoiceType, allowedTools: ChatCompletionAllowedTools) throws {
         (self.type, self.allowedTools) = (type, allowedTools)
-            try sdkValidateRawEnum("type", self.type, ChatCompletionAllowedToolsChoiceType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ChatCompletionAllowedToolsChoiceType.allCases.map(\.rawValue))
     }
 }
 
@@ -86,13 +106,16 @@ extension ChatCompletionAllowedToolsChoice {
 public struct ChatCompletionAllowedToolsMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = ChatCompletionAllowedToolsMode(rawValue: "auto")
     public static let required = ChatCompletionAllowedToolsMode(rawValue: "required")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

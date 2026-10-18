@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Audio domain models
+/// Audio domain models
 public indirect enum CreateSpeechRequestVoice {
     case voiceIdsShared(VoiceIdsShared)
     case stringValue(String)
@@ -11,18 +11,26 @@ public indirect enum CreateSpeechRequestVoice {
 }
 
 extension CreateSpeechRequestVoice: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
         }
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateSpeechRequestVoice")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateSpeechRequestVoice"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
@@ -40,9 +48,16 @@ extension CreateSpeechRequestVoice {
 
 extension CreateSpeechRequestVoice {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(VoiceIdsShared.self) { return .voiceIdsShared(value) }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(CreateSpeechRequestVoiceVariant2.self) { return .createSpeechRequestVoiceVariant2(value) }
+        if let value = try? container.decode(VoiceIdsShared.self) {
+            return .voiceIdsShared(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container
+            .decode(CreateSpeechRequestVoiceVariant2.self) {
+            return .createSpeechRequestVoiceVariant2(value)
+        }
         return nil
     }
 }
@@ -66,7 +81,6 @@ public indirect enum CreateSpeechResponseStreamEvent {
 }
 
 extension CreateSpeechResponseStreamEvent: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -74,12 +88,16 @@ extension CreateSpeechResponseStreamEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -90,9 +108,9 @@ extension CreateSpeechResponseStreamEvent: Codable {
 extension CreateSpeechResponseStreamEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "speech.audio.delta": return .speechAudioDeltaEvent(try SpeechAudioDeltaEvent(from: decoder))
-        case "speech.audio.done": return .speechAudioDoneEvent(try SpeechAudioDoneEvent(from: decoder))
-        default: return nil
+        case "speech.audio.delta": try .speechAudioDeltaEvent(SpeechAudioDeltaEvent(from: decoder))
+        case "speech.audio.done": try .speechAudioDoneEvent(SpeechAudioDoneEvent(from: decoder))
+        default: nil
         }
     }
 }
@@ -114,22 +132,32 @@ public indirect enum CreateTranscriptionRequestChunkingStrategy {
 }
 
 extension CreateTranscriptionRequestChunkingStrategy: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateTranscriptionRequestChunkingStrategy")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateTranscriptionRequestChunkingStrategy"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension CreateTranscriptionRequestChunkingStrategy {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(VadConfig.self) { return .vadConfig(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(VadConfig.self) {
+            return .vadConfig(value)
+        }
         return nil
     }
 }
@@ -151,18 +179,26 @@ public indirect enum CreateTranscriptionResponse {
 }
 
 extension CreateTranscriptionResponse: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
         }
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateTranscriptionResponse")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateTranscriptionResponse"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
@@ -171,10 +207,16 @@ extension CreateTranscriptionResponse {
         if let value = try? container.decode(CreateTranscriptionResponseJson.self), sdkKeepsEveryKey(value, of: raw) {
             return .createTranscriptionResponseJson(value)
         }
-        if let value = try? container.decode(CreateTranscriptionResponseDiarizedJson.self), sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(CreateTranscriptionResponseDiarizedJson.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
             return .createTranscriptionResponseDiarizedJson(value)
         }
-        if let value = try? container.decode(CreateTranscriptionResponseVerboseJson.self), sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(CreateTranscriptionResponseVerboseJson.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
             return .createTranscriptionResponseVerboseJson(value)
         }
         return nil
@@ -183,16 +225,19 @@ extension CreateTranscriptionResponse {
 
 extension CreateTranscriptionResponse {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(CreateTranscriptionResponseJson.self) { return .createTranscriptionResponseJson(value) }
+        if let value = try? container
+            .decode(CreateTranscriptionResponseJson.self) {
+            return .createTranscriptionResponseJson(value)
+        }
         if let value = try? container.decode(
             CreateTranscriptionResponseDiarizedJson.self
         ) {
-            return             .createTranscriptionResponseDiarizedJson(value)
+            return .createTranscriptionResponseDiarizedJson(value)
         }
         if let value = try? container.decode(
             CreateTranscriptionResponseVerboseJson.self
         ) {
-            return             .createTranscriptionResponseVerboseJson(value)
+            return .createTranscriptionResponseVerboseJson(value)
         }
         return nil
     }
@@ -217,7 +262,6 @@ public indirect enum CreateTranscriptionResponseDiarizedJsonUsage {
 }
 
 extension CreateTranscriptionResponseDiarizedJsonUsage: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -225,12 +269,16 @@ extension CreateTranscriptionResponseDiarizedJsonUsage: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -241,9 +289,9 @@ extension CreateTranscriptionResponseDiarizedJsonUsage: Codable {
 extension CreateTranscriptionResponseDiarizedJsonUsage {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "tokens": return .transcriptTextUsageTokens(try TranscriptTextUsageTokens(from: decoder))
-        case "duration": return .transcriptTextUsageDuration(try TranscriptTextUsageDuration(from: decoder))
-        default: return nil
+        case "tokens": try .transcriptTextUsageTokens(TranscriptTextUsageTokens(from: decoder))
+        case "duration": try .transcriptTextUsageDuration(TranscriptTextUsageDuration(from: decoder))
+        default: nil
         }
     }
 }
@@ -267,7 +315,6 @@ public indirect enum CreateTranscriptionResponseJsonUsage {
 }
 
 extension CreateTranscriptionResponseJsonUsage: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -275,12 +322,16 @@ extension CreateTranscriptionResponseJsonUsage: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -291,9 +342,9 @@ extension CreateTranscriptionResponseJsonUsage: Codable {
 extension CreateTranscriptionResponseJsonUsage {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "tokens": return .transcriptTextUsageTokens(try TranscriptTextUsageTokens(from: decoder))
-        case "duration": return .transcriptTextUsageDuration(try TranscriptTextUsageDuration(from: decoder))
-        default: return nil
+        case "tokens": try .transcriptTextUsageTokens(TranscriptTextUsageTokens(from: decoder))
+        case "duration": try .transcriptTextUsageDuration(TranscriptTextUsageDuration(from: decoder))
+        default: nil
         }
     }
 }
@@ -318,7 +369,6 @@ public indirect enum CreateTranscriptionResponseStreamEvent {
 }
 
 extension CreateTranscriptionResponseStreamEvent: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -326,12 +376,16 @@ extension CreateTranscriptionResponseStreamEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -342,10 +396,10 @@ extension CreateTranscriptionResponseStreamEvent: Codable {
 extension CreateTranscriptionResponseStreamEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "transcript.text.segment": return .transcriptTextSegmentEvent(try TranscriptTextSegmentEvent(from: decoder))
-        case "transcript.text.delta": return .transcriptTextDeltaEvent(try TranscriptTextDeltaEvent(from: decoder))
-        case "transcript.text.done": return .transcriptTextDoneEvent(try TranscriptTextDoneEvent(from: decoder))
-        default: return nil
+        case "transcript.text.segment": try .transcriptTextSegmentEvent(TranscriptTextSegmentEvent(from: decoder))
+        case "transcript.text.delta": try .transcriptTextDeltaEvent(TranscriptTextDeltaEvent(from: decoder))
+        case "transcript.text.done": try .transcriptTextDoneEvent(TranscriptTextDoneEvent(from: decoder))
+        default: nil
         }
     }
 }
@@ -368,18 +422,26 @@ public indirect enum CreateTranslationResponse {
 }
 
 extension CreateTranslationResponse: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
         }
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateTranslationResponse")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateTranslationResponse"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
@@ -388,7 +450,10 @@ extension CreateTranslationResponse {
         if let value = try? container.decode(CreateTranslationResponseJson.self), sdkKeepsEveryKey(value, of: raw) {
             return .createTranslationResponseJson(value)
         }
-        if let value = try? container.decode(CreateTranslationResponseVerboseJson.self), sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(CreateTranslationResponseVerboseJson.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
             return .createTranslationResponseVerboseJson(value)
         }
         return nil
@@ -397,11 +462,14 @@ extension CreateTranslationResponse {
 
 extension CreateTranslationResponse {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(CreateTranslationResponseJson.self) { return .createTranslationResponseJson(value) }
+        if let value = try? container
+            .decode(CreateTranslationResponseJson.self) {
+            return .createTranslationResponseJson(value)
+        }
         if let value = try? container.decode(
             CreateTranslationResponseVerboseJson.self
         ) {
-            return             .createTranslationResponseVerboseJson(value)
+            return .createTranslationResponseVerboseJson(value)
         }
         return nil
     }
@@ -424,7 +492,6 @@ public indirect enum CreateVoiceRequest {
 }
 
 extension CreateVoiceRequest: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -432,20 +499,29 @@ extension CreateVoiceRequest: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateVoiceRequest")
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateVoiceRequest"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -456,15 +532,18 @@ extension CreateVoiceRequest: Codable {
 extension CreateVoiceRequest {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "audio_sample": return .createVoiceFromConsentRequest(try CreateVoiceFromConsentRequest(from: decoder))
-        default: return nil
+        case "audio_sample": try .createVoiceFromConsentRequest(CreateVoiceFromConsentRequest(from: decoder))
+        default: nil
         }
     }
 }
 
 extension CreateVoiceRequest {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(CreateVoiceFromConsentRequest.self) { return .createVoiceFromConsentRequest(value) }
+        if let value = try? container
+            .decode(CreateVoiceFromConsentRequest.self) {
+            return .createVoiceFromConsentRequest(value)
+        }
         return nil
     }
 }
@@ -497,5 +576,7 @@ public struct CreateTranslationResponseVerboseJson: Codable {
         case segments
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

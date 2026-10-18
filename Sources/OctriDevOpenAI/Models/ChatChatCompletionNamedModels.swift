@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ChatChatCompletionNamed domain models
+/// ChatChatCompletionNamed domain models
 /// Required object value serialized in the `custom` wire field.
 public struct ChatCompletionNamedToolChoiceCustomCustom: Codable {
     /// The name of the custom tool to call.
@@ -13,21 +13,27 @@ public struct ChatCompletionNamedToolChoiceCustomCustom: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatCompletionNamedToolChoiceCustomCustom {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatCompletionNamedToolChoiceCustomCustom {
-    public init(name: String) {
+public extension ChatCompletionNamedToolChoiceCustomCustom {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+    }
+}
+
+public extension ChatCompletionNamedToolChoiceCustomCustom {
+    init(name: String) {
         self.name = name
     }
 }
@@ -44,28 +50,38 @@ public struct ChatCompletionNamedToolChoiceCustom: Codable {
         case custom
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatCompletionNamedToolChoiceCustom {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.custom) else {
-            throw SdkValidationError(field: "custom", code: "required", message: "Validation failed for 'custom': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.custom = try container.sdkDecodeRequired(.custom)
-            try sdkValidateRawEnum("type", self.type, ChatCompletionNamedToolChoiceCustomType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatCompletionNamedToolChoiceCustom {
-    public init(type: ChatCompletionNamedToolChoiceCustomType, custom: ChatCompletionNamedToolChoiceCustomCustom) throws {
+public extension ChatCompletionNamedToolChoiceCustom {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.custom) else {
+            throw SdkValidationError(
+                field: "custom",
+                code: "required",
+                message: "Validation failed for 'custom': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        custom = try container.sdkDecodeRequired(.custom)
+        try sdkValidateRawEnum("type", type, ChatCompletionNamedToolChoiceCustomType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ChatCompletionNamedToolChoiceCustom {
+    init(type: ChatCompletionNamedToolChoiceCustomType, custom: ChatCompletionNamedToolChoiceCustomCustom) throws {
         (self.type, self.custom) = (type, custom)
-            try sdkValidateRawEnum("type", self.type, ChatCompletionNamedToolChoiceCustomType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ChatCompletionNamedToolChoiceCustomType.allCases.map(\.rawValue))
     }
 }
 
@@ -78,21 +94,27 @@ public struct ChatCompletionNamedToolChoiceFunction: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatCompletionNamedToolChoiceFunction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatCompletionNamedToolChoiceFunction {
-    public init(name: String) {
+public extension ChatCompletionNamedToolChoiceFunction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+    }
+}
+
+public extension ChatCompletionNamedToolChoiceFunction {
+    init(name: String) {
         self.name = name
     }
 }
@@ -109,28 +131,38 @@ public struct ChatCompletionNamedToolChoice: Codable {
         case function
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatCompletionNamedToolChoice {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.function) else {
-            throw SdkValidationError(field: "function", code: "required", message: "Validation failed for 'function': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.function = try container.sdkDecodeRequired(.function)
-            try sdkValidateRawEnum("type", self.type, ChatCompletionNamedToolChoiceType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatCompletionNamedToolChoice {
-    public init(type: ChatCompletionNamedToolChoiceType, function: ChatCompletionNamedToolChoiceFunction) throws {
+public extension ChatCompletionNamedToolChoice {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.function) else {
+            throw SdkValidationError(
+                field: "function",
+                code: "required",
+                message: "Validation failed for 'function': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        function = try container.sdkDecodeRequired(.function)
+        try sdkValidateRawEnum("type", type, ChatCompletionNamedToolChoiceType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ChatCompletionNamedToolChoice {
+    init(type: ChatCompletionNamedToolChoiceType, function: ChatCompletionNamedToolChoiceFunction) throws {
         (self.type, self.function) = (type, function)
-            try sdkValidateRawEnum("type", self.type, ChatCompletionNamedToolChoiceType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ChatCompletionNamedToolChoiceType.allCases.map(\.rawValue))
     }
 }
 

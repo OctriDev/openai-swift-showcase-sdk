@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ResponsesMethods {
-    public struct CountResponsesInputTokensOptions: Codable {
+public extension ResponsesMethods {
+    struct CountResponsesInputTokensOptions: Codable {
         public var model: SdkOptional<String>?
         public var input: SdkOptional<TokenCountsBodyInput>?
         public var previousResponseId: SdkOptional<String>?
@@ -24,9 +24,12 @@ extension ResponsesMethods {
         public init() {}
     }
 
-    /// Counts the input tokens for a response request. Provide the model and any input or conversation context to count, and use `input_tokens` in the result to inspect the count. Do not combine `previous_response_id` with `conversation`.
+    /// Counts the input tokens for a response request. Provide the model and any input or conversation context to
+    /// count, and use `input_tokens` in the result to inspect the count. Do not combine `previous_response_id` with
+    /// `conversation`.
     ///
-    /// Returns input token counts of the request. Returns an object with `object` set to `response.input_tokens` and an `input_tokens` count.
+    /// Returns input token counts of the request. Returns an object with `object` set to `response.input_tokens` and an
+    /// `input_tokens` count.
     ///
     /// - Parameters:
     /// - model: Optional `string` value serialized in the `model` wire field.
@@ -54,9 +57,22 @@ extension ResponsesMethods {
     /// - toolChoice: Optional API value serialized in the `tool_choice` wire field.
     /// - parallelToolCalls: Optional `boolean` value serialized in the
     ///   `parallel_tool_calls` wire field.
-    public static func countResponsesInputTokens(config: ClientConfig, options: CountResponsesInputTokensOptions, requestOptions: RequestOptions? = nil) async throws -> TokenCountsResource {
+    static func countResponsesInputTokens(
+        config: ClientConfig,
+        options: CountResponsesInputTokensOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> TokenCountsResource {
         let requestBody = CountResponsesInputTokensRequestBody(options: options)
 
-        return try (await sdkRequest("POST", "/responses/input_tokens", config: config, body: requestBody, decoder: .json, operationId: "countResponsesInputTokens", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/responses/input_tokens",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "countResponsesInputTokens",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }
