@@ -4,6 +4,28 @@
 import Foundation
 
 // RealtimeRealtime domain models
+/// Retain a fraction of the conversation tokens when the conversation exceeds the input token limit. This allows
+/// you to amortize truncations across multiple turns, which can help improve cached token usage.
+public struct RealtimeTruncationVariant1: Codable {
+    /// Use retention ratio truncation.
+    public var type: RealtimeTruncationVariant1Type
+    /// Fraction of post-instruction conversation tokens to retain (`0.0` - `1.0`) when the conversation exceeds the
+    /// input token limit. Setting this to `0.8` means that messages will be dropped until 80% of the maximum
+    /// allowed tokens are used. This helps reduce the frequency of truncations and improve cache rates.
+    public var retentionRatio: Double
+    /// Optional custom token limits for this truncation strategy. If not provided, the model's default token limits
+    /// will be used.
+    public var tokenLimits: RealtimeTruncationVariant1TokenLimits?
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case retentionRatio = "retention_ratio"
+        case tokenLimits = "token_limits"
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
 extension RealtimeTruncationVariant1 {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

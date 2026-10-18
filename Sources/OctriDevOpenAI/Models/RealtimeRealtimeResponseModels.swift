@@ -82,12 +82,27 @@ extension RealtimeResponseCreateParamsToolsItem: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+        }
         if let value = Self.decodeGroup1(from: container) { self = value; return }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeResponseCreateParamsToolsItem")
     }
 
     public func encode(to encoder: Encoder) throws {
         if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension RealtimeResponseCreateParamsToolsItem {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(RealtimeFunctionTool.self), sdkKeepsEveryKey(value, of: raw) {
+            return .realtimeFunctionTool(value)
+        }
+        if let value = try? container.decode(MCPTool.self), sdkKeepsEveryKey(value, of: raw) {
+            return .mCpTool(value)
+        }
+        return nil
     }
 }
 
@@ -527,22 +542,5 @@ public struct RealtimeResponse: Codable {
         (self.id, self.object, self.status, self.statusDetails, self.output) = (nil, nil, nil, nil, nil)
         (self.metadata, self.audio, self.usage, self.conversationId, self.outputModalities) = (nil, nil, nil, nil, nil)
         self.maxOutputTokens = nil
-    }
-}
-
-extension RealtimeResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.object = try container.sdkDecodeIfPresent(.object)
-        self.status = try container.sdkDecodeIfPresent(.status)
-        self.statusDetails = try container.sdkDecodeIfPresent(.statusDetails)
-        self.output = try container.sdkDecodeIfPresent(.output)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.usage = try container.sdkDecodeIfPresent(.usage)
-        self.conversationId = try container.sdkDecodeIfPresent(.conversationId)
-        self.outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
-        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
     }
 }

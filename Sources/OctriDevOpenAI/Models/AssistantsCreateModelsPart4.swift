@@ -5,6 +5,15 @@ import Foundation
 
 // AssistantsCreate domain models
 extension CreateRunRequestModel {
+    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(AssistantSupportedModels.self) { return .assistantSupportedModels(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
+        return nil
+    }
+}
+
+extension CreateRunRequestModel {
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {

@@ -4,6 +4,65 @@
 import Foundation
 
 // AssistantsRun domain models
+extension RunStreamEventVariant1 {
+    public init(event: RunStreamEventVariant1Event, data: RunObject) throws {
+        (self.event, self.data) = (event, data)
+            try sdkValidateRawEnum("event", self.event, RunStreamEventVariant1Event.allCases.map(\.rawValue))
+    }
+}
+
+/// Typed representation of the `RunStepDetailsToolCallsCodeOutputImageObject` API schema.
+public struct RunStepDetailsToolCallsCodeOutputImageObject: Codable {
+    /// Always `image`.
+    public var type: RunStepDetailsToolCallsCodeOutputImageObjectType
+    /// Required object value serialized in the `image` wire field.
+    public var image: RunStepDetailsToolCallsCodeOutputImageObjectImage
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case image
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension RunStepDetailsToolCallsCodeOutputImageObject {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+        }
+        guard container.contains(.image) else {
+            throw SdkValidationError(field: "image", code: "required", message: "Validation failed for 'image': value is required")
+        }
+        self.type = try container.sdkDecodeRequired(.type)
+        self.image = try container.sdkDecodeRequired(.image)
+            try sdkValidateRawEnum("type", self.type, RunStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue))
+    }
+}
+
+extension RunStepDetailsToolCallsCodeOutputImageObject {
+    public init(type: RunStepDetailsToolCallsCodeOutputImageObjectType, image: RunStepDetailsToolCallsCodeOutputImageObjectImage) throws {
+        (self.type, self.image) = (type, image)
+            try sdkValidateRawEnum("type", self.type, RunStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue))
+    }
+}
+
+/// Details of the message creation by the run step.
+public struct RunStepDeltaStepDetailsMessageCreationObject: Codable {
+    /// Always `message_creation`.
+    public var type: RunStepDeltaStepDetailsMessageCreationObjectType
+    /// Optional object value serialized in the `message_creation` wire field.
+    public var messageCreation: RunStepDeltaStepDetailsMessageCreationObjectMessageCreation?
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case messageCreation = "message_creation"
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
 extension RunStepDeltaStepDetailsMessageCreationObject {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -426,61 +485,4 @@ extension RunStepStreamEventVariant4 {
         (self.event, self.data) = (event, data)
             try sdkValidateRawEnum("event", self.event, RunStepStreamEventVariant4Event.allCases.map(\.rawValue))
     }
-}
-
-/// Occurs when a run moves to a `cancelling` status.
-public struct RunStreamEventVariant7: Codable {
-    public var event: RunStreamEventVariant7Event
-    /// Represents an execution run on a thread.
-    public var data: RunObject
-
-    enum CodingKeys: String, CodingKey {
-        case event
-        case data
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunStreamEventVariant7 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.event) else {
-            throw SdkValidationError(field: "event", code: "required", message: "Validation failed for 'event': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        self.event = try container.sdkDecodeRequired(.event)
-        self.data = try container.sdkDecodeRequired(.data)
-            try sdkValidateRawEnum("event", self.event, RunStreamEventVariant7Event.allCases.map(\.rawValue))
-    }
-}
-
-extension RunStreamEventVariant7 {
-    public init(event: RunStreamEventVariant7Event, data: RunObject) throws {
-        (self.event, self.data) = (event, data)
-            try sdkValidateRawEnum("event", self.event, RunStreamEventVariant7Event.allCases.map(\.rawValue))
-    }
-}
-
-/// Typed representation of the `RunStepDeltaStepDetailsToolCallsFileSearchObject` API schema.
-public struct RunStepDeltaStepDetailsToolCallsFileSearchObject: Codable {
-    /// The index of the tool call in the tool calls array.
-    public var index: Int
-    /// The type of tool call. This is always going to be `file_search` for this type of tool call.
-    public var type: RunStepDeltaStepDetailsToolCallsFileSearchObjectType
-    /// For now, this is always going to be an empty object.
-    public var fileSearch: [String: JSONValue]
-    /// The ID of the tool call object.
-    public var id: String?
-
-    enum CodingKeys: String, CodingKey {
-        case index
-        case type
-        case fileSearch = "file_search"
-        case id
-    }
-
-    private init(sdkCopy value: Self) { self = value }
 }

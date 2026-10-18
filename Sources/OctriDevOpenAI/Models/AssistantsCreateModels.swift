@@ -17,12 +17,29 @@ extension CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXba30eed7
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+        }
         if let value = Self.decodeGroup1(from: container) { self = value; return }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXba30eed7a0")
     }
 
     public func encode(to encoder: Encoder) throws {
         if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXba30eed7a0 {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(CreateAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b.self),
+           sdkKeepsEveryKey(value, of: raw) {
+            return .createAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b(value)
+        }
+        if let value = try? container.decode(CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXa2a89b08ca.self),
+           sdkKeepsEveryKey(value, of: raw) {
+            return .createAssistantRequestToolResourcesFileSearchVectorStoresItemXa2a89b08ca(value)
+        }
+        return nil
     }
 }
 
@@ -327,12 +344,29 @@ extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff1
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+        }
         if let value = Self.decodeGroup1(from: container) { self = value; return }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179")
     }
 
     public func encode(to encoder: Encoder) throws {
         if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179 {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51.self),
+           sdkKeepsEveryKey(value, of: raw) {
+            return .createThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51(value)
+        }
+        if let value = try? container.decode(CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4.self),
+           sdkKeepsEveryKey(value, of: raw) {
+            return .createThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4(value)
+        }
+        return nil
     }
 }
 

@@ -193,6 +193,7 @@ extension ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParam {
         self.action = try container.sdkDecodeRequired(.action)
         self.fields = try container.sdkDecodeRequired(.fields)
         self.selectedOption = try container.sdkDecodeIfPresent(.selectedOption)
+            try sdkValidateRawEnum("type", self.type, ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamType.allCases.map(\.rawValue))
             try sdkValidateRawEnum("action", self.action, ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamAction.allCases.map(\.rawValue))
             try validateItems("fields", self.fields, min: 0, max: 6)
         if let value = self.selectedOption {
@@ -205,6 +206,7 @@ extension ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParam {
     public init(type: ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamType, action: ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamAction, fields: [BrowserAuthenticationFieldValueParam], selectedOption: String? = nil) throws {
         (self.type, self.action) = (type, action)
         (self.fields, self.selectedOption) = (fields, selectedOption)
+            try sdkValidateRawEnum("type", self.type, ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamType.allCases.map(\.rawValue))
             try sdkValidateRawEnum("action", self.action, ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamAction.allCases.map(\.rawValue))
             try validateItems("fields", self.fields, min: 0, max: 6)
         if let value = self.selectedOption {
@@ -239,6 +241,7 @@ extension ComputerUseApprovalResponseParamBrowserAuthenticationCancelParam {
         }
         self.type = try container.sdkDecodeRequired(.type)
         self.action = try container.sdkDecodeRequired(.action)
+            try sdkValidateRawEnum("type", self.type, ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType.allCases.map(\.rawValue))
             try sdkValidateRawEnum("action", self.action, ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamAction.allCases.map(\.rawValue))
     }
 }
@@ -246,6 +249,7 @@ extension ComputerUseApprovalResponseParamBrowserAuthenticationCancelParam {
 extension ComputerUseApprovalResponseParamBrowserAuthenticationCancelParam {
     public init(type: ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType, action: ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamAction) throws {
         (self.type, self.action) = (type, action)
+            try sdkValidateRawEnum("type", self.type, ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType.allCases.map(\.rawValue))
             try sdkValidateRawEnum("action", self.action, ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamAction.allCases.map(\.rawValue))
     }
 }
@@ -425,23 +429,5 @@ public struct ComputerUseApprovalResponseKindResourceBrowserAuthenticationSX422f
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
-    }
-}
-
-/// The item type. Always `computer_use_call`.
-public enum ComputerUseCallItemResourceType: String, CaseIterable, Codable {
-    case computerUseCall = "computer_use_call"
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "ComputerUseCallItemResourceType"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
     }
 }

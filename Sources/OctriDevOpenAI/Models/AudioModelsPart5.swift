@@ -4,6 +4,120 @@
 import Foundation
 
 // Audio domain models
+extension CreateVoiceConsentRequest {
+    public init(name: String, recording: Data, language: String) {
+        (self.name, self.recording) = (name, recording)
+        self.language = language
+    }
+}
+
+/// Typed representation of the `VoiceConsentDeletedResource` API schema.
+public struct VoiceConsentDeletedResource: Codable {
+    /// The consent recording identifier.
+    /// - Example: "cons_1234"
+    public var id: String
+    /// Required enumerated value serialized in the `object` wire field.
+    public var object: VoiceConsentDeletedResourceObject
+    /// Required `boolean` value serialized in the `deleted` wire field.
+    public var deleted: Bool
+
+    enum CodingKeys: String, CodingKey {
+        case id
+        case object
+        case deleted
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension VoiceConsentDeletedResource {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
+        }
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
+    }
+}
+
+extension VoiceConsentDeletedResource {
+    public init(id: String, object: VoiceConsentDeletedResourceObject, deleted: Bool) {
+        (self.id, self.object) = (id, object)
+        self.deleted = deleted
+    }
+}
+
+/// Typed representation of the `UpdateVoiceConsentRequest` API schema.
+public struct UpdateVoiceConsentRequest: Codable {
+    /// The updated label for this consent recording.
+    public var name: String
+
+    enum CodingKeys: String, CodingKey {
+        case name
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension UpdateVoiceConsentRequest {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+        }
+        self.name = try container.sdkDecodeRequired(.name)
+    }
+}
+
+extension UpdateVoiceConsentRequest {
+    public init(name: String) {
+        self.name = name
+    }
+}
+
+/// Typed representation of the `CreateSpeechRequest` API schema.
+public struct CreateSpeechRequest: Codable {
+    /// One of the available TTS models: `tts-1`, `tts-1-hd`, `gpt-4o-mini-tts`, or `gpt-4o-mini-tts-2025-12-15`.
+    public var model: String
+    /// The text to generate audio for. The maximum length is 4096 characters.
+    public var input: String
+    /// The voice to use when generating the audio. Supported built-in voices are `alloy`, `ash`, `ballad`, `coral`,
+    /// `echo`, `fable`, `onyx`, `nova`, `sage`, `shimmer`, `verse`, `marin`, and `cedar`. You may also provide a
+    /// custom voice object with an `id`, for example `{ "id": "voice_1234" }`. Previews of the voices are available
+    /// in the Text to speech guide. Custom voices must be created from audio samples.
+    public var voice: CreateSpeechRequestVoice
+    /// Control the voice of your generated audio with additional instructions. Does not work with `tts-1` or
+    /// `tts-1-hd`.
+    public var instructions: String?
+    /// The format to audio in. Supported formats are `mp3`, `opus`, `aac`, `flac`, `wav`, and `pcm`.
+    public var responseFormat: CreateSpeechRequestResponseFormat?
+    /// The speed of the generated audio. Select a value from `0.25` to `4.0`. `1.0` is the default.
+    public var speed: Double?
+    /// The format to stream the audio in. Supported formats are `sse` and `audio`. `sse` is not supported for
+    /// `tts-1` or `tts-1-hd`.
+    public var streamFormat: CreateSpeechRequestStreamFormat?
+
+    enum CodingKeys: String, CodingKey {
+        case model
+        case input
+        case voice
+        case instructions
+        case responseFormat = "response_format"
+        case speed
+        case streamFormat = "stream_format"
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
 extension CreateSpeechRequest {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -201,26 +315,6 @@ public struct CreateTranscriptionResponseDiarizedJsonTask: RawRepresentable, Has
     }
 }
 
-/// Required enumerated value serialized in the `voice` wire field.
-public struct CreateSpeechRequestVoiceVariant0Variant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
-    public let rawValue: String
-
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let fable = CreateSpeechRequestVoiceVariant0Variant1(rawValue: "fable")
-    public static let onyx = CreateSpeechRequestVoiceVariant0Variant1(rawValue: "onyx")
-    public static let nova = CreateSpeechRequestVoiceVariant0Variant1(rawValue: "nova")
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
 /// The type of the event. Always `transcript.text.delta`.
 public enum TranscriptTextDeltaEventType: String, CaseIterable, Codable {
     case transcriptTextDelta = "transcript.text.delta"
@@ -245,6 +339,26 @@ public struct VadConfigType: RawRepresentable, Hashable, Codable, Sendable, SdkW
 
     public init(rawValue: String) { self.rawValue = rawValue }
     public static let serverVad = VadConfigType(rawValue: "server_vad")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Required enumerated value serialized in the `voice` wire field.
+public struct CreateSpeechRequestVoiceVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let fable = CreateSpeechRequestVoiceVariant1(rawValue: "fable")
+    public static let onyx = CreateSpeechRequestVoiceVariant1(rawValue: "onyx")
+    public static let nova = CreateSpeechRequestVoiceVariant1(rawValue: "nova")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -335,24 +449,6 @@ public enum SpeechAudioDeltaEventType: String, CaseIterable, Codable {
     }
 }
 
-/// Automatically set chunking parameters based on the audio. Must be set to `"auto"`.
-public struct CreateTranscriptionRequestChunkingStrategyVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
-    public let rawValue: String
-
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let auto = CreateTranscriptionRequestChunkingStrategyVariant0(rawValue: "auto")
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
 /// Required enumerated value serialized in the `object` wire field.
 public struct VoiceConsentListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
@@ -377,6 +473,24 @@ public struct VoiceResourceType: RawRepresentable, Hashable, Codable, Sendable, 
 
     public init(rawValue: String) { self.rawValue = rawValue }
     public static let audioSample = VoiceResourceType(rawValue: "audio_sample")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Automatically set chunking parameters based on the audio. Must be set to `"auto"`.
+public struct CreateTranscriptionRequestChunkingStrategyVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let auto = CreateTranscriptionRequestChunkingStrategyVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -428,77 +542,5 @@ public struct CreateSpeechRequestResponseFormat: RawRepresentable, Hashable, Cod
     public func encode(to encoder: Encoder) throws {
         var container = encoder.singleValueContainer()
         try container.encode(rawValue)
-    }
-}
-
-/// The type of the usage object. Always `tokens` for this variant.
-public enum TranscriptTextUsageTokensType: String, CaseIterable, Codable {
-    case tokens
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "TranscriptTextUsageTokensType"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
-    }
-}
-
-/// The type of the segment. Always `transcript.text.segment`.
-public struct TranscriptionDiarizedSegmentType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
-    public let rawValue: String
-
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let transcriptTextSegment = TranscriptionDiarizedSegmentType(rawValue: "transcript.text.segment")
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
-    }
-}
-
-/// The type of the usage object. Always `duration` for this variant.
-public enum TranscriptTextUsageDurationType: String, CaseIterable, Codable {
-    case duration
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "TranscriptTextUsageDurationType"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
-    }
-}
-
-/// The voice creation method. Defaults to `audio_sample` when omitted.
-public enum CreateVoiceFromConsentRequestType: String, CaseIterable, Codable {
-    case audioSample = "audio_sample"
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "CreateVoiceFromConsentRequestType"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
     }
 }

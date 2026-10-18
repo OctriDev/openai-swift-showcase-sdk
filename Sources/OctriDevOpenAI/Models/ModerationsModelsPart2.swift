@@ -5,6 +5,21 @@ import Foundation
 
 // Moderations domain models
 extension CreateModerationRequestInputItemVariant1 {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
+        }
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+            try sdkValidateRawEnum("type", self.type, CreateModerationRequestInputItemVariant1Type.allCases.map(\.rawValue))
+    }
+}
+
+extension CreateModerationRequestInputItemVariant1 {
     public init(type: CreateModerationRequestInputItemVariant1Type, text: String) throws {
         (self.type, self.text) = (type, text)
             try sdkValidateRawEnum("type", self.type, CreateModerationRequestInputItemVariant1Type.allCases.map(\.rawValue))

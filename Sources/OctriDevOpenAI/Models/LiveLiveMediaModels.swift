@@ -59,6 +59,7 @@ extension LiveMediaSessionCreateParams {
         self.store = try container.sdkDecodeIfPresent(.store)
         self.input = try container.sdkDecodeIfPresent(.input)
         self.client = try container.sdkDecodeIfPresent(.client)
+            try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
         if let value = self.triggers {
             try validateItems("triggers", value, min: nil, max: 2)
         }
@@ -74,6 +75,7 @@ extension LiveMediaSessionCreateParams {
         (self.audio, self.delegation) = (audio, delegation)
         (self.triggers, self.store) = (triggers, store)
         (self.input, self.client) = (input, client)
+            try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
         if let value = self.triggers {
             try validateItems("triggers", value, min: nil, max: 2)
         }

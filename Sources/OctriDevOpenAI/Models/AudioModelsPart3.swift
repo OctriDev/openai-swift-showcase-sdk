@@ -4,6 +4,289 @@
 import Foundation
 
 // Audio domain models
+/// Token usage statistics for the request.
+public struct SpeechAudioDoneEventUsage: Codable {
+    /// Number of input tokens in the prompt.
+    public var inputTokens: Int
+    /// Number of output tokens generated.
+    public var outputTokens: Int
+    /// Total number of tokens used (input + output).
+    public var totalTokens: Int
+
+    enum CodingKeys: String, CodingKey {
+        case inputTokens = "input_tokens"
+        case outputTokens = "output_tokens"
+        case totalTokens = "total_tokens"
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension SpeechAudioDoneEventUsage {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.inputTokens) else {
+            throw SdkValidationError(field: "input_tokens", code: "required", message: "Validation failed for 'input_tokens': value is required")
+        }
+        guard container.contains(.outputTokens) else {
+            throw SdkValidationError(field: "output_tokens", code: "required", message: "Validation failed for 'output_tokens': value is required")
+        }
+        guard container.contains(.totalTokens) else {
+            throw SdkValidationError(field: "total_tokens", code: "required", message: "Validation failed for 'total_tokens': value is required")
+        }
+        self.inputTokens = try container.sdkDecodeRequired(.inputTokens)
+        self.outputTokens = try container.sdkDecodeRequired(.outputTokens)
+        self.totalTokens = try container.sdkDecodeRequired(.totalTokens)
+    }
+}
+
+extension SpeechAudioDoneEventUsage {
+    public init(inputTokens: Int, outputTokens: Int, totalTokens: Int) {
+        (self.inputTokens, self.outputTokens) = (inputTokens, outputTokens)
+        self.totalTokens = totalTokens
+    }
+}
+
+/// Required object value serialized in the `logprobs[]` wire field.
+public struct CreateTranscriptionResponseJsonLogprobsItem: Codable {
+    /// The token in the transcription.
+    public var token: String?
+    /// The log probability of the token.
+    public var logprob: Double?
+    /// The bytes of the token.
+    public var bytes: [Double]?
+
+    enum CodingKeys: String, CodingKey {
+        case token
+        case logprob
+        case bytes
+    }
+
+    init() {
+        (self.token, self.logprob, self.bytes) = (nil, nil, nil)
+    }
+}
+
+extension CreateTranscriptionResponseJsonLogprobsItem {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.token = try container.sdkDecodeIfPresent(.token)
+        self.logprob = try container.sdkDecodeIfPresent(.logprob)
+        self.bytes = try container.sdkDecodeIfPresent(.bytes)
+    }
+}
+
+extension CreateTranscriptionResponseJsonLogprobsItem {
+    public init(token: String? = nil, logprob: Double? = nil, bytes: [Double]? = nil) {
+        self.init()
+        (self.token, self.logprob) = (token, logprob)
+        self.bytes = bytes
+    }
+}
+
+/// Typed representation of the `TranscriptionWord` API schema.
+public struct TranscriptionWord: Codable {
+    /// The text content of the word.
+    public var word: String
+    /// Start time of the word in seconds.
+    public var start: Double
+    /// End time of the word in seconds.
+    public var end: Double
+
+    enum CodingKeys: String, CodingKey {
+        case word
+        case start
+        case end
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension TranscriptionWord {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.word) else {
+            throw SdkValidationError(field: "word", code: "required", message: "Validation failed for 'word': value is required")
+        }
+        guard container.contains(.start) else {
+            throw SdkValidationError(field: "start", code: "required", message: "Validation failed for 'start': value is required")
+        }
+        guard container.contains(.end) else {
+            throw SdkValidationError(field: "end", code: "required", message: "Validation failed for 'end': value is required")
+        }
+        self.word = try container.sdkDecodeRequired(.word)
+        self.start = try container.sdkDecodeRequired(.start)
+        self.end = try container.sdkDecodeRequired(.end)
+    }
+}
+
+extension TranscriptionWord {
+    public init(word: String, start: Double, end: Double) {
+        (self.word, self.start) = (word, start)
+        self.end = end
+    }
+}
+
+/// Details about the input tokens billed for this request.
+public struct TranscriptTextUsageTokensInputTokenDetails: Codable {
+    /// Number of text tokens billed for this request.
+    public var textTokens: Int?
+    /// Number of audio tokens billed for this request.
+    public var audioTokens: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case textTokens = "text_tokens"
+        case audioTokens = "audio_tokens"
+    }
+
+    init() {
+        (self.textTokens, self.audioTokens) = (nil, nil)
+    }
+}
+
+extension TranscriptTextUsageTokensInputTokenDetails {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.textTokens = try container.sdkDecodeIfPresent(.textTokens)
+        self.audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
+    }
+}
+
+extension TranscriptTextUsageTokensInputTokenDetails {
+    public init(textTokens: Int? = nil, audioTokens: Int? = nil) {
+        self.init()
+        (self.textTokens, self.audioTokens) = (textTokens, audioTokens)
+    }
+}
+
+/// Custom voice reference.
+public struct CreateSpeechRequestVoiceVariant2: Codable {
+    /// The custom voice ID, e.g. `voice_1234`.
+    /// - Example: "voice_1234"
+    public var id: String
+
+    enum CodingKeys: String, CodingKey {
+        case id
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension CreateSpeechRequestVoiceVariant2 {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+        }
+        self.id = try container.sdkDecodeRequired(.id)
+    }
+}
+
+extension CreateSpeechRequestVoiceVariant2 {
+    public init(id: String) {
+        self.id = id
+    }
+}
+
+/// Represents a verbose json transcription response returned by model, based on the provided input.
+public struct CreateTranscriptionResponseVerboseJson: Codable {
+    /// The language of the input audio.
+    public var language: String
+    /// The duration of the input audio.
+    public var duration: Double
+    /// The transcribed text.
+    public var text: String
+    /// Extracted words and their corresponding timestamps.
+    public var words: [TranscriptionWord]?
+    /// Segments of the transcribed text and their corresponding details.
+    public var segments: [TranscriptionSegment]?
+    /// Usage statistics for models billed by audio input duration.
+    public var usage: TranscriptTextUsageDuration?
+
+    enum CodingKeys: String, CodingKey {
+        case language
+        case duration
+        case text
+        case words
+        case segments
+        case usage
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension CreateTranscriptionResponseVerboseJson {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.language) else {
+            throw SdkValidationError(field: "language", code: "required", message: "Validation failed for 'language': value is required")
+        }
+        guard container.contains(.duration) else {
+            throw SdkValidationError(field: "duration", code: "required", message: "Validation failed for 'duration': value is required")
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
+        }
+        self.language = try container.sdkDecodeRequired(.language)
+        self.duration = try container.sdkDecodeRequired(.duration)
+        self.text = try container.sdkDecodeRequired(.text)
+        self.words = try container.sdkDecodeIfPresent(.words)
+        self.segments = try container.sdkDecodeIfPresent(.segments)
+        self.usage = try container.sdkDecodeIfPresent(.usage)
+    }
+}
+
+extension CreateTranscriptionResponseVerboseJson {
+    public init(language: String, duration: Double, text: String, words: [TranscriptionWord]? = nil, segments: [TranscriptionSegment]? = nil, usage: TranscriptTextUsageDuration? = nil) {
+        (self.language, self.duration) = (language, duration)
+        (self.text, self.words) = (text, words)
+        (self.segments, self.usage) = (segments, usage)
+    }
+}
+
+/// Typed representation of the `VadConfig` API schema.
+public struct VadConfig: Codable {
+    /// Must be set to `server_vad` to enable manual chunking using server side VAD.
+    public var type: VadConfigType
+    /// Amount of audio to include before the VAD detected speech (in milliseconds).
+    public var prefixPaddingMs: Int?
+    /// Duration of silence to detect speech stop (in milliseconds). With shorter values the model will respond more
+    /// quickly, but may jump in on short pauses from the user.
+    public var silenceDurationMs: Int?
+    /// Sensitivity threshold (0.0 to 1.0) for voice activity detection. A higher threshold will require louder
+    /// audio to activate the model, and thus might perform better in noisy environments.
+    public var threshold: Double?
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case prefixPaddingMs = "prefix_padding_ms"
+        case silenceDurationMs = "silence_duration_ms"
+        case threshold
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
+extension VadConfig {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+        }
+        self.type = try container.sdkDecodeRequired(.type)
+        self.prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
+        self.silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
+        self.threshold = try container.sdkDecodeIfPresent(.threshold)
+    }
+}
+
+extension VadConfig {
+    public init(type: VadConfigType, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil, threshold: Double? = nil) {
+        (self.type, self.prefixPaddingMs) = (type, prefixPaddingMs)
+        (self.silenceDurationMs, self.threshold) = (silenceDurationMs, threshold)
+    }
+}
+
 /// Typed representation of the `CreateTranscriptionRequest` API schema.
 public struct CreateTranscriptionRequest: Codable {
     /// The audio file object (not file name) to transcribe, in one of these formats: flac, mp3, mp4, mpeg, mpga,
@@ -211,78 +494,6 @@ extension TranscriptTextUsageDuration {
     }
 }
 
-public indirect enum CreateSpeechRequestVoice {
-    case createSpeechRequestVoiceVariant0(CreateSpeechRequestVoiceVariant0)
-    case createSpeechRequestVoiceVariant1(CreateSpeechRequestVoiceVariant1)
-}
-
-extension CreateSpeechRequestVoice: Codable {
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateSpeechRequestVoice")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension CreateSpeechRequestVoice {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(CreateSpeechRequestVoiceVariant0.self) { return .createSpeechRequestVoiceVariant0(value) }
-        if let value = try? container.decode(CreateSpeechRequestVoiceVariant1.self) { return .createSpeechRequestVoiceVariant1(value) }
-        return nil
-    }
-}
-
-extension CreateSpeechRequestVoice {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .createSpeechRequestVoiceVariant0(value): try container.encode(value); return true
-        case let .createSpeechRequestVoiceVariant1(value): try container.encode(value); return true
-        }
-    }
-}
-
-public indirect enum CreateSpeechRequestVoiceVariant0 {
-    case voiceIdsShared(VoiceIdsShared)
-    case stringValue(String)
-}
-
-extension CreateSpeechRequestVoiceVariant0: Codable {
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateSpeechRequestVoiceVariant0")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension CreateSpeechRequestVoiceVariant0 {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(VoiceIdsShared.self) { return .voiceIdsShared(value) }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        return nil
-    }
-}
-
-extension CreateSpeechRequestVoiceVariant0 {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .voiceIdsShared(value): try container.encode(value); return true
-        case let .stringValue(value): try container.encode(value); return true
-        }
-    }
-}
-
 /// Creates a voice from a consent recording and an audio sample. Requires multipart/form-data.
 public struct CreateVoiceFromConsentRequest: Codable {
     /// The name of the new voice.
@@ -300,191 +511,6 @@ public struct CreateVoiceFromConsentRequest: Codable {
         case audioSample = "audio_sample"
         case consent
         case type
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateVoiceFromConsentRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.audioSample) else {
-            throw SdkValidationError(field: "audio_sample", code: "required", message: "Validation failed for 'audio_sample': value is required")
-        }
-        guard container.contains(.consent) else {
-            throw SdkValidationError(field: "consent", code: "required", message: "Validation failed for 'consent': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.audioSample = try container.sdkDecodeRequired(.audioSample)
-        self.consent = try container.sdkDecodeRequired(.consent)
-        self.type = try container.sdkDecodeIfPresent(.type)
-            try validateLength("name", self.name, min: 1, max: 256)
-        if let value = self.type {
-            try sdkValidateRawEnum("type", value, CreateVoiceFromConsentRequestType.allCases.map(\.rawValue))
-        }
-    }
-}
-
-extension CreateVoiceFromConsentRequest {
-    public init(name: String, audioSample: Data, consent: String, type: CreateVoiceFromConsentRequestType? = nil) throws {
-        (self.name, self.audioSample) = (name, audioSample)
-        (self.consent, self.type) = (consent, type)
-            try validateLength("name", self.name, min: 1, max: 256)
-        if let value = self.type {
-            try sdkValidateRawEnum("type", value, CreateVoiceFromConsentRequestType.allCases.map(\.rawValue))
-        }
-    }
-}
-
-/// Usage statistics for models billed by token usage.
-public struct TranscriptTextUsageTokens: Codable {
-    /// The type of the usage object. Always `tokens` for this variant.
-    public var type: TranscriptTextUsageTokensType
-    /// Number of input tokens billed for this request.
-    public var inputTokens: Int
-    /// Number of output tokens generated.
-    public var outputTokens: Int
-    /// Total number of tokens used (input + output).
-    public var totalTokens: Int
-    /// Details about the input tokens billed for this request.
-    public var inputTokenDetails: TranscriptTextUsageTokensInputTokenDetails?
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case inputTokens = "input_tokens"
-        case outputTokens = "output_tokens"
-        case totalTokens = "total_tokens"
-        case inputTokenDetails = "input_token_details"
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TranscriptTextUsageTokens {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.inputTokens) else {
-            throw SdkValidationError(field: "input_tokens", code: "required", message: "Validation failed for 'input_tokens': value is required")
-        }
-        guard container.contains(.outputTokens) else {
-            throw SdkValidationError(field: "output_tokens", code: "required", message: "Validation failed for 'output_tokens': value is required")
-        }
-        guard container.contains(.totalTokens) else {
-            throw SdkValidationError(field: "total_tokens", code: "required", message: "Validation failed for 'total_tokens': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.inputTokens = try container.sdkDecodeRequired(.inputTokens)
-        self.outputTokens = try container.sdkDecodeRequired(.outputTokens)
-        self.totalTokens = try container.sdkDecodeRequired(.totalTokens)
-        self.inputTokenDetails = try container.sdkDecodeIfPresent(.inputTokenDetails)
-            try sdkValidateRawEnum("type", self.type, TranscriptTextUsageTokensType.allCases.map(\.rawValue))
-    }
-}
-
-extension TranscriptTextUsageTokens {
-    public init(type: TranscriptTextUsageTokensType, inputTokens: Int, outputTokens: Int, totalTokens: Int, inputTokenDetails: TranscriptTextUsageTokensInputTokenDetails? = nil) throws {
-        (self.type, self.inputTokens) = (type, inputTokens)
-        (self.outputTokens, self.totalTokens) = (outputTokens, totalTokens)
-        self.inputTokenDetails = inputTokenDetails
-            try sdkValidateRawEnum("type", self.type, TranscriptTextUsageTokensType.allCases.map(\.rawValue))
-    }
-}
-
-/// Emitted when the transcription is complete. Contains the complete transcription text. Only emitted when you
-/// create a transcription with the `Stream` parameter set to `true`.
-public struct TranscriptTextDoneEvent: Codable {
-    /// The type of the event. Always `transcript.text.done`.
-    public var type: TranscriptTextDoneEventType
-    /// The text that was transcribed.
-    public var text: String
-    /// The languages detected in the audio. Returned by `gpt-transcribe`. An empty array indicates that no language
-    /// could be reliably detected.
-    public var languages: [TranscriptionLanguage]?
-    /// The log probabilities of the individual tokens in the transcription. Only included if you create a
-    /// transcription with the `include[]` parameter set to `logprobs`.
-    public var logprobs: [TranscriptTextDoneEventLogprobsItem]?
-    /// Usage statistics for models billed by token usage.
-    public var usage: TranscriptTextUsageTokens?
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case text
-        case languages
-        case logprobs
-        case usage
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TranscriptTextDoneEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.languages = try container.sdkDecodeIfPresent(.languages)
-        self.logprobs = try container.sdkDecodeIfPresent(.logprobs)
-        self.usage = try container.sdkDecodeIfPresent(.usage)
-            try sdkValidateRawEnum("type", self.type, TranscriptTextDoneEventType.allCases.map(\.rawValue))
-    }
-}
-
-extension TranscriptTextDoneEvent {
-    public init(type: TranscriptTextDoneEventType, text: String, languages: [TranscriptionLanguage]? = nil, logprobs: [TranscriptTextDoneEventLogprobsItem]? = nil, usage: TranscriptTextUsageTokens? = nil) throws {
-        (self.type, self.text) = (type, text)
-        (self.languages, self.logprobs) = (languages, logprobs)
-        self.usage = usage
-            try sdkValidateRawEnum("type", self.type, TranscriptTextDoneEventType.allCases.map(\.rawValue))
-    }
-}
-
-/// Typed representation of the `TranscriptionSegment` API schema.
-public struct TranscriptionSegment: Codable {
-    /// Unique identifier of the segment.
-    public var id: Int
-    /// Seek offset of the segment.
-    public var seek: Int
-    /// Start time of the segment in seconds.
-    public var start: Double
-    /// End time of the segment in seconds.
-    public var end: Double
-    /// Text content of the segment.
-    public var text: String
-    /// Array of token IDs for the text content.
-    public var tokens: [Int]
-    /// Temperature parameter used for generating the segment.
-    public var temperature: Double
-    /// Average logprob of the segment. If the value is lower than -1, consider the logprobs failed.
-    public var avgLogprob: Double
-    /// Compression ratio of the segment. If the value is greater than 2.4, consider the compression failed.
-    public var compressionRatio: Double
-    /// Probability of no speech in the segment. If the value is higher than 1.0 and the `avg_logprob` is below -1,
-    /// consider this segment silent.
-    public var noSpeechProb: Double
-
-    enum CodingKeys: String, CodingKey {
-        case id
-        case seek
-        case start
-        case end
-        case text
-        case tokens
-        case temperature
-        case avgLogprob = "avg_logprob"
-        case compressionRatio = "compression_ratio"
-        case noSpeechProb = "no_speech_prob"
     }
 
     private init(sdkCopy value: Self) { self = value }

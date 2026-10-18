@@ -129,6 +129,7 @@ extension LiveInitialItem {
 
 public indirect enum LiveInitialSessionAudioOutputParamVoice {
     case stringValue(String)
+    case stringValue1(String)
     case liveCustomVoiceParam(LiveCustomVoiceParam)
 }
 
@@ -148,6 +149,7 @@ extension LiveInitialSessionAudioOutputParamVoice: Codable {
 extension LiveInitialSessionAudioOutputParamVoice {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
         if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(String.self) { return .stringValue1(value) }
         if let value = try? container.decode(LiveCustomVoiceParam.self) { return .liveCustomVoiceParam(value) }
         return nil
     }
@@ -158,6 +160,7 @@ extension LiveInitialSessionAudioOutputParamVoice {
         var container = encoder.singleValueContainer()
         switch self {
         case let .stringValue(value): try container.encode(value); return true
+        case let .stringValue1(value): try container.encode(value); return true
         case let .liveCustomVoiceParam(value): try container.encode(value); return true
         }
     }

@@ -3,6 +3,29 @@
 
 import Foundation
 
+extension VideosNamespace {
+/// Permanently delete a completed or failed video and its stored assets.
+    ///
+    /// - Warning: This operation is deprecated and may be removed in a future release.
+    public func delete(videoId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedVideoResource {
+        return try await VideosMethods.deleteVideo(config: config, videoId: videoId, requestOptions: requestOptions)
+    }
+
+/// Download the generated video bytes or a derived preview asset. Streams the rendered video content for the specified video job.
+    ///
+    /// - Warning: This operation is deprecated and may be removed in a future release.
+    public func retrieveContent(videoId: String, variant: VideoContentVariant? = nil, requestOptions: RequestOptions? = nil) async throws -> Data {
+        return try await VideosMethods.retrieveVideoContent(config: config, videoId: videoId, variant: variant, requestOptions: requestOptions)
+    }
+
+/// Create a remix of a completed video using a refreshed prompt.
+    ///
+    /// - Warning: This operation is deprecated and may be removed in a future release.
+    public func createRemix(videoId: String, prompt: String, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> VideoResource {
+        return try await VideosMethods.createVideoRemix(config: config, videoId: videoId, prompt: prompt, contentType: contentType, requestOptions: requestOptions)
+    }
+}
+
 public class SkillsNamespace {
     let config: ClientConfig
     public init(config: ClientConfig) {
@@ -167,54 +190,5 @@ public class DecisionsNamespace {
 /// Use this endpoint to quickly answer classification or scoring questions about some input. You can ask multiple questions in one request.
     public func create(model: String, input: DecisionInput, questions: [QuestionParam], safetyIdentifier: SdkOptional<String>? = nil, promptCacheKey: SdkOptional<String>? = nil, promptCacheOptions: SdkOptional<DecisionRequestPromptCacheOptions>? = nil, requestOptions: RequestOptions? = nil) async throws -> DecisionResponse {
         return try await DecisionsMethods.createDecision(config: config, model: model, input: input, questions: questions, safetyIdentifier: safetyIdentifier, promptCacheKey: promptCacheKey, promptCacheOptions: promptCacheOptions, requestOptions: requestOptions)
-    }
-}
-
-public class AgentsNamespace {
-    let config: ClientConfig
-    public init(config: ClientConfig) {
-        self.config = config
-    }
-
-/// Lists OpenAI-hosted environments owned by the authenticated principal. Requires access to the prewarming beta.
-    public func listEnvironments(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, type: EnvironmentTypeParam? = nil, requestOptions: RequestOptions? = nil) async throws -> AgentEnvironmentListResource {
-        return try await AgentsMethods.listAgentEnvironments(config: config, limit: limit, order: order, after: after, type: type, requestOptions: requestOptions)
-    }
-
-/// Lists OpenAI-hosted environments owned by the authenticated principal. Requires access to the prewarming beta.
-    public func listEnvironmentsPaginated(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, type: EnvironmentTypeParam? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<PublicEnvironmentResource, Swift.Error> {
-        return AgentsMethods.listAgentEnvironmentsPaginated(config: config, limit: limit, order: order, after: after, type: type, requestOptions: requestOptions)
-    }
-
-/// Creates an OpenAI-hosted environment before creating a session. Requires access to the prewarming beta.
-    public func createEnvironment(environment: CreateEnvironmentParam, idempotencyKey: String? = nil, vaultIds: SdkOptional<[String]>? = nil, requestOptions: RequestOptions? = nil) async throws -> PublicEnvironmentResource {
-        return try await AgentsMethods.createAgentEnvironment(config: config, environment: environment, idempotencyKey: idempotencyKey, vaultIds: vaultIds, requestOptions: requestOptions)
-    }
-
-/// Retrieves an execution environment's connection status and safe installed metadata. See [environment lifecycle](https://developers.openai.com/api/docs/guides/agents-api/environments/lifecycle).
-    public func retrieveEnvironment(environmentId: String, requestOptions: RequestOptions? = nil) async throws -> PublicEnvironmentResource {
-        return try await AgentsMethods.retrieveAgentEnvironment(config: config, environmentId: environmentId, requestOptions: requestOptions)
-    }
-
-/// Lists live files on a connected execution environment with optional directory filtering and opaque cursor pagination. See [environment files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
-    public func listEnvironmentFiles(environmentId: String, path: String? = nil, limit: Int? = nil, order: ListOrderParam? = nil, page: String? = nil, requestOptions: RequestOptions? = nil) async throws -> EnvironmentFileListResource {
-        return try await AgentsMethods.listAgentEnvironmentFiles(config: config, environmentId: environmentId, path: path, limit: limit, order: order, page: page, requestOptions: requestOptions)
-    }
-
-/// Writes a file to a connected agent execution environment, using either inline base64 data or a file uploaded through the Files API. Choose the `inline` or `file_id` body variant and provide the absolute destination `path`; writing to an existing regular file at that path replaces it. Upload the file between turns and wait for success before starting the next turn.
-    ///
-    /// Copies inline bytes or a Files API file into a connected execution environment, replacing an existing regular file at the same path. Upload between turns and wait for success before starting the next turn. See [environment files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
-    public func createEnvironmentFile(environmentId: String, body: HostedEnvironmentFileParam? = nil, requestOptions: RequestOptions? = nil) async throws -> EnvironmentFileResource {
-        return try await AgentsMethods.createAgentEnvironmentFile(config: config, environmentId: environmentId, body: body, requestOptions: requestOptions)
-    }
-
-/// Lists subagents in a session, including nested and closed subagents. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    public func listSessionSubagents(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListAgentSessionSubagentsResponse {
-        return try await AgentsMethods.listAgentSessionSubagents(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
-    }
-
-/// Lists subagents in a session, including nested and closed subagents. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    public func listSessionSubagentsPaginated(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SubagentResource, Swift.Error> {
-        return AgentsMethods.listAgentSessionSubagentsPaginated(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 }

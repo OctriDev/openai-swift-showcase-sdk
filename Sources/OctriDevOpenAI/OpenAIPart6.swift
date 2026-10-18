@@ -3,6 +3,52 @@
 
 import Foundation
 
+public class LiveNamespace {
+    let config: ClientConfig
+    public init(config: ClientConfig) {
+        self.config = config
+    }
+
+/// Create a Live WebRTC session or place an outbound SIP call. Start with the [Live prompting guide](https://developers.openai.com/api/docs/guides/live-prompting) for session configuration and [Telephony and SIP](https://developers.openai.com/api/docs/guides/voice-sip?api=live#place-an-outbound-call) for trunk setup and call monitoring. Set transport.type to `webrtc` and supply an SDP offer, or set it to `sip` and supply an E.164 destination and trunk credentials. Outbound SIP calling must be enabled for your organization. Ringing is limited to 3 minutes and connected calls to 2 hours; these limits are not configurable in the request. Returns `201 Created` after session initialization. WebRTC responses include an SDP answer. SIP responses do not wait for the callee to answer. Attach a sideband connection using session.id to monitor SIP call progress. Each SIP request creates a new call. If a request times out or the connection fails, retry with caution: the original request may have succeeded, and a retry can place another call.
+    public func create(session: LiveMediaSessionCreateParams, transport: LiveSessionCreateRequestTransportRequest, requestOptions: RequestOptions? = nil) async throws -> LiveSessionCreateResponse {
+        return try await LiveMethods.createLive(config: config, session: session, transport: transport, requestOptions: requestOptions)
+    }
+
+/// Accept an incoming SIP call. Supply session with type live, the model, and startup configuration. Before accepting calls, follow the [Live prompting guide](https://developers.openai.com/api/docs/guides/live-prompting) to write frontend conversation instructions and a separate backend prompt. SIP media format is negotiated; omit audio.format.
+    public func acceptSession(sessionId: String, session: LiveCallAcceptSession, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await LiveMethods.acceptLiveSession(config: config, sessionId: sessionId, session: session, requestOptions: requestOptions)
+    }
+
+/// Fork a stored Live session onto a new WebRTC connection.
+    public func forkSession(sessionId: String, transport: LiveWebRTCTransport, session: LiveMediaSessionForkParams? = nil, requestOptions: RequestOptions? = nil) async throws -> LiveCreateResponse {
+        return try await LiveMethods.forkLiveSession(config: config, sessionId: sessionId, transport: transport, session: session, requestOptions: requestOptions)
+    }
+
+/// Ends a SIP call associated with a Live session by submitting a hangup request. Use the opaque `session_id` returned when the session was created or supplied in an incoming-call webhook, preserving its prefix and value unchanged. A 200 response confirms that the hangup request was accepted.
+    ///
+    /// End a SIP call identified by session_id.
+    public func hangupSession(sessionId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await LiveMethods.hangupLiveSession(config: config, sessionId: sessionId, requestOptions: requestOptions)
+    }
+
+/// Transfer a SIP call to another destination. Supply a nonblank target_uri for the SIP Refer-To header.
+    public func referSession(sessionId: String, targetUri: TargetUri, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await LiveMethods.referLiveSession(config: config, sessionId: sessionId, targetUri: targetUri, requestOptions: requestOptions)
+    }
+
+/// Reject an incoming SIP call. Send a required SIP rejection status_code between 300 and 699.
+    public func rejectSession(sessionId: String, statusCode: Int, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await LiveMethods.rejectLiveSession(config: config, sessionId: sessionId, statusCode: statusCode, requestOptions: requestOptions)
+    }
+
+/// Downloads the stored audio recording for a Live session. Use the `session_id` returned when the session started with storage enabled. The recording is a stereo WAV file, with input audio in the left channel and output audio in the right channel.
+    ///
+    /// Get Live session content
+    public func downloadRecording(sessionId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
+        return try await LiveMethods.downloadLiveRecording(config: config, sessionId: sessionId, requestOptions: requestOptions)
+    }
+}
+
 public class ModelsNamespace {
     let config: ClientConfig
     public init(config: ClientConfig) {
@@ -156,35 +202,5 @@ public class CertificatesNamespace {
 /// Delete a certificate from the organization. The certificate must be inactive for the organization and all projects.
     public func delete(certificateId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteCertificateResponse {
         return try await CertificatesMethods.deleteCertificate(config: config, certificateId: certificateId, requestOptions: requestOptions)
-    }
-}
-
-extension CertificatesNamespace {
-/// Lists certificates configured for a project. Use `after` to continue from a certificate ID in a previous response, and set `limit` and `order` to control the page size and sort direction.
-    ///
-    /// List certificates for this project.
-    public func listForProject(projectId: String, limit: Int? = nil, after: String? = nil, order: ListCertificatesForProjectParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ListProjectCertificatesResponse {
-        return try await CertificatesMethods.listCertificatesForProject(config: config, projectId: projectId, limit: limit, after: after, order: order, requestOptions: requestOptions)
-    }
-
-/// Lists certificates configured for a project. Use `after` to continue from a certificate ID in a previous response, and set `limit` and `order` to control the page size and sort direction.
-    ///
-    /// List certificates for this project.
-    public func listForProjectPaginated(projectId: String, limit: Int? = nil, after: String? = nil, order: ListCertificatesForProjectParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<OrganizationProjectCertificate, Swift.Error> {
-        return CertificatesMethods.listCertificatesForProjectPaginated(config: config, projectId: projectId, limit: limit, after: after, order: order, requestOptions: requestOptions)
-    }
-
-/// Activates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and idempotent. The response contains the certificates with their updated activation state.
-    ///
-    /// Activate certificates at the project level. You can atomically and idempotently activate up to 10 certificates at a time.
-    public func activateForProject(projectId: String, certificateIds: [String], requestOptions: RequestOptions? = nil) async throws -> OrganizationProjectCertificateActivationResponse {
-        return try await CertificatesMethods.activateCertificatesForProject(config: config, projectId: projectId, certificateIds: certificateIds, requestOptions: requestOptions)
-    }
-
-/// Deactivates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and idempotent. The response contains the certificates with their updated activation state.
-    ///
-    /// Deactivate certificates at the project level. You can atomically and idempotently deactivate up to 10 certificates at a time.
-    public func deactivateForProject(projectId: String, certificateIds: [String], requestOptions: RequestOptions? = nil) async throws -> OrganizationProjectCertificateDeactivationResponse {
-        return try await CertificatesMethods.deactivateCertificatesForProject(config: config, projectId: projectId, certificateIds: certificateIds, requestOptions: requestOptions)
     }
 }

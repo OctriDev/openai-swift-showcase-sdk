@@ -4,6 +4,30 @@
 import Foundation
 
 // RealtimeRealtimeSession domain models
+extension RealtimeSessionCreateRequestTurnDetection {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.threshold = try container.sdkDecodeIfPresent(.threshold)
+        self.prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
+        self.silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
+    }
+}
+
+extension RealtimeSessionCreateRequestTurnDetection {
+    public init(type: String? = nil, threshold: Double? = nil, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil) {
+        self.init()
+        (self.type, self.threshold) = (type, threshold)
+        (self.prefixPaddingMs, self.silenceDurationMs) = (prefixPaddingMs, silenceDurationMs)
+    }
+}
+
+public indirect enum RealtimeSessionCreateRequestGATracing {
+    case stringValue(String)
+    case realtimeSessionCreateRequestGaTracingVariant1(RealtimeSessionCreateRequestGATracingVariant1)
+    case jsonValue(JSONValue)
+}
+
 extension RealtimeSessionCreateRequestGATracing: Codable {
 
     public init(from decoder: Decoder) throws {
@@ -38,6 +62,43 @@ extension RealtimeSessionCreateRequestGATracing {
         case let .realtimeSessionCreateRequestGaTracingVariant1(value): try container.encode(value); return true
         case let .jsonValue(value): try container.encode(value); return true
         }
+    }
+}
+
+/// Granular configuration for tracing.
+public struct RealtimeSessionCreateResponseGATracingVariant1: Codable {
+    /// The name of the workflow to attach to this trace. This is used to name the trace in the Traces Dashboard.
+    public var workflowName: String?
+    /// The group id to attach to this trace to enable filtering and grouping in the Traces Dashboard.
+    public var groupId: String?
+    /// The arbitrary metadata to attach to this trace to enable filtering in the Traces Dashboard.
+    public var metadata: [String: JSONValue]?
+
+    enum CodingKeys: String, CodingKey {
+        case workflowName = "workflow_name"
+        case groupId = "group_id"
+        case metadata
+    }
+
+    init() {
+        (self.workflowName, self.groupId, self.metadata) = (nil, nil, nil)
+    }
+}
+
+extension RealtimeSessionCreateResponseGATracingVariant1 {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.workflowName = try container.sdkDecodeIfPresent(.workflowName)
+        self.groupId = try container.sdkDecodeIfPresent(.groupId)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+    }
+}
+
+extension RealtimeSessionCreateResponseGATracingVariant1 {
+    public init(workflowName: String? = nil, groupId: String? = nil, metadata: [String: JSONValue]? = nil) {
+        self.init()
+        (self.workflowName, self.groupId) = (workflowName, groupId)
+        self.metadata = metadata
     }
 }
 
@@ -355,7 +416,7 @@ public struct RealtimeSession: Codable {
     /// runs asynchronously through the /audio/transcriptions endpoint and should be treated as guidance of input
     /// audio content rather than precisely what the model heard. The client can optionally set the language and
     /// prompt for transcription, these offer additional…
-    public var inputAudioTranscription: RealtimeSessionInputAudioTranscription?
+    public var inputAudioTranscription: AudioTranscriptionResponse?
     /// Configuration for turn detection, ether Server VAD or Semantic VAD. This can be set to `null` to turn off,
     /// in which case the client must manually trigger model response. Server VAD means that the model will detect
     /// the start and end of speech based on audio volume and respond at the end of user speech. Semantic VAD is
@@ -450,41 +511,5 @@ extension RealtimeSession {
         if let value = self.speed {
             try validateRange("speed", Double(value), min: 0.25, max: 1.5, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-    }
-}
-
-extension RealtimeSession {
-    public init(id: String? = nil, object: RealtimeSessionObject? = nil, modalities: [RealtimeSessionModalitiesItem]? = nil, model: String? = nil, instructions: String? = nil, voice: VoiceIdsShared? = nil, inputAudioFormat: RealtimeSessionInputAudioFormat? = nil, outputAudioFormat: RealtimeSessionOutputAudioFormat? = nil, inputAudioTranscription: RealtimeSessionInputAudioTranscription? = nil, turnDetection: RealtimeTurnDetection? = nil, inputAudioNoiseReduction: RealtimeSessionInputAudioNoiseReduction? = nil, speed: Double? = nil, tracing: RealtimeSessionTracing? = nil, tools: [RealtimeFunctionTool]? = nil, toolChoice: String? = nil, temperature: Double? = nil, maxResponseOutputTokens: RealtimeSessionMaxResponseOutputTokens? = nil, expiresAt: Int? = nil, prompt: Prompt? = nil, include: [RealtimeSessionIncludeItem]? = nil) throws {
-        self.init()
-        (self.id, self.object) = (id, object)
-        (self.modalities, self.model) = (modalities, model)
-        (self.instructions, self.voice) = (instructions, voice)
-        (self.inputAudioFormat, self.outputAudioFormat) = (inputAudioFormat, outputAudioFormat)
-        (self.inputAudioTranscription, self.turnDetection) = (inputAudioTranscription, turnDetection)
-        (self.inputAudioNoiseReduction, self.speed) = (inputAudioNoiseReduction, speed)
-        (self.tracing, self.tools) = (tracing, tools)
-        (self.toolChoice, self.temperature) = (toolChoice, temperature)
-        (self.maxResponseOutputTokens, self.expiresAt) = (maxResponseOutputTokens, expiresAt)
-        (self.prompt, self.include) = (prompt, include)
-        if let value = self.speed {
-            try validateRange("speed", Double(value), min: 0.25, max: 1.5, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-        }
-    }
-}
-
-/// Configuration for input and output audio.
-public struct RealtimeSessionCreateRequestGAAudio: Codable {
-    /// Optional object value serialized in the `input` wire field.
-    public var input: RealtimeSessionCreateRequestGAAudioInput?
-    /// Optional object value serialized in the `output` wire field.
-    public var output: RealtimeSessionCreateRequestGAAudioOutput?
-
-    enum CodingKeys: String, CodingKey {
-        case input
-        case output
-    }
-
-    init() {
-        (self.input, self.output) = (nil, nil)
     }
 }

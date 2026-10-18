@@ -6,78 +6,6 @@ import Foundation
 import XCTest
 
 extension SdkMethodTests {
-    func testCreateAgentEnvironmentCreateAgentEnvironmentReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient() else {
-            return
-        }
-        _ = client
-        let actual = try await client.agents.createEnvironment(
-            environment: decoded(sdkMethodFixture65Value1),
-            idempotencyKey: decoded("\"x\""),
-            vaultIds: decoded("[\"vault_ids\"]")
-        )
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture65Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        XCTAssertNil(
-            try mismatch(jsonValue(actual), expected),
-            "createAgentEnvironment decoded a response " +
-                "that differs from the mock"
-        )
-    }
-
-    func testCreateAgentEnvironmentCreateAgentEnvironment400ReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
-            return
-        }
-        _ = client
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture66Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        do {
-            _ = try await client.agents.createEnvironment(
-            environment: decoded(sdkMethodFixture66Value1),
-            idempotencyKey: decoded("\"x\""),
-            vaultIds: decoded("[\"vault_ids\"]")
-        )
-            XCTFail("createAgentEnvironment did not raise its declared error")
-        } catch let error as SdkHttpError {
-            XCTAssertEqual(error.statusCode, 400)
-            let data = try XCTUnwrap(
-                error.data as? any Encodable,
-                "createAgentEnvironment decoded no error body"
-            )
-            XCTAssertNil(
-                try mismatch(jsonValue(data), expected),
-                "createAgentEnvironment decoded an error body " +
-                    "that differs from the mock"
-            )
-        }
-        XCTAssertTrue(true)
-    }
-
-    func testCreateAgentEnvironmentFileCreateAgentEnvironmentFileReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient() else {
-            return
-        }
-        _ = client
-        let actual = try await client.agents.createEnvironmentFile(
-            environmentId: decoded("\"environment-1\""),
-            body: decoded("{\"type\":\"file_id\",\"file_id\":\"file-1\",\"path\":\"x\"}")
-        )
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture67Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        XCTAssertNil(
-            try mismatch(jsonValue(actual), expected),
-            "createAgentEnvironmentFile decoded a response " +
-                "that differs from the mock"
-        )
-    }
-
     func testCreateAgentEnvironmentFileCreateAgentEnvironmentFile400ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
@@ -92,17 +20,16 @@ extension SdkMethodTests {
             environmentId: decoded("\"environment-1\""),
             body: decoded("{\"type\":\"file_id\",\"file_id\":\"file-1\",\"path\":\"x\"}")
         )
-            XCTFail("createAgentEnvironmentFile did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "createAgentEnvironmentFile decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "createAgentEnvironmentFile decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -133,8 +60,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "createAgentEnvironmentTemplate decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -162,17 +88,16 @@ extension SdkMethodTests {
             _ = try await client.agents.createEnvironmentTemplate(
             options: options
         )
-            XCTFail("createAgentEnvironmentTemplate did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "createAgentEnvironmentTemplate decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "createAgentEnvironmentTemplate decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -200,8 +125,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "createAgentSession decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -226,17 +150,16 @@ extension SdkMethodTests {
             _ = try await client.agents.createSession(
             options: options
         )
-            XCTFail("createAgentSession did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "createAgentSession decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "createAgentSession decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -270,17 +193,16 @@ extension SdkMethodTests {
             events: decoded(sdkMethodFixture74Value1),
             idempotencyKey: decoded("\"x\"")
         )
-            XCTFail("createAgentSessionEvents did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "createAgentSessionEvents decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "createAgentSessionEvents decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -305,8 +227,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "createAgentSessionStream decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -335,8 +256,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "createAssistant decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -358,8 +278,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "createBatch decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -380,17 +299,16 @@ extension SdkMethodTests {
             metadata: decoded("{\"key\":\"key\"}"),
             outputExpiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":3600}")
         )
-            XCTFail("createBatch did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "createBatch decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "createBatch decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -410,8 +328,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "createChatCompletion decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -428,17 +345,16 @@ extension SdkMethodTests {
             _ = try await client.chat.createCompletion(
             body: decoded(sdkMethodFixture80Value1)
         )
-            XCTFail("createChatCompletion did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "createChatCompletion decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "createChatCompletion decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -463,8 +379,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "createChatCompletionStream decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -486,8 +401,7 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "createChatkitSession decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
@@ -508,17 +422,16 @@ extension SdkMethodTests {
             rateLimits: decoded("{\"max_requests_per_1_minute\":1}"),
             chatkitConfiguration: decoded(sdkMethodFixture83Value2)
         )
-            XCTFail("createChatkitSession did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "createChatkitSession decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "createChatkitSession decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
@@ -555,8 +468,98 @@ extension SdkMethodTests {
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "createCompletion decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
+        )
+    }
+
+    func testCreateCompletionCreateCompletion400ReachesMockAndDecodesResponse() async throws {
+        guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
+            return
+        }
+        _ = client
+        var options = try CompletionsMethods.CreateCompletionOptions(model: decoded("\"model\""), prompt: decoded("\"<|endoftext|>\""))
+        options.bestOf = try decoded("1")
+        options.echo = try decoded("false")
+        options.frequencyPenalty = try decoded("0")
+        options.logitBias = try decoded("null")
+        options.logprobs = try decoded("null")
+        options.maxTokens = try decoded("16")
+        options.n = try decoded("1")
+        options.presencePenalty = try decoded("0")
+        options.seed = try decoded("1")
+        options.stop = try decoded("null")
+        options.stream = try decoded("false")
+        options.streamOptions = try decoded("{\"include_usage\":false,\"include_obfuscation\":false}")
+        options.suffix = try decoded("\"test.\"")
+        options.temperature = try decoded("1")
+        options.topP = try decoded("1")
+        options.user = try decoded("\"user-1234\"")
+        let expected = try JSONSerialization.jsonObject(
+            with: Data(sdkMethodFixture85Expected.utf8),
+            options: [.fragmentsAllowed]
+        )
+        do {
+            _ = try await client.completions.create(
+            options: options
+        )
+            XCTFail("did not raise its declared error")
+        } catch let error as SdkHttpError {
+            XCTAssertEqual(error.statusCode, 400)
+            let data = try XCTUnwrap(
+                error.data as? any Encodable,
+                "decoded no error body"
+            )
+            XCTAssertNil(
+                try mismatch(jsonValue(data), expected),
+                "decoded an error body that differs from the mock"
+            )
+        }
+        XCTAssertTrue(true)
+    }
+
+    func testCreateCompletionCreateCompletionStreamReachesMockAndDecodesResponse() async throws {
+        guard let client = configuredClient() else {
+            return
+        }
+        _ = client
+        let stream = try await client.completions.createStream(
+            options: CompletionsMethods.CreateCompletionStreamOptions(model: decoded("\"model\""), prompt: decoded("\"<|endoftext|>\""), stream: decoded("false"))
+        )
+        var events = stream.makeAsyncIterator()
+        guard let actual = try await events.next() else {
+            XCTFail("createCompletionStream stream returned no events")
+            return
+        }
+        let expected = try JSONSerialization.jsonObject(
+            with: Data(sdkMethodFixture86Expected.utf8),
+            options: [.fragmentsAllowed]
+        )
+        XCTAssertNil(
+            try mismatch(jsonValue(actual), expected),
+            "decoded a response that differs from the mock"
+        )
+    }
+
+    func testCreateContainerCreateContainerReachesMockAndDecodesResponse() async throws {
+        guard let client = configuredClient() else {
+            return
+        }
+        _ = client
+        let actual = try await client.containers.create(
+            name: decoded("\"Example Name\""),
+            fileIds: decoded("[\"file_ids\"]"),
+            expiresAfter: decoded("{\"anchor\":\"last_active_at\",\"minutes\":1}"),
+            skills: decoded(sdkMethodFixture87Value1),
+            memoryLimit: decoded("\"1g\""),
+            networkPolicy: decoded("{\"type\":\"disabled\"}")
+        )
+        let expected = try JSONSerialization.jsonObject(
+            with: Data(sdkMethodFixture87Expected.utf8),
+            options: [.fragmentsAllowed]
+        )
+        XCTAssertNil(
+            try mismatch(jsonValue(actual), expected),
+            "decoded a response that differs from the mock"
         )
     }
 }

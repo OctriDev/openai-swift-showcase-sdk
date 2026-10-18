@@ -4,6 +4,63 @@
 import Foundation
 
 // AssistantsRun domain models
+/// Optional object value serialized in the `message_creation` wire field.
+public struct RunStepDeltaStepDetailsMessageCreationObjectMessageCreation: Codable {
+    /// The ID of the message that was created by this run step.
+    public var messageId: String?
+
+    enum CodingKeys: String, CodingKey {
+        case messageId = "message_id"
+    }
+
+    init() {
+        self.messageId = nil
+    }
+}
+
+extension RunStepDeltaStepDetailsMessageCreationObjectMessageCreation {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.messageId = try container.sdkDecodeIfPresent(.messageId)
+    }
+}
+
+extension RunStepDeltaStepDetailsMessageCreationObjectMessageCreation {
+    public init(messageId: String? = nil) {
+        self.init()
+        self.messageId = messageId
+    }
+}
+
+/// Details on why the run is incomplete. Will be `null` if the run is not incomplete.
+public struct RunObjectIncompleteDetails: Codable {
+    /// The reason why the run is incomplete. This will point to which specific token limit was reached over the
+    /// course of the run.
+    public var reason: RunObjectIncompleteDetailsReason?
+
+    enum CodingKeys: String, CodingKey {
+        case reason
+    }
+
+    init() {
+        self.reason = nil
+    }
+}
+
+extension RunObjectIncompleteDetails {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.reason = try container.sdkDecodeIfPresent(.reason)
+    }
+}
+
+extension RunObjectIncompleteDetails {
+    public init(reason: RunObjectIncompleteDetailsReason? = nil) {
+        self.init()
+        self.reason = reason
+    }
+}
+
 /// Occurs when a run is completed.
 public struct RunStreamEventVariant4: Codable {
     public var event: RunStreamEventVariant4Event
@@ -454,58 +511,6 @@ public enum RunStreamEventVariant6Event: String, CaseIterable, Codable {
         let rawValue = try container.decode(String.self)
         guard let value = Self(rawValue: rawValue) else {
             let field = decoder.codingPath.last?.stringValue ?? "RunStreamEventVariant6Event"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
-    }
-}
-
-public enum RunStreamEventVariant3Event: String, CaseIterable, Codable {
-    case threadRunRequiresAction = "thread.run.requires_action"
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "RunStreamEventVariant3Event"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
-    }
-}
-
-/// Always `logs`.
-public enum RunStepDeltaStepDetailsToolCallsCodeOutputLogsObjectType: String, CaseIterable, Codable {
-    case logs
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "RunStepDeltaStepDetailsToolCallsCodeOutputLogsObjectType"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
-    }
-}
-
-public enum RunStreamEventVariant4Event: String, CaseIterable, Codable {
-    case threadRunCompleted = "thread.run.completed"
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "RunStreamEventVariant4Event"
             throw SdkValidationError(
                 field: field,
                 code: "enum",

@@ -449,6 +449,26 @@ public struct BetaMCPToolConnectorId: RawRepresentable, Hashable, Codable, Senda
     }
 }
 
+/// Specify a single approval policy for all tools. One of `always` or `never`. When set to `always`, all tools
+/// will require approval. When set to `never`, all tools will not require approval.
+public struct BetaMCPToolRequireApprovalVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let always = BetaMCPToolRequireApprovalVariant1(rawValue: "always")
+    public static let never = BetaMCPToolRequireApprovalVariant1(rawValue: "never")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
 /// The type of the item. Always `mcp_call`.
 public enum BetaMCPToolCallType: String, CaseIterable, Codable {
     case mcpCall = "mcp_call"
@@ -497,24 +517,6 @@ public enum BetaMCPToolType: String, CaseIterable, Codable {
         let rawValue = try container.decode(String.self)
         guard let value = Self(rawValue: rawValue) else {
             let field = decoder.codingPath.last?.stringValue ?? "BetaMCPToolType"
-            throw SdkValidationError(
-                field: field,
-                code: "enum",
-                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
-            )
-        }
-        self = value
-    }
-}
-
-/// Required enumerated value serialized in the `type` wire field.
-public enum BetaMCPToolExecutionErrorType: String, CaseIterable, Codable {
-    case mcpToolExecutionError = "mcp_tool_execution_error"
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        let rawValue = try container.decode(String.self)
-        guard let value = Self(rawValue: rawValue) else {
-            let field = decoder.codingPath.last?.stringValue ?? "BetaMCPToolExecutionErrorType"
             throw SdkValidationError(
                 field: field,
                 code: "enum",

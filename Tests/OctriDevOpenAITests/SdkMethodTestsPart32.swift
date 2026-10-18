@@ -6,282 +6,12 @@ import Foundation
 import XCTest
 
 extension SdkMethodTests {
-    func testUpdateVoiceConsentUpdateVoiceConsent400ReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
-            return
-        }
-        _ = client
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture682Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        do {
-            _ = try await client.audio.updateVoiceConsent(
-            consentId: decoded("\"consent-1\""),
-            name: decoded("\"Example Name\"")
-        )
-            XCTFail("updateVoiceConsent did not raise its declared error")
-        } catch let error as SdkHttpError {
-            XCTAssertEqual(error.statusCode, 400)
-            let data = try XCTUnwrap(
-                error.data as? any Encodable,
-                "updateVoiceConsent decoded no error body"
-            )
-            XCTAssertNil(
-                try mismatch(jsonValue(data), expected),
-                "updateVoiceConsent decoded an error body " +
-                    "that differs from the mock"
-            )
-        }
-        XCTAssertTrue(true)
-    }
-
-    func testUpdateWebhookEndpointUpdateWebhookEndpointReachesMockAndDecodesResponse() async throws {
+    func testUsageVectorStoresUsageVectorStoresReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient() else {
             return
         }
         _ = client
-        let actual = try await client.webhookEndpoints.update(
-            webhookEndpointId: decoded("\"whe_123\""),
-            name: decoded("\"Example Name\""),
-            url: decoded("\"https://\""),
-            eventTypes: decoded("[\"batch.completed\"]")
-        )
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture683Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        XCTAssertNil(
-            try mismatch(jsonValue(actual), expected),
-            "updateWebhookEndpoint decoded a response " +
-                "that differs from the mock"
-        )
-    }
-
-    func testUpdateWebhookEndpointUpdateWebhookEndpoint400ReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
-            return
-        }
-        _ = client
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture684Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        do {
-            _ = try await client.webhookEndpoints.update(
-            webhookEndpointId: decoded("\"whe_123\""),
-            name: decoded("\"Example Name\""),
-            url: decoded("\"https://\""),
-            eventTypes: decoded("[\"batch.completed\"]")
-        )
-            XCTFail("updateWebhookEndpoint did not raise its declared error")
-        } catch let error as SdkHttpError {
-            XCTAssertEqual(error.statusCode, 400)
-            let data = try XCTUnwrap(
-                error.data as? any Encodable,
-                "updateWebhookEndpoint decoded no error body"
-            )
-            XCTAssertNil(
-                try mismatch(jsonValue(data), expected),
-                "updateWebhookEndpoint decoded an error body " +
-                    "that differs from the mock"
-            )
-        }
-        XCTAssertTrue(true)
-    }
-
-    func testUploadCertificateUploadCertificateReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient() else {
-            return
-        }
-        _ = client
-        let actual = try await client.certificates.upload(
-            certificate: decoded("\"certificate\""),
-            name: decoded("\"Example Name\"")
-        )
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture685Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        XCTAssertNil(
-            try mismatch(jsonValue(actual), expected),
-            "uploadCertificate decoded a response " +
-                "that differs from the mock"
-        )
-    }
-
-    func testUploadCertificateUploadCertificate400ReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
-            return
-        }
-        _ = client
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture686Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        do {
-            _ = try await client.certificates.upload(
-            certificate: decoded("\"certificate\""),
-            name: decoded("\"Example Name\"")
-        )
-            XCTFail("uploadCertificate did not raise its declared error")
-        } catch let error as SdkHttpError {
-            XCTAssertEqual(error.statusCode, 400)
-            let data = try XCTUnwrap(
-                error.data as? any Encodable,
-                "uploadCertificate decoded no error body"
-            )
-            XCTAssertNil(
-                try mismatch(jsonValue(data), expected),
-                "uploadCertificate decoded an error body " +
-                    "that differs from the mock"
-            )
-        }
-        XCTAssertTrue(true)
-    }
-
-    func testUsageAudioSpeechesUsageAudioSpeechesReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient() else {
-            return
-        }
-        _ = client
-        var options = try UsageMethods.UsageAudioSpeechesOptions(startTime: decoded("1"))
-        options.endTime = try decoded("1")
-        options.bucketWidth = try decoded("\"1d\"")
-        options.projectIds = try decoded("[\"project_ids\"]")
-        options.userIds = try decoded("[\"user_ids\"]")
-        options.apiKeyIds = try decoded("[\"api_key_ids\"]")
-        options.models = try decoded("[\"models\"]")
-        options.groupBy = try decoded("[\"project_id\"]")
-        options.limit = try decoded("1")
-        options.page = try decoded("\"page\"")
-        let actual = try await client.usage.audioSpeeches(
-            options: options
-        )
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture687Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        XCTAssertNil(
-            try mismatch(jsonValue(actual), expected),
-            "usageAudioSpeeches decoded a response " +
-                "that differs from the mock"
-        )
-    }
-
-    func testUsageAudioSpeechesUsageAudioSpeeches400ReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
-            return
-        }
-        _ = client
-        var options = try UsageMethods.UsageAudioSpeechesOptions(startTime: decoded("1"))
-        options.endTime = try decoded("1")
-        options.bucketWidth = try decoded("\"1d\"")
-        options.projectIds = try decoded("[\"project_ids\"]")
-        options.userIds = try decoded("[\"user_ids\"]")
-        options.apiKeyIds = try decoded("[\"api_key_ids\"]")
-        options.models = try decoded("[\"models\"]")
-        options.groupBy = try decoded("[\"project_id\"]")
-        options.limit = try decoded("1")
-        options.page = try decoded("\"page\"")
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture688Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        do {
-            _ = try await client.usage.audioSpeeches(
-            options: options
-        )
-            XCTFail("usageAudioSpeeches did not raise its declared error")
-        } catch let error as SdkHttpError {
-            XCTAssertEqual(error.statusCode, 400)
-            let data = try XCTUnwrap(
-                error.data as? any Encodable,
-                "usageAudioSpeeches decoded no error body"
-            )
-            XCTAssertNil(
-                try mismatch(jsonValue(data), expected),
-                "usageAudioSpeeches decoded an error body " +
-                    "that differs from the mock"
-            )
-        }
-        XCTAssertTrue(true)
-    }
-
-    func testUsageAudioTranscriptionsUsageAudioTranscriptionsReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient() else {
-            return
-        }
-        _ = client
-        var options = try UsageMethods.UsageAudioTranscriptionsOptions(startTime: decoded("1"))
-        options.endTime = try decoded("1")
-        options.bucketWidth = try decoded("\"1d\"")
-        options.projectIds = try decoded("[\"project_ids\"]")
-        options.userIds = try decoded("[\"user_ids\"]")
-        options.apiKeyIds = try decoded("[\"api_key_ids\"]")
-        options.models = try decoded("[\"models\"]")
-        options.groupBy = try decoded("[\"project_id\"]")
-        options.limit = try decoded("1")
-        options.page = try decoded("\"page\"")
-        let actual = try await client.usage.audioTranscriptions(
-            options: options
-        )
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture689Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        XCTAssertNil(
-            try mismatch(jsonValue(actual), expected),
-            "usageAudioTranscriptions decoded a response " +
-                "that differs from the mock"
-        )
-    }
-
-    func testUsageAudioTranscriptionsUsageAudioTranscriptions400ReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
-            return
-        }
-        _ = client
-        var options = try UsageMethods.UsageAudioTranscriptionsOptions(startTime: decoded("1"))
-        options.endTime = try decoded("1")
-        options.bucketWidth = try decoded("\"1d\"")
-        options.projectIds = try decoded("[\"project_ids\"]")
-        options.userIds = try decoded("[\"user_ids\"]")
-        options.apiKeyIds = try decoded("[\"api_key_ids\"]")
-        options.models = try decoded("[\"models\"]")
-        options.groupBy = try decoded("[\"project_id\"]")
-        options.limit = try decoded("1")
-        options.page = try decoded("\"page\"")
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture690Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        do {
-            _ = try await client.usage.audioTranscriptions(
-            options: options
-        )
-            XCTFail("usageAudioTranscriptions did not raise its declared error")
-        } catch let error as SdkHttpError {
-            XCTAssertEqual(error.statusCode, 400)
-            let data = try XCTUnwrap(
-                error.data as? any Encodable,
-                "usageAudioTranscriptions decoded no error body"
-            )
-            XCTAssertNil(
-                try mismatch(jsonValue(data), expected),
-                "usageAudioTranscriptions decoded an error body " +
-                    "that differs from the mock"
-            )
-        }
-        XCTAssertTrue(true)
-    }
-
-    func testUsageCodeInterpreterSessionsUsageCodeInterpreterSessionsReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient() else {
-            return
-        }
-        _ = client
-        let actual = try await client.usage.codeInterpreterSessions(
+        let actual = try await client.usage.vectorStores(
             startTime: decoded("1"),
             endTime: decoded("1"),
             bucketWidth: decoded("\"1d\""),
@@ -291,27 +21,26 @@ extension SdkMethodTests {
             page: decoded("\"page\"")
         )
         let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture691Expected.utf8),
+            with: Data(sdkMethodFixture705Expected.utf8),
             options: [.fragmentsAllowed]
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "usageCodeInterpreterSessions decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
-    func testUsageCodeInterpreterSessionsUsageCodeInterpreterSessions400ReachesMockAndDecodesResponse() async throws {
+    func testUsageVectorStoresUsageVectorStores400ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
         _ = client
         let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture692Expected.utf8),
+            with: Data(sdkMethodFixture706Expected.utf8),
             options: [.fragmentsAllowed]
         )
         do {
-            _ = try await client.usage.codeInterpreterSessions(
+            _ = try await client.usage.vectorStores(
             startTime: decoded("1"),
             endTime: decoded("1"),
             bucketWidth: decoded("\"1d\""),
@@ -320,252 +49,178 @@ extension SdkMethodTests {
             limit: decoded("1"),
             page: decoded("\"page\"")
         )
-            XCTFail("usageCodeInterpreterSessions did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "usageCodeInterpreterSessions decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "usageCodeInterpreterSessions decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
     }
 
-    func testUsageCompletionsUsageCompletionsReachesMockAndDecodesResponse() async throws {
+    func testUsageWebSearchCallsUsageWebSearchCallsReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient() else {
             return
         }
         _ = client
-        var options = try UsageMethods.UsageCompletionsOptions(startTime: decoded("1"))
+        var options = try UsageMethods.UsageWebSearchCallsOptions(startTime: decoded("1"))
         options.endTime = try decoded("1")
         options.bucketWidth = try decoded("\"1d\"")
         options.projectIds = try decoded("[\"project_ids\"]")
         options.userIds = try decoded("[\"user_ids\"]")
         options.apiKeyIds = try decoded("[\"api_key_ids\"]")
         options.models = try decoded("[\"models\"]")
-        options.batch = try decoded("false")
+        options.contextLevels = try decoded("[\"low\"]")
         options.groupBy = try decoded("[\"project_id\"]")
         options.limit = try decoded("1")
         options.page = try decoded("\"page\"")
-        let actual = try await client.usage.completions(
+        let actual = try await client.usage.webSearchCalls(
             options: options
         )
         let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture693Expected.utf8),
+            with: Data(sdkMethodFixture707Expected.utf8),
             options: [.fragmentsAllowed]
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "usageCompletions decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
-    func testUsageCompletionsUsageCompletions400ReachesMockAndDecodesResponse() async throws {
+    func testUsageWebSearchCallsUsageWebSearchCalls400ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
         _ = client
-        var options = try UsageMethods.UsageCompletionsOptions(startTime: decoded("1"))
+        var options = try UsageMethods.UsageWebSearchCallsOptions(startTime: decoded("1"))
         options.endTime = try decoded("1")
         options.bucketWidth = try decoded("\"1d\"")
         options.projectIds = try decoded("[\"project_ids\"]")
         options.userIds = try decoded("[\"user_ids\"]")
         options.apiKeyIds = try decoded("[\"api_key_ids\"]")
         options.models = try decoded("[\"models\"]")
-        options.batch = try decoded("false")
+        options.contextLevels = try decoded("[\"low\"]")
         options.groupBy = try decoded("[\"project_id\"]")
         options.limit = try decoded("1")
         options.page = try decoded("\"page\"")
         let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture694Expected.utf8),
+            with: Data(sdkMethodFixture708Expected.utf8),
             options: [.fragmentsAllowed]
         )
         do {
-            _ = try await client.usage.completions(
+            _ = try await client.usage.webSearchCalls(
             options: options
         )
-            XCTFail("usageCompletions did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "usageCompletions decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "usageCompletions decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
     }
 
-    func testUsageCostsUsageCostsReachesMockAndDecodesResponse() async throws {
+    func testValidateExternalStorageValidateExternalStorageReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient() else {
             return
         }
         _ = client
-        var options = try UsageMethods.UsageCostsOptions(startTime: decoded("1"))
-        options.endTime = try decoded("1")
-        options.bucketWidth = try decoded("\"1d\"")
-        options.projectIds = try decoded("[\"project_ids\"]")
-        options.apiKeyIds = try decoded("[\"api_key_ids\"]")
-        options.lineItems = try decoded("[\"line_items\"]")
-        options.groupBy = try decoded("[\"project_id\"]")
-        options.limit = try decoded("7")
-        options.page = try decoded("\"page\"")
-        let actual = try await client.usage.costs(
-            options: options
+        let actual = try await client.externalStorage.validate(
+            externalStorageId: decoded("\"extstorage_123\"")
         )
         let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture695Expected.utf8),
+            with: Data(sdkMethodFixture709Expected.utf8),
             options: [.fragmentsAllowed]
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "usageCosts decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
-    func testUsageCostsUsageCosts400ReachesMockAndDecodesResponse() async throws {
+    func testValidateExternalStorageValidateExternalStorage400ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
         _ = client
-        var options = try UsageMethods.UsageCostsOptions(startTime: decoded("1"))
-        options.endTime = try decoded("1")
-        options.bucketWidth = try decoded("\"1d\"")
-        options.projectIds = try decoded("[\"project_ids\"]")
-        options.apiKeyIds = try decoded("[\"api_key_ids\"]")
-        options.lineItems = try decoded("[\"line_items\"]")
-        options.groupBy = try decoded("[\"project_id\"]")
-        options.limit = try decoded("7")
-        options.page = try decoded("\"page\"")
         let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture696Expected.utf8),
+            with: Data(sdkMethodFixture710Expected.utf8),
             options: [.fragmentsAllowed]
         )
         do {
-            _ = try await client.usage.costs(
-            options: options
+            _ = try await client.externalStorage.validate(
+            externalStorageId: decoded("\"extstorage_123\"")
         )
-            XCTFail("usageCosts did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "usageCosts decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "usageCosts decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
     }
 
-    func testUsageEmbeddingsUsageEmbeddingsReachesMockAndDecodesResponse() async throws {
+    func testValidateGraderValidateGraderReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient() else {
             return
         }
         _ = client
-        var options = try UsageMethods.UsageEmbeddingsOptions(startTime: decoded("1"))
-        options.endTime = try decoded("1")
-        options.bucketWidth = try decoded("\"1d\"")
-        options.projectIds = try decoded("[\"project_ids\"]")
-        options.userIds = try decoded("[\"user_ids\"]")
-        options.apiKeyIds = try decoded("[\"api_key_ids\"]")
-        options.models = try decoded("[\"models\"]")
-        options.groupBy = try decoded("[\"project_id\"]")
-        options.limit = try decoded("1")
-        options.page = try decoded("\"page\"")
-        let actual = try await client.usage.embeddings(
-            options: options
+        let actual = try await client.fineTuning.validateGrader(
+            grader: decoded(sdkMethodFixture711Value1)
         )
         let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture697Expected.utf8),
+            with: Data(sdkMethodFixture711Expected.utf8),
             options: [.fragmentsAllowed]
         )
         XCTAssertNil(
             try mismatch(jsonValue(actual), expected),
-            "usageEmbeddings decoded a response " +
-                "that differs from the mock"
+            "decoded a response that differs from the mock"
         )
     }
 
-    func testUsageEmbeddingsUsageEmbeddings400ReachesMockAndDecodesResponse() async throws {
+    func testValidateGraderValidateGrader400ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
         _ = client
-        var options = try UsageMethods.UsageEmbeddingsOptions(startTime: decoded("1"))
-        options.endTime = try decoded("1")
-        options.bucketWidth = try decoded("\"1d\"")
-        options.projectIds = try decoded("[\"project_ids\"]")
-        options.userIds = try decoded("[\"user_ids\"]")
-        options.apiKeyIds = try decoded("[\"api_key_ids\"]")
-        options.models = try decoded("[\"models\"]")
-        options.groupBy = try decoded("[\"project_id\"]")
-        options.limit = try decoded("1")
-        options.page = try decoded("\"page\"")
         let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture698Expected.utf8),
+            with: Data(sdkMethodFixture712Expected.utf8),
             options: [.fragmentsAllowed]
         )
         do {
-            _ = try await client.usage.embeddings(
-            options: options
+            _ = try await client.fineTuning.validateGrader(
+            grader: decoded(sdkMethodFixture712Value1)
         )
-            XCTFail("usageEmbeddings did not raise its declared error")
+            XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
             let data = try XCTUnwrap(
                 error.data as? any Encodable,
-                "usageEmbeddings decoded no error body"
+                "decoded no error body"
             )
             XCTAssertNil(
                 try mismatch(jsonValue(data), expected),
-                "usageEmbeddings decoded an error body " +
-                    "that differs from the mock"
+                "decoded an error body that differs from the mock"
             )
         }
         XCTAssertTrue(true)
-    }
-
-    func testUsageFileSearchCallsUsageFileSearchCallsReachesMockAndDecodesResponse() async throws {
-        guard let client = configuredClient() else {
-            return
-        }
-        _ = client
-        var options = try UsageMethods.UsageFileSearchCallsOptions(startTime: decoded("1"))
-        options.endTime = try decoded("1")
-        options.bucketWidth = try decoded("\"1d\"")
-        options.projectIds = try decoded("[\"project_ids\"]")
-        options.userIds = try decoded("[\"user_ids\"]")
-        options.apiKeyIds = try decoded("[\"api_key_ids\"]")
-        options.vectorStoreIds = try decoded("[\"vector_store_ids\"]")
-        options.groupBy = try decoded("[\"project_id\"]")
-        options.limit = try decoded("1")
-        options.page = try decoded("\"page\"")
-        let actual = try await client.usage.fileSearchCalls(
-            options: options
-        )
-        let expected = try JSONSerialization.jsonObject(
-            with: Data(sdkMethodFixture699Expected.utf8),
-            options: [.fragmentsAllowed]
-        )
-        XCTAssertNil(
-            try mismatch(jsonValue(actual), expected),
-            "usageFileSearchCalls decoded a response " +
-                "that differs from the mock"
-        )
     }
 }

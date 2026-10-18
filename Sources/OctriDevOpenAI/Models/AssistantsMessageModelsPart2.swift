@@ -4,6 +4,20 @@
 import Foundation
 
 // AssistantsMessage domain models
+/// Occurs when a message is completed.
+public struct MessageStreamEventVariant3: Codable {
+    public var event: MessageStreamEventVariant3Event
+    /// Represents a message within a thread.
+    public var data: MessageObject
+
+    enum CodingKeys: String, CodingKey {
+        case event
+        case data
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
 extension MessageStreamEventVariant3 {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

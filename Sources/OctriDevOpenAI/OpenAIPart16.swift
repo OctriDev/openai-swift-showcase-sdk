@@ -3,6 +3,55 @@
 
 import Foundation
 
+public class AgentsNamespace {
+    let config: ClientConfig
+    public init(config: ClientConfig) {
+        self.config = config
+    }
+
+/// Lists OpenAI-hosted environments owned by the authenticated principal. Requires access to the prewarming beta.
+    public func listEnvironments(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, type: EnvironmentTypeParam? = nil, requestOptions: RequestOptions? = nil) async throws -> AgentEnvironmentListResource {
+        return try await AgentsMethods.listAgentEnvironments(config: config, limit: limit, order: order, after: after, type: type, requestOptions: requestOptions)
+    }
+
+/// Lists OpenAI-hosted environments owned by the authenticated principal. Requires access to the prewarming beta.
+    public func listEnvironmentsPaginated(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, type: EnvironmentTypeParam? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<PublicEnvironmentResource, Swift.Error> {
+        return AgentsMethods.listAgentEnvironmentsPaginated(config: config, limit: limit, order: order, after: after, type: type, requestOptions: requestOptions)
+    }
+
+/// Creates an OpenAI-hosted environment before creating a session. Requires access to the prewarming beta.
+    public func createEnvironment(environment: CreateEnvironmentParam, idempotencyKey: String? = nil, vaultIds: SdkOptional<[String]>? = nil, requestOptions: RequestOptions? = nil) async throws -> PublicEnvironmentResource {
+        return try await AgentsMethods.createAgentEnvironment(config: config, environment: environment, idempotencyKey: idempotencyKey, vaultIds: vaultIds, requestOptions: requestOptions)
+    }
+
+/// Retrieves an execution environment's connection status and safe installed metadata. See [environment lifecycle](https://developers.openai.com/api/docs/guides/agents-api/environments/lifecycle).
+    public func retrieveEnvironment(environmentId: String, requestOptions: RequestOptions? = nil) async throws -> PublicEnvironmentResource {
+        return try await AgentsMethods.retrieveAgentEnvironment(config: config, environmentId: environmentId, requestOptions: requestOptions)
+    }
+
+/// Lists live files on a connected execution environment with optional directory filtering and opaque cursor pagination. See [environment files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
+    public func listEnvironmentFiles(environmentId: String, path: String? = nil, limit: Int? = nil, order: ListOrderParam? = nil, page: String? = nil, requestOptions: RequestOptions? = nil) async throws -> EnvironmentFileListResource {
+        return try await AgentsMethods.listAgentEnvironmentFiles(config: config, environmentId: environmentId, path: path, limit: limit, order: order, page: page, requestOptions: requestOptions)
+    }
+
+/// Writes a file to a connected agent execution environment, using either inline base64 data or a file uploaded through the Files API. Choose the `inline` or `file_id` body variant and provide the absolute destination `path`; writing to an existing regular file at that path replaces it. Upload the file between turns and wait for success before starting the next turn.
+    ///
+    /// Copies inline bytes or a Files API file into a connected execution environment, replacing an existing regular file at the same path. Upload between turns and wait for success before starting the next turn. See [environment files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
+    public func createEnvironmentFile(environmentId: String, body: HostedEnvironmentFileParam? = nil, requestOptions: RequestOptions? = nil) async throws -> EnvironmentFileResource {
+        return try await AgentsMethods.createAgentEnvironmentFile(config: config, environmentId: environmentId, body: body, requestOptions: requestOptions)
+    }
+
+/// Lists subagents in a session, including nested and closed subagents. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func listSessionSubagents(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListAgentSessionSubagentsResponse {
+        return try await AgentsMethods.listAgentSessionSubagents(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
+    }
+
+/// Lists subagents in a session, including nested and closed subagents. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func listSessionSubagentsPaginated(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SubagentResource, Swift.Error> {
+        return AgentsMethods.listAgentSessionSubagentsPaginated(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
+    }
+}
+
 extension AgentsNamespace {
 /// Retrieves a subagent belonging to this session. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
     public func retrieveSessionSubagent(sessionId: String, subagentId: String, requestOptions: RequestOptions? = nil) async throws -> SubagentResource {
@@ -126,47 +175,5 @@ extension AgentsNamespace {
 /// Creates a managed agent session, optionally submits initial input, and returns the session or streams its events when stream is true. See [running sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions).
     public func createSessionStream(options: AgentsMethods.CreateAgentSessionStreamOptions, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
         return try await AgentsMethods.createAgentSessionStream(config: config, options: options, requestOptions: requestOptions)
-    }
-}
-
-extension AgentsNamespace {
-/// Retrieves the current state of a managed agent session. See [managing sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
-    public func retrieveSession(sessionId: String, requestOptions: RequestOptions? = nil) async throws -> SessionResource {
-        return try await AgentsMethods.retrieveAgentSession(config: config, sessionId: sessionId, requestOptions: requestOptions)
-    }
-
-/// Updates session metadata, model, reasoning effort, or service tier. Model settings apply to subsequent turns. Omitted fields are unchanged. See [managing sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
-    public func updateSession(sessionId: String, spendControl: SdkOptional<SessionSpendControlParam>? = nil, agent: UpdateSessionAgentParam? = nil, metadata: SdkOptional<[String: String]>? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionResource {
-        return try await AgentsMethods.updateAgentSession(config: config, sessionId: sessionId, spendControl: spendControl, agent: agent, metadata: metadata, requestOptions: requestOptions)
-    }
-
-/// Removes a managed agent session from the public API and returns a deletion confirmation. If backend execution has ended, deletion can cancel a still-open public turn and abandon unpublished outputs. Running execution must be cancelled first. Physical cleanup may continue asynchronously. See [managing sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
-    public func deleteSession(sessionId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedSessionResource {
-        return try await AgentsMethods.deleteAgentSession(config: config, sessionId: sessionId, requestOptions: requestOptions)
-    }
-
-/// Lists immutable artifacts published by completed hosted session turns. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
-    public func listSessionArtifacts(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, environmentId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionArtifactListResource {
-        return try await AgentsMethods.listAgentSessionArtifacts(config: config, sessionId: sessionId, limit: limit, order: order, after: after, environmentId: environmentId, requestOptions: requestOptions)
-    }
-
-/// Lists immutable artifacts published by completed hosted session turns. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
-    public func listSessionArtifactsPaginated(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, environmentId: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SessionArtifactResource, Swift.Error> {
-        return AgentsMethods.listAgentSessionArtifactsPaginated(config: config, sessionId: sessionId, limit: limit, order: order, after: after, environmentId: environmentId, requestOptions: requestOptions)
-    }
-
-/// Retrieves immutable metadata for one durable session artifact. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
-    public func retrieveSessionArtifact(sessionId: String, artifactId: String, requestOptions: RequestOptions? = nil) async throws -> SessionArtifactResource {
-        return try await AgentsMethods.retrieveAgentSessionArtifact(config: config, sessionId: sessionId, artifactId: artifactId, requestOptions: requestOptions)
-    }
-
-/// Deletes an immutable session artifact without deleting its live environment file or original Files API object. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
-    public func deleteSessionArtifact(sessionId: String, artifactId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedSessionArtifactResource {
-        return try await AgentsMethods.deleteAgentSessionArtifact(config: config, sessionId: sessionId, artifactId: artifactId, requestOptions: requestOptions)
-    }
-
-/// Downloads immutable session artifact bytes after the execution environment expires. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
-    public func retrieveSessionArtifactContent(sessionId: String, artifactId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
-        return try await AgentsMethods.retrieveAgentSessionArtifactContent(config: config, sessionId: sessionId, artifactId: artifactId, requestOptions: requestOptions)
     }
 }

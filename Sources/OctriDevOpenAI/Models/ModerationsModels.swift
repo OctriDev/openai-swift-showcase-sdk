@@ -13,12 +13,27 @@ extension CreateModerationRequestInputItem: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+        }
         if let value = Self.decodeGroup1(from: container) { self = value; return }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateModerationRequestInputItem")
     }
 
     public func encode(to encoder: Encoder) throws {
         if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension CreateModerationRequestInputItem {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(CreateModerationRequestInputItemVariant0.self), sdkKeepsEveryKey(value, of: raw) {
+            return .createModerationRequestInputItemVariant0(value)
+        }
+        if let value = try? container.decode(CreateModerationRequestInputItemVariant1.self), sdkKeepsEveryKey(value, of: raw) {
+            return .createModerationRequestInputItemVariant1(value)
+        }
+        return nil
     }
 }
 
@@ -454,19 +469,4 @@ public struct CreateModerationRequestInputItemVariant1: Codable {
     }
 
     private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateModerationRequestInputItemVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, CreateModerationRequestInputItemVariant1Type.allCases.map(\.rawValue))
-    }
 }

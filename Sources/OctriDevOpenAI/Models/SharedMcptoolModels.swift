@@ -57,6 +57,42 @@ extension MCPToolCallError {
     }
 }
 
+public indirect enum MCPToolRequireApproval {
+    case mCpToolRequireApprovalVariant0(MCPToolRequireApprovalVariant0)
+    case stringValue(String)
+}
+
+extension MCPToolRequireApproval: Codable {
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for MCPToolRequireApproval")
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension MCPToolRequireApproval {
+    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
+        if let value = try? container.decode(MCPToolRequireApprovalVariant0.self) { return .mCpToolRequireApprovalVariant0(value) }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        return nil
+    }
+}
+
+extension MCPToolRequireApproval {
+    func encodeGroup1(to encoder: Encoder) throws -> Bool {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .mCpToolRequireApprovalVariant0(value): try container.encode(value); return true
+        case let .stringValue(value): try container.encode(value); return true
+        }
+    }
+}
+
 /// An invocation of a tool on an MCP server.
 public struct MCPToolCall: Codable {
     /// The type of the item. Always `mcp_call`.
@@ -132,42 +168,6 @@ extension MCPToolCall {
         (self.error, self.status) = (error, status)
         self.approvalRequestId = approvalRequestId
             try sdkValidateRawEnum("type", self.type, MCPToolCallType.allCases.map(\.rawValue))
-    }
-}
-
-public indirect enum MCPToolRequireApproval {
-    case mCpToolRequireApprovalVariant0(MCPToolRequireApprovalVariant0)
-    case stringValue(String)
-}
-
-extension MCPToolRequireApproval: Codable {
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for MCPToolRequireApproval")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension MCPToolRequireApproval {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(MCPToolRequireApprovalVariant0.self) { return .mCpToolRequireApprovalVariant0(value) }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        return nil
-    }
-}
-
-extension MCPToolRequireApproval {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .mCpToolRequireApprovalVariant0(value): try container.encode(value); return true
-        case let .stringValue(value): try container.encode(value); return true
-        }
     }
 }
 

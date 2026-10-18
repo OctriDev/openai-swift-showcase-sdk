@@ -4,57 +4,6 @@
 import Foundation
 
 // Shared domain models
-/// Typed representation of the `CreateModelResponseProperties` API schema.
-public struct CreateModelResponseProperties: Codable {
-    /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional
-    /// information about the object in a structured format, and querying for objects via API or the dashboard. Keys
-    /// are strings with a maximum length of 64 characters. Values are strings with a maximum length of 512
-    /// characters.
-    public var metadata: Metadata?
-    /// An integer between 0 and 20 specifying the maximum number of most likely tokens to return at each token
-    /// position, each with an associated log probability. In some cases, the number of returned tokens may be fewer
-    /// than requested.
-    public var topLogprobs: Int?
-    /// Optional API value serialized in the `temperature` wire field.
-    public var temperature: Double?
-    /// Optional API value serialized in the `top_p` wire field.
-    public var topP: Double?
-    /// This field is being replaced by `safety_identifier` and `prompt_cache_key`. Use `prompt_cache_key` instead
-    /// to maintain caching optimizations. A stable identifier for your end-users. Used to boost cache hit rates by
-    /// better bucketing similar requests and to help OpenAI detect and prevent abuse. Learn more.
-    /// - Example: "user-1234"
-    public var user: String?
-    /// Optional API value serialized in the `safety_identifier` wire field.
-    public var safetyIdentifier: String?
-    /// Optional `string` value serialized in the `prompt_cache_key` wire field.
-    public var promptCacheKey: String?
-    /// Optional API value serialized in the `prompt_cache_retention` wire field.
-    public var promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0?
-    /// Options for prompt caching. Supported for `gpt-5.6` and later models. By default, OpenAI automatically
-    /// chooses one implicit cache breakpoint. You can add explicit breakpoints to content blocks with
-    /// `prompt_cache_breakpoint`. Each request can write up to four breakpoints. For cache matching, OpenAI
-    /// considers up to the latest 80 breakpoints in the conversation, without a content-block lookback limit. Set
-    /// `mode` to `explicit` to disable the implicit breakpoint. The `ttl`…
-    public var promptCacheOptions: PromptCacheOptionsParam?
-
-    enum CodingKeys: String, CodingKey {
-        case metadata
-        case topLogprobs = "top_logprobs"
-        case temperature
-        case topP = "top_p"
-        case user
-        case safetyIdentifier = "safety_identifier"
-        case promptCacheKey = "prompt_cache_key"
-        case promptCacheRetention = "prompt_cache_retention"
-        case promptCacheOptions = "prompt_cache_options"
-    }
-
-    init() {
-        (self.metadata, self.topLogprobs, self.temperature, self.topP, self.user) = (nil, nil, nil, nil, nil)
-        (self.safetyIdentifier, self.promptCacheKey, self.promptCacheRetention, self.promptCacheOptions) = (nil, nil, nil, nil)
-    }
-}
-
 extension CreateModelResponseProperties {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -470,4 +419,35 @@ extension EasyInputMessage {
             try sdkValidateRawEnum("type", value, EasyInputMessageType.allCases.map(\.rawValue))
         }
     }
+}
+
+extension EasyInputMessage {
+    public init(role: EasyInputMessageRole, content: EasyInputMessageContent, phase: MessagePhase? = nil, type: EasyInputMessageType? = nil) throws {
+        (self.role, self.content) = (role, content)
+        (self.phase, self.type) = (phase, type)
+        if let value = self.type {
+            try sdkValidateRawEnum("type", value, EasyInputMessageType.allCases.map(\.rawValue))
+        }
+    }
+}
+
+/// A double click action.
+public struct DoubleClickAction: Codable {
+    /// Specifies the event type. For a double click action, this property is always set to `double_click`.
+    public var type: DoubleClickActionType
+    /// The x-coordinate where the double click occurred.
+    public var x: Int
+    /// The y-coordinate where the double click occurred.
+    public var y: Int
+    /// The keys being held while double-clicking.
+    public var keys: [String]?
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case x
+        case y
+        case keys
+    }
+
+    private init(sdkCopy value: Self) { self = value }
 }

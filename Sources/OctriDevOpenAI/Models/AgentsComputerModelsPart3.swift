@@ -4,6 +4,24 @@
 import Foundation
 
 // AgentsComputer domain models
+/// The item type. Always `computer_use_call`.
+public enum ComputerUseCallItemResourceType: String, CaseIterable, Codable {
+    case computerUseCall = "computer_use_call"
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "ComputerUseCallItemResourceType"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
+    }
+}
+
 /// The type of the object. Always `browser_origin_access`.
 public enum ComputerUseApprovalRequestKindResourceBrowserOriginAccessType: String, CaseIterable, Codable {
     case browserOriginAccess = "browser_origin_access"
@@ -23,38 +41,38 @@ public enum ComputerUseApprovalRequestKindResourceBrowserOriginAccessType: Strin
 }
 
 /// Required enumerated value serialized in the `type` wire field.
-public struct ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
-    public let rawValue: String
-
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let browserAuthentication = ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamType(rawValue: "browser_authentication")
-
+public enum ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamType: String, CaseIterable, Codable {
+    case browserAuthentication = "browser_authentication"
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "ComputerUseApprovalResponseParamBrowserAuthenticationSubmitParamType"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
     }
 }
 
 /// Required enumerated value serialized in the `type` wire field.
-public struct ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
-    public let rawValue: String
-
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let browserAuthentication = ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType(rawValue: "browser_authentication")
-
+public enum ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType: String, CaseIterable, Codable {
+    case browserAuthentication = "browser_authentication"
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        var container = encoder.singleValueContainer()
-        try container.encode(rawValue)
+        let rawValue = try container.decode(String.self)
+        guard let value = Self(rawValue: rawValue) else {
+            let field = decoder.codingPath.last?.stringValue ?? "ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType"
+            throw SdkValidationError(
+                field: field,
+                code: "enum",
+                message: "Validation failed for '\(field)': enum value '\(rawValue)' is not declared"
+            )
+        }
+        self = value
     }
 }
 

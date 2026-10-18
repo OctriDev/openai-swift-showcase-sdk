@@ -54,6 +54,42 @@ extension CodeInterpreterToolCallOutputsItem {
     }
 }
 
+public indirect enum CodeInterpreterToolContainer {
+    case stringValue(String)
+    case autoCodeInterpreterToolParam(AutoCodeInterpreterToolParam)
+}
+
+extension CodeInterpreterToolContainer: Codable {
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CodeInterpreterToolContainer")
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension CodeInterpreterToolContainer {
+    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(AutoCodeInterpreterToolParam.self) { return .autoCodeInterpreterToolParam(value) }
+        return nil
+    }
+}
+
+extension CodeInterpreterToolContainer {
+    func encodeGroup1(to encoder: Encoder) throws -> Bool {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .stringValue(value): try container.encode(value); return true
+        case let .autoCodeInterpreterToolParam(value): try container.encode(value); return true
+        }
+    }
+}
+
 /// The logs output from the code interpreter.
 public struct CodeInterpreterOutputLogs: Codable {
     /// The type of the output. Always `logs`.
@@ -88,42 +124,6 @@ extension CodeInterpreterOutputLogs {
     public init(type: CodeInterpreterOutputLogsType, logs: String) throws {
         (self.type, self.logs) = (type, logs)
             try sdkValidateRawEnum("type", self.type, CodeInterpreterOutputLogsType.allCases.map(\.rawValue))
-    }
-}
-
-public indirect enum CodeInterpreterToolContainer {
-    case stringValue(String)
-    case autoCodeInterpreterToolParam(AutoCodeInterpreterToolParam)
-}
-
-extension CodeInterpreterToolContainer: Codable {
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CodeInterpreterToolContainer")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension CodeInterpreterToolContainer {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(AutoCodeInterpreterToolParam.self) { return .autoCodeInterpreterToolParam(value) }
-        return nil
-    }
-}
-
-extension CodeInterpreterToolContainer {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .stringValue(value): try container.encode(value); return true
-        case let .autoCodeInterpreterToolParam(value): try container.encode(value); return true
-        }
     }
 }
 

@@ -130,6 +130,54 @@ public struct LiveInitialUserMessageItemParamType: RawRepresentable, Hashable, C
     }
 }
 
+/// Optional enumerated value serialized in the `voice` wire field.
+public struct LiveInitialSessionAudioOutputParamVoiceVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let alloy = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "alloy")
+    public static let ash = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "ash")
+    public static let ballad = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "ballad")
+    public static let beacon = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "beacon")
+    public static let bossa = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "bossa")
+    public static let brise = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "brise")
+    public static let cedar = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "cedar")
+    public static let cinder = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "cinder")
+    public static let coral = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "coral")
+    public static let delta = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "delta")
+    public static let echo = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "echo")
+    public static let flitz = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "flitz")
+    public static let gleam = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "gleam")
+    public static let harema = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "harema")
+    public static let juni = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "juni")
+    public static let marin = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "marin")
+    public static let meridian = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "meridian")
+    public static let nira = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "nira")
+    public static let noeul = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "noeul")
+    public static let nuri = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "nuri")
+    public static let quartz = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "quartz")
+    public static let ripple = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "ripple")
+    public static let sage = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "sage")
+    public static let shida = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "shida")
+    public static let shimmer = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "shimmer")
+    public static let sillage = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "sillage")
+    public static let stone = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "stone")
+    public static let tempo = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "tempo")
+    public static let verse = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "verse")
+    public static let vesper = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "vesper")
+    public static let willow = LiveInitialSessionAudioOutputParamVoiceVariant1(rawValue: "willow")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        self.init(rawValue: try container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
 /// Typed representation of the `LiveInitialMessageStatus` API schema.
 public struct LiveInitialMessageStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String

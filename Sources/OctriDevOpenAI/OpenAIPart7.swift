@@ -3,6 +3,36 @@
 
 import Foundation
 
+extension CertificatesNamespace {
+/// Lists certificates configured for a project. Use `after` to continue from a certificate ID in a previous response, and set `limit` and `order` to control the page size and sort direction.
+    ///
+    /// List certificates for this project.
+    public func listForProject(projectId: String, limit: Int? = nil, after: String? = nil, order: ListCertificatesForProjectParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ListProjectCertificatesResponse {
+        return try await CertificatesMethods.listCertificatesForProject(config: config, projectId: projectId, limit: limit, after: after, order: order, requestOptions: requestOptions)
+    }
+
+/// Lists certificates configured for a project. Use `after` to continue from a certificate ID in a previous response, and set `limit` and `order` to control the page size and sort direction.
+    ///
+    /// List certificates for this project.
+    public func listForProjectPaginated(projectId: String, limit: Int? = nil, after: String? = nil, order: ListCertificatesForProjectParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<OrganizationProjectCertificate, Swift.Error> {
+        return CertificatesMethods.listCertificatesForProjectPaginated(config: config, projectId: projectId, limit: limit, after: after, order: order, requestOptions: requestOptions)
+    }
+
+/// Activates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and idempotent. The response contains the certificates with their updated activation state.
+    ///
+    /// Activate certificates at the project level. You can atomically and idempotently activate up to 10 certificates at a time.
+    public func activateForProject(projectId: String, certificateIds: [String], requestOptions: RequestOptions? = nil) async throws -> OrganizationProjectCertificateActivationResponse {
+        return try await CertificatesMethods.activateCertificatesForProject(config: config, projectId: projectId, certificateIds: certificateIds, requestOptions: requestOptions)
+    }
+
+/// Deactivates certificates for a project. Supply between 1 and 10 certificate IDs; the operation is atomic and idempotent. The response contains the certificates with their updated activation state.
+    ///
+    /// Deactivate certificates at the project level. You can atomically and idempotently deactivate up to 10 certificates at a time.
+    public func deactivateForProject(projectId: String, certificateIds: [String], requestOptions: RequestOptions? = nil) async throws -> OrganizationProjectCertificateDeactivationResponse {
+        return try await CertificatesMethods.deactivateCertificatesForProject(config: config, projectId: projectId, certificateIds: certificateIds, requestOptions: requestOptions)
+    }
+}
+
 public class UsageNamespace {
     let config: ClientConfig
     public init(config: ClientConfig) {

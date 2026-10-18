@@ -4,6 +4,34 @@
 import Foundation
 
 // ResponsesBetaInput domain models
+extension BetaInputFileContentParam {
+    public init(type: BetaInputFileContentParamType, fileId: String? = nil, filename: String? = nil, fileData: String? = nil, fileUrl: String? = nil, detail: BetaFileDetailEnum? = nil, promptCacheBreakpoint: BetaPromptCacheBreakpointParam? = nil) throws {
+        (self.type, self.fileId) = (type, fileId)
+        (self.filename, self.fileData) = (filename, fileData)
+        (self.fileUrl, self.detail) = (fileUrl, detail)
+        self.promptCacheBreakpoint = promptCacheBreakpoint
+            try sdkValidateRawEnum("type", self.type, BetaInputFileContentParamType.allCases.map(\.rawValue))
+    }
+}
+
+/// A text input to the model.
+public struct BetaInputTextContentParam: Codable {
+    /// The type of the input item. Always `input_text`.
+    public var type: BetaInputTextContentParamType
+    /// The text input to the model.
+    public var text: String
+    /// Optional API value serialized in the `prompt_cache_breakpoint` wire field.
+    public var promptCacheBreakpoint: BetaPromptCacheBreakpointParam?
+
+    enum CodingKeys: String, CodingKey {
+        case type
+        case text
+        case promptCacheBreakpoint = "prompt_cache_breakpoint"
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
 extension BetaInputTextContentParam {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)

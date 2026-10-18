@@ -4,39 +4,6 @@
 import Foundation
 
 // Shared domain models
-extension HybridSearchOptions {
-    public init(embeddingWeight: Double, textWeight: Double) {
-        (self.embeddingWeight, self.textWeight) = (embeddingWeight, textWeight)
-    }
-}
-
-/// A scroll action.
-public struct ScrollParam: Codable {
-    /// Specifies the event type. For a scroll action, this property is always set to `scroll`.
-    public var type: ScrollParamType
-    /// The x-coordinate where the scroll occurred.
-    public var x: Int
-    /// The y-coordinate where the scroll occurred.
-    public var y: Int
-    /// The horizontal scroll distance.
-    public var scrollX: Int
-    /// The vertical scroll distance.
-    public var scrollY: Int
-    /// The keys being held while scrolling.
-    public var keys: [String]?
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case x
-        case y
-        case scrollX = "scroll_x"
-        case scrollY = "scroll_y"
-        case keys
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
 extension ScrollParam {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -214,34 +181,6 @@ extension SummaryTextContent {
     public init(type: SummaryTextContentType, text: String) throws {
         (self.type, self.text) = (type, text)
             try sdkValidateRawEnum("type", self.type, SummaryTextContentType.allCases.map(\.rawValue))
-    }
-}
-
-/// Typed representation of the `PermissionErrorResponse` API schema.
-public struct PermissionErrorResponse: Codable {
-    /// Details about the permission error.
-    public var error: PermissionErrorResponseError
-
-    enum CodingKeys: String, CodingKey {
-        case error
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension PermissionErrorResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.error) else {
-            throw SdkValidationError(field: "error", code: "required", message: "Validation failed for 'error': value is required")
-        }
-        self.error = try container.sdkDecodeRequired(.error)
-    }
-}
-
-extension PermissionErrorResponse {
-    public init(error: PermissionErrorResponseError) {
-        self.error = error
     }
 }
 
@@ -498,5 +437,56 @@ extension CoordParam {
 extension CoordParam {
     public init(x: Int, y: Int) {
         (self.x, self.y) = (x, y)
+    }
+}
+
+/// Typed representation of the `CreateModelResponseProperties` API schema.
+public struct CreateModelResponseProperties: Codable {
+    /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional
+    /// information about the object in a structured format, and querying for objects via API or the dashboard. Keys
+    /// are strings with a maximum length of 64 characters. Values are strings with a maximum length of 512
+    /// characters.
+    public var metadata: Metadata?
+    /// An integer between 0 and 20 specifying the maximum number of most likely tokens to return at each token
+    /// position, each with an associated log probability. In some cases, the number of returned tokens may be fewer
+    /// than requested.
+    public var topLogprobs: Int?
+    /// Optional API value serialized in the `temperature` wire field.
+    public var temperature: Double?
+    /// Optional API value serialized in the `top_p` wire field.
+    public var topP: Double?
+    /// This field is being replaced by `safety_identifier` and `prompt_cache_key`. Use `prompt_cache_key` instead
+    /// to maintain caching optimizations. A stable identifier for your end-users. Used to boost cache hit rates by
+    /// better bucketing similar requests and to help OpenAI detect and prevent abuse. Learn more.
+    /// - Example: "user-1234"
+    public var user: String?
+    /// Optional API value serialized in the `safety_identifier` wire field.
+    public var safetyIdentifier: String?
+    /// Optional `string` value serialized in the `prompt_cache_key` wire field.
+    public var promptCacheKey: String?
+    /// Optional API value serialized in the `prompt_cache_retention` wire field.
+    public var promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0?
+    /// Options for prompt caching. Supported for `gpt-5.6` and later models. By default, OpenAI automatically
+    /// chooses one implicit cache breakpoint. You can add explicit breakpoints to content blocks with
+    /// `prompt_cache_breakpoint`. Each request can write up to four breakpoints. For cache matching, OpenAI
+    /// considers up to the latest 80 breakpoints in the conversation, without a content-block lookback limit. Set
+    /// `mode` to `explicit` to disable the implicit breakpoint. The `ttl`…
+    public var promptCacheOptions: PromptCacheOptionsParam?
+
+    enum CodingKeys: String, CodingKey {
+        case metadata
+        case topLogprobs = "top_logprobs"
+        case temperature
+        case topP = "top_p"
+        case user
+        case safetyIdentifier = "safety_identifier"
+        case promptCacheKey = "prompt_cache_key"
+        case promptCacheRetention = "prompt_cache_retention"
+        case promptCacheOptions = "prompt_cache_options"
+    }
+
+    init() {
+        (self.metadata, self.topLogprobs, self.temperature, self.topP, self.user) = (nil, nil, nil, nil, nil)
+        (self.safetyIdentifier, self.promptCacheKey, self.promptCacheRetention, self.promptCacheOptions) = (nil, nil, nil, nil)
     }
 }

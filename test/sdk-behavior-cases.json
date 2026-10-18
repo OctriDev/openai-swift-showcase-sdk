@@ -144,6 +144,19 @@
             "file_search": {
               "vector_store_ids": [
                 "vector_store_ids"
+              ],
+              "vector_stores": [
+                {
+                  "file_ids": [
+                    "file_ids"
+                  ],
+                  "chunking_strategy": {
+                    "type": "auto"
+                  },
+                  "metadata": {
+                    "key": "key"
+                  }
+                }
               ]
             }
           },
@@ -172,7 +185,7 @@
         "headers": {
           "content-type": "application/json"
         },
-        "bodyText": "{\"model\":\"gpt-4.1\",\"name\":\"Example Name\",\"description\":\"example text\",\"instructions\":\"instructions\",\"reasoning_effort\":\"medium\",\"tools\":[],\"tool_resources\":{\"code_interpreter\":{\"file_ids\":[]},\"file_search\":{\"vector_store_ids\":[\"vector_store_ids\"]}},\"metadata\":{\"key\":\"key\"},\"temperature\":1,\"top_p\":1,\"response_format\":{\"type\":\"text\"}}",
+        "bodyText": "{\"model\":\"gpt-4.1\",\"name\":\"Example Name\",\"description\":\"example text\",\"instructions\":\"instructions\",\"reasoning_effort\":\"medium\",\"tools\":[],\"tool_resources\":{\"code_interpreter\":{\"file_ids\":[]},\"file_search\":{\"vector_store_ids\":[\"vector_store_ids\"],\"vector_stores\":[{\"file_ids\":[\"file_ids\"],\"chunking_strategy\":{\"type\":\"auto\"},\"metadata\":{\"key\":\"key\"}}]}},\"metadata\":{\"key\":\"key\"},\"temperature\":1,\"top_p\":1,\"response_format\":{\"type\":\"text\"}}",
         "multipartFields": null
       },
       "response": {
@@ -4455,11 +4468,13 @@
           "model": "gpt-image-2.5-sunburst",
           "images": [
             {
-              "image_url": "https://example.com/source-image.png"
+              "image_url": "https://example.com/source-image.png",
+              "file_id": "file-abc123"
             }
           ],
           "mask": {
-            "image_url": "https://example.com/source-image.png"
+            "image_url": "https://example.com/source-image.png",
+            "file_id": "file-abc123"
           },
           "prompt": "Add a watercolor effect and keep the subject centered",
           "n": 1,
@@ -4491,7 +4506,7 @@
         "headers": {
           "content-type": "application/json"
         },
-        "bodyText": "{\"model\":\"gpt-image-2.5-sunburst\",\"images\":[{\"image_url\":\"https://example.com/source-image.png\"}],\"mask\":{\"image_url\":\"https://example.com/source-image.png\"},\"prompt\":\"Add a watercolor effect and keep the subject centered\",\"n\":1,\"quality\":\"high\",\"input_fidelity\":\"high\",\"size\":\"1024x1024\",\"safety_identifier\":\"user-1234\",\"user\":\"user-1234\",\"output_format\":\"png\",\"output_compression\":100,\"moderation\":\"auto\",\"background\":\"transparent\",\"stream\":false,\"partial_images\":1}",
+        "bodyText": "{\"model\":\"gpt-image-2.5-sunburst\",\"images\":[{\"image_url\":\"https://example.com/source-image.png\",\"file_id\":\"file-abc123\"}],\"mask\":{\"image_url\":\"https://example.com/source-image.png\",\"file_id\":\"file-abc123\"},\"prompt\":\"Add a watercolor effect and keep the subject centered\",\"n\":1,\"quality\":\"high\",\"input_fidelity\":\"high\",\"size\":\"1024x1024\",\"safety_identifier\":\"user-1234\",\"user\":\"user-1234\",\"output_format\":\"png\",\"output_compression\":100,\"moderation\":\"auto\",\"background\":\"transparent\",\"stream\":false,\"partial_images\":1}",
         "multipartFields": null
       },
       "response": {
@@ -9628,7 +9643,9 @@
                   "prompt": "prompt",
                   "delay": "minimal"
                 },
-                "noise_reduction": null,
+                "noise_reduction": {
+                  "type": "near_field"
+                },
                 "turn_detection": {
                   "type": "server_vad",
                   "threshold": 1,
@@ -9805,6 +9822,9 @@
                   "prompt": "prompt",
                   "delay": "minimal"
                 },
+                "noise_reduction": {
+                  "type": "near_field"
+                },
                 "turn_detection": {
                   "type": "server_vad",
                   "threshold": 1,
@@ -9873,7 +9893,7 @@
         "headers": {
           "content-type": "application/json"
         },
-        "bodyText": "{\"expires_after\":{\"anchor\":\"created_at\",\"seconds\":600},\"session\":{\"type\":\"realtime\",\"output_modalities\":[\"audio\"],\"model\":\"model\",\"instructions\":\"instructions\",\"audio\":{\"input\":{\"format\":{\"type\":\"audio/pcm\",\"rate\":24000},\"transcription\":{\"model\":\"model\",\"language\":\"language\",\"languages\":[\"languages\"],\"keywords\":[\"keywords\"],\"prompt\":\"prompt\",\"delay\":\"minimal\"},\"turn_detection\":{\"type\":\"server_vad\",\"threshold\":1,\"prefix_padding_ms\":1,\"silence_duration_ms\":1,\"create_response\":true,\"interrupt_response\":true,\"idle_timeout_ms\":5000}},\"output\":{\"format\":{\"type\":\"audio/pcm\",\"rate\":24000},\"voice\":\"alloy\",\"speed\":1}},\"include\":[\"item.input_audio_transcription.logprobs\"],\"tools\":[{\"type\":\"function\",\"name\":\"Example Name\",\"description\":\"example text\",\"parameters\":{}}],\"tool_choice\":\"auto\",\"parallel_tool_calls\":false,\"reasoning\":{\"effort\":\"low\"},\"max_output_tokens\":1,\"truncation\":\"auto\",\"prompt\":{\"id\":\"id-1\",\"version\":\"version\",\"variables\":{\"key\":{\"type\":\"input_text\",\"text\":\"text\",\"prompt_cache_breakpoint\":{\"mode\":\"explicit\"}}}}}}",
+        "bodyText": "{\"expires_after\":{\"anchor\":\"created_at\",\"seconds\":600},\"session\":{\"type\":\"realtime\",\"output_modalities\":[\"audio\"],\"model\":\"model\",\"instructions\":\"instructions\",\"audio\":{\"input\":{\"format\":{\"type\":\"audio/pcm\",\"rate\":24000},\"transcription\":{\"model\":\"model\",\"language\":\"language\",\"languages\":[\"languages\"],\"keywords\":[\"keywords\"],\"prompt\":\"prompt\",\"delay\":\"minimal\"},\"noise_reduction\":{\"type\":\"near_field\"},\"turn_detection\":{\"type\":\"server_vad\",\"threshold\":1,\"prefix_padding_ms\":1,\"silence_duration_ms\":1,\"create_response\":true,\"interrupt_response\":true,\"idle_timeout_ms\":5000}},\"output\":{\"format\":{\"type\":\"audio/pcm\",\"rate\":24000},\"voice\":\"alloy\",\"speed\":1}},\"include\":[\"item.input_audio_transcription.logprobs\"],\"tools\":[{\"type\":\"function\",\"name\":\"Example Name\",\"description\":\"example text\",\"parameters\":{}}],\"tool_choice\":\"auto\",\"parallel_tool_calls\":false,\"reasoning\":{\"effort\":\"low\"},\"max_output_tokens\":1,\"truncation\":\"auto\",\"prompt\":{\"id\":\"id-1\",\"version\":\"version\",\"variables\":{\"key\":{\"type\":\"input_text\",\"text\":\"text\",\"prompt_cache_breakpoint\":{\"mode\":\"explicit\"}}}}}}",
         "multipartFields": null
       },
       "response": {
@@ -10625,12 +10645,12 @@
         "kind": "json",
         "status": 200,
         "mediaType": "application/json",
-        "body": "{\"object\":\"list\",\"data\":[{\"type\":\"InputMessageResource\",\"role\":\"user\",\"status\":\"in_progress\",\"content\":[{\"type\":\"input_text\",\"text\":\"text\",\"prompt_cache_breakpoint\":{\"mode\":\"explicit\"}}],\"id\":\"id-1\"}],\"has_more\":false,\"first_id\":\"first-1\",\"last_id\":\"last-1\"}",
+        "body": "{\"object\":\"list\",\"data\":[{\"type\":\"message\",\"role\":\"user\",\"status\":\"in_progress\",\"content\":[{\"type\":\"input_text\",\"text\":\"text\",\"prompt_cache_breakpoint\":{\"mode\":\"explicit\"}}],\"id\":\"id-1\"}],\"has_more\":false,\"first_id\":\"first-1\",\"last_id\":\"last-1\"}",
         "value": {
           "object": "list",
           "data": [
             {
-              "type": "InputMessageResource",
+              "type": "message",
               "role": "user",
               "status": "in_progress",
               "content": [
@@ -10696,6 +10716,19 @@
               "file_search": {
                 "vector_store_ids": [
                   "vector_store_ids"
+                ],
+                "vector_stores": [
+                  {
+                    "file_ids": [
+                      "file_ids"
+                    ],
+                    "chunking_strategy": {
+                      "type": "auto"
+                    },
+                    "metadata": {
+                      "key": "key"
+                    }
+                  }
                 ]
               }
             },
@@ -10759,7 +10792,7 @@
         "headers": {
           "content-type": "application/json"
         },
-        "bodyText": "{\"assistant_id\":\"assistant-1\",\"thread\":{\"messages\":[{\"role\":\"user\",\"content\":\"content\",\"attachments\":[{\"file_id\":\"file-1\",\"tools\":[{\"type\":\"code_interpreter\"}]}],\"metadata\":{\"key\":\"key\"}}],\"tool_resources\":{\"code_interpreter\":{\"file_ids\":[]},\"file_search\":{\"vector_store_ids\":[\"vector_store_ids\"]}},\"metadata\":{\"key\":\"key\"}},\"model\":\"gpt-4.1\",\"instructions\":\"instructions\",\"tools\":[{\"type\":\"code_interpreter\"}],\"tool_resources\":{\"code_interpreter\":{\"file_ids\":[]},\"file_search\":{\"vector_store_ids\":[\"vector_store_ids\"]}},\"metadata\":{\"key\":\"key\"},\"temperature\":1,\"top_p\":1,\"stream\":false,\"max_prompt_tokens\":256,\"max_completion_tokens\":256,\"truncation_strategy\":{\"type\":\"auto\",\"last_messages\":1},\"tool_choice\":{\"type\":\"function\",\"function\":{\"name\":\"Example Name\"}},\"parallel_tool_calls\":true,\"response_format\":{\"type\":\"text\"}}",
+        "bodyText": "{\"assistant_id\":\"assistant-1\",\"thread\":{\"messages\":[{\"role\":\"user\",\"content\":\"content\",\"attachments\":[{\"file_id\":\"file-1\",\"tools\":[{\"type\":\"code_interpreter\"}]}],\"metadata\":{\"key\":\"key\"}}],\"tool_resources\":{\"code_interpreter\":{\"file_ids\":[]},\"file_search\":{\"vector_store_ids\":[\"vector_store_ids\"],\"vector_stores\":[{\"file_ids\":[\"file_ids\"],\"chunking_strategy\":{\"type\":\"auto\"},\"metadata\":{\"key\":\"key\"}}]}},\"metadata\":{\"key\":\"key\"}},\"model\":\"gpt-4.1\",\"instructions\":\"instructions\",\"tools\":[{\"type\":\"code_interpreter\"}],\"tool_resources\":{\"code_interpreter\":{\"file_ids\":[]},\"file_search\":{\"vector_store_ids\":[\"vector_store_ids\"]}},\"metadata\":{\"key\":\"key\"},\"temperature\":1,\"top_p\":1,\"stream\":false,\"max_prompt_tokens\":256,\"max_completion_tokens\":256,\"truncation_strategy\":{\"type\":\"auto\",\"last_messages\":1},\"tool_choice\":{\"type\":\"function\",\"function\":{\"name\":\"Example Name\"}},\"parallel_tool_calls\":true,\"response_format\":{\"type\":\"text\"}}",
         "multipartFields": null
       },
       "response": {
@@ -10840,6 +10873,7 @@
         "auth-application",
         "error-response",
         "json-response",
+        "pagination",
         "path-serialization",
         "query-serialization"
       ],
@@ -11495,6 +11529,7 @@
         "auth-application",
         "error-response",
         "json-response",
+        "pagination",
         "path-serialization",
         "query-serialization"
       ],
@@ -11946,106 +11981,6 @@
     },
     {
       "id": "behavior-130",
-      "operationId": "listVectorStores",
-      "kinds": [
-        "auth-application",
-        "error-response",
-        "json-response",
-        "query-serialization"
-      ],
-      "request": {
-        "method": "GET",
-        "pathTemplate": "/vector_stores",
-        "pathParameters": {},
-        "query": [
-          {
-            "name": "limit",
-            "style": "form",
-            "explode": true,
-            "value": 20,
-            "serialized": "20"
-          },
-          {
-            "name": "order",
-            "style": "form",
-            "explode": true,
-            "value": "desc",
-            "serialized": "desc"
-          },
-          {
-            "name": "after",
-            "style": "form",
-            "explode": true,
-            "value": "after",
-            "serialized": "after"
-          },
-          {
-            "name": "before",
-            "style": "form",
-            "explode": true,
-            "value": "before",
-            "serialized": "before"
-          }
-        ],
-        "headers": {},
-        "bodyKind": null,
-        "contentType": null,
-        "security": [
-          {
-            "ApiKeyAuth": []
-          }
-        ]
-      },
-      "expect": {
-        "method": "GET",
-        "path": "/vector_stores",
-        "query": "limit=20&order=desc&after=after&before=before",
-        "url": "https://behavior.test/vector_stores?limit=20&order=desc&after=after&before=before",
-        "headers": {},
-        "bodyText": null,
-        "multipartFields": null
-      },
-      "response": {
-        "kind": "json",
-        "status": 200,
-        "mediaType": "application/json",
-        "body": "{\"object\":\"list\",\"data\":[{\"id\":\"id-1\",\"object\":\"vector_store\",\"created_at\":1,\"name\":\"Example Name\",\"usage_bytes\":30,\"file_counts\":{\"in_progress\":1,\"completed\":1,\"failed\":1,\"cancelled\":1,\"total\":100},\"status\":\"expired\",\"expires_after\":{\"anchor\":\"last_active_at\",\"days\":1},\"expires_at\":1,\"last_active_at\":1,\"metadata\":{\"key\":\"key\"}}],\"first_id\":\"vs_abc123\",\"last_id\":\"vs_abc456\",\"has_more\":false}",
-        "value": {
-          "object": "list",
-          "data": [
-            {
-              "id": "id-1",
-              "object": "vector_store",
-              "created_at": 1,
-              "name": "Example Name",
-              "usage_bytes": 30,
-              "file_counts": {
-                "in_progress": 1,
-                "completed": 1,
-                "failed": 1,
-                "cancelled": 1,
-                "total": 100
-              },
-              "status": "expired",
-              "expires_after": {
-                "anchor": "last_active_at",
-                "days": 1
-              },
-              "expires_at": 1,
-              "last_active_at": 1,
-              "metadata": {
-                "key": "key"
-              }
-            }
-          ],
-          "first_id": "vs_abc123",
-          "last_id": "vs_abc456",
-          "has_more": false
-        }
-      }
-    },
-    {
-      "id": "behavior-131",
       "operationId": "cancelVectorStoreFileBatch",
       "kinds": [
         "auth-application",
@@ -12101,12 +12036,13 @@
       }
     },
     {
-      "id": "behavior-132",
+      "id": "behavior-131",
       "operationId": "listFilesInVectorStoreBatch",
       "kinds": [
         "auth-application",
         "error-response",
         "json-response",
+        "pagination",
         "path-serialization",
         "query-serialization"
       ],
@@ -12210,12 +12146,13 @@
       }
     },
     {
-      "id": "behavior-133",
+      "id": "behavior-132",
       "operationId": "listVectorStoreFiles",
       "kinds": [
         "auth-application",
         "error-response",
         "json-response",
+        "pagination",
         "path-serialization",
         "query-serialization"
       ],
@@ -12318,7 +12255,7 @@
       }
     },
     {
-      "id": "behavior-134",
+      "id": "behavior-133",
       "operationId": "deleteVectorStoreFile",
       "kinds": [
         "auth-application",
@@ -12365,7 +12302,7 @@
       }
     },
     {
-      "id": "behavior-135",
+      "id": "behavior-134",
       "operationId": "updateVectorStoreFileAttributes",
       "kinds": [
         "auth-application",
@@ -12437,7 +12374,7 @@
       }
     },
     {
-      "id": "behavior-136",
+      "id": "behavior-135",
       "operationId": "retrieveVectorStoreFileContent",
       "kinds": [
         "auth-application",
@@ -12490,7 +12427,7 @@
       }
     },
     {
-      "id": "behavior-137",
+      "id": "behavior-136",
       "operationId": "retrieveSafetyCase",
       "kinds": [
         "auth-application",
@@ -12541,7 +12478,7 @@
       }
     },
     {
-      "id": "behavior-138",
+      "id": "behavior-137",
       "operationId": "retrieveSafetyAlert",
       "kinds": [
         "auth-application",
@@ -12594,7 +12531,7 @@
       }
     },
     {
-      "id": "behavior-139",
+      "id": "behavior-138",
       "operationId": "downloadLiveRecording",
       "kinds": [
         "auth-application",
@@ -12636,7 +12573,7 @@
       }
     },
     {
-      "id": "behavior-140",
+      "id": "behavior-139",
       "operationId": "decisionsUsage",
       "kinds": [
         "auth-application",
@@ -12815,7 +12752,7 @@
       }
     },
     {
-      "id": "behavior-141",
+      "id": "behavior-140",
       "operationId": "listExternalStorage",
       "kinds": [
         "auth-application",
@@ -12909,7 +12846,7 @@
       }
     },
     {
-      "id": "behavior-142",
+      "id": "behavior-141",
       "operationId": "deleteExternalStorage",
       "kinds": [
         "auth-application",
@@ -12955,7 +12892,7 @@
       }
     },
     {
-      "id": "behavior-143",
+      "id": "behavior-142",
       "operationId": "deleteSpendLimitsOrganization",
       "kinds": [
         "auth-application",
@@ -12997,7 +12934,7 @@
       }
     },
     {
-      "id": "behavior-144",
+      "id": "behavior-143",
       "operationId": "createProjectsServiceAccountApiKey",
       "kinds": [
         "auth-application",
@@ -13057,7 +12994,7 @@
       }
     },
     {
-      "id": "behavior-145",
+      "id": "behavior-144",
       "operationId": "createVideo",
       "kinds": [
         "auth-application",
@@ -13140,7 +13077,7 @@
       }
     },
     {
-      "id": "behavior-146",
+      "id": "behavior-145",
       "operationId": "ListVideos",
       "kinds": [
         "auth-application",
@@ -13241,7 +13178,7 @@
       }
     },
     {
-      "id": "behavior-147",
+      "id": "behavior-146",
       "operationId": "CreateVideoCharacter",
       "kinds": [
         "auth-application",
@@ -13294,7 +13231,7 @@
       }
     },
     {
-      "id": "behavior-148",
+      "id": "behavior-147",
       "operationId": "RetrieveVideoContent",
       "kinds": [
         "auth-application",
@@ -13346,7 +13283,7 @@
       }
     },
     {
-      "id": "behavior-149",
+      "id": "behavior-148",
       "operationId": "CreateVideoRemix",
       "kinds": [
         "auth-application",
@@ -13425,7 +13362,7 @@
       }
     },
     {
-      "id": "behavior-150",
+      "id": "behavior-149",
       "operationId": "CreateSkill",
       "kinds": [
         "auth-application",
@@ -13481,7 +13418,7 @@
       }
     },
     {
-      "id": "behavior-151",
+      "id": "behavior-150",
       "operationId": "GetSkillContent",
       "kinds": [
         "auth-application",
@@ -13524,7 +13461,7 @@
       }
     },
     {
-      "id": "behavior-152",
+      "id": "behavior-151",
       "operationId": "CreateSkillVersion",
       "kinds": [
         "auth-application",
@@ -13584,7 +13521,7 @@
       }
     },
     {
-      "id": "behavior-153",
+      "id": "behavior-152",
       "operationId": "ListSkillVersions",
       "kinds": [
         "auth-application",
@@ -13666,7 +13603,7 @@
       }
     },
     {
-      "id": "behavior-154",
+      "id": "behavior-153",
       "operationId": "GetSkillVersionContent",
       "kinds": [
         "auth-application",
@@ -13710,7 +13647,7 @@
       }
     },
     {
-      "id": "behavior-155",
+      "id": "behavior-154",
       "operationId": "listChatkitThreads",
       "kinds": [
         "auth-application",
@@ -13804,7 +13741,7 @@
       }
     },
     {
-      "id": "behavior-156",
+      "id": "behavior-155",
       "operationId": "listAgentEnvironments",
       "kinds": [
         "auth-application",
@@ -13912,7 +13849,7 @@
       }
     },
     {
-      "id": "behavior-157",
+      "id": "behavior-156",
       "operationId": "createAgentEnvironment",
       "kinds": [
         "auth-application",
@@ -14058,7 +13995,7 @@
       }
     },
     {
-      "id": "behavior-158",
+      "id": "behavior-157",
       "operationId": "retrieveAgentEnvironment",
       "kinds": [
         "auth-application",
@@ -14130,7 +14067,7 @@
       }
     },
     {
-      "id": "behavior-159",
+      "id": "behavior-158",
       "operationId": "listAgentEnvironmentFiles",
       "kinds": [
         "auth-application",
@@ -14215,7 +14152,7 @@
       }
     },
     {
-      "id": "behavior-160",
+      "id": "behavior-159",
       "operationId": "createAgentEnvironmentFile",
       "kinds": [
         "auth-application",
@@ -14270,7 +14207,7 @@
       }
     },
     {
-      "id": "behavior-161",
+      "id": "behavior-160",
       "operationId": "listAgentSessionSubagents",
       "kinds": [
         "auth-application",
@@ -14359,7 +14296,7 @@
       }
     },
     {
-      "id": "behavior-162",
+      "id": "behavior-161",
       "operationId": "retrieveAgentSessionSubagent",
       "kinds": [
         "auth-application",
@@ -14417,7 +14354,7 @@
       }
     },
     {
-      "id": "behavior-163",
+      "id": "behavior-162",
       "operationId": "listAgentSessionSubagentItems",
       "kinds": [
         "auth-application",
@@ -14505,7 +14442,7 @@
       }
     },
     {
-      "id": "behavior-164",
+      "id": "behavior-163",
       "operationId": "retrieveAgentSessionSubagentTurn",
       "kinds": [
         "auth-application",
@@ -14574,7 +14511,7 @@
       }
     },
     {
-      "id": "behavior-165",
+      "id": "behavior-164",
       "operationId": "listAgentSessionSubagentTurnItems",
       "kinds": [
         "auth-application",
@@ -14663,7 +14600,7 @@
       }
     },
     {
-      "id": "behavior-166",
+      "id": "behavior-165",
       "operationId": "listAgents",
       "kinds": [
         "auth-application",
@@ -14771,7 +14708,7 @@
       }
     },
     {
-      "id": "behavior-167",
+      "id": "behavior-166",
       "operationId": "createAgent",
       "kinds": [
         "auth-application",
@@ -14882,7 +14819,7 @@
       }
     },
     {
-      "id": "behavior-168",
+      "id": "behavior-167",
       "operationId": "updateAgent",
       "kinds": [
         "auth-application",
@@ -14996,7 +14933,7 @@
       }
     },
     {
-      "id": "behavior-169",
+      "id": "behavior-168",
       "operationId": "deleteAgent",
       "kinds": [
         "auth-application",
@@ -15042,7 +14979,7 @@
       }
     },
     {
-      "id": "behavior-170",
+      "id": "behavior-169",
       "operationId": "listAgentEnvironmentTemplates",
       "kinds": [
         "auth-application",
@@ -15163,7 +15100,7 @@
       }
     },
     {
-      "id": "behavior-171",
+      "id": "behavior-170",
       "operationId": "createAgentEnvironmentTemplate",
       "kinds": [
         "auth-application",
@@ -15319,7 +15256,7 @@
       }
     },
     {
-      "id": "behavior-172",
+      "id": "behavior-171",
       "operationId": "retrieveAgentEnvironmentTemplate",
       "kinds": [
         "auth-application",
@@ -15411,7 +15348,7 @@
       }
     },
     {
-      "id": "behavior-173",
+      "id": "behavior-172",
       "operationId": "createAgentSession",
       "kinds": [
         "auth-application",
@@ -15591,7 +15528,7 @@
       }
     },
     {
-      "id": "behavior-174",
+      "id": "behavior-173",
       "operationId": "listAgentSessionArtifacts",
       "kinds": [
         "auth-application",
@@ -15682,7 +15619,7 @@
       }
     },
     {
-      "id": "behavior-175",
+      "id": "behavior-174",
       "operationId": "deleteAgentSessionArtifact",
       "kinds": [
         "auth-application",
@@ -15729,7 +15666,7 @@
       }
     },
     {
-      "id": "behavior-176",
+      "id": "behavior-175",
       "operationId": "retrieveAgentSessionArtifactContent",
       "kinds": [
         "auth-application",
@@ -15772,7 +15709,7 @@
       }
     },
     {
-      "id": "behavior-177",
+      "id": "behavior-176",
       "operationId": "listAgentSessionEvents",
       "kinds": [
         "auth-application",
@@ -15814,7 +15751,7 @@
       }
     },
     {
-      "id": "behavior-178",
+      "id": "behavior-177",
       "operationId": "createAgentSessionEvents",
       "kinds": [
         "auth-application",
@@ -15882,7 +15819,7 @@
       }
     },
     {
-      "id": "behavior-179",
+      "id": "behavior-178",
       "operationId": "listVaults",
       "kinds": [
         "auth-application",
@@ -15968,7 +15905,7 @@
       }
     },
     {
-      "id": "behavior-180",
+      "id": "behavior-179",
       "operationId": "listVaultCredentials",
       "kinds": [
         "auth-application",
@@ -16073,7 +16010,7 @@
       }
     },
     {
-      "id": "behavior-181",
+      "id": "behavior-180",
       "operationId": "rotateVaultCredential",
       "kinds": [
         "auth-application",
@@ -16146,7 +16083,7 @@
       }
     },
     {
-      "id": "behavior-182",
+      "id": "behavior-181",
       "operationId": "ListWebhookEndpoints",
       "kinds": [
         "auth-application",
@@ -16222,7 +16159,7 @@
       }
     },
     {
-      "id": "behavior-183",
+      "id": "behavior-182",
       "operationId": "beta_createResponse",
       "kinds": [
         "auth-application",
@@ -16430,7 +16367,7 @@
       }
     },
     {
-      "id": "behavior-184",
+      "id": "behavior-183",
       "operationId": "beta_getResponse",
       "kinds": [
         "auth-application",
@@ -16571,7 +16508,7 @@
       }
     },
     {
-      "id": "behavior-185",
+      "id": "behavior-184",
       "operationId": "beta_deleteResponse",
       "kinds": [
         "auth-application",
@@ -16622,7 +16559,7 @@
       }
     },
     {
-      "id": "behavior-186",
+      "id": "behavior-185",
       "operationId": "beta_cancelResponse",
       "kinds": [
         "auth-application",
@@ -16728,7 +16665,7 @@
       }
     },
     {
-      "id": "behavior-187",
+      "id": "behavior-186",
       "operationId": "betaResponsesCompact",
       "kinds": [
         "auth-application",
@@ -16834,7 +16771,7 @@
       }
     },
     {
-      "id": "behavior-188",
+      "id": "behavior-187",
       "operationId": "beta_listInputItems",
       "kinds": [
         "auth-application",
@@ -16911,7 +16848,7 @@
         "kind": "json",
         "status": 200,
         "mediaType": "application/json",
-        "body": "{\"object\":\"list\",\"data\":[{\"agent\":{\"agent_name\":\"Example Name\"},\"type\":\"BetaInputMessageResource\",\"role\":\"user\",\"status\":\"in_progress\",\"content\":[{\"type\":\"input_text\",\"text\":\"text\",\"prompt_cache_breakpoint\":{\"mode\":\"explicit\"}}],\"id\":\"id-1\"}],\"has_more\":false,\"first_id\":\"first-1\",\"last_id\":\"last-1\"}",
+        "body": "{\"object\":\"list\",\"data\":[{\"agent\":{\"agent_name\":\"Example Name\"},\"type\":\"message\",\"role\":\"user\",\"status\":\"in_progress\",\"content\":[{\"type\":\"input_text\",\"text\":\"text\",\"prompt_cache_breakpoint\":{\"mode\":\"explicit\"}}],\"id\":\"id-1\"}],\"has_more\":false,\"first_id\":\"first-1\",\"last_id\":\"last-1\"}",
         "value": {
           "object": "list",
           "data": [
@@ -16919,7 +16856,7 @@
               "agent": {
                 "agent_name": "Example Name"
               },
-              "type": "BetaInputMessageResource",
+              "type": "message",
               "role": "user",
               "status": "in_progress",
               "content": [
@@ -16941,7 +16878,7 @@
       }
     },
     {
-      "id": "behavior-189",
+      "id": "behavior-188",
       "operationId": "betaResponsesCountInputTokens",
       "kinds": [
         "auth-application",
@@ -18758,6 +18695,19 @@
             "file_search": {
               "vector_store_ids": [
                 "vector_store_ids"
+              ],
+              "vector_stores": [
+                {
+                  "file_ids": [
+                    "file_ids"
+                  ],
+                  "chunking_strategy": {
+                    "type": "auto"
+                  },
+                  "metadata": {
+                    "key": "key"
+                  }
+                }
               ]
             }
           },
@@ -18786,7 +18736,7 @@
         "headers": {
           "content-type": "application/json"
         },
-        "bodyText": "{\"model\":\"gpt-4.1\",\"name\":\"Example Name\",\"description\":\"example text\",\"instructions\":\"instructions\",\"reasoning_effort\":\"medium\",\"tools\":[],\"tool_resources\":{\"code_interpreter\":{\"file_ids\":[]},\"file_search\":{\"vector_store_ids\":[\"vector_store_ids\"]}},\"metadata\":{\"key\":\"key\"},\"temperature\":1,\"top_p\":1,\"response_format\":{\"type\":\"text\"}}",
+        "bodyText": "{\"model\":\"gpt-4.1\",\"name\":\"Example Name\",\"description\":\"example text\",\"instructions\":\"instructions\",\"reasoning_effort\":\"medium\",\"tools\":[],\"tool_resources\":{\"code_interpreter\":{\"file_ids\":[]},\"file_search\":{\"vector_store_ids\":[\"vector_store_ids\"],\"vector_stores\":[{\"file_ids\":[\"file_ids\"],\"chunking_strategy\":{\"type\":\"auto\"},\"metadata\":{\"key\":\"key\"}}]}},\"metadata\":{\"key\":\"key\"},\"temperature\":1,\"top_p\":1,\"response_format\":{\"type\":\"text\"}}",
         "multipartFields": null
       },
       "response": {

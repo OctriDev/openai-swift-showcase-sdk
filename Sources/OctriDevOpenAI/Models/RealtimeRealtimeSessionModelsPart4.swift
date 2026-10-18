@@ -4,6 +4,42 @@
 import Foundation
 
 // RealtimeRealtimeSession domain models
+extension RealtimeSession {
+    public init(id: String? = nil, object: RealtimeSessionObject? = nil, modalities: [RealtimeSessionModalitiesItem]? = nil, model: String? = nil, instructions: String? = nil, voice: VoiceIdsShared? = nil, inputAudioFormat: RealtimeSessionInputAudioFormat? = nil, outputAudioFormat: RealtimeSessionOutputAudioFormat? = nil, inputAudioTranscription: AudioTranscriptionResponse? = nil, turnDetection: RealtimeTurnDetection? = nil, inputAudioNoiseReduction: RealtimeSessionInputAudioNoiseReduction? = nil, speed: Double? = nil, tracing: RealtimeSessionTracing? = nil, tools: [RealtimeFunctionTool]? = nil, toolChoice: String? = nil, temperature: Double? = nil, maxResponseOutputTokens: RealtimeSessionMaxResponseOutputTokens? = nil, expiresAt: Int? = nil, prompt: Prompt? = nil, include: [RealtimeSessionIncludeItem]? = nil) throws {
+        self.init()
+        (self.id, self.object) = (id, object)
+        (self.modalities, self.model) = (modalities, model)
+        (self.instructions, self.voice) = (instructions, voice)
+        (self.inputAudioFormat, self.outputAudioFormat) = (inputAudioFormat, outputAudioFormat)
+        (self.inputAudioTranscription, self.turnDetection) = (inputAudioTranscription, turnDetection)
+        (self.inputAudioNoiseReduction, self.speed) = (inputAudioNoiseReduction, speed)
+        (self.tracing, self.tools) = (tracing, tools)
+        (self.toolChoice, self.temperature) = (toolChoice, temperature)
+        (self.maxResponseOutputTokens, self.expiresAt) = (maxResponseOutputTokens, expiresAt)
+        (self.prompt, self.include) = (prompt, include)
+        if let value = self.speed {
+            try validateRange("speed", Double(value), min: 0.25, max: 1.5, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        }
+    }
+}
+
+/// Configuration for input and output audio.
+public struct RealtimeSessionCreateRequestGAAudio: Codable {
+    /// Optional object value serialized in the `input` wire field.
+    public var input: RealtimeSessionCreateRequestGAAudioInput?
+    /// Optional object value serialized in the `output` wire field.
+    public var output: RealtimeSessionCreateRequestGAAudioOutput?
+
+    enum CodingKeys: String, CodingKey {
+        case input
+        case output
+    }
+
+    init() {
+        (self.input, self.output) = (nil, nil)
+    }
+}
+
 extension RealtimeSessionCreateRequestGAAudio {
     public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
@@ -217,6 +253,38 @@ extension RealtimeSessionCreateResponseTurnDetection {
     }
 }
 
+/// Configuration for input and output audio for the session.
+public struct RealtimeSessionCreateResponseAudio: Codable {
+    /// Optional object value serialized in the `input` wire field.
+    public var input: RealtimeSessionCreateResponseAudioInput?
+    /// Optional object value serialized in the `output` wire field.
+    public var output: RealtimeSessionCreateResponseAudioOutput?
+
+    enum CodingKeys: String, CodingKey {
+        case input
+        case output
+    }
+
+    init() {
+        (self.input, self.output) = (nil, nil)
+    }
+}
+
+extension RealtimeSessionCreateResponseAudio {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.input = try container.sdkDecodeIfPresent(.input)
+        self.output = try container.sdkDecodeIfPresent(.output)
+    }
+}
+
+extension RealtimeSessionCreateResponseAudio {
+    public init(input: RealtimeSessionCreateResponseAudioInput? = nil, output: RealtimeSessionCreateResponseAudioOutput? = nil) {
+        self.init()
+        (self.input, self.output) = (input, output)
+    }
+}
+
 /// Granular configuration for tracing.
 public struct RealtimeSessionCreateResponseTracingVariant1: Codable {
     /// The name of the workflow to attach to this trace. This is used to name the trace in the traces dashboard.
@@ -254,115 +322,6 @@ extension RealtimeSessionCreateResponseTracingVariant1 {
     }
 }
 
-/// Granular configuration for tracing.
-public struct RealtimeSessionCreateResponseGATracingVariant1: Codable {
-    /// The name of the workflow to attach to this trace. This is used to name the trace in the Traces Dashboard.
-    public var workflowName: String?
-    /// The group id to attach to this trace to enable filtering and grouping in the Traces Dashboard.
-    public var groupId: String?
-    /// The arbitrary metadata to attach to this trace to enable filtering in the Traces Dashboard.
-    public var metadata: [String: JSONValue]?
-
-    enum CodingKeys: String, CodingKey {
-        case workflowName = "workflow_name"
-        case groupId = "group_id"
-        case metadata
-    }
-
-    init() {
-        (self.workflowName, self.groupId, self.metadata) = (nil, nil, nil)
-    }
-}
-
-extension RealtimeSessionCreateResponseGATracingVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.workflowName = try container.sdkDecodeIfPresent(.workflowName)
-        self.groupId = try container.sdkDecodeIfPresent(.groupId)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-    }
-}
-
-extension RealtimeSessionCreateResponseGATracingVariant1 {
-    public init(workflowName: String? = nil, groupId: String? = nil, metadata: [String: JSONValue]? = nil) {
-        self.init()
-        (self.workflowName, self.groupId) = (workflowName, groupId)
-        self.metadata = metadata
-    }
-}
-
-/// Configuration for input and output audio for the session.
-public struct RealtimeSessionCreateResponseAudio: Codable {
-    /// Optional object value serialized in the `input` wire field.
-    public var input: RealtimeSessionCreateResponseAudioInput?
-    /// Optional object value serialized in the `output` wire field.
-    public var output: RealtimeSessionCreateResponseAudioOutput?
-
-    enum CodingKeys: String, CodingKey {
-        case input
-        case output
-    }
-
-    init() {
-        (self.input, self.output) = (nil, nil)
-    }
-}
-
-extension RealtimeSessionCreateResponseAudio {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.input = try container.sdkDecodeIfPresent(.input)
-        self.output = try container.sdkDecodeIfPresent(.output)
-    }
-}
-
-extension RealtimeSessionCreateResponseAudio {
-    public init(input: RealtimeSessionCreateResponseAudioInput? = nil, output: RealtimeSessionCreateResponseAudioOutput? = nil) {
-        self.init()
-        (self.input, self.output) = (input, output)
-    }
-}
-
-public indirect enum RealtimeSessionCreateResponseGATracing {
-    case stringValue(String)
-    case realtimeSessionCreateResponseGaTracingVariant1(RealtimeSessionCreateResponseGATracingVariant1)
-}
-
-extension RealtimeSessionCreateResponseGATracing: Codable {
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateResponseGATracing")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension RealtimeSessionCreateResponseGATracing {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(
-            RealtimeSessionCreateResponseGATracingVariant1.self
-        ) {
-            return             .realtimeSessionCreateResponseGaTracingVariant1(value)
-        }
-        return nil
-    }
-}
-
-extension RealtimeSessionCreateResponseGATracing {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .stringValue(value): try container.encode(value); return true
-        case let .realtimeSessionCreateResponseGaTracingVariant1(value): try container.encode(value); return true
-        }
-    }
-}
-
 /// Configuration for input audio noise reduction. This can be set to `null` to turn off. Noise reduction filters
 /// audio added to the input audio buffer before it is sent to VAD and the model. Filtering the audio can improve
 /// VAD and turn detection accuracy (reducing false positives) and model performance by improving perception of the
@@ -392,46 +351,6 @@ extension RealtimeSessionInputAudioNoiseReduction {
     public init(type: NoiseReductionType? = nil) {
         self.init()
         self.type = type
-    }
-}
-
-public indirect enum RealtimeSessionCreateRequestTracing {
-    case stringValue(String)
-    case realtimeSessionCreateRequestTracingVariant1(RealtimeSessionCreateRequestTracingVariant1)
-}
-
-extension RealtimeSessionCreateRequestTracing: Codable {
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateRequestTracing")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension RealtimeSessionCreateRequestTracing {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(
-            RealtimeSessionCreateRequestTracingVariant1.self
-        ) {
-            return             .realtimeSessionCreateRequestTracingVariant1(value)
-        }
-        return nil
-    }
-}
-
-extension RealtimeSessionCreateRequestTracing {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .stringValue(value): try container.encode(value); return true
-        case let .realtimeSessionCreateRequestTracingVariant1(value): try container.encode(value); return true
-        }
     }
 }
 
@@ -536,5 +455,42 @@ extension RealtimeSessionCreateRequestGA {
         (self.reasoning, self.maxOutputTokens) = (reasoning, maxOutputTokens)
         (self.truncation, self.prompt) = (truncation, prompt)
             try sdkValidateRawEnum("type", self.type, RealtimeSessionCreateRequestGAType.allCases.map(\.rawValue))
+    }
+}
+
+/// Granular configuration for tracing.
+public struct RealtimeSessionTracingVariant1: Codable {
+    /// The name of the workflow to attach to this trace. This is used to name the trace in the traces dashboard.
+    public var workflowName: String?
+    /// The group id to attach to this trace to enable filtering and grouping in the traces dashboard.
+    public var groupId: String?
+    /// The arbitrary metadata to attach to this trace to enable filtering in the traces dashboard.
+    public var metadata: [String: JSONValue]?
+
+    enum CodingKeys: String, CodingKey {
+        case workflowName = "workflow_name"
+        case groupId = "group_id"
+        case metadata
+    }
+
+    init() {
+        (self.workflowName, self.groupId, self.metadata) = (nil, nil, nil)
+    }
+}
+
+extension RealtimeSessionTracingVariant1 {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.workflowName = try container.sdkDecodeIfPresent(.workflowName)
+        self.groupId = try container.sdkDecodeIfPresent(.groupId)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+    }
+}
+
+extension RealtimeSessionTracingVariant1 {
+    public init(workflowName: String? = nil, groupId: String? = nil, metadata: [String: JSONValue]? = nil) {
+        self.init()
+        (self.workflowName, self.groupId) = (workflowName, groupId)
+        self.metadata = metadata
     }
 }

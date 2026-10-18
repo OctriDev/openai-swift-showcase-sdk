@@ -13,12 +13,27 @@ extension CustomToolChatCompletionsCustomFormat: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+        }
         if let value = Self.decodeGroup1(from: container) { self = value; return }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CustomToolChatCompletionsCustomFormat")
     }
 
     public func encode(to encoder: Encoder) throws {
         if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension CustomToolChatCompletionsCustomFormat {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(CustomToolChatCompletionsCustomFormatVariant0.self), sdkKeepsEveryKey(value, of: raw) {
+            return .customToolChatCompletionsCustomFormatVariant0(value)
+        }
+        if let value = try? container.decode(CustomToolChatCompletionsCustomFormatVariant1.self), sdkKeepsEveryKey(value, of: raw) {
+            return .customToolChatCompletionsCustomFormatVariant1(value)
+        }
+        return nil
     }
 }
 

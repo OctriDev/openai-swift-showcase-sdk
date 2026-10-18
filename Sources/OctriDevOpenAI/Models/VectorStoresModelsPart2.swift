@@ -4,40 +4,6 @@
 import Foundation
 
 // VectorStores domain models
-extension VectorStoreSearchResultsPage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.searchQuery) else {
-            throw SdkValidationError(field: "search_query", code: "required", message: "Validation failed for 'search_query': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        guard container.contains(.nextPage) else {
-            throw SdkValidationError(field: "next_page", code: "required", message: "Validation failed for 'next_page': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.searchQuery = try container.sdkDecodeRequired(.searchQuery)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-        self.nextPage = try container.sdkDecodeNullable(.nextPage)
-    }
-}
-
-extension VectorStoreSearchResultsPage {
-    public init(object: VectorStoreSearchResultsPageObject, searchQuery: [String], data: [VectorStoreSearchResultItem], hasMore: Bool, nextPage: String?) {
-        (self.object, self.searchQuery) = (object, searchQuery)
-        (self.data, self.hasMore) = (data, hasMore)
-        self.nextPage = nextPage
-    }
-}
-
 /// Typed representation of the `ListVectorStoreFilesResponse` API schema.
 public struct ListVectorStoreFilesResponse: Codable {
     /// Required `string` value serialized in the `object` wire field.
@@ -162,6 +128,69 @@ extension VectorStoreFileObjectLastError {
 extension VectorStoreFileObjectLastError {
     public init(code: VectorStoreFileObjectLastErrorCode, message: String) {
         (self.code, self.message) = (code, message)
+    }
+}
+
+/// Typed representation of the `CreateVectorStoreFileBatchRequest` API schema.
+public struct CreateVectorStoreFileBatchRequest: Codable {
+    /// A list of File IDs that the vector store should use. Useful for tools like `file_search` that can access
+    /// files. If `attributes` or `chunking_strategy` are provided, they will be applied to all files in the batch.
+    /// The maximum batch size is 2000 files. This endpoint is recommended for multi-file ingestion and helps reduce
+    /// per-vector-store write request pressure. Mutually exclusive with `files`.
+    public var fileIds: [String]?
+    /// A list of objects that each include a `file_id` plus optional `attributes` or `chunking_strategy`. Use this
+    /// when you need to override metadata for specific files. The global `attributes` or `chunking_strategy` will
+    /// be ignored and must be specified for each file. The maximum batch size is 2000 files. This endpoint is
+    /// recommended for multi-file ingestion and helps reduce per-vector-store write request pressure. Mutually
+    /// exclusive with `file_ids`.
+    public var files: [CreateVectorStoreFileRequest]?
+    /// The chunking strategy used to chunk the file(s). If not set, will use the `auto` strategy.
+    public var chunkingStrategy: ChunkingStrategyRequestParam?
+    /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional
+    /// information about the object in a structured format, and querying for objects via API or the dashboard. Keys
+    /// are strings with a maximum length of 64 characters. Values are strings with a maximum length of 512
+    /// characters, booleans, or numbers.
+    public var attributes: VectorStoreFileAttributes?
+
+    enum CodingKeys: String, CodingKey {
+        case fileIds = "file_ids"
+        case files
+        case chunkingStrategy = "chunking_strategy"
+        case attributes
+    }
+
+    init() {
+        (self.fileIds, self.files, self.chunkingStrategy, self.attributes) = (nil, nil, nil, nil)
+    }
+}
+
+extension CreateVectorStoreFileBatchRequest {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        self.files = try container.sdkDecodeIfPresent(.files)
+        self.chunkingStrategy = try container.sdkDecodeIfPresent(.chunkingStrategy)
+        self.attributes = try container.sdkDecodeIfPresent(.attributes)
+        if let value = self.fileIds {
+            try validateItems("file_ids", value, min: 1, max: 2000)
+        }
+        if let value = self.files {
+            try validateItems("files", value, min: 1, max: 2000)
+        }
+    }
+}
+
+extension CreateVectorStoreFileBatchRequest {
+    public init(fileIds: [String]? = nil, files: [CreateVectorStoreFileRequest]? = nil, chunkingStrategy: ChunkingStrategyRequestParam? = nil, attributes: VectorStoreFileAttributes? = nil) throws {
+        self.init()
+        (self.fileIds, self.files) = (fileIds, files)
+        (self.chunkingStrategy, self.attributes) = (chunkingStrategy, attributes)
+        if let value = self.fileIds {
+            try validateItems("file_ids", value, min: 1, max: 2000)
+        }
+        if let value = self.files {
+            try validateItems("files", value, min: 1, max: 2000)
+        }
     }
 }
 

@@ -4,6 +4,82 @@
 import Foundation
 
 // AssistantsRun domain models
+extension RunStreamEvent {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(RunStreamEventVariant0.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStreamEventVariant0(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant1.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStreamEventVariant1(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant2.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStreamEventVariant2(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant3.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStreamEventVariant3(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant4.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStreamEventVariant4(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant5.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStreamEventVariant5(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant6.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStreamEventVariant6(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant7.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStreamEventVariant7(value)
+        }
+        return nil
+    }
+}
+
+extension RunStreamEvent {
+    static func decodeLossless2(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(RunStreamEventVariant8.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStreamEventVariant8(value)
+        }
+        if let value = try? container.decode(RunStreamEventVariant9.self), sdkKeepsEveryKey(value, of: raw) {
+            return .runStreamEventVariant9(value)
+        }
+        return nil
+    }
+}
+
+extension RunStreamEvent {
+    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
+        if let value = try? container.decode(RunStreamEventVariant0.self) { return .runStreamEventVariant0(value) }
+        if let value = try? container.decode(RunStreamEventVariant1.self) { return .runStreamEventVariant1(value) }
+        if let value = try? container.decode(RunStreamEventVariant2.self) { return .runStreamEventVariant2(value) }
+        if let value = try? container.decode(RunStreamEventVariant3.self) { return .runStreamEventVariant3(value) }
+        if let value = try? container.decode(RunStreamEventVariant4.self) { return .runStreamEventVariant4(value) }
+        if let value = try? container.decode(RunStreamEventVariant5.self) { return .runStreamEventVariant5(value) }
+        if let value = try? container.decode(RunStreamEventVariant6.self) { return .runStreamEventVariant6(value) }
+        if let value = try? container.decode(RunStreamEventVariant7.self) { return .runStreamEventVariant7(value) }
+        if let value = try? container.decode(RunStreamEventVariant8.self) { return .runStreamEventVariant8(value) }
+        if let value = try? container.decode(RunStreamEventVariant9.self) { return .runStreamEventVariant9(value) }
+        return nil
+    }
+}
+
+extension RunStreamEvent {
+    func encodeGroup1(to encoder: Encoder) throws -> Bool {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .runStreamEventVariant0(value): try container.encode(value); return true
+        case let .runStreamEventVariant1(value): try container.encode(value); return true
+        case let .runStreamEventVariant2(value): try container.encode(value); return true
+        case let .runStreamEventVariant3(value): try container.encode(value); return true
+        case let .runStreamEventVariant4(value): try container.encode(value); return true
+        case let .runStreamEventVariant5(value): try container.encode(value); return true
+        case let .runStreamEventVariant6(value): try container.encode(value); return true
+        case let .runStreamEventVariant7(value): try container.encode(value); return true
+        case let .runStreamEventVariant8(value): try container.encode(value); return true
+        case let .runStreamEventVariant9(value): try container.encode(value); return true
+        }
+    }
+}
+
 /// Represents an execution run on a thread.
 public struct RunObject: Codable {
     /// The identifier, which can be referenced in API endpoints.
@@ -390,63 +466,4 @@ extension RunStreamEventVariant1 {
         self.data = try container.sdkDecodeRequired(.data)
             try sdkValidateRawEnum("event", self.event, RunStreamEventVariant1Event.allCases.map(\.rawValue))
     }
-}
-
-extension RunStreamEventVariant1 {
-    public init(event: RunStreamEventVariant1Event, data: RunObject) throws {
-        (self.event, self.data) = (event, data)
-            try sdkValidateRawEnum("event", self.event, RunStreamEventVariant1Event.allCases.map(\.rawValue))
-    }
-}
-
-/// Typed representation of the `RunStepDetailsToolCallsCodeOutputImageObject` API schema.
-public struct RunStepDetailsToolCallsCodeOutputImageObject: Codable {
-    /// Always `image`.
-    public var type: RunStepDetailsToolCallsCodeOutputImageObjectType
-    /// Required object value serialized in the `image` wire field.
-    public var image: RunStepDetailsToolCallsCodeOutputImageObjectImage
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case image
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunStepDetailsToolCallsCodeOutputImageObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.image) else {
-            throw SdkValidationError(field: "image", code: "required", message: "Validation failed for 'image': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.image = try container.sdkDecodeRequired(.image)
-            try sdkValidateRawEnum("type", self.type, RunStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue))
-    }
-}
-
-extension RunStepDetailsToolCallsCodeOutputImageObject {
-    public init(type: RunStepDetailsToolCallsCodeOutputImageObjectType, image: RunStepDetailsToolCallsCodeOutputImageObjectImage) throws {
-        (self.type, self.image) = (type, image)
-            try sdkValidateRawEnum("type", self.type, RunStepDetailsToolCallsCodeOutputImageObjectType.allCases.map(\.rawValue))
-    }
-}
-
-/// Details of the message creation by the run step.
-public struct RunStepDeltaStepDetailsMessageCreationObject: Codable {
-    /// Always `message_creation`.
-    public var type: RunStepDeltaStepDetailsMessageCreationObjectType
-    /// Optional object value serialized in the `message_creation` wire field.
-    public var messageCreation: RunStepDeltaStepDetailsMessageCreationObjectMessageCreation?
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case messageCreation = "message_creation"
-    }
-
-    private init(sdkCopy value: Self) { self = value }
 }

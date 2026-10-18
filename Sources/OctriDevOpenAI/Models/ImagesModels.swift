@@ -104,42 +104,6 @@ extension ImageGenStreamEvent {
     }
 }
 
-public indirect enum ImageRefParam {
-    case jsonValue(JSONValue)
-    case jsonValue1(JSONValue)
-}
-
-extension ImageRefParam: Codable {
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ImageRefParam")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension ImageRefParam {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
-        if let value = try? container.decode(JSONValue.self) { return .jsonValue1(value) }
-        return nil
-    }
-}
-
-extension ImageRefParam {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .jsonValue(value): try container.encode(value); return true
-        case let .jsonValue1(value): try container.encode(value); return true
-        }
-    }
-}
-
 public indirect enum PartialImages {
     case intValue(Int)
     case jsonValue(JSONValue)
@@ -181,6 +145,48 @@ extension PartialImages: SdkNumericValueConvertible {
         switch self {
         case let .intValue(value): Double(value)
         default: nil
+        }
+    }
+}
+
+/// Reference an input image by either URL or uploaded file ID. Provide exactly one of `image_url` or `file_id`.
+public struct ImageRefParam: Codable {
+    /// A fully qualified URL or base64-encoded data URL.
+    /// - Example: "https://example.com/source-image.png"
+    public var imageUrl: String?
+    /// The File API ID of an uploaded image to use as input.
+    /// - Example: "file-abc123"
+    public var fileId: String?
+
+    enum CodingKeys: String, CodingKey {
+        case imageUrl = "image_url"
+        case fileId = "file_id"
+    }
+
+    init() {
+        (self.imageUrl, self.fileId) = (nil, nil)
+    }
+}
+
+extension ImageRefParam {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        if let value = self.imageUrl {
+            try validateLength("image_url", value, min: nil, max: 20971520)
+            try sdkValidateUri("image_url", value)
+        }
+    }
+}
+
+extension ImageRefParam {
+    public init(imageUrl: String? = nil, fileId: String? = nil) throws {
+        self.init()
+        (self.imageUrl, self.fileId) = (imageUrl, fileId)
+        if let value = self.imageUrl {
+            try validateLength("image_url", value, min: nil, max: 20971520)
+            try sdkValidateUri("image_url", value)
         }
     }
 }

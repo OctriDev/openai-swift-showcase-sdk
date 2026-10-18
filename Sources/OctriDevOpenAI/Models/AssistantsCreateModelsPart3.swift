@@ -124,74 +124,95 @@ extension CreateMessageRequest {
     }
 }
 
-public indirect enum CreateAssistantRequestToolResourcesFileSearch {
-    case jsonValue(JSONValue)
-    case jsonValue1(JSONValue)
+public typealias CreateAssistantRequestToolResourcesFileSearchVectorStoresList = [CreateAssistantRequestToolResourcesFileSearchVectorStoresItem]
+
+/// Optional object value serialized in the `file_search` wire field.
+public struct CreateAssistantRequestToolResourcesFileSearch: Codable {
+    /// The vector store attached to this assistant. There can be a maximum of 1 vector store attached to the
+    /// assistant.
+    public var vectorStoreIds: [String]?
+    /// A helper to create a vector store with file_ids and attach it to this assistant. There can be a maximum of 1
+    /// vector store attached to the assistant.
+    public var vectorStores: CreateAssistantRequestToolResourcesFileSearchVectorStoresList?
+
+    enum CodingKeys: String, CodingKey {
+        case vectorStoreIds = "vector_store_ids"
+        case vectorStores = "vector_stores"
+    }
+
+    init() {
+        (self.vectorStoreIds, self.vectorStores) = (nil, nil)
+    }
 }
 
-extension CreateAssistantRequestToolResourcesFileSearch: Codable {
-
+extension CreateAssistantRequestToolResourcesFileSearch {
     public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateAssistantRequestToolResourcesFileSearch")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension CreateAssistantRequestToolResourcesFileSearch {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
-        if let value = try? container.decode(JSONValue.self) { return .jsonValue1(value) }
-        return nil
-    }
-}
-
-extension CreateAssistantRequestToolResourcesFileSearch {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .jsonValue(value): try container.encode(value); return true
-        case let .jsonValue1(value): try container.encode(value); return true
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
+        self.vectorStores = try container.sdkDecodeIfPresent(.vectorStores)
+        if let value = self.vectorStoreIds {
+            try validateItems("vector_store_ids", value, min: nil, max: 1)
+        }
+        if let value = self.vectorStores {
+            try validateItems("vector_stores", value, min: nil, max: 1)
         }
     }
 }
 
-public indirect enum CreateThreadRequestToolResourcesFileSearch {
-    case jsonValue(JSONValue)
-    case jsonValue1(JSONValue)
+extension CreateAssistantRequestToolResourcesFileSearch {
+    public init(vectorStoreIds: [String]? = nil, vectorStores: CreateAssistantRequestToolResourcesFileSearchVectorStoresList? = nil) throws {
+        self.init()
+        (self.vectorStoreIds, self.vectorStores) = (vectorStoreIds, vectorStores)
+        if let value = self.vectorStoreIds {
+            try validateItems("vector_store_ids", value, min: nil, max: 1)
+        }
+        if let value = self.vectorStores {
+            try validateItems("vector_stores", value, min: nil, max: 1)
+        }
+    }
 }
 
-extension CreateThreadRequestToolResourcesFileSearch: Codable {
+/// Optional object value serialized in the `file_search` wire field.
+public struct CreateThreadRequestToolResourcesFileSearch: Codable {
+    /// The vector store attached to this thread. There can be a maximum of 1 vector store attached to the thread.
+    public var vectorStoreIds: [String]?
+    /// A helper to create a vector store with file_ids and attach it to this thread. There can be a maximum of 1
+    /// vector store attached to the thread.
+    public var vectorStores: [CreateThreadRequestToolResourcesFileSearchVectorStoresItem]?
 
+    enum CodingKeys: String, CodingKey {
+        case vectorStoreIds = "vector_store_ids"
+        case vectorStores = "vector_stores"
+    }
+
+    init() {
+        (self.vectorStoreIds, self.vectorStores) = (nil, nil)
+    }
+}
+
+extension CreateThreadRequestToolResourcesFileSearch {
     public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateThreadRequestToolResourcesFileSearch")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension CreateThreadRequestToolResourcesFileSearch {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
-        if let value = try? container.decode(JSONValue.self) { return .jsonValue1(value) }
-        return nil
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        self.vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
+        self.vectorStores = try container.sdkDecodeIfPresent(.vectorStores)
+        if let value = self.vectorStoreIds {
+            try validateItems("vector_store_ids", value, min: nil, max: 1)
+        }
+        if let value = self.vectorStores {
+            try validateItems("vector_stores", value, min: nil, max: 1)
+        }
     }
 }
 
 extension CreateThreadRequestToolResourcesFileSearch {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .jsonValue(value): try container.encode(value); return true
-        case let .jsonValue1(value): try container.encode(value); return true
+    public init(vectorStoreIds: [String]? = nil, vectorStores: [CreateThreadRequestToolResourcesFileSearchVectorStoresItem]? = nil) throws {
+        self.init()
+        (self.vectorStoreIds, self.vectorStores) = (vectorStoreIds, vectorStores)
+        if let value = self.vectorStoreIds {
+            try validateItems("vector_store_ids", value, min: nil, max: 1)
+        }
+        if let value = self.vectorStores {
+            try validateItems("vector_stores", value, min: nil, max: 1)
         }
     }
 }
@@ -423,14 +444,5 @@ extension CreateRunRequestModel: Codable {
 
     public func encode(to encoder: Encoder) throws {
         if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension CreateRunRequestModel {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(AssistantSupportedModels.self) { return .assistantSupportedModels(value) }
-        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
-        return nil
     }
 }

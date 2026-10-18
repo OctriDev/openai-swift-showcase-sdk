@@ -82,12 +82,27 @@ extension RealtimeSessionCreateRequestGAToolsItem: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+        }
         if let value = Self.decodeGroup1(from: container) { self = value; return }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateRequestGAToolsItem")
     }
 
     public func encode(to encoder: Encoder) throws {
         if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension RealtimeSessionCreateRequestGAToolsItem {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(RealtimeFunctionTool.self), sdkKeepsEveryKey(value, of: raw) {
+            return .realtimeFunctionTool(value)
+        }
+        if let value = try? container.decode(MCPTool.self), sdkKeepsEveryKey(value, of: raw) {
+            return .mCpTool(value)
+        }
+        return nil
     }
 }
 
@@ -105,6 +120,46 @@ extension RealtimeSessionCreateRequestGAToolsItem {
         switch self {
         case let .realtimeFunctionTool(value): try container.encode(value); return true
         case let .mCpTool(value): try container.encode(value); return true
+        }
+    }
+}
+
+public indirect enum RealtimeSessionCreateRequestTracing {
+    case stringValue(String)
+    case realtimeSessionCreateRequestTracingVariant1(RealtimeSessionCreateRequestTracingVariant1)
+}
+
+extension RealtimeSessionCreateRequestTracing: Codable {
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateRequestTracing")
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension RealtimeSessionCreateRequestTracing {
+    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(
+            RealtimeSessionCreateRequestTracingVariant1.self
+        ) {
+            return             .realtimeSessionCreateRequestTracingVariant1(value)
+        }
+        return nil
+    }
+}
+
+extension RealtimeSessionCreateRequestTracing {
+    func encodeGroup1(to encoder: Encoder) throws -> Bool {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .stringValue(value): try container.encode(value); return true
+        case let .realtimeSessionCreateRequestTracingVariant1(value): try container.encode(value); return true
         }
     }
 }
@@ -187,12 +242,27 @@ extension RealtimeSessionCreateResponseGAToolsItem: Codable {
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
+        if let raw = try? container.decode(JSONValue.self) {
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+        }
         if let value = Self.decodeGroup1(from: container) { self = value; return }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateResponseGAToolsItem")
     }
 
     public func encode(to encoder: Encoder) throws {
         if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension RealtimeSessionCreateResponseGAToolsItem {
+    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
+        if let value = try? container.decode(RealtimeFunctionTool.self), sdkKeepsEveryKey(value, of: raw) {
+            return .realtimeFunctionTool(value)
+        }
+        if let value = try? container.decode(MCPTool.self), sdkKeepsEveryKey(value, of: raw) {
+            return .mCpTool(value)
+        }
+        return nil
     }
 }
 
@@ -210,6 +280,122 @@ extension RealtimeSessionCreateResponseGAToolsItem {
         switch self {
         case let .realtimeFunctionTool(value): try container.encode(value); return true
         case let .mCpTool(value): try container.encode(value); return true
+        }
+    }
+}
+
+public indirect enum RealtimeSessionCreateResponseGATracing {
+    case stringValue(String)
+    case realtimeSessionCreateResponseGaTracingVariant1(RealtimeSessionCreateResponseGATracingVariant1)
+}
+
+extension RealtimeSessionCreateResponseGATracing: Codable {
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateResponseGATracing")
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension RealtimeSessionCreateResponseGATracing {
+    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(
+            RealtimeSessionCreateResponseGATracingVariant1.self
+        ) {
+            return             .realtimeSessionCreateResponseGaTracingVariant1(value)
+        }
+        return nil
+    }
+}
+
+extension RealtimeSessionCreateResponseGATracing {
+    func encodeGroup1(to encoder: Encoder) throws -> Bool {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .stringValue(value): try container.encode(value); return true
+        case let .realtimeSessionCreateResponseGaTracingVariant1(value): try container.encode(value); return true
+        }
+    }
+}
+
+public indirect enum RealtimeSessionCreateResponseTracing {
+    case stringValue(String)
+    case realtimeSessionCreateResponseTracingVariant1(RealtimeSessionCreateResponseTracingVariant1)
+}
+
+extension RealtimeSessionCreateResponseTracing: Codable {
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateResponseTracing")
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension RealtimeSessionCreateResponseTracing {
+    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(
+            RealtimeSessionCreateResponseTracingVariant1.self
+        ) {
+            return             .realtimeSessionCreateResponseTracingVariant1(value)
+        }
+        return nil
+    }
+}
+
+extension RealtimeSessionCreateResponseTracing {
+    func encodeGroup1(to encoder: Encoder) throws -> Bool {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .stringValue(value): try container.encode(value); return true
+        case let .realtimeSessionCreateResponseTracingVariant1(value): try container.encode(value); return true
+        }
+    }
+}
+
+public indirect enum RealtimeSessionTracing {
+    case stringValue(String)
+    case realtimeSessionTracingVariant1(RealtimeSessionTracingVariant1)
+}
+
+extension RealtimeSessionTracing: Codable {
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionTracing")
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        if try encodeGroup1(to: encoder) { return }
+    }
+}
+
+extension RealtimeSessionTracing {
+    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(RealtimeSessionTracingVariant1.self) { return .realtimeSessionTracingVariant1(value) }
+        return nil
+    }
+}
+
+extension RealtimeSessionTracing {
+    func encodeGroup1(to encoder: Encoder) throws -> Bool {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .stringValue(value): try container.encode(value); return true
+        case let .realtimeSessionTracingVariant1(value): try container.encode(value); return true
         }
     }
 }
@@ -326,198 +512,4 @@ extension RealtimeSessionCreateRequestTracingVariant1 {
         (self.workflowName, self.groupId) = (workflowName, groupId)
         self.metadata = metadata
     }
-}
-
-/// Configuration for input audio transcription, defaults to off and can be set to `null` to turn off once on. Input
-/// audio transcription is not native to the model, since the model consumes audio directly. Transcription runs
-/// asynchronously through the /audio/transcriptions endpoint and should be treated as guidance of input audio
-/// content rather than precisely what the model heard. The client can optionally set the language and prompt for
-/// transcription, these offer additional…
-public struct RealtimeSessionInputAudioTranscription: Codable {
-    /// The model used for transcription. Current options are `whisper-1`, `gpt-transcribe`, `gpt-live-transcribe`,
-    /// `gpt-4o-mini-transcribe`, `gpt-4o-mini-transcribe-2025-12-15`, `gpt-4o-transcribe`,
-    /// `gpt-4o-transcribe-diarize`, and `gpt-realtime-whisper`.
-    public var model: String?
-    /// The language of the input audio.
-    public var language: String?
-    /// The possible input audio languages configured for transcription, in ISO-639-1 format.
-    public var languages: [String]?
-    /// The prompt configured for input audio transcription, when present.
-    public var prompt: String?
-
-    enum CodingKeys: String, CodingKey {
-        case model
-        case language
-        case languages
-        case prompt
-    }
-
-    init() {
-        (self.model, self.language, self.languages, self.prompt) = (nil, nil, nil, nil)
-    }
-}
-
-extension RealtimeSessionInputAudioTranscription {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.language = try container.sdkDecodeIfPresent(.language)
-        self.languages = try container.sdkDecodeIfPresent(.languages)
-        self.prompt = try container.sdkDecodeIfPresent(.prompt)
-        if let value = self.languages {
-            try validateItems("languages", value, min: 1, max: nil)
-        }
-    }
-}
-
-extension RealtimeSessionInputAudioTranscription {
-    public init(model: String? = nil, language: String? = nil, languages: [String]? = nil, prompt: String? = nil) throws {
-        self.init()
-        (self.model, self.language) = (model, language)
-        (self.languages, self.prompt) = (languages, prompt)
-        if let value = self.languages {
-            try validateItems("languages", value, min: 1, max: nil)
-        }
-    }
-}
-
-/// Required object value serialized in the `tools[]` wire field.
-public struct RealtimeSessionCreateRequestToolsItem: Codable {
-    /// The type of the tool, i.e. `function`.
-    public var type: RealtimeSessionCreateRequestToolsItemType?
-    /// The name of the function.
-    public var name: String?
-    /// The description of the function, including guidance on when and how to call it, and guidance about what to
-    /// tell the user when calling (if anything).
-    public var description: String?
-    /// Parameters of the function in JSON Schema.
-    public var parameters: [String: JSONValue]?
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case name
-        case description
-        case parameters
-    }
-
-    init() {
-        (self.type, self.name, self.description, self.parameters) = (nil, nil, nil, nil)
-    }
-}
-
-extension RealtimeSessionCreateRequestToolsItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.description = try container.sdkDecodeIfPresent(.description)
-        self.parameters = try container.sdkDecodeIfPresent(.parameters)
-    }
-}
-
-extension RealtimeSessionCreateRequestToolsItem {
-    public init(type: RealtimeSessionCreateRequestToolsItemType? = nil, name: String? = nil, description: String? = nil, parameters: [String: JSONValue]? = nil) {
-        self.init()
-        (self.type, self.name) = (type, name)
-        (self.description, self.parameters) = (description, parameters)
-    }
-}
-
-/// Optional object value serialized in the `output` wire field.
-public struct RealtimeSessionCreateResponseGAAudioOutput: Codable {
-    /// The format of the output audio.
-    public var format: RealtimeAudioFormats?
-    /// The voice the model uses to respond. Voice cannot be changed during the session once the model has responded
-    /// with audio at least once. Current voice options are `alloy`, `ash`, `ballad`, `coral`, `echo`, `sage`,
-    /// `shimmer`, `verse`, `marin`, and `cedar`. We recommend `marin` and `cedar` for best quality.
-    /// - Example: "ash"
-    public var voice: VoiceIdsShared?
-    /// The speed of the model's spoken response as a multiple of the original speed. 1.0 is the default speed. 0.25
-    /// is the minimum speed. 1.5 is the maximum speed. This value can only be changed in between model turns, not
-    /// while a response is in progress. This parameter is a post-processing adjustment to the audio after it is
-    /// generated, it's also possible to prompt the model to speak faster or slower.
-    public var speed: Double?
-
-    enum CodingKeys: String, CodingKey {
-        case format
-        case voice
-        case speed
-    }
-
-    init() {
-        (self.format, self.voice, self.speed) = (nil, nil, nil)
-    }
-}
-
-extension RealtimeSessionCreateResponseGAAudioOutput {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.format = try container.sdkDecodeIfPresent(.format)
-        self.voice = try container.sdkDecodeIfPresent(.voice)
-        self.speed = try container.sdkDecodeIfPresent(.speed)
-        if let value = self.speed {
-            try validateRange("speed", Double(value), min: 0.25, max: 1.5, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-        }
-    }
-}
-
-extension RealtimeSessionCreateResponseGAAudioOutput {
-    public init(format: RealtimeAudioFormats? = nil, voice: VoiceIdsShared? = nil, speed: Double? = nil) throws {
-        self.init()
-        (self.format, self.voice) = (format, voice)
-        self.speed = speed
-        if let value = self.speed {
-            try validateRange("speed", Double(value), min: 0.25, max: 1.5, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-        }
-    }
-}
-
-public indirect enum RealtimeSessionCreateResponseMaxOutputTokens {
-    case intValue(Int)
-    case stringValue(String)
-}
-
-extension RealtimeSessionCreateResponseMaxOutputTokens: Codable {
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateResponseMaxOutputTokens")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension RealtimeSessionCreateResponseMaxOutputTokens {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) { return .intValue(value) }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        return nil
-    }
-}
-
-extension RealtimeSessionCreateResponseMaxOutputTokens {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .intValue(value): try container.encode(value); return true
-        case let .stringValue(value): try container.encode(value); return true
-        }
-    }
-}
-
-extension RealtimeSessionCreateResponseMaxOutputTokens: SdkNumericValueConvertible {
-    var sdkNumericValue: Double? {
-        switch self {
-        case let .intValue(value): Double(value)
-        default: nil
-        }
-    }
-}
-
-public indirect enum RealtimeSessionCreateResponseTracing {
-    case stringValue(String)
-    case realtimeSessionCreateResponseTracingVariant1(RealtimeSessionCreateResponseTracingVariant1)
 }

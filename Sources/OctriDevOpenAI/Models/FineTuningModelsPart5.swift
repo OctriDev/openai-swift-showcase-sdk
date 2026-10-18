@@ -319,7 +319,7 @@ extension FineTuneReinforcementHyperparametersEvalSamples: SdkNumericValueConver
 }
 
 public struct FineTuningJobMethod: Codable {
-    public var type: JSONValue
+    public var type: FineTuningJobMethodType
 
     enum CodingKeys: String, CodingKey {
         case type
@@ -339,7 +339,7 @@ extension FineTuningJobMethod {
 }
 
 extension FineTuningJobMethod {
-    public init(type: JSONValue) {
+    public init(type: FineTuningJobMethodType) {
         self.type = type
     }
 }

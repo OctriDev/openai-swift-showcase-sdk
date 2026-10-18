@@ -81,6 +81,13 @@ public class VectorStoresNamespace {
         return try await VectorStoresMethods.listVectorStores(config: config, limit: limit, order: order, after: after, before: before, requestOptions: requestOptions)
     }
 
+/// Lists vector stores, which are collections of processed files that you can use with the `file_search` tool. Use the cursor parameters to move forward or backward through the results, and set `order` to control sorting by creation time.
+    ///
+    /// Returns a list of vector stores.
+    public func listPaginated(limit: Int? = nil, order: ListVectorStoresParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<VectorStoreObject, Swift.Error> {
+        return VectorStoresMethods.listVectorStoresPaginated(config: config, limit: limit, order: order, after: after, before: before, requestOptions: requestOptions)
+    }
+
 /// Creates a vector store to collect processed files for use with the `file_search` tool. Supply `file_ids` to add files at creation, and optionally set a name, description, expiration policy, chunking strategy, or metadata.
     ///
     /// Create a vector store.
@@ -122,16 +129,16 @@ public class VectorStoresNamespace {
     public func getFileBatch(vectorStoreId: String, batchId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileBatchObject {
         return try await VectorStoresMethods.getVectorStoreFileBatch(config: config, vectorStoreId: vectorStoreId, batchId: batchId, requestOptions: requestOptions)
     }
+}
 
+extension VectorStoresNamespace {
 /// Attempts to stop processing files in a vector store file batch as soon as possible. Check the returned batch status to see whether processing has been cancelled.
     ///
     /// Cancel a vector store file batch. This attempts to cancel the processing of files in this batch as soon as possible.
     public func cancelFileBatch(vectorStoreId: String, batchId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileBatchObject {
         return try await VectorStoresMethods.cancelVectorStoreFileBatch(config: config, vectorStoreId: vectorStoreId, batchId: batchId, requestOptions: requestOptions)
     }
-}
 
-extension VectorStoresNamespace {
 /// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor parameters to navigate through the batch's files.
     ///
     /// Returns a list of vector store files in a batch.
@@ -139,11 +146,25 @@ extension VectorStoresNamespace {
         return try await VectorStoresMethods.listFilesInVectorStoreBatch(config: config, vectorStoreId: vectorStoreId, batchId: batchId, limit: limit, order: order, after: after, before: before, filter: filter, requestOptions: requestOptions)
     }
 
+/// Lists the files in a vector store file batch. Use `filter` to limit results by processing status and the cursor parameters to navigate through the batch's files.
+    ///
+    /// Returns a list of vector store files in a batch.
+    public func listFilesInBatchPaginated(vectorStoreId: String, batchId: String, limit: Int? = nil, order: ListFilesInVectorStoreBatchParameter? = nil, after: String? = nil, before: String? = nil, filter: ListFilesInVectorStoreBatchParameterX38051c3c? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<VectorStoreFileObject, Swift.Error> {
+        return VectorStoresMethods.listFilesInVectorStoreBatchPaginated(config: config, vectorStoreId: vectorStoreId, batchId: batchId, limit: limit, order: order, after: after, before: before, filter: filter, requestOptions: requestOptions)
+    }
+
 /// Lists files attached to a vector store, with pagination and an optional status filter. Use `after` or `before` to navigate the list, and `filter` to select files by processing status.
     ///
     /// Returns a list of vector store files.
     public func listFiles(vectorStoreId: String, limit: Int? = nil, order: ListVectorStoreFilesParameter? = nil, after: String? = nil, before: String? = nil, filter: ListVectorStoreFilesParameterX63027327? = nil, requestOptions: RequestOptions? = nil) async throws -> ListVectorStoreFilesResponse {
         return try await VectorStoresMethods.listVectorStoreFiles(config: config, vectorStoreId: vectorStoreId, limit: limit, order: order, after: after, before: before, filter: filter, requestOptions: requestOptions)
+    }
+
+/// Lists files attached to a vector store, with pagination and an optional status filter. Use `after` or `before` to navigate the list, and `filter` to select files by processing status.
+    ///
+    /// Returns a list of vector store files.
+    public func listFilesPaginated(vectorStoreId: String, limit: Int? = nil, order: ListVectorStoreFilesParameter? = nil, after: String? = nil, before: String? = nil, filter: ListVectorStoreFilesParameterX63027327? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<VectorStoreFileObject, Swift.Error> {
+        return VectorStoresMethods.listVectorStoreFilesPaginated(config: config, vectorStoreId: vectorStoreId, limit: limit, order: order, after: after, before: before, filter: filter, requestOptions: requestOptions)
     }
 
 /// Creates an attachment between a file and a vector store. Supply the file's `file_id` and optionally configure `chunking_strategy` or attach `attributes`; use file batches for multi-file ingestion. The response includes the attached file's processing status.
@@ -166,7 +187,9 @@ extension VectorStoresNamespace {
     public func deleteFile(vectorStoreId: String, fileId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteVectorStoreFileResponse {
         return try await VectorStoresMethods.deleteVectorStoreFile(config: config, vectorStoreId: vectorStoreId, fileId: fileId, requestOptions: requestOptions)
     }
+}
 
+extension VectorStoresNamespace {
 /// Updates the attributes attached to a file in a vector store. Supply `attributes` to replace the file's attribute set, or use `null` to clear it.
     ///
     /// Update attributes on a vector store file.
@@ -186,24 +209,5 @@ extension VectorStoresNamespace {
     /// Search a vector store for relevant chunks based on a query and file attributes filter.
     public func search(vectorStoreId: String, query: VectorStoreSearchRequestQuery, rewriteQuery: Bool? = nil, maxNumResults: Int? = nil, filters: VectorStoreSearchRequestFilters? = nil, rankingOptions: VectorStoreSearchRequestRankingOptions? = nil, requestOptions: RequestOptions? = nil) async throws -> VectorStoreSearchResultsPage {
         return try await VectorStoresMethods.searchVectorStore(config: config, vectorStoreId: vectorStoreId, query: query, rewriteQuery: rewriteQuery, maxNumResults: maxNumResults, filters: filters, rankingOptions: rankingOptions, requestOptions: requestOptions)
-    }
-}
-
-public class SafetyNamespace {
-    let config: ClientConfig
-    public init(config: ClientConfig) {
-        self.config = config
-    }
-
-/// Retrieves a safety case by its identifier. Use `id` to specify the safety case you want to inspect; it can contain at most 128 characters.
-    ///
-    /// Get a safety case by ID.
-    public func retrieveCase(id: String, requestOptions: RequestOptions? = nil) async throws -> SafetyCaseResource {
-        return try await SafetyMethods.retrieveSafetyCase(config: config, id: id, requestOptions: requestOptions)
-    }
-
-/// Get a safety alert belonging to the authenticated API project.
-    public func retrieveAlert(id: String, requestOptions: RequestOptions? = nil) async throws -> SafetyAlertResource {
-        return try await SafetyMethods.retrieveSafetyAlert(config: config, id: id, requestOptions: requestOptions)
     }
 }

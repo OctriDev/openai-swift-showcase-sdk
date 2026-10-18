@@ -4,8 +4,226 @@
 import Foundation
 
 // ChatCreate domain models
+/// Typed representation of the `CreateChatCompletionRequest` API schema.
+public struct CreateChatCompletionRequest: Codable {
+    /// A list of messages comprising the conversation so far. Depending on the model you use, different message
+    /// types (modalities) are supported, like text, images, and audio.
+    public var messages: [ChatCompletionRequestMessage]
+    /// Model ID used to generate the response, like `gpt-6-astra` or `o3`. OpenAI offers a wide range of models
+    /// with different capabilities, performance characteristics, and price points. Refer to the model guide to
+    /// browse and compare available models.
+    /// - Example: "gpt-6-astra"
+    public var model: ModelIdsShared
+    /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional
+    /// information about the object in a structured format, and querying for objects via API or the dashboard. Keys
+    /// are strings with a maximum length of 64 characters. Values are strings with a maximum length of 512
+    /// characters.
+    public var metadata: Metadata?
+    /// An integer between 0 and 20 specifying the maximum number of most likely tokens to return at each token
+    /// position, each with an associated log probability. In some cases, the number of returned tokens may be fewer
+    /// than requested. `logprobs` must be set to `true` if this parameter is used.
+    public var topLogprobs: Int?
+    /// Optional API value serialized in the `temperature` wire field.
+    public var temperature: Double?
+    /// Optional API value serialized in the `top_p` wire field.
+    public var topP: Double?
+    /// This field is being replaced by `safety_identifier` and `prompt_cache_key`. Use `prompt_cache_key` instead
+    /// to maintain caching optimizations. A stable identifier for your end-users. Used to boost cache hit rates by
+    /// better bucketing similar requests and to help OpenAI detect and prevent abuse. Learn more.
+    /// - Example: "user-1234"
+    public var user: String?
+    /// Optional API value serialized in the `safety_identifier` wire field.
+    public var safetyIdentifier: String?
+    /// Optional `string` value serialized in the `prompt_cache_key` wire field.
+    public var promptCacheKey: String?
+    /// Optional API value serialized in the `prompt_cache_retention` wire field.
+    public var promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0?
+    /// Options for prompt caching. Supported for `gpt-5.6` and later models. By default, OpenAI automatically
+    /// chooses one implicit cache breakpoint. You can add explicit breakpoints to content blocks with
+    /// `prompt_cache_breakpoint`. Each request can write up to four breakpoints. For cache matching, OpenAI
+    /// considers up to the latest 80 breakpoints in the conversation, without a content-block lookback limit. Set
+    /// `mode` to `explicit` to disable the implicit breakpoint. The `ttl`…
+    public var promptCacheOptions: PromptCacheOptionsParam?
+    public var serviceTier: ServiceTierVariant0?
+    /// Output types that you would like the model to generate. Most models are capable of generating text, which is
+    /// the default: `["text"]` The `gpt-4o-audio-preview` model can also be used to generate audio. To request that
+    /// this model generate both text and audio responses, you can use: `["text", "audio"]`
+    public var modalities: ResponseModalities?
+    public var verbosity: VerbosityVariant0?
+    public var reasoningEffort: ReasoningEffortVariant0?
+    /// An upper bound for the number of tokens that can be generated for a completion, including visible output
+    /// tokens and reasoning tokens.
+    public var maxCompletionTokens: Int?
+    /// Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing frequency in the
+    /// text so far, decreasing the model's likelihood to repeat the same line verbatim.
+    public var frequencyPenalty: Double?
+    /// Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear in the text so
+    /// far, increasing the model's likelihood to talk about new topics.
+    public var presencePenalty: Double?
+    /// This tool searches the web for relevant results to use in a response. Learn more about the web search tool.
+    public var webSearchOptions: CreateChatCompletionRequestVariant1WebSearchOptions?
+    /// An object specifying the format that the model must output. Setting to `{ "type": "json_schema",
+    /// "json_schema": {...} }` enables Structured Outputs which ensures the model will match your supplied JSON
+    /// schema. Learn more in the [Structured Outputs guide](developers.openai.com). Setting to `{ "type":
+    /// "json_object" }` enables the older JSON mode, which ensures the message the model generates is valid JSON.
+    /// Using `json_schema` is preferred for models that support it.
+    public var responseFormat: CreateChatCompletionRequestVariant1ResponseFormat?
+    /// Parameters for audio output. Required when audio output is requested with `modalities: "audio"]`. [Learn
+    /// more.
+    public var audio: CreateChatCompletionRequestVariant1Audio?
+    /// Whether or not to store the output of this chat completion request for use in our model distillation or
+    /// evals products. Supports text and image inputs. Note: image inputs over 8MB will be dropped.
+    public var store: Bool?
+    public var moderation: ModerationParam?
+    /// If set to true, the model response data will be streamed to the client as it is generated using server-sent
+    /// events. See the Streaming section below for more information, along with the streaming responses guide for
+    /// more information on how to handle the streaming events.
+    public var stream: Bool?
+    /// Not supported with latest reasoning models `o3` and `o4-mini`. Up to 4 sequences where the API will stop
+    /// generating further tokens. The returned text will not contain the stop sequence.
+    public var stop: StopConfiguration?
+    /// Modify the likelihood of specified tokens appearing in the completion. Accepts a JSON object that maps
+    /// tokens (specified by their token ID in the tokenizer) to an associated bias value from -100 to 100.
+    /// Mathematically, the bias is added to the logits generated by the model prior to sampling. The exact effect
+    /// will vary per model, but values between -1 and 1 should decrease or increase likelihood of selection; values
+    /// like -100 or 100 should result in a ban or exclusive…
+    public var logitBias: [String: Int]?
+    /// Whether to return log probabilities of the output tokens or not. If true, returns the log probabilities of
+    /// each output token returned in the `content` of `message`.
+    public var logprobs: Bool?
+    /// The maximum number of tokens that can be generated in the chat completion. This value can be used to control
+    /// costs for text generated via API. This value is now deprecated in favor of `max_completion_tokens`, and is
+    /// not compatible with o-series models.
+    public var maxTokens: Int?
+    /// How many chat completion choices to generate for each input message. Note that you will be charged based on
+    /// the number of generated tokens across all of the choices. Keep `n` as `1` to minimize costs.
+    /// - Example: 1
+    public var n: Int?
+    /// Configuration for a Predicted Output, which can greatly improve response times when large parts of the model
+    /// response are known ahead of time. This is most common when you are regenerating a file with only minor
+    /// changes to most of the content.
+    public var prediction: PredictionContent?
+    /// This feature is in Beta. If specified, our system will make a best effort to sample deterministically, such
+    /// that repeated requests with the same `seed` and parameters should return the same result. Determinism is not
+    /// guaranteed, and you should refer to the `system_fingerprint` response parameter to monitor changes in the
+    /// backend.
+    public var seed: Int?
+    /// Options for streaming response. Only set this when you set `stream: true`.
+    public var streamOptions: ChatCompletionStreamOptions?
+    /// A list of tools the model may call. You can provide either custom tools or function tools.
+    public var tools: [CreateChatCompletionRequestVariant1ToolsItem]?
+    /// Controls which (if any) tool is called by the model. `none` means the model will not call any tool and
+    /// instead generates a message. `auto` means the model can pick between generating a message or calling one or
+    /// more tools. `required` means the model must call one or more tools. Specifying a particular tool via
+    /// `{"type": "function", "function": {"name": "my_function"}}` forces the model to call that tool. `none` is
+    /// the default when no tools are present. `auto` is the default…
+    public var toolChoice: ChatCompletionToolChoiceOption?
+    /// Whether to enable parallel function calling during tool use.
+    public var parallelToolCalls: ParallelToolCalls?
+    /// Deprecated in favor of `tool_choice`. Controls which (if any) function is called by the model. `none` means
+    /// the model will not call a function and instead generates a message. `auto` means the model can pick between
+    /// generating a message or calling a function. Specifying a particular function via `{"name": "my_function"}`
+    /// forces the model to call that function. `none` is the default when no functions are present. `auto` is the
+    /// default if functions are present.
+    public var functionCall: CreateChatCompletionRequestVariant1FunctionCall?
+    /// Deprecated in favor of `tools`. A list of functions the model may generate JSON inputs for.
+    public var functions: [ChatCompletionFunctions]?
+
+    enum CodingKeys: String, CodingKey {
+        case messages
+        case model
+        case metadata
+        case topLogprobs = "top_logprobs"
+        case temperature
+        case topP = "top_p"
+        case user
+        case safetyIdentifier = "safety_identifier"
+        case promptCacheKey = "prompt_cache_key"
+        case promptCacheRetention = "prompt_cache_retention"
+        case promptCacheOptions = "prompt_cache_options"
+        case serviceTier = "service_tier"
+        case modalities
+        case verbosity
+        case reasoningEffort = "reasoning_effort"
+        case maxCompletionTokens = "max_completion_tokens"
+        case frequencyPenalty = "frequency_penalty"
+        case presencePenalty = "presence_penalty"
+        case webSearchOptions = "web_search_options"
+        case responseFormat = "response_format"
+        case audio
+        case store
+        case moderation
+        case stream
+        case stop
+        case logitBias = "logit_bias"
+        case logprobs
+        case maxTokens = "max_tokens"
+        case n
+        case prediction
+        case seed
+        case streamOptions = "stream_options"
+        case tools
+        case toolChoice = "tool_choice"
+        case parallelToolCalls = "parallel_tool_calls"
+        case functionCall = "function_call"
+        case functions
+    }
+
+    private init(sdkCopy value: Self) { self = value }
+}
+
 extension CreateChatCompletionRequest {
-    public init(messages: [ChatCompletionRequestMessage], model: ModelIdsShared, metadata: Metadata? = nil, topLogprobs: Int? = nil, temperature: Double? = nil, topP: Double? = nil, user: String? = nil, safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0? = nil, promptCacheOptions: PromptCacheOptionsParam? = nil, serviceTier: ServiceTierVariant0? = nil, modalities: ResponseModalities? = nil, verbosity: VerbosityVariant0? = nil, reasoningEffort: ReasoningEffortVariant0? = nil, maxCompletionTokens: Int? = nil, frequencyPenalty: Double? = nil, presencePenalty: Double? = nil, webSearchOptions: CreateChatCompletionRequestVariant1WebSearchOptions? = nil, responseFormat: ResponseFormat? = nil, audio: CreateChatCompletionRequestVariant1Audio? = nil, store: Bool? = nil, moderation: ModerationParam? = nil, stream: Bool? = nil, stop: StopConfiguration? = nil, logitBias: [String: Int]? = nil, logprobs: Bool? = nil, maxTokens: Int? = nil, n: Int? = nil, prediction: PredictionContent? = nil, seed: Int? = nil, streamOptions: ChatCompletionStreamOptions? = nil, tools: [ToolsItem]? = nil, toolChoice: ChatCompletionToolChoiceOption? = nil, parallelToolCalls: ParallelToolCalls? = nil, functionCall: CreateChatCompletionRequestVariant1FunctionCall? = nil, functions: [ChatCompletionFunctions]? = nil) throws {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.messages) else {
+            throw SdkValidationError(field: "messages", code: "required", message: "Validation failed for 'messages': value is required")
+        }
+        guard container.contains(.model) else {
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
+        }
+        self.messages = try container.sdkDecodeRequired(.messages)
+        self.model = try container.sdkDecodeRequired(.model)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        self.temperature = try container.sdkDecodeIfPresent(.temperature)
+        self.topP = try container.sdkDecodeIfPresent(.topP)
+        self.user = try container.sdkDecodeIfPresent(.user)
+        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        self.modalities = try container.sdkDecodeIfPresent(.modalities)
+        self.verbosity = try container.sdkDecodeIfPresent(.verbosity)
+        self.reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
+        self.maxCompletionTokens = try container.sdkDecodeIfPresent(.maxCompletionTokens)
+        self.frequencyPenalty = try container.sdkDecodeIfPresent(.frequencyPenalty)
+        self.presencePenalty = try container.sdkDecodeIfPresent(.presencePenalty)
+        self.webSearchOptions = try container.sdkDecodeIfPresent(.webSearchOptions)
+        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        self.audio = try container.sdkDecodeIfPresent(.audio)
+        self.store = try container.sdkDecodeIfPresent(.store)
+        self.moderation = try container.sdkDecodeIfPresent(.moderation)
+        self.stream = try container.sdkDecodeIfPresent(.stream)
+        self.stop = try container.sdkDecodeIfPresent(.stop)
+        self.logitBias = try container.sdkDecodeIfPresent(.logitBias)
+        self.logprobs = try container.sdkDecodeIfPresent(.logprobs)
+        self.maxTokens = try container.sdkDecodeIfPresent(.maxTokens)
+        self.n = try container.sdkDecodeIfPresent(.n)
+        self.prediction = try container.sdkDecodeIfPresent(.prediction)
+        self.seed = try container.sdkDecodeIfPresent(.seed)
+        self.streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
+        self.tools = try container.sdkDecodeIfPresent(.tools)
+        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        self.functionCall = try container.sdkDecodeIfPresent(.functionCall)
+        self.functions = try container.sdkDecodeIfPresent(.functions)
+        try sdkValidateConstraints()
+    }
+}
+
+extension CreateChatCompletionRequest {
+    public init(messages: [ChatCompletionRequestMessage], model: ModelIdsShared, metadata: Metadata? = nil, topLogprobs: Int? = nil, temperature: Double? = nil, topP: Double? = nil, user: String? = nil, safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0? = nil, promptCacheOptions: PromptCacheOptionsParam? = nil, serviceTier: ServiceTierVariant0? = nil, modalities: ResponseModalities? = nil, verbosity: VerbosityVariant0? = nil, reasoningEffort: ReasoningEffortVariant0? = nil, maxCompletionTokens: Int? = nil, frequencyPenalty: Double? = nil, presencePenalty: Double? = nil, webSearchOptions: CreateChatCompletionRequestVariant1WebSearchOptions? = nil, responseFormat: CreateChatCompletionRequestVariant1ResponseFormat? = nil, audio: CreateChatCompletionRequestVariant1Audio? = nil, store: Bool? = nil, moderation: ModerationParam? = nil, stream: Bool? = nil, stop: StopConfiguration? = nil, logitBias: [String: Int]? = nil, logprobs: Bool? = nil, maxTokens: Int? = nil, n: Int? = nil, prediction: PredictionContent? = nil, seed: Int? = nil, streamOptions: ChatCompletionStreamOptions? = nil, tools: [CreateChatCompletionRequestVariant1ToolsItem]? = nil, toolChoice: ChatCompletionToolChoiceOption? = nil, parallelToolCalls: ParallelToolCalls? = nil, functionCall: CreateChatCompletionRequestVariant1FunctionCall? = nil, functions: [ChatCompletionFunctions]? = nil) throws {
         (self.messages, self.model) = (messages, model)
         (self.metadata, self.topLogprobs) = (metadata, topLogprobs)
         (self.temperature, self.topP) = (temperature, topP)
@@ -246,173 +464,5 @@ extension CreateChatCompletionResponse {
         self.systemFingerprint = try container.sdkDecodeIfPresent(.systemFingerprint)
         self.usage = try container.sdkDecodeIfPresent(.usage)
         self.moderation = try container.sdkDecodeIfPresent(.moderation)
-    }
-}
-
-extension CreateChatCompletionResponse {
-    public init(id: String, choices: [CreateChatCompletionResponseChoicesItem], created: Int, model: String, object: CreateChatCompletionResponseObject, metadata: Metadata? = nil, serviceTier: ServiceTierVariant0? = nil, systemFingerprint: String? = nil, usage: CompletionUsage? = nil, moderation: ChatCompletionModeration? = nil) {
-        (self.id, self.choices) = (id, choices)
-        (self.created, self.model) = (created, model)
-        (self.object, self.metadata) = (object, metadata)
-        (self.serviceTier, self.systemFingerprint) = (serviceTier, systemFingerprint)
-        (self.usage, self.moderation) = (usage, moderation)
-    }
-}
-
-/// Approximate location parameters for the search.
-public struct CreateChatCompletionRequestVariant1WebSearchOptionsUserLocation: Codable {
-    /// The type of location approximation. Always `approximate`.
-    public var type: CreateChatCompletionRequestVariant1WebSearchOptionsUserLocationType
-    /// Approximate location parameters for the search.
-    public var approximate: WebSearchLocation
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case approximate
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateChatCompletionRequestVariant1WebSearchOptionsUserLocation {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.approximate) else {
-            throw SdkValidationError(field: "approximate", code: "required", message: "Validation failed for 'approximate': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.approximate = try container.sdkDecodeRequired(.approximate)
-    }
-}
-
-extension CreateChatCompletionRequestVariant1WebSearchOptionsUserLocation {
-    public init(type: CreateChatCompletionRequestVariant1WebSearchOptionsUserLocationType, approximate: WebSearchLocation) {
-        (self.type, self.approximate) = (type, approximate)
-    }
-}
-
-/// Required object value serialized in the `choices[]` wire field.
-public struct CreateChatCompletionStreamResponseChoicesItem: Codable {
-    /// A chat completion delta generated by streamed model responses. Streamed audio can arrive in partial updates
-    /// with an ID, base64 data, or transcript text. The final audio update contains only its expiry timestamp.
-    public var delta: ChatCompletionStreamResponseDelta
-    /// The index of the choice in the list of choices.
-    public var index: Int
-    /// Log probability information for the choice.
-    public var logprobs: CreateChatCompletionStreamResponseChoicesItemLogprobs?
-    /// The reason the model stopped generating tokens. This will be `stop` if the model hit a natural stop point or
-    /// a provided stop sequence, `length` if the maximum number of tokens specified in the request was reached,
-    /// `content_filter` if content was omitted due to a flag from our content filters, `tool_calls` if the model
-    /// called a tool, or `function_call` (deprecated) if the model called a function. Omitted from the final audio
-    /// update containing only `delta.audio.expires_at`.
-    public var finishReason: CreateChatCompletionStreamResponseChoicesItemFinishReason?
-
-    enum CodingKeys: String, CodingKey {
-        case delta
-        case index
-        case logprobs
-        case finishReason = "finish_reason"
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateChatCompletionStreamResponseChoicesItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.delta) else {
-            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
-        }
-        guard container.contains(.index) else {
-            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
-        }
-        self.delta = try container.sdkDecodeRequired(.delta)
-        self.index = try container.sdkDecodeRequired(.index)
-        self.logprobs = try container.sdkDecodeIfPresent(.logprobs)
-        self.finishReason = try container.sdkDecodeIfPresent(.finishReason)
-    }
-}
-
-extension CreateChatCompletionStreamResponseChoicesItem {
-    public init(delta: ChatCompletionStreamResponseDelta, index: Int, logprobs: CreateChatCompletionStreamResponseChoicesItemLogprobs? = nil, finishReason: CreateChatCompletionStreamResponseChoicesItemFinishReason? = nil) {
-        (self.delta, self.index) = (delta, index)
-        (self.logprobs, self.finishReason) = (logprobs, finishReason)
-    }
-}
-
-public indirect enum CreateChatCompletionRequestVariant1FunctionCall {
-    case stringValue(String)
-    case chatCompletionFunctionCallOption(ChatCompletionFunctionCallOption)
-}
-
-extension CreateChatCompletionRequestVariant1FunctionCall: Codable {
-
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateChatCompletionRequestVariant1FunctionCall")
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-    }
-}
-
-extension CreateChatCompletionRequestVariant1FunctionCall {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(ChatCompletionFunctionCallOption.self) { return .chatCompletionFunctionCallOption(value) }
-        return nil
-    }
-}
-
-extension CreateChatCompletionRequestVariant1FunctionCall {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .stringValue(value): try container.encode(value); return true
-        case let .chatCompletionFunctionCallOption(value): try container.encode(value); return true
-        }
-    }
-}
-
-/// Parameters for audio output. Required when audio output is requested with `modalities: "audio"]`. [Learn more.
-public struct CreateChatCompletionRequestVariant1Audio: Codable {
-    /// The voice the model uses to respond. Supported built-in voices are `alloy`, `ash`, `ballad`, `coral`,
-    /// `echo`, `fable`, `nova`, `onyx`, `sage`, `shimmer`, `marin`, and `cedar`. You may also provide a custom
-    /// voice object with an `id`, for example `{ "id": "voice_1234" }`. Custom voices must be created from audio
-    /// samples.
-    public var voice: VoiceIdsOrCustomVoice
-    /// Specifies the output audio format. Must be one of `wav`, `mp3`, `flac`, `opus`, or `pcm16`.
-    public var format: CreateChatCompletionRequestVariant1AudioFormat
-
-    enum CodingKeys: String, CodingKey {
-        case voice
-        case format
-    }
-
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateChatCompletionRequestVariant1Audio {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.voice) else {
-            throw SdkValidationError(field: "voice", code: "required", message: "Validation failed for 'voice': value is required")
-        }
-        guard container.contains(.format) else {
-            throw SdkValidationError(field: "format", code: "required", message: "Validation failed for 'format': value is required")
-        }
-        self.voice = try container.sdkDecodeRequired(.voice)
-        self.format = try container.sdkDecodeRequired(.format)
-    }
-}
-
-extension CreateChatCompletionRequestVariant1Audio {
-    public init(voice: VoiceIdsOrCustomVoice, format: CreateChatCompletionRequestVariant1AudioFormat) {
-        (self.voice, self.format) = (voice, format)
     }
 }
