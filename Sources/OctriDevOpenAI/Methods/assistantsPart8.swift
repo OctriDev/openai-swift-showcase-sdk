@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AssistantsMethods {
-    public struct CreateThreadAndRunOptions: Codable {
+public extension AssistantsMethods {
+    struct CreateThreadAndRunOptions: Codable {
         public var assistantId: String
         public var thread: CreateThreadRequest?
         public var model: SdkOptional<String>?
@@ -30,7 +30,9 @@ extension AssistantsMethods {
         }
     }
 
-    /// Creates a thread and starts an assistant run in one request. Supply `assistant_id` and optionally configure the thread, model, tools, sampling, and token limits; `stream` returns run events as server-sent events. The run can remain queued or in progress, so check its status to track completion.
+    /// Creates a thread and starts an assistant run in one request. Supply `assistant_id` and optionally configure the
+    /// thread, model, tools, sampling, and token limits; `stream` returns run events as server-sent events. The run can
+    /// remain queued or in progress, so check its status to track completion.
     ///
     /// Create a thread and run it in one request.
     ///
@@ -103,7 +105,11 @@ extension AssistantsMethods {
     ///   content may be partially cut off if `finish_reason="length"`, which
     ///   indicates the generation exceeded `max_tokens` or the conversation exceeded
     ///   the max context length.
-    public static func createThreadAndRun(config: ClientConfig, options: CreateThreadAndRunOptions, requestOptions: RequestOptions? = nil) async throws -> RunObject {
+    static func createThreadAndRun(
+        config: ClientConfig,
+        options: CreateThreadAndRunOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> RunObject {
         if let tools = options.tools?.valueOrNil {
             try validateItems("tools", tools, max: 20)
         }
@@ -126,6 +132,15 @@ extension AssistantsMethods {
 
         let requestBody = CreateThreadAndRunRequestBody(options: options)
 
-        return try (await sdkRequest("POST", "/threads/runs", config: config, body: requestBody, decoder: .json, operationId: "createThreadAndRun", options: requestOptions, errors: ["429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/threads/runs",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createThreadAndRun",
+            options: requestOptions,
+            errors: ["429": ErrorResponse.self]
+        )).data
     }
 }

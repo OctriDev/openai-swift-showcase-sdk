@@ -6,27 +6,71 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ResponsesMethods {
-    /// Creates a model response from text, image, or file input, with optional tools and output configuration. Use `input`, `model`, and `tools` to control what the model processes and how it generates the response. Set `background` to true if you need to cancel the response later.
+public extension ResponsesMethods {
+    /// Creates a model response from text, image, or file input, with optional tools and output configuration. Use
+    /// `input`, `model`, and `tools` to control what the model processes and how it generates the response. Set
+    /// `background` to true if you need to cancel the response later.
     ///
-    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate [text](https://developers.openai.com/api/docs/guides/text) or [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in [tools](https://developers.openai.com/api/docs/guides/tools) like [web search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the model's response.
+    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or
+    /// [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate
+    /// [text](https://developers.openai.com/api/docs/guides/text) or
+    /// [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own
+    /// [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in
+    /// [tools](https://developers.openai.com/api/docs/guides/tools) like [web
+    /// search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file
+    /// search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the
+    /// model's response.
     ///
     /// - Parameters:
     /// - openaiBeta: Optional beta features to enable for this request.
-    public static func betaCreateResponse(config: ClientConfig, body: BetaCreateResponse, openaiBeta: [BetaCreateResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> BetaResponse {
-        return try (await sdkRequest("POST", "/responses?beta=true", config: config, rawBody: (try sdkEncodeBody(body, contentType: "application/json")), decoder: .json, operationId: "beta_createResponse", extraHeaders: sdkHeaders([
-            ("openai-beta", sdkHeaderValue(openaiBeta)),
-        ]), options: requestOptions, errors: ["400": BetaErrorResponse.self, "404": BetaErrorResponse.self, "429": ErrorResponse.self, "503": ErrorResponse.self])).data
+    static func betaCreateResponse(
+        config: ClientConfig,
+        body: BetaCreateResponse,
+        openaiBeta: [BetaCreateResponseParameterItem]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BetaResponse {
+        try await (sdkRequest(
+            "POST",
+            "/responses?beta=true",
+            config: config,
+            rawBody: sdkEncodeBody(body, contentType: "application/json"),
+            decoder: .json,
+            operationId: "beta_createResponse",
+            extraHeaders: sdkHeaders([
+                ("openai-beta", sdkHeaderValue(openaiBeta)),
+            ]),
+            options: requestOptions,
+            errors: [
+                "400": BetaErrorResponse.self,
+                "404": BetaErrorResponse.self,
+                "429": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
+        )).data
     }
 
-    /// Creates a model response from text, image, or file input, with optional tools and output configuration. Use `input`, `model`, and `tools` to control what the model processes and how it generates the response. Set `background` to true if you need to cancel the response later.
+    /// Creates a model response from text, image, or file input, with optional tools and output configuration. Use
+    /// `input`, `model`, and `tools` to control what the model processes and how it generates the response. Set
+    /// `background` to true if you need to cancel the response later.
     ///
-    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate [text](https://developers.openai.com/api/docs/guides/text) or [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in [tools](https://developers.openai.com/api/docs/guides/tools) like [web search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the model's response.
+    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or
+    /// [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate
+    /// [text](https://developers.openai.com/api/docs/guides/text) or
+    /// [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own
+    /// [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in
+    /// [tools](https://developers.openai.com/api/docs/guides/tools) like [web
+    /// search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file
+    /// search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the
+    /// model's response.
     ///
     /// - Parameters:
     /// - openaiBeta: Optional beta features to enable for this request.
-    public static func betaCreateResponseStream(config: ClientConfig, body: BetaCreateResponse, openaiBeta: [BetaCreateResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<BetaResponseStreamEvent, Swift.Error> {
-
+    static func betaCreateResponseStream(
+        config: ClientConfig,
+        body: BetaCreateResponse,
+        openaiBeta: [BetaCreateResponseParameterItem]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AsyncThrowingStream<BetaResponseStreamEvent, Swift.Error> {
         let upstream = try await sdkStream(
             "POST",
             "/responses?beta=true",
@@ -38,7 +82,12 @@ extension ResponsesMethods {
             chunkDomain: "bytes",
             extraHeaders: sdkHeaders([("openai-beta", sdkHeaderValue(openaiBeta))]),
             options: requestOptions,
-            errors: ["400": BetaErrorResponse.self, "404": BetaErrorResponse.self, "429": ErrorResponse.self, "503": ErrorResponse.self]
+            errors: [
+                "400": BetaErrorResponse.self,
+                "404": BetaErrorResponse.self,
+                "429": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
         )
         return AsyncThrowingStream { continuation in
             let streamTask = _Concurrency.Task {
@@ -48,8 +97,11 @@ extension ResponsesMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(BetaResponseStreamEvent.self, from: Data(event.data.utf8)) }
-                        
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
+                            BetaResponseStreamEvent.self,
+                            from: Data(event.data.utf8)
+                        ) }
+
                         continuation.yield(payload)
                     }
                     continuation.finish()

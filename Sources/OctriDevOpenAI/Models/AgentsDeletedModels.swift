@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsDeleted domain models
+/// AgentsDeleted domain models
 /// A Managed Agents session removed from the public API. Physical cleanup may continue asynchronously.
 public struct DeletedSessionResource: Codable {
     /// The ID of the deleted session.
@@ -20,33 +20,47 @@ public struct DeletedSessionResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DeletedSessionResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
-            try validateLength("id", self.id, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DeletedSessionResource {
-    public init(id: String, object: DeletedSessionResourceObject, deleted: Bool) throws {
+public extension DeletedSessionResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+        try validateLength("id", id, min: 0, max: nil)
+    }
+}
+
+public extension DeletedSessionResource {
+    init(id: String, object: DeletedSessionResourceObject, deleted: Bool) throws {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
-            try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
     }
 }
 
@@ -65,33 +79,47 @@ public struct DeletedEnvironmentTemplateResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DeletedEnvironmentTemplateResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
-            try validateLength("id", self.id, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DeletedEnvironmentTemplateResource {
-    public init(id: String, object: DeletedEnvironmentTemplateResourceObject, deleted: Bool) throws {
+public extension DeletedEnvironmentTemplateResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+        try validateLength("id", id, min: 0, max: nil)
+    }
+}
+
+public extension DeletedEnvironmentTemplateResource {
+    init(id: String, object: DeletedEnvironmentTemplateResourceObject, deleted: Bool) throws {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
-            try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
     }
 }
 
@@ -110,33 +138,47 @@ public struct DeletedSessionArtifactResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DeletedSessionArtifactResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
-            try validateLength("id", self.id, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DeletedSessionArtifactResource {
-    public init(id: String, object: DeletedSessionArtifactResourceObject, deleted: Bool) throws {
+public extension DeletedSessionArtifactResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+        try validateLength("id", id, min: 0, max: nil)
+    }
+}
+
+public extension DeletedSessionArtifactResource {
+    init(id: String, object: DeletedSessionArtifactResourceObject, deleted: Bool) throws {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
-            try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
     }
 }
 
@@ -155,33 +197,47 @@ public struct DeletedAgentResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DeletedAgentResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
-            try validateLength("id", self.id, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DeletedAgentResource {
-    public init(id: String, object: DeletedAgentResourceObject, deleted: Bool) throws {
+public extension DeletedAgentResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+        try validateLength("id", id, min: 0, max: nil)
+    }
+}
+
+public extension DeletedAgentResource {
+    init(id: String, object: DeletedAgentResourceObject, deleted: Bool) throws {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
-            try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
     }
 }
 
@@ -189,12 +245,15 @@ extension DeletedAgentResource {
 public struct DeletedSessionResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let agentSessionDeleted = DeletedSessionResourceObject(rawValue: "agent.session.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -207,12 +266,15 @@ public struct DeletedSessionResourceObject: RawRepresentable, Hashable, Codable,
 public struct DeletedAgentResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let agentDeleted = DeletedAgentResourceObject(rawValue: "agent.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -225,12 +287,16 @@ public struct DeletedAgentResourceObject: RawRepresentable, Hashable, Codable, S
 public struct DeletedSessionArtifactResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let agentSessionArtifactDeleted = DeletedSessionArtifactResourceObject(rawValue: "agent.session.artifact.deleted")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let agentSessionArtifactDeleted =
+        DeletedSessionArtifactResourceObject(rawValue: "agent.session.artifact.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -240,15 +306,20 @@ public struct DeletedSessionArtifactResourceObject: RawRepresentable, Hashable, 
 }
 
 /// The object type. Always `agent.environment.template.deleted`.
-public struct DeletedEnvironmentTemplateResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct DeletedEnvironmentTemplateResourceObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let agentEnvironmentTemplateDeleted = DeletedEnvironmentTemplateResourceObject(rawValue: "agent.environment.template.deleted")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let agentEnvironmentTemplateDeleted =
+        DeletedEnvironmentTemplateResourceObject(rawValue: "agent.environment.template.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

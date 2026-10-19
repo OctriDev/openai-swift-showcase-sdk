@@ -17,13 +17,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.search(
-            vectorStoreId: decoded("\"vs_abc123\""),
-            query: decoded("\"query\""),
-            rewriteQuery: decoded("false"),
-            maxNumResults: decoded("10"),
-            filters: decoded("{\"type\":\"eq\",\"key\":\"key\",\"value\":\"value\"}"),
-            rankingOptions: decoded("{\"ranker\":\"auto\",\"score_threshold\":0}")
-        )
+                vectorStoreId: decoded("\"vs_abc123\""),
+                query: decoded("\"query\""),
+                rewriteQuery: decoded("false"),
+                maxNumResults: decoded("10"),
+                filters: decoded("{\"type\":\"eq\",\"key\":\"key\",\"value\":\"value\"}"),
+                rankingOptions: decoded("{\"ranker\":\"auto\",\"score_threshold\":0}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -39,7 +39,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testSubmitAssistantsToolOutputsToRunSubmitAssistantsToolOutputsToRunReachesMockAndDecodesResponse() async throws {
+    func testSubmitAssistantsToolOutputsToRunSubmitAssistantsToolOutputsToRunReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -60,7 +61,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testSubmitAssistantsToolOutputsToRunSubmitAssistantsToolOutputsToRunStreamReachesMockAndDecodesResponse() async throws {
+    func testSubmitAssistantsToolOutputsToRunSubmitAssistantsToolOutputsToRunStreamReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -116,9 +118,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.webhookEndpoints.test(
-            webhookEndpointId: decoded("\"whe_123\""),
-            eventType: decoded("\"batch.completed\"")
-        )
+                webhookEndpointId: decoded("\"whe_123\""),
+                eventType: decoded("\"batch.completed\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -164,9 +166,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.groupOrganizationRoleAssignments.unassignGroupRole(
-            groupId: decoded("\"group-1\""),
-            roleId: decoded("\"role-1\"")
-        )
+                groupId: decoded("\"group-1\""),
+                roleId: decoded("\"role-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -213,10 +215,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projectGroupRoleAssignments.unassignProjectGroupRole(
-            projectId: decoded("\"project-1\""),
-            groupId: decoded("\"group-1\""),
-            roleId: decoded("\"role-1\"")
-        )
+                projectId: decoded("\"project-1\""),
+                groupId: decoded("\"group-1\""),
+                roleId: decoded("\"role-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -263,10 +265,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projectUserRoleAssignments.unassignProjectUserRole(
-            projectId: decoded("\"project-1\""),
-            userId: decoded("\"user-1\""),
-            roleId: decoded("\"role-1\"")
-        )
+                projectId: decoded("\"project-1\""),
+                userId: decoded("\"user-1\""),
+                roleId: decoded("\"role-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -312,9 +314,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.userOrganizationRoleAssignments.unassignUserRole(
-            userId: decoded("\"user-1\""),
-            roleId: decoded("\"role-1\"")
-        )
+                userId: decoded("\"user-1\""),
+                roleId: decoded("\"role-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -379,8 +381,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.update(
-            options: options
-        )
+                options: options
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -401,7 +403,8 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try AgentsMethods.UpdateAgentEnvironmentTemplateOptions(environmentTemplateId: decoded("\"environment_template-1\""))
+        var options = try AgentsMethods
+            .UpdateAgentEnvironmentTemplateOptions(environmentTemplateId: decoded("\"environment_template-1\""))
         options.name = try decoded("\"Example Name\"")
         options.packages = try decoded("{\"python\":[\"python\"],\"system\":[\"system\"],\"npm\":[\"npm\"]}")
         options.setupCommands = try decoded("[{\"command\":\"command\",\"cwd\":\"cwd\"}]")
@@ -425,12 +428,14 @@ extension SdkMethodTests {
         )
     }
 
-    func testUpdateAgentEnvironmentTemplateUpdateAgentEnvironmentTemplate400ReachesMockAndDecodesResponse() async throws {
+    func testUpdateAgentEnvironmentTemplateUpdateAgentEnvironmentTemplate400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
         _ = client
-        var options = try AgentsMethods.UpdateAgentEnvironmentTemplateOptions(environmentTemplateId: decoded("\"environment_template-1\""))
+        var options = try AgentsMethods
+            .UpdateAgentEnvironmentTemplateOptions(environmentTemplateId: decoded("\"environment_template-1\""))
         options.name = try decoded("\"Example Name\"")
         options.packages = try decoded("{\"python\":[\"python\"],\"system\":[\"system\"],\"npm\":[\"npm\"]}")
         options.setupCommands = try decoded("[{\"command\":\"command\",\"cwd\":\"cwd\"}]")
@@ -447,8 +452,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.updateEnvironmentTemplate(
-            options: options
-        )
+                options: options
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -496,11 +501,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.updateSession(
-            sessionId: decoded("\"session-1\""),
-            spendControl: decoded("{\"limit\":1}"),
-            agent: decoded(sdkMethodFixture640Value1),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                sessionId: decoded("\"session-1\""),
+                spendControl: decoded("{\"limit\":1}"),
+                agent: decoded(sdkMethodFixture640Value1),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -546,9 +551,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.chat.updateCompletion(
-            completionId: decoded("\"completion-1\""),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                completionId: decoded("\"completion-1\""),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

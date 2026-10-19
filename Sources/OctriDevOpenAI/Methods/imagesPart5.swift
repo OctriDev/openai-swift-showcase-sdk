@@ -6,10 +6,13 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ImagesMethods {
-    /// Creates image variations based on an uploaded image using the legacy image variations contract. This operation is retired and no longer available; use the image edits endpoint with a GPT Image model and a prompt to create a variation. The legacy request schema requires a square PNG image smaller than 4 MB.
+public extension ImagesMethods {
+    /// Creates image variations based on an uploaded image using the legacy image variations contract. This operation
+    /// is retired and no longer available; use the image edits endpoint with a GPT Image model and a prompt to create a
+    /// variation. The legacy request schema requires a square PNG image smaller than 4 MB.
     ///
-    /// This endpoint is retired and no longer available. Use the image edits endpoint with a GPT Image model and a prompt to create a variation of an image. The request and response schemas below describe the legacy contract.
+    /// This endpoint is retired and no longer available. Use the image edits endpoint with a GPT Image model and a
+    /// prompt to create a variation of an image. The request and response schemas below describe the legacy contract.
     ///
     /// - Parameters:
     /// - image: The image to use as the basis for the variation(s). Must be a valid
@@ -28,30 +31,55 @@ extension ImagesMethods {
     ///   plement-safety-identifiers).
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func createImageVariation(config: ClientConfig, image: SdkUploadFile, model: SdkOptional<String>? = nil, n: SdkOptional<Int>? = nil, responseFormat: SdkOptional<CreateImageVariationRequestResponseFormat>? = nil, size: SdkOptional<CreateImageVariationRequestSize>? = nil, user: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ImagesResponse {
+    static func createImageVariation(
+        config: ClientConfig,
+        image: SdkUploadFile,
+        model: SdkOptional<String>? = nil,
+        n: SdkOptional<Int>? = nil,
+        responseFormat: SdkOptional<CreateImageVariationRequestResponseFormat>? = nil,
+        size: SdkOptional<CreateImageVariationRequestSize>? = nil,
+        user: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ImagesResponse {
         if let n = n?.valueOrNil {
             try validateRange("n", Double(n), min: 1, max: 10)
         }
 
         var multipartParts: [SdkMultipartField] = []
         multipartParts.append(.file("image", image))
-        if let model = model {
+        if let model {
             multipartParts.append(.scalar("model", model))
         }
-        if let n = n {
+        if let n {
             multipartParts.append(.scalar("n", n))
         }
-        if let responseFormat = responseFormat {
+        if let responseFormat {
             multipartParts.append(.scalar("response_format", responseFormat))
         }
-        if let size = size {
+        if let size {
             multipartParts.append(.scalar("size", size))
         }
-        if let user = user {
+        if let user {
             multipartParts.append(.scalar("user", user))
         }
         let multipart = sdkEncodeMultipart(multipartParts)
 
-        return try (await sdkRequest("POST", "/images/variations", config: config, rawBody: multipart.data, contentType: multipart.contentType, decoder: .json, operationId: "createImageVariation", options: requestOptions, errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "410": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/images/variations",
+            config: config,
+            rawBody: multipart.data,
+            contentType: multipart.contentType,
+            decoder: .json,
+            operationId: "createImageVariation",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": ErrorResponse.self,
+                "410": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+            ]
+        )).data
     }
 }

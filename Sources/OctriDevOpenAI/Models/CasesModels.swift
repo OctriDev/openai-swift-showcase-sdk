@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Cases domain models
+/// Cases domain models
 /// Typed representation of the `SafetyCaseNotice` API schema.
 public struct SafetyCaseNotice: Codable {
     /// Required enumerated value serialized in the `type` wire field.
@@ -13,21 +13,27 @@ public struct SafetyCaseNotice: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SafetyCaseNotice {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SafetyCaseNotice {
-    public init(type: SafetyCaseNoticeType) {
+public extension SafetyCaseNotice {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+    }
+}
+
+public extension SafetyCaseNotice {
+    init(type: SafetyCaseNoticeType) {
         self.type = type
     }
 }
@@ -56,41 +62,74 @@ public struct SafetyCaseResource: Codable {
         case notice
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SafetyCaseResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.entityIdentifier) else {
-            throw SdkValidationError(field: "entity_identifier", code: "required", message: "Validation failed for 'entity_identifier': value is required")
-        }
-        guard container.contains(.reason) else {
-            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
-        }
-        guard container.contains(.notice) else {
-            throw SdkValidationError(field: "notice", code: "required", message: "Validation failed for 'notice': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.entityIdentifier = try container.sdkDecodeRequired(.entityIdentifier)
-        self.reason = try container.sdkDecodeNullable(.reason)
-        self.notice = try container.sdkDecodeRequired(.notice)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SafetyCaseResource {
-    public init(id: String, object: SafetyCaseResourceObject, createdAt: Int, entityIdentifier: String, reason: String?, notice: SafetyCaseNotice) {
+public extension SafetyCaseResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.entityIdentifier) else {
+            throw SdkValidationError(
+                field: "entity_identifier",
+                code: "required",
+                message: "Validation failed for 'entity_identifier': value is required"
+            )
+        }
+        guard container.contains(.reason) else {
+            throw SdkValidationError(
+                field: "reason",
+                code: "required",
+                message: "Validation failed for 'reason': value is required"
+            )
+        }
+        guard container.contains(.notice) else {
+            throw SdkValidationError(
+                field: "notice",
+                code: "required",
+                message: "Validation failed for 'notice': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        entityIdentifier = try container.sdkDecodeRequired(.entityIdentifier)
+        reason = try container.sdkDecodeNullable(.reason)
+        notice = try container.sdkDecodeRequired(.notice)
+    }
+}
+
+public extension SafetyCaseResource {
+    init(
+        id: String,
+        object: SafetyCaseResourceObject,
+        createdAt: Int,
+        entityIdentifier: String,
+        reason: String?,
+        notice: SafetyCaseNotice
+    ) {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.entityIdentifier) = (createdAt, entityIdentifier)
         (self.reason, self.notice) = (reason, notice)
@@ -101,12 +140,15 @@ extension SafetyCaseResource {
 public struct SafetyCaseResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let safetyCase = SafetyCaseResourceObject(rawValue: "safety.case")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -119,13 +161,16 @@ public struct SafetyCaseResourceObject: RawRepresentable, Hashable, Codable, Sen
 public struct SafetyCaseNoticeType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let warning = SafetyCaseNoticeType(rawValue: "warning")
     public static let deactivation = SafetyCaseNoticeType(rawValue: "deactivation")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

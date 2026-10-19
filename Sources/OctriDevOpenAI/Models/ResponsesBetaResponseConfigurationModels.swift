@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaResponseConfiguration domain models
+/// ResponsesBetaResponseConfiguration domain models
 /// A configuration update that applies to subsequent responses until it is replaced by another configuration
 /// update.
 public struct BetaResponseConfigurationUpdate: Codable {
@@ -24,31 +24,46 @@ public struct BetaResponseConfigurationUpdate: Codable {
         case reasoning
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponseConfigurationUpdate {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-            try sdkValidateRawEnum("type", self.type, BetaResponseConfigurationUpdateType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponseConfigurationUpdate {
-    public init(id: String, type: BetaResponseConfigurationUpdateType, agent: BetaAgentTag? = nil, reasoning: BetaResponseConfigurationUpdateReasoning? = nil) throws {
+public extension BetaResponseConfigurationUpdate {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        try sdkValidateRawEnum("type", type, BetaResponseConfigurationUpdateType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseConfigurationUpdate {
+    init(
+        id: String,
+        type: BetaResponseConfigurationUpdateType,
+        agent: BetaAgentTag? = nil,
+        reasoning: BetaResponseConfigurationUpdateReasoning? = nil
+    ) throws {
         (self.id, self.type) = (id, type)
         (self.agent, self.reasoning) = (agent, reasoning)
-            try sdkValidateRawEnum("type", self.type, BetaResponseConfigurationUpdateType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseConfigurationUpdateType.allCases.map(\.rawValue))
     }
 }
 
@@ -71,28 +86,39 @@ public struct BetaResponseConfigurationUpdateItemParam: Codable {
         case reasoning
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponseConfigurationUpdateItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-            try sdkValidateRawEnum("type", self.type, BetaResponseConfigurationUpdateItemParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponseConfigurationUpdateItemParam {
-    public init(type: BetaResponseConfigurationUpdateItemParamType, agent: BetaAgentTagParam? = nil, id: String? = nil, reasoning: BetaResponseConfigurationUpdateItemParamReasoning? = nil) throws {
+public extension BetaResponseConfigurationUpdateItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        id = try container.sdkDecodeIfPresent(.id)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        try sdkValidateRawEnum("type", type, BetaResponseConfigurationUpdateItemParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseConfigurationUpdateItemParam {
+    init(
+        type: BetaResponseConfigurationUpdateItemParamType,
+        agent: BetaAgentTagParam? = nil,
+        id: String? = nil,
+        reasoning: BetaResponseConfigurationUpdateItemParamReasoning? = nil
+    ) throws {
         (self.type, self.agent) = (type, agent)
         (self.id, self.reasoning) = (id, reasoning)
-            try sdkValidateRawEnum("type", self.type, BetaResponseConfigurationUpdateItemParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseConfigurationUpdateItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -106,19 +132,19 @@ public struct BetaResponseConfigurationUpdateReasoning: Codable {
     }
 
     init() {
-        self.effort = nil
+        effort = nil
     }
 }
 
-extension BetaResponseConfigurationUpdateReasoning {
-    public init(from decoder: Decoder) throws {
+public extension BetaResponseConfigurationUpdateReasoning {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.effort = try container.sdkDecodeIfPresent(.effort)
+        effort = try container.sdkDecodeIfPresent(.effort)
     }
 }
 
-extension BetaResponseConfigurationUpdateReasoning {
-    public init(effort: BetaReasoningEffortVariant0? = nil) {
+public extension BetaResponseConfigurationUpdateReasoning {
+    init(effort: BetaReasoningEffortVariant0? = nil) {
         self.init()
         self.effort = effort
     }
@@ -134,19 +160,19 @@ public struct BetaResponseConfigurationUpdateItemParamReasoning: Codable {
     }
 
     init() {
-        self.effort = nil
+        effort = nil
     }
 }
 
-extension BetaResponseConfigurationUpdateItemParamReasoning {
-    public init(from decoder: Decoder) throws {
+public extension BetaResponseConfigurationUpdateItemParamReasoning {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.effort = try container.sdkDecodeIfPresent(.effort)
+        effort = try container.sdkDecodeIfPresent(.effort)
     }
 }
 
-extension BetaResponseConfigurationUpdateItemParamReasoning {
-    public init(effort: BetaReasoningEffortVariant0? = nil) {
+public extension BetaResponseConfigurationUpdateItemParamReasoning {
+    init(effort: BetaReasoningEffortVariant0? = nil) {
         self.init()
         self.effort = effort
     }

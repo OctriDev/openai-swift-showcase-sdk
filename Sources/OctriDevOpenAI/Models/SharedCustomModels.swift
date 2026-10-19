@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedCustom domain models
+/// SharedCustom domain models
 public indirect enum CustomToolParamFormat {
     case customTextFormatParam(CustomTextFormatParam)
     case customGrammarFormatParam(CustomGrammarFormatParam)
@@ -12,7 +12,6 @@ public indirect enum CustomToolParamFormat {
 }
 
 extension CustomToolParamFormat: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension CustomToolParamFormat: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,9 @@ extension CustomToolParamFormat: Codable {
 extension CustomToolParamFormat {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "text": return .customTextFormatParam(try CustomTextFormatParam(from: decoder))
-        case "grammar": return .customGrammarFormatParam(try CustomGrammarFormatParam(from: decoder))
-        default: return nil
+        case "text": try .customTextFormatParam(CustomTextFormatParam(from: decoder))
+        case "grammar": try .customGrammarFormatParam(CustomGrammarFormatParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -63,24 +66,30 @@ public struct CustomTextFormatParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CustomTextFormatParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, CustomTextFormatParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CustomTextFormatParam {
-    public init(type: CustomTextFormatParamType) throws {
+public extension CustomTextFormatParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, CustomTextFormatParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension CustomTextFormatParam {
+    init(type: CustomTextFormatParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, CustomTextFormatParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, CustomTextFormatParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -99,33 +108,47 @@ public struct CustomGrammarFormatParam: Codable {
         case definition
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CustomGrammarFormatParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.syntax) else {
-            throw SdkValidationError(field: "syntax", code: "required", message: "Validation failed for 'syntax': value is required")
-        }
-        guard container.contains(.definition) else {
-            throw SdkValidationError(field: "definition", code: "required", message: "Validation failed for 'definition': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.syntax = try container.sdkDecodeRequired(.syntax)
-        self.definition = try container.sdkDecodeRequired(.definition)
-            try sdkValidateRawEnum("type", self.type, CustomGrammarFormatParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CustomGrammarFormatParam {
-    public init(type: CustomGrammarFormatParamType, syntax: GrammarSyntax1, definition: String) throws {
+public extension CustomGrammarFormatParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.syntax) else {
+            throw SdkValidationError(
+                field: "syntax",
+                code: "required",
+                message: "Validation failed for 'syntax': value is required"
+            )
+        }
+        guard container.contains(.definition) else {
+            throw SdkValidationError(
+                field: "definition",
+                code: "required",
+                message: "Validation failed for 'definition': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        syntax = try container.sdkDecodeRequired(.syntax)
+        definition = try container.sdkDecodeRequired(.definition)
+        try sdkValidateRawEnum("type", type, CustomGrammarFormatParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension CustomGrammarFormatParam {
+    init(type: CustomGrammarFormatParamType, syntax: GrammarSyntax1, definition: String) throws {
         (self.type, self.syntax) = (type, syntax)
         self.definition = definition
-            try sdkValidateRawEnum("type", self.type, CustomGrammarFormatParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, CustomGrammarFormatParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -150,36 +173,56 @@ public struct CustomToolCallOutput: Codable {
         case caller
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CustomToolCallOutput {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.output = try container.sdkDecodeRequired(.output)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-            try sdkValidateRawEnum("type", self.type, CustomToolCallOutputType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CustomToolCallOutput {
-    public init(type: CustomToolCallOutputType, callId: String, output: CustomToolCallOutputOutput, id: String? = nil, caller: ToolCallCallerParam? = nil) throws {
+public extension CustomToolCallOutput {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        output = try container.sdkDecodeRequired(.output)
+        id = try container.sdkDecodeIfPresent(.id)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        try sdkValidateRawEnum("type", type, CustomToolCallOutputType.allCases.map(\.rawValue))
+    }
+}
+
+public extension CustomToolCallOutput {
+    init(
+        type: CustomToolCallOutputType,
+        callId: String,
+        output: CustomToolCallOutputOutput,
+        id: String? = nil,
+        caller: ToolCallCallerParam? = nil
+    ) throws {
         (self.type, self.callId) = (type, callId)
         (self.output, self.id) = (output, id)
         self.caller = caller
-            try sdkValidateRawEnum("type", self.type, CustomToolCallOutputType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, CustomToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 
@@ -189,22 +232,33 @@ public indirect enum CustomToolCallOutputOutput {
 }
 
 extension CustomToolCallOutputOutput: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CustomToolCallOutputOutput")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CustomToolCallOutputOutput"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension CustomToolCallOutputOutput {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode([FunctionAndCustomToolCallOutput].self) { return .functionAndCustomToolCallOutputList(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container
+            .decode([FunctionAndCustomToolCallOutput].self) {
+            return .functionAndCustomToolCallOutputList(value)
+        }
         return nil
     }
 }
@@ -247,39 +301,57 @@ public struct CustomToolParam: Codable {
         case allowedCallers = "allowed_callers"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CustomToolParam {
-    public init(from decoder: Decoder) throws {
+public extension CustomToolParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.async = try container.sdkDecodeIfPresent(.async)
-        self.description = try container.sdkDecodeIfPresent(.description)
-        self.format = try container.sdkDecodeIfPresent(.format)
-        self.deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
-        self.allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
-            try sdkValidateRawEnum("type", self.type, CustomToolParamType.allCases.map(\.rawValue))
-        if let value = self.allowedCallers {
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        async = try container.sdkDecodeIfPresent(.async)
+        description = try container.sdkDecodeIfPresent(.description)
+        format = try container.sdkDecodeIfPresent(.format)
+        deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
+        allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
+        try sdkValidateRawEnum("type", type, CustomToolParamType.allCases.map(\.rawValue))
+        if let value = allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
     }
 }
 
-extension CustomToolParam {
-    public init(type: CustomToolParamType, name: String, async: Bool? = nil, description: String? = nil, format: CustomToolParamFormat? = nil, deferLoading: Bool? = nil, allowedCallers: [CallableToolAllowedCaller]? = nil) throws {
+public extension CustomToolParam {
+    init(
+        type: CustomToolParamType,
+        name: String,
+        async: Bool? = nil,
+        description: String? = nil,
+        format: CustomToolParamFormat? = nil,
+        deferLoading: Bool? = nil,
+        allowedCallers: [CallableToolAllowedCaller]? = nil
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.async, self.description) = (async, description)
         (self.format, self.deferLoading) = (format, deferLoading)
         self.allowedCallers = allowedCallers
-            try sdkValidateRawEnum("type", self.type, CustomToolParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, CustomToolParamType.allCases.map(\.rawValue))
         if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
@@ -316,43 +388,70 @@ public struct CustomToolCall: Codable {
         case async
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CustomToolCall {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.input) else {
-            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.input = try container.sdkDecodeRequired(.input)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-        self.namespace = try container.sdkDecodeIfPresent(.namespace)
-        self.async = try container.sdkDecodeIfPresent(.async)
-            try sdkValidateRawEnum("type", self.type, CustomToolCallType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CustomToolCall {
-    public init(type: CustomToolCallType, callId: String, name: String, input: String, id: String? = nil, caller: ToolCallCaller? = nil, namespace: String? = nil, async: Bool? = nil) throws {
+public extension CustomToolCall {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.input) else {
+            throw SdkValidationError(
+                field: "input",
+                code: "required",
+                message: "Validation failed for 'input': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        name = try container.sdkDecodeRequired(.name)
+        input = try container.sdkDecodeRequired(.input)
+        id = try container.sdkDecodeIfPresent(.id)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        namespace = try container.sdkDecodeIfPresent(.namespace)
+        async = try container.sdkDecodeIfPresent(.async)
+        try sdkValidateRawEnum("type", type, CustomToolCallType.allCases.map(\.rawValue))
+    }
+}
+
+public extension CustomToolCall {
+    init(
+        type: CustomToolCallType,
+        callId: String,
+        name: String,
+        input: String,
+        id: String? = nil,
+        caller: ToolCallCaller? = nil,
+        namespace: String? = nil,
+        async: Bool? = nil
+    ) throws {
         (self.type, self.callId) = (type, callId)
         (self.name, self.input) = (name, input)
         (self.id, self.caller) = (id, caller)
         (self.namespace, self.async) = (namespace, async)
-            try sdkValidateRawEnum("type", self.type, CustomToolCallType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, CustomToolCallType.allCases.map(\.rawValue))
     }
 }
 

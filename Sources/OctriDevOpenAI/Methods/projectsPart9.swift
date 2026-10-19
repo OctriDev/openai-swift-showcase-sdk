@@ -6,14 +6,32 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectsMethods {
-    /// Deletes the model permission policy for a project. Use `project_id` to identify the project whose policy you want to remove. The response confirms whether the permissions were deleted.
+public extension ProjectsMethods {
+    /// Deletes the model permission policy for a project. Use `project_id` to identify the project whose policy you
+    /// want to remove. The response confirms whether the permissions were deleted.
     ///
     /// Deletes model permissions for a project.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
-    public static func deleteProjectModelPermissions(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectModelPermissionsDeleteResponse {
-        return try (await sdkRequest("DELETE", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/model_permissions"].joined(), config: config, decoder: .json, operationId: "deleteProjectModelPermissions", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func deleteProjectModelPermissions(
+        config: ClientConfig,
+        projectId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectModelPermissionsDeleteResponse {
+        try await (sdkRequest(
+            "DELETE",
+            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/model_permissions"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteProjectModelPermissions",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

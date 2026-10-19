@@ -3,26 +3,34 @@
 
 import Foundation
 
-// AgentsPersisted domain models
-extension PersistedAgentToolResourceComputerUse {
-    public init(from decoder: Decoder) throws {
+/// AgentsPersisted domain models
+public extension PersistedAgentToolResourceComputerUse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.includeScreenshots) else {
-            throw SdkValidationError(field: "include_screenshots", code: "required", message: "Validation failed for 'include_screenshots': value is required")
+            throw SdkValidationError(
+                field: "include_screenshots",
+                code: "required",
+                message: "Validation failed for 'include_screenshots': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.includeScreenshots = try container.sdkDecodeRequired(.includeScreenshots)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceComputerUseType.allCases.map(\.rawValue))
+        type = try container.sdkDecodeRequired(.type)
+        includeScreenshots = try container.sdkDecodeRequired(.includeScreenshots)
+        try sdkValidateRawEnum("type", type, PersistedAgentToolResourceComputerUseType.allCases.map(\.rawValue))
     }
 }
 
-extension PersistedAgentToolResourceComputerUse {
-    public init(type: PersistedAgentToolResourceComputerUseType, includeScreenshots: Bool) throws {
+public extension PersistedAgentToolResourceComputerUse {
+    init(type: PersistedAgentToolResourceComputerUseType, includeScreenshots: Bool) throws {
         (self.type, self.includeScreenshots) = (type, includeScreenshots)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceComputerUseType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceComputerUseType.allCases.map(\.rawValue))
     }
 }
 
@@ -47,43 +55,67 @@ public struct PersistedAgentToolConfigParamFunction: Codable {
         case deferLoading = "defer_loading"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension PersistedAgentToolConfigParamFunction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        guard container.contains(.parameters) else {
-            throw SdkValidationError(field: "parameters", code: "required", message: "Validation failed for 'parameters': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeRequired(.description)
-        self.parameters = try container.sdkDecodeRequired(.parameters)
-        self.deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamFunctionType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 0, max: 1048576)
-            try validateLength("description", self.description, min: 0, max: 1048576)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension PersistedAgentToolConfigParamFunction {
-    public init(type: PersistedAgentToolConfigParamFunctionType, name: String, description: String, parameters: [String: JSONValue], deferLoading: Bool? = nil) throws {
+public extension PersistedAgentToolConfigParamFunction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        guard container.contains(.parameters) else {
+            throw SdkValidationError(
+                field: "parameters",
+                code: "required",
+                message: "Validation failed for 'parameters': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeRequired(.description)
+        parameters = try container.sdkDecodeRequired(.parameters)
+        deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
+        try sdkValidateRawEnum("type", type, PersistedAgentToolConfigParamFunctionType.allCases.map(\.rawValue))
+        try validateLength("name", name, min: 0, max: 1_048_576)
+        try validateLength("description", description, min: 0, max: 1_048_576)
+    }
+}
+
+public extension PersistedAgentToolConfigParamFunction {
+    init(
+        type: PersistedAgentToolConfigParamFunctionType,
+        name: String,
+        description: String,
+        parameters: [String: JSONValue],
+        deferLoading: Bool? = nil
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.description, self.parameters) = (description, parameters)
         self.deferLoading = deferLoading
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamFunctionType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 0, max: 1048576)
-            try validateLength("description", self.description, min: 0, max: 1048576)
+        try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamFunctionType.allCases.map(\.rawValue))
+        try validateLength("name", self.name, min: 0, max: 1_048_576)
+        try validateLength("description", self.description, min: 0, max: 1_048_576)
     }
 }
 
@@ -108,33 +140,45 @@ public struct PersistedAgentToolConfigParamWebSearch: Codable {
         case location
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension PersistedAgentToolConfigParamWebSearch {
-    public init(from decoder: Decoder) throws {
+public extension PersistedAgentToolConfigParamWebSearch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.mode = try container.sdkDecodeIfPresent(.mode)
-        self.contextSize = try container.sdkDecodeIfPresent(.contextSize)
-        self.allowedDomains = try container.sdkDecodeIfPresent(.allowedDomains)
-        self.location = try container.sdkDecodeIfPresent(.location)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamWebSearchType.allCases.map(\.rawValue))
-        if let value = self.allowedDomains {
+        type = try container.sdkDecodeRequired(.type)
+        mode = try container.sdkDecodeIfPresent(.mode)
+        contextSize = try container.sdkDecodeIfPresent(.contextSize)
+        allowedDomains = try container.sdkDecodeIfPresent(.allowedDomains)
+        location = try container.sdkDecodeIfPresent(.location)
+        try sdkValidateRawEnum("type", type, PersistedAgentToolConfigParamWebSearchType.allCases.map(\.rawValue))
+        if let value = allowedDomains {
             try validateItems("allowed_domains", value, min: 0, max: 16384)
         }
     }
 }
 
-extension PersistedAgentToolConfigParamWebSearch {
-    public init(type: PersistedAgentToolConfigParamWebSearchType, mode: WebSearchModeParam? = nil, contextSize: WebSearchContextSizeParam? = nil, allowedDomains: [String]? = nil, location: WebSearchLocationParam? = nil) throws {
+public extension PersistedAgentToolConfigParamWebSearch {
+    init(
+        type: PersistedAgentToolConfigParamWebSearchType,
+        mode: WebSearchModeParam? = nil,
+        contextSize: WebSearchContextSizeParam? = nil,
+        allowedDomains: [String]? = nil,
+        location: WebSearchLocationParam? = nil
+    ) throws {
         (self.type, self.mode) = (type, mode)
         (self.contextSize, self.allowedDomains) = (contextSize, allowedDomains)
         self.location = location
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamWebSearchType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamWebSearchType.allCases.map(\.rawValue))
         if let value = self.allowedDomains {
             try validateItems("allowed_domains", value, min: 0, max: 16384)
         }
@@ -153,25 +197,31 @@ public struct PersistedAgentToolConfigParamComputerUse: Codable {
         case includeScreenshots = "include_screenshots"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension PersistedAgentToolConfigParamComputerUse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.includeScreenshots = try container.sdkDecodeIfPresent(.includeScreenshots)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension PersistedAgentToolConfigParamComputerUse {
-    public init(type: PersistedAgentToolConfigParamComputerUseType, includeScreenshots: Bool? = nil) throws {
+public extension PersistedAgentToolConfigParamComputerUse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        includeScreenshots = try container.sdkDecodeIfPresent(.includeScreenshots)
+        try sdkValidateRawEnum("type", type, PersistedAgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
+    }
+}
+
+public extension PersistedAgentToolConfigParamComputerUse {
+    init(type: PersistedAgentToolConfigParamComputerUseType, includeScreenshots: Bool? = nil) throws {
         (self.type, self.includeScreenshots) = (type, includeScreenshots)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
     }
 }
 
@@ -184,24 +234,30 @@ public struct PersistedAgentToolResourceToolSearch: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension PersistedAgentToolResourceToolSearch {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceToolSearchType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension PersistedAgentToolResourceToolSearch {
-    public init(type: PersistedAgentToolResourceToolSearchType) throws {
+public extension PersistedAgentToolResourceToolSearch {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, PersistedAgentToolResourceToolSearchType.allCases.map(\.rawValue))
+    }
+}
+
+public extension PersistedAgentToolResourceToolSearch {
+    init(type: PersistedAgentToolResourceToolSearchType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceToolSearchType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceToolSearchType.allCases.map(\.rawValue))
     }
 }
 
@@ -226,50 +282,78 @@ public struct PersistedMcpTransportResourceStdio: Codable {
         case envVars = "env_vars"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension PersistedMcpTransportResourceStdio {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.command) else {
-            throw SdkValidationError(field: "command", code: "required", message: "Validation failed for 'command': value is required")
-        }
-        guard container.contains(.args) else {
-            throw SdkValidationError(field: "args", code: "required", message: "Validation failed for 'args': value is required")
-        }
-        guard container.contains(.cwd) else {
-            throw SdkValidationError(field: "cwd", code: "required", message: "Validation failed for 'cwd': value is required")
-        }
-        guard container.contains(.envVars) else {
-            throw SdkValidationError(field: "env_vars", code: "required", message: "Validation failed for 'env_vars': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.command = try container.sdkDecodeRequired(.command)
-        self.args = try container.sdkDecodeRequired(.args)
-        self.cwd = try container.sdkDecodeRequired(.cwd)
-        self.envVars = try container.sdkDecodeRequired(.envVars)
-            try sdkValidateRawEnum("type", self.type, PersistedMcpTransportResourceStdioType.allCases.map(\.rawValue))
-            try validateLength("command", self.command, min: 0, max: nil)
-            try validateItems("args", self.args, min: 0, max: 2000)
-            try validateLength("cwd", self.cwd, min: 0, max: nil)
-            try validateItems("env_vars", self.envVars, min: 0, max: 2000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension PersistedMcpTransportResourceStdio {
-    public init(type: PersistedMcpTransportResourceStdioType, command: String, args: [String], cwd: String, envVars: [String]) throws {
+public extension PersistedMcpTransportResourceStdio {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.command) else {
+            throw SdkValidationError(
+                field: "command",
+                code: "required",
+                message: "Validation failed for 'command': value is required"
+            )
+        }
+        guard container.contains(.args) else {
+            throw SdkValidationError(
+                field: "args",
+                code: "required",
+                message: "Validation failed for 'args': value is required"
+            )
+        }
+        guard container.contains(.cwd) else {
+            throw SdkValidationError(
+                field: "cwd",
+                code: "required",
+                message: "Validation failed for 'cwd': value is required"
+            )
+        }
+        guard container.contains(.envVars) else {
+            throw SdkValidationError(
+                field: "env_vars",
+                code: "required",
+                message: "Validation failed for 'env_vars': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        command = try container.sdkDecodeRequired(.command)
+        args = try container.sdkDecodeRequired(.args)
+        cwd = try container.sdkDecodeRequired(.cwd)
+        envVars = try container.sdkDecodeRequired(.envVars)
+        try sdkValidateRawEnum("type", type, PersistedMcpTransportResourceStdioType.allCases.map(\.rawValue))
+        try validateLength("command", command, min: 0, max: nil)
+        try validateItems("args", args, min: 0, max: 2000)
+        try validateLength("cwd", cwd, min: 0, max: nil)
+        try validateItems("env_vars", envVars, min: 0, max: 2000)
+    }
+}
+
+public extension PersistedMcpTransportResourceStdio {
+    init(
+        type: PersistedMcpTransportResourceStdioType,
+        command: String,
+        args: [String],
+        cwd: String,
+        envVars: [String]
+    ) throws {
         (self.type, self.command) = (type, command)
         (self.args, self.cwd) = (args, cwd)
         self.envVars = envVars
-            try sdkValidateRawEnum("type", self.type, PersistedMcpTransportResourceStdioType.allCases.map(\.rawValue))
-            try validateLength("command", self.command, min: 0, max: nil)
-            try validateItems("args", self.args, min: 0, max: 2000)
-            try validateLength("cwd", self.cwd, min: 0, max: nil)
-            try validateItems("env_vars", self.envVars, min: 0, max: 2000)
+        try sdkValidateRawEnum("type", self.type, PersistedMcpTransportResourceStdioType.allCases.map(\.rawValue))
+        try validateLength("command", self.command, min: 0, max: nil)
+        try validateItems("args", self.args, min: 0, max: 2000)
+        try validateLength("cwd", self.cwd, min: 0, max: nil)
+        try validateItems("env_vars", self.envVars, min: 0, max: 2000)
     }
 }
 
@@ -303,39 +387,50 @@ public struct PersistedAgentToolResourceMcp: Codable {
         case connectionOrigin = "connection_origin"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension PersistedAgentToolResourceMcp {
-    public init(from decoder: Decoder) throws {
+public extension PersistedAgentToolResourceMcp {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        self.credentialId = try container.sdkDecodeNullable(.credentialId)
-        self.transport = try container.sdkDecodeRequired(.transport)
-        self.requestMetadata = try container.sdkDecodeRequired(.requestMetadata)
-        self.allowedTools = try container.sdkDecodeNullable(.allowedTools)
-        self.required = try container.sdkDecodeRequired(.required)
-        self.connectionOrigin = try container.sdkDecodeRequired(.connectionOrigin)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceMcpType.allCases.map(\.rawValue))
-            try validateLength("server_label", self.serverLabel, min: 0, max: nil)
-        if let value = self.credentialId {
+        type = try container.sdkDecodeRequired(.type)
+        serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        credentialId = try container.sdkDecodeNullable(.credentialId)
+        transport = try container.sdkDecodeRequired(.transport)
+        requestMetadata = try container.sdkDecodeRequired(.requestMetadata)
+        allowedTools = try container.sdkDecodeNullable(.allowedTools)
+        required = try container.sdkDecodeRequired(.required)
+        connectionOrigin = try container.sdkDecodeRequired(.connectionOrigin)
+        try sdkValidateRawEnum("type", type, PersistedAgentToolResourceMcpType.allCases.map(\.rawValue))
+        try validateLength("server_label", serverLabel, min: 0, max: nil)
+        if let value = credentialId {
             try validateLength("credential_id", value, min: 0, max: nil)
         }
-        if let value = self.allowedTools {
+        if let value = allowedTools {
             try validateItems("allowed_tools", value, min: 0, max: 2000)
         }
     }
 }
 
-extension PersistedAgentToolResourceMcp {
-    public init(type: PersistedAgentToolResourceMcpType, serverLabel: String, credentialId: String?, transport: PersistedMcpTransportResource, requestMetadata: [String: JSONValue], allowedTools: [String]?, required: Bool, connectionOrigin: McpConnectionOriginResource) throws {
+public extension PersistedAgentToolResourceMcp {
+    init(
+        type: PersistedAgentToolResourceMcpType,
+        serverLabel: String,
+        credentialId: String?,
+        transport: PersistedMcpTransportResource,
+        requestMetadata: [String: JSONValue],
+        allowedTools: [String]?,
+        required: Bool,
+        connectionOrigin: McpConnectionOriginResource
+    ) throws {
         (self.type, self.serverLabel) = (type, serverLabel)
         (self.credentialId, self.transport) = (credentialId, transport)
         (self.requestMetadata, self.allowedTools) = (requestMetadata, allowedTools)
         (self.required, self.connectionOrigin) = (required, connectionOrigin)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceMcpType.allCases.map(\.rawValue))
-            try validateLength("server_label", self.serverLabel, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceMcpType.allCases.map(\.rawValue))
+        try validateLength("server_label", self.serverLabel, min: 0, max: nil)
         if let value = self.credentialId {
             try validateLength("credential_id", value, min: 0, max: nil)
         }
@@ -366,46 +461,74 @@ public struct PersistedAgentToolResourceFunction: Codable {
         case deferLoading = "defer_loading"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension PersistedAgentToolResourceFunction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        guard container.contains(.parameters) else {
-            throw SdkValidationError(field: "parameters", code: "required", message: "Validation failed for 'parameters': value is required")
-        }
-        guard container.contains(.deferLoading) else {
-            throw SdkValidationError(field: "defer_loading", code: "required", message: "Validation failed for 'defer_loading': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeRequired(.description)
-        self.parameters = try container.sdkDecodeRequired(.parameters)
-        self.deferLoading = try container.sdkDecodeRequired(.deferLoading)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceFunctionType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 0, max: nil)
-            try validateLength("description", self.description, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension PersistedAgentToolResourceFunction {
-    public init(type: PersistedAgentToolResourceFunctionType, name: String, description: String, parameters: [String: JSONValue], deferLoading: Bool) throws {
+public extension PersistedAgentToolResourceFunction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        guard container.contains(.parameters) else {
+            throw SdkValidationError(
+                field: "parameters",
+                code: "required",
+                message: "Validation failed for 'parameters': value is required"
+            )
+        }
+        guard container.contains(.deferLoading) else {
+            throw SdkValidationError(
+                field: "defer_loading",
+                code: "required",
+                message: "Validation failed for 'defer_loading': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeRequired(.description)
+        parameters = try container.sdkDecodeRequired(.parameters)
+        deferLoading = try container.sdkDecodeRequired(.deferLoading)
+        try sdkValidateRawEnum("type", type, PersistedAgentToolResourceFunctionType.allCases.map(\.rawValue))
+        try validateLength("name", name, min: 0, max: nil)
+        try validateLength("description", description, min: 0, max: nil)
+    }
+}
+
+public extension PersistedAgentToolResourceFunction {
+    init(
+        type: PersistedAgentToolResourceFunctionType,
+        name: String,
+        description: String,
+        parameters: [String: JSONValue],
+        deferLoading: Bool
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.description, self.parameters) = (description, parameters)
         self.deferLoading = deferLoading
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceFunctionType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 0, max: nil)
-            try validateLength("description", self.description, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceFunctionType.allCases.map(\.rawValue))
+        try validateLength("name", self.name, min: 0, max: nil)
+        try validateLength("description", self.description, min: 0, max: nil)
     }
 }
 
@@ -418,24 +541,30 @@ public struct PersistedAgentToolConfigParamToolSearch: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension PersistedAgentToolConfigParamToolSearch {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension PersistedAgentToolConfigParamToolSearch {
-    public init(type: PersistedAgentToolConfigParamToolSearchType) throws {
+public extension PersistedAgentToolConfigParamToolSearch {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, PersistedAgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
+    }
+}
+
+public extension PersistedAgentToolConfigParamToolSearch {
+    init(type: PersistedAgentToolConfigParamToolSearchType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
     }
 }
 
@@ -460,5 +589,7 @@ public struct PersistedAgentToolResourceWebSearch: Codable {
         case location
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

@@ -27,8 +27,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.fileSearchCalls(
-            options: options
-        )
+                options: options
+            )
             XCTFail("usageFileSearchCalls did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -99,8 +99,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.images(
-            options: options
-        )
+                options: options
+            )
             XCTFail("usageImages did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -167,8 +167,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.moderations(
-            options: options
-        )
+                options: options
+            )
             XCTFail("usageModerations did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -221,14 +221,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.vectorStores(
-            startTime: decoded("1"),
-            endTime: decoded("1"),
-            bucketWidth: decoded("\"1d\""),
-            projectIds: decoded("[\"project_ids\"]"),
-            groupBy: decoded("[\"project_id\"]"),
-            limit: decoded("1"),
-            page: decoded("\"page\"")
-        )
+                startTime: decoded("1"),
+                endTime: decoded("1"),
+                bucketWidth: decoded("\"1d\""),
+                projectIds: decoded("[\"project_ids\"]"),
+                groupBy: decoded("[\"project_id\"]"),
+                limit: decoded("1"),
+                page: decoded("\"page\"")
+            )
             XCTFail("usageVectorStores did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -297,8 +297,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.usage.webSearchCalls(
-            options: options
-        )
+                options: options
+            )
             XCTFail("usageWebSearchCalls did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -345,8 +345,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.externalStorage.validate(
-            externalStorageId: decoded("\"extstorage_123\"")
-        )
+                externalStorageId: decoded("\"extstorage_123\"")
+            )
             XCTFail("validateExternalStorage did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -393,8 +393,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.validateGrader(
-            grader: decoded(sdkMethodFixture712Value1)
-        )
+                grader: decoded(sdkMethodFixture712Value1)
+            )
             XCTFail("validateGrader did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Agent domain models
+/// Agent domain models
 /// Identifies the environment whose lifecycle changed.
 public struct AgentEnvironmentEvent: Codable {
     /// The ID of the environment.
@@ -13,23 +13,29 @@ public struct AgentEnvironmentEvent: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AgentEnvironmentEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-            try validateLength("id", self.id, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AgentEnvironmentEvent {
-    public init(id: String) throws {
+public extension AgentEnvironmentEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        try validateLength("id", id, min: 0, max: nil)
+    }
+}
+
+public extension AgentEnvironmentEvent {
+    init(id: String) throws {
         self.id = id
-            try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
     }
 }

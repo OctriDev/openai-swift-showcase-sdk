@@ -3,17 +3,20 @@
 
 import Foundation
 
-// SpendAlerts domain models
+/// SpendAlerts domain models
 /// The time interval for evaluating spend against the threshold.
 public struct OrganizationSpendAlertInterval: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let month = OrganizationSpendAlertInterval(rawValue: "month")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -26,12 +29,15 @@ public struct OrganizationSpendAlertInterval: RawRepresentable, Hashable, Codabl
 public struct ProjectSpendAlertObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let projectSpendAlert = ProjectSpendAlertObject(rawValue: "project.spend_alert")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -41,15 +47,19 @@ public struct ProjectSpendAlertObject: RawRepresentable, Hashable, Codable, Send
 }
 
 /// Always `list`.
-public struct OrganizationSpendAlertListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct OrganizationSpendAlertListResourceObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = OrganizationSpendAlertListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -62,12 +72,15 @@ public struct OrganizationSpendAlertListResourceObject: RawRepresentable, Hashab
 public struct SpendAlertNotificationChannelType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let email = SpendAlertNotificationChannelType(rawValue: "email")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -80,12 +93,15 @@ public struct SpendAlertNotificationChannelType: RawRepresentable, Hashable, Cod
 public struct CreateSpendAlertBodyInterval: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let month = CreateSpendAlertBodyInterval(rawValue: "month")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -98,12 +114,15 @@ public struct CreateSpendAlertBodyInterval: RawRepresentable, Hashable, Codable,
 public struct ProjectSpendAlertInterval: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let month = ProjectSpendAlertInterval(rawValue: "month")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -116,12 +135,15 @@ public struct ProjectSpendAlertInterval: RawRepresentable, Hashable, Codable, Se
 public struct CreateSpendAlertBodyCurrency: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let usd = CreateSpendAlertBodyCurrency(rawValue: "USD")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -134,12 +156,15 @@ public struct CreateSpendAlertBodyCurrency: RawRepresentable, Hashable, Codable,
 public struct OrganizationSpendAlertObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let organizationSpendAlert = OrganizationSpendAlertObject(rawValue: "organization.spend_alert")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -152,12 +177,15 @@ public struct OrganizationSpendAlertObject: RawRepresentable, Hashable, Codable,
 public struct OrganizationSpendAlertCurrency: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let usd = OrganizationSpendAlertCurrency(rawValue: "USD")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -167,15 +195,20 @@ public struct OrganizationSpendAlertCurrency: RawRepresentable, Hashable, Codabl
 }
 
 /// Always `organization.spend_alert.deleted`.
-public struct OrganizationSpendAlertDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct OrganizationSpendAlertDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationSpendAlertDeleted = OrganizationSpendAlertDeletedResourceObject(rawValue: "organization.spend_alert.deleted")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationSpendAlertDeleted =
+        OrganizationSpendAlertDeletedResourceObject(rawValue: "organization.spend_alert.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -185,15 +218,20 @@ public struct OrganizationSpendAlertDeletedResourceObject: RawRepresentable, Has
 }
 
 /// Always `project.spend_alert.deleted`.
-public struct ProjectSpendAlertDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ProjectSpendAlertDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let projectSpendAlertDeleted = ProjectSpendAlertDeletedResourceObject(rawValue: "project.spend_alert.deleted")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let projectSpendAlertDeleted =
+        ProjectSpendAlertDeletedResourceObject(rawValue: "project.spend_alert.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -206,12 +244,15 @@ public struct ProjectSpendAlertDeletedResourceObject: RawRepresentable, Hashable
 public struct ProjectSpendAlertListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = ProjectSpendAlertListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -224,12 +265,15 @@ public struct ProjectSpendAlertListResourceObject: RawRepresentable, Hashable, C
 public struct ProjectSpendAlertCurrency: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let usd = ProjectSpendAlertCurrency(rawValue: "USD")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

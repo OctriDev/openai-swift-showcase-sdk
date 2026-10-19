@@ -6,19 +6,62 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ResponsesMethods {
-    /// Creates a model response from text, image, or file input and can produce text or JSON output. Provide `input` and `model`, and configure `tools` and `tool_choice` when you want the model to use custom code or built-in tools. Set `background` to run the response asynchronously or `stream` to receive generated events as they are produced.
+public extension ResponsesMethods {
+    /// Creates a model response from text, image, or file input and can produce text or JSON output. Provide `input`
+    /// and `model`, and configure `tools` and `tool_choice` when you want the model to use custom code or built-in
+    /// tools. Set `background` to run the response asynchronously or `stream` to receive generated events as they are
+    /// produced.
     ///
-    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate [text](https://developers.openai.com/api/docs/guides/text) or [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in [tools](https://developers.openai.com/api/docs/guides/tools) like [web search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the model's response.
-    public static func createResponse(config: ClientConfig, body: CreateResponse, requestOptions: RequestOptions? = nil) async throws -> Response {
-        return try (await sdkRequest("POST", "/responses", config: config, rawBody: (try sdkEncodeBody(body, contentType: "application/json")), decoder: .json, operationId: "createResponse", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "503": ErrorResponse.self])).data
+    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or
+    /// [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate
+    /// [text](https://developers.openai.com/api/docs/guides/text) or
+    /// [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own
+    /// [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in
+    /// [tools](https://developers.openai.com/api/docs/guides/tools) like [web
+    /// search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file
+    /// search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the
+    /// model's response.
+    static func createResponse(
+        config: ClientConfig,
+        body: CreateResponse,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Response {
+        try await (sdkRequest(
+            "POST",
+            "/responses",
+            config: config,
+            rawBody: sdkEncodeBody(body, contentType: "application/json"),
+            decoder: .json,
+            operationId: "createResponse",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
+        )).data
     }
 
-    /// Creates a model response from text, image, or file input and can produce text or JSON output. Provide `input` and `model`, and configure `tools` and `tool_choice` when you want the model to use custom code or built-in tools. Set `background` to run the response asynchronously or `stream` to receive generated events as they are produced.
+    /// Creates a model response from text, image, or file input and can produce text or JSON output. Provide `input`
+    /// and `model`, and configure `tools` and `tool_choice` when you want the model to use custom code or built-in
+    /// tools. Set `background` to run the response asynchronously or `stream` to receive generated events as they are
+    /// produced.
     ///
-    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate [text](https://developers.openai.com/api/docs/guides/text) or [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in [tools](https://developers.openai.com/api/docs/guides/tools) like [web search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the model's response.
-    public static func createResponseStream(config: ClientConfig, body: CreateResponse, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<ResponseStreamEvent, Swift.Error> {
-
+    /// Creates a model response. Provide [text](https://developers.openai.com/api/docs/guides/text) or
+    /// [image](https://developers.openai.com/api/docs/guides/images-vision) inputs to generate
+    /// [text](https://developers.openai.com/api/docs/guides/text) or
+    /// [JSON](https://developers.openai.com/api/docs/guides/structured-outputs) outputs. Have the model call your own
+    /// [custom code](https://developers.openai.com/api/docs/guides/function-calling) or use built-in
+    /// [tools](https://developers.openai.com/api/docs/guides/tools) like [web
+    /// search](https://developers.openai.com/api/docs/guides/tools-web-search) or [file
+    /// search](https://developers.openai.com/api/docs/guides/tools-file-search) to use your own data as input for the
+    /// model's response.
+    static func createResponseStream(
+        config: ClientConfig,
+        body: CreateResponse,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AsyncThrowingStream<ResponseStreamEvent, Swift.Error> {
         let upstream = try await sdkStream(
             "POST",
             "/responses",
@@ -29,7 +72,12 @@ extension ResponsesMethods {
             streamMediaType: "text/event-stream",
             chunkDomain: "bytes",
             options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "503": ErrorResponse.self]
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
         )
         return AsyncThrowingStream { continuation in
             let streamTask = _Concurrency.Task {
@@ -39,8 +87,11 @@ extension ResponsesMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(ResponseStreamEvent.self, from: Data(event.data.utf8)) }
-                        
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
+                            ResponseStreamEvent.self,
+                            from: Data(event.data.utf8)
+                        ) }
+
                         continuation.yield(payload)
                     }
                     continuation.finish()

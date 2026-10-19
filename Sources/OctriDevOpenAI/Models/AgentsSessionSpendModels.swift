@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsSessionSpend domain models
+/// AgentsSessionSpend domain models
 /// Sets the session-wide limit without changing recorded spend.
 public struct SessionSpendControlParam: Codable {
     /// Positive USD cents, or null to remove the limit.
@@ -13,27 +13,49 @@ public struct SessionSpendControlParam: Codable {
         case limit
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension SessionSpendControlParam {
-    public init(from decoder: Decoder) throws {
+public extension SessionSpendControlParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.limit) else {
-            throw SdkValidationError(field: "limit", code: "required", message: "Validation failed for 'limit': value is required")
+            throw SdkValidationError(
+                field: "limit",
+                code: "required",
+                message: "Validation failed for 'limit': value is required"
+            )
         }
-        self.limit = try container.sdkDecodeNullable(.limit)
-        if let value = self.limit {
-            try validateRange("limit", Double(value), min: 1, max: 4503599627370495, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        limit = try container.sdkDecodeNullable(.limit)
+        if let value = limit {
+            try validateRange(
+                "limit",
+                Double(value),
+                min: 1,
+                max: 4_503_599_627_370_495,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension SessionSpendControlParam {
-    public init(limit: Int?) throws {
+public extension SessionSpendControlParam {
+    init(limit: Int?) throws {
         self.limit = limit
         if let value = self.limit {
-            try validateRange("limit", Double(value), min: 1, max: 4503599627370495, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "limit",
+                Double(value),
+                min: 1,
+                max: 4_503_599_627_370_495,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -50,33 +72,75 @@ public struct SessionSpendControlResource: Codable {
         case consumed
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension SessionSpendControlResource {
-    public init(from decoder: Decoder) throws {
+public extension SessionSpendControlResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.limit) else {
-            throw SdkValidationError(field: "limit", code: "required", message: "Validation failed for 'limit': value is required")
+            throw SdkValidationError(
+                field: "limit",
+                code: "required",
+                message: "Validation failed for 'limit': value is required"
+            )
         }
         guard container.contains(.consumed) else {
-            throw SdkValidationError(field: "consumed", code: "required", message: "Validation failed for 'consumed': value is required")
+            throw SdkValidationError(
+                field: "consumed",
+                code: "required",
+                message: "Validation failed for 'consumed': value is required"
+            )
         }
-        self.limit = try container.sdkDecodeRequired(.limit)
-        self.consumed = try container.sdkDecodeNullable(.consumed)
-            try validateRange("limit", Double(self.limit), min: 1, max: 4503599627370495, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
-        if let value = self.consumed {
-            try validateRange("consumed", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        limit = try container.sdkDecodeRequired(.limit)
+        consumed = try container.sdkDecodeNullable(.consumed)
+        try validateRange(
+            "limit",
+            Double(limit),
+            min: 1,
+            max: 4_503_599_627_370_495,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+        if let value = consumed {
+            try validateRange(
+                "consumed",
+                Double(value),
+                min: 0,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension SessionSpendControlResource {
-    public init(limit: Int, consumed: Int?) throws {
+public extension SessionSpendControlResource {
+    init(limit: Int, consumed: Int?) throws {
         (self.limit, self.consumed) = (limit, consumed)
-            try validateRange("limit", Double(self.limit), min: 1, max: 4503599627370495, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "limit",
+            Double(self.limit),
+            min: 1,
+            max: 4_503_599_627_370_495,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
         if let value = self.consumed {
-            try validateRange("consumed", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "consumed",
+                Double(value),
+                min: 0,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }

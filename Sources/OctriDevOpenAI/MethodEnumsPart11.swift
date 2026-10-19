@@ -28,45 +28,45 @@ struct CreateCompletionRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encode(self.prompt, forKey: SdkCodingKey("prompt"))
-        try keyedContainer.encodeIfPresent(self.bestOf, forKey: SdkCodingKey("best_of"))
-        try keyedContainer.encodeIfPresent(self.echo, forKey: SdkCodingKey("echo"))
-        try keyedContainer.encodeIfPresent(self.frequencyPenalty, forKey: SdkCodingKey("frequency_penalty"))
-        try keyedContainer.encodeIfPresent(self.logitBias, forKey: SdkCodingKey("logit_bias"))
-        try keyedContainer.encodeIfPresent(self.logprobs, forKey: SdkCodingKey("logprobs"))
-        try keyedContainer.encodeIfPresent(self.maxTokens, forKey: SdkCodingKey("max_tokens"))
-        try keyedContainer.encodeIfPresent(self.n, forKey: SdkCodingKey("n"))
-        try keyedContainer.encodeIfPresent(self.presencePenalty, forKey: SdkCodingKey("presence_penalty"))
-        try keyedContainer.encodeIfPresent(self.seed, forKey: SdkCodingKey("seed"))
-        try keyedContainer.encodeIfPresent(self.stop, forKey: SdkCodingKey("stop"))
-        try keyedContainer.encodeIfPresent(self.stream, forKey: SdkCodingKey("stream"))
-        try keyedContainer.encodeIfPresent(self.streamOptions, forKey: SdkCodingKey("stream_options"))
-        try keyedContainer.encodeIfPresent(self.suffix, forKey: SdkCodingKey("suffix"))
-        try keyedContainer.encodeIfPresent(self.temperature, forKey: SdkCodingKey("temperature"))
-        try keyedContainer.encodeIfPresent(self.topP, forKey: SdkCodingKey("top_p"))
-        try keyedContainer.encodeIfPresent(self.user, forKey: SdkCodingKey("user"))
+        try keyedContainer.encode(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encode(prompt, forKey: SdkCodingKey("prompt"))
+        try keyedContainer.encodeIfPresent(bestOf, forKey: SdkCodingKey("best_of"))
+        try keyedContainer.encodeIfPresent(echo, forKey: SdkCodingKey("echo"))
+        try keyedContainer.encodeIfPresent(frequencyPenalty, forKey: SdkCodingKey("frequency_penalty"))
+        try keyedContainer.encodeIfPresent(logitBias, forKey: SdkCodingKey("logit_bias"))
+        try keyedContainer.encodeIfPresent(logprobs, forKey: SdkCodingKey("logprobs"))
+        try keyedContainer.encodeIfPresent(maxTokens, forKey: SdkCodingKey("max_tokens"))
+        try keyedContainer.encodeIfPresent(n, forKey: SdkCodingKey("n"))
+        try keyedContainer.encodeIfPresent(presencePenalty, forKey: SdkCodingKey("presence_penalty"))
+        try keyedContainer.encodeIfPresent(seed, forKey: SdkCodingKey("seed"))
+        try keyedContainer.encodeIfPresent(stop, forKey: SdkCodingKey("stop"))
+        try keyedContainer.encodeIfPresent(stream, forKey: SdkCodingKey("stream"))
+        try keyedContainer.encodeIfPresent(streamOptions, forKey: SdkCodingKey("stream_options"))
+        try keyedContainer.encodeIfPresent(suffix, forKey: SdkCodingKey("suffix"))
+        try keyedContainer.encodeIfPresent(temperature, forKey: SdkCodingKey("temperature"))
+        try keyedContainer.encodeIfPresent(topP, forKey: SdkCodingKey("top_p"))
+        try keyedContainer.encodeIfPresent(user, forKey: SdkCodingKey("user"))
     }
 
     init(options: CompletionsMethods.CreateCompletionOptions) {
-        self.model = options.model
-        self.prompt = options.prompt
-        self.bestOf = options.bestOf
-        self.echo = options.echo
-        self.frequencyPenalty = options.frequencyPenalty
-        self.logitBias = options.logitBias
-        self.logprobs = options.logprobs
-        self.maxTokens = options.maxTokens
-        self.n = options.n
-        self.presencePenalty = options.presencePenalty
-        self.seed = options.seed
-        self.stop = options.stop
-        self.stream = options.stream
-        self.streamOptions = options.streamOptions
-        self.suffix = options.suffix
-        self.temperature = options.temperature
-        self.topP = options.topP
-        self.user = options.user
+        model = options.model
+        prompt = options.prompt
+        bestOf = options.bestOf
+        echo = options.echo
+        frequencyPenalty = options.frequencyPenalty
+        logitBias = options.logitBias
+        logprobs = options.logprobs
+        maxTokens = options.maxTokens
+        n = options.n
+        presencePenalty = options.presencePenalty
+        seed = options.seed
+        stop = options.stop
+        stream = options.stream
+        streamOptions = options.streamOptions
+        suffix = options.suffix
+        temperature = options.temperature
+        topP = options.topP
+        user = options.user
     }
 }
 
@@ -92,45 +92,45 @@ struct CreateCompletionStreamStreamRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encode(self.prompt, forKey: SdkCodingKey("prompt"))
-        try keyedContainer.encode(self.stream, forKey: SdkCodingKey("stream"))
-        try keyedContainer.encodeIfPresent(self.bestOf, forKey: SdkCodingKey("best_of"))
-        try keyedContainer.encodeIfPresent(self.echo, forKey: SdkCodingKey("echo"))
-        try keyedContainer.encodeIfPresent(self.frequencyPenalty, forKey: SdkCodingKey("frequency_penalty"))
-        try keyedContainer.encodeIfPresent(self.logitBias, forKey: SdkCodingKey("logit_bias"))
-        try keyedContainer.encodeIfPresent(self.logprobs, forKey: SdkCodingKey("logprobs"))
-        try keyedContainer.encodeIfPresent(self.maxTokens, forKey: SdkCodingKey("max_tokens"))
-        try keyedContainer.encodeIfPresent(self.n, forKey: SdkCodingKey("n"))
-        try keyedContainer.encodeIfPresent(self.presencePenalty, forKey: SdkCodingKey("presence_penalty"))
-        try keyedContainer.encodeIfPresent(self.seed, forKey: SdkCodingKey("seed"))
-        try keyedContainer.encodeIfPresent(self.stop, forKey: SdkCodingKey("stop"))
-        try keyedContainer.encodeIfPresent(self.streamOptions, forKey: SdkCodingKey("stream_options"))
-        try keyedContainer.encodeIfPresent(self.suffix, forKey: SdkCodingKey("suffix"))
-        try keyedContainer.encodeIfPresent(self.temperature, forKey: SdkCodingKey("temperature"))
-        try keyedContainer.encodeIfPresent(self.topP, forKey: SdkCodingKey("top_p"))
-        try keyedContainer.encodeIfPresent(self.user, forKey: SdkCodingKey("user"))
+        try keyedContainer.encode(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encode(prompt, forKey: SdkCodingKey("prompt"))
+        try keyedContainer.encode(stream, forKey: SdkCodingKey("stream"))
+        try keyedContainer.encodeIfPresent(bestOf, forKey: SdkCodingKey("best_of"))
+        try keyedContainer.encodeIfPresent(echo, forKey: SdkCodingKey("echo"))
+        try keyedContainer.encodeIfPresent(frequencyPenalty, forKey: SdkCodingKey("frequency_penalty"))
+        try keyedContainer.encodeIfPresent(logitBias, forKey: SdkCodingKey("logit_bias"))
+        try keyedContainer.encodeIfPresent(logprobs, forKey: SdkCodingKey("logprobs"))
+        try keyedContainer.encodeIfPresent(maxTokens, forKey: SdkCodingKey("max_tokens"))
+        try keyedContainer.encodeIfPresent(n, forKey: SdkCodingKey("n"))
+        try keyedContainer.encodeIfPresent(presencePenalty, forKey: SdkCodingKey("presence_penalty"))
+        try keyedContainer.encodeIfPresent(seed, forKey: SdkCodingKey("seed"))
+        try keyedContainer.encodeIfPresent(stop, forKey: SdkCodingKey("stop"))
+        try keyedContainer.encodeIfPresent(streamOptions, forKey: SdkCodingKey("stream_options"))
+        try keyedContainer.encodeIfPresent(suffix, forKey: SdkCodingKey("suffix"))
+        try keyedContainer.encodeIfPresent(temperature, forKey: SdkCodingKey("temperature"))
+        try keyedContainer.encodeIfPresent(topP, forKey: SdkCodingKey("top_p"))
+        try keyedContainer.encodeIfPresent(user, forKey: SdkCodingKey("user"))
     }
 
     init(options: CompletionsMethods.CreateCompletionStreamOptions) {
-        self.model = options.model
-        self.prompt = options.prompt
-        self.stream = options.stream
-        self.bestOf = options.bestOf
-        self.echo = options.echo
-        self.frequencyPenalty = options.frequencyPenalty
-        self.logitBias = options.logitBias
-        self.logprobs = options.logprobs
-        self.maxTokens = options.maxTokens
-        self.n = options.n
-        self.presencePenalty = options.presencePenalty
-        self.seed = options.seed
-        self.stop = options.stop
-        self.streamOptions = options.streamOptions
-        self.suffix = options.suffix
-        self.temperature = options.temperature
-        self.topP = options.topP
-        self.user = options.user
+        model = options.model
+        prompt = options.prompt
+        stream = options.stream
+        bestOf = options.bestOf
+        echo = options.echo
+        frequencyPenalty = options.frequencyPenalty
+        logitBias = options.logitBias
+        logprobs = options.logprobs
+        maxTokens = options.maxTokens
+        n = options.n
+        presencePenalty = options.presencePenalty
+        seed = options.seed
+        stop = options.stop
+        streamOptions = options.streamOptions
+        suffix = options.suffix
+        temperature = options.temperature
+        topP = options.topP
+        user = options.user
     }
 }
 
@@ -144,12 +144,12 @@ struct CreateContainerRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.fileIds, forKey: SdkCodingKey("file_ids"))
-        try keyedContainer.encodeIfPresent(self.expiresAfter, forKey: SdkCodingKey("expires_after"))
-        try keyedContainer.encodeIfPresent(self.skills, forKey: SdkCodingKey("skills"))
-        try keyedContainer.encodeIfPresent(self.memoryLimit, forKey: SdkCodingKey("memory_limit"))
-        try keyedContainer.encodeIfPresent(self.networkPolicy, forKey: SdkCodingKey("network_policy"))
+        try keyedContainer.encode(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(fileIds, forKey: SdkCodingKey("file_ids"))
+        try keyedContainer.encodeIfPresent(expiresAfter, forKey: SdkCodingKey("expires_after"))
+        try keyedContainer.encodeIfPresent(skills, forKey: SdkCodingKey("skills"))
+        try keyedContainer.encodeIfPresent(memoryLimit, forKey: SdkCodingKey("memory_limit"))
+        try keyedContainer.encodeIfPresent(networkPolicy, forKey: SdkCodingKey("network_policy"))
     }
 }
 
@@ -159,8 +159,8 @@ struct CreateContainerFileRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.fileId, forKey: SdkCodingKey("file_id"))
-        try keyedContainer.encodeIfPresent(self.file, forKey: SdkCodingKey("file"))
+        try keyedContainer.encodeIfPresent(fileId, forKey: SdkCodingKey("file_id"))
+        try keyedContainer.encodeIfPresent(file, forKey: SdkCodingKey("file"))
     }
 }
 
@@ -169,7 +169,7 @@ struct CreateConversationItemsRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.items, forKey: SdkCodingKey("items"))
+        try keyedContainer.encode(items, forKey: SdkCodingKey("items"))
     }
 }
 
@@ -179,8 +179,8 @@ struct CreateConversationRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
-        try keyedContainer.encodeIfPresent(self.items, forKey: SdkCodingKey("items"))
+        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(items, forKey: SdkCodingKey("items"))
     }
 }
 
@@ -189,7 +189,7 @@ struct UpdateConversationRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encode(metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -202,10 +202,10 @@ struct CreateEmbeddingRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.input, forKey: SdkCodingKey("input"))
-        try keyedContainer.encode(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(self.encodingFormat, forKey: SdkCodingKey("encoding_format"))
-        try keyedContainer.encodeIfPresent(self.dimensions, forKey: SdkCodingKey("dimensions"))
-        try keyedContainer.encodeIfPresent(self.user, forKey: SdkCodingKey("user"))
+        try keyedContainer.encode(input, forKey: SdkCodingKey("input"))
+        try keyedContainer.encode(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(encodingFormat, forKey: SdkCodingKey("encoding_format"))
+        try keyedContainer.encodeIfPresent(dimensions, forKey: SdkCodingKey("dimensions"))
+        try keyedContainer.encodeIfPresent(user, forKey: SdkCodingKey("user"))
     }
 }

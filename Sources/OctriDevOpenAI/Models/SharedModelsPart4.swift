@@ -3,35 +3,51 @@
 
 import Foundation
 
-// Shared domain models
-extension DoubleClickAction {
-    public init(from decoder: Decoder) throws {
+/// Shared domain models
+public extension DoubleClickAction {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.x) else {
-            throw SdkValidationError(field: "x", code: "required", message: "Validation failed for 'x': value is required")
+            throw SdkValidationError(
+                field: "x",
+                code: "required",
+                message: "Validation failed for 'x': value is required"
+            )
         }
         guard container.contains(.y) else {
-            throw SdkValidationError(field: "y", code: "required", message: "Validation failed for 'y': value is required")
+            throw SdkValidationError(
+                field: "y",
+                code: "required",
+                message: "Validation failed for 'y': value is required"
+            )
         }
         guard container.contains(.keys) else {
-            throw SdkValidationError(field: "keys", code: "required", message: "Validation failed for 'keys': value is required")
+            throw SdkValidationError(
+                field: "keys",
+                code: "required",
+                message: "Validation failed for 'keys': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.x = try container.sdkDecodeRequired(.x)
-        self.y = try container.sdkDecodeRequired(.y)
-        self.keys = try container.sdkDecodeNullable(.keys)
-            try sdkValidateRawEnum("type", self.type, DoubleClickActionType.allCases.map(\.rawValue))
+        type = try container.sdkDecodeRequired(.type)
+        x = try container.sdkDecodeRequired(.x)
+        y = try container.sdkDecodeRequired(.y)
+        keys = try container.sdkDecodeNullable(.keys)
+        try sdkValidateRawEnum("type", type, DoubleClickActionType.allCases.map(\.rawValue))
     }
 }
 
-extension DoubleClickAction {
-    public init(type: DoubleClickActionType, x: Int, y: Int, keys: [String]?) throws {
+public extension DoubleClickAction {
+    init(type: DoubleClickActionType, x: Int, y: Int, keys: [String]?) throws {
         (self.type, self.x) = (type, x)
         (self.y, self.keys) = (y, keys)
-            try sdkValidateRawEnum("type", self.type, DoubleClickActionType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, DoubleClickActionType.allCases.map(\.rawValue))
     }
 }
 
@@ -53,33 +69,51 @@ public struct LogProb: Codable {
         case topLogprobs = "top_logprobs"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LogProb {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.token) else {
-            throw SdkValidationError(field: "token", code: "required", message: "Validation failed for 'token': value is required")
-        }
-        guard container.contains(.logprob) else {
-            throw SdkValidationError(field: "logprob", code: "required", message: "Validation failed for 'logprob': value is required")
-        }
-        guard container.contains(.bytes) else {
-            throw SdkValidationError(field: "bytes", code: "required", message: "Validation failed for 'bytes': value is required")
-        }
-        guard container.contains(.topLogprobs) else {
-            throw SdkValidationError(field: "top_logprobs", code: "required", message: "Validation failed for 'top_logprobs': value is required")
-        }
-        self.token = try container.sdkDecodeRequired(.token)
-        self.logprob = try container.sdkDecodeRequired(.logprob)
-        self.bytes = try container.sdkDecodeRequired(.bytes)
-        self.topLogprobs = try container.sdkDecodeRequired(.topLogprobs)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LogProb {
-    public init(token: String, logprob: Double, bytes: [Int], topLogprobs: [TopLogProb]) {
+public extension LogProb {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.token) else {
+            throw SdkValidationError(
+                field: "token",
+                code: "required",
+                message: "Validation failed for 'token': value is required"
+            )
+        }
+        guard container.contains(.logprob) else {
+            throw SdkValidationError(
+                field: "logprob",
+                code: "required",
+                message: "Validation failed for 'logprob': value is required"
+            )
+        }
+        guard container.contains(.bytes) else {
+            throw SdkValidationError(
+                field: "bytes",
+                code: "required",
+                message: "Validation failed for 'bytes': value is required"
+            )
+        }
+        guard container.contains(.topLogprobs) else {
+            throw SdkValidationError(
+                field: "top_logprobs",
+                code: "required",
+                message: "Validation failed for 'top_logprobs': value is required"
+            )
+        }
+        token = try container.sdkDecodeRequired(.token)
+        logprob = try container.sdkDecodeRequired(.logprob)
+        bytes = try container.sdkDecodeRequired(.bytes)
+        topLogprobs = try container.sdkDecodeRequired(.topLogprobs)
+    }
+}
+
+public extension LogProb {
+    init(token: String, logprob: Double, bytes: [Int], topLogprobs: [TopLogProb]) {
         (self.token, self.logprob) = (token, logprob)
         (self.bytes, self.topLogprobs) = (bytes, topLogprobs)
     }
@@ -97,28 +131,38 @@ public struct TypeParam: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TypeParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, TypeParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension TypeParam {
-    public init(type: TypeParamType, text: String) throws {
+public extension TypeParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        try sdkValidateRawEnum("type", type, TypeParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension TypeParam {
+    init(type: TypeParamType, text: String) throws {
         (self.type, self.text) = (type, text)
-            try sdkValidateRawEnum("type", self.type, TypeParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, TypeParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -134,28 +178,38 @@ public struct RefusalContent: Codable {
         case refusal
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RefusalContent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.refusal) else {
-            throw SdkValidationError(field: "refusal", code: "required", message: "Validation failed for 'refusal': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.refusal = try container.sdkDecodeRequired(.refusal)
-            try sdkValidateRawEnum("type", self.type, RefusalContentType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RefusalContent {
-    public init(type: RefusalContentType, refusal: String) throws {
+public extension RefusalContent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.refusal) else {
+            throw SdkValidationError(
+                field: "refusal",
+                code: "required",
+                message: "Validation failed for 'refusal': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        refusal = try container.sdkDecodeRequired(.refusal)
+        try sdkValidateRawEnum("type", type, RefusalContentType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RefusalContent {
+    init(type: RefusalContentType, refusal: String) throws {
         (self.type, self.refusal) = (type, refusal)
-            try sdkValidateRawEnum("type", self.type, RefusalContentType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RefusalContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -177,27 +231,43 @@ public struct CreateModelResponsePropertiesVariant1: Codable {
     }
 
     init() {
-        (self.promptCacheOptions, self.topLogprobs) = (nil, nil)
+        (promptCacheOptions, topLogprobs) = (nil, nil)
     }
 }
 
-extension CreateModelResponsePropertiesVariant1 {
-    public init(from decoder: Decoder) throws {
+public extension CreateModelResponsePropertiesVariant1 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        if let value = self.topLogprobs {
-            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        if let value = topLogprobs {
+            try validateRange(
+                "top_logprobs",
+                Double(value),
+                min: 0,
+                max: 20,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension CreateModelResponsePropertiesVariant1 {
-    public init(promptCacheOptions: PromptCacheOptionsParam? = nil, topLogprobs: Int? = nil) throws {
+public extension CreateModelResponsePropertiesVariant1 {
+    init(promptCacheOptions: PromptCacheOptionsParam? = nil, topLogprobs: Int? = nil) throws {
         self.init()
         (self.promptCacheOptions, self.topLogprobs) = (promptCacheOptions, topLogprobs)
         if let value = self.topLogprobs {
-            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "top_logprobs",
+                Double(value),
+                min: 0,
+                max: 20,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -223,31 +293,51 @@ public struct CompletionUsage: Codable {
         case promptTokensDetails = "prompt_tokens_details"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CompletionUsage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.completionTokens) else {
-            throw SdkValidationError(field: "completion_tokens", code: "required", message: "Validation failed for 'completion_tokens': value is required")
-        }
-        guard container.contains(.promptTokens) else {
-            throw SdkValidationError(field: "prompt_tokens", code: "required", message: "Validation failed for 'prompt_tokens': value is required")
-        }
-        guard container.contains(.totalTokens) else {
-            throw SdkValidationError(field: "total_tokens", code: "required", message: "Validation failed for 'total_tokens': value is required")
-        }
-        self.completionTokens = try container.sdkDecodeRequired(.completionTokens)
-        self.promptTokens = try container.sdkDecodeRequired(.promptTokens)
-        self.totalTokens = try container.sdkDecodeRequired(.totalTokens)
-        self.completionTokensDetails = try container.sdkDecodeIfPresent(.completionTokensDetails)
-        self.promptTokensDetails = try container.sdkDecodeIfPresent(.promptTokensDetails)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CompletionUsage {
-    public init(completionTokens: Int, promptTokens: Int, totalTokens: Int, completionTokensDetails: CompletionUsageCompletionTokensDetails? = nil, promptTokensDetails: CompletionUsagePromptTokensDetails? = nil) {
+public extension CompletionUsage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.completionTokens) else {
+            throw SdkValidationError(
+                field: "completion_tokens",
+                code: "required",
+                message: "Validation failed for 'completion_tokens': value is required"
+            )
+        }
+        guard container.contains(.promptTokens) else {
+            throw SdkValidationError(
+                field: "prompt_tokens",
+                code: "required",
+                message: "Validation failed for 'prompt_tokens': value is required"
+            )
+        }
+        guard container.contains(.totalTokens) else {
+            throw SdkValidationError(
+                field: "total_tokens",
+                code: "required",
+                message: "Validation failed for 'total_tokens': value is required"
+            )
+        }
+        completionTokens = try container.sdkDecodeRequired(.completionTokens)
+        promptTokens = try container.sdkDecodeRequired(.promptTokens)
+        totalTokens = try container.sdkDecodeRequired(.totalTokens)
+        completionTokensDetails = try container.sdkDecodeIfPresent(.completionTokensDetails)
+        promptTokensDetails = try container.sdkDecodeIfPresent(.promptTokensDetails)
+    }
+}
+
+public extension CompletionUsage {
+    init(
+        completionTokens: Int,
+        promptTokens: Int,
+        totalTokens: Int,
+        completionTokensDetails: CompletionUsageCompletionTokensDetails? = nil,
+        promptTokensDetails: CompletionUsagePromptTokensDetails? = nil
+    ) {
         (self.completionTokens, self.promptTokens) = (completionTokens, promptTokens)
         (self.totalTokens, self.completionTokensDetails) = (totalTokens, completionTokensDetails)
         self.promptTokensDetails = promptTokensDetails
@@ -291,47 +381,87 @@ public struct OpenAIFile: Codable {
         case statusDetails = "status_details"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OpenAIFile {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.bytes) else {
-            throw SdkValidationError(field: "bytes", code: "required", message: "Validation failed for 'bytes': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.filename) else {
-            throw SdkValidationError(field: "filename", code: "required", message: "Validation failed for 'filename': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.purpose) else {
-            throw SdkValidationError(field: "purpose", code: "required", message: "Validation failed for 'purpose': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.bytes = try container.sdkDecodeNullable(.bytes)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.filename = try container.sdkDecodeRequired(.filename)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.purpose = try container.sdkDecodeRequired(.purpose)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        self.statusDetails = try container.sdkDecodeIfPresent(.statusDetails)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OpenAIFile {
-    public init(id: String, bytes: Int?, createdAt: Int, filename: String, object: OpenAIFileObject, purpose: OpenAIFilePurpose, status: OpenAIFileStatus, expiresAt: Int? = nil, statusDetails: String? = nil) {
+public extension OpenAIFile {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.bytes) else {
+            throw SdkValidationError(
+                field: "bytes",
+                code: "required",
+                message: "Validation failed for 'bytes': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.filename) else {
+            throw SdkValidationError(
+                field: "filename",
+                code: "required",
+                message: "Validation failed for 'filename': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.purpose) else {
+            throw SdkValidationError(
+                field: "purpose",
+                code: "required",
+                message: "Validation failed for 'purpose': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        bytes = try container.sdkDecodeNullable(.bytes)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        filename = try container.sdkDecodeRequired(.filename)
+        object = try container.sdkDecodeRequired(.object)
+        purpose = try container.sdkDecodeRequired(.purpose)
+        status = try container.sdkDecodeRequired(.status)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        statusDetails = try container.sdkDecodeIfPresent(.statusDetails)
+    }
+}
+
+public extension OpenAIFile {
+    init(
+        id: String,
+        bytes: Int?,
+        createdAt: Int,
+        filename: String,
+        object: OpenAIFileObject,
+        purpose: OpenAIFilePurpose,
+        status: OpenAIFileStatus,
+        expiresAt: Int? = nil,
+        statusDetails: String? = nil
+    ) {
         (self.id, self.bytes) = (id, bytes)
         (self.createdAt, self.filename) = (createdAt, filename)
         (self.object, self.purpose) = (object, purpose)
@@ -358,21 +488,21 @@ public struct RankingOptions: Codable {
     }
 
     init() {
-        (self.ranker, self.scoreThreshold, self.hybridSearch) = (nil, nil, nil)
+        (ranker, scoreThreshold, hybridSearch) = (nil, nil, nil)
     }
 }
 
-extension RankingOptions {
-    public init(from decoder: Decoder) throws {
+public extension RankingOptions {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.ranker = try container.sdkDecodeIfPresent(.ranker)
-        self.scoreThreshold = try container.sdkDecodeIfPresent(.scoreThreshold)
-        self.hybridSearch = try container.sdkDecodeIfPresent(.hybridSearch)
+        ranker = try container.sdkDecodeIfPresent(.ranker)
+        scoreThreshold = try container.sdkDecodeIfPresent(.scoreThreshold)
+        hybridSearch = try container.sdkDecodeIfPresent(.hybridSearch)
     }
 }
 
-extension RankingOptions {
-    public init(ranker: RankerVersionType? = nil, scoreThreshold: Double? = nil, hybridSearch: HybridSearchOptions? = nil) {
+public extension RankingOptions {
+    init(ranker: RankerVersionType? = nil, scoreThreshold: Double? = nil, hybridSearch: HybridSearchOptions? = nil) {
         self.init()
         (self.ranker, self.scoreThreshold) = (ranker, scoreThreshold)
         self.hybridSearch = hybridSearch
@@ -385,22 +515,32 @@ public indirect enum ComparisonFilterValueVariant3Item {
 }
 
 extension ComparisonFilterValueVariant3Item: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ComparisonFilterValueVariant3Item")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for ComparisonFilterValueVariant3Item"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension ComparisonFilterValueVariant3Item {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(Double.self) { return .doubleValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(Double.self) {
+            return .doubleValue(value)
+        }
         return nil
     }
 }
@@ -439,29 +579,43 @@ public struct TopLogProb: Codable {
         case bytes
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TopLogProb {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.token) else {
-            throw SdkValidationError(field: "token", code: "required", message: "Validation failed for 'token': value is required")
-        }
-        guard container.contains(.logprob) else {
-            throw SdkValidationError(field: "logprob", code: "required", message: "Validation failed for 'logprob': value is required")
-        }
-        guard container.contains(.bytes) else {
-            throw SdkValidationError(field: "bytes", code: "required", message: "Validation failed for 'bytes': value is required")
-        }
-        self.token = try container.sdkDecodeRequired(.token)
-        self.logprob = try container.sdkDecodeRequired(.logprob)
-        self.bytes = try container.sdkDecodeRequired(.bytes)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension TopLogProb {
-    public init(token: String, logprob: Double, bytes: [Int]) {
+public extension TopLogProb {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.token) else {
+            throw SdkValidationError(
+                field: "token",
+                code: "required",
+                message: "Validation failed for 'token': value is required"
+            )
+        }
+        guard container.contains(.logprob) else {
+            throw SdkValidationError(
+                field: "logprob",
+                code: "required",
+                message: "Validation failed for 'logprob': value is required"
+            )
+        }
+        guard container.contains(.bytes) else {
+            throw SdkValidationError(
+                field: "bytes",
+                code: "required",
+                message: "Validation failed for 'bytes': value is required"
+            )
+        }
+        token = try container.sdkDecodeRequired(.token)
+        logprob = try container.sdkDecodeRequired(.logprob)
+        bytes = try container.sdkDecodeRequired(.bytes)
+    }
+}
+
+public extension TopLogProb {
+    init(token: String, logprob: Double, bytes: [Int]) {
         (self.token, self.logprob) = (token, logprob)
         self.bytes = bytes
     }

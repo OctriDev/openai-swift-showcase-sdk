@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AssistantsRun domain models
+/// AssistantsRun domain models
 public enum RunStreamEventVariant3Event: String, CaseIterable, Codable {
     case threadRunRequiresAction = "thread.run.requires_action"
     public init(from decoder: Decoder) throws {
@@ -60,12 +60,15 @@ public enum RunStreamEventVariant4Event: String, CaseIterable, Codable {
 public struct RunStepObjectObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let threadRunStep = RunStepObjectObject(rawValue: "thread.run.step")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -96,7 +99,10 @@ public enum RunStreamEventVariant8Event: String, CaseIterable, Codable {
 public struct RunObjectStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let queued = RunObjectStatus(rawValue: "queued")
     public static let inProgress = RunObjectStatus(rawValue: "in_progress")
     public static let requiresAction = RunObjectStatus(rawValue: "requires_action")
@@ -109,7 +115,7 @@ public struct RunObjectStatus: RawRepresentable, Hashable, Codable, Sendable, Sd
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -140,12 +146,15 @@ public enum RunStepDeltaStepDetailsToolCallsCodeOutputImageObjectType: String, C
 public struct RunToolCallObjectType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let function = RunToolCallObjectType(rawValue: "function")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -175,12 +184,15 @@ public enum RunStreamEventVariant9Event: String, CaseIterable, Codable {
 public struct RunObjectObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let threadRun = RunObjectObject(rawValue: "thread.run")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -211,14 +223,17 @@ public enum RunStepDeltaStepDetailsToolCallsCodeObjectType: String, CaseIterable
 public struct RunObjectLastErrorCode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let serverError = RunObjectLastErrorCode(rawValue: "server_error")
     public static let rateLimitExceeded = RunObjectLastErrorCode(rawValue: "rate_limit_exceeded")
     public static let invalidPrompt = RunObjectLastErrorCode(rawValue: "invalid_prompt")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -249,13 +264,16 @@ public enum RunStepDetailsToolCallsFileSearchObjectType: String, CaseIterable, C
 public struct RunStepObjectType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let messageCreation = RunStepObjectType(rawValue: "message_creation")
     public static let toolCalls = RunStepObjectType(rawValue: "tool_calls")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -265,15 +283,19 @@ public struct RunStepObjectType: RawRepresentable, Hashable, Codable, Sendable, 
 }
 
 /// The type of the content.
-public struct RunStepDetailsToolCallsFileSearchResultObjectContentItemType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RunStepDetailsToolCallsFileSearchResultObjectContentItemType: RawRepresentable, Hashable, Codable,
+    Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let text = RunStepDetailsToolCallsFileSearchResultObjectContentItemType(rawValue: "text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -374,13 +396,16 @@ public enum RunStreamEventVariant0Event: String, CaseIterable, Codable {
 public struct RunObjectIncompleteDetailsReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let maxCompletionTokens = RunObjectIncompleteDetailsReason(rawValue: "max_completion_tokens")
     public static let maxPromptTokens = RunObjectIncompleteDetailsReason(rawValue: "max_prompt_tokens")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -534,7 +559,10 @@ public enum RunStepDetailsToolCallsCodeOutputImageObjectType: String, CaseIterab
 public struct RunStepObjectStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = RunStepObjectStatus(rawValue: "in_progress")
     public static let cancelled = RunStepObjectStatus(rawValue: "cancelled")
     public static let failed = RunStepObjectStatus(rawValue: "failed")
@@ -543,7 +571,7 @@ public struct RunStepObjectStatus: RawRepresentable, Hashable, Codable, Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

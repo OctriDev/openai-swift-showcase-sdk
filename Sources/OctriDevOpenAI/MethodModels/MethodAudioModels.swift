@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-// Canonical audio operation model declarations
+/// Canonical audio operation model declarations
 public indirect enum CreateTranscriptionResponse {
     case createTranscriptionResponseJson(CreateTranscriptionResponseJson)
     case createTranscriptionResponseDiarizedJson(CreateTranscriptionResponseDiarizedJson)
@@ -15,30 +15,39 @@ public indirect enum CreateTranscriptionResponse {
 }
 
 extension CreateTranscriptionResponse: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateTranscriptionResponse")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateTranscriptionResponse"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension CreateTranscriptionResponse {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(CreateTranscriptionResponseJson.self) { return .createTranscriptionResponseJson(value) }
+        if let value = try? container
+            .decode(CreateTranscriptionResponseJson.self) {
+            return .createTranscriptionResponseJson(value)
+        }
         if let value = try? container.decode(
             CreateTranscriptionResponseDiarizedJson.self
         ) {
-            return             .createTranscriptionResponseDiarizedJson(value)
+            return .createTranscriptionResponseDiarizedJson(value)
         }
         if let value = try? container.decode(
             CreateTranscriptionResponseVerboseJson.self
         ) {
-            return             .createTranscriptionResponseVerboseJson(value)
+            return .createTranscriptionResponseVerboseJson(value)
         }
         return nil
     }
@@ -61,25 +70,34 @@ public indirect enum CreateTranslationResponse {
 }
 
 extension CreateTranslationResponse: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateTranslationResponse")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateTranslationResponse"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension CreateTranslationResponse {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(CreateTranslationResponseJson.self) { return .createTranslationResponseJson(value) }
+        if let value = try? container
+            .decode(CreateTranslationResponseJson.self) {
+            return .createTranslationResponseJson(value)
+        }
         if let value = try? container.decode(
             CreateTranslationResponseVerboseJson.self
         ) {
-            return             .createTranslationResponseVerboseJson(value)
+            return .createTranslationResponseVerboseJson(value)
         }
         return nil
     }

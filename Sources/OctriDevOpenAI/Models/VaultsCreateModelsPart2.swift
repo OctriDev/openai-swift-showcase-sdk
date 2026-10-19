@@ -3,43 +3,61 @@
 
 import Foundation
 
-// VaultsCreate domain models
-extension CreateVaultCredentialAuthParamMcpOauth {
-    public init(from decoder: Decoder) throws {
+/// VaultsCreate domain models
+public extension CreateVaultCredentialAuthParamMcpOauth {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.mcpServerUrl) else {
-            throw SdkValidationError(field: "mcp_server_url", code: "required", message: "Validation failed for 'mcp_server_url': value is required")
+            throw SdkValidationError(
+                field: "mcp_server_url",
+                code: "required",
+                message: "Validation failed for 'mcp_server_url': value is required"
+            )
         }
         guard container.contains(.accessToken) else {
-            throw SdkValidationError(field: "access_token", code: "required", message: "Validation failed for 'access_token': value is required")
+            throw SdkValidationError(
+                field: "access_token",
+                code: "required",
+                message: "Validation failed for 'access_token': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.mcpServerUrl = try container.sdkDecodeRequired(.mcpServerUrl)
-        self.accessToken = try container.sdkDecodeRequired(.accessToken)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        self.refresh = try container.sdkDecodeIfPresent(.refresh)
-            try sdkValidateRawEnum("type", self.type, CreateVaultCredentialAuthParamMcpOauthType.allCases.map(\.rawValue))
-            try validateLength("mcp_server_url", self.mcpServerUrl, min: 0, max: 1048576)
-            try validateLength("access_token", self.accessToken, min: 0, max: 1048576)
-        if let value = self.expiresAt {
-            try validateLength("expires_at", value, min: 0, max: 1048576)
+        type = try container.sdkDecodeRequired(.type)
+        mcpServerUrl = try container.sdkDecodeRequired(.mcpServerUrl)
+        accessToken = try container.sdkDecodeRequired(.accessToken)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        refresh = try container.sdkDecodeIfPresent(.refresh)
+        try sdkValidateRawEnum("type", type, CreateVaultCredentialAuthParamMcpOauthType.allCases.map(\.rawValue))
+        try validateLength("mcp_server_url", mcpServerUrl, min: 0, max: 1_048_576)
+        try validateLength("access_token", accessToken, min: 0, max: 1_048_576)
+        if let value = expiresAt {
+            try validateLength("expires_at", value, min: 0, max: 1_048_576)
         }
     }
 }
 
-extension CreateVaultCredentialAuthParamMcpOauth {
-    public init(type: CreateVaultCredentialAuthParamMcpOauthType, mcpServerUrl: String, accessToken: String, expiresAt: String? = nil, refresh: CreateMcpOauthRefreshParam? = nil) throws {
+public extension CreateVaultCredentialAuthParamMcpOauth {
+    init(
+        type: CreateVaultCredentialAuthParamMcpOauthType,
+        mcpServerUrl: String,
+        accessToken: String,
+        expiresAt: String? = nil,
+        refresh: CreateMcpOauthRefreshParam? = nil
+    ) throws {
         (self.type, self.mcpServerUrl) = (type, mcpServerUrl)
         (self.accessToken, self.expiresAt) = (accessToken, expiresAt)
         self.refresh = refresh
-            try sdkValidateRawEnum("type", self.type, CreateVaultCredentialAuthParamMcpOauthType.allCases.map(\.rawValue))
-            try validateLength("mcp_server_url", self.mcpServerUrl, min: 0, max: 1048576)
-            try validateLength("access_token", self.accessToken, min: 0, max: 1048576)
+        try sdkValidateRawEnum("type", self.type, CreateVaultCredentialAuthParamMcpOauthType.allCases.map(\.rawValue))
+        try validateLength("mcp_server_url", self.mcpServerUrl, min: 0, max: 1_048_576)
+        try validateLength("access_token", self.accessToken, min: 0, max: 1_048_576)
         if let value = self.expiresAt {
-            try validateLength("expires_at", value, min: 0, max: 1048576)
+            try validateLength("expires_at", value, min: 0, max: 1_048_576)
         }
     }
 }
@@ -56,30 +74,48 @@ public struct CreateMcpOauthTokenEndpointAuthParamClientSecretPost: Codable {
         case clientSecret = "client_secret"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateMcpOauthTokenEndpointAuthParamClientSecretPost {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.clientSecret) else {
-            throw SdkValidationError(field: "client_secret", code: "required", message: "Validation failed for 'client_secret': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.clientSecret = try container.sdkDecodeRequired(.clientSecret)
-            try sdkValidateRawEnum("type", self.type, CreateMcpOauthTokenEndpointAuthParamClientSecretPostType.allCases.map(\.rawValue))
-            try validateLength("client_secret", self.clientSecret, min: 0, max: 1048576)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateMcpOauthTokenEndpointAuthParamClientSecretPost {
-    public init(type: CreateMcpOauthTokenEndpointAuthParamClientSecretPostType, clientSecret: String) throws {
+public extension CreateMcpOauthTokenEndpointAuthParamClientSecretPost {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.clientSecret) else {
+            throw SdkValidationError(
+                field: "client_secret",
+                code: "required",
+                message: "Validation failed for 'client_secret': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        clientSecret = try container.sdkDecodeRequired(.clientSecret)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            CreateMcpOauthTokenEndpointAuthParamClientSecretPostType.allCases.map(\.rawValue)
+        )
+        try validateLength("client_secret", clientSecret, min: 0, max: 1_048_576)
+    }
+}
+
+public extension CreateMcpOauthTokenEndpointAuthParamClientSecretPost {
+    init(type: CreateMcpOauthTokenEndpointAuthParamClientSecretPostType, clientSecret: String) throws {
         (self.type, self.clientSecret) = (type, clientSecret)
-            try sdkValidateRawEnum("type", self.type, CreateMcpOauthTokenEndpointAuthParamClientSecretPostType.allCases.map(\.rawValue))
-            try validateLength("client_secret", self.clientSecret, min: 0, max: 1048576)
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            CreateMcpOauthTokenEndpointAuthParamClientSecretPostType.allCases.map(\.rawValue)
+        )
+        try validateLength("client_secret", self.clientSecret, min: 0, max: 1_048_576)
     }
 }
 

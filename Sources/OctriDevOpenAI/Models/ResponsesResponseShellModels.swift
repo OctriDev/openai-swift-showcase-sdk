@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesResponseShell domain models
+/// ResponsesResponseShell domain models
 /// A streaming event that indicated a shell command was completed.
 public struct ResponseShellCallCommandDoneStreamingEvent: Codable {
     /// The type of the event, always `response.shell_call_command.done`.
@@ -25,42 +25,74 @@ public struct ResponseShellCallCommandDoneStreamingEvent: Codable {
         case command
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseShellCallCommandDoneStreamingEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.commandIndex) else {
-            throw SdkValidationError(field: "command_index", code: "required", message: "Validation failed for 'command_index': value is required")
-        }
-        guard container.contains(.command) else {
-            throw SdkValidationError(field: "command", code: "required", message: "Validation failed for 'command': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.commandIndex = try container.sdkDecodeRequired(.commandIndex)
-        self.command = try container.sdkDecodeRequired(.command)
-            try sdkValidateRawEnum("type", self.type, ResponseShellCallCommandDoneStreamingEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseShellCallCommandDoneStreamingEvent {
-    public init(type: ResponseShellCallCommandDoneStreamingEventType, sequenceNumber: Int, outputIndex: Int, commandIndex: Int, command: String) throws {
+public extension ResponseShellCallCommandDoneStreamingEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.commandIndex) else {
+            throw SdkValidationError(
+                field: "command_index",
+                code: "required",
+                message: "Validation failed for 'command_index': value is required"
+            )
+        }
+        guard container.contains(.command) else {
+            throw SdkValidationError(
+                field: "command",
+                code: "required",
+                message: "Validation failed for 'command': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        commandIndex = try container.sdkDecodeRequired(.commandIndex)
+        command = try container.sdkDecodeRequired(.command)
+        try sdkValidateRawEnum("type", type, ResponseShellCallCommandDoneStreamingEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseShellCallCommandDoneStreamingEvent {
+    init(
+        type: ResponseShellCallCommandDoneStreamingEventType,
+        sequenceNumber: Int,
+        outputIndex: Int,
+        commandIndex: Int,
+        command: String
+    ) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.outputIndex, self.commandIndex) = (outputIndex, commandIndex)
         self.command = command
-            try sdkValidateRawEnum("type", self.type, ResponseShellCallCommandDoneStreamingEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            ResponseShellCallCommandDoneStreamingEventType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -88,46 +120,87 @@ public struct ResponseShellCallOutputContentDoneStreamingEvent: Codable {
         case output
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseShellCallOutputContentDoneStreamingEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.commandIndex) else {
-            throw SdkValidationError(field: "command_index", code: "required", message: "Validation failed for 'command_index': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.commandIndex = try container.sdkDecodeRequired(.commandIndex)
-        self.output = try container.sdkDecodeRequired(.output)
-            try sdkValidateRawEnum("type", self.type, ResponseShellCallOutputContentDoneStreamingEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseShellCallOutputContentDoneStreamingEvent {
-    public init(type: ResponseShellCallOutputContentDoneStreamingEventType, sequenceNumber: Int, itemId: String, outputIndex: Int, commandIndex: Int, output: [FunctionShellCallOutputContent]) throws {
+public extension ResponseShellCallOutputContentDoneStreamingEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.commandIndex) else {
+            throw SdkValidationError(
+                field: "command_index",
+                code: "required",
+                message: "Validation failed for 'command_index': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        commandIndex = try container.sdkDecodeRequired(.commandIndex)
+        output = try container.sdkDecodeRequired(.output)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            ResponseShellCallOutputContentDoneStreamingEventType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension ResponseShellCallOutputContentDoneStreamingEvent {
+    init(
+        type: ResponseShellCallOutputContentDoneStreamingEventType,
+        sequenceNumber: Int,
+        itemId: String,
+        outputIndex: Int,
+        commandIndex: Int,
+        output: [FunctionShellCallOutputContent]
+    ) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.itemId, self.outputIndex) = (itemId, outputIndex)
         (self.commandIndex, self.output) = (commandIndex, output)
-            try sdkValidateRawEnum("type", self.type, ResponseShellCallOutputContentDoneStreamingEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            ResponseShellCallOutputContentDoneStreamingEventType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -152,42 +225,74 @@ public struct ResponseShellCallCommandAddedStreamingEvent: Codable {
         case command
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseShellCallCommandAddedStreamingEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.commandIndex) else {
-            throw SdkValidationError(field: "command_index", code: "required", message: "Validation failed for 'command_index': value is required")
-        }
-        guard container.contains(.command) else {
-            throw SdkValidationError(field: "command", code: "required", message: "Validation failed for 'command': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.commandIndex = try container.sdkDecodeRequired(.commandIndex)
-        self.command = try container.sdkDecodeRequired(.command)
-            try sdkValidateRawEnum("type", self.type, ResponseShellCallCommandAddedStreamingEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseShellCallCommandAddedStreamingEvent {
-    public init(type: ResponseShellCallCommandAddedStreamingEventType, sequenceNumber: Int, outputIndex: Int, commandIndex: Int, command: String) throws {
+public extension ResponseShellCallCommandAddedStreamingEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.commandIndex) else {
+            throw SdkValidationError(
+                field: "command_index",
+                code: "required",
+                message: "Validation failed for 'command_index': value is required"
+            )
+        }
+        guard container.contains(.command) else {
+            throw SdkValidationError(
+                field: "command",
+                code: "required",
+                message: "Validation failed for 'command': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        commandIndex = try container.sdkDecodeRequired(.commandIndex)
+        command = try container.sdkDecodeRequired(.command)
+        try sdkValidateRawEnum("type", type, ResponseShellCallCommandAddedStreamingEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseShellCallCommandAddedStreamingEvent {
+    init(
+        type: ResponseShellCallCommandAddedStreamingEventType,
+        sequenceNumber: Int,
+        outputIndex: Int,
+        commandIndex: Int,
+        command: String
+    ) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.outputIndex, self.commandIndex) = (outputIndex, commandIndex)
         self.command = command
-            try sdkValidateRawEnum("type", self.type, ResponseShellCallCommandAddedStreamingEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            ResponseShellCallCommandAddedStreamingEventType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -215,46 +320,87 @@ public struct ResponseShellCallOutputContentDeltaStreamingEvent: Codable {
         case delta
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseShellCallOutputContentDeltaStreamingEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.commandIndex) else {
-            throw SdkValidationError(field: "command_index", code: "required", message: "Validation failed for 'command_index': value is required")
-        }
-        guard container.contains(.delta) else {
-            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.commandIndex = try container.sdkDecodeRequired(.commandIndex)
-        self.delta = try container.sdkDecodeRequired(.delta)
-            try sdkValidateRawEnum("type", self.type, ResponseShellCallOutputContentDeltaStreamingEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseShellCallOutputContentDeltaStreamingEvent {
-    public init(type: ResponseShellCallOutputContentDeltaStreamingEventType, sequenceNumber: Int, itemId: String, outputIndex: Int, commandIndex: Int, delta: ShellCallOutputDelta) throws {
+public extension ResponseShellCallOutputContentDeltaStreamingEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.commandIndex) else {
+            throw SdkValidationError(
+                field: "command_index",
+                code: "required",
+                message: "Validation failed for 'command_index': value is required"
+            )
+        }
+        guard container.contains(.delta) else {
+            throw SdkValidationError(
+                field: "delta",
+                code: "required",
+                message: "Validation failed for 'delta': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        commandIndex = try container.sdkDecodeRequired(.commandIndex)
+        delta = try container.sdkDecodeRequired(.delta)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            ResponseShellCallOutputContentDeltaStreamingEventType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension ResponseShellCallOutputContentDeltaStreamingEvent {
+    init(
+        type: ResponseShellCallOutputContentDeltaStreamingEventType,
+        sequenceNumber: Int,
+        itemId: String,
+        outputIndex: Int,
+        commandIndex: Int,
+        delta: ShellCallOutputDelta
+    ) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.itemId, self.outputIndex) = (itemId, outputIndex)
         (self.commandIndex, self.delta) = (commandIndex, delta)
-            try sdkValidateRawEnum("type", self.type, ResponseShellCallOutputContentDeltaStreamingEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            ResponseShellCallOutputContentDeltaStreamingEventType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -282,43 +428,76 @@ public struct ResponseShellCallCommandDeltaStreamingEvent: Codable {
         case obfuscation
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseShellCallCommandDeltaStreamingEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.commandIndex) else {
-            throw SdkValidationError(field: "command_index", code: "required", message: "Validation failed for 'command_index': value is required")
-        }
-        guard container.contains(.delta) else {
-            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.commandIndex = try container.sdkDecodeRequired(.commandIndex)
-        self.delta = try container.sdkDecodeRequired(.delta)
-        self.obfuscation = try container.sdkDecodeIfPresent(.obfuscation)
-            try sdkValidateRawEnum("type", self.type, ResponseShellCallCommandDeltaStreamingEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseShellCallCommandDeltaStreamingEvent {
-    public init(type: ResponseShellCallCommandDeltaStreamingEventType, sequenceNumber: Int, outputIndex: Int, commandIndex: Int, delta: String, obfuscation: String? = nil) throws {
+public extension ResponseShellCallCommandDeltaStreamingEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.commandIndex) else {
+            throw SdkValidationError(
+                field: "command_index",
+                code: "required",
+                message: "Validation failed for 'command_index': value is required"
+            )
+        }
+        guard container.contains(.delta) else {
+            throw SdkValidationError(
+                field: "delta",
+                code: "required",
+                message: "Validation failed for 'delta': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        commandIndex = try container.sdkDecodeRequired(.commandIndex)
+        delta = try container.sdkDecodeRequired(.delta)
+        obfuscation = try container.sdkDecodeIfPresent(.obfuscation)
+        try sdkValidateRawEnum("type", type, ResponseShellCallCommandDeltaStreamingEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ResponseShellCallCommandDeltaStreamingEvent {
+    init(
+        type: ResponseShellCallCommandDeltaStreamingEventType,
+        sequenceNumber: Int,
+        outputIndex: Int,
+        commandIndex: Int,
+        delta: String,
+        obfuscation: String? = nil
+    ) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.outputIndex, self.commandIndex) = (outputIndex, commandIndex)
         (self.delta, self.obfuscation) = (delta, obfuscation)
-            try sdkValidateRawEnum("type", self.type, ResponseShellCallCommandDeltaStreamingEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            ResponseShellCallCommandDeltaStreamingEventType.allCases.map(\.rawValue)
+        )
     }
 }
 

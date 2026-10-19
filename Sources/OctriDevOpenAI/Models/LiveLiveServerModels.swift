@@ -3,8 +3,8 @@
 
 import Foundation
 
-// LiveLiveServer domain models
-// LiveServerEvent is an allOf type (properties unresolvable)
+/// LiveLiveServer domain models
+/// LiveServerEvent is an allOf type (properties unresolvable)
 public typealias LiveServerEvent = LiveServerEvent2
 
 public indirect enum LiveServerEvent2 {
@@ -40,7 +40,6 @@ public indirect enum LiveServerEvent2 {
 }
 
 extension LiveServerEvent2: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -48,15 +47,25 @@ extension LiveServerEvent2: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
-        if let value = try Self.decodeGroup2(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
+        if let value = try Self.decodeGroup2(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
-        if try encodeGroup3(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
+        if try encodeGroup3(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -67,27 +76,31 @@ extension LiveServerEvent2: Codable {
 extension LiveServerEvent2 {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "session.started": return .liveSessionStarted(try LiveSessionStarted(from: decoder))
-        case "session.updated": return .liveSessionUpdated(try LiveSessionUpdated(from: decoder))
-        case "session.input_audio.muted": return .liveInputAudioMuted(try LiveInputAudioMuted(from: decoder))
-        case "session.input_audio.unmuted": return .liveInputAudioUnmuted(try LiveInputAudioUnmuted(from: decoder))
-        case "session.output_audio.fixture.playing": return .liveOutputAudioFixturePlaying(try LiveOutputAudioFixturePlaying(from: decoder))
-        case "session.output_audio.fixture.played": return .liveOutputAudioFixturePlayed(try LiveOutputAudioFixturePlayed(from: decoder))
-        case "session.instructions.appended": return .liveInstructionsAppended(try LiveInstructionsAppended(from: decoder))
-        case "session.thinking.appended": return .liveThinkingAppended(try LiveThinkingAppended(from: decoder))
-        case "session.commentary.appended": return .liveCommentaryAppended(try LiveCommentaryAppended(from: decoder))
-        case "session.input_audio.append": return .liveInputAudioAppend(try LiveInputAudioAppend(from: decoder))
-        case "session.output_audio.delta": return .liveOutputAudioDelta(try LiveOutputAudioDelta(from: decoder))
-        case "session.input_transcript.delta": return .liveInputTranscriptDelta(try LiveInputTranscriptDelta(from: decoder))
-        case "session.output_transcript.delta": return .liveOutputTranscriptDelta(try LiveOutputTranscriptDelta(from: decoder))
-        case "session.delegation.created": return .liveDelegationCreated(try LiveDelegationCreated(from: decoder))
-        case "decision.event": return .liveDecisionEvent(try LiveDecisionEvent(from: decoder))
-        case "decision.item.created": return .liveDecisionItemCreated(try LiveDecisionItemCreated(from: decoder))
-        case "decision.item.deleted": return .liveDecisionItemDeleted(try LiveDecisionItemDeleted(from: decoder))
-        case "response.event": return .liveResponseEvent(try LiveResponseEvent(from: decoder))
-        case "session.usage.updated": return .liveSessionUsageUpdated(try LiveSessionUsageUpdated(from: decoder))
-        case "session.closed": return .liveSessionClosed(try LiveSessionClosed(from: decoder))
-        default: return nil
+        case "session.started": try .liveSessionStarted(LiveSessionStarted(from: decoder))
+        case "session.updated": try .liveSessionUpdated(LiveSessionUpdated(from: decoder))
+        case "session.input_audio.muted": try .liveInputAudioMuted(LiveInputAudioMuted(from: decoder))
+        case "session.input_audio.unmuted": try .liveInputAudioUnmuted(LiveInputAudioUnmuted(from: decoder))
+        case "session.output_audio.fixture.playing": try .liveOutputAudioFixturePlaying(
+                LiveOutputAudioFixturePlaying(from: decoder)
+            )
+        case "session.output_audio.fixture.played": try .liveOutputAudioFixturePlayed(
+                LiveOutputAudioFixturePlayed(from: decoder)
+            )
+        case "session.instructions.appended": try .liveInstructionsAppended(LiveInstructionsAppended(from: decoder))
+        case "session.thinking.appended": try .liveThinkingAppended(LiveThinkingAppended(from: decoder))
+        case "session.commentary.appended": try .liveCommentaryAppended(LiveCommentaryAppended(from: decoder))
+        case "session.input_audio.append": try .liveInputAudioAppend(LiveInputAudioAppend(from: decoder))
+        case "session.output_audio.delta": try .liveOutputAudioDelta(LiveOutputAudioDelta(from: decoder))
+        case "session.input_transcript.delta": try .liveInputTranscriptDelta(LiveInputTranscriptDelta(from: decoder))
+        case "session.output_transcript.delta": try .liveOutputTranscriptDelta(LiveOutputTranscriptDelta(from: decoder))
+        case "session.delegation.created": try .liveDelegationCreated(LiveDelegationCreated(from: decoder))
+        case "decision.event": try .liveDecisionEvent(LiveDecisionEvent(from: decoder))
+        case "decision.item.created": try .liveDecisionItemCreated(LiveDecisionItemCreated(from: decoder))
+        case "decision.item.deleted": try .liveDecisionItemDeleted(LiveDecisionItemDeleted(from: decoder))
+        case "response.event": try .liveResponseEvent(LiveResponseEvent(from: decoder))
+        case "session.usage.updated": try .liveSessionUsageUpdated(LiveSessionUsageUpdated(from: decoder))
+        case "session.closed": try .liveSessionClosed(LiveSessionClosed(from: decoder))
+        default: nil
         }
     }
 }
@@ -95,14 +108,14 @@ extension LiveServerEvent2 {
 extension LiveServerEvent2 {
     static func decodeGroup2(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "error": return .liveErrorEvent(try LiveErrorEvent(from: decoder))
-        case "info": return .liveInfoEvent(try LiveInfoEvent(from: decoder))
-        case "transport.dtmf.received": return .liveTransportDtmfReceived(try LiveTransportDTMFReceived(from: decoder))
-        case "transport.dtmf.send": return .liveTransportDtmfSend(try LiveTransportDTMFSend(from: decoder))
-        case "transport.ringing": return .liveTransportRinging(try LiveTransportRinging(from: decoder))
-        case "transport.answered": return .liveTransportAnswered(try LiveTransportAnswered(from: decoder))
-        case "transport.failed": return .liveTransportFailed(try LiveTransportFailed(from: decoder))
-        default: return nil
+        case "error": try .liveErrorEvent(LiveErrorEvent(from: decoder))
+        case "info": try .liveInfoEvent(LiveInfoEvent(from: decoder))
+        case "transport.dtmf.received": try .liveTransportDtmfReceived(LiveTransportDTMFReceived(from: decoder))
+        case "transport.dtmf.send": try .liveTransportDtmfSend(LiveTransportDTMFSend(from: decoder))
+        case "transport.ringing": try .liveTransportRinging(LiveTransportRinging(from: decoder))
+        case "transport.answered": try .liveTransportAnswered(LiveTransportAnswered(from: decoder))
+        case "transport.failed": try .liveTransportFailed(LiveTransportFailed(from: decoder))
+        default: nil
         }
     }
 }

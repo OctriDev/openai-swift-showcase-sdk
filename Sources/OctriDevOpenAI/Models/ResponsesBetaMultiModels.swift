@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaMulti domain models
+/// ResponsesBetaMulti domain models
 /// Configuration for server-hosted multi-agent execution.
 public struct BetaMultiAgentParam: Codable {
     /// Whether to enable server-hosted multi-agent execution for this response.
@@ -20,28 +20,50 @@ public struct BetaMultiAgentParam: Codable {
         case maxConcurrentSubagents = "max_concurrent_subagents"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension BetaMultiAgentParam {
-    public init(from decoder: Decoder) throws {
+public extension BetaMultiAgentParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
+            throw SdkValidationError(
+                field: "enabled",
+                code: "required",
+                message: "Validation failed for 'enabled': value is required"
+            )
         }
-        self.enabled = try container.sdkDecodeRequired(.enabled)
-        self.maxConcurrentSubagents = try container.sdkDecodeIfPresent(.maxConcurrentSubagents)
-        if let value = self.maxConcurrentSubagents {
-            try validateRange("max_concurrent_subagents", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        enabled = try container.sdkDecodeRequired(.enabled)
+        maxConcurrentSubagents = try container.sdkDecodeIfPresent(.maxConcurrentSubagents)
+        if let value = maxConcurrentSubagents {
+            try validateRange(
+                "max_concurrent_subagents",
+                Double(value),
+                min: 1,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension BetaMultiAgentParam {
-    public init(enabled: Bool, maxConcurrentSubagents: Int? = nil) throws {
+public extension BetaMultiAgentParam {
+    init(enabled: Bool, maxConcurrentSubagents: Int? = nil) throws {
         (self.enabled, self.maxConcurrentSubagents) = (enabled, maxConcurrentSubagents)
         if let value = self.maxConcurrentSubagents {
-            try validateRange("max_concurrent_subagents", Double(value), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "max_concurrent_subagents",
+                Double(value),
+                min: 1,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -70,42 +92,67 @@ public struct BetaMultiAgentCallItemParam: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaMultiAgentCallItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.action) else {
-            throw SdkValidationError(field: "action", code: "required", message: "Validation failed for 'action': value is required")
-        }
-        guard container.contains(.arguments) else {
-            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
-        }
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.action = try container.sdkDecodeRequired(.action)
-        self.arguments = try container.sdkDecodeRequired(.arguments)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.id = try container.sdkDecodeIfPresent(.id)
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallItemParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaMultiAgentCallItemParam {
-    public init(callId: String, type: BetaMultiAgentCallItemParamType, action: BetaMultiAgentAction1, arguments: String, agent: BetaAgentTagParam? = nil, id: String? = nil) throws {
+public extension BetaMultiAgentCallItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.action) else {
+            throw SdkValidationError(
+                field: "action",
+                code: "required",
+                message: "Validation failed for 'action': value is required"
+            )
+        }
+        guard container.contains(.arguments) else {
+            throw SdkValidationError(
+                field: "arguments",
+                code: "required",
+                message: "Validation failed for 'arguments': value is required"
+            )
+        }
+        callId = try container.sdkDecodeRequired(.callId)
+        type = try container.sdkDecodeRequired(.type)
+        action = try container.sdkDecodeRequired(.action)
+        arguments = try container.sdkDecodeRequired(.arguments)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        id = try container.sdkDecodeIfPresent(.id)
+        try validateLength("call_id", callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", type, BetaMultiAgentCallItemParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaMultiAgentCallItemParam {
+    init(
+        callId: String,
+        type: BetaMultiAgentCallItemParamType,
+        action: BetaMultiAgentAction1,
+        arguments: String,
+        agent: BetaAgentTagParam? = nil,
+        id: String? = nil
+    ) throws {
         (self.callId, self.type) = (callId, type)
         (self.action, self.arguments) = (action, arguments)
         (self.agent, self.id) = (agent, id)
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -133,43 +180,72 @@ public struct BetaMultiAgentCall: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaMultiAgentCall {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.action) else {
-            throw SdkValidationError(field: "action", code: "required", message: "Validation failed for 'action': value is required")
-        }
-        guard container.contains(.arguments) else {
-            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.action = try container.sdkDecodeRequired(.action)
-        self.arguments = try container.sdkDecodeRequired(.arguments)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaMultiAgentCall {
-    public init(type: BetaMultiAgentCallType, id: String, callId: String, action: BetaMultiAgentAction, arguments: String, agent: BetaAgentTag? = nil) throws {
+public extension BetaMultiAgentCall {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.action) else {
+            throw SdkValidationError(
+                field: "action",
+                code: "required",
+                message: "Validation failed for 'action': value is required"
+            )
+        }
+        guard container.contains(.arguments) else {
+            throw SdkValidationError(
+                field: "arguments",
+                code: "required",
+                message: "Validation failed for 'arguments': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        callId = try container.sdkDecodeRequired(.callId)
+        action = try container.sdkDecodeRequired(.action)
+        arguments = try container.sdkDecodeRequired(.arguments)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaMultiAgentCallType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaMultiAgentCall {
+    init(
+        type: BetaMultiAgentCallType,
+        id: String,
+        callId: String,
+        action: BetaMultiAgentAction,
+        arguments: String,
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.action) = (callId, action)
         (self.arguments, self.agent) = (arguments, agent)
-            try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -197,42 +273,67 @@ public struct BetaMultiAgentCallOutputItemParam: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaMultiAgentCallOutputItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.action) else {
-            throw SdkValidationError(field: "action", code: "required", message: "Validation failed for 'action': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.action = try container.sdkDecodeRequired(.action)
-        self.output = try container.sdkDecodeRequired(.output)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.id = try container.sdkDecodeIfPresent(.id)
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallOutputItemParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaMultiAgentCallOutputItemParam {
-    public init(callId: String, type: BetaMultiAgentCallOutputItemParamType, action: BetaMultiAgentAction1, output: [BetaOutputTextContentParam], agent: BetaAgentTagParam? = nil, id: String? = nil) throws {
+public extension BetaMultiAgentCallOutputItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.action) else {
+            throw SdkValidationError(
+                field: "action",
+                code: "required",
+                message: "Validation failed for 'action': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        callId = try container.sdkDecodeRequired(.callId)
+        type = try container.sdkDecodeRequired(.type)
+        action = try container.sdkDecodeRequired(.action)
+        output = try container.sdkDecodeRequired(.output)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        id = try container.sdkDecodeIfPresent(.id)
+        try validateLength("call_id", callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", type, BetaMultiAgentCallOutputItemParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaMultiAgentCallOutputItemParam {
+    init(
+        callId: String,
+        type: BetaMultiAgentCallOutputItemParamType,
+        action: BetaMultiAgentAction1,
+        output: [BetaOutputTextContentParam],
+        agent: BetaAgentTagParam? = nil,
+        id: String? = nil
+    ) throws {
         (self.callId, self.type) = (callId, type)
         (self.action, self.output) = (action, output)
         (self.agent, self.id) = (agent, id)
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallOutputItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -260,43 +361,72 @@ public struct BetaMultiAgentCallOutput: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaMultiAgentCallOutput {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.action) else {
-            throw SdkValidationError(field: "action", code: "required", message: "Validation failed for 'action': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.action = try container.sdkDecodeRequired(.action)
-        self.output = try container.sdkDecodeRequired(.output)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallOutputType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaMultiAgentCallOutput {
-    public init(type: BetaMultiAgentCallOutputType, id: String, callId: String, action: BetaMultiAgentAction, output: [BetaOutputTextContent], agent: BetaAgentTag? = nil) throws {
+public extension BetaMultiAgentCallOutput {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.action) else {
+            throw SdkValidationError(
+                field: "action",
+                code: "required",
+                message: "Validation failed for 'action': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        callId = try container.sdkDecodeRequired(.callId)
+        action = try container.sdkDecodeRequired(.action)
+        output = try container.sdkDecodeRequired(.output)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaMultiAgentCallOutputType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaMultiAgentCallOutput {
+    init(
+        type: BetaMultiAgentCallOutputType,
+        id: String,
+        callId: String,
+        action: BetaMultiAgentAction,
+        output: [BetaOutputTextContent],
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.action) = (callId, action)
         (self.output, self.agent) = (output, agent)
-            try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallOutputType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaMultiAgentCallOutputType.allCases.map(\.rawValue))
     }
 }
 
@@ -358,7 +488,10 @@ public enum BetaMultiAgentCallItemParamType: String, CaseIterable, Codable {
 public struct BetaMultiAgentAction: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let spawnAgent = BetaMultiAgentAction(rawValue: "spawn_agent")
     public static let interruptAgent = BetaMultiAgentAction(rawValue: "interrupt_agent")
     public static let listAgents = BetaMultiAgentAction(rawValue: "list_agents")
@@ -368,7 +501,7 @@ public struct BetaMultiAgentAction: RawRepresentable, Hashable, Codable, Sendabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -381,7 +514,10 @@ public struct BetaMultiAgentAction: RawRepresentable, Hashable, Codable, Sendabl
 public struct BetaMultiAgentAction1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let spawnAgent = BetaMultiAgentAction1(rawValue: "spawn_agent")
     public static let interruptAgent = BetaMultiAgentAction1(rawValue: "interrupt_agent")
     public static let listAgents = BetaMultiAgentAction1(rawValue: "list_agents")
@@ -391,7 +527,7 @@ public struct BetaMultiAgentAction1: RawRepresentable, Hashable, Codable, Sendab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

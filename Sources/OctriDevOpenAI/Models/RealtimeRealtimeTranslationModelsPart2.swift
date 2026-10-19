@@ -3,9 +3,12 @@
 
 import Foundation
 
-// RealtimeRealtimeTranslation domain models
-extension RealtimeTranslationSessionCreateRequestAudioInput {
-    public init(transcription: RealtimeTranslationSessionCreateRequestAudioInputTranscription? = nil, noiseReduction: RealtimeTranslationSessionCreateRequestAudioInputNoiseReduction? = nil) {
+/// RealtimeRealtimeTranslation domain models
+public extension RealtimeTranslationSessionCreateRequestAudioInput {
+    init(
+        transcription: RealtimeTranslationSessionCreateRequestAudioInputTranscription? = nil,
+        noiseReduction: RealtimeTranslationSessionCreateRequestAudioInputNoiseReduction? = nil
+    ) {
         self.init()
         (self.transcription, self.noiseReduction) = (transcription, noiseReduction)
     }
@@ -21,21 +24,27 @@ public struct RealtimeTranslationSessionAudioInputNoiseReduction: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeTranslationSessionAudioInputNoiseReduction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeTranslationSessionAudioInputNoiseReduction {
-    public init(type: NoiseReductionType) {
+public extension RealtimeTranslationSessionAudioInputNoiseReduction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+    }
+}
+
+public extension RealtimeTranslationSessionAudioInputNoiseReduction {
+    init(type: NoiseReductionType) {
         self.type = type
     }
 }
@@ -50,19 +59,19 @@ public struct RealtimeTranslationSessionUpdateRequest: Codable {
     }
 
     init() {
-        self.audio = nil
+        audio = nil
     }
 }
 
-extension RealtimeTranslationSessionUpdateRequest {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeTranslationSessionUpdateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
+        audio = try container.sdkDecodeIfPresent(.audio)
     }
 }
 
-extension RealtimeTranslationSessionUpdateRequest {
-    public init(audio: RealtimeTranslationSessionUpdateRequestAudio? = nil) {
+public extension RealtimeTranslationSessionUpdateRequest {
+    init(audio: RealtimeTranslationSessionUpdateRequestAudio? = nil) {
         self.init()
         self.audio = audio
     }
@@ -85,27 +94,43 @@ public struct RealtimeTranslationClientSecretCreateRequestExpiresAfter: Codable 
     }
 
     init() {
-        (self.anchor, self.seconds) = (nil, nil)
+        (anchor, seconds) = (nil, nil)
     }
 }
 
-extension RealtimeTranslationClientSecretCreateRequestExpiresAfter {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeTranslationClientSecretCreateRequestExpiresAfter {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.anchor = try container.sdkDecodeIfPresent(.anchor)
-        self.seconds = try container.sdkDecodeIfPresent(.seconds)
-        if let value = self.seconds {
-            try validateRange("seconds", Double(value), min: 10, max: 7200, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        anchor = try container.sdkDecodeIfPresent(.anchor)
+        seconds = try container.sdkDecodeIfPresent(.seconds)
+        if let value = seconds {
+            try validateRange(
+                "seconds",
+                Double(value),
+                min: 10,
+                max: 7200,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension RealtimeTranslationClientSecretCreateRequestExpiresAfter {
-    public init(anchor: RealtimeTranslationClientSecretCreateRequestExpiresAfterAnchor? = nil, seconds: Int? = nil) throws {
+public extension RealtimeTranslationClientSecretCreateRequestExpiresAfter {
+    init(anchor: RealtimeTranslationClientSecretCreateRequestExpiresAfterAnchor? = nil, seconds: Int? = nil) throws {
         self.init()
         (self.anchor, self.seconds) = (anchor, seconds)
         if let value = self.seconds {
-            try validateRange("seconds", Double(value), min: 10, max: 7200, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "seconds",
+                Double(value),
+                min: 10,
+                max: 7200,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -120,19 +145,19 @@ public struct RealtimeTranslationSessionAudioOutput: Codable {
     }
 
     init() {
-        self.language = nil
+        language = nil
     }
 }
 
-extension RealtimeTranslationSessionAudioOutput {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeTranslationSessionAudioOutput {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.language = try container.sdkDecodeIfPresent(.language)
+        language = try container.sdkDecodeIfPresent(.language)
     }
 }
 
-extension RealtimeTranslationSessionAudioOutput {
-    public init(language: String? = nil) {
+public extension RealtimeTranslationSessionAudioOutput {
+    init(language: String? = nil) {
         self.init()
         self.language = language
     }
@@ -161,37 +186,65 @@ public struct RealtimeTranslationSession: Codable {
         case audio
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeTranslationSession {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.expiresAt) else {
-            throw SdkValidationError(field: "expires_at", code: "required", message: "Validation failed for 'expires_at': value is required")
-        }
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        guard container.contains(.audio) else {
-            throw SdkValidationError(field: "audio", code: "required", message: "Validation failed for 'audio': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.expiresAt = try container.sdkDecodeRequired(.expiresAt)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.audio = try container.sdkDecodeRequired(.audio)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeTranslationSession {
-    public init(id: String, type: RealtimeTranslationSessionType, expiresAt: Int, model: String, audio: RealtimeTranslationSessionAudio) {
+public extension RealtimeTranslationSession {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.expiresAt) else {
+            throw SdkValidationError(
+                field: "expires_at",
+                code: "required",
+                message: "Validation failed for 'expires_at': value is required"
+            )
+        }
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        guard container.contains(.audio) else {
+            throw SdkValidationError(
+                field: "audio",
+                code: "required",
+                message: "Validation failed for 'audio': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        expiresAt = try container.sdkDecodeRequired(.expiresAt)
+        model = try container.sdkDecodeRequired(.model)
+        audio = try container.sdkDecodeRequired(.audio)
+    }
+}
+
+public extension RealtimeTranslationSession {
+    init(
+        id: String,
+        type: RealtimeTranslationSessionType,
+        expiresAt: Int,
+        model: String,
+        audio: RealtimeTranslationSessionAudio
+    ) {
         (self.id, self.type) = (id, type)
         (self.expiresAt, self.model) = (expiresAt, model)
         self.audio = audio
@@ -217,33 +270,51 @@ public struct RealtimeTranslationClientEventInputAudioBufferAppend: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RealtimeTranslationClientEventInputAudioBufferAppend {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeTranslationClientEventInputAudioBufferAppend {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.audio) else {
-            throw SdkValidationError(field: "audio", code: "required", message: "Validation failed for 'audio': value is required")
+            throw SdkValidationError(
+                field: "audio",
+                code: "required",
+                message: "Validation failed for 'audio': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.audio = try container.sdkDecodeRequired(.audio)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-            try sdkValidateRawEnum("type", self.type, RealtimeTranslationClientEventInputAudioBufferAppendType.allCases.map(\.rawValue))
-        if let value = self.eventId {
+        type = try container.sdkDecodeRequired(.type)
+        audio = try container.sdkDecodeRequired(.audio)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            RealtimeTranslationClientEventInputAudioBufferAppendType.allCases.map(\.rawValue)
+        )
+        if let value = eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
     }
 }
 
-extension RealtimeTranslationClientEventInputAudioBufferAppend {
-    public init(type: RealtimeTranslationClientEventInputAudioBufferAppendType, audio: String, eventId: String? = nil) throws {
+public extension RealtimeTranslationClientEventInputAudioBufferAppend {
+    init(type: RealtimeTranslationClientEventInputAudioBufferAppendType, audio: String, eventId: String? = nil) throws {
         (self.type, self.audio) = (type, audio)
         self.eventId = eventId
-            try sdkValidateRawEnum("type", self.type, RealtimeTranslationClientEventInputAudioBufferAppendType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeTranslationClientEventInputAudioBufferAppendType.allCases.map(\.rawValue)
+        )
         if let value = self.eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
@@ -266,33 +337,55 @@ public struct RealtimeTranslationServerEventSessionCreated: Codable {
         case session
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeTranslationServerEventSessionCreated {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.session = try container.sdkDecodeRequired(.session)
-            try sdkValidateRawEnum("type", self.type, RealtimeTranslationServerEventSessionCreatedType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeTranslationServerEventSessionCreated {
-    public init(eventId: String, type: RealtimeTranslationServerEventSessionCreatedType, session: RealtimeTranslationSession) throws {
+public extension RealtimeTranslationServerEventSessionCreated {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        session = try container.sdkDecodeRequired(.session)
+        try sdkValidateRawEnum("type", type, RealtimeTranslationServerEventSessionCreatedType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeTranslationServerEventSessionCreated {
+    init(
+        eventId: String,
+        type: RealtimeTranslationServerEventSessionCreatedType,
+        session: RealtimeTranslationSession
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         self.session = session
-            try sdkValidateRawEnum("type", self.type, RealtimeTranslationServerEventSessionCreatedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeTranslationServerEventSessionCreatedType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -306,19 +399,19 @@ public struct RealtimeTranslationSessionCreateRequestAudioOutput: Codable {
     }
 
     init() {
-        self.language = nil
+        language = nil
     }
 }
 
-extension RealtimeTranslationSessionCreateRequestAudioOutput {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeTranslationSessionCreateRequestAudioOutput {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.language = try container.sdkDecodeIfPresent(.language)
+        language = try container.sdkDecodeIfPresent(.language)
     }
 }
 
-extension RealtimeTranslationSessionCreateRequestAudioOutput {
-    public init(language: String? = nil) {
+public extension RealtimeTranslationSessionCreateRequestAudioOutput {
+    init(language: String? = nil) {
         self.init()
         self.language = language
     }
@@ -337,28 +430,38 @@ public struct RealtimeTranslationClientEventSessionClose: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RealtimeTranslationClientEventSessionClose {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeTranslationClientEventSessionClose {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-            try sdkValidateRawEnum("type", self.type, RealtimeTranslationClientEventSessionCloseType.allCases.map(\.rawValue))
-        if let value = self.eventId {
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        try sdkValidateRawEnum("type", type, RealtimeTranslationClientEventSessionCloseType.allCases.map(\.rawValue))
+        if let value = eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
     }
 }
 
-extension RealtimeTranslationClientEventSessionClose {
-    public init(type: RealtimeTranslationClientEventSessionCloseType, eventId: String? = nil) throws {
+public extension RealtimeTranslationClientEventSessionClose {
+    init(type: RealtimeTranslationClientEventSessionCloseType, eventId: String? = nil) throws {
         (self.type, self.eventId) = (type, eventId)
-            try sdkValidateRawEnum("type", self.type, RealtimeTranslationClientEventSessionCloseType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeTranslationClientEventSessionCloseType.allCases.map(\.rawValue)
+        )
         if let value = self.eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
@@ -382,33 +485,51 @@ public struct RealtimeTranslationClientEventSessionUpdate: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RealtimeTranslationClientEventSessionUpdate {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeTranslationClientEventSessionUpdate {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.session = try container.sdkDecodeRequired(.session)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-            try sdkValidateRawEnum("type", self.type, RealtimeTranslationClientEventSessionUpdateType.allCases.map(\.rawValue))
-        if let value = self.eventId {
+        type = try container.sdkDecodeRequired(.type)
+        session = try container.sdkDecodeRequired(.session)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        try sdkValidateRawEnum("type", type, RealtimeTranslationClientEventSessionUpdateType.allCases.map(\.rawValue))
+        if let value = eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
     }
 }
 
-extension RealtimeTranslationClientEventSessionUpdate {
-    public init(type: RealtimeTranslationClientEventSessionUpdateType, session: RealtimeTranslationSessionUpdateRequest, eventId: String? = nil) throws {
+public extension RealtimeTranslationClientEventSessionUpdate {
+    init(
+        type: RealtimeTranslationClientEventSessionUpdateType,
+        session: RealtimeTranslationSessionUpdateRequest,
+        eventId: String? = nil
+    ) throws {
         (self.type, self.session) = (type, session)
         self.eventId = eventId
-            try sdkValidateRawEnum("type", self.type, RealtimeTranslationClientEventSessionUpdateType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeTranslationClientEventSessionUpdateType.allCases.map(\.rawValue)
+        )
         if let value = self.eventId {
             try validateLength("event_id", value, min: nil, max: 512)
         }
@@ -428,20 +549,23 @@ public struct RealtimeTranslationSessionUpdateRequestAudio: Codable {
     }
 
     init() {
-        (self.input, self.output) = (nil, nil)
+        (input, output) = (nil, nil)
     }
 }
 
-extension RealtimeTranslationSessionUpdateRequestAudio {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeTranslationSessionUpdateRequestAudio {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.input = try container.sdkDecodeIfPresent(.input)
-        self.output = try container.sdkDecodeIfPresent(.output)
+        input = try container.sdkDecodeIfPresent(.input)
+        output = try container.sdkDecodeIfPresent(.output)
     }
 }
 
-extension RealtimeTranslationSessionUpdateRequestAudio {
-    public init(input: RealtimeTranslationSessionUpdateRequestAudioInput? = nil, output: RealtimeTranslationSessionUpdateRequestAudioOutput? = nil) {
+public extension RealtimeTranslationSessionUpdateRequestAudio {
+    init(
+        input: RealtimeTranslationSessionUpdateRequestAudioInput? = nil,
+        output: RealtimeTranslationSessionUpdateRequestAudioOutput? = nil
+    ) {
         self.init()
         (self.input, self.output) = (input, output)
     }
@@ -462,22 +586,31 @@ public struct RealtimeTranslationClientSecretCreateRequest: Codable {
         case expiresAfter = "expires_after"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeTranslationClientSecretCreateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        self.session = try container.sdkDecodeRequired(.session)
-        self.expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeTranslationClientSecretCreateRequest {
-    public init(session: RealtimeTranslationSessionCreateRequest, expiresAfter: RealtimeTranslationClientSecretCreateRequestExpiresAfter? = nil) {
+public extension RealtimeTranslationClientSecretCreateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        session = try container.sdkDecodeRequired(.session)
+        expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
+    }
+}
+
+public extension RealtimeTranslationClientSecretCreateRequest {
+    init(
+        session: RealtimeTranslationSessionCreateRequest,
+        expiresAfter: RealtimeTranslationClientSecretCreateRequestExpiresAfter? = nil
+    ) {
         (self.session, self.expiresAfter) = (session, expiresAfter)
     }
 }

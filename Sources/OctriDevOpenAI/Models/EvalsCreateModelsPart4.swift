@@ -3,7 +3,7 @@
 
 import Foundation
 
-// EvalsCreate domain models
+/// EvalsCreate domain models
 /// The type of run data source. Always `completions`.
 public enum CreateEvalCompletionsRunDataSourceType: String, CaseIterable, Codable {
     case completions

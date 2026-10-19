@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesTool domain models
+/// ResponsesTool domain models
 public indirect enum ToolChoiceParam {
     case toolChoiceOptions(ToolChoiceOptions)
     case toolChoiceAllowed(ToolChoiceAllowed)
@@ -19,7 +19,6 @@ public indirect enum ToolChoiceParam {
 }
 
 extension ToolChoiceParam: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -27,20 +26,29 @@ extension ToolChoiceParam: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ToolChoiceParam")
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for ToolChoiceParam"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -51,50 +59,67 @@ extension ToolChoiceParam: Codable {
 extension ToolChoiceParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "allowed_tools": return .toolChoiceAllowed(try ToolChoiceAllowed(from: decoder))
+        case "allowed_tools": try .toolChoiceAllowed(ToolChoiceAllowed(from: decoder))
         case "file_search":
-        return .toolChoiceTypes(try ToolChoiceTypes(from: decoder))
+            try .toolChoiceTypes(ToolChoiceTypes(from: decoder))
         case "web_search_preview":
-        return .toolChoiceTypes(try ToolChoiceTypes(from: decoder))
+            try .toolChoiceTypes(ToolChoiceTypes(from: decoder))
         case "computer":
-        return .toolChoiceTypes(try ToolChoiceTypes(from: decoder))
+            try .toolChoiceTypes(ToolChoiceTypes(from: decoder))
         case "computer_use_preview":
-        return .toolChoiceTypes(try ToolChoiceTypes(from: decoder))
+            try .toolChoiceTypes(ToolChoiceTypes(from: decoder))
         case "computer_use":
-        return .toolChoiceTypes(try ToolChoiceTypes(from: decoder))
+            try .toolChoiceTypes(ToolChoiceTypes(from: decoder))
         case "web_search_preview_2025_03_11":
-        return .toolChoiceTypes(try ToolChoiceTypes(from: decoder))
+            try .toolChoiceTypes(ToolChoiceTypes(from: decoder))
         case "image_generation":
-        return .toolChoiceTypes(try ToolChoiceTypes(from: decoder))
+            try .toolChoiceTypes(ToolChoiceTypes(from: decoder))
         case "code_interpreter":
-        return .toolChoiceTypes(try ToolChoiceTypes(from: decoder))
-        case "function": return .toolChoiceFunction(try ToolChoiceFunction(from: decoder))
-        case "mcp": return .toolChoiceMcp(try ToolChoiceMCP(from: decoder))
-        case "custom": return .toolChoiceCustom(try ToolChoiceCustom(from: decoder))
+            try .toolChoiceTypes(ToolChoiceTypes(from: decoder))
+        case "function": try .toolChoiceFunction(ToolChoiceFunction(from: decoder))
+        case "mcp": try .toolChoiceMcp(ToolChoiceMCP(from: decoder))
+        case "custom": try .toolChoiceCustom(ToolChoiceCustom(from: decoder))
         case "programmatic_tool_calling":
-        return .specificProgrammaticToolCallingParam(try SpecificProgrammaticToolCallingParam(from: decoder))
-        case "apply_patch": return .specificApplyPatchParam(try SpecificApplyPatchParam(from: decoder))
-        case "shell": return .specificFunctionShellParam(try SpecificFunctionShellParam(from: decoder))
-        default: return nil
+            try .specificProgrammaticToolCallingParam(SpecificProgrammaticToolCallingParam(from: decoder))
+        case "apply_patch": try .specificApplyPatchParam(SpecificApplyPatchParam(from: decoder))
+        case "shell": try .specificFunctionShellParam(SpecificFunctionShellParam(from: decoder))
+        default: nil
         }
     }
 }
 
 extension ToolChoiceParam {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(ToolChoiceOptions.self) { return .toolChoiceOptions(value) }
-        if let value = try? container.decode(ToolChoiceAllowed.self) { return .toolChoiceAllowed(value) }
-        if let value = try? container.decode(ToolChoiceTypes.self) { return .toolChoiceTypes(value) }
-        if let value = try? container.decode(ToolChoiceFunction.self) { return .toolChoiceFunction(value) }
-        if let value = try? container.decode(ToolChoiceMCP.self) { return .toolChoiceMcp(value) }
-        if let value = try? container.decode(ToolChoiceCustom.self) { return .toolChoiceCustom(value) }
+        if let value = try? container.decode(ToolChoiceOptions.self) {
+            return .toolChoiceOptions(value)
+        }
+        if let value = try? container.decode(ToolChoiceAllowed.self) {
+            return .toolChoiceAllowed(value)
+        }
+        if let value = try? container.decode(ToolChoiceTypes.self) {
+            return .toolChoiceTypes(value)
+        }
+        if let value = try? container.decode(ToolChoiceFunction.self) {
+            return .toolChoiceFunction(value)
+        }
+        if let value = try? container.decode(ToolChoiceMCP.self) {
+            return .toolChoiceMcp(value)
+        }
+        if let value = try? container.decode(ToolChoiceCustom.self) {
+            return .toolChoiceCustom(value)
+        }
         if let value = try? container.decode(
             SpecificProgrammaticToolCallingParam.self
         ) {
-            return             .specificProgrammaticToolCallingParam(value)
+            return .specificProgrammaticToolCallingParam(value)
         }
-        if let value = try? container.decode(SpecificApplyPatchParam.self) { return .specificApplyPatchParam(value) }
-        if let value = try? container.decode(SpecificFunctionShellParam.self) { return .specificFunctionShellParam(value) }
+        if let value = try? container.decode(SpecificApplyPatchParam.self) {
+            return .specificApplyPatchParam(value)
+        }
+        if let value = try? container
+            .decode(SpecificFunctionShellParam.self) {
+            return .specificFunctionShellParam(value)
+        }
         return nil
     }
 }
@@ -128,24 +153,30 @@ public struct ToolChoiceTypes: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ToolChoiceTypes {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, ToolChoiceTypesType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ToolChoiceTypes {
-    public init(type: ToolChoiceTypesType) throws {
+public extension ToolChoiceTypes {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, ToolChoiceTypesType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ToolChoiceTypes {
+    init(type: ToolChoiceTypesType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, ToolChoiceTypesType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ToolChoiceTypesType.allCases.map(\.rawValue))
     }
 }
 
@@ -161,34 +192,40 @@ public struct ToolChoiceCustom: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension ToolChoiceCustom {
-    public init(from decoder: Decoder) throws {
+public extension ToolChoiceCustom {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-            try sdkValidateRawEnum("type", self.type, ToolChoiceCustomType.allCases.map(\.rawValue))
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        try sdkValidateRawEnum("type", type, ToolChoiceCustomType.allCases.map(\.rawValue))
     }
 }
 
-extension ToolChoiceCustom {
-    public init(type: ToolChoiceCustomType, name: String) throws {
+public extension ToolChoiceCustom {
+    init(type: ToolChoiceCustomType, name: String) throws {
         (self.type, self.name) = (type, name)
-            try sdkValidateRawEnum("type", self.type, ToolChoiceCustomType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ToolChoiceCustomType.allCases.map(\.rawValue))
     }
 }
-
-
-
-
 
 /// Constrains the tools available to the model to a pre-defined set.
 public struct ToolChoiceAllowed: Codable {
@@ -209,33 +246,47 @@ public struct ToolChoiceAllowed: Codable {
         case tools
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ToolChoiceAllowed {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.mode) else {
-            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
-        }
-        guard container.contains(.tools) else {
-            throw SdkValidationError(field: "tools", code: "required", message: "Validation failed for 'tools': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.mode = try container.sdkDecodeRequired(.mode)
-        self.tools = try container.sdkDecodeRequired(.tools)
-            try sdkValidateRawEnum("type", self.type, ToolChoiceAllowedType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ToolChoiceAllowed {
-    public init(type: ToolChoiceAllowedType, mode: ToolChoiceAllowedMode, tools: [[String: JSONValue]]) throws {
+public extension ToolChoiceAllowed {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.mode) else {
+            throw SdkValidationError(
+                field: "mode",
+                code: "required",
+                message: "Validation failed for 'mode': value is required"
+            )
+        }
+        guard container.contains(.tools) else {
+            throw SdkValidationError(
+                field: "tools",
+                code: "required",
+                message: "Validation failed for 'tools': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        mode = try container.sdkDecodeRequired(.mode)
+        tools = try container.sdkDecodeRequired(.tools)
+        try sdkValidateRawEnum("type", type, ToolChoiceAllowedType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ToolChoiceAllowed {
+    init(type: ToolChoiceAllowedType, mode: ToolChoiceAllowedMode, tools: [[String: JSONValue]]) throws {
         (self.type, self.mode) = (type, mode)
         self.tools = tools
-            try sdkValidateRawEnum("type", self.type, ToolChoiceAllowedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ToolChoiceAllowedType.allCases.map(\.rawValue))
     }
 }
 
@@ -281,13 +332,16 @@ public enum ToolChoiceCustomType: String, CaseIterable, Codable {
 public struct ToolChoiceAllowedMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = ToolChoiceAllowedMode(rawValue: "auto")
     public static let required = ToolChoiceAllowedMode(rawValue: "required")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

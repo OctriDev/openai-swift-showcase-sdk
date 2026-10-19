@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AssistantsModify domain models
+/// AssistantsModify domain models
 public indirect enum ModifyAssistantRequestToolsItem {
     case assistantToolsCode(AssistantToolsCode)
     case assistantToolsFileSearch(AssistantToolsFileSearch)
@@ -13,7 +13,6 @@ public indirect enum ModifyAssistantRequestToolsItem {
 }
 
 extension ModifyAssistantRequestToolsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension ModifyAssistantRequestToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension ModifyAssistantRequestToolsItem: Codable {
 extension ModifyAssistantRequestToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "code_interpreter": return .assistantToolsCode(try AssistantToolsCode(from: decoder))
-        case "file_search": return .assistantToolsFileSearch(try AssistantToolsFileSearch(from: decoder))
-        case "function": return .assistantToolsFunction(try AssistantToolsFunction(from: decoder))
-        default: return nil
+        case "code_interpreter": try .assistantToolsCode(AssistantToolsCode(from: decoder))
+        case "file_search": try .assistantToolsFileSearch(AssistantToolsFileSearch(from: decoder))
+        case "function": try .assistantToolsFunction(AssistantToolsFunction(from: decoder))
+        default: nil
         }
     }
 }
@@ -70,19 +73,19 @@ public struct ModifyMessageRequest: Codable {
     }
 
     init() {
-        self.metadata = nil
+        metadata = nil
     }
 }
 
-extension ModifyMessageRequest {
-    public init(from decoder: Decoder) throws {
+public extension ModifyMessageRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
     }
 }
 
-extension ModifyMessageRequest {
-    public init(metadata: Metadata? = nil) {
+public extension ModifyMessageRequest {
+    init(metadata: Metadata? = nil) {
         self.init()
         self.metadata = metadata
     }
@@ -98,22 +101,22 @@ public struct ModifyThreadRequestToolResourcesFileSearch: Codable {
     }
 
     init() {
-        self.vectorStoreIds = nil
+        vectorStoreIds = nil
     }
 }
 
-extension ModifyThreadRequestToolResourcesFileSearch {
-    public init(from decoder: Decoder) throws {
+public extension ModifyThreadRequestToolResourcesFileSearch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
-        if let value = self.vectorStoreIds {
+        vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
+        if let value = vectorStoreIds {
             try validateItems("vector_store_ids", value, min: nil, max: 1)
         }
     }
 }
 
-extension ModifyThreadRequestToolResourcesFileSearch {
-    public init(vectorStoreIds: [String]? = nil) throws {
+public extension ModifyThreadRequestToolResourcesFileSearch {
+    init(vectorStoreIds: [String]? = nil) throws {
         self.init()
         self.vectorStoreIds = vectorStoreIds
         if let value = self.vectorStoreIds {
@@ -133,22 +136,22 @@ public struct ModifyAssistantRequestToolResourcesFileSearch: Codable {
     }
 
     init() {
-        self.vectorStoreIds = nil
+        vectorStoreIds = nil
     }
 }
 
-extension ModifyAssistantRequestToolResourcesFileSearch {
-    public init(from decoder: Decoder) throws {
+public extension ModifyAssistantRequestToolResourcesFileSearch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
-        if let value = self.vectorStoreIds {
+        vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
+        if let value = vectorStoreIds {
             try validateItems("vector_store_ids", value, min: nil, max: 1)
         }
     }
 }
 
-extension ModifyAssistantRequestToolResourcesFileSearch {
-    public init(vectorStoreIds: [String]? = nil) throws {
+public extension ModifyAssistantRequestToolResourcesFileSearch {
+    init(vectorStoreIds: [String]? = nil) throws {
         self.init()
         self.vectorStoreIds = vectorStoreIds
         if let value = self.vectorStoreIds {
@@ -170,19 +173,19 @@ public struct ModifyRunRequest: Codable {
     }
 
     init() {
-        self.metadata = nil
+        metadata = nil
     }
 }
 
-extension ModifyRunRequest {
-    public init(from decoder: Decoder) throws {
+public extension ModifyRunRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
     }
 }
 
-extension ModifyRunRequest {
-    public init(metadata: Metadata? = nil) {
+public extension ModifyRunRequest {
+    init(metadata: Metadata? = nil) {
         self.init()
         self.metadata = metadata
     }
@@ -235,34 +238,46 @@ public struct ModifyAssistantRequest: Codable {
     }
 
     init() {
-        (self.model, self.reasoningEffort, self.name, self.description, self.instructions) = (nil, nil, nil, nil, nil)
-        (self.tools, self.toolResources, self.metadata, self.temperature, self.topP) = (nil, nil, nil, nil, nil)
-        self.responseFormat = nil
+        (model, reasoningEffort, name, description, instructions) = (nil, nil, nil, nil, nil)
+        (tools, toolResources, metadata, temperature, topP) = (nil, nil, nil, nil, nil)
+        responseFormat = nil
     }
 }
 
-extension ModifyAssistantRequest {
-    public init(from decoder: Decoder) throws {
+public extension ModifyAssistantRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.description = try container.sdkDecodeIfPresent(.description)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolResources = try container.sdkDecodeIfPresent(.toolResources)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.temperature = try container.sdkDecodeIfPresent(.temperature)
-        self.topP = try container.sdkDecodeIfPresent(.topP)
-        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        if let value = self.tools {
+        model = try container.sdkDecodeIfPresent(.model)
+        reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
+        name = try container.sdkDecodeIfPresent(.name)
+        description = try container.sdkDecodeIfPresent(.description)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolResources = try container.sdkDecodeIfPresent(.toolResources)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        temperature = try container.sdkDecodeIfPresent(.temperature)
+        topP = try container.sdkDecodeIfPresent(.topP)
+        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        if let value = tools {
             try validateItems("tools", value, min: nil, max: 128)
         }
     }
 }
 
-extension ModifyAssistantRequest {
-    public init(model: ModifyAssistantRequestModel? = nil, reasoningEffort: ReasoningEffortVariant0? = nil, name: String? = nil, description: String? = nil, instructions: String? = nil, tools: [ModifyAssistantRequestToolsItem]? = nil, toolResources: ModifyAssistantRequestToolResources? = nil, metadata: Metadata? = nil, temperature: Double? = nil, topP: Double? = nil, responseFormat: AssistantsApiResponseFormatOption? = nil) throws {
+public extension ModifyAssistantRequest {
+    init(
+        model: ModifyAssistantRequestModel? = nil,
+        reasoningEffort: ReasoningEffortVariant0? = nil,
+        name: String? = nil,
+        description: String? = nil,
+        instructions: String? = nil,
+        tools: [ModifyAssistantRequestToolsItem]? = nil,
+        toolResources: ModifyAssistantRequestToolResources? = nil,
+        metadata: Metadata? = nil,
+        temperature: Double? = nil,
+        topP: Double? = nil,
+        responseFormat: AssistantsApiResponseFormatOption? = nil
+    ) throws {
         self.init()
         (self.model, self.reasoningEffort) = (model, reasoningEffort)
         (self.name, self.description) = (name, description)
@@ -282,22 +297,32 @@ public indirect enum ModifyAssistantRequestModel {
 }
 
 extension ModifyAssistantRequestModel: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ModifyAssistantRequestModel")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for ModifyAssistantRequestModel"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension ModifyAssistantRequestModel {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(AssistantSupportedModels.self) { return .assistantSupportedModels(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(AssistantSupportedModels.self) {
+            return .assistantSupportedModels(value)
+        }
         return nil
     }
 }
@@ -323,22 +348,22 @@ public struct ModifyAssistantRequestToolResourcesCodeInterpreter: Codable {
     }
 
     init() {
-        self.fileIds = nil
+        fileIds = nil
     }
 }
 
-extension ModifyAssistantRequestToolResourcesCodeInterpreter {
-    public init(from decoder: Decoder) throws {
+public extension ModifyAssistantRequestToolResourcesCodeInterpreter {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        if let value = self.fileIds {
+        fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        if let value = fileIds {
             try validateItems("file_ids", value, min: nil, max: 20)
         }
     }
 }
 
-extension ModifyAssistantRequestToolResourcesCodeInterpreter {
-    public init(fileIds: [String]? = nil) throws {
+public extension ModifyAssistantRequestToolResourcesCodeInterpreter {
+    init(fileIds: [String]? = nil) throws {
         self.init()
         self.fileIds = fileIds
         if let value = self.fileIds {
@@ -362,20 +387,23 @@ public struct ModifyThreadRequestToolResources: Codable {
     }
 
     init() {
-        (self.codeInterpreter, self.fileSearch) = (nil, nil)
+        (codeInterpreter, fileSearch) = (nil, nil)
     }
 }
 
-extension ModifyThreadRequestToolResources {
-    public init(from decoder: Decoder) throws {
+public extension ModifyThreadRequestToolResources {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
-        self.fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
+        codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
+        fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
     }
 }
 
-extension ModifyThreadRequestToolResources {
-    public init(codeInterpreter: ModifyThreadRequestToolResourcesCodeInterpreter? = nil, fileSearch: ModifyThreadRequestToolResourcesFileSearch? = nil) {
+public extension ModifyThreadRequestToolResources {
+    init(
+        codeInterpreter: ModifyThreadRequestToolResourcesCodeInterpreter? = nil,
+        fileSearch: ModifyThreadRequestToolResourcesFileSearch? = nil
+    ) {
         self.init()
         (self.codeInterpreter, self.fileSearch) = (codeInterpreter, fileSearch)
     }
@@ -392,22 +420,22 @@ public struct ModifyThreadRequestToolResourcesCodeInterpreter: Codable {
     }
 
     init() {
-        self.fileIds = nil
+        fileIds = nil
     }
 }
 
-extension ModifyThreadRequestToolResourcesCodeInterpreter {
-    public init(from decoder: Decoder) throws {
+public extension ModifyThreadRequestToolResourcesCodeInterpreter {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        if let value = self.fileIds {
+        fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        if let value = fileIds {
             try validateItems("file_ids", value, min: nil, max: 20)
         }
     }
 }
 
-extension ModifyThreadRequestToolResourcesCodeInterpreter {
-    public init(fileIds: [String]? = nil) throws {
+public extension ModifyThreadRequestToolResourcesCodeInterpreter {
+    init(fileIds: [String]? = nil) throws {
         self.init()
         self.fileIds = fileIds
         if let value = self.fileIds {
@@ -431,20 +459,23 @@ public struct ModifyAssistantRequestToolResources: Codable {
     }
 
     init() {
-        (self.codeInterpreter, self.fileSearch) = (nil, nil)
+        (codeInterpreter, fileSearch) = (nil, nil)
     }
 }
 
-extension ModifyAssistantRequestToolResources {
-    public init(from decoder: Decoder) throws {
+public extension ModifyAssistantRequestToolResources {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
-        self.fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
+        codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
+        fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
     }
 }
 
-extension ModifyAssistantRequestToolResources {
-    public init(codeInterpreter: ModifyAssistantRequestToolResourcesCodeInterpreter? = nil, fileSearch: ModifyAssistantRequestToolResourcesFileSearch? = nil) {
+public extension ModifyAssistantRequestToolResources {
+    init(
+        codeInterpreter: ModifyAssistantRequestToolResourcesCodeInterpreter? = nil,
+        fileSearch: ModifyAssistantRequestToolResourcesFileSearch? = nil
+    ) {
         self.init()
         (self.codeInterpreter, self.fileSearch) = (codeInterpreter, fileSearch)
     }
@@ -468,20 +499,20 @@ public struct ModifyThreadRequest: Codable {
     }
 
     init() {
-        (self.toolResources, self.metadata) = (nil, nil)
+        (toolResources, metadata) = (nil, nil)
     }
 }
 
-extension ModifyThreadRequest {
-    public init(from decoder: Decoder) throws {
+public extension ModifyThreadRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.toolResources = try container.sdkDecodeIfPresent(.toolResources)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        toolResources = try container.sdkDecodeIfPresent(.toolResources)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
     }
 }
 
-extension ModifyThreadRequest {
-    public init(toolResources: ModifyThreadRequestToolResources? = nil, metadata: Metadata? = nil) {
+public extension ModifyThreadRequest {
+    init(toolResources: ModifyThreadRequestToolResources? = nil, metadata: Metadata? = nil) {
         self.init()
         (self.toolResources, self.metadata) = (toolResources, metadata)
     }

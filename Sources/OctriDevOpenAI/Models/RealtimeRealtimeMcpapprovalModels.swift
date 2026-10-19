@@ -3,7 +3,7 @@
 
 import Foundation
 
-// RealtimeRealtimeMcpapproval domain models
+/// RealtimeRealtimeMcpapproval domain models
 /// A Realtime item responding to an MCP approval request.
 public struct RealtimeMCPApprovalResponse: Codable {
     /// The type of the item. Always `mcp_approval_response`.
@@ -25,39 +25,63 @@ public struct RealtimeMCPApprovalResponse: Codable {
         case reason
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeMCPApprovalResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.approvalRequestId) else {
-            throw SdkValidationError(field: "approval_request_id", code: "required", message: "Validation failed for 'approval_request_id': value is required")
-        }
-        guard container.contains(.approve) else {
-            throw SdkValidationError(field: "approve", code: "required", message: "Validation failed for 'approve': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.approvalRequestId = try container.sdkDecodeRequired(.approvalRequestId)
-        self.approve = try container.sdkDecodeRequired(.approve)
-        self.reason = try container.sdkDecodeIfPresent(.reason)
-            try sdkValidateRawEnum("type", self.type, RealtimeMCPApprovalResponseType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeMCPApprovalResponse {
-    public init(type: RealtimeMCPApprovalResponseType, id: String, approvalRequestId: String, approve: Bool, reason: String? = nil) throws {
+public extension RealtimeMCPApprovalResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.approvalRequestId) else {
+            throw SdkValidationError(
+                field: "approval_request_id",
+                code: "required",
+                message: "Validation failed for 'approval_request_id': value is required"
+            )
+        }
+        guard container.contains(.approve) else {
+            throw SdkValidationError(
+                field: "approve",
+                code: "required",
+                message: "Validation failed for 'approve': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        approvalRequestId = try container.sdkDecodeRequired(.approvalRequestId)
+        approve = try container.sdkDecodeRequired(.approve)
+        reason = try container.sdkDecodeIfPresent(.reason)
+        try sdkValidateRawEnum("type", type, RealtimeMCPApprovalResponseType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeMCPApprovalResponse {
+    init(
+        type: RealtimeMCPApprovalResponseType,
+        id: String,
+        approvalRequestId: String,
+        approve: Bool,
+        reason: String? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.approvalRequestId, self.approve) = (approvalRequestId, approve)
         self.reason = reason
-            try sdkValidateRawEnum("type", self.type, RealtimeMCPApprovalResponseType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeMCPApprovalResponseType.allCases.map(\.rawValue))
     }
 }
 
@@ -82,42 +106,70 @@ public struct RealtimeMCPApprovalRequest: Codable {
         case arguments
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeMCPApprovalRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.serverLabel) else {
-            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.arguments) else {
-            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.arguments = try container.sdkDecodeRequired(.arguments)
-            try sdkValidateRawEnum("type", self.type, RealtimeMCPApprovalRequestType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeMCPApprovalRequest {
-    public init(type: RealtimeMCPApprovalRequestType, id: String, serverLabel: String, name: String, arguments: String) throws {
+public extension RealtimeMCPApprovalRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.serverLabel) else {
+            throw SdkValidationError(
+                field: "server_label",
+                code: "required",
+                message: "Validation failed for 'server_label': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.arguments) else {
+            throw SdkValidationError(
+                field: "arguments",
+                code: "required",
+                message: "Validation failed for 'arguments': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        name = try container.sdkDecodeRequired(.name)
+        arguments = try container.sdkDecodeRequired(.arguments)
+        try sdkValidateRawEnum("type", type, RealtimeMCPApprovalRequestType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeMCPApprovalRequest {
+    init(
+        type: RealtimeMCPApprovalRequestType,
+        id: String,
+        serverLabel: String,
+        name: String,
+        arguments: String
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.serverLabel, self.name) = (serverLabel, name)
         self.arguments = arguments
-            try sdkValidateRawEnum("type", self.type, RealtimeMCPApprovalRequestType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeMCPApprovalRequestType.allCases.map(\.rawValue))
     }
 }
 

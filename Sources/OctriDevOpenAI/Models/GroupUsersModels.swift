@@ -3,7 +3,7 @@
 
 import Foundation
 
-// GroupUsers domain models
+/// GroupUsers domain models
 /// Request payload for adding a user to a group.
 public struct CreateGroupUserBody: Codable {
     /// Identifier of the user to add to the group.
@@ -13,21 +13,27 @@ public struct CreateGroupUserBody: Codable {
         case userId = "user_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateGroupUserBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.userId) else {
-            throw SdkValidationError(field: "user_id", code: "required", message: "Validation failed for 'user_id': value is required")
-        }
-        self.userId = try container.sdkDecodeRequired(.userId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateGroupUserBody {
-    public init(userId: String) {
+public extension CreateGroupUserBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.userId) else {
+            throw SdkValidationError(
+                field: "user_id",
+                code: "required",
+                message: "Validation failed for 'user_id': value is required"
+            )
+        }
+        userId = try container.sdkDecodeRequired(.userId)
+    }
+}
+
+public extension CreateGroupUserBody {
+    init(userId: String) {
         self.userId = userId
     }
 }
@@ -44,25 +50,35 @@ public struct GroupUserDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GroupUserDeletedResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GroupUserDeletedResource {
-    public init(object: GroupUserDeletedResourceObject, deleted: Bool) {
+public extension GroupUserDeletedResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+    }
+}
+
+public extension GroupUserDeletedResource {
+    init(object: GroupUserDeletedResourceObject, deleted: Bool) {
         (self.object, self.deleted) = (object, deleted)
     }
 }
@@ -82,29 +98,43 @@ public struct GroupUserAssignment: Codable {
         case groupId = "group_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GroupUserAssignment {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.userId) else {
-            throw SdkValidationError(field: "user_id", code: "required", message: "Validation failed for 'user_id': value is required")
-        }
-        guard container.contains(.groupId) else {
-            throw SdkValidationError(field: "group_id", code: "required", message: "Validation failed for 'group_id': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.userId = try container.sdkDecodeRequired(.userId)
-        self.groupId = try container.sdkDecodeRequired(.groupId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GroupUserAssignment {
-    public init(object: GroupUserAssignmentObject, userId: String, groupId: String) {
+public extension GroupUserAssignment {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.userId) else {
+            throw SdkValidationError(
+                field: "user_id",
+                code: "required",
+                message: "Validation failed for 'user_id': value is required"
+            )
+        }
+        guard container.contains(.groupId) else {
+            throw SdkValidationError(
+                field: "group_id",
+                code: "required",
+                message: "Validation failed for 'group_id': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        userId = try container.sdkDecodeRequired(.userId)
+        groupId = try container.sdkDecodeRequired(.groupId)
+    }
+}
+
+public extension GroupUserAssignment {
+    init(object: GroupUserAssignmentObject, userId: String, groupId: String) {
         (self.object, self.userId) = (object, userId)
         self.groupId = groupId
     }
@@ -125,29 +155,43 @@ public struct GroupUser: Codable {
         case email
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GroupUser {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.email) else {
-            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.email = try container.sdkDecodeNullable(.email)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GroupUser {
-    public init(id: String, name: String, email: String?) {
+public extension GroupUser {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.email) else {
+            throw SdkValidationError(
+                field: "email",
+                code: "required",
+                message: "Validation failed for 'email': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        name = try container.sdkDecodeRequired(.name)
+        email = try container.sdkDecodeNullable(.email)
+    }
+}
+
+public extension GroupUser {
+    init(id: String, name: String, email: String?) {
         (self.id, self.name) = (id, name)
         self.email = email
     }
@@ -171,33 +215,51 @@ public struct UserListResource: Codable {
         case next
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UserListResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        guard container.contains(.next) else {
-            throw SdkValidationError(field: "next", code: "required", message: "Validation failed for 'next': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-        self.next = try container.sdkDecodeNullable(.next)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UserListResource {
-    public init(object: UserListResourceObject, data: [GroupUser], hasMore: Bool, next: String?) {
+public extension UserListResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        guard container.contains(.next) else {
+            throw SdkValidationError(
+                field: "next",
+                code: "required",
+                message: "Validation failed for 'next': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        next = try container.sdkDecodeNullable(.next)
+    }
+}
+
+public extension UserListResource {
+    init(object: UserListResourceObject, data: [GroupUser], hasMore: Bool, next: String?) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.next) = (hasMore, next)
     }
@@ -227,41 +289,74 @@ public struct GroupMemberUser: Codable {
         case userType = "user_type"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GroupMemberUser {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.email) else {
-            throw SdkValidationError(field: "email", code: "required", message: "Validation failed for 'email': value is required")
-        }
-        guard container.contains(.picture) else {
-            throw SdkValidationError(field: "picture", code: "required", message: "Validation failed for 'picture': value is required")
-        }
-        guard container.contains(.isServiceAccount) else {
-            throw SdkValidationError(field: "is_service_account", code: "required", message: "Validation failed for 'is_service_account': value is required")
-        }
-        guard container.contains(.userType) else {
-            throw SdkValidationError(field: "user_type", code: "required", message: "Validation failed for 'user_type': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.email = try container.sdkDecodeNullable(.email)
-        self.picture = try container.sdkDecodeNullable(.picture)
-        self.isServiceAccount = try container.sdkDecodeNullable(.isServiceAccount)
-        self.userType = try container.sdkDecodeRequired(.userType)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GroupMemberUser {
-    public init(id: String, name: String, email: String?, picture: String?, isServiceAccount: Bool?, userType: GroupMemberUserUserType) {
+public extension GroupMemberUser {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.email) else {
+            throw SdkValidationError(
+                field: "email",
+                code: "required",
+                message: "Validation failed for 'email': value is required"
+            )
+        }
+        guard container.contains(.picture) else {
+            throw SdkValidationError(
+                field: "picture",
+                code: "required",
+                message: "Validation failed for 'picture': value is required"
+            )
+        }
+        guard container.contains(.isServiceAccount) else {
+            throw SdkValidationError(
+                field: "is_service_account",
+                code: "required",
+                message: "Validation failed for 'is_service_account': value is required"
+            )
+        }
+        guard container.contains(.userType) else {
+            throw SdkValidationError(
+                field: "user_type",
+                code: "required",
+                message: "Validation failed for 'user_type': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        name = try container.sdkDecodeRequired(.name)
+        email = try container.sdkDecodeNullable(.email)
+        picture = try container.sdkDecodeNullable(.picture)
+        isServiceAccount = try container.sdkDecodeNullable(.isServiceAccount)
+        userType = try container.sdkDecodeRequired(.userType)
+    }
+}
+
+public extension GroupMemberUser {
+    init(
+        id: String,
+        name: String,
+        email: String?,
+        picture: String?,
+        isServiceAccount: Bool?,
+        userType: GroupMemberUserUserType
+    ) {
         (self.id, self.name) = (id, name)
         (self.email, self.picture) = (email, picture)
         (self.isServiceAccount, self.userType) = (isServiceAccount, userType)
@@ -272,12 +367,15 @@ extension GroupMemberUser {
 public struct UserListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = UserListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -290,12 +388,15 @@ public struct UserListResourceObject: RawRepresentable, Hashable, Codable, Senda
 public struct GroupUserDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let groupUserDeleted = GroupUserDeletedResourceObject(rawValue: "group.user.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -308,12 +409,15 @@ public struct GroupUserDeletedResourceObject: RawRepresentable, Hashable, Codabl
 public struct GroupUserAssignmentObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let groupUser = GroupUserAssignmentObject(rawValue: "group.user")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -326,13 +430,16 @@ public struct GroupUserAssignmentObject: RawRepresentable, Hashable, Codable, Se
 public struct GroupMemberUserUserType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = GroupMemberUserUserType(rawValue: "user")
     public static let tenantUser = GroupMemberUserUserType(rawValue: "tenant_user")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ResponsesMethods {
-    public struct BetaResponsesCountInputTokensOptions: Codable {
+public extension ResponsesMethods {
+    struct BetaResponsesCountInputTokensOptions: Codable {
         public var openaiBeta: [BetaResponsesCountInputTokensParameterItem]?
         public var model: SdkOptional<String>?
         public var input: SdkOptional<BetaTokenCountsBodyInput>?
@@ -25,9 +25,12 @@ extension ResponsesMethods {
         public init() {}
     }
 
-    /// Counts the input tokens for a prospective model request. Supply the model and any input, tool, text, reasoning, or conversation settings whose token contribution you want counted. Use the returned count to assess the request's input size before generating a response.
+    /// Counts the input tokens for a prospective model request. Supply the model and any input, tool, text, reasoning,
+    /// or conversation settings whose token contribution you want counted. Use the returned count to assess the
+    /// request's input size before generating a response.
     ///
-    /// Returns input token counts of the request. Returns an object with `object` set to `response.input_tokens` and an `input_tokens` count.
+    /// Returns input token counts of the request. Returns an object with `object` set to `response.input_tokens` and an
+    /// `input_tokens` count.
     ///
     /// - Parameters:
     /// - openaiBeta: Optional beta features to enable for this request.
@@ -56,11 +59,25 @@ extension ResponsesMethods {
     /// - toolChoice: Optional API value serialized in the `tool_choice` wire field.
     /// - parallelToolCalls: Optional `boolean` value serialized in the
     ///   `parallel_tool_calls` wire field.
-    public static func betaResponsesCountInputTokens(config: ClientConfig, options: BetaResponsesCountInputTokensOptions, requestOptions: RequestOptions? = nil) async throws -> BetaTokenCountsResource {
+    static func betaResponsesCountInputTokens(
+        config: ClientConfig,
+        options: BetaResponsesCountInputTokensOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> BetaTokenCountsResource {
         let requestBody = BetaResponsesCountInputTokensRequestBody(options: options)
 
-        return try (await sdkRequest("POST", "/responses/input_tokens?beta=true", config: config, body: requestBody, decoder: .json, operationId: "betaResponsesCountInputTokens", extraHeaders: sdkHeaders([
-            ("openai-beta", sdkHeaderValue(options.openaiBeta)),
-        ]), options: requestOptions, errors: ["400": BetaErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/responses/input_tokens?beta=true",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "betaResponsesCountInputTokens",
+            extraHeaders: sdkHeaders([
+                ("openai-beta", sdkHeaderValue(options.openaiBeta)),
+            ]),
+            options: requestOptions,
+            errors: ["400": BetaErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

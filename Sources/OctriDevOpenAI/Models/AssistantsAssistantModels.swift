@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AssistantsAssistant domain models
+/// AssistantsAssistant domain models
 public indirect enum AssistantObjectToolsItem {
     case assistantToolsCode(AssistantToolsCode)
     case assistantToolsFileSearch(AssistantToolsFileSearch)
@@ -13,7 +13,6 @@ public indirect enum AssistantObjectToolsItem {
 }
 
 extension AssistantObjectToolsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension AssistantObjectToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension AssistantObjectToolsItem: Codable {
 extension AssistantObjectToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "code_interpreter": return .assistantToolsCode(try AssistantToolsCode(from: decoder))
-        case "file_search": return .assistantToolsFileSearch(try AssistantToolsFileSearch(from: decoder))
-        case "function": return .assistantToolsFunction(try AssistantToolsFunction(from: decoder))
-        default: return nil
+        case "code_interpreter": try .assistantToolsCode(AssistantToolsCode(from: decoder))
+        case "file_search": try .assistantToolsFileSearch(AssistantToolsFileSearch(from: decoder))
+        case "function": try .assistantToolsFunction(AssistantToolsFunction(from: decoder))
+        default: nil
         }
     }
 }
@@ -69,7 +72,6 @@ public indirect enum AssistantStreamEvent {
 }
 
 extension AssistantStreamEvent: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "event"
     }
@@ -77,20 +79,29 @@ extension AssistantStreamEvent: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for AssistantStreamEvent")
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for AssistantStreamEvent"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -101,21 +112,33 @@ extension AssistantStreamEvent: Codable {
 extension AssistantStreamEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "error": return .errorEvent(try ErrorEvent(from: decoder))
-        case "done": return .doneEvent(try DoneEvent(from: decoder))
-        default: return nil
+        case "error": try .errorEvent(ErrorEvent(from: decoder))
+        case "done": try .doneEvent(DoneEvent(from: decoder))
+        default: nil
         }
     }
 }
 
 extension AssistantStreamEvent {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(ThreadStreamEvent.self) { return .threadStreamEvent(value) }
-        if let value = try? container.decode(RunStreamEvent.self) { return .runStreamEvent(value) }
-        if let value = try? container.decode(RunStepStreamEvent.self) { return .runStepStreamEvent(value) }
-        if let value = try? container.decode(MessageStreamEvent.self) { return .messageStreamEvent(value) }
-        if let value = try? container.decode(ErrorEvent.self) { return .errorEvent(value) }
-        if let value = try? container.decode(DoneEvent.self) { return .doneEvent(value) }
+        if let value = try? container.decode(ThreadStreamEvent.self) {
+            return .threadStreamEvent(value)
+        }
+        if let value = try? container.decode(RunStreamEvent.self) {
+            return .runStreamEvent(value)
+        }
+        if let value = try? container.decode(RunStepStreamEvent.self) {
+            return .runStepStreamEvent(value)
+        }
+        if let value = try? container.decode(MessageStreamEvent.self) {
+            return .messageStreamEvent(value)
+        }
+        if let value = try? container.decode(ErrorEvent.self) {
+            return .errorEvent(value)
+        }
+        if let value = try? container.decode(DoneEvent.self) {
+            return .doneEvent(value)
+        }
         return nil
     }
 }
@@ -147,25 +170,31 @@ public struct AssistantToolsFileSearch: Codable {
         case fileSearch = "file_search"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AssistantToolsFileSearch {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
-            try sdkValidateRawEnum("type", self.type, AssistantToolsFileSearchType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AssistantToolsFileSearch {
-    public init(type: AssistantToolsFileSearchType, fileSearch: AssistantToolsFileSearchFileSearch? = nil) throws {
+public extension AssistantToolsFileSearch {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
+        try sdkValidateRawEnum("type", type, AssistantToolsFileSearchType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AssistantToolsFileSearch {
+    init(type: AssistantToolsFileSearchType, fileSearch: AssistantToolsFileSearchFileSearch? = nil) throws {
         (self.type, self.fileSearch) = (type, fileSearch)
-            try sdkValidateRawEnum("type", self.type, AssistantToolsFileSearchType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, AssistantToolsFileSearchType.allCases.map(\.rawValue))
     }
 }
 
@@ -185,27 +214,43 @@ public struct AssistantToolsFileSearchFileSearch: Codable {
     }
 
     init() {
-        (self.maxNumResults, self.rankingOptions) = (nil, nil)
+        (maxNumResults, rankingOptions) = (nil, nil)
     }
 }
 
-extension AssistantToolsFileSearchFileSearch {
-    public init(from decoder: Decoder) throws {
+public extension AssistantToolsFileSearchFileSearch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.maxNumResults = try container.sdkDecodeIfPresent(.maxNumResults)
-        self.rankingOptions = try container.sdkDecodeIfPresent(.rankingOptions)
-        if let value = self.maxNumResults {
-            try validateRange("max_num_results", Double(value), min: 1, max: 50, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        maxNumResults = try container.sdkDecodeIfPresent(.maxNumResults)
+        rankingOptions = try container.sdkDecodeIfPresent(.rankingOptions)
+        if let value = maxNumResults {
+            try validateRange(
+                "max_num_results",
+                Double(value),
+                min: 1,
+                max: 50,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension AssistantToolsFileSearchFileSearch {
-    public init(maxNumResults: Int? = nil, rankingOptions: FileSearchRankingOptions? = nil) throws {
+public extension AssistantToolsFileSearchFileSearch {
+    init(maxNumResults: Int? = nil, rankingOptions: FileSearchRankingOptions? = nil) throws {
         self.init()
         (self.maxNumResults, self.rankingOptions) = (maxNumResults, rankingOptions)
         if let value = self.maxNumResults {
-            try validateRange("max_num_results", Double(value), min: 1, max: 50, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "max_num_results",
+                Double(value),
+                min: 1,
+                max: 50,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -221,22 +266,22 @@ public struct AssistantObjectToolResourcesFileSearch: Codable {
     }
 
     init() {
-        self.vectorStoreIds = nil
+        vectorStoreIds = nil
     }
 }
 
-extension AssistantObjectToolResourcesFileSearch {
-    public init(from decoder: Decoder) throws {
+public extension AssistantObjectToolResourcesFileSearch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
-        if let value = self.vectorStoreIds {
+        vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
+        if let value = vectorStoreIds {
             try validateItems("vector_store_ids", value, min: nil, max: 1)
         }
     }
 }
 
-extension AssistantObjectToolResourcesFileSearch {
-    public init(vectorStoreIds: [String]? = nil) throws {
+public extension AssistantObjectToolResourcesFileSearch {
+    init(vectorStoreIds: [String]? = nil) throws {
         self.init()
         self.vectorStoreIds = vectorStoreIds
         if let value = self.vectorStoreIds {
@@ -256,22 +301,22 @@ public struct AssistantObjectToolResourcesCodeInterpreter: Codable {
     }
 
     init() {
-        self.fileIds = nil
+        fileIds = nil
     }
 }
 
-extension AssistantObjectToolResourcesCodeInterpreter {
-    public init(from decoder: Decoder) throws {
+public extension AssistantObjectToolResourcesCodeInterpreter {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        if let value = self.fileIds {
+        fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        if let value = fileIds {
             try validateItems("file_ids", value, min: nil, max: 20)
         }
     }
 }
 
-extension AssistantObjectToolResourcesCodeInterpreter {
-    public init(fileIds: [String]? = nil) throws {
+public extension AssistantObjectToolResourcesCodeInterpreter {
+    init(fileIds: [String]? = nil) throws {
         self.init()
         self.fileIds = fileIds
         if let value = self.fileIds {
@@ -289,24 +334,30 @@ public struct AssistantToolsFileSearchTypeOnly: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AssistantToolsFileSearchTypeOnly {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, AssistantToolsFileSearchTypeOnlyType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AssistantToolsFileSearchTypeOnly {
-    public init(type: AssistantToolsFileSearchTypeOnlyType) throws {
+public extension AssistantToolsFileSearchTypeOnly {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, AssistantToolsFileSearchTypeOnlyType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AssistantToolsFileSearchTypeOnly {
+    init(type: AssistantToolsFileSearchTypeOnlyType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, AssistantToolsFileSearchTypeOnlyType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, AssistantToolsFileSearchTypeOnlyType.allCases.map(\.rawValue))
     }
 }
 
@@ -322,28 +373,38 @@ public struct AssistantToolsFunction: Codable {
         case function
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AssistantToolsFunction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.function) else {
-            throw SdkValidationError(field: "function", code: "required", message: "Validation failed for 'function': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.function = try container.sdkDecodeRequired(.function)
-            try sdkValidateRawEnum("type", self.type, AssistantToolsFunctionType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AssistantToolsFunction {
-    public init(type: AssistantToolsFunctionType, function: FunctionObject) throws {
+public extension AssistantToolsFunction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.function) else {
+            throw SdkValidationError(
+                field: "function",
+                code: "required",
+                message: "Validation failed for 'function': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        function = try container.sdkDecodeRequired(.function)
+        try sdkValidateRawEnum("type", type, AssistantToolsFunctionType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AssistantToolsFunction {
+    init(type: AssistantToolsFunctionType, function: FunctionObject) throws {
         (self.type, self.function) = (type, function)
-            try sdkValidateRawEnum("type", self.type, AssistantToolsFunctionType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, AssistantToolsFunctionType.allCases.map(\.rawValue))
     }
 }
 
@@ -356,24 +417,30 @@ public struct AssistantToolsCode: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AssistantToolsCode {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, AssistantToolsCodeType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AssistantToolsCode {
-    public init(type: AssistantToolsCodeType) throws {
+public extension AssistantToolsCode {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, AssistantToolsCodeType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AssistantToolsCode {
+    init(type: AssistantToolsCodeType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, AssistantToolsCodeType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, AssistantToolsCodeType.allCases.map(\.rawValue))
     }
 }
 
@@ -392,20 +459,23 @@ public struct AssistantObjectToolResources: Codable {
     }
 
     init() {
-        (self.codeInterpreter, self.fileSearch) = (nil, nil)
+        (codeInterpreter, fileSearch) = (nil, nil)
     }
 }
 
-extension AssistantObjectToolResources {
-    public init(from decoder: Decoder) throws {
+public extension AssistantObjectToolResources {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
-        self.fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
+        codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
+        fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
     }
 }
 
-extension AssistantObjectToolResources {
-    public init(codeInterpreter: AssistantObjectToolResourcesCodeInterpreter? = nil, fileSearch: AssistantObjectToolResourcesFileSearch? = nil) {
+public extension AssistantObjectToolResources {
+    init(
+        codeInterpreter: AssistantObjectToolResourcesCodeInterpreter? = nil,
+        fileSearch: AssistantObjectToolResourcesFileSearch? = nil
+    ) {
         self.init()
         (self.codeInterpreter, self.fileSearch) = (codeInterpreter, fileSearch)
     }
@@ -463,31 +533,47 @@ public struct AssistantObject: Codable {
         case responseFormat = "response_format"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AssistantObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.name = try container.sdkDecodeNullable(.name)
-        self.description = try container.sdkDecodeNullable(.description)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.instructions = try container.sdkDecodeNullable(.instructions)
-        self.tools = try container.sdkDecodeRequired(.tools)
-        self.metadata = try container.sdkDecodeNullable(.metadata)
-        self.toolResources = try container.sdkDecodeIfPresent(.toolResources)
-        self.temperature = try container.sdkDecodeIfPresent(.temperature)
-        self.topP = try container.sdkDecodeIfPresent(.topP)
-        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-            try validateItems("tools", self.tools, min: nil, max: 128)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AssistantObject {
-    public init(id: String, object: AssistantObjectObject, createdAt: Int, name: String?, description: String?, model: String, instructions: String?, tools: [AssistantObjectToolsItem], metadata: Metadata?, toolResources: AssistantObjectToolResources? = nil, temperature: Double? = nil, topP: Double? = nil, responseFormat: AssistantsApiResponseFormatOption? = nil) throws {
+public extension AssistantObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        name = try container.sdkDecodeNullable(.name)
+        description = try container.sdkDecodeNullable(.description)
+        model = try container.sdkDecodeRequired(.model)
+        instructions = try container.sdkDecodeNullable(.instructions)
+        tools = try container.sdkDecodeRequired(.tools)
+        metadata = try container.sdkDecodeNullable(.metadata)
+        toolResources = try container.sdkDecodeIfPresent(.toolResources)
+        temperature = try container.sdkDecodeIfPresent(.temperature)
+        topP = try container.sdkDecodeIfPresent(.topP)
+        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        try validateItems("tools", tools, min: nil, max: 128)
+    }
+}
+
+public extension AssistantObject {
+    init(
+        id: String,
+        object: AssistantObjectObject,
+        createdAt: Int,
+        name: String?,
+        description: String?,
+        model: String,
+        instructions: String?,
+        tools: [AssistantObjectToolsItem],
+        metadata: Metadata?,
+        toolResources: AssistantObjectToolResources? = nil,
+        temperature: Double? = nil,
+        topP: Double? = nil,
+        responseFormat: AssistantsApiResponseFormatOption? = nil
+    ) throws {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.name) = (createdAt, name)
         (self.description, self.model) = (description, model)
@@ -495,7 +581,7 @@ extension AssistantObject {
         (self.metadata, self.toolResources) = (metadata, toolResources)
         (self.temperature, self.topP) = (temperature, topP)
         self.responseFormat = responseFormat
-            try validateItems("tools", self.tools, min: nil, max: 128)
+        try validateItems("tools", self.tools, min: nil, max: 128)
     }
 }
 

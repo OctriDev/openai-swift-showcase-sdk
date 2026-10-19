@@ -3,28 +3,52 @@
 
 import Foundation
 
-// LiveLiveSession domain models
-extension LiveSessionAudioFormatPCMAParam {
-    public init(from decoder: Decoder) throws {
+/// LiveLiveSession domain models
+public extension LiveSessionAudioFormatPCMAParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.rate) else {
-            throw SdkValidationError(field: "rate", code: "required", message: "Validation failed for 'rate': value is required")
+            throw SdkValidationError(
+                field: "rate",
+                code: "required",
+                message: "Validation failed for 'rate': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.rate = try container.sdkDecodeRequired(.rate)
-            try sdkValidateRawEnum("type", self.type, LiveSessionAudioFormatPCMAParamType.allCases.map(\.rawValue))
-            try validateRange("rate", Double(self.rate), min: 8000, max: 8000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        type = try container.sdkDecodeRequired(.type)
+        rate = try container.sdkDecodeRequired(.rate)
+        try sdkValidateRawEnum("type", type, LiveSessionAudioFormatPCMAParamType.allCases.map(\.rawValue))
+        try validateRange(
+            "rate",
+            Double(rate),
+            min: 8000,
+            max: 8000,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
-extension LiveSessionAudioFormatPCMAParam {
-    public init(type: LiveSessionAudioFormatPCMAParamType, rate: Int) throws {
+public extension LiveSessionAudioFormatPCMAParam {
+    init(type: LiveSessionAudioFormatPCMAParamType, rate: Int) throws {
         (self.type, self.rate) = (type, rate)
-            try sdkValidateRawEnum("type", self.type, LiveSessionAudioFormatPCMAParamType.allCases.map(\.rawValue))
-            try validateRange("rate", Double(self.rate), min: 8000, max: 8000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try sdkValidateRawEnum("type", self.type, LiveSessionAudioFormatPCMAParamType.allCases.map(\.rawValue))
+        try validateRange(
+            "rate",
+            Double(self.rate),
+            min: 8000,
+            max: 8000,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -41,25 +65,31 @@ public struct LiveSessionCloseParam: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveSessionCloseParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-            try sdkValidateRawEnum("type", self.type, LiveSessionCloseParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveSessionCloseParam {
-    public init(type: LiveSessionCloseParamType, eventId: String? = nil) throws {
+public extension LiveSessionCloseParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        try sdkValidateRawEnum("type", type, LiveSessionCloseParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveSessionCloseParam {
+    init(type: LiveSessionCloseParamType, eventId: String? = nil) throws {
         (self.type, self.eventId) = (type, eventId)
-            try sdkValidateRawEnum("type", self.type, LiveSessionCloseParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveSessionCloseParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -79,23 +109,26 @@ public struct LiveSessionUpdateParams: Codable {
     }
 
     init() {
-        (self.delegation, self.triggers) = (nil, nil)
+        (delegation, triggers) = (nil, nil)
     }
 }
 
-extension LiveSessionUpdateParams {
-    public init(from decoder: Decoder) throws {
+public extension LiveSessionUpdateParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.delegation = try container.sdkDecodeIfPresent(.delegation)
-        self.triggers = try container.sdkDecodeIfPresent(.triggers)
-        if let value = self.triggers {
+        delegation = try container.sdkDecodeIfPresent(.delegation)
+        triggers = try container.sdkDecodeIfPresent(.triggers)
+        if let value = triggers {
             try validateItems("triggers", value, min: nil, max: 2)
         }
     }
 }
 
-extension LiveSessionUpdateParams {
-    public init(delegation: LiveSessionUpdateParamsDelegation? = nil, triggers: [LiveDecisionTriggerInputParam2]? = nil) throws {
+public extension LiveSessionUpdateParams {
+    init(
+        delegation: LiveSessionUpdateParamsDelegation? = nil,
+        triggers: [LiveDecisionTriggerInputParam2]? = nil
+    ) throws {
         self.init()
         (self.delegation, self.triggers) = (delegation, triggers)
         if let value = self.triggers {
@@ -123,34 +156,53 @@ public struct LiveSessionStarted: Codable {
         case clientEventId = "client_event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveSessionStarted {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.session = try container.sdkDecodeRequired(.session)
-        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
-            try sdkValidateRawEnum("type", self.type, LiveSessionStartedType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveSessionStarted {
-    public init(type: LiveSessionStartedType, eventId: String, session: LiveSessionResourceParam, clientEventId: String? = nil) throws {
+public extension LiveSessionStarted {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        eventId = try container.sdkDecodeRequired(.eventId)
+        session = try container.sdkDecodeRequired(.session)
+        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+        try sdkValidateRawEnum("type", type, LiveSessionStartedType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveSessionStarted {
+    init(
+        type: LiveSessionStartedType,
+        eventId: String,
+        session: LiveSessionResourceParam,
+        clientEventId: String? = nil
+    ) throws {
         (self.type, self.eventId) = (type, eventId)
         (self.session, self.clientEventId) = (session, clientEventId)
-            try sdkValidateRawEnum("type", self.type, LiveSessionStartedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveSessionStartedType.allCases.map(\.rawValue))
     }
 }
 
@@ -193,40 +245,55 @@ public struct LiveSessionCreateParams: Codable {
         case client
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension LiveSessionCreateParams {
-    public init(from decoder: Decoder) throws {
+public extension LiveSessionCreateParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
         }
-        self.model = try container.sdkDecodeRequired(.model)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.input = try container.sdkDecodeIfPresent(.input)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.delegation = try container.sdkDecodeIfPresent(.delegation)
-        self.triggers = try container.sdkDecodeIfPresent(.triggers)
-        self.store = try container.sdkDecodeIfPresent(.store)
-        self.client = try container.sdkDecodeIfPresent(.client)
-            try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
-        if let value = self.input {
+        model = try container.sdkDecodeRequired(.model)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        input = try container.sdkDecodeIfPresent(.input)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        delegation = try container.sdkDecodeIfPresent(.delegation)
+        triggers = try container.sdkDecodeIfPresent(.triggers)
+        store = try container.sdkDecodeIfPresent(.store)
+        client = try container.sdkDecodeIfPresent(.client)
+        try validateLength("model", sdkWireString(model), min: 1, max: nil)
+        if let value = input {
             try validateItems("input", value, min: nil, max: 128)
         }
-        if let value = self.triggers {
+        if let value = triggers {
             try validateItems("triggers", value, min: nil, max: 2)
         }
     }
 }
 
-extension LiveSessionCreateParams {
-    public init(model: ModelIdsLive, instructions: String? = nil, input: [LiveInitialItem]? = nil, audio: LiveInitialSessionAudioParam? = nil, delegation: LiveSessionCreateParamsDelegation? = nil, triggers: [LiveDecisionTriggerInputParam2]? = nil, store: Bool? = nil, client: LiveClientConfigParam? = nil) throws {
+public extension LiveSessionCreateParams {
+    init(
+        model: ModelIdsLive,
+        instructions: String? = nil,
+        input: [LiveInitialItem]? = nil,
+        audio: LiveInitialSessionAudioParam? = nil,
+        delegation: LiveSessionCreateParamsDelegation? = nil,
+        triggers: [LiveDecisionTriggerInputParam2]? = nil,
+        store: Bool? = nil,
+        client: LiveClientConfigParam? = nil
+    ) throws {
         (self.model, self.instructions) = (model, instructions)
         (self.input, self.audio) = (input, audio)
         (self.delegation, self.triggers) = (delegation, triggers)
         (self.store, self.client) = (store, client)
-            try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
+        try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
         if let value = self.input {
             try validateItems("input", value, min: nil, max: 128)
         }
@@ -248,30 +315,56 @@ public struct LiveSessionAudioFormatPCMUParam: Codable {
         case rate
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveSessionAudioFormatPCMUParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.rate) else {
-            throw SdkValidationError(field: "rate", code: "required", message: "Validation failed for 'rate': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.rate = try container.sdkDecodeRequired(.rate)
-            try sdkValidateRawEnum("type", self.type, LiveSessionAudioFormatPCMUParamType.allCases.map(\.rawValue))
-            try validateRange("rate", Double(self.rate), min: 8000, max: 8000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveSessionAudioFormatPCMUParam {
-    public init(type: LiveSessionAudioFormatPCMUParamType, rate: Int) throws {
+public extension LiveSessionAudioFormatPCMUParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.rate) else {
+            throw SdkValidationError(
+                field: "rate",
+                code: "required",
+                message: "Validation failed for 'rate': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        rate = try container.sdkDecodeRequired(.rate)
+        try sdkValidateRawEnum("type", type, LiveSessionAudioFormatPCMUParamType.allCases.map(\.rawValue))
+        try validateRange(
+            "rate",
+            Double(rate),
+            min: 8000,
+            max: 8000,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension LiveSessionAudioFormatPCMUParam {
+    init(type: LiveSessionAudioFormatPCMUParamType, rate: Int) throws {
         (self.type, self.rate) = (type, rate)
-            try sdkValidateRawEnum("type", self.type, LiveSessionAudioFormatPCMUParamType.allCases.map(\.rawValue))
-            try validateRange("rate", Double(self.rate), min: 8000, max: 8000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try sdkValidateRawEnum("type", self.type, LiveSessionAudioFormatPCMUParamType.allCases.map(\.rawValue))
+        try validateRange(
+            "rate",
+            Double(self.rate),
+            min: 8000,
+            max: 8000,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -297,12 +390,15 @@ public enum LiveSessionAudioFormatPCMParamType: String, CaseIterable, Codable {
 public struct LiveSessionClosedReasonVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let closeRequested = LiveSessionClosedReasonVariant0(rawValue: "close_requested")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -333,12 +429,15 @@ public enum LiveSessionCreateResponseTransportVariant1Type: String, CaseIterable
 public struct LiveSessionClosedReasonVariant3: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let remoteHangup = LiveSessionClosedReasonVariant3(rawValue: "remote_hangup")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -459,12 +558,15 @@ public enum LiveSessionAudioFormatPCMAParamType: String, CaseIterable, Codable {
 public struct LiveSessionClosedReasonVariant4: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let connectionLost = LiveSessionClosedReasonVariant4(rawValue: "connection_lost")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -496,12 +598,15 @@ public enum LiveSessionClosedType: String, CaseIterable, Codable {
 public struct LiveSessionResourceParamStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let active = LiveSessionResourceParamStatus(rawValue: "active")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

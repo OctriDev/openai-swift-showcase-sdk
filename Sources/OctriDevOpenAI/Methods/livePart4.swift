@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension LiveMethods {
+public extension LiveMethods {
     /// Transfer a SIP call to another destination. Supply a nonblank target_uri for the SIP Refer-To header.
     ///
     /// - Parameters:
@@ -15,13 +15,27 @@ extension LiveMethods {
     ///   prefix.
     /// - targetUri: Nonblank URI for the SIP Refer-To header, such as
     ///   tel:+14155550123 or sip:agent@example.com.
-    public static func referLiveSession(config: ClientConfig, sessionId: String, targetUri: TargetUri, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func referLiveSession(
+        config: ClientConfig,
+        sessionId: String,
+        targetUri: TargetUri,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try validateLength("target_uri", targetUri, min: 1)
         try sdkValidatePattern("target_uri", targetUri, sdkPattern130c1c9d5879)
 
         let requestBody = ReferLiveSessionRequestBody(targetUri: targetUri)
 
-        return try (await sdkRequest("POST", ["/live/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/refer"].joined(), config: config, body: requestBody, decoder: .empty, operationId: "referLiveSession", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/live/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/refer"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .empty,
+            operationId: "referLiveSession",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
     /// Reject an incoming SIP call. Send a required SIP rejection status_code between 300 and 699.
@@ -32,11 +46,25 @@ extension LiveMethods {
     ///   prefix.
     /// - statusCode: SIP rejection status sent to the caller. This field is
     ///   required.
-    public static func rejectLiveSession(config: ClientConfig, sessionId: String, statusCode: Int, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func rejectLiveSession(
+        config: ClientConfig,
+        sessionId: String,
+        statusCode: Int,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         try validateRange("status_code", Double(statusCode), min: 300, max: 699)
 
         let requestBody = RejectLiveSessionRequestBody(statusCode: statusCode)
 
-        return try (await sdkRequest("POST", ["/live/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/reject"].joined(), config: config, body: requestBody, decoder: .empty, operationId: "rejectLiveSession", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/live/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/reject"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .empty,
+            operationId: "rejectLiveSession",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self]
+        )).data
     }
 }

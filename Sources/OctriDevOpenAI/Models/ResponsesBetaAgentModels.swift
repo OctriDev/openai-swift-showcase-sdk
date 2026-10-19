@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaAgent domain models
+/// ResponsesBetaAgent domain models
 public indirect enum BetaAgentMessageContentItem {
     case betaInputTextContent(BetaInputTextContent)
     case betaOutputTextContent(BetaOutputTextContent)
@@ -20,7 +20,6 @@ public indirect enum BetaAgentMessageContentItem {
 }
 
 extension BetaAgentMessageContentItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -28,12 +27,16 @@ extension BetaAgentMessageContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -44,17 +47,17 @@ extension BetaAgentMessageContentItem: Codable {
 extension BetaAgentMessageContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .betaInputTextContent(try BetaInputTextContent(from: decoder))
-        case "output_text": return .betaOutputTextContent(try BetaOutputTextContent(from: decoder))
-        case "text": return .betaTextContent(try BetaTextContent(from: decoder))
-        case "summary_text": return .betaSummaryTextContent(try BetaSummaryTextContent(from: decoder))
-        case "reasoning_text": return .betaReasoningTextContent(try BetaReasoningTextContent(from: decoder))
-        case "refusal": return .betaRefusalContent(try BetaRefusalContent(from: decoder))
-        case "input_image": return .betaInputImageContent(try BetaInputImageContent(from: decoder))
-        case "computer_screenshot": return .betaComputerScreenshotContent(try BetaComputerScreenshotContent(from: decoder))
-        case "input_file": return .betaInputFileContent(try BetaInputFileContent(from: decoder))
-        case "encrypted_content": return .betaEncryptedContent(try BetaEncryptedContent(from: decoder))
-        default: return nil
+        case "input_text": try .betaInputTextContent(BetaInputTextContent(from: decoder))
+        case "output_text": try .betaOutputTextContent(BetaOutputTextContent(from: decoder))
+        case "text": try .betaTextContent(BetaTextContent(from: decoder))
+        case "summary_text": try .betaSummaryTextContent(BetaSummaryTextContent(from: decoder))
+        case "reasoning_text": try .betaReasoningTextContent(BetaReasoningTextContent(from: decoder))
+        case "refusal": try .betaRefusalContent(BetaRefusalContent(from: decoder))
+        case "input_image": try .betaInputImageContent(BetaInputImageContent(from: decoder))
+        case "computer_screenshot": try .betaComputerScreenshotContent(BetaComputerScreenshotContent(from: decoder))
+        case "input_file": try .betaInputFileContent(BetaInputFileContent(from: decoder))
+        case "encrypted_content": try .betaEncryptedContent(BetaEncryptedContent(from: decoder))
+        default: nil
         }
     }
 }
@@ -87,7 +90,6 @@ public indirect enum BetaAgentMessageItemParamContentItem {
 }
 
 extension BetaAgentMessageItemParamContentItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -95,12 +97,16 @@ extension BetaAgentMessageItemParamContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -111,10 +117,10 @@ extension BetaAgentMessageItemParamContentItem: Codable {
 extension BetaAgentMessageItemParamContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .betaInputTextContentParam(try BetaInputTextContentParam(from: decoder))
-        case "input_image": return .betaInputImageContentParamAutoParam(try BetaInputImageContentParamAutoParam(from: decoder))
-        case "encrypted_content": return .betaEncryptedContentParam(try BetaEncryptedContentParam(from: decoder))
-        default: return nil
+        case "input_text": try .betaInputTextContentParam(BetaInputTextContentParam(from: decoder))
+        case "input_image": try .betaInputImageContentParamAutoParam(BetaInputImageContentParamAutoParam(from: decoder))
+        case "encrypted_content": try .betaEncryptedContentParam(BetaEncryptedContentParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -155,40 +161,65 @@ public struct BetaAgentMessageItemParam: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaAgentMessageItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.author) else {
-            throw SdkValidationError(field: "author", code: "required", message: "Validation failed for 'author': value is required")
-        }
-        guard container.contains(.recipient) else {
-            throw SdkValidationError(field: "recipient", code: "required", message: "Validation failed for 'recipient': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.author = try container.sdkDecodeRequired(.author)
-        self.recipient = try container.sdkDecodeRequired(.recipient)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.id = try container.sdkDecodeIfPresent(.id)
-            try sdkValidateRawEnum("type", self.type, BetaAgentMessageItemParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaAgentMessageItemParam {
-    public init(type: BetaAgentMessageItemParamType, author: String, recipient: String, content: [BetaAgentMessageItemParamContentItem], agent: BetaAgentTagParam? = nil, id: String? = nil) throws {
+public extension BetaAgentMessageItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.author) else {
+            throw SdkValidationError(
+                field: "author",
+                code: "required",
+                message: "Validation failed for 'author': value is required"
+            )
+        }
+        guard container.contains(.recipient) else {
+            throw SdkValidationError(
+                field: "recipient",
+                code: "required",
+                message: "Validation failed for 'recipient': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        author = try container.sdkDecodeRequired(.author)
+        recipient = try container.sdkDecodeRequired(.recipient)
+        content = try container.sdkDecodeRequired(.content)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        id = try container.sdkDecodeIfPresent(.id)
+        try sdkValidateRawEnum("type", type, BetaAgentMessageItemParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaAgentMessageItemParam {
+    init(
+        type: BetaAgentMessageItemParamType,
+        author: String,
+        recipient: String,
+        content: [BetaAgentMessageItemParamContentItem],
+        agent: BetaAgentTagParam? = nil,
+        id: String? = nil
+    ) throws {
         (self.type, self.author) = (type, author)
         (self.recipient, self.content) = (recipient, content)
         (self.agent, self.id) = (agent, id)
-            try sdkValidateRawEnum("type", self.type, BetaAgentMessageItemParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaAgentMessageItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -201,21 +232,27 @@ public struct BetaAgentTagParam: Codable {
         case agentName = "agent_name"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaAgentTagParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.agentName) else {
-            throw SdkValidationError(field: "agent_name", code: "required", message: "Validation failed for 'agent_name': value is required")
-        }
-        self.agentName = try container.sdkDecodeRequired(.agentName)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaAgentTagParam {
-    public init(agentName: String) {
+public extension BetaAgentTagParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.agentName) else {
+            throw SdkValidationError(
+                field: "agent_name",
+                code: "required",
+                message: "Validation failed for 'agent_name': value is required"
+            )
+        }
+        agentName = try container.sdkDecodeRequired(.agentName)
+    }
+}
+
+public extension BetaAgentTagParam {
+    init(agentName: String) {
         self.agentName = agentName
     }
 }
@@ -229,21 +266,27 @@ public struct BetaAgentTag: Codable {
         case agentName = "agent_name"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaAgentTag {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.agentName) else {
-            throw SdkValidationError(field: "agent_name", code: "required", message: "Validation failed for 'agent_name': value is required")
-        }
-        self.agentName = try container.sdkDecodeRequired(.agentName)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaAgentTag {
-    public init(agentName: String) {
+public extension BetaAgentTag {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.agentName) else {
+            throw SdkValidationError(
+                field: "agent_name",
+                code: "required",
+                message: "Validation failed for 'agent_name': value is required"
+            )
+        }
+        agentName = try container.sdkDecodeRequired(.agentName)
+    }
+}
+
+public extension BetaAgentTag {
+    init(agentName: String) {
         self.agentName = agentName
     }
 }
@@ -272,43 +315,72 @@ public struct BetaAgentMessage: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaAgentMessage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.author) else {
-            throw SdkValidationError(field: "author", code: "required", message: "Validation failed for 'author': value is required")
-        }
-        guard container.contains(.recipient) else {
-            throw SdkValidationError(field: "recipient", code: "required", message: "Validation failed for 'recipient': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.author = try container.sdkDecodeRequired(.author)
-        self.recipient = try container.sdkDecodeRequired(.recipient)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaAgentMessageType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaAgentMessage {
-    public init(type: BetaAgentMessageType, id: String, author: String, recipient: String, content: [BetaAgentMessageContentItem], agent: BetaAgentTag? = nil) throws {
+public extension BetaAgentMessage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.author) else {
+            throw SdkValidationError(
+                field: "author",
+                code: "required",
+                message: "Validation failed for 'author': value is required"
+            )
+        }
+        guard container.contains(.recipient) else {
+            throw SdkValidationError(
+                field: "recipient",
+                code: "required",
+                message: "Validation failed for 'recipient': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        author = try container.sdkDecodeRequired(.author)
+        recipient = try container.sdkDecodeRequired(.recipient)
+        content = try container.sdkDecodeRequired(.content)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaAgentMessageType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaAgentMessage {
+    init(
+        type: BetaAgentMessageType,
+        id: String,
+        author: String,
+        recipient: String,
+        content: [BetaAgentMessageContentItem],
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.author, self.recipient) = (author, recipient)
         (self.content, self.agent) = (content, agent)
-            try sdkValidateRawEnum("type", self.type, BetaAgentMessageType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaAgentMessageType.allCases.map(\.rawValue))
     }
 }
 

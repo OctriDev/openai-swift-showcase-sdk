@@ -3,7 +3,7 @@
 
 import Foundation
 
-// RealtimeRealtimeServerEvent domain models
+/// RealtimeRealtimeServerEvent domain models
 /// The event type, must be `response.mcp_call.in_progress`.
 public enum RealtimeServerEventResponseMCPCallInProgressType: String, CaseIterable, Codable {
     case responseMcpCallInProgress = "response.mcp_call.in_progress"
@@ -185,15 +185,20 @@ public enum RealtimeServerEventResponseMCPCallCompletedType: String, CaseIterabl
 }
 
 /// The event type, must be `transcription_session.updated`.
-public struct RealtimeServerEventTranscriptionSessionUpdatedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeServerEventTranscriptionSessionUpdatedType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let transcriptionSessionUpdated = RealtimeServerEventTranscriptionSessionUpdatedType(rawValue: "transcription_session.updated")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let transcriptionSessionUpdated =
+        RealtimeServerEventTranscriptionSessionUpdatedType(rawValue: "transcription_session.updated")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

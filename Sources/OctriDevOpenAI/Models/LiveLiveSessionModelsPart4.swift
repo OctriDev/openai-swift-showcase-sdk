@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveSession domain models
+/// LiveLiveSession domain models
 /// The event type, always `session.updated`.
 public enum LiveSessionUpdatedType: String, CaseIterable, Codable {
     case sessionUpdated = "session.updated"
@@ -26,12 +26,15 @@ public enum LiveSessionUpdatedType: String, CaseIterable, Codable {
 public struct LiveSessionClosedReasonVariant2: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let content = LiveSessionClosedReasonVariant2(rawValue: "content")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -44,12 +47,15 @@ public struct LiveSessionClosedReasonVariant2: RawRepresentable, Hashable, Codab
 public struct LiveSessionClosedReasonVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let expired = LiveSessionClosedReasonVariant1(rawValue: "expired")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,10 +6,13 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VectorStoresMethods {
-    /// Creates an attachment between a file and a vector store. Supply the file's `file_id` and optionally configure `chunking_strategy` or attach `attributes`; use file batches for multi-file ingestion. The response includes the attached file's processing status.
+public extension VectorStoresMethods {
+    /// Creates an attachment between a file and a vector store. Supply the file's `file_id` and optionally configure
+    /// `chunking_strategy` or attach `attributes`; use file batches for multi-file ingestion. The response includes the
+    /// attached file's processing status.
     ///
-    /// Create a vector store file by attaching a [File](https://developers.openai.com/api/reference/resources/files) to a [vector store](https://developers.openai.com/api/reference/resources/vector_stores).
+    /// Create a vector store file by attaching a [File](https://developers.openai.com/api/reference/resources/files) to
+    /// a [vector store](https://developers.openai.com/api/reference/resources/vector_stores).
     ///
     /// - Parameters:
     /// - vectorStoreId: The ID of the vector store for which to create a File.
@@ -27,9 +30,35 @@ extension VectorStoresMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters, booleans, or numbers.
-    public static func createVectorStoreFile(config: ClientConfig, vectorStoreId: String, fileId: String, chunkingStrategy: ChunkingStrategyRequestParam? = nil, attributes: SdkOptional<VectorStoreFileAttributes>? = nil, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileObject {
-        let requestBody = CreateVectorStoreFileRequestBody(fileId: fileId, chunkingStrategy: chunkingStrategy, attributes: attributes)
+    static func createVectorStoreFile(
+        config: ClientConfig,
+        vectorStoreId: String,
+        fileId: String,
+        chunkingStrategy: ChunkingStrategyRequestParam? = nil,
+        attributes: SdkOptional<VectorStoreFileAttributes>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreFileObject {
+        let requestBody = CreateVectorStoreFileRequestBody(
+            fileId: fileId,
+            chunkingStrategy: chunkingStrategy,
+            attributes: attributes
+        )
 
-        return try (await sdkRequest("POST", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/files"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createVectorStoreFile", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/files"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createVectorStoreFile",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "409": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+            ]
+        )).data
     }
 }
