@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaResponseShell domain models
+// ResponsesBetaResponseShell domain models
 /// The type of the event, always `response.shell_call_output_content.delta`.
 public enum BetaResponseShellCallOutputContentDeltaStreamingEventType: String, CaseIterable, Codable {
     case responseShellCallOutputContentDelta = "response.shell_call_output_content.delta"

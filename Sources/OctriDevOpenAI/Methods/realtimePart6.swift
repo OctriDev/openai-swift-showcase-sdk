@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension RealtimeMethods {
-    struct CreateRealtimeSessionOptions: Codable {
+extension RealtimeMethods {
+    public struct CreateRealtimeSessionOptions: Codable {
         public var clientSecret: RealtimeSessionCreateRequestClientSecret
         public var modalities: [RealtimeSessionCreateRequestModalitiesItem]?
         public var instructions: String?
@@ -30,14 +30,9 @@ public extension RealtimeMethods {
         }
     }
 
-    /// Creates a Realtime session and an ephemeral API key for authenticating client-side connections. Configure the
-    /// session with fields such as `modalities`, `instructions`, and `tools`; the key expires after one minute. Use the
-    /// returned `client_secret.value` in client environments instead of a standard API token.
+    /// Creates a Realtime session and an ephemeral API key for authenticating client-side connections. Configure the session with fields such as `modalities`, `instructions`, and `tools`; the key expires after one minute. Use the returned `client_secret.value` in client environments instead of a standard API token.
     ///
-    /// Create an ephemeral API token for use in client-side applications with the Realtime API. Can be configured with
-    /// the same session parameters as the `session.update` client event. It responds with a session object, plus a
-    /// `client_secret` key which contains a usable ephemeral API token that can be used to authenticate browser clients
-    /// for the Realtime API. Returns the created Realtime session object, plus an ephemeral key.
+    /// Create an ephemeral API token for use in client-side applications with the Realtime API. Can be configured with the same session parameters as the `session.update` client event. It responds with a session object, plus a `client_secret` key which contains a usable ephemeral API token that can be used to authenticate browser clients for the Realtime API. Returns the created Realtime session object, plus an ephemeral key.
     ///
     /// - Parameters:
     /// - clientSecret: Ephemeral key returned by the API.
@@ -104,25 +99,13 @@ public extension RealtimeMethods {
     /// - prompt: Reference to a prompt template and its variables. [Learn
     ///   more](https://developers.openai.com/api/docs/guides/text?api-mode=responses#
     ///   version-prompts-in-code).
-    static func createRealtimeSession(
-        config: ClientConfig,
-        options: CreateRealtimeSessionOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RealtimeSessionCreateResponse {
+    public static func createRealtimeSession(config: ClientConfig, options: CreateRealtimeSessionOptions, requestOptions: RequestOptions? = nil) async throws -> RealtimeSessionCreateResponse {
         if let speed = options.speed {
             try validateRange("speed", Double(speed), min: 0.25, max: 1.5)
         }
 
         let requestBody = CreateRealtimeSessionRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "POST",
-            "/realtime/sessions",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createRealtimeSession",
-            options: requestOptions
-        )).data
+        return try (await sdkRequest("POST", "/realtime/sessions", config: config, body: requestBody, decoder: .json, operationId: "createRealtimeSession", options: requestOptions)).data
     }
 }

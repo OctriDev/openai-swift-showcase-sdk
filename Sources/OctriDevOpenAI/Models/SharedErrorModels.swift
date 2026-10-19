@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedError domain models
+// SharedError domain models
 /// Typed representation of the `ErrorResponse` API schema.
 public struct ErrorResponse: Codable {
     /// Required object value serialized in the `error` wire field.
@@ -13,27 +13,21 @@ public struct ErrorResponse: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ErrorResponse {
-    init(from decoder: Decoder) throws {
+extension ErrorResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.error) else {
-            throw SdkValidationError(
-                field: "error",
-                code: "required",
-                message: "Validation failed for 'error': value is required"
-            )
+            throw SdkValidationError(field: "error", code: "required", message: "Validation failed for 'error': value is required")
         }
-        error = try container.sdkDecodeRequired(.error)
+        self.error = try container.sdkDecodeRequired(.error)
     }
 }
 
-public extension ErrorResponse {
-    init(error: Error3) {
+extension ErrorResponse {
+    public init(error: Error3) {
         self.error = error
     }
 }
@@ -47,27 +41,21 @@ public struct ErrorResponse2: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ErrorResponse2 {
-    init(from decoder: Decoder) throws {
+extension ErrorResponse2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.error) else {
-            throw SdkValidationError(
-                field: "error",
-                code: "required",
-                message: "Validation failed for 'error': value is required"
-            )
+            throw SdkValidationError(field: "error", code: "required", message: "Validation failed for 'error': value is required")
         }
-        error = try container.sdkDecodeRequired(.error)
+        self.error = try container.sdkDecodeRequired(.error)
     }
 }
 
-public extension ErrorResponse2 {
-    init(error: ErrorBodyResource) {
+extension ErrorResponse2 {
+    public init(error: ErrorBodyResource) {
         self.error = error
     }
 }
@@ -90,62 +78,44 @@ public struct ErrorBodyResource: Codable {
         case param
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ErrorBodyResource {
-    init(from decoder: Decoder) throws {
+extension ErrorBodyResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
         guard container.contains(.param) else {
-            throw SdkValidationError(
-                field: "param",
-                code: "required",
-                message: "Validation failed for 'param': value is required"
-            )
+            throw SdkValidationError(field: "param", code: "required", message: "Validation failed for 'param': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        param = try container.sdkDecodeNullable(.param)
-        try validateLength("type", type, min: 0, max: nil)
-        try validateLength("code", code, min: 0, max: nil)
-        try validateLength("message", message, min: 0, max: nil)
-        if let value = param {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+        self.param = try container.sdkDecodeNullable(.param)
+            try validateLength("type", self.type, min: 0, max: nil)
+            try validateLength("code", self.code, min: 0, max: nil)
+            try validateLength("message", self.message, min: 0, max: nil)
+        if let value = self.param {
             try validateLength("param", value, min: 0, max: nil)
         }
     }
 }
 
-public extension ErrorBodyResource {
-    init(type: String, code: String, message: String, param: String?) throws {
+extension ErrorBodyResource {
+    public init(type: String, code: String, message: String, param: String?) throws {
         (self.type, self.code) = (type, code)
         (self.message, self.param) = (message, param)
-        try validateLength("type", self.type, min: 0, max: nil)
-        try validateLength("code", self.code, min: 0, max: nil)
-        try validateLength("message", self.message, min: 0, max: nil)
+            try validateLength("type", self.type, min: 0, max: nil)
+            try validateLength("code", self.code, min: 0, max: nil)
+            try validateLength("message", self.message, min: 0, max: nil)
         if let value = self.param {
             try validateLength("param", value, min: 0, max: nil)
         }

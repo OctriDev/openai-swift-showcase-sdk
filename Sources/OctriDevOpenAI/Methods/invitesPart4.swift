@@ -6,29 +6,12 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension InvitesMethods {
+extension InvitesMethods {
     /// Delete an invite. If the invite has already been accepted, it cannot be deleted.
     ///
     /// - Parameters:
     /// - inviteId: The ID of the invite to delete.
-    static func deleteInvite(
-        config: ClientConfig,
-        inviteId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> InviteDeleteResponse {
-        try await (sdkRequest(
-            "DELETE",
-            ["/organization/invites/", sdkEncodePathSegment(sdkWireString(inviteId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteInvite",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func deleteInvite(config: ClientConfig, inviteId: String, requestOptions: RequestOptions? = nil) async throws -> InviteDeleteResponse {
+        return try (await sdkRequest("DELETE", ["/organization/invites/", sdkEncodePathSegment(sdkWireString(inviteId))].joined(), config: config, decoder: .json, operationId: "deleteInvite", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

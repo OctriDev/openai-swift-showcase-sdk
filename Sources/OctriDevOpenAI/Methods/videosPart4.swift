@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension VideosMethods {
-    /// Creates a character from an uploaded video. Send the video in `video` and provide a `name` of 1 to 80
-    /// characters. This operation is closing down and will be removed on a date not specified in the API definition.
+extension VideosMethods {
+    /// Creates a character from an uploaded video. Send the video in `video` and provide a `name` of 1 to 80 characters. This operation is closing down and will be removed on a date not specified in the API definition.
     ///
     /// Create a character from an uploaded video.
     ///
@@ -17,12 +16,7 @@ public extension VideosMethods {
     /// - name: Display name for this API character.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func createVideoCharacter(
-        config: ClientConfig,
-        video: SdkUploadFile,
-        name: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VideoCharacterResource {
+    public static func createVideoCharacter(config: ClientConfig, video: SdkUploadFile, name: String, requestOptions: RequestOptions? = nil) async throws -> VideoCharacterResource {
         try validateLength("name", name, min: 1, max: 80)
 
         var multipartParts: [SdkMultipartField] = []
@@ -30,26 +24,10 @@ public extension VideosMethods {
         multipartParts.append(.scalar("name", name))
         let multipart = sdkEncodeMultipart(multipartParts)
 
-        return try await (sdkRequest(
-            "POST",
-            "/videos/characters",
-            config: config,
-            rawBody: multipart.data,
-            contentType: multipart.contentType,
-            decoder: .json,
-            operationId: "CreateVideoCharacter",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "500": ErrorResponse.self,
-                "504": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/videos/characters", config: config, rawBody: multipart.data, contentType: multipart.contentType, decoder: .json, operationId: "CreateVideoCharacter", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self, "504": ErrorResponse.self])).data
     }
 
-    /// Retrieves metadata for a video character. Use `character_id` to identify the character whose details you need.
-    /// This operation is closing down and will be removed on a date not specified in the API definition.
+    /// Retrieves metadata for a video character. Use `character_id` to identify the character whose details you need. This operation is closing down and will be removed on a date not specified in the API definition.
     ///
     /// Fetch a character.
     ///
@@ -57,19 +35,7 @@ public extension VideosMethods {
     /// - characterId: The identifier of the character to retrieve.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func getVideoCharacter(
-        config: ClientConfig,
-        characterId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VideoCharacterResource {
-        try await (sdkRequest(
-            "GET",
-            ["/videos/characters/", sdkEncodePathSegment(sdkWireString(characterId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "GetVideoCharacter",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+    public static func getVideoCharacter(config: ClientConfig, characterId: String, requestOptions: RequestOptions? = nil) async throws -> VideoCharacterResource {
+        return try (await sdkRequest("GET", ["/videos/characters/", sdkEncodePathSegment(sdkWireString(characterId))].joined(), config: config, decoder: .json, operationId: "GetVideoCharacter", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
     }
 }

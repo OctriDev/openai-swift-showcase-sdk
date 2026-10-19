@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// WebhookEventTypes domain models
+// WebhookEventTypes domain models
 /// Typed representation of the `WebhookEventTypeListResource` API schema.
 public struct WebhookEventTypeListResource: Codable {
     /// The object type, which is always list.
@@ -16,35 +16,25 @@ public struct WebhookEventTypeListResource: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookEventTypeListResource {
-    init(from decoder: Decoder) throws {
+extension WebhookEventTypeListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
     }
 }
 
-public extension WebhookEventTypeListResource {
-    init(object: WebhookEventTypeListResourceObject, data: [String]) {
+extension WebhookEventTypeListResource {
+    public init(object: WebhookEventTypeListResourceObject, data: [String]) {
         (self.object, self.data) = (object, data)
     }
 }
@@ -53,15 +43,12 @@ public extension WebhookEventTypeListResource {
 public struct WebhookEventTypeListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = WebhookEventTypeListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

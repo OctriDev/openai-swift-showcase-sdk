@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaApply domain models
+// ResponsesBetaApply domain models
 public indirect enum BetaApplyPatchOperationParam {
     case betaApplyPatchCreateFileOperationParam(BetaApplyPatchCreateFileOperationParam)
     case betaApplyPatchDeleteFileOperationParam(BetaApplyPatchDeleteFileOperationParam)
@@ -13,6 +13,7 @@ public indirect enum BetaApplyPatchOperationParam {
 }
 
 extension BetaApplyPatchOperationParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension BetaApplyPatchOperationParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,16 +37,10 @@ extension BetaApplyPatchOperationParam: Codable {
 extension BetaApplyPatchOperationParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "create_file": try .betaApplyPatchCreateFileOperationParam(
-                BetaApplyPatchCreateFileOperationParam(from: decoder)
-            )
-        case "delete_file": try .betaApplyPatchDeleteFileOperationParam(
-                BetaApplyPatchDeleteFileOperationParam(from: decoder)
-            )
-        case "update_file": try .betaApplyPatchUpdateFileOperationParam(
-                BetaApplyPatchUpdateFileOperationParam(from: decoder)
-            )
-        default: nil
+        case "create_file": return .betaApplyPatchCreateFileOperationParam(try BetaApplyPatchCreateFileOperationParam(from: decoder))
+        case "delete_file": return .betaApplyPatchDeleteFileOperationParam(try BetaApplyPatchDeleteFileOperationParam(from: decoder))
+        case "update_file": return .betaApplyPatchUpdateFileOperationParam(try BetaApplyPatchUpdateFileOperationParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -75,6 +66,7 @@ public indirect enum BetaApplyPatchToolCallOperation {
 }
 
 extension BetaApplyPatchToolCallOperation: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -82,16 +74,12 @@ extension BetaApplyPatchToolCallOperation: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -102,10 +90,10 @@ extension BetaApplyPatchToolCallOperation: Codable {
 extension BetaApplyPatchToolCallOperation {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "create_file": try .betaApplyPatchCreateFileOperation(BetaApplyPatchCreateFileOperation(from: decoder))
-        case "delete_file": try .betaApplyPatchDeleteFileOperation(BetaApplyPatchDeleteFileOperation(from: decoder))
-        case "update_file": try .betaApplyPatchUpdateFileOperation(BetaApplyPatchUpdateFileOperation(from: decoder))
-        default: nil
+        case "create_file": return .betaApplyPatchCreateFileOperation(try BetaApplyPatchCreateFileOperation(from: decoder))
+        case "delete_file": return .betaApplyPatchDeleteFileOperation(try BetaApplyPatchDeleteFileOperation(from: decoder))
+        case "update_file": return .betaApplyPatchUpdateFileOperation(try BetaApplyPatchUpdateFileOperation(from: decoder))
+        default: return nil
         }
     }
 }
@@ -134,34 +122,28 @@ public struct BetaApplyPatchToolParam: Codable {
         case allowedCallers = "allowed_callers"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaApplyPatchToolParam {
-    init(from decoder: Decoder) throws {
+extension BetaApplyPatchToolParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
-        try sdkValidateRawEnum("type", type, BetaApplyPatchToolParamType.allCases.map(\.rawValue))
-        if let value = allowedCallers {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolParamType.allCases.map(\.rawValue))
+        if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
     }
 }
 
-public extension BetaApplyPatchToolParam {
-    init(type: BetaApplyPatchToolParamType, allowedCallers: [BetaCallableToolAllowedCaller]? = nil) throws {
+extension BetaApplyPatchToolParam {
+    public init(type: BetaApplyPatchToolParamType, allowedCallers: [BetaCallableToolAllowedCaller]? = nil) throws {
         (self.type, self.allowedCallers) = (type, allowedCallers)
-        try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolParamType.allCases.map(\.rawValue))
         if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
@@ -198,70 +180,43 @@ public struct BetaApplyPatchToolCallOutput: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaApplyPatchToolCallOutput {
-    init(from decoder: Decoder) throws {
+extension BetaApplyPatchToolCallOutput {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        callId = try container.sdkDecodeRequired(.callId)
-        status = try container.sdkDecodeRequired(.status)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        caller = try container.sdkDecodeIfPresent(.caller)
-        output = try container.sdkDecodeIfPresent(.output)
-        createdBy = try container.sdkDecodeIfPresent(.createdBy)
-        try sdkValidateRawEnum("type", type, BetaApplyPatchToolCallOutputType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.caller = try container.sdkDecodeIfPresent(.caller)
+        self.output = try container.sdkDecodeIfPresent(.output)
+        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaApplyPatchToolCallOutput {
-    init(
-        type: BetaApplyPatchToolCallOutputType,
-        id: String,
-        callId: String,
-        status: BetaApplyPatchCallOutputStatus,
-        agent: BetaAgentTag? = nil,
-        caller: BetaToolCallCaller? = nil,
-        output: String? = nil,
-        createdBy: String? = nil
-    ) throws {
+extension BetaApplyPatchToolCallOutput {
+    public init(type: BetaApplyPatchToolCallOutputType, id: String, callId: String, status: BetaApplyPatchCallOutputStatus, agent: BetaAgentTag? = nil, caller: BetaToolCallCaller? = nil, output: String? = nil, createdBy: String? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.status) = (callId, status)
         (self.agent, self.caller) = (agent, caller)
         (self.output, self.createdBy) = (output, createdBy)
-        try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallOutputType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 
@@ -280,51 +235,37 @@ public struct BetaApplyPatchCreateFileOperationParam: Codable {
         case diff
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaApplyPatchCreateFileOperationParam {
-    init(from decoder: Decoder) throws {
+extension BetaApplyPatchCreateFileOperationParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.path) else {
-            throw SdkValidationError(
-                field: "path",
-                code: "required",
-                message: "Validation failed for 'path': value is required"
-            )
+            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
         }
         guard container.contains(.diff) else {
-            throw SdkValidationError(
-                field: "diff",
-                code: "required",
-                message: "Validation failed for 'diff': value is required"
-            )
+            throw SdkValidationError(field: "diff", code: "required", message: "Validation failed for 'diff': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        path = try container.sdkDecodeRequired(.path)
-        diff = try container.sdkDecodeRequired(.diff)
-        try sdkValidateRawEnum("type", type, BetaApplyPatchCreateFileOperationParamType.allCases.map(\.rawValue))
-        try validateLength("path", path, min: 1, max: nil)
-        try validateLength("diff", diff, min: nil, max: 10_485_760)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.path = try container.sdkDecodeRequired(.path)
+        self.diff = try container.sdkDecodeRequired(.diff)
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchCreateFileOperationParamType.allCases.map(\.rawValue))
+            try validateLength("path", self.path, min: 1, max: nil)
+            try validateLength("diff", self.diff, min: nil, max: 10485760)
     }
 }
 
-public extension BetaApplyPatchCreateFileOperationParam {
-    init(type: BetaApplyPatchCreateFileOperationParamType, path: String, diff: String) throws {
+extension BetaApplyPatchCreateFileOperationParam {
+    public init(type: BetaApplyPatchCreateFileOperationParamType, path: String, diff: String) throws {
         (self.type, self.path) = (type, path)
         self.diff = diff
-        try sdkValidateRawEnum("type", self.type, BetaApplyPatchCreateFileOperationParamType.allCases.map(\.rawValue))
-        try validateLength("path", self.path, min: 1, max: nil)
-        try validateLength("diff", self.diff, min: nil, max: 10_485_760)
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchCreateFileOperationParamType.allCases.map(\.rawValue))
+            try validateLength("path", self.path, min: 1, max: nil)
+            try validateLength("diff", self.diff, min: nil, max: 10485760)
     }
 }
 
@@ -340,40 +281,30 @@ public struct BetaApplyPatchDeleteFileOperationParam: Codable {
         case path
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaApplyPatchDeleteFileOperationParam {
-    init(from decoder: Decoder) throws {
+extension BetaApplyPatchDeleteFileOperationParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.path) else {
-            throw SdkValidationError(
-                field: "path",
-                code: "required",
-                message: "Validation failed for 'path': value is required"
-            )
+            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        path = try container.sdkDecodeRequired(.path)
-        try sdkValidateRawEnum("type", type, BetaApplyPatchDeleteFileOperationParamType.allCases.map(\.rawValue))
-        try validateLength("path", path, min: 1, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.path = try container.sdkDecodeRequired(.path)
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchDeleteFileOperationParamType.allCases.map(\.rawValue))
+            try validateLength("path", self.path, min: 1, max: nil)
     }
 }
 
-public extension BetaApplyPatchDeleteFileOperationParam {
-    init(type: BetaApplyPatchDeleteFileOperationParamType, path: String) throws {
+extension BetaApplyPatchDeleteFileOperationParam {
+    public init(type: BetaApplyPatchDeleteFileOperationParamType, path: String) throws {
         (self.type, self.path) = (type, path)
-        try sdkValidateRawEnum("type", self.type, BetaApplyPatchDeleteFileOperationParamType.allCases.map(\.rawValue))
-        try validateLength("path", self.path, min: 1, max: nil)
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchDeleteFileOperationParamType.allCases.map(\.rawValue))
+            try validateLength("path", self.path, min: 1, max: nil)
     }
 }
 
@@ -389,38 +320,28 @@ public struct BetaApplyPatchDeleteFileOperation: Codable {
         case path
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaApplyPatchDeleteFileOperation {
-    init(from decoder: Decoder) throws {
+extension BetaApplyPatchDeleteFileOperation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.path) else {
-            throw SdkValidationError(
-                field: "path",
-                code: "required",
-                message: "Validation failed for 'path': value is required"
-            )
+            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        path = try container.sdkDecodeRequired(.path)
-        try sdkValidateRawEnum("type", type, BetaApplyPatchDeleteFileOperationType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.path = try container.sdkDecodeRequired(.path)
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchDeleteFileOperationType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaApplyPatchDeleteFileOperation {
-    init(type: BetaApplyPatchDeleteFileOperationType, path: String) throws {
+extension BetaApplyPatchDeleteFileOperation {
+    public init(type: BetaApplyPatchDeleteFileOperationType, path: String) throws {
         (self.type, self.path) = (type, path)
-        try sdkValidateRawEnum("type", self.type, BetaApplyPatchDeleteFileOperationType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchDeleteFileOperationType.allCases.map(\.rawValue))
     }
 }
 
@@ -439,47 +360,33 @@ public struct BetaApplyPatchUpdateFileOperation: Codable {
         case diff
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaApplyPatchUpdateFileOperation {
-    init(from decoder: Decoder) throws {
+extension BetaApplyPatchUpdateFileOperation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.path) else {
-            throw SdkValidationError(
-                field: "path",
-                code: "required",
-                message: "Validation failed for 'path': value is required"
-            )
+            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
         }
         guard container.contains(.diff) else {
-            throw SdkValidationError(
-                field: "diff",
-                code: "required",
-                message: "Validation failed for 'diff': value is required"
-            )
+            throw SdkValidationError(field: "diff", code: "required", message: "Validation failed for 'diff': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        path = try container.sdkDecodeRequired(.path)
-        diff = try container.sdkDecodeRequired(.diff)
-        try sdkValidateRawEnum("type", type, BetaApplyPatchUpdateFileOperationType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.path = try container.sdkDecodeRequired(.path)
+        self.diff = try container.sdkDecodeRequired(.diff)
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchUpdateFileOperationType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaApplyPatchUpdateFileOperation {
-    init(type: BetaApplyPatchUpdateFileOperationType, path: String, diff: String) throws {
+extension BetaApplyPatchUpdateFileOperation {
+    public init(type: BetaApplyPatchUpdateFileOperationType, path: String, diff: String) throws {
         (self.type, self.path) = (type, path)
         self.diff = diff
-        try sdkValidateRawEnum("type", self.type, BetaApplyPatchUpdateFileOperationType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchUpdateFileOperationType.allCases.map(\.rawValue))
     }
 }
 
@@ -498,47 +405,33 @@ public struct BetaApplyPatchCreateFileOperation: Codable {
         case diff
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaApplyPatchCreateFileOperation {
-    init(from decoder: Decoder) throws {
+extension BetaApplyPatchCreateFileOperation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.path) else {
-            throw SdkValidationError(
-                field: "path",
-                code: "required",
-                message: "Validation failed for 'path': value is required"
-            )
+            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
         }
         guard container.contains(.diff) else {
-            throw SdkValidationError(
-                field: "diff",
-                code: "required",
-                message: "Validation failed for 'diff': value is required"
-            )
+            throw SdkValidationError(field: "diff", code: "required", message: "Validation failed for 'diff': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        path = try container.sdkDecodeRequired(.path)
-        diff = try container.sdkDecodeRequired(.diff)
-        try sdkValidateRawEnum("type", type, BetaApplyPatchCreateFileOperationType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.path = try container.sdkDecodeRequired(.path)
+        self.diff = try container.sdkDecodeRequired(.diff)
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchCreateFileOperationType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaApplyPatchCreateFileOperation {
-    init(type: BetaApplyPatchCreateFileOperationType, path: String, diff: String) throws {
+extension BetaApplyPatchCreateFileOperation {
+    public init(type: BetaApplyPatchCreateFileOperationType, path: String, diff: String) throws {
         (self.type, self.path) = (type, path)
         self.diff = diff
-        try sdkValidateRawEnum("type", self.type, BetaApplyPatchCreateFileOperationType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaApplyPatchCreateFileOperationType.allCases.map(\.rawValue))
     }
 }
 
@@ -569,7 +462,5 @@ public struct BetaApplyPatchToolCallOutputItemParam: Codable {
         case output
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

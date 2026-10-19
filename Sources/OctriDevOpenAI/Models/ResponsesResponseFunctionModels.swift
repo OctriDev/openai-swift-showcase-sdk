@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesResponseFunction domain models
+// ResponsesResponseFunction domain models
 /// Emitted when there is a partial function-call arguments delta.
 public struct ResponseFunctionCallArgumentsDeltaEvent: Codable {
     /// The type of the event. Always `response.function_call_arguments.delta`.
@@ -25,70 +25,42 @@ public struct ResponseFunctionCallArgumentsDeltaEvent: Codable {
         case delta
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseFunctionCallArgumentsDeltaEvent {
-    init(from decoder: Decoder) throws {
+extension ResponseFunctionCallArgumentsDeltaEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.delta) else {
-            throw SdkValidationError(
-                field: "delta",
-                code: "required",
-                message: "Validation failed for 'delta': value is required"
-            )
+            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        delta = try container.sdkDecodeRequired(.delta)
-        try sdkValidateRawEnum("type", type, ResponseFunctionCallArgumentsDeltaEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.delta = try container.sdkDecodeRequired(.delta)
+            try sdkValidateRawEnum("type", self.type, ResponseFunctionCallArgumentsDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseFunctionCallArgumentsDeltaEvent {
-    init(
-        type: ResponseFunctionCallArgumentsDeltaEventType,
-        itemId: String,
-        outputIndex: Int,
-        sequenceNumber: Int,
-        delta: String
-    ) throws {
+extension ResponseFunctionCallArgumentsDeltaEvent {
+    public init(type: ResponseFunctionCallArgumentsDeltaEventType, itemId: String, outputIndex: Int, sequenceNumber: Int, delta: String) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.sequenceNumber) = (outputIndex, sequenceNumber)
         self.delta = delta
-        try sdkValidateRawEnum("type", self.type, ResponseFunctionCallArgumentsDeltaEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseFunctionCallArgumentsDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -113,70 +85,42 @@ public struct ResponseFunctionCallArgumentsDoneEvent: Codable {
         case arguments
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseFunctionCallArgumentsDoneEvent {
-    init(from decoder: Decoder) throws {
+extension ResponseFunctionCallArgumentsDoneEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.arguments) else {
-            throw SdkValidationError(
-                field: "arguments",
-                code: "required",
-                message: "Validation failed for 'arguments': value is required"
-            )
+            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        arguments = try container.sdkDecodeRequired(.arguments)
-        try sdkValidateRawEnum("type", type, ResponseFunctionCallArgumentsDoneEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.arguments = try container.sdkDecodeRequired(.arguments)
+            try sdkValidateRawEnum("type", self.type, ResponseFunctionCallArgumentsDoneEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseFunctionCallArgumentsDoneEvent {
-    init(
-        type: ResponseFunctionCallArgumentsDoneEventType,
-        itemId: String,
-        outputIndex: Int,
-        sequenceNumber: Int,
-        arguments: String
-    ) throws {
+extension ResponseFunctionCallArgumentsDoneEvent {
+    public init(type: ResponseFunctionCallArgumentsDoneEventType, itemId: String, outputIndex: Int, sequenceNumber: Int, arguments: String) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.sequenceNumber) = (outputIndex, sequenceNumber)
         self.arguments = arguments
-        try sdkValidateRawEnum("type", self.type, ResponseFunctionCallArgumentsDoneEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseFunctionCallArgumentsDoneEventType.allCases.map(\.rawValue))
     }
 }
 

@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension CertificatesMethods {
-    /// Lists certificates uploaded for the organization. Use `after` to continue from a certificate ID, and set `order`
-    /// to sort by creation time. The response includes pagination metadata and whether more certificates are available.
+extension CertificatesMethods {
+    /// Lists certificates uploaded for the organization. Use `after` to continue from a certificate ID, and set `order` to sort by creation time. The response includes pagination metadata and whether more certificates are available.
     ///
     /// List uploaded certificates for this organization.
     ///
@@ -21,31 +20,15 @@ public extension CertificatesMethods {
     ///   after=obj_foo in order to fetch the next page of the list.
     /// - order: Sort order by the `created_at` timestamp of the objects. `asc` for
     ///   ascending order and `desc` for descending order.
-    static func listCertificatesForOrganization(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListCertificatesForOrganizationParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListCertificatesResponse {
-        try await (sdkRequest(
-            "GET",
-            "/organization/certificates",
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("order", value: order),
-            ],
-            decoder: .json,
-            operationId: "listCertificatesForOrganization",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func listCertificatesForOrganization(config: ClientConfig, limit: Int? = nil, after: String? = nil, order: ListCertificatesForOrganizationParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ListCertificatesResponse {
+        return try (await sdkRequest("GET", "/organization/certificates", config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("order", value: order),
+        ], decoder: .json, operationId: "listCertificatesForOrganization", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists certificates uploaded for the organization. Use `after` to continue from a certificate ID, and set `order`
-    /// to sort by creation time. The response includes pagination metadata and whether more certificates are available.
+    /// Lists certificates uploaded for the organization. Use `after` to continue from a certificate ID, and set `order` to sort by creation time. The response includes pagination metadata and whether more certificates are available.
     ///
     /// List uploaded certificates for this organization.
     ///
@@ -58,41 +41,18 @@ public extension CertificatesMethods {
     ///   after=obj_foo in order to fetch the next page of the list.
     /// - order: Sort order by the `created_at` timestamp of the objects. `asc` for
     ///   ascending order and `desc` for descending order.
-    static func listCertificatesForOrganizationPaginated(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListCertificatesForOrganizationParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<OrganizationCertificate, Swift.Error> {
-        AsyncThrowingStream<OrganizationCertificate, Swift.Error> { (continuation: AsyncThrowingStream<
-            OrganizationCertificate,
-            Swift.Error
-        >.Continuation) in
+    public static func listCertificatesForOrganizationPaginated(config: ClientConfig, limit: Int? = nil, after: String? = nil, order: ListCertificatesForOrganizationParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<OrganizationCertificate, Swift.Error> {
+        return AsyncThrowingStream<OrganizationCertificate, Swift.Error> { (continuation: AsyncThrowingStream<OrganizationCertificate, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listCertificatesForOrganization(
-                            config: config,
-                            limit: limit,
-                            after: pageCursor,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listCertificatesForOrganization(config: config, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -105,50 +65,25 @@ public extension CertificatesMethods {
         }
     }
 
-    struct ListCertificatesForOrganizationPage {
+    public struct ListCertificatesForOrganizationPage {
         public let data: ListCertificatesResponse
         public let items: [OrganizationCertificate]
         public let hasMore: Bool
     }
 
-    static func listCertificatesForOrganizationPages(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListCertificatesForOrganizationParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListCertificatesForOrganizationPage, Swift.Error> {
-        AsyncThrowingStream<ListCertificatesForOrganizationPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListCertificatesForOrganizationPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listCertificatesForOrganizationPages(config: ClientConfig, limit: Int? = nil, after: String? = nil, order: ListCertificatesForOrganizationParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListCertificatesForOrganizationPage, Swift.Error> {
+        return AsyncThrowingStream<ListCertificatesForOrganizationPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListCertificatesForOrganizationPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listCertificatesForOrganization(
-                            config: config,
-                            limit: limit,
-                            after: pageCursor,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listCertificatesForOrganization(config: config, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListCertificatesForOrganizationPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        pageContinuation.yield(ListCertificatesForOrganizationPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AgentsMethods {
-    struct CreateAgentOptions: Codable {
+extension AgentsMethods {
+    public struct CreateAgentOptions: Codable {
         public var model: String
         public var metadata: SdkOptional<[String: String]>?
         public var name: SdkOptional<String>?
@@ -23,8 +23,7 @@ public extension AgentsMethods {
         }
     }
 
-    /// Creates a reusable agent without storing credentials. See [agent
-    /// configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
+    /// Creates a reusable agent without storing credentials. See [agent configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
     ///
     /// - Parameters:
     /// - model: The model to use for the agent. The requested model name is
@@ -44,19 +43,15 @@ public extension AgentsMethods {
     ///   list must fit within 3 MiB (3,145,728 bytes) of compact UTF-8 JSON.
     /// - multiAgent: Configuration for creating and coordinating subagents.
     ///   Subagent tools are disabled by default.
-    static func createAgent(
-        config: ClientConfig,
-        options: CreateAgentOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AgentResource {
-        try validateLength("model", options.model, min: 0, max: 1_048_576)
+    public static func createAgent(config: ClientConfig, options: CreateAgentOptions, requestOptions: RequestOptions? = nil) async throws -> AgentResource {
+        try validateLength("model", options.model, min: 0, max: 1048576)
 
         if let name = options.name?.valueOrNil {
             try validateLength("name", name, min: 0, max: 128)
         }
 
         if let instructions = options.instructions?.valueOrNil {
-            try validateLength("instructions", instructions, min: 0, max: 1_048_576)
+            try validateLength("instructions", instructions, min: 0, max: 1048576)
         }
 
         if let tools = options.tools?.valueOrNil {
@@ -65,23 +60,6 @@ public extension AgentsMethods {
 
         let requestBody = CreateAgentRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "POST",
-            "/agents",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createAgent",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse2.self,
-                "401": ErrorResponse2.self,
-                "403": ErrorResponse2.self,
-                "404": ErrorResponse2.self,
-                "409": ErrorResponse2.self,
-                "500": ErrorResponse2.self,
-                "503": ErrorResponse2.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/agents", config: config, body: requestBody, decoder: .json, operationId: "createAgent", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
     }
 }

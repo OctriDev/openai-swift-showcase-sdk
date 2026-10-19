@@ -3,39 +3,29 @@
 
 import Foundation
 
-/// ResponsesBetaToken domain models
+// ResponsesBetaToken domain models
 public indirect enum BetaTokenCountsBodyInput {
     case stringValue(String)
     case betaInputItemList([BetaInputItem])
 }
 
 extension BetaTokenCountsBodyInput: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for BetaTokenCountsBodyInput"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaTokenCountsBodyInput")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension BetaTokenCountsBodyInput {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode([BetaInputItem].self) {
-            return .betaInputItemList(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode([BetaInputItem].self) { return .betaInputItemList(value) }
         return nil
     }
 }
@@ -62,35 +52,25 @@ public struct BetaTokenCountsResource: Codable {
         case inputTokens = "input_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaTokenCountsResource {
-    init(from decoder: Decoder) throws {
+extension BetaTokenCountsResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.inputTokens) else {
-            throw SdkValidationError(
-                field: "input_tokens",
-                code: "required",
-                message: "Validation failed for 'input_tokens': value is required"
-            )
+            throw SdkValidationError(field: "input_tokens", code: "required", message: "Validation failed for 'input_tokens': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        inputTokens = try container.sdkDecodeRequired(.inputTokens)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.inputTokens = try container.sdkDecodeRequired(.inputTokens)
     }
 }
 
-public extension BetaTokenCountsResource {
-    init(object: BetaTokenCountsResourceObject, inputTokens: Int) {
+extension BetaTokenCountsResource {
+    public init(object: BetaTokenCountsResourceObject, inputTokens: Int) {
         (self.object, self.inputTokens) = (object, inputTokens)
     }
 }
@@ -143,45 +123,32 @@ public struct BetaTokenCountsBody: Codable {
     }
 
     init() {
-        (model, input, previousResponseId, tools, text) = (nil, nil, nil, nil, nil)
-        (reasoning, truncation, instructions, personality, conversation) = (nil, nil, nil, nil, nil)
-        (toolChoice, parallelToolCalls) = (nil, nil)
+        (self.model, self.input, self.previousResponseId, self.tools, self.text) = (nil, nil, nil, nil, nil)
+        (self.reasoning, self.truncation, self.instructions, self.personality, self.conversation) = (nil, nil, nil, nil, nil)
+        (self.toolChoice, self.parallelToolCalls) = (nil, nil)
     }
 }
 
-public extension BetaTokenCountsBody {
-    init(from decoder: Decoder) throws {
+extension BetaTokenCountsBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        model = try container.sdkDecodeIfPresent(.model)
-        input = try container.sdkDecodeIfPresent(.input)
-        previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
-        tools = try container.sdkDecodeIfPresent(.tools)
-        text = try container.sdkDecodeIfPresent(.text)
-        reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        truncation = try container.sdkDecodeIfPresent(.truncation)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        personality = try container.sdkDecodeIfPresent(.personality)
-        conversation = try container.sdkDecodeIfPresent(.conversation)
-        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        self.model = try container.sdkDecodeIfPresent(.model)
+        self.input = try container.sdkDecodeIfPresent(.input)
+        self.previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
+        self.tools = try container.sdkDecodeIfPresent(.tools)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        self.truncation = try container.sdkDecodeIfPresent(.truncation)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.personality = try container.sdkDecodeIfPresent(.personality)
+        self.conversation = try container.sdkDecodeIfPresent(.conversation)
+        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
     }
 }
 
-public extension BetaTokenCountsBody {
-    init(
-        model: String? = nil,
-        input: BetaTokenCountsBodyInput? = nil,
-        previousResponseId: String? = nil,
-        tools: [BetaTool]? = nil,
-        text: BetaResponseTextParam? = nil,
-        reasoning: BetaReasoning? = nil,
-        truncation: BetaTruncationEnum? = nil,
-        instructions: String? = nil,
-        personality: BetaPersonalityEnum? = nil,
-        conversation: BetaConversationParam? = nil,
-        toolChoice: BetaToolChoiceParam? = nil,
-        parallelToolCalls: Bool? = nil
-    ) {
+extension BetaTokenCountsBody {
+    public init(model: String? = nil, input: BetaTokenCountsBodyInput? = nil, previousResponseId: String? = nil, tools: [BetaTool]? = nil, text: BetaResponseTextParam? = nil, reasoning: BetaReasoning? = nil, truncation: BetaTruncationEnum? = nil, instructions: String? = nil, personality: BetaPersonalityEnum? = nil, conversation: BetaConversationParam? = nil, toolChoice: BetaToolChoiceParam? = nil, parallelToolCalls: Bool? = nil) {
         self.init()
         (self.model, self.input) = (model, input)
         (self.previousResponseId, self.tools) = (previousResponseId, tools)
@@ -196,15 +163,12 @@ public extension BetaTokenCountsBody {
 public struct BetaTokenCountsResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let responseInputTokens = BetaTokenCountsResourceObject(rawValue: "response.input_tokens")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

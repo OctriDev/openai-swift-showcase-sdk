@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsSessionArtifact domain models
+// AgentsSessionArtifact domain models
 /// A page of Agents API resources, with IDs for retrieving additional pages.
 public struct SessionArtifactListResource: Codable {
     /// The object type, which is always `list`.
@@ -26,76 +26,48 @@ public struct SessionArtifactListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SessionArtifactListResource {
-    init(from decoder: Decoder) throws {
+extension SessionArtifactListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(
-                field: "first_id",
-                code: "required",
-                message: "Validation failed for 'first_id': value is required"
-            )
+            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(
-                field: "last_id",
-                code: "required",
-                message: "Validation failed for 'last_id': value is required"
-            )
+            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        firstId = try container.sdkDecodeNullable(.firstId)
-        lastId = try container.sdkDecodeNullable(.lastId)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        try validateItems("data", data, min: 0, max: 2000)
-        if let value = firstId {
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.firstId = try container.sdkDecodeNullable(.firstId)
+        self.lastId = try container.sdkDecodeNullable(.lastId)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+            try validateItems("data", self.data, min: 0, max: 2000)
+        if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
-        if let value = lastId {
+        if let value = self.lastId {
             try validateLength("last_id", value, min: 0, max: nil)
         }
     }
 }
 
-public extension SessionArtifactListResource {
-    init(
-        object: SessionArtifactListResourceObject,
-        data: [SessionArtifactResource],
-        firstId: String?,
-        lastId: String?,
-        hasMore: Bool
-    ) throws {
+extension SessionArtifactListResource {
+    public init(object: SessionArtifactListResourceObject, data: [SessionArtifactResource], firstId: String?, lastId: String?, hasMore: Bool) throws {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
-        try validateItems("data", self.data, min: 0, max: 2000)
+            try validateItems("data", self.data, min: 0, max: 2000)
         if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
@@ -135,68 +107,41 @@ public struct SessionArtifactResource: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SessionArtifactResource {
-    init(from decoder: Decoder) throws {
+extension SessionArtifactResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        sessionId = try container.sdkDecodeRequired(.sessionId)
-        environmentId = try container.sdkDecodeRequired(.environmentId)
-        turnId = try container.sdkDecodeRequired(.turnId)
-        path = try container.sdkDecodeRequired(.path)
-        sizeBytes = try container.sdkDecodeRequired(.sizeBytes)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        try validateLength("id", id, min: 0, max: nil)
-        try validateLength("session_id", sessionId, min: 0, max: nil)
-        try validateLength("environment_id", environmentId, min: 0, max: nil)
-        try validateLength("turn_id", turnId, min: 0, max: nil)
-        try validateLength("path", path, min: 0, max: nil)
-        try validateRange(
-            "size_bytes",
-            Double(sizeBytes),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.sessionId = try container.sdkDecodeRequired(.sessionId)
+        self.environmentId = try container.sdkDecodeRequired(.environmentId)
+        self.turnId = try container.sdkDecodeRequired(.turnId)
+        self.path = try container.sdkDecodeRequired(.path)
+        self.sizeBytes = try container.sdkDecodeRequired(.sizeBytes)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("session_id", self.sessionId, min: 0, max: nil)
+            try validateLength("environment_id", self.environmentId, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try validateLength("path", self.path, min: 0, max: nil)
+            try validateRange("size_bytes", Double(self.sizeBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension SessionArtifactResource {
-    init(
-        id: String,
-        object: SessionArtifactResourceObject,
-        sessionId: String,
-        environmentId: String,
-        turnId: String,
-        path: String,
-        sizeBytes: Int,
-        createdAt: Int
-    ) throws {
+extension SessionArtifactResource {
+    public init(id: String, object: SessionArtifactResourceObject, sessionId: String, environmentId: String, turnId: String, path: String, sizeBytes: Int, createdAt: Int) throws {
         (self.id, self.object) = (id, object)
         (self.sessionId, self.environmentId) = (sessionId, environmentId)
         (self.turnId, self.path) = (turnId, path)
         (self.sizeBytes, self.createdAt) = (sizeBytes, createdAt)
-        try validateLength("id", self.id, min: 0, max: nil)
-        try validateLength("session_id", self.sessionId, min: 0, max: nil)
-        try validateLength("environment_id", self.environmentId, min: 0, max: nil)
-        try validateLength("turn_id", self.turnId, min: 0, max: nil)
-        try validateLength("path", self.path, min: 0, max: nil)
-        try validateRange(
-            "size_bytes",
-            Double(self.sizeBytes),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("session_id", self.sessionId, min: 0, max: nil)
+            try validateLength("environment_id", self.environmentId, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try validateLength("path", self.path, min: 0, max: nil)
+            try validateRange("size_bytes", Double(self.sizeBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -204,15 +149,12 @@ public extension SessionArtifactResource {
 public struct SessionArtifactListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = SessionArtifactListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -225,15 +167,12 @@ public struct SessionArtifactListResourceObject: RawRepresentable, Hashable, Cod
 public struct SessionArtifactResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let agentSessionArtifact = SessionArtifactResourceObject(rawValue: "agent.session.artifact")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

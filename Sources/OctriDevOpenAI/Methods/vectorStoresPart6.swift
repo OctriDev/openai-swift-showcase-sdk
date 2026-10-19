@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension VectorStoresMethods {
-    /// Creates a batch to attach files to a vector store for processing. Provide `file_ids` or `files`, and optionally
-    /// set a shared chunking strategy or shared attributes when using `file_ids`. Use per-file settings in `files` when
-    /// different files need different attributes or chunking strategies.
+extension VectorStoresMethods {
+    /// Creates a batch to attach files to a vector store for processing. Provide `file_ids` or `files`, and optionally set a shared chunking strategy or shared attributes when using `file_ids`. Use per-file settings in `files` when different files need different attributes or chunking strategies.
     ///
     /// Create a vector store file batch.
     ///
@@ -37,45 +35,17 @@ public extension VectorStoresMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters, booleans, or numbers.
-    static func createVectorStoreFileBatch(
-        config: ClientConfig,
-        vectorStoreId: String,
-        fileIds: [String]? = nil,
-        files: [CreateVectorStoreFileRequest]? = nil,
-        chunkingStrategy: ChunkingStrategyRequestParam? = nil,
-        attributes: SdkOptional<VectorStoreFileAttributes>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VectorStoreFileBatchObject {
-        if let fileIds {
+    public static func createVectorStoreFileBatch(config: ClientConfig, vectorStoreId: String, fileIds: [String]? = nil, files: [CreateVectorStoreFileRequest]? = nil, chunkingStrategy: ChunkingStrategyRequestParam? = nil, attributes: SdkOptional<VectorStoreFileAttributes>? = nil, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileBatchObject {
+        if let fileIds = fileIds {
             try validateItems("file_ids", fileIds, min: 1, max: 2000)
         }
 
-        if let files {
+        if let files = files {
             try validateItems("files", files, min: 1, max: 2000)
         }
 
-        let requestBody = CreateVectorStoreFileBatchRequestBody(
-            fileIds: fileIds,
-            files: files,
-            chunkingStrategy: chunkingStrategy,
-            attributes: attributes
-        )
+        let requestBody = CreateVectorStoreFileBatchRequestBody(fileIds: fileIds, files: files, chunkingStrategy: chunkingStrategy, attributes: attributes)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/file_batches"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createVectorStoreFileBatch",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "409": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/file_batches"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createVectorStoreFileBatch", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

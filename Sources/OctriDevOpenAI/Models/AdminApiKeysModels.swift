@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AdminApiKeys domain models
+// AdminApiKeys domain models
 /// Required object value serialized in the `owner` wire field.
 public struct AdminApiKeyOwner: Codable {
     /// Always `user`
@@ -35,32 +35,25 @@ public struct AdminApiKeyOwner: Codable {
     }
 
     init() {
-        (type, object, id, name, createdAt) = (nil, nil, nil, nil, nil)
-        role = nil
+        (self.type, self.object, self.id, self.name, self.createdAt) = (nil, nil, nil, nil, nil)
+        self.role = nil
     }
 }
 
-public extension AdminApiKeyOwner {
-    init(from decoder: Decoder) throws {
+extension AdminApiKeyOwner {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        object = try container.sdkDecodeIfPresent(.object)
-        id = try container.sdkDecodeIfPresent(.id)
-        name = try container.sdkDecodeIfPresent(.name)
-        createdAt = try container.sdkDecodeIfPresent(.createdAt)
-        role = try container.sdkDecodeIfPresent(.role)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.object = try container.sdkDecodeIfPresent(.object)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.createdAt = try container.sdkDecodeIfPresent(.createdAt)
+        self.role = try container.sdkDecodeIfPresent(.role)
     }
 }
 
-public extension AdminApiKeyOwner {
-    init(
-        type: String? = nil,
-        object: String? = nil,
-        id: String? = nil,
-        name: String? = nil,
-        createdAt: Int? = nil,
-        role: String? = nil
-    ) {
+extension AdminApiKeyOwner {
+    public init(type: String? = nil, object: String? = nil, id: String? = nil, name: String? = nil, createdAt: Int? = nil, role: String? = nil) {
         self.init()
         (self.type, self.object) = (type, object)
         (self.id, self.name) = (id, name)
@@ -92,45 +85,31 @@ public struct ApiKeyList: Codable {
         case lastId = "last_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ApiKeyList {
-    init(from decoder: Decoder) throws {
+extension ApiKeyList {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        firstId = try container.sdkDecodeIfPresent(.firstId)
-        lastId = try container.sdkDecodeIfPresent(.lastId)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.firstId = try container.sdkDecodeIfPresent(.firstId)
+        self.lastId = try container.sdkDecodeIfPresent(.lastId)
     }
 }
 
-public extension ApiKeyList {
-    init(object: ApiKeyListObject, data: [AdminApiKey], hasMore: Bool, firstId: String? = nil, lastId: String? = nil) {
+extension ApiKeyList {
+    public init(object: ApiKeyListObject, data: [AdminApiKey], hasMore: Bool, firstId: String? = nil, lastId: String? = nil) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.firstId) = (hasMore, firstId)
         self.lastId = lastId
@@ -175,87 +154,47 @@ public struct AdminApiKeyCreateResponse: Codable {
         case lastUsedAt = "last_used_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AdminApiKeyCreateResponse {
-    init(from decoder: Decoder) throws {
+extension AdminApiKeyCreateResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.redactedValue) else {
-            throw SdkValidationError(
-                field: "redacted_value",
-                code: "required",
-                message: "Validation failed for 'redacted_value': value is required"
-            )
+            throw SdkValidationError(field: "redacted_value", code: "required", message: "Validation failed for 'redacted_value': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.expiresAt) else {
-            throw SdkValidationError(
-                field: "expires_at",
-                code: "required",
-                message: "Validation failed for 'expires_at': value is required"
-            )
+            throw SdkValidationError(field: "expires_at", code: "required", message: "Validation failed for 'expires_at': value is required")
         }
         guard container.contains(.owner) else {
-            throw SdkValidationError(
-                field: "owner",
-                code: "required",
-                message: "Validation failed for 'owner': value is required"
-            )
+            throw SdkValidationError(field: "owner", code: "required", message: "Validation failed for 'owner': value is required")
         }
         guard container.contains(.value) else {
-            throw SdkValidationError(
-                field: "value",
-                code: "required",
-                message: "Validation failed for 'value': value is required"
-            )
+            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        id = try container.sdkDecodeRequired(.id)
-        redactedValue = try container.sdkDecodeRequired(.redactedValue)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        expiresAt = try container.sdkDecodeNullable(.expiresAt)
-        owner = try container.sdkDecodeRequired(.owner)
-        value = try container.sdkDecodeRequired(.value)
-        name = try container.sdkDecodeIfPresent(.name)
-        lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.redactedValue = try container.sdkDecodeRequired(.redactedValue)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.expiresAt = try container.sdkDecodeNullable(.expiresAt)
+        self.owner = try container.sdkDecodeRequired(.owner)
+        self.value = try container.sdkDecodeRequired(.value)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
     }
 }
 
-public extension AdminApiKeyCreateResponse {
-    init(
-        object: AdminApiKeyObject,
-        id: String,
-        redactedValue: String,
-        createdAt: Int,
-        expiresAt: Int?,
-        owner: AdminApiKeyOwner,
-        value: String,
-        name: String? = nil,
-        lastUsedAt: Int? = nil
-    ) {
+extension AdminApiKeyCreateResponse {
+    public init(object: AdminApiKeyObject, id: String, redactedValue: String, createdAt: Int, expiresAt: Int?, owner: AdminApiKeyOwner, value: String, name: String? = nil, lastUsedAt: Int? = nil) {
         (self.object, self.id) = (object, id)
         (self.redactedValue, self.createdAt) = (redactedValue, createdAt)
         (self.expiresAt, self.owner) = (expiresAt, owner)
@@ -298,78 +237,43 @@ public struct AdminApiKey: Codable {
         case lastUsedAt = "last_used_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AdminApiKey {
-    init(from decoder: Decoder) throws {
+extension AdminApiKey {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.redactedValue) else {
-            throw SdkValidationError(
-                field: "redacted_value",
-                code: "required",
-                message: "Validation failed for 'redacted_value': value is required"
-            )
+            throw SdkValidationError(field: "redacted_value", code: "required", message: "Validation failed for 'redacted_value': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.expiresAt) else {
-            throw SdkValidationError(
-                field: "expires_at",
-                code: "required",
-                message: "Validation failed for 'expires_at': value is required"
-            )
+            throw SdkValidationError(field: "expires_at", code: "required", message: "Validation failed for 'expires_at': value is required")
         }
         guard container.contains(.owner) else {
-            throw SdkValidationError(
-                field: "owner",
-                code: "required",
-                message: "Validation failed for 'owner': value is required"
-            )
+            throw SdkValidationError(field: "owner", code: "required", message: "Validation failed for 'owner': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        id = try container.sdkDecodeRequired(.id)
-        redactedValue = try container.sdkDecodeRequired(.redactedValue)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        expiresAt = try container.sdkDecodeNullable(.expiresAt)
-        owner = try container.sdkDecodeRequired(.owner)
-        name = try container.sdkDecodeIfPresent(.name)
-        lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.redactedValue = try container.sdkDecodeRequired(.redactedValue)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.expiresAt = try container.sdkDecodeNullable(.expiresAt)
+        self.owner = try container.sdkDecodeRequired(.owner)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.lastUsedAt = try container.sdkDecodeIfPresent(.lastUsedAt)
     }
 }
 
-public extension AdminApiKey {
-    init(
-        object: AdminApiKeyObject,
-        id: String,
-        redactedValue: String,
-        createdAt: Int,
-        expiresAt: Int?,
-        owner: AdminApiKeyOwner,
-        name: String? = nil,
-        lastUsedAt: Int? = nil
-    ) {
+extension AdminApiKey {
+    public init(object: AdminApiKeyObject, id: String, redactedValue: String, createdAt: Int, expiresAt: Int?, owner: AdminApiKeyOwner, name: String? = nil, lastUsedAt: Int? = nil) {
         (self.object, self.id) = (object, id)
         (self.redactedValue, self.createdAt) = (redactedValue, createdAt)
         (self.expiresAt, self.owner) = (expiresAt, owner)
@@ -387,27 +291,21 @@ public struct AdminApiKeyCreateResponseVariant1: Codable {
         case value
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AdminApiKeyCreateResponseVariant1 {
-    init(from decoder: Decoder) throws {
+extension AdminApiKeyCreateResponseVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.value) else {
-            throw SdkValidationError(
-                field: "value",
-                code: "required",
-                message: "Validation failed for 'value': value is required"
-            )
+            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
         }
-        value = try container.sdkDecodeRequired(.value)
+        self.value = try container.sdkDecodeRequired(.value)
     }
 }
 
-public extension AdminApiKeyCreateResponseVariant1 {
-    init(value: String) {
+extension AdminApiKeyCreateResponseVariant1 {
+    public init(value: String) {
         self.value = value
     }
 }
@@ -416,15 +314,12 @@ public extension AdminApiKeyCreateResponseVariant1 {
 public struct ApiKeyListObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = ApiKeyListObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -437,15 +332,12 @@ public struct ApiKeyListObject: RawRepresentable, Hashable, Codable, Sendable, S
 public struct AdminApiKeyObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let organizationAdminApiKey = AdminApiKeyObject(rawValue: "organization.admin_api_key")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

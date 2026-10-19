@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    struct CreateRunOptions: Codable {
+extension AssistantsMethods {
+    public struct CreateRunOptions: Codable {
         public var threadId: String
         public var assistantId: String
         public var include: [CreateRunParameterItem]?
@@ -34,9 +34,7 @@ public extension AssistantsMethods {
         }
     }
 
-    /// Creates a run on a thread using the specified assistant. Supply `assistant_id` and optionally override the
-    /// assistant’s model, instructions, tools, or generation settings for this run. If the run requires tool outputs,
-    /// submit them with POST /threads/{thread_id}/runs/{run_id}/submit_tool_outputs.
+    /// Creates a run on a thread using the specified assistant. Supply `assistant_id` and optionally override the assistant’s model, instructions, tools, or generation settings for this run. If the run requires tool outputs, submit them with POST /threads/{thread_id}/runs/{run_id}/submit_tool_outputs.
     ///
     /// Create a run.
     ///
@@ -119,11 +117,7 @@ public extension AssistantsMethods {
     ///   content may be partially cut off if `finish_reason="length"`, which
     ///   indicates the generation exceeded `max_tokens` or the conversation exceeded
     ///   the max context length.
-    static func createRun(
-        config: ClientConfig,
-        options: CreateRunOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RunObject {
+    public static func createRun(config: ClientConfig, options: CreateRunOptions, requestOptions: RequestOptions? = nil) async throws -> RunObject {
         if let tools = options.tools?.valueOrNil {
             try validateItems("tools", tools, max: 20)
         }
@@ -146,18 +140,8 @@ public extension AssistantsMethods {
 
         let requestBody = CreateRunRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/threads/", sdkEncodePathSegment(sdkWireString(options.threadId)), "/runs"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("include[]", values: options.include, style: "form", explode: true),
-            ],
-            body: requestBody,
-            decoder: .json,
-            operationId: "createRun",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/threads/", sdkEncodePathSegment(sdkWireString(options.threadId)), "/runs"].joined(), config: config, query: [
+            SdkQueryParameter("include[]", values: options.include, style: "form", explode: true),
+        ], body: requestBody, decoder: .json, operationId: "createRun", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 }

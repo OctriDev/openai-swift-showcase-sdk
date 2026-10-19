@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesModeration domain models
+// ResponsesModeration domain models
 public indirect enum ModerationInput {
     case moderationResultBody(ModerationResultBody)
     case moderationErrorBody(ModerationErrorBody)
@@ -12,6 +12,7 @@ public indirect enum ModerationInput {
 }
 
 extension ModerationInput: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension ModerationInput: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension ModerationInput: Codable {
 extension ModerationInput {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "moderation_result": try .moderationResultBody(ModerationResultBody(from: decoder))
-        case "error": try .moderationErrorBody(ModerationErrorBody(from: decoder))
-        default: nil
+        case "moderation_result": return .moderationResultBody(try ModerationResultBody(from: decoder))
+        case "error": return .moderationErrorBody(try ModerationErrorBody(from: decoder))
+        default: return nil
         }
     }
 }
@@ -65,6 +62,7 @@ public indirect enum ModerationOutput {
 }
 
 extension ModerationOutput: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -72,16 +70,12 @@ extension ModerationOutput: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -92,9 +86,9 @@ extension ModerationOutput: Codable {
 extension ModerationOutput {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "moderation_result": try .moderationResultBody(ModerationResultBody(from: decoder))
-        case "error": try .moderationErrorBody(ModerationErrorBody(from: decoder))
-        default: nil
+        case "moderation_result": return .moderationResultBody(try ModerationResultBody(from: decoder))
+        case "error": return .moderationErrorBody(try ModerationErrorBody(from: decoder))
+        default: return nil
         }
     }
 }
@@ -125,47 +119,33 @@ public struct ModerationErrorBody: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ModerationErrorBody {
-    init(from decoder: Decoder) throws {
+extension ModerationErrorBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        try sdkValidateRawEnum("type", type, ModerationErrorBodyType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+            try sdkValidateRawEnum("type", self.type, ModerationErrorBodyType.allCases.map(\.rawValue))
     }
 }
 
-public extension ModerationErrorBody {
-    init(type: ModerationErrorBodyType, code: String, message: String) throws {
+extension ModerationErrorBody {
+    public init(type: ModerationErrorBodyType, code: String, message: String) throws {
         (self.type, self.code) = (type, code)
         self.message = message
-        try sdkValidateRawEnum("type", self.type, ModerationErrorBodyType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ModerationErrorBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -181,35 +161,25 @@ public struct Moderation: Codable {
         case output
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Moderation {
-    init(from decoder: Decoder) throws {
+extension Moderation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.input) else {
-            throw SdkValidationError(
-                field: "input",
-                code: "required",
-                message: "Validation failed for 'input': value is required"
-            )
+            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
-        input = try container.sdkDecodeRequired(.input)
-        output = try container.sdkDecodeRequired(.output)
+        self.input = try container.sdkDecodeRequired(.input)
+        self.output = try container.sdkDecodeRequired(.output)
     }
 }
 
-public extension Moderation {
-    init(input: ModerationInput, output: ModerationOutput) {
+extension Moderation {
+    public init(input: ModerationInput, output: ModerationOutput) {
         (self.input, self.output) = (input, output)
     }
 }

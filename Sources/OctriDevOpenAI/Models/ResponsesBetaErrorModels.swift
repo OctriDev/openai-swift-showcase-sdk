@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaError domain models
+// ResponsesBetaError domain models
 /// Typed representation of the `BetaErrorResponse` API schema.
 public struct BetaErrorResponse: Codable {
     /// Required object value serialized in the `error` wire field.
@@ -13,27 +13,21 @@ public struct BetaErrorResponse: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaErrorResponse {
-    init(from decoder: Decoder) throws {
+extension BetaErrorResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.error) else {
-            throw SdkValidationError(
-                field: "error",
-                code: "required",
-                message: "Validation failed for 'error': value is required"
-            )
+            throw SdkValidationError(field: "error", code: "required", message: "Validation failed for 'error': value is required")
         }
-        error = try container.sdkDecodeRequired(.error)
+        self.error = try container.sdkDecodeRequired(.error)
     }
 }
 
-public extension BetaErrorResponse {
-    init(error: BetaError) {
+extension BetaErrorResponse {
+    public init(error: BetaError) {
         self.error = error
     }
 }
@@ -59,58 +53,34 @@ public struct BetaError: Codable {
         case misalignment
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaError {
-    init(from decoder: Decoder) throws {
+extension BetaError {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
         guard container.contains(.param) else {
-            throw SdkValidationError(
-                field: "param",
-                code: "required",
-                message: "Validation failed for 'param': value is required"
-            )
+            throw SdkValidationError(field: "param", code: "required", message: "Validation failed for 'param': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        code = try container.sdkDecodeNullable(.code)
-        message = try container.sdkDecodeRequired(.message)
-        param = try container.sdkDecodeNullable(.param)
-        type = try container.sdkDecodeRequired(.type)
-        misalignment = try container.sdkDecodeIfPresent(.misalignment)
+        self.code = try container.sdkDecodeNullable(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+        self.param = try container.sdkDecodeNullable(.param)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.misalignment = try container.sdkDecodeIfPresent(.misalignment)
     }
 }
 
-public extension BetaError {
-    init(
-        code: String?,
-        message: String,
-        param: String?,
-        type: String,
-        misalignment: BetaMisalignmentErrorDetailsResource? = nil
-    ) {
+extension BetaError {
+    public init(code: String?, message: String, param: String?, type: String, misalignment: BetaMisalignmentErrorDetailsResource? = nil) {
         (self.code, self.message) = (code, message)
         (self.param, self.type) = (param, type)
         self.misalignment = misalignment

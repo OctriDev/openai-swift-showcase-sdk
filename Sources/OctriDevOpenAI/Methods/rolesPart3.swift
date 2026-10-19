@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension RolesMethods {
-    /// Creates a custom role for the organization. Provide `role_name` and `permissions`; you can also include an
-    /// optional `description`. The response includes the new role's identifier, permissions, and resource type.
+extension RolesMethods {
+    /// Creates a custom role for the organization. Provide `role_name` and `permissions`; you can also include an optional `description`. The response includes the new role's identifier, permissions, and resource type.
     ///
     /// Creates a custom role for the organization.
     ///
@@ -16,52 +15,19 @@ public extension RolesMethods {
     /// - roleName: Unique name for the role.
     /// - permissions: Permissions to grant to the role.
     /// - description: Optional description of the role.
-    static func createRole(
-        config: ClientConfig,
-        roleName: String,
-        permissions: [String],
-        description: SdkOptional<String>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Role {
+    public static func createRole(config: ClientConfig, roleName: String, permissions: [String], description: SdkOptional<String>? = nil, requestOptions: RequestOptions? = nil) async throws -> Role {
         let requestBody = CreateRoleRequestBody(roleName: roleName, permissions: permissions, description: description)
 
-        return try await (sdkRequest(
-            "POST",
-            "/organization/roles",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createRole",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/organization/roles", config: config, body: requestBody, decoder: .json, operationId: "createRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Retrieves a role configured for the organization. Use `role_id` to identify the role and review its name,
-    /// permissions, and resource type.
+    /// Retrieves a role configured for the organization. Use `role_id` to identify the role and review its name, permissions, and resource type.
     ///
     /// Retrieves an organization role.
     ///
     /// - Parameters:
     /// - roleId: The ID of the role to retrieve.
-    static func retrieveRole(
-        config: ClientConfig,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Role {
-        try await (sdkRequest(
-            "GET",
-            ["/organization/roles/", sdkEncodePathSegment(sdkWireString(roleId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveRole",
-            options: requestOptions,
-            errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func retrieveRole(config: ClientConfig, roleId: String, requestOptions: RequestOptions? = nil) async throws -> Role {
+        return try (await sdkRequest("GET", ["/organization/roles/", sdkEncodePathSegment(sdkWireString(roleId))].joined(), config: config, decoder: .json, operationId: "retrieveRole", options: requestOptions, errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

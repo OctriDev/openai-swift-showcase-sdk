@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedCompaction domain models
+// SharedCompaction domain models
 /// Compacts the current context. Must be the final input item.
 public struct CompactionTriggerItemParam: Codable {
     /// The type of the item. Always `compaction_trigger`.
@@ -16,31 +16,25 @@ public struct CompactionTriggerItemParam: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CompactionTriggerItemParam {
-    init(from decoder: Decoder) throws {
+extension CompactionTriggerItemParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeIfPresent(.id)
-        try sdkValidateRawEnum("type", type, CompactionTriggerItemParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeIfPresent(.id)
+            try sdkValidateRawEnum("type", self.type, CompactionTriggerItemParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension CompactionTriggerItemParam {
-    init(type: CompactionTriggerItemParamType, id: String? = nil) throws {
+extension CompactionTriggerItemParam {
+    public init(type: CompactionTriggerItemParamType, id: String? = nil) throws {
         (self.type, self.id) = (type, id)
-        try sdkValidateRawEnum("type", self.type, CompactionTriggerItemParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, CompactionTriggerItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -62,48 +56,34 @@ public struct CompactionBody: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CompactionBody {
-    init(from decoder: Decoder) throws {
+extension CompactionBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.encryptedContent) else {
-            throw SdkValidationError(
-                field: "encrypted_content",
-                code: "required",
-                message: "Validation failed for 'encrypted_content': value is required"
-            )
+            throw SdkValidationError(field: "encrypted_content", code: "required", message: "Validation failed for 'encrypted_content': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        encryptedContent = try container.sdkDecodeRequired(.encryptedContent)
-        createdBy = try container.sdkDecodeIfPresent(.createdBy)
-        try sdkValidateRawEnum("type", type, CompactionBodyType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.encryptedContent = try container.sdkDecodeRequired(.encryptedContent)
+        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
+            try sdkValidateRawEnum("type", self.type, CompactionBodyType.allCases.map(\.rawValue))
     }
 }
 
-public extension CompactionBody {
-    init(type: CompactionBodyType, id: String, encryptedContent: String, createdBy: String? = nil) throws {
+extension CompactionBody {
+    public init(type: CompactionBodyType, id: String, encryptedContent: String, createdBy: String? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.encryptedContent, self.createdBy) = (encryptedContent, createdBy)
-        try sdkValidateRawEnum("type", self.type, CompactionBodyType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, CompactionBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -122,42 +102,32 @@ public struct CompactionSummaryItemParam: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CompactionSummaryItemParam {
-    init(from decoder: Decoder) throws {
+extension CompactionSummaryItemParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.encryptedContent) else {
-            throw SdkValidationError(
-                field: "encrypted_content",
-                code: "required",
-                message: "Validation failed for 'encrypted_content': value is required"
-            )
+            throw SdkValidationError(field: "encrypted_content", code: "required", message: "Validation failed for 'encrypted_content': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        encryptedContent = try container.sdkDecodeRequired(.encryptedContent)
-        id = try container.sdkDecodeIfPresent(.id)
-        try sdkValidateRawEnum("type", type, CompactionSummaryItemParamType.allCases.map(\.rawValue))
-        try validateLength("encrypted_content", encryptedContent, min: nil, max: 104_857_600)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.encryptedContent = try container.sdkDecodeRequired(.encryptedContent)
+        self.id = try container.sdkDecodeIfPresent(.id)
+            try sdkValidateRawEnum("type", self.type, CompactionSummaryItemParamType.allCases.map(\.rawValue))
+            try validateLength("encrypted_content", self.encryptedContent, min: nil, max: 104857600)
     }
 }
 
-public extension CompactionSummaryItemParam {
-    init(type: CompactionSummaryItemParamType, encryptedContent: String, id: String? = nil) throws {
+extension CompactionSummaryItemParam {
+    public init(type: CompactionSummaryItemParamType, encryptedContent: String, id: String? = nil) throws {
         (self.type, self.encryptedContent) = (type, encryptedContent)
         self.id = id
-        try sdkValidateRawEnum("type", self.type, CompactionSummaryItemParamType.allCases.map(\.rawValue))
-        try validateLength("encrypted_content", self.encryptedContent, min: nil, max: 104_857_600)
+            try sdkValidateRawEnum("type", self.type, CompactionSummaryItemParamType.allCases.map(\.rawValue))
+            try validateLength("encrypted_content", self.encryptedContent, min: nil, max: 104857600)
     }
 }
 

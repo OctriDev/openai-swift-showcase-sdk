@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Items domain models
+// Items domain models
 public indirect enum ResponseOutputTextAnnotationsItem {
     case fileAnnotation(FileAnnotation)
     case urlAnnotation(UrlAnnotation)
@@ -12,6 +12,7 @@ public indirect enum ResponseOutputTextAnnotationsItem {
 }
 
 extension ResponseOutputTextAnnotationsItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension ResponseOutputTextAnnotationsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension ResponseOutputTextAnnotationsItem: Codable {
 extension ResponseOutputTextAnnotationsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file": try .fileAnnotation(FileAnnotation(from: decoder))
-        case "url": try .urlAnnotation(UrlAnnotation(from: decoder))
-        default: nil
+        case "file": return .fileAnnotation(try FileAnnotation(from: decoder))
+        case "url": return .urlAnnotation(try UrlAnnotation(from: decoder))
+        default: return nil
         }
     }
 }
@@ -69,6 +66,7 @@ public indirect enum ThreadItem {
 }
 
 extension ThreadItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -76,16 +74,12 @@ extension ThreadItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -96,13 +90,13 @@ extension ThreadItem: Codable {
 extension ThreadItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "chatkit.user_message": try .userMessageItem(UserMessageItem(from: decoder))
-        case "chatkit.assistant_message": try .assistantMessageItem(AssistantMessageItem(from: decoder))
-        case "chatkit.widget": try .widgetMessageItem(WidgetMessageItem(from: decoder))
-        case "chatkit.client_tool_call": try .clientToolCallItem(ClientToolCallItem(from: decoder))
-        case "chatkit.task": try .taskItem(TaskItem(from: decoder))
-        case "chatkit.task_group": try .taskGroupItem(TaskGroupItem(from: decoder))
-        default: nil
+        case "chatkit.user_message": return .userMessageItem(try UserMessageItem(from: decoder))
+        case "chatkit.assistant_message": return .assistantMessageItem(try AssistantMessageItem(from: decoder))
+        case "chatkit.widget": return .widgetMessageItem(try WidgetMessageItem(from: decoder))
+        case "chatkit.client_tool_call": return .clientToolCallItem(try ClientToolCallItem(from: decoder))
+        case "chatkit.task": return .taskItem(try TaskItem(from: decoder))
+        case "chatkit.task_group": return .taskGroupItem(try TaskGroupItem(from: decoder))
+        default: return nil
         }
     }
 }
@@ -130,6 +124,7 @@ public indirect enum UserMessageItemContentItem {
 }
 
 extension UserMessageItemContentItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -137,16 +132,12 @@ extension UserMessageItemContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -157,9 +148,9 @@ extension UserMessageItemContentItem: Codable {
 extension UserMessageItemContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": try .userMessageInputText(UserMessageInputText(from: decoder))
-        case "quoted_text": try .userMessageQuotedText(UserMessageQuotedText(from: decoder))
-        default: nil
+        case "input_text": return .userMessageInputText(try UserMessageInputText(from: decoder))
+        case "quoted_text": return .userMessageQuotedText(try UserMessageQuotedText(from: decoder))
+        default: return nil
         }
     }
 }
@@ -187,38 +178,28 @@ public struct UserMessageQuotedText: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UserMessageQuotedText {
-    init(from decoder: Decoder) throws {
+extension UserMessageQuotedText {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        try sdkValidateRawEnum("type", type, UserMessageQuotedTextType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+            try sdkValidateRawEnum("type", self.type, UserMessageQuotedTextType.allCases.map(\.rawValue))
     }
 }
 
-public extension UserMessageQuotedText {
-    init(type: UserMessageQuotedTextType, text: String) throws {
+extension UserMessageQuotedText {
+    public init(type: UserMessageQuotedTextType, text: String) throws {
         (self.type, self.text) = (type, text)
-        try sdkValidateRawEnum("type", self.type, UserMessageQuotedTextType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, UserMessageQuotedTextType.allCases.map(\.rawValue))
     }
 }
 
@@ -234,35 +215,25 @@ public struct InferenceOptions: Codable {
         case model
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InferenceOptions {
-    init(from decoder: Decoder) throws {
+extension InferenceOptions {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.toolChoice) else {
-            throw SdkValidationError(
-                field: "tool_choice",
-                code: "required",
-                message: "Validation failed for 'tool_choice': value is required"
-            )
+            throw SdkValidationError(field: "tool_choice", code: "required", message: "Validation failed for 'tool_choice': value is required")
         }
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
-        toolChoice = try container.sdkDecodeNullable(.toolChoice)
-        model = try container.sdkDecodeNullable(.model)
+        self.toolChoice = try container.sdkDecodeNullable(.toolChoice)
+        self.model = try container.sdkDecodeNullable(.model)
     }
 }
 
-public extension InferenceOptions {
-    init(toolChoice: ToolChoice?, model: String?) {
+extension InferenceOptions {
+    public init(toolChoice: ToolChoice?, model: String?) {
         (self.toolChoice, self.model) = (toolChoice, model)
     }
 }
@@ -291,79 +262,46 @@ public struct WidgetMessageItem: Codable {
         case widget
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WidgetMessageItem {
-    init(from decoder: Decoder) throws {
+extension WidgetMessageItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.threadId) else {
-            throw SdkValidationError(
-                field: "thread_id",
-                code: "required",
-                message: "Validation failed for 'thread_id': value is required"
-            )
+            throw SdkValidationError(field: "thread_id", code: "required", message: "Validation failed for 'thread_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.widget) else {
-            throw SdkValidationError(
-                field: "widget",
-                code: "required",
-                message: "Validation failed for 'widget': value is required"
-            )
+            throw SdkValidationError(field: "widget", code: "required", message: "Validation failed for 'widget': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        threadId = try container.sdkDecodeRequired(.threadId)
-        type = try container.sdkDecodeRequired(.type)
-        widget = try container.sdkDecodeRequired(.widget)
-        try sdkValidateRawEnum("type", type, WidgetMessageItemType.allCases.map(\.rawValue))
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.threadId = try container.sdkDecodeRequired(.threadId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.widget = try container.sdkDecodeRequired(.widget)
+            try sdkValidateRawEnum("type", self.type, WidgetMessageItemType.allCases.map(\.rawValue))
     }
 }
 
-public extension WidgetMessageItem {
-    init(
-        id: String,
-        object: WidgetMessageItemObject,
-        createdAt: Int,
-        threadId: String,
-        type: WidgetMessageItemType,
-        widget: String
-    ) throws {
+extension WidgetMessageItem {
+    public init(id: String, object: WidgetMessageItemObject, createdAt: Int, threadId: String, type: WidgetMessageItemType, widget: String) throws {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.threadId) = (createdAt, threadId)
         (self.type, self.widget) = (type, widget)
-        try sdkValidateRawEnum("type", self.type, WidgetMessageItemType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, WidgetMessageItemType.allCases.map(\.rawValue))
     }
 }
 
@@ -391,79 +329,46 @@ public struct AssistantMessageItem: Codable {
         case content
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AssistantMessageItem {
-    init(from decoder: Decoder) throws {
+extension AssistantMessageItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.threadId) else {
-            throw SdkValidationError(
-                field: "thread_id",
-                code: "required",
-                message: "Validation failed for 'thread_id': value is required"
-            )
+            throw SdkValidationError(field: "thread_id", code: "required", message: "Validation failed for 'thread_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        threadId = try container.sdkDecodeRequired(.threadId)
-        type = try container.sdkDecodeRequired(.type)
-        content = try container.sdkDecodeRequired(.content)
-        try sdkValidateRawEnum("type", type, AssistantMessageItemType.allCases.map(\.rawValue))
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.threadId = try container.sdkDecodeRequired(.threadId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.content = try container.sdkDecodeRequired(.content)
+            try sdkValidateRawEnum("type", self.type, AssistantMessageItemType.allCases.map(\.rawValue))
     }
 }
 
-public extension AssistantMessageItem {
-    init(
-        id: String,
-        object: AssistantMessageItemObject,
-        createdAt: Int,
-        threadId: String,
-        type: AssistantMessageItemType,
-        content: [ResponseOutputText]
-    ) throws {
+extension AssistantMessageItem {
+    public init(id: String, object: AssistantMessageItemObject, createdAt: Int, threadId: String, type: AssistantMessageItemType, content: [ResponseOutputText]) throws {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.threadId) = (createdAt, threadId)
         (self.type, self.content) = (type, content)
-        try sdkValidateRawEnum("type", self.type, AssistantMessageItemType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, AssistantMessageItemType.allCases.map(\.rawValue))
     }
 }
 
@@ -497,42 +402,31 @@ public struct TaskItem: Codable {
         case summary
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension TaskItem {
-    init(from decoder: Decoder) throws {
+extension TaskItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        threadId = try container.sdkDecodeRequired(.threadId)
-        type = try container.sdkDecodeRequired(.type)
-        taskType = try container.sdkDecodeRequired(.taskType)
-        heading = try container.sdkDecodeNullable(.heading)
-        summary = try container.sdkDecodeNullable(.summary)
-        try sdkValidateRawEnum("type", type, TaskItemType.allCases.map(\.rawValue))
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.threadId = try container.sdkDecodeRequired(.threadId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.taskType = try container.sdkDecodeRequired(.taskType)
+        self.heading = try container.sdkDecodeNullable(.heading)
+        self.summary = try container.sdkDecodeNullable(.summary)
+            try sdkValidateRawEnum("type", self.type, TaskItemType.allCases.map(\.rawValue))
     }
 }
 
-public extension TaskItem {
-    init(
-        id: String,
-        object: TaskItemObject,
-        createdAt: Int,
-        threadId: String,
-        type: TaskItemType,
-        taskType: TaskType,
-        heading: String?,
-        summary: String?
-    ) throws {
+extension TaskItem {
+    public init(id: String, object: TaskItemObject, createdAt: Int, threadId: String, type: TaskItemType, taskType: TaskType, heading: String?, summary: String?) throws {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.threadId) = (createdAt, threadId)
         (self.type, self.taskType) = (type, taskType)
         (self.heading, self.summary) = (heading, summary)
-        try sdkValidateRawEnum("type", self.type, TaskItemType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, TaskItemType.allCases.map(\.rawValue))
     }
 }
 
@@ -566,42 +460,31 @@ public struct UserMessageItem: Codable {
         case inferenceOptions = "inference_options"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UserMessageItem {
-    init(from decoder: Decoder) throws {
+extension UserMessageItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        threadId = try container.sdkDecodeRequired(.threadId)
-        type = try container.sdkDecodeRequired(.type)
-        content = try container.sdkDecodeRequired(.content)
-        attachments = try container.sdkDecodeRequired(.attachments)
-        inferenceOptions = try container.sdkDecodeNullable(.inferenceOptions)
-        try sdkValidateRawEnum("type", type, UserMessageItemType.allCases.map(\.rawValue))
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.threadId = try container.sdkDecodeRequired(.threadId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.attachments = try container.sdkDecodeRequired(.attachments)
+        self.inferenceOptions = try container.sdkDecodeNullable(.inferenceOptions)
+            try sdkValidateRawEnum("type", self.type, UserMessageItemType.allCases.map(\.rawValue))
     }
 }
 
-public extension UserMessageItem {
-    init(
-        id: String,
-        object: UserMessageItemObject,
-        createdAt: Int,
-        threadId: String,
-        type: UserMessageItemType,
-        content: [UserMessageItemContentItem],
-        attachments: [Attachment],
-        inferenceOptions: InferenceOptions?
-    ) throws {
+extension UserMessageItem {
+    public init(id: String, object: UserMessageItemObject, createdAt: Int, threadId: String, type: UserMessageItemType, content: [UserMessageItemContentItem], attachments: [Attachment], inferenceOptions: InferenceOptions?) throws {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.threadId) = (createdAt, threadId)
         (self.type, self.content) = (type, content)
         (self.attachments, self.inferenceOptions) = (attachments, inferenceOptions)
-        try sdkValidateRawEnum("type", self.type, UserMessageItemType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, UserMessageItemType.allCases.map(\.rawValue))
     }
 }
 
@@ -626,7 +509,5 @@ public struct Attachment: Codable {
         case previewUrl = "preview_url"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

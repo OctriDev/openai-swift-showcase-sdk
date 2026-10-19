@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsSessionEnvironment domain models
+// AgentsSessionEnvironment domain models
 /// The current state of a session environment.
 public struct SessionEnvironmentStateResource: Codable {
     /// The public ID of the environment.
@@ -22,62 +22,39 @@ public struct SessionEnvironmentStateResource: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SessionEnvironmentStateResource {
-    init(from decoder: Decoder) throws {
+extension SessionEnvironmentStateResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.error) else {
-            throw SdkValidationError(
-                field: "error",
-                code: "required",
-                message: "Validation failed for 'error': value is required"
-            )
+            throw SdkValidationError(field: "error", code: "required", message: "Validation failed for 'error': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        type = try container.sdkDecodeRequired(.type)
-        status = try container.sdkDecodeRequired(.status)
-        error = try container.sdkDecodeNullable(.error)
-        try validateLength("id", id, min: 0, max: nil)
-        try validateLength("type", type, min: 0, max: nil)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.error = try container.sdkDecodeNullable(.error)
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("type", self.type, min: 0, max: nil)
     }
 }
 
-public extension SessionEnvironmentStateResource {
-    init(
-        id: String,
-        type: String,
-        status: SessionEnvironmentStatusResource,
-        error: SessionEnvironmentErrorResource?
-    ) throws {
+extension SessionEnvironmentStateResource {
+    public init(id: String, type: String, status: SessionEnvironmentStatusResource, error: SessionEnvironmentErrorResource?) throws {
         (self.id, self.type) = (id, type)
         (self.status, self.error) = (status, error)
-        try validateLength("id", self.id, min: 0, max: nil)
-        try validateLength("type", self.type, min: 0, max: nil)
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("type", self.type, min: 0, max: nil)
     }
 }
 
@@ -96,51 +73,37 @@ public struct SessionEnvironmentErrorResource: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SessionEnvironmentErrorResource {
-    init(from decoder: Decoder) throws {
+extension SessionEnvironmentErrorResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        try validateLength("type", type, min: 0, max: nil)
-        try validateLength("code", code, min: 0, max: nil)
-        try validateLength("message", message, min: 0, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+            try validateLength("type", self.type, min: 0, max: nil)
+            try validateLength("code", self.code, min: 0, max: nil)
+            try validateLength("message", self.message, min: 0, max: nil)
     }
 }
 
-public extension SessionEnvironmentErrorResource {
-    init(type: String, code: String, message: String) throws {
+extension SessionEnvironmentErrorResource {
+    public init(type: String, code: String, message: String) throws {
         (self.type, self.code) = (type, code)
         self.message = message
-        try validateLength("type", self.type, min: 0, max: nil)
-        try validateLength("code", self.code, min: 0, max: nil)
-        try validateLength("message", self.message, min: 0, max: nil)
+            try validateLength("type", self.type, min: 0, max: nil)
+            try validateLength("code", self.code, min: 0, max: nil)
+            try validateLength("message", self.message, min: 0, max: nil)
     }
 }
 
@@ -148,10 +111,7 @@ public extension SessionEnvironmentErrorResource {
 public struct SessionEnvironmentStatusResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let pending = SessionEnvironmentStatusResource(rawValue: "pending")
     public static let ready = SessionEnvironmentStatusResource(rawValue: "ready")
     public static let connected = SessionEnvironmentStatusResource(rawValue: "connected")
@@ -162,7 +122,7 @@ public struct SessionEnvironmentStatusResource: RawRepresentable, Hashable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

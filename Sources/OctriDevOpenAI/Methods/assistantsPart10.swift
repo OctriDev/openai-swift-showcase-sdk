@@ -6,33 +6,18 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    /// Retrieves a thread and its associated details. Use the thread's identifier to fetch its creation timestamp, tool
-    /// resources, and metadata.
+extension AssistantsMethods {
+    /// Retrieves a thread and its associated details. Use the thread's identifier to fetch its creation timestamp, tool resources, and metadata.
     ///
     /// Retrieves a thread.
     ///
     /// - Parameters:
     /// - threadId: The ID of the thread to retrieve.
-    static func getThread(
-        config: ClientConfig,
-        threadId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ThreadObject {
-        try await (sdkRequest(
-            "GET",
-            ["/threads/", sdkEncodePathSegment(sdkWireString(threadId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getThread",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+    public static func getThread(config: ClientConfig, threadId: String, requestOptions: RequestOptions? = nil) async throws -> ThreadObject {
+        return try (await sdkRequest("GET", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId))].joined(), config: config, decoder: .json, operationId: "getThread", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 
-    /// Updates the configurable details of a thread. Supply `metadata` to attach structured key-value pairs, or
-    /// `tool_resources` to provide resources for the assistant's tools. The thread identifier selects which thread to
-    /// update.
+    /// Updates the configurable details of a thread. Supply `metadata` to attach structured key-value pairs, or `tool_resources` to provide resources for the assistant's tools. The thread identifier selects which thread to update.
     ///
     /// Modifies a thread.
     ///
@@ -48,24 +33,9 @@ public extension AssistantsMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    static func modifyThread(
-        config: ClientConfig,
-        threadId: String,
-        toolResources: SdkOptional<ModifyThreadRequestToolResources>? = nil,
-        metadata: SdkOptional<Metadata>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ThreadObject {
+    public static func modifyThread(config: ClientConfig, threadId: String, toolResources: SdkOptional<ModifyThreadRequestToolResources>? = nil, metadata: SdkOptional<Metadata>? = nil, requestOptions: RequestOptions? = nil) async throws -> ThreadObject {
         let requestBody = ModifyThreadRequestBody(toolResources: toolResources, metadata: metadata)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/threads/", sdkEncodePathSegment(sdkWireString(threadId))].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "modifyThread",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "modifyThread", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 }

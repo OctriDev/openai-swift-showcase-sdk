@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension VectorStoresMethods {
-    /// Lists vector stores, which are collections of processed files that you can use with the `file_search` tool. Use
-    /// the cursor parameters to move forward or backward through the results, and set `order` to control sorting by
-    /// creation time.
+extension VectorStoresMethods {
+    /// Lists vector stores, which are collections of processed files that you can use with the `file_search` tool. Use the cursor parameters to move forward or backward through the results, and set `order` to control sorting by creation time.
     ///
     /// Returns a list of vector stores.
     ///
@@ -26,34 +24,16 @@ public extension VectorStoresMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, starting with obj_foo, your subsequent call can include
     ///   before=obj_foo in order to fetch the previous page of the list.
-    static func listVectorStores(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: ListVectorStoresParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListVectorStoresResponse {
-        try await (sdkRequest(
-            "GET",
-            "/vector_stores",
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("before", value: before),
-            ],
-            decoder: .json,
-            operationId: "listVectorStores",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self, "503": ErrorResponse.self]
-        )).data
+    public static func listVectorStores(config: ClientConfig, limit: Int? = nil, order: ListVectorStoresParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListVectorStoresResponse {
+        return try (await sdkRequest("GET", "/vector_stores", config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("before", value: before),
+        ], decoder: .json, operationId: "listVectorStores", options: requestOptions, errors: ["429": ErrorResponse.self, "503": ErrorResponse.self])).data
     }
 
-    /// Lists vector stores, which are collections of processed files that you can use with the `file_search` tool. Use
-    /// the cursor parameters to move forward or backward through the results, and set `order` to control sorting by
-    /// creation time.
+    /// Lists vector stores, which are collections of processed files that you can use with the `file_search` tool. Use the cursor parameters to move forward or backward through the results, and set `order` to control sorting by creation time.
     ///
     /// Returns a list of vector stores.
     ///
@@ -70,40 +50,17 @@ public extension VectorStoresMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, starting with obj_foo, your subsequent call can include
     ///   before=obj_foo in order to fetch the previous page of the list.
-    static func listVectorStoresPaginated(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: ListVectorStoresParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<VectorStoreObject, Swift.Error> {
-        AsyncThrowingStream<VectorStoreObject, Swift.Error> { (continuation: AsyncThrowingStream<
-            VectorStoreObject,
-            Swift.Error
-        >.Continuation) in
+    public static func listVectorStoresPaginated(config: ClientConfig, limit: Int? = nil, order: ListVectorStoresParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<VectorStoreObject, Swift.Error> {
+        return AsyncThrowingStream<VectorStoreObject, Swift.Error> { (continuation: AsyncThrowingStream<VectorStoreObject, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listVectorStores(
-                            config: config,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listVectorStores(config: config, limit: limit, order: order, after: pageCursor, before: before, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -116,49 +73,24 @@ public extension VectorStoresMethods {
         }
     }
 
-    struct ListVectorStoresPage {
+    public struct ListVectorStoresPage {
         public let data: ListVectorStoresResponse
         public let items: [VectorStoreObject]
         public let hasMore: Bool
     }
 
-    static func listVectorStoresPages(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: ListVectorStoresParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListVectorStoresPage, Swift.Error> {
-        AsyncThrowingStream<ListVectorStoresPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListVectorStoresPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listVectorStoresPages(config: ClientConfig, limit: Int? = nil, order: ListVectorStoresParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListVectorStoresPage, Swift.Error> {
+        return AsyncThrowingStream<ListVectorStoresPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListVectorStoresPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listVectorStores(
-                            config: config,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listVectorStores(config: config, limit: limit, order: order, after: pageCursor, before: before, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && true
-                        pageContinuation.yield(ListVectorStoresPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
+                        pageContinuation.yield(ListVectorStoresPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

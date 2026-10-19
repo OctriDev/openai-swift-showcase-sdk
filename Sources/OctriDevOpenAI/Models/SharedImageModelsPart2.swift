@@ -3,17 +3,14 @@
 
 import Foundation
 
-/// SharedImage domain models
+// SharedImage domain models
 /// The quality of the generated image. The GPT image models support `low`, `medium`, and `high`.
 /// `gpt-image-2.5-sunburst` and `gpt-image-2.5-flare`, including their `2026-09-08` snapshots, also support
 /// `xhigh` and `max`. Default: `auto`.
 public struct ImageGenToolQuality: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = ImageGenToolQuality(rawValue: "low")
     public static let medium = ImageGenToolQuality(rawValue: "medium")
     public static let high = ImageGenToolQuality(rawValue: "high")
@@ -23,7 +20,7 @@ public struct ImageGenToolQuality: RawRepresentable, Hashable, Codable, Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -36,17 +33,14 @@ public struct ImageGenToolQuality: RawRepresentable, Hashable, Codable, Sendable
 public struct ImageBackground: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let transparent = ImageBackground(rawValue: "transparent")
     public static let opaque = ImageBackground(rawValue: "opaque")
     public static let auto = ImageBackground(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -56,21 +50,17 @@ public struct ImageBackground: RawRepresentable, Hashable, Codable, Sendable, Sd
 }
 
 /// The stage where moderation blocked the image generation call.
-public struct ImageGenToolCallModerationDetailsModerationStage: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ImageGenToolCallModerationDetailsModerationStage: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let input = ImageGenToolCallModerationDetailsModerationStage(rawValue: "input")
     public static let output = ImageGenToolCallModerationDetailsModerationStage(rawValue: "output")
     public static let unknown = ImageGenToolCallModerationDetailsModerationStage(rawValue: "unknown")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

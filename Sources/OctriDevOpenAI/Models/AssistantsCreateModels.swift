@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AssistantsCreate domain models
+// AssistantsCreate domain models
 public indirect enum CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXba30eed7a0 {
     case createAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b(
         CreateAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b
@@ -14,39 +14,29 @@ public indirect enum CreateAssistantRequestToolResourcesFileSearchVectorStoresIt
 }
 
 extension CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXba30eed7a0: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXba30eed7a0"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXba30eed7a0")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXba30eed7a0 {
     static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
-        if let value = try? container
-            .decode(CreateAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b.self),
-            sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(CreateAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b.self),
+           sdkKeepsEveryKey(value, of: raw) {
             return .createAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b(value)
         }
-        if let value = try? container
-            .decode(CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXa2a89b08ca.self),
-            sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXa2a89b08ca.self),
+           sdkKeepsEveryKey(value, of: raw) {
             return .createAssistantRequestToolResourcesFileSearchVectorStoresItemXa2a89b08ca(value)
         }
         return nil
@@ -58,12 +48,12 @@ extension CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXba30eed7
         if let value = try? container.decode(
             CreateAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b.self
         ) {
-            return .createAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b(value)
+            return             .createAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b(value)
         }
         if let value = try? container.decode(
             CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXa2a89b08ca.self
         ) {
-            return .createAssistantRequestToolResourcesFileSearchVectorStoresItemXa2a89b08ca(value)
+            return             .createAssistantRequestToolResourcesFileSearchVectorStoresItemXa2a89b08ca(value)
         }
         return nil
     }
@@ -73,10 +63,8 @@ extension CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXba30eed7
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .createAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b(value): try container
-            .encode(value); return true
-        case let .createAssistantRequestToolResourcesFileSearchVectorStoresItemXa2a89b08ca(value): try container
-            .encode(value); return true
+        case let .createAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b(value): try container.encode(value); return true
+        case let .createAssistantRequestToolResourcesFileSearchVectorStoresItemXa2a89b08ca(value): try container.encode(value); return true
         }
     }
 }
@@ -90,6 +78,7 @@ public indirect enum CreateAssistantRequestToolsItem {
 }
 
 extension CreateAssistantRequestToolsItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -97,16 +86,12 @@ extension CreateAssistantRequestToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -117,10 +102,10 @@ extension CreateAssistantRequestToolsItem: Codable {
 extension CreateAssistantRequestToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "code_interpreter": try .assistantToolsCode(AssistantToolsCode(from: decoder))
-        case "file_search": try .assistantToolsFileSearch(AssistantToolsFileSearch(from: decoder))
-        case "function": try .assistantToolsFunction(AssistantToolsFunction(from: decoder))
-        default: nil
+        case "code_interpreter": return .assistantToolsCode(try AssistantToolsCode(from: decoder))
+        case "file_search": return .assistantToolsFileSearch(try AssistantToolsFileSearch(from: decoder))
+        case "function": return .assistantToolsFunction(try AssistantToolsFunction(from: decoder))
+        default: return nil
         }
     }
 }
@@ -145,6 +130,7 @@ public indirect enum CreateMessageRequestAttachmentsItemToolsItem {
 }
 
 extension CreateMessageRequestAttachmentsItemToolsItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -152,16 +138,12 @@ extension CreateMessageRequestAttachmentsItemToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -172,9 +154,9 @@ extension CreateMessageRequestAttachmentsItemToolsItem: Codable {
 extension CreateMessageRequestAttachmentsItemToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "code_interpreter": try .assistantToolsCode(AssistantToolsCode(from: decoder))
-        case "file_search": try .assistantToolsFileSearchTypeOnly(AssistantToolsFileSearchTypeOnly(from: decoder))
-        default: nil
+        case "code_interpreter": return .assistantToolsCode(try AssistantToolsCode(from: decoder))
+        case "file_search": return .assistantToolsFileSearchTypeOnly(try AssistantToolsFileSearchTypeOnly(from: decoder))
+        default: return nil
         }
     }
 }
@@ -199,6 +181,7 @@ public indirect enum CreateMessageRequestContentItem {
 }
 
 extension CreateMessageRequestContentItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -206,16 +189,12 @@ extension CreateMessageRequestContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -226,10 +205,10 @@ extension CreateMessageRequestContentItem: Codable {
 extension CreateMessageRequestContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "image_file": try .messageContentImageFileObject(MessageContentImageFileObject(from: decoder))
-        case "image_url": try .messageContentImageUrlObject(MessageContentImageUrlObject(from: decoder))
-        case "text": try .messageRequestContentTextObject(MessageRequestContentTextObject(from: decoder))
-        default: nil
+        case "image_file": return .messageContentImageFileObject(try MessageContentImageFileObject(from: decoder))
+        case "image_url": return .messageContentImageUrlObject(try MessageContentImageUrlObject(from: decoder))
+        case "text": return .messageRequestContentTextObject(try MessageRequestContentTextObject(from: decoder))
+        default: return nil
         }
     }
 }
@@ -255,6 +234,7 @@ public indirect enum CreateRunRequestToolsItem {
 }
 
 extension CreateRunRequestToolsItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -262,16 +242,12 @@ extension CreateRunRequestToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -282,10 +258,10 @@ extension CreateRunRequestToolsItem: Codable {
 extension CreateRunRequestToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "code_interpreter": try .assistantToolsCode(AssistantToolsCode(from: decoder))
-        case "file_search": try .assistantToolsFileSearch(AssistantToolsFileSearch(from: decoder))
-        case "function": try .assistantToolsFunction(AssistantToolsFunction(from: decoder))
-        default: nil
+        case "code_interpreter": return .assistantToolsCode(try AssistantToolsCode(from: decoder))
+        case "file_search": return .assistantToolsFileSearch(try AssistantToolsFileSearch(from: decoder))
+        case "function": return .assistantToolsFunction(try AssistantToolsFunction(from: decoder))
+        default: return nil
         }
     }
 }
@@ -311,6 +287,7 @@ public indirect enum CreateThreadAndRunRequestToolsItem {
 }
 
 extension CreateThreadAndRunRequestToolsItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -318,16 +295,12 @@ extension CreateThreadAndRunRequestToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -338,10 +311,10 @@ extension CreateThreadAndRunRequestToolsItem: Codable {
 extension CreateThreadAndRunRequestToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "code_interpreter": try .assistantToolsCode(AssistantToolsCode(from: decoder))
-        case "file_search": try .assistantToolsFileSearch(AssistantToolsFileSearch(from: decoder))
-        case "function": try .assistantToolsFunction(AssistantToolsFunction(from: decoder))
-        default: nil
+        case "code_interpreter": return .assistantToolsCode(try AssistantToolsCode(from: decoder))
+        case "file_search": return .assistantToolsFileSearch(try AssistantToolsFileSearch(from: decoder))
+        case "function": return .assistantToolsFunction(try AssistantToolsFunction(from: decoder))
+        default: return nil
         }
     }
 }
@@ -368,39 +341,29 @@ public indirect enum CreateThreadRequestToolResourcesFileSearchVectorStoresItemC
 }
 
 extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179 {
     static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
-        if let value = try? container
-            .decode(CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51.self),
-            sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51.self),
+           sdkKeepsEveryKey(value, of: raw) {
             return .createThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51(value)
         }
-        if let value = try? container
-            .decode(CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4.self),
-            sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4.self),
+           sdkKeepsEveryKey(value, of: raw) {
             return .createThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4(value)
         }
         return nil
@@ -412,12 +375,12 @@ extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff1
         if let value = try? container.decode(
             CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51.self
         ) {
-            return .createThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51(value)
+            return             .createThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51(value)
         }
         if let value = try? container.decode(
             CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4.self
         ) {
-            return .createThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4(value)
+            return             .createThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4(value)
         }
         return nil
     }
@@ -427,10 +390,8 @@ extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff1
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .createThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51(value): try container
-            .encode(value); return true
-        case let .createThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4(value): try container
-            .encode(value); return true
+        case let .createThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51(value): try container.encode(value); return true
+        case let .createThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4(value): try container.encode(value); return true
         }
     }
 }
@@ -445,38 +406,24 @@ public struct CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51 {
-    init(from decoder: Decoder) throws {
+extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b.allCases.map(\.rawValue)
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b.allCases.map(\.rawValue))
     }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51 {
-    init(type: CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b) throws {
+extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51 {
+    public init(type: CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b) throws {
         self.type = type
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b.allCases.map(\.rawValue))
     }
 }
 
@@ -527,52 +474,34 @@ public struct CreateAssistantRequest: Codable {
         case responseFormat = "response_format"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateAssistantRequest {
-    init(from decoder: Decoder) throws {
+extension CreateAssistantRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
-        model = try container.sdkDecodeRequired(.model)
-        name = try container.sdkDecodeIfPresent(.name)
-        description = try container.sdkDecodeIfPresent(.description)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
-        tools = try container.sdkDecodeIfPresent(.tools)
-        toolResources = try container.sdkDecodeIfPresent(.toolResources)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        topP = try container.sdkDecodeIfPresent(.topP)
-        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        if let value = tools {
+        self.model = try container.sdkDecodeRequired(.model)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.description = try container.sdkDecodeIfPresent(.description)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
+        self.tools = try container.sdkDecodeIfPresent(.tools)
+        self.toolResources = try container.sdkDecodeIfPresent(.toolResources)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.temperature = try container.sdkDecodeIfPresent(.temperature)
+        self.topP = try container.sdkDecodeIfPresent(.topP)
+        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        if let value = self.tools {
             try validateItems("tools", value, min: nil, max: 128)
         }
     }
 }
 
-public extension CreateAssistantRequest {
-    init(
-        model: CreateAssistantRequestModel,
-        name: String? = nil,
-        description: String? = nil,
-        instructions: String? = nil,
-        reasoningEffort: ReasoningEffortVariant0? = nil,
-        tools: [CreateAssistantRequestToolsItem]? = nil,
-        toolResources: CreateAssistantRequestToolResources? = nil,
-        metadata: Metadata? = nil,
-        temperature: Double? = nil,
-        topP: Double? = nil,
-        responseFormat: AssistantsApiResponseFormatOption? = nil
-    ) throws {
+extension CreateAssistantRequest {
+    public init(model: CreateAssistantRequestModel, name: String? = nil, description: String? = nil, instructions: String? = nil, reasoningEffort: ReasoningEffortVariant0? = nil, tools: [CreateAssistantRequestToolsItem]? = nil, toolResources: CreateAssistantRequestToolResources? = nil, metadata: Metadata? = nil, temperature: Double? = nil, topP: Double? = nil, responseFormat: AssistantsApiResponseFormatOption? = nil) throws {
         (self.model, self.name) = (model, name)
         (self.description, self.instructions) = (description, instructions)
         (self.reasoningEffort, self.tools) = (reasoningEffort, tools)

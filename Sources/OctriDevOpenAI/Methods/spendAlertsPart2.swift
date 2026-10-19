@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension SpendAlertsMethods {
-    /// Lists spend alerts configured for a project, with cursor-based pagination. Use `limit` to set the page size,
-    /// `order` to choose the sort direction, and `after` or `before` to move through the results.
+extension SpendAlertsMethods {
+    /// Lists spend alerts configured for a project, with cursor-based pagination. Use `limit` to set the page size, `order` to choose the sort direction, and `after` or `before` to move through the results.
     ///
     /// Lists project spend alerts.
     ///
@@ -20,38 +19,20 @@ public extension SpendAlertsMethods {
     ///   the previous response to fetch the next page.
     /// - before: Cursor for pagination. Provide the ID of the first spend alert
     ///   from the previous response to fetch the previous page.
-    static func listProjectSpendAlerts(
-        config: ClientConfig,
-        projectId: String,
-        limit: Int? = nil,
-        order: ListProjectSpendAlertsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectSpendAlertListResource {
-        if let limit {
+    public static func listProjectSpendAlerts(config: ClientConfig, projectId: String, limit: Int? = nil, order: ListProjectSpendAlertsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendAlertListResource {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 0, max: 100)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/spend_alerts"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("before", value: before),
-            ],
-            decoder: .json,
-            operationId: "listProjectSpendAlerts",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/spend_alerts"].joined(), config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("before", value: before),
+        ], decoder: .json, operationId: "listProjectSpendAlerts", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
     }
 
-    /// Lists spend alerts configured for a project, with cursor-based pagination. Use `limit` to set the page size,
-    /// `order` to choose the sort direction, and `after` or `before` to move through the results.
+    /// Lists spend alerts configured for a project, with cursor-based pagination. Use `limit` to set the page size, `order` to choose the sort direction, and `after` or `before` to move through the results.
     ///
     /// Lists project spend alerts.
     ///
@@ -63,45 +44,18 @@ public extension SpendAlertsMethods {
     ///   the previous response to fetch the next page.
     /// - before: Cursor for pagination. Provide the ID of the first spend alert
     ///   from the previous response to fetch the previous page.
-    static func listProjectSpendAlertsPaginated(
-        config: ClientConfig,
-        projectId: String,
-        limit: Int? = nil,
-        order: ListProjectSpendAlertsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ProjectSpendAlert, Swift.Error> {
-        AsyncThrowingStream<ProjectSpendAlert, Swift.Error> { (continuation: AsyncThrowingStream<
-            ProjectSpendAlert,
-            Swift.Error
-        >.Continuation) in
+    public static func listProjectSpendAlertsPaginated(config: ClientConfig, projectId: String, limit: Int? = nil, order: ListProjectSpendAlertsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ProjectSpendAlert, Swift.Error> {
+        return AsyncThrowingStream<ProjectSpendAlert, Swift.Error> { (continuation: AsyncThrowingStream<ProjectSpendAlert, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectSpendAlerts(
-                            config: config,
-                            projectId: projectId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listProjectSpendAlerts(config: config, projectId: projectId, limit: limit, order: order, after: pageCursor, before: before, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -114,54 +68,25 @@ public extension SpendAlertsMethods {
         }
     }
 
-    struct ListProjectSpendAlertsPage {
+    public struct ListProjectSpendAlertsPage {
         public let data: ProjectSpendAlertListResource
         public let items: [ProjectSpendAlert]
         public let hasMore: Bool
     }
 
-    static func listProjectSpendAlertsPages(
-        config: ClientConfig,
-        projectId: String,
-        limit: Int? = nil,
-        order: ListProjectSpendAlertsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListProjectSpendAlertsPage, Swift.Error> {
-        AsyncThrowingStream<ListProjectSpendAlertsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListProjectSpendAlertsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listProjectSpendAlertsPages(config: ClientConfig, projectId: String, limit: Int? = nil, order: ListProjectSpendAlertsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListProjectSpendAlertsPage, Swift.Error> {
+        return AsyncThrowingStream<ListProjectSpendAlertsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListProjectSpendAlertsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectSpendAlerts(
-                            config: config,
-                            projectId: projectId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listProjectSpendAlerts(config: config, projectId: projectId, limit: limit, order: order, after: pageCursor, before: before, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListProjectSpendAlertsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        pageContinuation.yield(ListProjectSpendAlertsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

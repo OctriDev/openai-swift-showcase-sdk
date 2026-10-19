@@ -6,13 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ChatMethods {
-    /// Updates the metadata on a stored chat completion. The completion must have been created with `store` set to
-    /// `true`, and metadata is the only supported modification. Use this operation to attach or replace structured
-    /// key-value metadata on the completion.
+extension ChatMethods {
+    /// Updates the metadata on a stored chat completion. The completion must have been created with `store` set to `true`, and metadata is the only supported modification. Use this operation to attach or replace structured key-value metadata on the completion.
     ///
-    /// Modify a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to
-    /// `true` can be modified. Currently, the only supported modification is to update the `metadata` field.
+    /// Modify a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to `true` can be modified. Currently, the only supported modification is to update the `metadata` field.
     ///
     /// - Parameters:
     /// - completionId: The ID of the chat completion to update.
@@ -21,49 +18,17 @@ public extension ChatMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    static func updateChatCompletion(
-        config: ClientConfig,
-        completionId: String,
-        metadata: Metadata?,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateChatCompletionResponse {
+    public static func updateChatCompletion(config: ClientConfig, completionId: String, metadata: Metadata?, requestOptions: RequestOptions? = nil) async throws -> CreateChatCompletionResponse {
         let requestBody = UpdateChatCompletionRequestBody(metadata: metadata)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/chat/completions/", sdkEncodePathSegment(sdkWireString(completionId))].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateChatCompletion",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/chat/completions/", sdkEncodePathSegment(sdkWireString(completionId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateChatCompletion", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 
-    /// Delete a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to
-    /// `true` can be deleted.
+    /// Delete a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to `true` can be deleted.
     ///
     /// - Parameters:
     /// - completionId: The ID of the chat completion to delete.
-    static func deleteChatCompletion(
-        config: ClientConfig,
-        completionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ChatCompletionDeleted {
-        try await (sdkRequest(
-            "DELETE",
-            ["/chat/completions/", sdkEncodePathSegment(sdkWireString(completionId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteChatCompletion",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self]
-        )).data
+    public static func deleteChatCompletion(config: ClientConfig, completionId: String, requestOptions: RequestOptions? = nil) async throws -> ChatCompletionDeleted {
+        return try (await sdkRequest("DELETE", ["/chat/completions/", sdkEncodePathSegment(sdkWireString(completionId))].joined(), config: config, decoder: .json, operationId: "deleteChatCompletion", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

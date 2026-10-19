@@ -3,25 +3,21 @@
 
 import Foundation
 
-/// ResponsesBetaCreate domain models
+// ResponsesBetaCreate domain models
 /// The truncation strategy to use for the model response. - `auto`: If the input to this Response exceeds the
 /// model's context window size, the model will truncate the response to fit the context window by dropping
 /// items from the beginning of the conversation. - `disabled` (default): If the input size will exceed the
 /// context window size for a model, the request will fail with a 400 error.
-public struct BetaCreateResponseVariant2TruncationVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct BetaCreateResponseVariant2TruncationVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = BetaCreateResponseVariant2TruncationVariant0(rawValue: "auto")
     public static let disabled = BetaCreateResponseVariant2TruncationVariant0(rawValue: "disabled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

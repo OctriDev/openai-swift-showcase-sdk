@@ -3,21 +3,17 @@
 
 import Foundation
 
-/// ExternalStorage domain models
+// ExternalStorage domain models
 /// Required enumerated value serialized in the `object` wire field.
 public struct ExternalStorageDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let organizationExternalStorageDeleted =
-        ExternalStorageDeletedResourceObject(rawValue: "organization.external_storage.deleted")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let organizationExternalStorageDeleted = ExternalStorageDeletedResourceObject(rawValue: "organization.external_storage.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -30,16 +26,13 @@ public struct ExternalStorageDeletedResourceObject: RawRepresentable, Hashable, 
 public struct ExternalStorageOrder: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let asc = ExternalStorageOrder(rawValue: "asc")
     public static let desc = ExternalStorageOrder(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -52,15 +45,12 @@ public struct ExternalStorageOrder: RawRepresentable, Hashable, Codable, Sendabl
 public struct ExternalStorageListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = ExternalStorageListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,24 +6,12 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension SpendLimitsMethods {
-    /// Retrieves the hard spend limit configured for the organization. Use this operation to check the limit amount,
-    /// currency, evaluation interval, and enforcement state.
+extension SpendLimitsMethods {
+    /// Retrieves the hard spend limit configured for the organization. Use this operation to check the limit amount, currency, evaluation interval, and enforcement state.
     ///
     /// Get the organization's hard spend limit.
-    static func retrieveSpendLimitsOrganization(
-        config: ClientConfig,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationSpendLimitResource {
-        try await (sdkRequest(
-            "GET",
-            "/organization/spend_limit",
-            config: config,
-            decoder: .json,
-            operationId: "retrieveSpendLimitsOrganization",
-            options: requestOptions,
-            errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+    public static func retrieveSpendLimitsOrganization(config: ClientConfig, requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendLimitResource {
+        return try (await sdkRequest("GET", "/organization/spend_limit", config: config, decoder: .json, operationId: "retrieveSpendLimitsOrganization", options: requestOptions, errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
     }
 
     /// Create or replace the organization's hard spend limit.
@@ -34,49 +22,18 @@ public extension SpendLimitsMethods {
     ///   supported.
     /// - interval: The time interval for evaluating spend against the threshold.
     ///   Currently, only `month` is supported.
-    static func updateSpendLimitsOrganization(
-        config: ClientConfig,
-        thresholdAmount: Int,
-        currency: UpdateOrganizationSpendLimitBodyCurrency,
-        interval: UpdateOrganizationSpendLimitBodyInterval,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationSpendLimitResource {
+    public static func updateSpendLimitsOrganization(config: ClientConfig, thresholdAmount: Int, currency: UpdateOrganizationSpendLimitBodyCurrency, interval: UpdateOrganizationSpendLimitBodyInterval, requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendLimitResource {
         try validateRange("threshold_amount", Double(thresholdAmount), min: 1)
 
-        let requestBody = UpdateSpendLimitsOrganizationRequestBody(
-            thresholdAmount: thresholdAmount,
-            currency: currency,
-            interval: interval
-        )
+        let requestBody = UpdateSpendLimitsOrganizationRequestBody(thresholdAmount: thresholdAmount, currency: currency, interval: interval)
 
-        return try await (sdkRequest(
-            "POST",
-            "/organization/spend_limit",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateSpendLimitsOrganization",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/organization/spend_limit", config: config, body: requestBody, decoder: .json, operationId: "updateSpendLimitsOrganization", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self])).data
     }
 
-    /// Deletes the hard spend limit configured for the organization. Use this operation when the organization should no
-    /// longer enforce its configured spending threshold. The response confirms whether the limit was deleted.
+    /// Deletes the hard spend limit configured for the organization. Use this operation when the organization should no longer enforce its configured spending threshold. The response confirms whether the limit was deleted.
     ///
     /// Delete the organization's hard spend limit.
-    static func deleteSpendLimitsOrganization(
-        config: ClientConfig,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationSpendLimitDeletedResource {
-        try await (sdkRequest(
-            "DELETE",
-            "/organization/spend_limit",
-            config: config,
-            decoder: .json,
-            operationId: "deleteSpendLimitsOrganization",
-            options: requestOptions,
-            errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+    public static func deleteSpendLimitsOrganization(config: ClientConfig, requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendLimitDeletedResource {
+        return try (await sdkRequest("DELETE", "/organization/spend_limit", config: config, decoder: .json, operationId: "deleteSpendLimitsOrganization", options: requestOptions, errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
     }
 }

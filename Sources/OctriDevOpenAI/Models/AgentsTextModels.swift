@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsText domain models
+// AgentsText domain models
 public indirect enum TextFormatParam {
     case textFormatParamText(TextFormatParamText)
     case textFormatParamJsonSchema(TextFormatParamJsonSchema)
@@ -12,6 +12,7 @@ public indirect enum TextFormatParam {
 }
 
 extension TextFormatParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension TextFormatParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension TextFormatParam: Codable {
 extension TextFormatParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "text": try .textFormatParamText(TextFormatParamText(from: decoder))
-        case "json_schema": try .textFormatParamJsonSchema(TextFormatParamJsonSchema(from: decoder))
-        default: nil
+        case "text": return .textFormatParamText(try TextFormatParamText(from: decoder))
+        case "json_schema": return .textFormatParamJsonSchema(try TextFormatParamJsonSchema(from: decoder))
+        default: return nil
         }
     }
 }
@@ -65,6 +62,7 @@ public indirect enum TextFormatResource {
 }
 
 extension TextFormatResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -72,16 +70,12 @@ extension TextFormatResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -92,9 +86,9 @@ extension TextFormatResource: Codable {
 extension TextFormatResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "text": try .textFormatResourceText(TextFormatResourceText(from: decoder))
-        case "json_schema": try .textFormatResourceJsonSchema(TextFormatResourceJsonSchema(from: decoder))
-        default: nil
+        case "text": return .textFormatResourceText(try TextFormatResourceText(from: decoder))
+        case "json_schema": return .textFormatResourceJsonSchema(try TextFormatResourceJsonSchema(from: decoder))
+        default: return nil
         }
     }
 }
@@ -119,30 +113,24 @@ public struct TextFormatResourceText: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension TextFormatResourceText {
-    init(from decoder: Decoder) throws {
+extension TextFormatResourceText {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, TextFormatResourceTextType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, TextFormatResourceTextType.allCases.map(\.rawValue))
     }
 }
 
-public extension TextFormatResourceText {
-    init(type: TextFormatResourceTextType) throws {
+extension TextFormatResourceText {
+    public init(type: TextFormatResourceTextType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, TextFormatResourceTextType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, TextFormatResourceTextType.allCases.map(\.rawValue))
     }
 }
 
@@ -155,30 +143,24 @@ public struct TextFormatParamText: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension TextFormatParamText {
-    init(from decoder: Decoder) throws {
+extension TextFormatParamText {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, TextFormatParamTextType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, TextFormatParamTextType.allCases.map(\.rawValue))
     }
 }
 
-public extension TextFormatParamText {
-    init(type: TextFormatParamTextType) throws {
+extension TextFormatParamText {
+    public init(type: TextFormatParamTextType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, TextFormatParamTextType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, TextFormatParamTextType.allCases.map(\.rawValue))
     }
 }
 
@@ -194,38 +176,28 @@ public struct TextFormatParamJsonSchema: Codable {
         case schema
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension TextFormatParamJsonSchema {
-    init(from decoder: Decoder) throws {
+extension TextFormatParamJsonSchema {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.schema) else {
-            throw SdkValidationError(
-                field: "schema",
-                code: "required",
-                message: "Validation failed for 'schema': value is required"
-            )
+            throw SdkValidationError(field: "schema", code: "required", message: "Validation failed for 'schema': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        schema = try container.sdkDecodeRequired(.schema)
-        try sdkValidateRawEnum("type", type, TextFormatParamJsonSchemaType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.schema = try container.sdkDecodeRequired(.schema)
+            try sdkValidateRawEnum("type", self.type, TextFormatParamJsonSchemaType.allCases.map(\.rawValue))
     }
 }
 
-public extension TextFormatParamJsonSchema {
-    init(type: TextFormatParamJsonSchemaType, schema: [String: JSONValue]) throws {
+extension TextFormatParamJsonSchema {
+    public init(type: TextFormatParamJsonSchemaType, schema: [String: JSONValue]) throws {
         (self.type, self.schema) = (type, schema)
-        try sdkValidateRawEnum("type", self.type, TextFormatParamJsonSchemaType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, TextFormatParamJsonSchemaType.allCases.map(\.rawValue))
     }
 }
 
@@ -241,35 +213,25 @@ public struct TextResource: Codable {
         case verbosity
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension TextResource {
-    init(from decoder: Decoder) throws {
+extension TextResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.format) else {
-            throw SdkValidationError(
-                field: "format",
-                code: "required",
-                message: "Validation failed for 'format': value is required"
-            )
+            throw SdkValidationError(field: "format", code: "required", message: "Validation failed for 'format': value is required")
         }
         guard container.contains(.verbosity) else {
-            throw SdkValidationError(
-                field: "verbosity",
-                code: "required",
-                message: "Validation failed for 'verbosity': value is required"
-            )
+            throw SdkValidationError(field: "verbosity", code: "required", message: "Validation failed for 'verbosity': value is required")
         }
-        format = try container.sdkDecodeRequired(.format)
-        verbosity = try container.sdkDecodeRequired(.verbosity)
+        self.format = try container.sdkDecodeRequired(.format)
+        self.verbosity = try container.sdkDecodeRequired(.verbosity)
     }
 }
 
-public extension TextResource {
-    init(format: TextFormatResource, verbosity: VerbosityResource) {
+extension TextResource {
+    public init(format: TextFormatResource, verbosity: VerbosityResource) {
         (self.format, self.verbosity) = (format, verbosity)
     }
 }
@@ -287,20 +249,20 @@ public struct TextParam: Codable {
     }
 
     init() {
-        (format, verbosity) = (nil, nil)
+        (self.format, self.verbosity) = (nil, nil)
     }
 }
 
-public extension TextParam {
-    init(from decoder: Decoder) throws {
+extension TextParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        format = try container.sdkDecodeIfPresent(.format)
-        verbosity = try container.sdkDecodeIfPresent(.verbosity)
+        self.format = try container.sdkDecodeIfPresent(.format)
+        self.verbosity = try container.sdkDecodeIfPresent(.verbosity)
     }
 }
 
-public extension TextParam {
-    init(format: TextFormatParam? = nil, verbosity: VerbosityParam? = nil) {
+extension TextParam {
+    public init(format: TextFormatParam? = nil, verbosity: VerbosityParam? = nil) {
         self.init()
         (self.format, self.verbosity) = (format, verbosity)
     }
@@ -318,38 +280,28 @@ public struct TextFormatResourceJsonSchema: Codable {
         case schema
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension TextFormatResourceJsonSchema {
-    init(from decoder: Decoder) throws {
+extension TextFormatResourceJsonSchema {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.schema) else {
-            throw SdkValidationError(
-                field: "schema",
-                code: "required",
-                message: "Validation failed for 'schema': value is required"
-            )
+            throw SdkValidationError(field: "schema", code: "required", message: "Validation failed for 'schema': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        schema = try container.sdkDecodeRequired(.schema)
-        try sdkValidateRawEnum("type", type, TextFormatResourceJsonSchemaType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.schema = try container.sdkDecodeRequired(.schema)
+            try sdkValidateRawEnum("type", self.type, TextFormatResourceJsonSchemaType.allCases.map(\.rawValue))
     }
 }
 
-public extension TextFormatResourceJsonSchema {
-    init(type: TextFormatResourceJsonSchemaType, schema: [String: JSONValue]) throws {
+extension TextFormatResourceJsonSchema {
+    public init(type: TextFormatResourceJsonSchemaType, schema: [String: JSONValue]) throws {
         (self.type, self.schema) = (type, schema)
-        try sdkValidateRawEnum("type", self.type, TextFormatResourceJsonSchemaType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, TextFormatResourceJsonSchemaType.allCases.map(\.rawValue))
     }
 }
 

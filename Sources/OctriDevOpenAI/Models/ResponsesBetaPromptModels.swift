@@ -3,19 +3,18 @@
 
 import Foundation
 
-/// ResponsesBetaPrompt domain models
+// ResponsesBetaPrompt domain models
 public indirect enum BetaPromptCacheDiagnostics {
     case betaPromptCacheMissDiagnosticsBody(BetaPromptCacheMissDiagnosticsBody)
     case betaPromptCacheHitDiagnosticsBody(BetaPromptCacheHitDiagnosticsBody)
-    case betaPromptCacheComparisonResponseNotFoundDiagnosticsBody(
-        BetaPromptCacheComparisonResponseNotFoundDiagnosticsBody
-    )
+    case betaPromptCacheComparisonResponseNotFoundDiagnosticsBody(BetaPromptCacheComparisonResponseNotFoundDiagnosticsBody)
     case betaPromptCacheUnavailableDiagnosticsBody(BetaPromptCacheUnavailableDiagnosticsBody)
     /// A member whose `type` names no branch this SDK knows, kept as received.
     case unknown(tag: String, raw: JSONValue)
 }
 
 extension BetaPromptCacheDiagnostics: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -23,16 +22,12 @@ extension BetaPromptCacheDiagnostics: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -43,16 +38,14 @@ extension BetaPromptCacheDiagnostics: Codable {
 extension BetaPromptCacheDiagnostics {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "cache_miss": try .betaPromptCacheMissDiagnosticsBody(BetaPromptCacheMissDiagnosticsBody(from: decoder))
-        case "cache_hit": try .betaPromptCacheHitDiagnosticsBody(BetaPromptCacheHitDiagnosticsBody(from: decoder))
+        case "cache_miss": return .betaPromptCacheMissDiagnosticsBody(try BetaPromptCacheMissDiagnosticsBody(from: decoder))
+        case "cache_hit": return .betaPromptCacheHitDiagnosticsBody(try BetaPromptCacheHitDiagnosticsBody(from: decoder))
         case "comparison_response_not_found":
-            try .betaPromptCacheComparisonResponseNotFoundDiagnosticsBody(
-                BetaPromptCacheComparisonResponseNotFoundDiagnosticsBody(from: decoder)
-            )
-        case "unavailable": try .betaPromptCacheUnavailableDiagnosticsBody(
-                BetaPromptCacheUnavailableDiagnosticsBody(from: decoder)
-            )
-        default: nil
+        return .betaPromptCacheComparisonResponseNotFoundDiagnosticsBody(
+            try BetaPromptCacheComparisonResponseNotFoundDiagnosticsBody(from: decoder)
+        )
+        case "unavailable": return .betaPromptCacheUnavailableDiagnosticsBody(try BetaPromptCacheUnavailableDiagnosticsBody(from: decoder))
+        default: return nil
         }
     }
 }
@@ -63,8 +56,7 @@ extension BetaPromptCacheDiagnostics {
         switch self {
         case let .betaPromptCacheMissDiagnosticsBody(value): try container.encode(value); return true
         case let .betaPromptCacheHitDiagnosticsBody(value): try container.encode(value); return true
-        case let .betaPromptCacheComparisonResponseNotFoundDiagnosticsBody(value): try container
-            .encode(value); return true
+        case let .betaPromptCacheComparisonResponseNotFoundDiagnosticsBody(value): try container.encode(value); return true
         case let .betaPromptCacheUnavailableDiagnosticsBody(value): try container.encode(value); return true
         default: return false
         }
@@ -81,27 +73,21 @@ public struct BetaPromptCacheBreakpointParam: Codable {
         case mode
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaPromptCacheBreakpointParam {
-    init(from decoder: Decoder) throws {
+extension BetaPromptCacheBreakpointParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.mode) else {
-            throw SdkValidationError(
-                field: "mode",
-                code: "required",
-                message: "Validation failed for 'mode': value is required"
-            )
+            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
         }
-        mode = try container.sdkDecodeRequired(.mode)
+        self.mode = try container.sdkDecodeRequired(.mode)
     }
 }
 
-public extension BetaPromptCacheBreakpointParam {
-    init(mode: BetaPromptCacheBreakpointParamMode) {
+extension BetaPromptCacheBreakpointParam {
+    public init(mode: BetaPromptCacheBreakpointParamMode) {
         self.mode = mode
     }
 }
@@ -115,30 +101,24 @@ public struct BetaPromptCacheHitDiagnosticsBody: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaPromptCacheHitDiagnosticsBody {
-    init(from decoder: Decoder) throws {
+extension BetaPromptCacheHitDiagnosticsBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, BetaPromptCacheHitDiagnosticsBodyType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, BetaPromptCacheHitDiagnosticsBodyType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaPromptCacheHitDiagnosticsBody {
-    init(type: BetaPromptCacheHitDiagnosticsBodyType) throws {
+extension BetaPromptCacheHitDiagnosticsBody {
+    public init(type: BetaPromptCacheHitDiagnosticsBodyType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, BetaPromptCacheHitDiagnosticsBodyType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaPromptCacheHitDiagnosticsBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -151,34 +131,24 @@ public struct BetaPromptCacheUnavailableDiagnosticsBody: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaPromptCacheUnavailableDiagnosticsBody {
-    init(from decoder: Decoder) throws {
+extension BetaPromptCacheUnavailableDiagnosticsBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, BetaPromptCacheUnavailableDiagnosticsBodyType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, BetaPromptCacheUnavailableDiagnosticsBodyType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaPromptCacheUnavailableDiagnosticsBody {
-    init(type: BetaPromptCacheUnavailableDiagnosticsBodyType) throws {
+extension BetaPromptCacheUnavailableDiagnosticsBody {
+    public init(type: BetaPromptCacheUnavailableDiagnosticsBodyType) throws {
         self.type = type
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            BetaPromptCacheUnavailableDiagnosticsBodyType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, BetaPromptCacheUnavailableDiagnosticsBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -198,29 +168,23 @@ public struct BetaPrompt: Codable {
         case variables
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaPrompt {
-    init(from decoder: Decoder) throws {
+extension BetaPrompt {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        version = try container.sdkDecodeIfPresent(.version)
-        variables = try container.sdkDecodeIfPresent(.variables)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.version = try container.sdkDecodeIfPresent(.version)
+        self.variables = try container.sdkDecodeIfPresent(.variables)
     }
 }
 
-public extension BetaPrompt {
-    init(id: String, version: String? = nil, variables: BetaResponsePromptVariables? = nil) {
+extension BetaPrompt {
+    public init(id: String, version: String? = nil, variables: BetaResponsePromptVariables? = nil) {
         (self.id, self.version) = (id, version)
         self.variables = variables
     }
@@ -241,36 +205,26 @@ public struct BetaPromptCacheOptions: Codable {
         case comparisonResponseId = "comparison_response_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaPromptCacheOptions {
-    init(from decoder: Decoder) throws {
+extension BetaPromptCacheOptions {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.ttl) else {
-            throw SdkValidationError(
-                field: "ttl",
-                code: "required",
-                message: "Validation failed for 'ttl': value is required"
-            )
+            throw SdkValidationError(field: "ttl", code: "required", message: "Validation failed for 'ttl': value is required")
         }
         guard container.contains(.mode) else {
-            throw SdkValidationError(
-                field: "mode",
-                code: "required",
-                message: "Validation failed for 'mode': value is required"
-            )
+            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
         }
-        ttl = try container.sdkDecodeRequired(.ttl)
-        mode = try container.sdkDecodeRequired(.mode)
-        comparisonResponseId = try container.sdkDecodeIfPresent(.comparisonResponseId)
+        self.ttl = try container.sdkDecodeRequired(.ttl)
+        self.mode = try container.sdkDecodeRequired(.mode)
+        self.comparisonResponseId = try container.sdkDecodeIfPresent(.comparisonResponseId)
     }
 }
 
-public extension BetaPromptCacheOptions {
-    init(ttl: BetaPromptCacheTTLEnum, mode: BetaPromptCacheModeEnum, comparisonResponseId: String? = nil) {
+extension BetaPromptCacheOptions {
+    public init(ttl: BetaPromptCacheTTLEnum, mode: BetaPromptCacheModeEnum, comparisonResponseId: String? = nil) {
         (self.ttl, self.mode) = (ttl, mode)
         self.comparisonResponseId = comparisonResponseId
     }
@@ -298,20 +252,20 @@ public struct BetaPromptCacheOptionsParam: Codable {
     }
 
     init() {
-        (ttl, mode) = (nil, nil)
+        (self.ttl, self.mode) = (nil, nil)
     }
 }
 
-public extension BetaPromptCacheOptionsParam {
-    init(from decoder: Decoder) throws {
+extension BetaPromptCacheOptionsParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        ttl = try container.sdkDecodeIfPresent(.ttl)
-        mode = try container.sdkDecodeIfPresent(.mode)
+        self.ttl = try container.sdkDecodeIfPresent(.ttl)
+        self.mode = try container.sdkDecodeIfPresent(.mode)
     }
 }
 
-public extension BetaPromptCacheOptionsParam {
-    init(ttl: BetaPromptCacheTTLEnum? = nil, mode: BetaPromptCacheModeEnum? = nil) {
+extension BetaPromptCacheOptionsParam {
+    public init(ttl: BetaPromptCacheTTLEnum? = nil, mode: BetaPromptCacheModeEnum? = nil) {
         self.init()
         (self.ttl, self.mode) = (ttl, mode)
     }
@@ -327,27 +281,21 @@ public struct BetaPromptCacheBreakpointConfig: Codable {
         case mode
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaPromptCacheBreakpointConfig {
-    init(from decoder: Decoder) throws {
+extension BetaPromptCacheBreakpointConfig {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.mode) else {
-            throw SdkValidationError(
-                field: "mode",
-                code: "required",
-                message: "Validation failed for 'mode': value is required"
-            )
+            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
         }
-        mode = try container.sdkDecodeRequired(.mode)
+        self.mode = try container.sdkDecodeRequired(.mode)
     }
 }
 
-public extension BetaPromptCacheBreakpointConfig {
-    init(mode: BetaPromptCacheBreakpointConfigMode) {
+extension BetaPromptCacheBreakpointConfig {
+    public init(mode: BetaPromptCacheBreakpointConfigMode) {
         self.mode = mode
     }
 }
@@ -370,54 +318,35 @@ public struct BetaPromptCacheMissDiagnosticsBody: Codable {
         case comparisonReusableTokens = "comparison_reusable_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaPromptCacheMissDiagnosticsBody {
-    init(from decoder: Decoder) throws {
+extension BetaPromptCacheMissDiagnosticsBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.reason) else {
-            throw SdkValidationError(
-                field: "reason",
-                code: "required",
-                message: "Validation failed for 'reason': value is required"
-            )
+            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
         }
         guard container.contains(.cacheMissedTokens) else {
-            throw SdkValidationError(
-                field: "cache_missed_tokens",
-                code: "required",
-                message: "Validation failed for 'cache_missed_tokens': value is required"
-            )
+            throw SdkValidationError(field: "cache_missed_tokens", code: "required", message: "Validation failed for 'cache_missed_tokens': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        reason = try container.sdkDecodeRequired(.reason)
-        cacheMissedTokens = try container.sdkDecodeRequired(.cacheMissedTokens)
-        comparisonReusableTokens = try container.sdkDecodeIfPresent(.comparisonReusableTokens)
-        try sdkValidateRawEnum("type", type, BetaPromptCacheMissDiagnosticsBodyType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.reason = try container.sdkDecodeRequired(.reason)
+        self.cacheMissedTokens = try container.sdkDecodeRequired(.cacheMissedTokens)
+        self.comparisonReusableTokens = try container.sdkDecodeIfPresent(.comparisonReusableTokens)
+            try sdkValidateRawEnum("type", self.type, BetaPromptCacheMissDiagnosticsBodyType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaPromptCacheMissDiagnosticsBody {
-    init(
-        type: BetaPromptCacheMissDiagnosticsBodyType,
-        reason: BetaCacheMissReasonTypeEnum,
-        cacheMissedTokens: Int,
-        comparisonReusableTokens: Int? = nil
-    ) throws {
+extension BetaPromptCacheMissDiagnosticsBody {
+    public init(type: BetaPromptCacheMissDiagnosticsBodyType, reason: BetaCacheMissReasonTypeEnum, cacheMissedTokens: Int, comparisonReusableTokens: Int? = nil) throws {
         (self.type, self.reason) = (type, reason)
         self.cacheMissedTokens = cacheMissedTokens
         self.comparisonReusableTokens = comparisonReusableTokens
-        try sdkValidateRawEnum("type", self.type, BetaPromptCacheMissDiagnosticsBodyType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaPromptCacheMissDiagnosticsBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -430,38 +359,24 @@ public struct BetaPromptCacheComparisonResponseNotFoundDiagnosticsBody: Codable 
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaPromptCacheComparisonResponseNotFoundDiagnosticsBody {
-    init(from decoder: Decoder) throws {
+extension BetaPromptCacheComparisonResponseNotFoundDiagnosticsBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            BetaPromptCacheComparisonResponseNotFoundDiagnosticsBodyType.allCases.map(\.rawValue)
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, BetaPromptCacheComparisonResponseNotFoundDiagnosticsBodyType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaPromptCacheComparisonResponseNotFoundDiagnosticsBody {
-    init(type: BetaPromptCacheComparisonResponseNotFoundDiagnosticsBodyType) throws {
+extension BetaPromptCacheComparisonResponseNotFoundDiagnosticsBody {
+    public init(type: BetaPromptCacheComparisonResponseNotFoundDiagnosticsBodyType) throws {
         self.type = type
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            BetaPromptCacheComparisonResponseNotFoundDiagnosticsBodyType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, BetaPromptCacheComparisonResponseNotFoundDiagnosticsBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -505,16 +420,13 @@ public enum BetaPromptCacheMissDiagnosticsBodyType: String, CaseIterable, Codabl
 public struct BetaPromptCacheRetentionEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inMemory = BetaPromptCacheRetentionEnum(rawValue: "in_memory")
     public static let value24h = BetaPromptCacheRetentionEnum(rawValue: "24h")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -545,15 +457,12 @@ public enum BetaPromptCacheHitDiagnosticsBodyType: String, CaseIterable, Codable
 public struct BetaPromptCacheTTLEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let value30m = BetaPromptCacheTTLEnum(rawValue: "30m")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -566,16 +475,13 @@ public struct BetaPromptCacheTTLEnum: RawRepresentable, Hashable, Codable, Senda
 public struct BetaPromptCacheModeEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let implicit = BetaPromptCacheModeEnum(rawValue: "implicit")
     public static let explicit = BetaPromptCacheModeEnum(rawValue: "explicit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -588,15 +494,12 @@ public struct BetaPromptCacheModeEnum: RawRepresentable, Hashable, Codable, Send
 public struct BetaPromptCacheBreakpointParamMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let explicit = BetaPromptCacheBreakpointParamMode(rawValue: "explicit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

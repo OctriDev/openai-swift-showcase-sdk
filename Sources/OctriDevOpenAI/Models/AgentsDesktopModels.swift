@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsDesktop domain models
+// AgentsDesktop domain models
 /// Desktop configuration for an OpenAI-hosted environment.
 public struct DesktopParam: Codable {
     /// Whether to provision the desktop and its browser proxy.
@@ -13,27 +13,21 @@ public struct DesktopParam: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DesktopParam {
-    init(from decoder: Decoder) throws {
+extension DesktopParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(
-                field: "enabled",
-                code: "required",
-                message: "Validation failed for 'enabled': value is required"
-            )
+            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
         }
-        enabled = try container.sdkDecodeRequired(.enabled)
+        self.enabled = try container.sdkDecodeRequired(.enabled)
     }
 }
 
-public extension DesktopParam {
-    init(enabled: Bool) {
+extension DesktopParam {
+    public init(enabled: Bool) {
         self.enabled = enabled
     }
 }
@@ -47,27 +41,21 @@ public struct DesktopResource: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DesktopResource {
-    init(from decoder: Decoder) throws {
+extension DesktopResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(
-                field: "enabled",
-                code: "required",
-                message: "Validation failed for 'enabled': value is required"
-            )
+            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
         }
-        enabled = try container.sdkDecodeRequired(.enabled)
+        self.enabled = try container.sdkDecodeRequired(.enabled)
     }
 }
 
-public extension DesktopResource {
-    init(enabled: Bool) {
+extension DesktopResource {
+    public init(enabled: Bool) {
         self.enabled = enabled
     }
 }

@@ -3,36 +3,29 @@
 
 import Foundation
 
-/// ResponsesInput domain models
+// ResponsesInput domain models
 public indirect enum InputParam {
     case stringValue(String)
     case inputItemList([InputItem])
 }
 
 extension InputParam: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for InputParam")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension InputParam {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode([InputItem].self) {
-            return .inputItemList(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode([InputItem].self) { return .inputItemList(value) }
         return nil
     }
 }
@@ -56,30 +49,30 @@ public struct InputMessageResourceVariant1: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InputMessageResourceVariant1 {
-    init(from decoder: Decoder) throws {
+extension InputMessageResourceVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension InputMessageResourceVariant1 {
-    init(id: String) {
+extension InputMessageResourceVariant1 {
+    public init(id: String) {
         self.id = id
     }
 }
+
+
+
+
+
+
 
 /// Typed representation of the `InputMessageResource` API schema.
 public struct InputMessageResource: Codable {
@@ -103,62 +96,38 @@ public struct InputMessageResource: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InputMessageResource {
-    init(from decoder: Decoder) throws {
+extension InputMessageResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        id = try container.sdkDecodeRequired(.id)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("type", type, InputMessageType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("type", self.type, InputMessageType.allCases.map(\.rawValue))
     }
 }
 
-public extension InputMessageResource {
-    init(
-        type: InputMessageType,
-        role: InputMessageRole,
-        content: InputMessageContentList,
-        id: String,
-        status: InputMessageStatus? = nil
-    ) throws {
+extension InputMessageResource {
+    public init(type: InputMessageType, role: InputMessageRole, content: InputMessageContentList, id: String, status: InputMessageStatus? = nil) throws {
         (self.type, self.role) = (type, role)
         (self.content, self.id) = (content, id)
         self.status = status
-        try sdkValidateRawEnum("type", self.type, InputMessageType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, InputMessageType.allCases.map(\.rawValue))
     }
 }

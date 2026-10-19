@@ -3,96 +3,44 @@
 
 import Foundation
 
-/// Misc domain models
-public extension UrlCitationParam {
-    init(from decoder: Decoder) throws {
+// Misc domain models
+extension UrlCitationParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.startIndex) else {
-            throw SdkValidationError(
-                field: "start_index",
-                code: "required",
-                message: "Validation failed for 'start_index': value is required"
-            )
+            throw SdkValidationError(field: "start_index", code: "required", message: "Validation failed for 'start_index': value is required")
         }
         guard container.contains(.endIndex) else {
-            throw SdkValidationError(
-                field: "end_index",
-                code: "required",
-                message: "Validation failed for 'end_index': value is required"
-            )
+            throw SdkValidationError(field: "end_index", code: "required", message: "Validation failed for 'end_index': value is required")
         }
         guard container.contains(.url) else {
-            throw SdkValidationError(
-                field: "url",
-                code: "required",
-                message: "Validation failed for 'url': value is required"
-            )
+            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
         }
         guard container.contains(.title) else {
-            throw SdkValidationError(
-                field: "title",
-                code: "required",
-                message: "Validation failed for 'title': value is required"
-            )
+            throw SdkValidationError(field: "title", code: "required", message: "Validation failed for 'title': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        startIndex = try container.sdkDecodeRequired(.startIndex)
-        endIndex = try container.sdkDecodeRequired(.endIndex)
-        url = try container.sdkDecodeRequired(.url)
-        title = try container.sdkDecodeRequired(.title)
-        try validateRange(
-            "start_index",
-            Double(startIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "end_index",
-            Double(endIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try sdkValidateUri("url", url)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.startIndex = try container.sdkDecodeRequired(.startIndex)
+        self.endIndex = try container.sdkDecodeRequired(.endIndex)
+        self.url = try container.sdkDecodeRequired(.url)
+        self.title = try container.sdkDecodeRequired(.title)
+            try validateRange("start_index", Double(self.startIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("end_index", Double(self.endIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try sdkValidateUri("url", self.url)
     }
 }
 
-public extension UrlCitationParam {
-    init(type: UrlCitationParamType, startIndex: Int, endIndex: Int, url: String, title: String) throws {
+extension UrlCitationParam {
+    public init(type: UrlCitationParamType, startIndex: Int, endIndex: Int, url: String, title: String) throws {
         (self.type, self.startIndex) = (type, startIndex)
         (self.endIndex, self.url) = (endIndex, url)
         self.title = title
-        try validateRange(
-            "start_index",
-            Double(self.startIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "end_index",
-            Double(self.endIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try sdkValidateUri("url", self.url)
+            try validateRange("start_index", Double(self.startIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("end_index", Double(self.endIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try sdkValidateUri("url", self.url)
     }
 }
 
@@ -122,113 +70,48 @@ public struct ContainerFileCitationParam: Codable {
         case filename
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ContainerFileCitationParam {
-    init(from decoder: Decoder) throws {
+extension ContainerFileCitationParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.startIndex) else {
-            throw SdkValidationError(
-                field: "start_index",
-                code: "required",
-                message: "Validation failed for 'start_index': value is required"
-            )
+            throw SdkValidationError(field: "start_index", code: "required", message: "Validation failed for 'start_index': value is required")
         }
         guard container.contains(.endIndex) else {
-            throw SdkValidationError(
-                field: "end_index",
-                code: "required",
-                message: "Validation failed for 'end_index': value is required"
-            )
+            throw SdkValidationError(field: "end_index", code: "required", message: "Validation failed for 'end_index': value is required")
         }
         guard container.contains(.containerId) else {
-            throw SdkValidationError(
-                field: "container_id",
-                code: "required",
-                message: "Validation failed for 'container_id': value is required"
-            )
+            throw SdkValidationError(field: "container_id", code: "required", message: "Validation failed for 'container_id': value is required")
         }
         guard container.contains(.fileId) else {
-            throw SdkValidationError(
-                field: "file_id",
-                code: "required",
-                message: "Validation failed for 'file_id': value is required"
-            )
+            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
         }
         guard container.contains(.filename) else {
-            throw SdkValidationError(
-                field: "filename",
-                code: "required",
-                message: "Validation failed for 'filename': value is required"
-            )
+            throw SdkValidationError(field: "filename", code: "required", message: "Validation failed for 'filename': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        startIndex = try container.sdkDecodeRequired(.startIndex)
-        endIndex = try container.sdkDecodeRequired(.endIndex)
-        containerId = try container.sdkDecodeRequired(.containerId)
-        fileId = try container.sdkDecodeRequired(.fileId)
-        filename = try container.sdkDecodeRequired(.filename)
-        try validateRange(
-            "start_index",
-            Double(startIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "end_index",
-            Double(endIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.startIndex = try container.sdkDecodeRequired(.startIndex)
+        self.endIndex = try container.sdkDecodeRequired(.endIndex)
+        self.containerId = try container.sdkDecodeRequired(.containerId)
+        self.fileId = try container.sdkDecodeRequired(.fileId)
+        self.filename = try container.sdkDecodeRequired(.filename)
+            try validateRange("start_index", Double(self.startIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("end_index", Double(self.endIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension ContainerFileCitationParam {
-    init(
-        type: ContainerFileCitationParamType,
-        startIndex: Int,
-        endIndex: Int,
-        containerId: String,
-        fileId: String,
-        filename: String
-    ) throws {
+extension ContainerFileCitationParam {
+    public init(type: ContainerFileCitationParamType, startIndex: Int, endIndex: Int, containerId: String, fileId: String, filename: String) throws {
         (self.type, self.startIndex) = (type, startIndex)
         (self.endIndex, self.containerId) = (endIndex, containerId)
         (self.fileId, self.filename) = (fileId, filename)
-        try validateRange(
-            "start_index",
-            Double(self.startIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "end_index",
-            Double(self.endIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("start_index", Double(self.startIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("end_index", Double(self.endIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -236,15 +119,12 @@ public extension ContainerFileCitationParam {
 public struct UrlCitationParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let urlCitation = UrlCitationParamType(rawValue: "url_citation")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -257,15 +137,12 @@ public struct UrlCitationParamType: RawRepresentable, Hashable, Codable, Sendabl
 public struct TranscriptionChunkingStrategyVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = TranscriptionChunkingStrategyVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -278,15 +155,12 @@ public struct TranscriptionChunkingStrategyVariant0: RawRepresentable, Hashable,
 public struct ContainerFileCitationParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let containerFileCitation = ContainerFileCitationParamType(rawValue: "container_file_citation")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -299,15 +173,12 @@ public struct ContainerFileCitationParamType: RawRepresentable, Hashable, Codabl
 public struct FileCitationParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let fileCitation = FileCitationParamType(rawValue: "file_citation")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -320,15 +191,12 @@ public struct FileCitationParamType: RawRepresentable, Hashable, Codable, Sendab
 public struct OutputAudioType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let outputAudio = OutputAudioType(rawValue: "output_audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

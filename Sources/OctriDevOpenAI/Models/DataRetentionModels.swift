@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// DataRetention domain models
+// DataRetention domain models
 /// Parameters for updating organization data retention controls.
 public struct UpdateOrganizationDataRetentionBody: Codable {
     /// The desired organization data retention type.
@@ -13,27 +13,21 @@ public struct UpdateOrganizationDataRetentionBody: Codable {
         case retentionType = "retention_type"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateOrganizationDataRetentionBody {
-    init(from decoder: Decoder) throws {
+extension UpdateOrganizationDataRetentionBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.retentionType) else {
-            throw SdkValidationError(
-                field: "retention_type",
-                code: "required",
-                message: "Validation failed for 'retention_type': value is required"
-            )
+            throw SdkValidationError(field: "retention_type", code: "required", message: "Validation failed for 'retention_type': value is required")
         }
-        retentionType = try container.sdkDecodeRequired(.retentionType)
+        self.retentionType = try container.sdkDecodeRequired(.retentionType)
     }
 }
 
-public extension UpdateOrganizationDataRetentionBody {
-    init(retentionType: UpdateOrganizationDataRetentionBodyRetentionType) {
+extension UpdateOrganizationDataRetentionBody {
+    public init(retentionType: UpdateOrganizationDataRetentionBodyRetentionType) {
         self.retentionType = retentionType
     }
 }
@@ -47,30 +41,28 @@ public struct UpdateProjectDataRetentionBody: Codable {
         case retentionType = "retention_type"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateProjectDataRetentionBody {
-    init(from decoder: Decoder) throws {
+extension UpdateProjectDataRetentionBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.retentionType) else {
-            throw SdkValidationError(
-                field: "retention_type",
-                code: "required",
-                message: "Validation failed for 'retention_type': value is required"
-            )
+            throw SdkValidationError(field: "retention_type", code: "required", message: "Validation failed for 'retention_type': value is required")
         }
-        retentionType = try container.sdkDecodeRequired(.retentionType)
+        self.retentionType = try container.sdkDecodeRequired(.retentionType)
     }
 }
 
-public extension UpdateProjectDataRetentionBody {
-    init(retentionType: UpdateProjectDataRetentionBodyRetentionType) {
+extension UpdateProjectDataRetentionBody {
+    public init(retentionType: UpdateProjectDataRetentionBodyRetentionType) {
         self.retentionType = retentionType
     }
 }
+
+
+
+
 
 /// Represents a project's data retention control setting.
 public struct ProjectDataRetention: Codable {
@@ -84,38 +76,32 @@ public struct ProjectDataRetention: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectDataRetention {
-    init(from decoder: Decoder) throws {
+extension ProjectDataRetention {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        type = try container.sdkDecodeRequired(.type)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.type = try container.sdkDecodeRequired(.type)
     }
 }
 
-public extension ProjectDataRetention {
-    init(object: ProjectDataRetentionObject, type: ProjectDataRetentionType) {
+extension ProjectDataRetention {
+    public init(object: ProjectDataRetentionObject, type: ProjectDataRetentionType) {
         (self.object, self.type) = (object, type)
     }
 }
+
+
+
+
 
 /// Represents the organization's data retention control setting.
 public struct OrganizationDataRetention: Codable {
@@ -129,35 +115,25 @@ public struct OrganizationDataRetention: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationDataRetention {
-    init(from decoder: Decoder) throws {
+extension OrganizationDataRetention {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        type = try container.sdkDecodeRequired(.type)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.type = try container.sdkDecodeRequired(.type)
     }
 }
 
-public extension OrganizationDataRetention {
-    init(object: OrganizationDataRetentionObject, type: OrganizationDataRetentionType) {
+extension OrganizationDataRetention {
+    public init(object: OrganizationDataRetentionObject, type: OrganizationDataRetentionType) {
         (self.object, self.type) = (object, type)
     }
 }
@@ -166,15 +142,12 @@ public extension OrganizationDataRetention {
 public struct ProjectDataRetentionObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let projectDataRetention = ProjectDataRetentionObject(rawValue: "project.data_retention")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -187,20 +160,15 @@ public struct ProjectDataRetentionObject: RawRepresentable, Hashable, Codable, S
 public struct OrganizationDataRetentionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let zeroDataRetention = OrganizationDataRetentionType(rawValue: "zero_data_retention")
     public static let modifiedAbuseMonitoring = OrganizationDataRetentionType(rawValue: "modified_abuse_monitoring")
-    public static let enhancedZeroDataRetention =
-        OrganizationDataRetentionType(rawValue: "enhanced_zero_data_retention")
-    public static let enhancedModifiedAbuseMonitoring =
-        OrganizationDataRetentionType(rawValue: "enhanced_modified_abuse_monitoring")
+    public static let enhancedZeroDataRetention = OrganizationDataRetentionType(rawValue: "enhanced_zero_data_retention")
+    public static let enhancedModifiedAbuseMonitoring = OrganizationDataRetentionType(rawValue: "enhanced_modified_abuse_monitoring")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -213,16 +181,12 @@ public struct OrganizationDataRetentionType: RawRepresentable, Hashable, Codable
 public struct OrganizationDataRetentionObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let organizationDataRetention =
-        OrganizationDataRetentionObject(rawValue: "organization.data_retention")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let organizationDataRetention = OrganizationDataRetentionObject(rawValue: "organization.data_retention")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -232,28 +196,20 @@ public struct OrganizationDataRetentionObject: RawRepresentable, Hashable, Codab
 }
 
 /// The desired project data retention type.
-public struct UpdateProjectDataRetentionBodyRetentionType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct UpdateProjectDataRetentionBodyRetentionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let organizationDefault =
-        UpdateProjectDataRetentionBodyRetentionType(rawValue: "organization_default")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let organizationDefault = UpdateProjectDataRetentionBodyRetentionType(rawValue: "organization_default")
     public static let none = UpdateProjectDataRetentionBodyRetentionType(rawValue: "none")
     public static let zeroDataRetention = UpdateProjectDataRetentionBodyRetentionType(rawValue: "zero_data_retention")
-    public static let modifiedAbuseMonitoring =
-        UpdateProjectDataRetentionBodyRetentionType(rawValue: "modified_abuse_monitoring")
-    public static let enhancedZeroDataRetention =
-        UpdateProjectDataRetentionBodyRetentionType(rawValue: "enhanced_zero_data_retention")
-    public static let enhancedModifiedAbuseMonitoring =
-        UpdateProjectDataRetentionBodyRetentionType(rawValue: "enhanced_modified_abuse_monitoring")
+    public static let modifiedAbuseMonitoring = UpdateProjectDataRetentionBodyRetentionType(rawValue: "modified_abuse_monitoring")
+    public static let enhancedZeroDataRetention = UpdateProjectDataRetentionBodyRetentionType(rawValue: "enhanced_zero_data_retention")
+    public static let enhancedModifiedAbuseMonitoring = UpdateProjectDataRetentionBodyRetentionType(rawValue: "enhanced_modified_abuse_monitoring")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -266,21 +222,17 @@ public struct UpdateProjectDataRetentionBodyRetentionType: RawRepresentable, Has
 public struct ProjectDataRetentionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let organizationDefault = ProjectDataRetentionType(rawValue: "organization_default")
     public static let none = ProjectDataRetentionType(rawValue: "none")
     public static let zeroDataRetention = ProjectDataRetentionType(rawValue: "zero_data_retention")
     public static let modifiedAbuseMonitoring = ProjectDataRetentionType(rawValue: "modified_abuse_monitoring")
     public static let enhancedZeroDataRetention = ProjectDataRetentionType(rawValue: "enhanced_zero_data_retention")
-    public static let enhancedModifiedAbuseMonitoring =
-        ProjectDataRetentionType(rawValue: "enhanced_modified_abuse_monitoring")
+    public static let enhancedModifiedAbuseMonitoring = ProjectDataRetentionType(rawValue: "enhanced_modified_abuse_monitoring")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -290,26 +242,18 @@ public struct ProjectDataRetentionType: RawRepresentable, Hashable, Codable, Sen
 }
 
 /// The desired organization data retention type.
-public struct UpdateOrganizationDataRetentionBodyRetentionType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct UpdateOrganizationDataRetentionBodyRetentionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let zeroDataRetention =
-        UpdateOrganizationDataRetentionBodyRetentionType(rawValue: "zero_data_retention")
-    public static let modifiedAbuseMonitoring =
-        UpdateOrganizationDataRetentionBodyRetentionType(rawValue: "modified_abuse_monitoring")
-    public static let enhancedZeroDataRetention =
-        UpdateOrganizationDataRetentionBodyRetentionType(rawValue: "enhanced_zero_data_retention")
-    public static let enhancedModifiedAbuseMonitoring =
-        UpdateOrganizationDataRetentionBodyRetentionType(rawValue: "enhanced_modified_abuse_monitoring")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let zeroDataRetention = UpdateOrganizationDataRetentionBodyRetentionType(rawValue: "zero_data_retention")
+    public static let modifiedAbuseMonitoring = UpdateOrganizationDataRetentionBodyRetentionType(rawValue: "modified_abuse_monitoring")
+    public static let enhancedZeroDataRetention = UpdateOrganizationDataRetentionBodyRetentionType(rawValue: "enhanced_zero_data_retention")
+    public static let enhancedModifiedAbuseMonitoring = UpdateOrganizationDataRetentionBodyRetentionType(rawValue: "enhanced_modified_abuse_monitoring")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

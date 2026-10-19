@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension FineTuningMethods {
-    /// Lists checkpoints produced by a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to
-    /// continue from a checkpoint on a previous page. Set `limit` to control the number of checkpoints retrieved.
+extension FineTuningMethods {
+    /// Lists checkpoints produced by a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to continue from a checkpoint on a previous page. Set `limit` to control the number of checkpoints retrieved.
     ///
     /// List checkpoints for a fine-tuning job.
     ///
@@ -17,30 +16,14 @@ public extension FineTuningMethods {
     /// - after: Identifier for the last checkpoint ID from the previous pagination
     ///   request.
     /// - limit: Number of checkpoints to retrieve.
-    static func listFineTuningJobCheckpoints(
-        config: ClientConfig,
-        fineTuningJobId: String,
-        after: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListFineTuningJobCheckpointsResponse {
-        try await (sdkRequest(
-            "GET",
-            ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId)), "/checkpoints"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("limit", value: limit),
-            ],
-            decoder: .json,
-            operationId: "listFineTuningJobCheckpoints",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func listFineTuningJobCheckpoints(config: ClientConfig, fineTuningJobId: String, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ListFineTuningJobCheckpointsResponse {
+        return try (await sdkRequest("GET", ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId)), "/checkpoints"].joined(), config: config, query: [
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("limit", value: limit),
+        ], decoder: .json, operationId: "listFineTuningJobCheckpoints", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists checkpoints produced by a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to
-    /// continue from a checkpoint on a previous page. Set `limit` to control the number of checkpoints retrieved.
+    /// Lists checkpoints produced by a fine-tuning job. Use `fine_tuning_job_id` to select the job, and use `after` to continue from a checkpoint on a previous page. Set `limit` to control the number of checkpoints retrieved.
     ///
     /// List checkpoints for a fine-tuning job.
     ///
@@ -49,41 +32,18 @@ public extension FineTuningMethods {
     /// - after: Identifier for the last checkpoint ID from the previous pagination
     ///   request.
     /// - limit: Number of checkpoints to retrieve.
-    static func listFineTuningJobCheckpointsPaginated(
-        config: ClientConfig,
-        fineTuningJobId: String,
-        after: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<FineTuningJobCheckpoint, Swift.Error> {
-        AsyncThrowingStream<FineTuningJobCheckpoint, Swift.Error> { (continuation: AsyncThrowingStream<
-            FineTuningJobCheckpoint,
-            Swift.Error
-        >.Continuation) in
+    public static func listFineTuningJobCheckpointsPaginated(config: ClientConfig, fineTuningJobId: String, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<FineTuningJobCheckpoint, Swift.Error> {
+        return AsyncThrowingStream<FineTuningJobCheckpoint, Swift.Error> { (continuation: AsyncThrowingStream<FineTuningJobCheckpoint, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listFineTuningJobCheckpoints(
-                            config: config,
-                            fineTuningJobId: fineTuningJobId,
-                            after: pageCursor,
-                            limit: limit,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listFineTuningJobCheckpoints(config: config, fineTuningJobId: fineTuningJobId, after: pageCursor, limit: limit, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -96,50 +56,25 @@ public extension FineTuningMethods {
         }
     }
 
-    struct ListFineTuningJobCheckpointsPage {
+    public struct ListFineTuningJobCheckpointsPage {
         public let data: ListFineTuningJobCheckpointsResponse
         public let items: [FineTuningJobCheckpoint]
         public let hasMore: Bool
     }
 
-    static func listFineTuningJobCheckpointsPages(
-        config: ClientConfig,
-        fineTuningJobId: String,
-        after: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListFineTuningJobCheckpointsPage, Swift.Error> {
-        AsyncThrowingStream<ListFineTuningJobCheckpointsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListFineTuningJobCheckpointsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listFineTuningJobCheckpointsPages(config: ClientConfig, fineTuningJobId: String, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListFineTuningJobCheckpointsPage, Swift.Error> {
+        return AsyncThrowingStream<ListFineTuningJobCheckpointsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListFineTuningJobCheckpointsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listFineTuningJobCheckpoints(
-                            config: config,
-                            fineTuningJobId: fineTuningJobId,
-                            after: pageCursor,
-                            limit: limit,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listFineTuningJobCheckpoints(config: config, fineTuningJobId: fineTuningJobId, after: pageCursor, limit: limit, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListFineTuningJobCheckpointsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        pageContinuation.yield(ListFineTuningJobCheckpointsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

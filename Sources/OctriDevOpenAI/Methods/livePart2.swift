@@ -6,52 +6,20 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension LiveMethods {
-    /// Create a Live WebRTC session or place an outbound SIP call. Start with the [Live prompting
-    /// guide](https://developers.openai.com/api/docs/guides/live-prompting) for session configuration and [Telephony
-    /// and SIP](https://developers.openai.com/api/docs/guides/voice-sip?api=live#place-an-outbound-call) for trunk
-    /// setup and call monitoring. Set transport.type to `webrtc` and supply an SDP offer, or set it to `sip` and supply
-    /// an E.164 destination and trunk credentials. Outbound SIP calling must be enabled for your organization. Ringing
-    /// is limited to 3 minutes and connected calls to 2 hours; these limits are not configurable in the request.
-    /// Returns `201 Created` after session initialization. WebRTC responses include an SDP answer. SIP responses do not
-    /// wait for the callee to answer. Attach a sideband connection using session.id to monitor SIP call progress. Each
-    /// SIP request creates a new call. If a request times out or the connection fails, retry with caution: the original
-    /// request may have succeeded, and a retry can place another call.
+extension LiveMethods {
+    /// Create a Live WebRTC session or place an outbound SIP call. Start with the [Live prompting guide](https://developers.openai.com/api/docs/guides/live-prompting) for session configuration and [Telephony and SIP](https://developers.openai.com/api/docs/guides/voice-sip?api=live#place-an-outbound-call) for trunk setup and call monitoring. Set transport.type to `webrtc` and supply an SDP offer, or set it to `sip` and supply an E.164 destination and trunk credentials. Outbound SIP calling must be enabled for your organization. Ringing is limited to 3 minutes and connected calls to 2 hours; these limits are not configurable in the request. Returns `201 Created` after session initialization. WebRTC responses include an SDP answer. SIP responses do not wait for the callee to answer. Attach a sideband connection using session.id to monitor SIP call progress. Each SIP request creates a new call. If a request times out or the connection fails, retry with caution: the original request may have succeeded, and a retry can place another call.
     ///
     /// - Parameters:
     /// - session: Startup configuration for the Live session.
     /// - transport: WebRTC transport with an SDP offer, or SIP transport with a
     ///   destination and per-call trunk credentials.
-    static func createLive(
-        config: ClientConfig,
-        session: LiveMediaSessionCreateParams,
-        transport: LiveSessionCreateRequestTransportRequest,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> LiveSessionCreateResponse {
+    public static func createLive(config: ClientConfig, session: LiveMediaSessionCreateParams, transport: LiveSessionCreateRequestTransportRequest, requestOptions: RequestOptions? = nil) async throws -> LiveSessionCreateResponse {
         let requestBody = CreateLiveRequestBody(session: session, transport: transport)
 
-        return try await (sdkRequest(
-            "POST",
-            "/live/sessions",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createLive",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "413": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "503": ErrorResponse.self,
-                "504": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/live/sessions", config: config, body: requestBody, decoder: .json, operationId: "createLive", options: requestOptions, errors: ["400": ErrorResponse.self, "413": ErrorResponse.self, "429": ErrorResponse.self, "503": ErrorResponse.self, "504": ErrorResponse.self])).data
     }
 
-    /// Accept an incoming SIP call. Supply session with type live, the model, and startup configuration. Before
-    /// accepting calls, follow the [Live prompting guide](https://developers.openai.com/api/docs/guides/live-prompting)
-    /// to write frontend conversation instructions and a separate backend prompt. SIP media format is negotiated; omit
-    /// audio.format.
+    /// Accept an incoming SIP call. Supply session with type live, the model, and startup configuration. Before accepting calls, follow the [Live prompting guide](https://developers.openai.com/api/docs/guides/live-prompting) to write frontend conversation instructions and a separate backend prompt. SIP media format is negotiated; omit audio.format.
     ///
     /// - Parameters:
     /// - sessionId: Opaque Live session identifier from the creation response or
@@ -59,29 +27,9 @@ public extension LiveMethods {
     ///   prefix.
     /// - session: Model and startup configuration for the Live session that answers
     ///   the incoming SIP call.
-    static func acceptLiveSession(
-        config: ClientConfig,
-        sessionId: String,
-        session: LiveCallAcceptSession,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func acceptLiveSession(config: ClientConfig, sessionId: String, session: LiveCallAcceptSession, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         let requestBody = AcceptLiveSessionRequestBody(session: session)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/live/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/accept"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .empty,
-            operationId: "acceptLiveSession",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "409": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "503": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/live/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/accept"].joined(), config: config, body: requestBody, decoder: .empty, operationId: "acceptLiveSession", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self, "503": ErrorResponse.self])).data
     }
 }

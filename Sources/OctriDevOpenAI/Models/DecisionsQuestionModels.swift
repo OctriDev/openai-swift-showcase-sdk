@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// DecisionsQuestion domain models
+// DecisionsQuestion domain models
 public indirect enum QuestionParam {
     case questionParamPredicate(QuestionParamPredicate)
     case questionParamChoice(QuestionParamChoice)
@@ -13,6 +13,7 @@ public indirect enum QuestionParam {
 }
 
 extension QuestionParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension QuestionParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,10 +37,10 @@ extension QuestionParam: Codable {
 extension QuestionParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "predicate": try .questionParamPredicate(QuestionParamPredicate(from: decoder))
-        case "choice": try .questionParamChoice(QuestionParamChoice(from: decoder))
-        case "score": try .questionParamScore(QuestionParamScore(from: decoder))
-        default: nil
+        case "predicate": return .questionParamPredicate(try QuestionParamPredicate(from: decoder))
+        case "choice": return .questionParamChoice(try QuestionParamChoice(from: decoder))
+        case "score": return .questionParamScore(try QuestionParamScore(from: decoder))
+        default: return nil
         }
     }
 }
@@ -75,47 +72,37 @@ public struct QuestionParamPredicate: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension QuestionParamPredicate {
-    init(from decoder: Decoder) throws {
+extension QuestionParamPredicate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.instructions) else {
-            throw SdkValidationError(
-                field: "instructions",
-                code: "required",
-                message: "Validation failed for 'instructions': value is required"
-            )
+            throw SdkValidationError(field: "instructions", code: "required", message: "Validation failed for 'instructions': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        instructions = try container.sdkDecodeRequired(.instructions)
-        name = try container.sdkDecodeIfPresent(.name)
-        try sdkValidateRawEnum("type", type, QuestionParamPredicateType.allCases.map(\.rawValue))
-        try validateLength("instructions", instructions, min: 0, max: 1_048_576)
-        if let value = name {
-            try validateLength("name", value, min: 0, max: 1_048_576)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.instructions = try container.sdkDecodeRequired(.instructions)
+        self.name = try container.sdkDecodeIfPresent(.name)
+            try sdkValidateRawEnum("type", self.type, QuestionParamPredicateType.allCases.map(\.rawValue))
+            try validateLength("instructions", self.instructions, min: 0, max: 1048576)
+        if let value = self.name {
+            try validateLength("name", value, min: 0, max: 1048576)
         }
     }
 }
 
-public extension QuestionParamPredicate {
-    init(type: QuestionParamPredicateType, instructions: String, name: String? = nil) throws {
+extension QuestionParamPredicate {
+    public init(type: QuestionParamPredicateType, instructions: String, name: String? = nil) throws {
         (self.type, self.instructions) = (type, instructions)
         self.name = name
-        try sdkValidateRawEnum("type", self.type, QuestionParamPredicateType.allCases.map(\.rawValue))
-        try validateLength("instructions", self.instructions, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, QuestionParamPredicateType.allCases.map(\.rawValue))
+            try validateLength("instructions", self.instructions, min: 0, max: 1048576)
         if let value = self.name {
-            try validateLength("name", value, min: 0, max: 1_048_576)
+            try validateLength("name", value, min: 0, max: 1048576)
         }
     }
 }
@@ -138,57 +125,43 @@ public struct QuestionParamScore: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension QuestionParamScore {
-    init(from decoder: Decoder) throws {
+extension QuestionParamScore {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.instructions) else {
-            throw SdkValidationError(
-                field: "instructions",
-                code: "required",
-                message: "Validation failed for 'instructions': value is required"
-            )
+            throw SdkValidationError(field: "instructions", code: "required", message: "Validation failed for 'instructions': value is required")
         }
         guard container.contains(.levels) else {
-            throw SdkValidationError(
-                field: "levels",
-                code: "required",
-                message: "Validation failed for 'levels': value is required"
-            )
+            throw SdkValidationError(field: "levels", code: "required", message: "Validation failed for 'levels': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        instructions = try container.sdkDecodeRequired(.instructions)
-        levels = try container.sdkDecodeRequired(.levels)
-        name = try container.sdkDecodeIfPresent(.name)
-        try sdkValidateRawEnum("type", type, QuestionParamScoreType.allCases.map(\.rawValue))
-        try validateLength("instructions", instructions, min: 0, max: 1_048_576)
-        try validateItems("levels", levels, min: 2, max: 10)
-        if let value = name {
-            try validateLength("name", value, min: 0, max: 1_048_576)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.instructions = try container.sdkDecodeRequired(.instructions)
+        self.levels = try container.sdkDecodeRequired(.levels)
+        self.name = try container.sdkDecodeIfPresent(.name)
+            try sdkValidateRawEnum("type", self.type, QuestionParamScoreType.allCases.map(\.rawValue))
+            try validateLength("instructions", self.instructions, min: 0, max: 1048576)
+            try validateItems("levels", self.levels, min: 2, max: 10)
+        if let value = self.name {
+            try validateLength("name", value, min: 0, max: 1048576)
         }
     }
 }
 
-public extension QuestionParamScore {
-    init(type: QuestionParamScoreType, instructions: String, levels: [ScoreLevelParam], name: String? = nil) throws {
+extension QuestionParamScore {
+    public init(type: QuestionParamScoreType, instructions: String, levels: [ScoreLevelParam], name: String? = nil) throws {
         (self.type, self.instructions) = (type, instructions)
         (self.levels, self.name) = (levels, name)
-        try sdkValidateRawEnum("type", self.type, QuestionParamScoreType.allCases.map(\.rawValue))
-        try validateLength("instructions", self.instructions, min: 0, max: 1_048_576)
-        try validateItems("levels", self.levels, min: 2, max: 10)
+            try sdkValidateRawEnum("type", self.type, QuestionParamScoreType.allCases.map(\.rawValue))
+            try validateLength("instructions", self.instructions, min: 0, max: 1048576)
+            try validateItems("levels", self.levels, min: 2, max: 10)
         if let value = self.name {
-            try validateLength("name", value, min: 0, max: 1_048_576)
+            try validateLength("name", value, min: 0, max: 1048576)
         }
     }
 }
@@ -211,62 +184,43 @@ public struct QuestionParamChoice: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension QuestionParamChoice {
-    init(from decoder: Decoder) throws {
+extension QuestionParamChoice {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.instructions) else {
-            throw SdkValidationError(
-                field: "instructions",
-                code: "required",
-                message: "Validation failed for 'instructions': value is required"
-            )
+            throw SdkValidationError(field: "instructions", code: "required", message: "Validation failed for 'instructions': value is required")
         }
         guard container.contains(.choices) else {
-            throw SdkValidationError(
-                field: "choices",
-                code: "required",
-                message: "Validation failed for 'choices': value is required"
-            )
+            throw SdkValidationError(field: "choices", code: "required", message: "Validation failed for 'choices': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        instructions = try container.sdkDecodeRequired(.instructions)
-        choices = try container.sdkDecodeRequired(.choices)
-        name = try container.sdkDecodeIfPresent(.name)
-        try sdkValidateRawEnum("type", type, QuestionParamChoiceType.allCases.map(\.rawValue))
-        try validateLength("instructions", instructions, min: 0, max: 1_048_576)
-        try validateItems("choices", choices, min: 2, max: 255)
-        if let value = name {
-            try validateLength("name", value, min: 0, max: 1_048_576)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.instructions = try container.sdkDecodeRequired(.instructions)
+        self.choices = try container.sdkDecodeRequired(.choices)
+        self.name = try container.sdkDecodeIfPresent(.name)
+            try sdkValidateRawEnum("type", self.type, QuestionParamChoiceType.allCases.map(\.rawValue))
+            try validateLength("instructions", self.instructions, min: 0, max: 1048576)
+            try validateItems("choices", self.choices, min: 2, max: 255)
+        if let value = self.name {
+            try validateLength("name", value, min: 0, max: 1048576)
         }
     }
 }
 
-public extension QuestionParamChoice {
-    init(
-        type: QuestionParamChoiceType,
-        instructions: String,
-        choices: [ChoiceOptionParam],
-        name: String? = nil
-    ) throws {
+extension QuestionParamChoice {
+    public init(type: QuestionParamChoiceType, instructions: String, choices: [ChoiceOptionParam], name: String? = nil) throws {
         (self.type, self.instructions) = (type, instructions)
         (self.choices, self.name) = (choices, name)
-        try sdkValidateRawEnum("type", self.type, QuestionParamChoiceType.allCases.map(\.rawValue))
-        try validateLength("instructions", self.instructions, min: 0, max: 1_048_576)
-        try validateItems("choices", self.choices, min: 2, max: 255)
+            try sdkValidateRawEnum("type", self.type, QuestionParamChoiceType.allCases.map(\.rawValue))
+            try validateLength("instructions", self.instructions, min: 0, max: 1048576)
+            try validateItems("choices", self.choices, min: 2, max: 255)
         if let value = self.name {
-            try validateLength("name", value, min: 0, max: 1_048_576)
+            try validateLength("name", value, min: 0, max: 1048576)
         }
     }
 }

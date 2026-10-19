@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AgentsMethods {
-    /// Lists items belonging to one turn of this subagent. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+extension AgentsMethods {
+    /// Lists items belonging to one turn of this subagent. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
     ///
     /// - Parameters:
     /// - sessionId: The ID of the session.
@@ -18,64 +17,29 @@ public extension AgentsMethods {
     ///   Defaults to 20.
     /// - order: The order in which resources are returned. Defaults to `desc`.
     /// - after: Return resources after this resource ID in the selected order.
-    static func listAgentSessionSubagentTurnItems(
-        config: ClientConfig,
-        sessionId: String,
-        subagentId: String,
-        turnId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SessionItemListResource {
-        try validateLength("session_id", sessionId, min: 0, max: 1_048_576)
+    public static func listAgentSessionSubagentTurnItems(config: ClientConfig, sessionId: String, subagentId: String, turnId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionItemListResource {
+        try validateLength("session_id", sessionId, min: 0, max: 1048576)
 
-        try validateLength("subagent_id", subagentId, min: 0, max: 1_048_576)
+        try validateLength("subagent_id", subagentId, min: 0, max: 1048576)
 
-        try validateLength("turn_id", turnId, min: 0, max: 1_048_576)
+        try validateLength("turn_id", turnId, min: 0, max: 1048576)
 
-        if let limit {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 1, max: 100)
         }
 
-        if let after {
-            try validateLength("after", after, min: 0, max: 1_048_576)
+        if let after = after {
+            try validateLength("after", after, min: 0, max: 1048576)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/agents/sessions/",
-                sdkEncodePathSegment(sdkWireString(sessionId)),
-                "/subagents/",
-                sdkEncodePathSegment(sdkWireString(subagentId)),
-                "/turns/",
-                sdkEncodePathSegment(sdkWireString(turnId)),
-                "/items",
-            ].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-                SdkQueryParameter("after", value: after),
-            ],
-            decoder: .json,
-            operationId: "listAgentSessionSubagentTurnItems",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse2.self,
-                "401": ErrorResponse2.self,
-                "403": ErrorResponse2.self,
-                "404": ErrorResponse2.self,
-                "409": ErrorResponse2.self,
-                "500": ErrorResponse2.self,
-                "503": ErrorResponse2.self,
-            ]
-        )).data
+        return try (await sdkRequest("GET", ["/agents/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/subagents/", sdkEncodePathSegment(sdkWireString(subagentId)), "/turns/", sdkEncodePathSegment(sdkWireString(turnId)), "/items"].joined(), config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("after", value: after),
+        ], decoder: .json, operationId: "listAgentSessionSubagentTurnItems", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
     }
 
-    /// Lists items belonging to one turn of this subagent. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    /// Lists items belonging to one turn of this subagent. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
     ///
     /// - Parameters:
     /// - sessionId: The ID of the session.
@@ -85,47 +49,18 @@ public extension AgentsMethods {
     ///   Defaults to 20.
     /// - order: The order in which resources are returned. Defaults to `desc`.
     /// - after: Return resources after this resource ID in the selected order.
-    static func listAgentSessionSubagentTurnItemsPaginated(
-        config: ClientConfig,
-        sessionId: String,
-        subagentId: String,
-        turnId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<SessionTurnItemResource, Swift.Error> {
-        AsyncThrowingStream<SessionTurnItemResource, Swift.Error> { (continuation: AsyncThrowingStream<
-            SessionTurnItemResource,
-            Swift.Error
-        >.Continuation) in
+    public static func listAgentSessionSubagentTurnItemsPaginated(config: ClientConfig, sessionId: String, subagentId: String, turnId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SessionTurnItemResource, Swift.Error> {
+        return AsyncThrowingStream<SessionTurnItemResource, Swift.Error> { (continuation: AsyncThrowingStream<SessionTurnItemResource, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAgentSessionSubagentTurnItems(
-                            config: config,
-                            sessionId: sessionId,
-                            subagentId: subagentId,
-                            turnId: turnId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listAgentSessionSubagentTurnItems(config: config, sessionId: sessionId, subagentId: subagentId, turnId: turnId, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -138,59 +73,25 @@ public extension AgentsMethods {
         }
     }
 
-    struct ListAgentSessionSubagentTurnItemsPage {
+    public struct ListAgentSessionSubagentTurnItemsPage {
         public let data: SessionItemListResource
         public let items: [SessionTurnItemResource]
         public let hasMore: Bool
     }
 
-    static func listAgentSessionSubagentTurnItemsPages(
-        config: ClientConfig,
-        sessionId: String,
-        subagentId: String,
-        turnId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListAgentSessionSubagentTurnItemsPage, Swift.Error> {
-        AsyncThrowingStream<
-            ListAgentSessionSubagentTurnItemsPage,
-            Swift.Error
-        > { (pageContinuation: AsyncThrowingStream<
-            ListAgentSessionSubagentTurnItemsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listAgentSessionSubagentTurnItemsPages(config: ClientConfig, sessionId: String, subagentId: String, turnId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListAgentSessionSubagentTurnItemsPage, Swift.Error> {
+        return AsyncThrowingStream<ListAgentSessionSubagentTurnItemsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListAgentSessionSubagentTurnItemsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAgentSessionSubagentTurnItems(
-                            config: config,
-                            sessionId: sessionId,
-                            subagentId: subagentId,
-                            turnId: turnId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listAgentSessionSubagentTurnItems(config: config, sessionId: sessionId, subagentId: subagentId, turnId: turnId, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListAgentSessionSubagentTurnItemsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        pageContinuation.yield(ListAgentSessionSubagentTurnItemsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

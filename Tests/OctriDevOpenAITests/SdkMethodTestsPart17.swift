@@ -39,12 +39,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listSessionArtifacts(
-                sessionId: decoded("\"session-1\""),
-                limit: decoded("20"),
-                order: decoded("\"desc\""),
-                after: decoded("\"after\""),
-                environmentId: decoded("\"environment-1\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            limit: decoded("20"),
+            order: decoded("\"desc\""),
+            after: decoded("\"after\""),
+            environmentId: decoded("\"environment-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -115,11 +115,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listSessionItems(
-                sessionId: decoded("\"session-1\""),
-                limit: decoded("20"),
-                order: decoded("\"desc\""),
-                after: decoded("\"after\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            limit: decoded("20"),
+            order: decoded("\"desc\""),
+            after: decoded("\"after\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -167,11 +167,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listSessions(
-                limit: decoded("20"),
-                order: decoded("\"desc\""),
-                after: decoded("\"after\""),
-                agentId: decoded("\"agent-1\"")
-            )
+            limit: decoded("20"),
+            order: decoded("\"desc\""),
+            after: decoded("\"after\""),
+            agentId: decoded("\"agent-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -220,12 +220,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listSessionSubagentItems(
-                sessionId: decoded("\"session-1\""),
-                subagentId: decoded("\"subagent-1\""),
-                limit: decoded("20"),
-                order: decoded("\"desc\""),
-                after: decoded("\"after\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            subagentId: decoded("\"subagent-1\""),
+            limit: decoded("20"),
+            order: decoded("\"desc\""),
+            after: decoded("\"after\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -273,11 +273,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listSessionSubagents(
-                sessionId: decoded("\"session-1\""),
-                limit: decoded("20"),
-                order: decoded("\"desc\""),
-                after: decoded("\"after\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            limit: decoded("20"),
+            order: decoded("\"desc\""),
+            after: decoded("\"after\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -293,8 +293,7 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testListAgentSessionSubagentTurnItemsListAgentSessionSubagentTurnItemsReachesMockAndDecodesResponse(
-    ) async throws {
+    func testListAgentSessionSubagentTurnItemsListAgentSessionSubagentTurnItemsReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -317,8 +316,7 @@ extension SdkMethodTests {
         )
     }
 
-    func testListAgentSessionSubagentTurnItemsListAgentSessionSubagentTurnItems400ReachesMockAndDecodesResponse(
-    ) async throws {
+    func testListAgentSessionSubagentTurnItemsListAgentSessionSubagentTurnItems400ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -329,13 +327,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listSessionSubagentTurnItems(
-                sessionId: decoded("\"session-1\""),
-                subagentId: decoded("\"subagent-1\""),
-                turnId: decoded("\"turn-1\""),
-                limit: decoded("20"),
-                order: decoded("\"desc\""),
-                after: decoded("\"after\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            subagentId: decoded("\"subagent-1\""),
+            turnId: decoded("\"turn-1\""),
+            limit: decoded("20"),
+            order: decoded("\"desc\""),
+            after: decoded("\"after\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -384,12 +382,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listSessionSubagentTurns(
-                sessionId: decoded("\"session-1\""),
-                subagentId: decoded("\"subagent-1\""),
-                limit: decoded("20"),
-                order: decoded("\"desc\""),
-                after: decoded("\"after\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            subagentId: decoded("\"subagent-1\""),
+            limit: decoded("20"),
+            order: decoded("\"desc\""),
+            after: decoded("\"after\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -437,11 +435,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listSessionTraces(
-                sessionId: decoded("\"session-1\""),
-                limit: decoded("20"),
-                order: decoded("\"desc\""),
-                after: decoded("\"after\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            limit: decoded("20"),
+            order: decoded("\"desc\""),
+            after: decoded("\"after\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -490,12 +488,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listSessionTurnItems(
-                sessionId: decoded("\"session-1\""),
-                turnId: decoded("\"turn-1\""),
-                limit: decoded("20"),
-                order: decoded("\"desc\""),
-                after: decoded("\"after\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            turnId: decoded("\"turn-1\""),
+            limit: decoded("20"),
+            order: decoded("\"desc\""),
+            after: decoded("\"after\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -543,11 +541,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listSessionTurns(
-                sessionId: decoded("\"session-1\""),
-                limit: decoded("20"),
-                order: decoded("\"desc\""),
-                after: decoded("\"after\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            limit: decoded("20"),
+            order: decoded("\"desc\""),
+            after: decoded("\"after\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

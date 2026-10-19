@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectUserRoleAssignmentsMethods {
+extension ProjectUserRoleAssignmentsMethods {
     /// Unassigns a project role from a user within a project.
     ///
     /// - Parameters:
@@ -14,33 +14,7 @@ public extension ProjectUserRoleAssignmentsMethods {
     /// - userId: The ID of the user whose project role assignment should be
     ///   removed.
     /// - roleId: The ID of the project role to remove from the user.
-    static func unassignProjectUserRole(
-        config: ClientConfig,
-        projectId: String,
-        userId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedRoleAssignmentResource {
-        try await (sdkRequest(
-            "DELETE",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/users/",
-                sdkEncodePathSegment(sdkWireString(userId)),
-                "/roles/",
-                sdkEncodePathSegment(sdkWireString(roleId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "unassignProjectUserRole",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func unassignProjectUserRole(config: ClientConfig, projectId: String, userId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedRoleAssignmentResource {
+        return try (await sdkRequest("DELETE", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/users/", sdkEncodePathSegment(sdkWireString(userId)), "/roles/", sdkEncodePathSegment(sdkWireString(roleId))].joined(), config: config, decoder: .json, operationId: "unassignProjectUserRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

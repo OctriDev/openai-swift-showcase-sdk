@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AudioMethods {
-    /// Lists voice consent recordings used to authorize creation of custom voices. Use the `after` cursor to continue
-    /// from a previous page and `limit` to control the number of records returned. The response includes pagination
-    /// cursors and indicates whether more records are available.
+extension AudioMethods {
+    /// Lists voice consent recordings used to authorize creation of custom voices. Use the `after` cursor to continue from a previous page and `limit` to control the number of records returned. The response includes pagination cursors and indicates whether more records are available.
     ///
     /// Returns a list of voice consent recordings.
     ///
@@ -20,30 +18,14 @@ public extension AudioMethods {
     ///   after=obj_foo in order to fetch the next page of the list.
     /// - limit: A limit on the number of objects to be returned. Limit can range
     ///   between 1 and 100, and the default is 20.
-    static func listVoiceConsents(
-        config: ClientConfig,
-        after: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VoiceConsentListResource {
-        try await (sdkRequest(
-            "GET",
-            "/audio/voice_consents",
-            config: config,
-            query: [
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("limit", value: limit),
-            ],
-            decoder: .json,
-            operationId: "listVoiceConsents",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+    public static func listVoiceConsents(config: ClientConfig, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> VoiceConsentListResource {
+        return try (await sdkRequest("GET", "/audio/voice_consents", config: config, query: [
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("limit", value: limit),
+        ], decoder: .json, operationId: "listVoiceConsents", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
     }
 
-    /// Lists voice consent recordings used to authorize creation of custom voices. Use the `after` cursor to continue
-    /// from a previous page and `limit` to control the number of records returned. The response includes pagination
-    /// cursors and indicates whether more records are available.
+    /// Lists voice consent recordings used to authorize creation of custom voices. Use the `after` cursor to continue from a previous page and `limit` to control the number of records returned. The response includes pagination cursors and indicates whether more records are available.
     ///
     /// Returns a list of voice consent recordings.
     ///
@@ -54,39 +36,18 @@ public extension AudioMethods {
     ///   after=obj_foo in order to fetch the next page of the list.
     /// - limit: A limit on the number of objects to be returned. Limit can range
     ///   between 1 and 100, and the default is 20.
-    static func listVoiceConsentsPaginated(
-        config: ClientConfig,
-        after: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<VoiceConsentResource, Swift.Error> {
-        AsyncThrowingStream<VoiceConsentResource, Swift.Error> { (continuation: AsyncThrowingStream<
-            VoiceConsentResource,
-            Swift.Error
-        >.Continuation) in
+    public static func listVoiceConsentsPaginated(config: ClientConfig, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<VoiceConsentResource, Swift.Error> {
+        return AsyncThrowingStream<VoiceConsentResource, Swift.Error> { (continuation: AsyncThrowingStream<VoiceConsentResource, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listVoiceConsents(
-                            config: config,
-                            after: pageCursor,
-                            limit: limit,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listVoiceConsents(config: config, after: pageCursor, limit: limit, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -99,48 +60,25 @@ public extension AudioMethods {
         }
     }
 
-    struct ListVoiceConsentsPage {
+    public struct ListVoiceConsentsPage {
         public let data: VoiceConsentListResource
         public let items: [VoiceConsentResource]
         public let hasMore: Bool
     }
 
-    static func listVoiceConsentsPages(
-        config: ClientConfig,
-        after: String? = nil,
-        limit: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListVoiceConsentsPage, Swift.Error> {
-        AsyncThrowingStream<ListVoiceConsentsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListVoiceConsentsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listVoiceConsentsPages(config: ClientConfig, after: String? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListVoiceConsentsPage, Swift.Error> {
+        return AsyncThrowingStream<ListVoiceConsentsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListVoiceConsentsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listVoiceConsents(
-                            config: config,
-                            after: pageCursor,
-                            limit: limit,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listVoiceConsents(config: config, after: pageCursor, limit: limit, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListVoiceConsentsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        pageContinuation.yield(ListVoiceConsentsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

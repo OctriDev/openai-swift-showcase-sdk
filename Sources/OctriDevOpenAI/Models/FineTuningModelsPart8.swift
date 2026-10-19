@@ -3,22 +3,17 @@
 
 import Foundation
 
-/// FineTuning domain models
+// FineTuning domain models
 /// The object type, which is always "checkpoint.permission".
-public struct DeleteFineTuningCheckpointPermissionResponseObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct DeleteFineTuningCheckpointPermissionResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let checkpointPermission =
-        DeleteFineTuningCheckpointPermissionResponseObject(rawValue: "checkpoint.permission")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let checkpointPermission = DeleteFineTuningCheckpointPermissionResponseObject(rawValue: "checkpoint.permission")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -28,19 +23,15 @@ public struct DeleteFineTuningCheckpointPermissionResponseObject: RawRepresentab
 }
 
 /// Optional enumerated value serialized in the `compute_multiplier` wire field.
-public struct FineTuneReinforcementHyperparametersComputeMultiplierVariant0: RawRepresentable, Hashable, Codable,
-    Sendable, SdkWireConvertible {
+public struct FineTuneReinforcementHyperparametersComputeMultiplierVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = FineTuneReinforcementHyperparametersComputeMultiplierVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -53,17 +44,14 @@ public struct FineTuneReinforcementHyperparametersComputeMultiplierVariant0: Raw
 public struct FineTuneMethodType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let supervised = FineTuneMethodType(rawValue: "supervised")
     public static let dpo = FineTuneMethodType(rawValue: "dpo")
     public static let reinforcement = FineTuneMethodType(rawValue: "reinforcement")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -73,19 +61,15 @@ public struct FineTuneMethodType: RawRepresentable, Hashable, Codable, Sendable,
 }
 
 /// Optional enumerated value serialized in the `batch_size` wire field.
-public struct FineTuningJobHyperparametersBatchSizeVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct FineTuningJobHyperparametersBatchSizeVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = FineTuningJobHyperparametersBatchSizeVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -95,19 +79,15 @@ public struct FineTuningJobHyperparametersBatchSizeVariant0: RawRepresentable, H
 }
 
 /// Optional enumerated value serialized in the `learning_rate_multiplier` wire field.
-public struct FineTuneDPOHyperparametersLearningRateMultiplierVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct FineTuneDPOHyperparametersLearningRateMultiplierVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = FineTuneDPOHyperparametersLearningRateMultiplierVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -117,19 +97,15 @@ public struct FineTuneDPOHyperparametersLearningRateMultiplierVariant0: RawRepre
 }
 
 /// Optional enumerated value serialized in the `learning_rate_multiplier` wire field.
-public struct FineTuningJobHyperparametersLearningRateMultiplierVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct FineTuningJobHyperparametersLearningRateMultiplierVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = FineTuningJobHyperparametersLearningRateMultiplierVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -139,19 +115,15 @@ public struct FineTuningJobHyperparametersLearningRateMultiplierVariant0: RawRep
 }
 
 /// Optional enumerated value serialized in the `batch_size` wire field.
-public struct FineTuneReinforcementHyperparametersBatchSizeVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct FineTuneReinforcementHyperparametersBatchSizeVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = FineTuneReinforcementHyperparametersBatchSizeVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -161,19 +133,15 @@ public struct FineTuneReinforcementHyperparametersBatchSizeVariant0: RawRepresen
 }
 
 /// Optional enumerated value serialized in the `n_epochs` wire field.
-public struct FineTuneSupervisedHyperparametersNEpochsVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct FineTuneSupervisedHyperparametersNEpochsVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = FineTuneSupervisedHyperparametersNEpochsVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -186,15 +154,12 @@ public struct FineTuneSupervisedHyperparametersNEpochsVariant0: RawRepresentable
 public struct FineTuningJobEventObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let fineTuningJobEvent = FineTuningJobEventObject(rawValue: "fine_tuning.job.event")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -204,19 +169,15 @@ public struct FineTuningJobEventObject: RawRepresentable, Hashable, Codable, Sen
 }
 
 /// Required enumerated value serialized in the `object` wire field.
-public struct ListFineTuningCheckpointPermissionResponseObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ListFineTuningCheckpointPermissionResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = ListFineTuningCheckpointPermissionResponseObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -226,19 +187,15 @@ public struct ListFineTuningCheckpointPermissionResponseObject: RawRepresentable
 }
 
 /// Optional enumerated value serialized in the `n_epochs` wire field.
-public struct FineTuneDPOHyperparametersNEpochsVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct FineTuneDPOHyperparametersNEpochsVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = FineTuneDPOHyperparametersNEpochsVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -248,19 +205,15 @@ public struct FineTuneDPOHyperparametersNEpochsVariant0: RawRepresentable, Hasha
 }
 
 /// Optional enumerated value serialized in the `n_epochs` wire field.
-public struct CreateFineTuningJobRequestHyperparametersNEpochsVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct CreateFineTuningJobRequestHyperparametersNEpochsVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = CreateFineTuningJobRequestHyperparametersNEpochsVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

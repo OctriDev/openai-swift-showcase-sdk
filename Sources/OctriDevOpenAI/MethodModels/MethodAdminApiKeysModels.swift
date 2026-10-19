@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-/// Canonical adminApiKeys operation model declarations
+// Canonical adminApiKeys operation model declarations
 public struct DeleteAdminApiKeysResponse: Codable {
     /// - Example: "key_abc"
     public var id: String
@@ -22,43 +22,29 @@ public struct DeleteAdminApiKeysResponse: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DeleteAdminApiKeysResponse {
-    init(from decoder: Decoder) throws {
+extension DeleteAdminApiKeysResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension DeleteAdminApiKeysResponse {
-    init(id: String, object: DeleteAdminApiKeysResponseObject, deleted: Bool) {
+extension DeleteAdminApiKeysResponse {
+    public init(id: String, object: DeleteAdminApiKeysResponseObject, deleted: Bool) {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
     }

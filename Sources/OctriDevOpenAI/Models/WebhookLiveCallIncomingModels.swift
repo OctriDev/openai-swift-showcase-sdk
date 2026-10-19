@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// WebhookLiveCallIncoming domain models
+// WebhookLiveCallIncoming domain models
 /// A header from the SIP Invite.
 public struct WebhookLiveCallIncomingDataSipHeadersItem: Codable {
     /// Name of the SIP Header.
@@ -16,38 +16,32 @@ public struct WebhookLiveCallIncomingDataSipHeadersItem: Codable {
         case value
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookLiveCallIncomingDataSipHeadersItem {
-    init(from decoder: Decoder) throws {
+extension WebhookLiveCallIncomingDataSipHeadersItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.value) else {
-            throw SdkValidationError(
-                field: "value",
-                code: "required",
-                message: "Validation failed for 'value': value is required"
-            )
+            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        value = try container.sdkDecodeRequired(.value)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.value = try container.sdkDecodeRequired(.value)
     }
 }
 
-public extension WebhookLiveCallIncomingDataSipHeadersItem {
-    init(name: String, value: String) {
+extension WebhookLiveCallIncomingDataSipHeadersItem {
+    public init(name: String, value: String) {
         (self.name, self.value) = (name, value)
     }
 }
+
+
+
+
 
 /// Deprecated: use `live.transport.incoming`. Retained for existing subscriptions during migration; new
 /// subscriptions to this event are not allowed. Sent when an incoming API SIP session is available for Live
@@ -73,58 +67,34 @@ public struct WebhookLiveCallIncoming: Codable {
         case object
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookLiveCallIncoming {
-    init(from decoder: Decoder) throws {
+extension WebhookLiveCallIncoming {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        id = try container.sdkDecodeRequired(.id)
-        data = try container.sdkDecodeRequired(.data)
-        type = try container.sdkDecodeRequired(.type)
-        object = try container.sdkDecodeIfPresent(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.object = try container.sdkDecodeIfPresent(.object)
     }
 }
 
-public extension WebhookLiveCallIncoming {
-    init(
-        createdAt: Int,
-        id: String,
-        data: WebhookLiveCallIncomingData,
-        type: WebhookLiveCallIncomingType,
-        object: WebhookLiveCallIncomingObject? = nil
-    ) {
+extension WebhookLiveCallIncoming {
+    public init(createdAt: Int, id: String, data: WebhookLiveCallIncomingData, type: WebhookLiveCallIncomingType, object: WebhookLiveCallIncomingObject? = nil) {
         (self.createdAt, self.id) = (createdAt, id)
         (self.data, self.type) = (data, type)
         self.object = object
@@ -150,36 +120,26 @@ public struct WebhookLiveCallIncomingData: Codable {
         case sipMediaSecurity = "sip_media_security"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookLiveCallIncomingData {
-    init(from decoder: Decoder) throws {
+extension WebhookLiveCallIncomingData {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.sessionId) else {
-            throw SdkValidationError(
-                field: "session_id",
-                code: "required",
-                message: "Validation failed for 'session_id': value is required"
-            )
+            throw SdkValidationError(field: "session_id", code: "required", message: "Validation failed for 'session_id': value is required")
         }
         guard container.contains(.sipHeaders) else {
-            throw SdkValidationError(
-                field: "sip_headers",
-                code: "required",
-                message: "Validation failed for 'sip_headers': value is required"
-            )
+            throw SdkValidationError(field: "sip_headers", code: "required", message: "Validation failed for 'sip_headers': value is required")
         }
-        sessionId = try container.sdkDecodeRequired(.sessionId)
-        sipHeaders = try container.sdkDecodeRequired(.sipHeaders)
-        sipMediaSecurity = try container.sdkDecodeIfPresent(.sipMediaSecurity)
+        self.sessionId = try container.sdkDecodeRequired(.sessionId)
+        self.sipHeaders = try container.sdkDecodeRequired(.sipHeaders)
+        self.sipMediaSecurity = try container.sdkDecodeIfPresent(.sipMediaSecurity)
     }
 }
 
-public extension WebhookLiveCallIncomingData {
-    init(sessionId: String, sipHeaders: [WebhookLiveCallIncomingDataSipHeadersItem], sipMediaSecurity: String? = nil) {
+extension WebhookLiveCallIncomingData {
+    public init(sessionId: String, sipHeaders: [WebhookLiveCallIncomingDataSipHeadersItem], sipMediaSecurity: String? = nil) {
         (self.sessionId, self.sipHeaders) = (sessionId, sipHeaders)
         self.sipMediaSecurity = sipMediaSecurity
     }
@@ -189,15 +149,12 @@ public extension WebhookLiveCallIncomingData {
 public struct WebhookLiveCallIncomingObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let event = WebhookLiveCallIncomingObject(rawValue: "event")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -210,15 +167,12 @@ public struct WebhookLiveCallIncomingObject: RawRepresentable, Hashable, Codable
 public struct WebhookLiveCallIncomingType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let liveCallIncoming = WebhookLiveCallIncomingType(rawValue: "live.call.incoming")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

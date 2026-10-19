@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ChatChatCompletionModeration domain models
+// ChatChatCompletionModeration domain models
 public indirect enum ChatCompletionModerationInput {
     case chatCompletionModerationResults(ChatCompletionModerationResults)
     case chatCompletionModerationError(ChatCompletionModerationError)
@@ -12,6 +12,7 @@ public indirect enum ChatCompletionModerationInput {
 }
 
 extension ChatCompletionModerationInput: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension ChatCompletionModerationInput: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension ChatCompletionModerationInput: Codable {
 extension ChatCompletionModerationInput {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "moderation_results": try .chatCompletionModerationResults(ChatCompletionModerationResults(from: decoder))
-        case "error": try .chatCompletionModerationError(ChatCompletionModerationError(from: decoder))
-        default: nil
+        case "moderation_results": return .chatCompletionModerationResults(try ChatCompletionModerationResults(from: decoder))
+        case "error": return .chatCompletionModerationError(try ChatCompletionModerationError(from: decoder))
+        default: return nil
         }
     }
 }
@@ -65,6 +62,7 @@ public indirect enum ChatCompletionModerationOutput {
 }
 
 extension ChatCompletionModerationOutput: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -72,16 +70,12 @@ extension ChatCompletionModerationOutput: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -92,9 +86,9 @@ extension ChatCompletionModerationOutput: Codable {
 extension ChatCompletionModerationOutput {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "moderation_results": try .chatCompletionModerationResults(ChatCompletionModerationResults(from: decoder))
-        case "error": try .chatCompletionModerationError(ChatCompletionModerationError(from: decoder))
-        default: nil
+        case "moderation_results": return .chatCompletionModerationResults(try ChatCompletionModerationResults(from: decoder))
+        case "error": return .chatCompletionModerationError(try ChatCompletionModerationError(from: decoder))
+        default: return nil
         }
     }
 }
@@ -125,47 +119,33 @@ public struct ChatCompletionModerationResults: Codable {
         case results
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatCompletionModerationResults {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionModerationResults {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
         guard container.contains(.results) else {
-            throw SdkValidationError(
-                field: "results",
-                code: "required",
-                message: "Validation failed for 'results': value is required"
-            )
+            throw SdkValidationError(field: "results", code: "required", message: "Validation failed for 'results': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        model = try container.sdkDecodeRequired(.model)
-        results = try container.sdkDecodeRequired(.results)
-        try sdkValidateRawEnum("type", type, ChatCompletionModerationResultsType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.model = try container.sdkDecodeRequired(.model)
+        self.results = try container.sdkDecodeRequired(.results)
+            try sdkValidateRawEnum("type", self.type, ChatCompletionModerationResultsType.allCases.map(\.rawValue))
     }
 }
 
-public extension ChatCompletionModerationResults {
-    init(type: ChatCompletionModerationResultsType, model: String, results: [ModerationResultBody]) throws {
+extension ChatCompletionModerationResults {
+    public init(type: ChatCompletionModerationResultsType, model: String, results: [ModerationResultBody]) throws {
         (self.type, self.model) = (type, model)
         self.results = results
-        try sdkValidateRawEnum("type", self.type, ChatCompletionModerationResultsType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ChatCompletionModerationResultsType.allCases.map(\.rawValue))
     }
 }
 
@@ -181,35 +161,25 @@ public struct ChatCompletionModeration: Codable {
         case output
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatCompletionModeration {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionModeration {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.input) else {
-            throw SdkValidationError(
-                field: "input",
-                code: "required",
-                message: "Validation failed for 'input': value is required"
-            )
+            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
-        input = try container.sdkDecodeRequired(.input)
-        output = try container.sdkDecodeRequired(.output)
+        self.input = try container.sdkDecodeRequired(.input)
+        self.output = try container.sdkDecodeRequired(.output)
     }
 }
 
-public extension ChatCompletionModeration {
-    init(input: ChatCompletionModerationInput, output: ChatCompletionModerationOutput) {
+extension ChatCompletionModeration {
+    public init(input: ChatCompletionModerationInput, output: ChatCompletionModerationOutput) {
         (self.input, self.output) = (input, output)
     }
 }
@@ -229,47 +199,33 @@ public struct ChatCompletionModerationError: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatCompletionModerationError {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionModerationError {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        try sdkValidateRawEnum("type", type, ChatCompletionModerationErrorType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+            try sdkValidateRawEnum("type", self.type, ChatCompletionModerationErrorType.allCases.map(\.rawValue))
     }
 }
 
-public extension ChatCompletionModerationError {
-    init(type: ChatCompletionModerationErrorType, code: String, message: String) throws {
+extension ChatCompletionModerationError {
+    public init(type: ChatCompletionModerationErrorType, code: String, message: String) throws {
         (self.type, self.code) = (type, code)
         self.message = message
-        try sdkValidateRawEnum("type", self.type, ChatCompletionModerationErrorType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ChatCompletionModerationErrorType.allCases.map(\.rawValue))
     }
 }
 

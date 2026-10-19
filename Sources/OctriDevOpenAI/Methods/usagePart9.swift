@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension UsageMethods {
-    struct UsageImagesOptions: Codable {
+extension UsageMethods {
+    public struct UsageImagesOptions: Codable {
         public var startTime: Int
         public var endTime: Int?
         public var bucketWidth: UsageImagesParameter?
@@ -26,9 +26,7 @@ public extension UsageMethods {
         }
     }
 
-    /// Lists image usage for the organization in time buckets. Use `start_time` to set the inclusive start of the
-    /// range, and filter by sources, image sizes, projects, users, API keys, or models as needed. Use the `next_page`
-    /// value to retrieve the next page of results.
+    /// Lists image usage for the organization in time buckets. Use `start_time` to set the inclusive start of the range, and filter by sources, image sizes, projects, users, API keys, or models as needed. Use the `next_page` value to retrieve the next page of results.
     ///
     /// Get images usage details for the organization.
     ///
@@ -55,39 +53,24 @@ public extension UsageMethods {
     ///   `bucket_width=1m`: default: 60, max: 1440
     /// - page: A cursor for use in pagination. Corresponding to the `next_page`
     ///   field from the previous response.
-    static func usageImages(
-        config: ClientConfig,
-        options: UsageImagesOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> UsageResponse {
-        try await (sdkRequest(
-            "GET",
-            "/organization/usage/images",
-            config: config,
-            query: [
-                SdkQueryParameter("start_time", value: options.startTime),
-                SdkQueryParameter("end_time", value: options.endTime),
-                SdkQueryParameter("bucket_width", value: options.bucketWidth),
-                SdkQueryParameter("sources", values: options.sources, style: "form", explode: true),
-                SdkQueryParameter("sizes", values: options.sizes, style: "form", explode: true),
-                SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
-                SdkQueryParameter("user_ids", values: options.userIds, style: "form", explode: true),
-                SdkQueryParameter("api_key_ids", values: options.apiKeyIds, style: "form", explode: true),
-                SdkQueryParameter("models", values: options.models, style: "form", explode: true),
-                SdkQueryParameter("group_by", values: options.groupBy, style: "form", explode: true),
-                SdkQueryParameter("limit", value: options.limit),
-                SdkQueryParameter("page", value: options.page),
-            ],
-            decoder: .json,
-            operationId: "usageImages",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func usageImages(config: ClientConfig, options: UsageImagesOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
+        return try (await sdkRequest("GET", "/organization/usage/images", config: config, query: [
+            SdkQueryParameter("start_time", value: options.startTime),
+            SdkQueryParameter("end_time", value: options.endTime),
+            SdkQueryParameter("bucket_width", value: options.bucketWidth),
+            SdkQueryParameter("sources", values: options.sources, style: "form", explode: true),
+            SdkQueryParameter("sizes", values: options.sizes, style: "form", explode: true),
+            SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
+            SdkQueryParameter("user_ids", values: options.userIds, style: "form", explode: true),
+            SdkQueryParameter("api_key_ids", values: options.apiKeyIds, style: "form", explode: true),
+            SdkQueryParameter("models", values: options.models, style: "form", explode: true),
+            SdkQueryParameter("group_by", values: options.groupBy, style: "form", explode: true),
+            SdkQueryParameter("limit", value: options.limit),
+            SdkQueryParameter("page", value: options.page),
+        ], decoder: .json, operationId: "usageImages", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists image usage for the organization in time buckets. Use `start_time` to set the inclusive start of the
-    /// range, and filter by sources, image sizes, projects, users, API keys, or models as needed. Use the `next_page`
-    /// value to retrieve the next page of results.
+    /// Lists image usage for the organization in time buckets. Use `start_time` to set the inclusive start of the range, and filter by sources, image sizes, projects, users, API keys, or models as needed. Use the `next_page` value to retrieve the next page of results.
     ///
     /// Get images usage details for the organization.
     ///
@@ -114,40 +97,21 @@ public extension UsageMethods {
     ///   `bucket_width=1m`: default: 60, max: 1440
     /// - page: A cursor for use in pagination. Corresponding to the `next_page`
     ///   field from the previous response.
-    static func usageImagesPaginated(
-        config: ClientConfig,
-        options: UsageImagesOptions,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+    public static func usageImagesPaginated(config: ClientConfig, options: UsageImagesOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
         let page = options.page
-        return AsyncThrowingStream<UsageTimeBucket, Swift.Error> { (continuation: AsyncThrowingStream<
-            UsageTimeBucket,
-            Swift.Error
-        >.Continuation) in
+        return AsyncThrowingStream<UsageTimeBucket, Swift.Error> { (continuation: AsyncThrowingStream<UsageTimeBucket, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = page
                     while true {
                         var nextOptions = options
                         nextOptions.page = pageCursor
-                        let pageResponse = try await usageImages(
-                            config: config,
-                            options: nextOptions,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await usageImages(config: config, options: nextOptions, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.nextPage else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.nextPage else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -160,45 +124,28 @@ public extension UsageMethods {
         }
     }
 
-    struct UsageImagesPage {
+    public struct UsageImagesPage {
         public let data: UsageResponse
         public let items: [UsageTimeBucket]
         public let hasMore: Bool
     }
 
-    static func usageImagesPages(
-        config: ClientConfig,
-        options: UsageImagesOptions,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<UsageImagesPage, Swift.Error> {
+    public static func usageImagesPages(config: ClientConfig, options: UsageImagesOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageImagesPage, Swift.Error> {
         let page = options.page
-        return AsyncThrowingStream<UsageImagesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            UsageImagesPage,
-            Swift.Error
-        >.Continuation) in
+        return AsyncThrowingStream<UsageImagesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<UsageImagesPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = page
                     while true {
                         var nextOptions = options
                         nextOptions.page = pageCursor
-                        let pageResponse = try await usageImages(
-                            config: config,
-                            options: nextOptions,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await usageImages(config: config, options: nextOptions, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.nextPage != nil
                         pageContinuation.yield(UsageImagesPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.nextPage else {
-                            break
-                        }
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.nextPage else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

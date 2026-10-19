@@ -6,32 +6,14 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension UsersMethods {
-    /// Deletes a user from the organization. Use this operation to remove a user who is no longer part of the
-    /// organization. The response confirms deletion and includes the user's ID.
+extension UsersMethods {
+    /// Deletes a user from the organization. Use this operation to remove a user who is no longer part of the organization. The response confirms deletion and includes the user's ID.
     ///
     /// Deletes a user from the organization.
     ///
     /// - Parameters:
     /// - userId: The ID of the user.
-    static func deleteUser(
-        config: ClientConfig,
-        userId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> UserDeleteResponse {
-        try await (sdkRequest(
-            "DELETE",
-            ["/organization/users/", sdkEncodePathSegment(sdkWireString(userId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteUser",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func deleteUser(config: ClientConfig, userId: String, requestOptions: RequestOptions? = nil) async throws -> UserDeleteResponse {
+        return try (await sdkRequest("DELETE", ["/organization/users/", sdkEncodePathSegment(sdkWireString(userId))].joined(), config: config, decoder: .json, operationId: "deleteUser", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

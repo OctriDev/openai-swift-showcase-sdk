@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension FineTuningMethods {
-    struct CreateFineTuningJobOptions: Codable {
+extension FineTuningMethods {
+    public struct CreateFineTuningJobOptions: Codable {
         public var model: String
         public var trainingFile: String
         public var hyperparameters: CreateFineTuningJobRequestHyperparameters?
@@ -24,13 +24,9 @@ public extension FineTuningMethods {
         }
     }
 
-    /// Creates and queues a fine-tuning job to train a model on a dataset. Supply `model` and `training_file`, and
-    /// optionally configure the training method, validation data, integrations, and metadata. The job runs
-    /// asynchronously; retrieve it with GET /fine_tuning/jobs/{fine_tuning_job_id} to check its status.
+    /// Creates and queues a fine-tuning job to train a model on a dataset. Supply `model` and `training_file`, and optionally configure the training method, validation data, integrations, and metadata. The job runs asynchronously; retrieve it with GET /fine_tuning/jobs/{fine_tuning_job_id} to check its status.
     ///
-    /// Creates a fine-tuning job which begins the process of creating a new model from a given dataset. Response
-    /// includes details of the enqueued job including job status and the name of the fine-tuned models once complete.
-    /// [Learn more about fine-tuning](https://developers.openai.com/api/docs/guides/model-optimization)
+    /// Creates a fine-tuning job which begins the process of creating a new model from a given dataset. Response includes details of the enqueued job including job status and the name of the fine-tuned models once complete. [Learn more about fine-tuning](https://developers.openai.com/api/docs/guides/model-optimization)
     ///
     /// - Parameters:
     /// - model: The name of the model to fine-tune. You can select one of the
@@ -76,30 +72,17 @@ public extension FineTuningMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    static func createFineTuningJob(
-        config: ClientConfig,
-        options: CreateFineTuningJobOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> FineTuningJob {
+    public static func createFineTuningJob(config: ClientConfig, options: CreateFineTuningJobOptions, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
         if let suffix = options.suffix?.valueOrNil {
             try validateLength("suffix", suffix, min: 1, max: 64)
         }
 
         if let seed = options.seed?.valueOrNil {
-            try validateRange("seed", Double(seed), min: 0, max: 2_147_483_647)
+            try validateRange("seed", Double(seed), min: 0, max: 2147483647)
         }
 
         let requestBody = CreateFineTuningJobRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "POST",
-            "/fine_tuning/jobs",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createFineTuningJob",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/fine_tuning/jobs", config: config, body: requestBody, decoder: .json, operationId: "createFineTuningJob", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

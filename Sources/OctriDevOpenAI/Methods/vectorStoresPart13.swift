@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension VectorStoresMethods {
-    /// Searches a vector store for relevant file chunks using one or more queries and optional file-attribute filters.
-    /// Set `max_num_results` to control the result count and `ranking_options` to configure ranking; use `next_page` to
-    /// continue when more results are available.
+extension VectorStoresMethods {
+    /// Searches a vector store for relevant file chunks using one or more queries and optional file-attribute filters. Set `max_num_results` to control the result count and `ranking_options` to configure ranking; use `next_page` to continue when more results are available.
     ///
     /// Search a vector store for relevant chunks based on a query and file attributes filter.
     ///
@@ -22,37 +20,13 @@ public extension VectorStoresMethods {
     ///   be between 1 and 50 inclusive.
     /// - filters: A filter to apply based on file attributes.
     /// - rankingOptions: Ranking options for search.
-    static func searchVectorStore(
-        config: ClientConfig,
-        vectorStoreId: String,
-        query: VectorStoreSearchRequestQuery,
-        rewriteQuery: Bool? = nil,
-        maxNumResults: Int? = nil,
-        filters: VectorStoreSearchRequestFilters? = nil,
-        rankingOptions: VectorStoreSearchRequestRankingOptions? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VectorStoreSearchResultsPage {
-        if let maxNumResults {
+    public static func searchVectorStore(config: ClientConfig, vectorStoreId: String, query: VectorStoreSearchRequestQuery, rewriteQuery: Bool? = nil, maxNumResults: Int? = nil, filters: VectorStoreSearchRequestFilters? = nil, rankingOptions: VectorStoreSearchRequestRankingOptions? = nil, requestOptions: RequestOptions? = nil) async throws -> VectorStoreSearchResultsPage {
+        if let maxNumResults = maxNumResults {
             try validateRange("max_num_results", Double(maxNumResults), min: 1, max: 50)
         }
 
-        let requestBody = SearchVectorStoreRequestBody(
-            query: query,
-            rewriteQuery: rewriteQuery,
-            maxNumResults: maxNumResults,
-            filters: filters,
-            rankingOptions: rankingOptions
-        )
+        let requestBody = SearchVectorStoreRequestBody(query: query, rewriteQuery: rewriteQuery, maxNumResults: maxNumResults, filters: filters, rankingOptions: rankingOptions)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/search"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "searchVectorStore",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/search"].joined(), config: config, body: requestBody, decoder: .json, operationId: "searchVectorStore", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

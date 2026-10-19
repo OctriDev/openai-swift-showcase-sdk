@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedMessage domain models
+// SharedMessage domain models
 public indirect enum MessageContentItem {
     case inputTextContent(InputTextContent)
     case outputTextContent(OutputTextContent)
@@ -19,6 +19,7 @@ public indirect enum MessageContentItem {
 }
 
 extension MessageContentItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -26,16 +27,12 @@ extension MessageContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -46,16 +43,16 @@ extension MessageContentItem: Codable {
 extension MessageContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": try .inputTextContent(InputTextContent(from: decoder))
-        case "output_text": try .outputTextContent(OutputTextContent(from: decoder))
-        case "text": try .textContent(TextContent(from: decoder))
-        case "summary_text": try .summaryTextContent(SummaryTextContent(from: decoder))
-        case "reasoning_text": try .reasoningTextContent(ReasoningTextContent(from: decoder))
-        case "refusal": try .refusalContent(RefusalContent(from: decoder))
-        case "input_image": try .inputImageContent(InputImageContent(from: decoder))
-        case "computer_screenshot": try .computerScreenshotContent(ComputerScreenshotContent(from: decoder))
-        case "input_file": try .inputFileContent(InputFileContent(from: decoder))
-        default: nil
+        case "input_text": return .inputTextContent(try InputTextContent(from: decoder))
+        case "output_text": return .outputTextContent(try OutputTextContent(from: decoder))
+        case "text": return .textContent(try TextContent(from: decoder))
+        case "summary_text": return .summaryTextContent(try SummaryTextContent(from: decoder))
+        case "reasoning_text": return .reasoningTextContent(try ReasoningTextContent(from: decoder))
+        case "refusal": return .refusalContent(try RefusalContent(from: decoder))
+        case "input_image": return .inputImageContent(try InputImageContent(from: decoder))
+        case "computer_screenshot": return .computerScreenshotContent(try ComputerScreenshotContent(from: decoder))
+        case "input_file": return .inputFileContent(try InputFileContent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -104,72 +101,43 @@ public struct Message: Codable {
         case phase
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Message {
-    init(from decoder: Decoder) throws {
+extension Message {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        status = try container.sdkDecodeRequired(.status)
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        phase = try container.sdkDecodeIfPresent(.phase)
-        try sdkValidateRawEnum("type", type, MessageType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.phase = try container.sdkDecodeIfPresent(.phase)
+            try sdkValidateRawEnum("type", self.type, MessageType.allCases.map(\.rawValue))
     }
 }
 
-public extension Message {
-    init(
-        type: MessageType,
-        id: String,
-        status: MessageStatus,
-        role: MessageRole,
-        content: [MessageContentItem],
-        phase: MessagePhase2? = nil
-    ) throws {
+extension Message {
+    public init(type: MessageType, id: String, status: MessageStatus, role: MessageRole, content: [MessageContentItem], phase: MessagePhase2? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.status, self.role) = (status, role)
         (self.content, self.phase) = (content, phase)
-        try sdkValidateRawEnum("type", self.type, MessageType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, MessageType.allCases.map(\.rawValue))
     }
 }
 
@@ -195,16 +163,13 @@ public enum MessageType: String, CaseIterable, Codable {
 public struct MessagePhase2: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let commentary = MessagePhase2(rawValue: "commentary")
     public static let finalAnswer = MessagePhase2(rawValue: "final_answer")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -219,16 +184,13 @@ public struct MessagePhase2: RawRepresentable, Hashable, Codable, Sendable, SdkW
 public struct MessagePhase: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let commentary = MessagePhase(rawValue: "commentary")
     public static let finalAnswer = MessagePhase(rawValue: "final_answer")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -241,17 +203,14 @@ public struct MessagePhase: RawRepresentable, Hashable, Codable, Sendable, SdkWi
 public struct MessageStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = MessageStatus(rawValue: "in_progress")
     public static let completed = MessageStatus(rawValue: "completed")
     public static let incomplete = MessageStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -264,10 +223,7 @@ public struct MessageStatus: RawRepresentable, Hashable, Codable, Sendable, SdkW
 public struct MessageRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let unknown = MessageRole(rawValue: "unknown")
     public static let user = MessageRole(rawValue: "user")
     public static let assistant = MessageRole(rawValue: "assistant")
@@ -279,7 +235,7 @@ public struct MessageRole: RawRepresentable, Hashable, Codable, Sendable, SdkWir
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

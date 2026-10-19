@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension VideosMethods {
+extension VideosMethods {
     /// List recently generated videos for the current project.
     ///
     /// - Parameters:
@@ -16,31 +16,16 @@ public extension VideosMethods {
     /// - after: Identifier for the last item from the previous pagination request
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func listVideos(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: OrderEnum? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VideoListResource {
-        if let limit {
+    public static func listVideos(config: ClientConfig, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> VideoListResource {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 0, max: 100)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            "/videos",
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-                SdkQueryParameter("after", value: after),
-            ],
-            decoder: .json,
-            operationId: "ListVideos",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("GET", "/videos", config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("after", value: after),
+        ], decoder: .json, operationId: "ListVideos", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
     }
 
     /// List recently generated videos for the current project.
@@ -52,41 +37,18 @@ public extension VideosMethods {
     /// - after: Identifier for the last item from the previous pagination request
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func listVideosPaginated(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: OrderEnum? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<VideoResource, Swift.Error> {
-        AsyncThrowingStream<VideoResource, Swift.Error> { (continuation: AsyncThrowingStream<
-            VideoResource,
-            Swift.Error
-        >.Continuation) in
+    public static func listVideosPaginated(config: ClientConfig, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<VideoResource, Swift.Error> {
+        return AsyncThrowingStream<VideoResource, Swift.Error> { (continuation: AsyncThrowingStream<VideoResource, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listVideos(
-                            config: config,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listVideos(config: config, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -99,46 +61,25 @@ public extension VideosMethods {
         }
     }
 
-    struct ListVideosPage {
+    public struct ListVideosPage {
         public let data: VideoListResource
         public let items: [VideoResource]
         public let hasMore: Bool
     }
 
-    static func listVideosPages(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: OrderEnum? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListVideosPage, Swift.Error> {
-        AsyncThrowingStream<ListVideosPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListVideosPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listVideosPages(config: ClientConfig, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListVideosPage, Swift.Error> {
+        return AsyncThrowingStream<ListVideosPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListVideosPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listVideos(
-                            config: config,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listVideos(config: config, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
                         pageContinuation.yield(ListVideosPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

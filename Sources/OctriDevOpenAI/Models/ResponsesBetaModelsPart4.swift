@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBeta domain models
+// ResponsesBeta domain models
 /// Specifies the event type. For a double click action, this property is always set to `double_click`.
 public enum BetaDoubleClickActionType: String, CaseIterable, Codable {
     case doubleClick = "double_click"
@@ -44,16 +44,13 @@ public enum BetaKeyPressActionType: String, CaseIterable, Codable {
 public struct BetaTruncationEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = BetaTruncationEnum(rawValue: "auto")
     public static let disabled = BetaTruncationEnum(rawValue: "disabled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -66,16 +63,13 @@ public struct BetaTruncationEnum: RawRepresentable, Hashable, Codable, Sendable,
 public struct BetaGrammarSyntax1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let lark = BetaGrammarSyntax1(rawValue: "lark")
     public static let regex = BetaGrammarSyntax1(rawValue: "regex")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -88,16 +82,13 @@ public struct BetaGrammarSyntax1: RawRepresentable, Hashable, Codable, Sendable,
 public struct BetaCallableToolAllowedCaller: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let direct = BetaCallableToolAllowedCaller(rawValue: "direct")
     public static let programmatic = BetaCallableToolAllowedCaller(rawValue: "programmatic")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -164,15 +155,12 @@ public enum BetaProgrammaticToolCallingParamType: String, CaseIterable, Codable 
 public struct BetaApproximateLocationType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let approximate = BetaApproximateLocationType(rawValue: "approximate")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -221,10 +209,7 @@ public enum BetaSummaryTextContentType: String, CaseIterable, Codable {
 public struct BetaEasyInputMessageRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let user = BetaEasyInputMessageRole(rawValue: "user")
     public static let assistant = BetaEasyInputMessageRole(rawValue: "assistant")
     public static let system = BetaEasyInputMessageRole(rawValue: "system")
@@ -232,7 +217,7 @@ public struct BetaEasyInputMessageRole: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -245,10 +230,7 @@ public struct BetaEasyInputMessageRole: RawRepresentable, Hashable, Codable, Sen
 public struct BetaDetailEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = BetaDetailEnum(rawValue: "low")
     public static let high = BetaDetailEnum(rawValue: "high")
     public static let auto = BetaDetailEnum(rawValue: "auto")
@@ -256,7 +238,7 @@ public struct BetaDetailEnum: RawRepresentable, Hashable, Codable, Sendable, Sdk
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -269,16 +251,13 @@ public struct BetaDetailEnum: RawRepresentable, Hashable, Codable, Sendable, Sdk
 public struct BetaRankerVersionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = BetaRankerVersionType(rawValue: "auto")
     public static let default20241115 = BetaRankerVersionType(rawValue: "default-2024-11-15")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -297,7 +276,7 @@ public enum BetaComparisonFilterType: String, CaseIterable, Codable {
     case gte
     case lt
     case lte
-    case `in`
+    case `in` = "in"
     case nin
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()

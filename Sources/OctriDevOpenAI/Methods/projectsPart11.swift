@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectsMethods {
-    struct UpdateProjectRateLimitsOptions: Codable {
+extension ProjectsMethods {
+    public struct UpdateProjectRateLimitsOptions: Codable {
         public var projectId: String
         public var rateLimitId: String
         public var maxRequestsPer1Minute: Int?
@@ -23,9 +23,7 @@ public extension ProjectsMethods {
         }
     }
 
-    /// Updates a rate limit configuration for a project. Use `project_id` and `rate_limit_id` to identify the project
-    /// and rate limit, then provide the limit values to change. The response returns the updated rate limit
-    /// configuration.
+    /// Updates a rate limit configuration for a project. Use `project_id` and `rate_limit_id` to identify the project and rate limit, then provide the limit values to change. The response returns the updated rate limit configuration.
     ///
     /// Updates a project rate limit.
     ///
@@ -42,27 +40,9 @@ public extension ProjectsMethods {
     ///   certain models.
     /// - batch1DayMaxInputTokens: The maximum batch input tokens per day. Only
     ///   relevant for certain models.
-    static func updateProjectRateLimits(
-        config: ClientConfig,
-        options: UpdateProjectRateLimitsOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectRateLimit {
+    public static func updateProjectRateLimits(config: ClientConfig, options: UpdateProjectRateLimitsOptions, requestOptions: RequestOptions? = nil) async throws -> ProjectRateLimit {
         let requestBody = UpdateProjectRateLimitsRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/organization/projects/",
-                sdkEncodePathSegment(sdkWireString(options.projectId)),
-                "/rate_limits/",
-                sdkEncodePathSegment(sdkWireString(options.rateLimitId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateProjectRateLimits",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(options.projectId)), "/rate_limits/", sdkEncodePathSegment(sdkWireString(options.rateLimitId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateProjectRateLimits", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
     }
 }

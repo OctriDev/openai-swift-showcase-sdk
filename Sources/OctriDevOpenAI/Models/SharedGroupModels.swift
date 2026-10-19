@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedGroup domain models
+// SharedGroup domain models
 /// Role assignment linking a group to a role.
 public struct GroupRoleAssignment: Codable {
     /// Always `group.role`.
@@ -19,43 +19,29 @@ public struct GroupRoleAssignment: Codable {
         case role
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension GroupRoleAssignment {
-    init(from decoder: Decoder) throws {
+extension GroupRoleAssignment {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.group) else {
-            throw SdkValidationError(
-                field: "group",
-                code: "required",
-                message: "Validation failed for 'group': value is required"
-            )
+            throw SdkValidationError(field: "group", code: "required", message: "Validation failed for 'group': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        group = try container.sdkDecodeRequired(.group)
-        role = try container.sdkDecodeRequired(.role)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.group = try container.sdkDecodeRequired(.group)
+        self.role = try container.sdkDecodeRequired(.role)
     }
 }
 
-public extension GroupRoleAssignment {
-    init(object: GroupRoleAssignmentObject, group: Group, role: Role) {
+extension GroupRoleAssignment {
+    public init(object: GroupRoleAssignmentObject, group: Group, role: Role) {
         (self.object, self.group) = (object, group)
         self.role = role
     }
@@ -82,59 +68,37 @@ public struct Group: Codable {
         case scimManaged = "scim_managed"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Group {
-    init(from decoder: Decoder) throws {
+extension Group {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.scimManaged) else {
-            throw SdkValidationError(
-                field: "scim_managed",
-                code: "required",
-                message: "Validation failed for 'scim_managed': value is required"
-            )
+            throw SdkValidationError(field: "scim_managed", code: "required", message: "Validation failed for 'scim_managed': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        id = try container.sdkDecodeRequired(.id)
-        name = try container.sdkDecodeRequired(.name)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        scimManaged = try container.sdkDecodeRequired(.scimManaged)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.scimManaged = try container.sdkDecodeRequired(.scimManaged)
     }
 }
 
-public extension Group {
-    init(object: GroupObject, id: String, name: String, createdAt: Int, scimManaged: Bool) {
+extension Group {
+    public init(object: GroupObject, id: String, name: String, createdAt: Int, scimManaged: Bool) {
         (self.object, self.id) = (object, id)
         (self.name, self.createdAt) = (name, createdAt)
         self.scimManaged = scimManaged
@@ -145,15 +109,12 @@ public extension Group {
 public struct GroupRoleAssignmentObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let groupRole = GroupRoleAssignmentObject(rawValue: "group.role")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -166,15 +127,12 @@ public struct GroupRoleAssignmentObject: RawRepresentable, Hashable, Codable, Se
 public struct GroupObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let group = GroupObject(rawValue: "group")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

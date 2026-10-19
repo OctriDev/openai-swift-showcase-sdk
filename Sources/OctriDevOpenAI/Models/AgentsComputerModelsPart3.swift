@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsComputer domain models
+// AgentsComputer domain models
 /// The item type. Always `computer_use_call`.
 public enum ComputerUseCallItemResourceType: String, CaseIterable, Codable {
     case computerUseCall = "computer_use_call"
@@ -77,20 +77,15 @@ public enum ComputerUseApprovalResponseParamBrowserAuthenticationCancelParamType
 }
 
 /// Required enumerated value serialized in the `type` wire field.
-public struct ComputerUseApprovalResponseKindResourceBrowserAuthenticationCX8d958ab1db: RawRepresentable, Hashable,
-    Codable, Sendable, SdkWireConvertible {
+public struct ComputerUseApprovalResponseKindResourceBrowserAuthenticationCX8d958ab1db: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let browserAuthentication =
-        ComputerUseApprovalResponseKindResourceBrowserAuthenticationCX8d958ab1db(rawValue: "browser_authentication")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let browserAuthentication = ComputerUseApprovalResponseKindResourceBrowserAuthenticationCX8d958ab1db(rawValue: "browser_authentication")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,23 +6,23 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ImagesMethods {
-    struct CreateImageStreamOptions {
+extension ImagesMethods {
+    public struct CreateImageStreamOptions {
         public var prompt: String
         public var model: String
         public var stream: Bool?
-        public var n: SdkOptional<Int>?
-        public var quality: SdkOptional<CreateImageRequestQualityVariant0>?
-        public var responseFormat: SdkOptional<CreateImageRequestResponseFormat>?
-        public var outputFormat: SdkOptional<CreateImageRequestOutputFormatVariant0>?
-        public var outputCompression: SdkOptional<Int>?
-        public var partialImages: SdkOptional<PartialImages>?
-        public var size: SdkOptional<String>?
-        public var moderation: SdkOptional<CreateImageRequestModerationVariant0>?
-        public var background: SdkOptional<CreateImageRequestBackgroundVariant0>?
-        public var style: SdkOptional<CreateImageRequestStyle>?
-        public var safetyIdentifier: SdkOptional<String>?
-        public var user: String?
+        public var n: SdkOptional<Int>? = nil
+        public var quality: SdkOptional<CreateImageRequestQualityVariant0>? = nil
+        public var responseFormat: SdkOptional<CreateImageRequestResponseFormat>? = nil
+        public var outputFormat: SdkOptional<CreateImageRequestOutputFormatVariant0>? = nil
+        public var outputCompression: SdkOptional<Int>? = nil
+        public var partialImages: SdkOptional<PartialImages>? = nil
+        public var size: SdkOptional<String>? = nil
+        public var moderation: SdkOptional<CreateImageRequestModerationVariant0>? = nil
+        public var background: SdkOptional<CreateImageRequestBackgroundVariant0>? = nil
+        public var style: SdkOptional<CreateImageRequestStyle>? = nil
+        public var safetyIdentifier: SdkOptional<String>? = nil
+        public var user: String? = nil
 
         public init(prompt: String, model: String, stream: Bool?) {
             self.prompt = prompt
@@ -31,12 +31,9 @@ public extension ImagesMethods {
         }
     }
 
-    /// Creates one or more images from a text prompt using the specified image model. Provide `model` and `prompt`; `n`
-    /// defaults to 1, and you can enable streaming with `stream`. Use `size`, `quality`, and `output_format` to control
-    /// the generated images.
+    /// Creates one or more images from a text prompt using the specified image model. Provide `model` and `prompt`; `n` defaults to 1, and you can enable streaming with `stream`. Use `size`, `quality`, and `output_format` to control the generated images.
     ///
-    /// Creates an image given a prompt using a GPT Image model. [Learn
-    /// more](https://developers.openai.com/api/docs/guides/images-vision).
+    /// Creates an image given a prompt using a GPT Image model. [Learn more](https://developers.openai.com/api/docs/guides/images-vision).
     ///
     /// - Parameters:
     /// - prompt: A text description of the desired image(s). The maximum length is
@@ -104,12 +101,9 @@ public extension ImagesMethods {
     ///   omitted, null, or empty. [Learn
     ///   more](https://developers.openai.com/api/docs/guides/safety-best-practices#im
     ///   plement-safety-identifiers).
-    static func createImageStream(
-        config: ClientConfig,
-        options: CreateImageStreamOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<ImageGenStreamEvent, Swift.Error> {
+    public static func createImageStream(config: ClientConfig, options: CreateImageStreamOptions, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<ImageGenStreamEvent, Swift.Error> {
         let requestBody = CreateImageStreamStreamRequestBody(options: options)
+
 
         let upstream = try await sdkStream(
             "POST",
@@ -121,14 +115,7 @@ public extension ImagesMethods {
             streamMediaType: "text/event-stream",
             chunkDomain: "bytes",
             options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": ErrorResponse.self,
-                "410": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-                "503": ErrorResponse.self,
-            ]
+            errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "410": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self]
         )
         return AsyncThrowingStream { continuation in
             let streamTask = _Concurrency.Task {
@@ -138,11 +125,8 @@ public extension ImagesMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
-                            ImageGenStreamEvent.self,
-                            from: Data(event.data.utf8)
-                        ) }
-
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(ImageGenStreamEvent.self, from: Data(event.data.utf8)) }
+                        
                         continuation.yield(payload)
                     }
                     continuation.finish()

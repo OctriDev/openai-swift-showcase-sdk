@@ -7,38 +7,16 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum HostedToolsMethods {
-    /// Retrieves the hosted tool permission settings for a project. Use `project_id` to identify the project whose
-    /// permissions you want to inspect. The response includes an enabled state for each hosted tool.
+    /// Retrieves the hosted tool permission settings for a project. Use `project_id` to identify the project whose permissions you want to inspect. The response includes an enabled state for each hosted tool.
     ///
     /// Returns hosted tool permissions for a project.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
-    public static func retrieveProjectHostedToolPermissions(
-        config: ClientConfig,
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectHostedToolPermissions {
-        try await (sdkRequest(
-            "GET",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/hosted_tool_permissions"]
-                .joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveProjectHostedToolPermissions",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func retrieveProjectHostedToolPermissions(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectHostedToolPermissions {
+        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/hosted_tool_permissions"].joined(), config: config, decoder: .json, operationId: "retrieveProjectHostedToolPermissions", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
-
-    /// Updates the hosted tool permissions for a project. Supply settings for the tools you want to change using
-    /// `file_search`, `web_search`, `image_generation`, `mcp`, or `code_interpreter`. The response returns the
-    /// project's resulting permission states.
+    /// Updates the hosted tool permissions for a project. Supply settings for the tools you want to change using `file_search`, `web_search`, `image_generation`, `mcp`, or `code_interpreter`. The response returns the project's resulting permission states.
     ///
     /// Updates hosted tool permissions for a project.
     ///
@@ -49,40 +27,9 @@ public enum HostedToolsMethods {
     /// - imageGeneration: The image generation permission update.
     /// - mcp: The MCP permission update.
     /// - codeInterpreter: The code interpreter permission update.
-    public static func updateProjectHostedToolPermissions(
-        config: ClientConfig,
-        projectId: String,
-        fileSearch: SdkOptional<HostedToolPermissionUpdate>? = nil,
-        webSearch: SdkOptional<HostedToolPermissionUpdate>? = nil,
-        imageGeneration: SdkOptional<HostedToolPermissionUpdate>? = nil,
-        mcp: SdkOptional<HostedToolPermissionUpdate>? = nil,
-        codeInterpreter: SdkOptional<HostedToolPermissionUpdate>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectHostedToolPermissions {
-        let requestBody = UpdateProjectHostedToolPermissionsRequestBody(
-            fileSearch: fileSearch,
-            webSearch: webSearch,
-            imageGeneration: imageGeneration,
-            mcp: mcp,
-            codeInterpreter: codeInterpreter
-        )
+    public static func updateProjectHostedToolPermissions(config: ClientConfig, projectId: String, fileSearch: SdkOptional<HostedToolPermissionUpdate>? = nil, webSearch: SdkOptional<HostedToolPermissionUpdate>? = nil, imageGeneration: SdkOptional<HostedToolPermissionUpdate>? = nil, mcp: SdkOptional<HostedToolPermissionUpdate>? = nil, codeInterpreter: SdkOptional<HostedToolPermissionUpdate>? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectHostedToolPermissions {
+        let requestBody = UpdateProjectHostedToolPermissionsRequestBody(fileSearch: fileSearch, webSearch: webSearch, imageGeneration: imageGeneration, mcp: mcp, codeInterpreter: codeInterpreter)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/hosted_tool_permissions"]
-                .joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateProjectHostedToolPermissions",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "409": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/hosted_tool_permissions"].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateProjectHostedToolPermissions", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

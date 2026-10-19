@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveDecision domain models
+// LiveLiveDecision domain models
 /// Required enumerated value serialized in the `type` wire field.
 public enum LiveDecisionScoreQuestionParamType: String, CaseIterable, Codable {
     case score
@@ -41,22 +41,16 @@ public enum LiveDecisionItemCreateParamType: String, CaseIterable, Codable {
 }
 
 /// Required enumerated value serialized in the `event_type` wire field.
-public struct LiveDecisionTriggerInputParam2EventType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct LiveDecisionTriggerInputParam2EventType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let sessionInputTranscriptDelta =
-        LiveDecisionTriggerInputParam2EventType(rawValue: "session.input_transcript.delta")
-    public static let sessionOutputTranscriptDelta =
-        LiveDecisionTriggerInputParam2EventType(rawValue: "session.output_transcript.delta")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let sessionInputTranscriptDelta = LiveDecisionTriggerInputParam2EventType(rawValue: "session.input_transcript.delta")
+    public static let sessionOutputTranscriptDelta = LiveDecisionTriggerInputParam2EventType(rawValue: "session.output_transcript.delta")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

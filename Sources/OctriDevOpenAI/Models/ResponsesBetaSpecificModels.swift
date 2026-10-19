@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaSpecific domain models
+// ResponsesBetaSpecific domain models
 /// Typed representation of the `BetaSpecificProgrammaticToolCallingParam` API schema.
 public struct BetaSpecificProgrammaticToolCallingParam: Codable {
     /// The tool to call. Always `programmatic_tool_calling`.
@@ -13,30 +13,24 @@ public struct BetaSpecificProgrammaticToolCallingParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaSpecificProgrammaticToolCallingParam {
-    init(from decoder: Decoder) throws {
+extension BetaSpecificProgrammaticToolCallingParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, BetaSpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, BetaSpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaSpecificProgrammaticToolCallingParam {
-    init(type: BetaSpecificProgrammaticToolCallingParamType) throws {
+extension BetaSpecificProgrammaticToolCallingParam {
+    public init(type: BetaSpecificProgrammaticToolCallingParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, BetaSpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaSpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -49,30 +43,24 @@ public struct BetaSpecificApplyPatchParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaSpecificApplyPatchParam {
-    init(from decoder: Decoder) throws {
+extension BetaSpecificApplyPatchParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, BetaSpecificApplyPatchParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, BetaSpecificApplyPatchParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaSpecificApplyPatchParam {
-    init(type: BetaSpecificApplyPatchParamType) throws {
+extension BetaSpecificApplyPatchParam {
+    public init(type: BetaSpecificApplyPatchParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, BetaSpecificApplyPatchParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaSpecificApplyPatchParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -85,30 +73,24 @@ public struct BetaSpecificFunctionShellParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaSpecificFunctionShellParam {
-    init(from decoder: Decoder) throws {
+extension BetaSpecificFunctionShellParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, BetaSpecificFunctionShellParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, BetaSpecificFunctionShellParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaSpecificFunctionShellParam {
-    init(type: BetaSpecificFunctionShellParamType) throws {
+extension BetaSpecificFunctionShellParam {
+    public init(type: BetaSpecificFunctionShellParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, BetaSpecificFunctionShellParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaSpecificFunctionShellParamType.allCases.map(\.rawValue))
     }
 }
 

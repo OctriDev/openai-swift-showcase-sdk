@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveFunction domain models
+// LiveLiveFunction domain models
 /// Typed representation of the `LiveFunctionToolChoiceParam` API schema.
 public struct LiveFunctionToolChoiceParam: Codable {
     /// The tool to call. Always `function`.
@@ -16,38 +16,28 @@ public struct LiveFunctionToolChoiceParam: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveFunctionToolChoiceParam {
-    init(from decoder: Decoder) throws {
+extension LiveFunctionToolChoiceParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeRequired(.name)
-        try sdkValidateRawEnum("type", type, LiveFunctionToolChoiceParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeRequired(.name)
+            try sdkValidateRawEnum("type", self.type, LiveFunctionToolChoiceParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveFunctionToolChoiceParam {
-    init(type: LiveFunctionToolChoiceParamType, name: String) throws {
+extension LiveFunctionToolChoiceParam {
+    public init(type: LiveFunctionToolChoiceParamType, name: String) throws {
         (self.type, self.name) = (type, name)
-        try sdkValidateRawEnum("type", self.type, LiveFunctionToolChoiceParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveFunctionToolChoiceParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -72,49 +62,33 @@ public struct LiveFunctionToolInputParam: Codable {
         case strict
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveFunctionToolInputParam {
-    init(from decoder: Decoder) throws {
+extension LiveFunctionToolInputParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeRequired(.name)
-        description = try container.sdkDecodeIfPresent(.description)
-        parameters = try container.sdkDecodeIfPresent(.parameters)
-        strict = try container.sdkDecodeIfPresent(.strict)
-        try sdkValidateRawEnum("type", type, LiveFunctionToolInputParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.description = try container.sdkDecodeIfPresent(.description)
+        self.parameters = try container.sdkDecodeIfPresent(.parameters)
+        self.strict = try container.sdkDecodeIfPresent(.strict)
+            try sdkValidateRawEnum("type", self.type, LiveFunctionToolInputParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveFunctionToolInputParam {
-    init(
-        type: LiveFunctionToolInputParamType,
-        name: String,
-        description: String? = nil,
-        parameters: [String: JSONValue]? = nil,
-        strict: Bool? = nil
-    ) throws {
+extension LiveFunctionToolInputParam {
+    public init(type: LiveFunctionToolInputParamType, name: String, description: String? = nil, parameters: [String: JSONValue]? = nil, strict: Bool? = nil) throws {
         (self.type, self.name) = (type, name)
         (self.description, self.parameters) = (description, parameters)
         self.strict = strict
-        try sdkValidateRawEnum("type", self.type, LiveFunctionToolInputParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveFunctionToolInputParamType.allCases.map(\.rawValue))
     }
 }
 

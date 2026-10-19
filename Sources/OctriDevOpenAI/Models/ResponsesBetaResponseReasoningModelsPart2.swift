@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaResponseReasoning domain models
+// ResponsesBetaResponseReasoning domain models
 /// Emitted when a delta is added to a reasoning summary text.
 public struct BetaResponseReasoningSummaryTextDeltaEvent: Codable {
     /// The type of the event. Always `response.reasoning_summary_text.delta`.
@@ -31,86 +31,48 @@ public struct BetaResponseReasoningSummaryTextDeltaEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseReasoningSummaryTextDeltaEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseReasoningSummaryTextDeltaEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.summaryIndex) else {
-            throw SdkValidationError(
-                field: "summary_index",
-                code: "required",
-                message: "Validation failed for 'summary_index': value is required"
-            )
+            throw SdkValidationError(field: "summary_index", code: "required", message: "Validation failed for 'summary_index': value is required")
         }
         guard container.contains(.delta) else {
-            throw SdkValidationError(
-                field: "delta",
-                code: "required",
-                message: "Validation failed for 'delta': value is required"
-            )
+            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        summaryIndex = try container.sdkDecodeRequired(.summaryIndex)
-        delta = try container.sdkDecodeRequired(.delta)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseReasoningSummaryTextDeltaEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.summaryIndex = try container.sdkDecodeRequired(.summaryIndex)
+        self.delta = try container.sdkDecodeRequired(.delta)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningSummaryTextDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseReasoningSummaryTextDeltaEvent {
-    init(
-        type: BetaResponseReasoningSummaryTextDeltaEventType,
-        itemId: String,
-        outputIndex: Int,
-        summaryIndex: Int,
-        delta: String,
-        sequenceNumber: Int,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseReasoningSummaryTextDeltaEvent {
+    public init(type: BetaResponseReasoningSummaryTextDeltaEventType, itemId: String, outputIndex: Int, summaryIndex: Int, delta: String, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.summaryIndex) = (outputIndex, summaryIndex)
         (self.delta, self.sequenceNumber) = (delta, sequenceNumber)
         self.agent = agent
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            BetaResponseReasoningSummaryTextDeltaEventType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningSummaryTextDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -126,35 +88,25 @@ public struct BetaResponseReasoningSummaryPartAddedEventPart: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseReasoningSummaryPartAddedEventPart {
-    init(from decoder: Decoder) throws {
+extension BetaResponseReasoningSummaryPartAddedEventPart {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
     }
 }
 
-public extension BetaResponseReasoningSummaryPartAddedEventPart {
-    init(type: BetaResponseReasoningSummaryPartAddedEventPartType, text: String) {
+extension BetaResponseReasoningSummaryPartAddedEventPart {
+    public init(type: BetaResponseReasoningSummaryPartAddedEventPartType, text: String) {
         (self.type, self.text) = (type, text)
     }
 }
@@ -178,19 +130,15 @@ public enum BetaResponseReasoningTextDoneEventType: String, CaseIterable, Codabl
 }
 
 /// The type of the summary part. Always `summary_text`.
-public struct BetaResponseReasoningSummaryPartDoneEventPartType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct BetaResponseReasoningSummaryPartDoneEventPartType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let summaryText = BetaResponseReasoningSummaryPartDoneEventPartType(rawValue: "summary_text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -219,19 +167,15 @@ public enum BetaResponseReasoningSummaryPartAddedEventType: String, CaseIterable
 
 /// The completion status of the summary part. Omitted when the part completed normally and set to `incomplete`
 /// when generation was interrupted.
-public struct BetaResponseReasoningSummaryPartDoneEventStatus: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct BetaResponseReasoningSummaryPartDoneEventStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let incomplete = BetaResponseReasoningSummaryPartDoneEventStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -313,19 +257,15 @@ public enum BetaResponseReasoningSummaryTextDeltaEventType: String, CaseIterable
 }
 
 /// The type of the summary part. Always `summary_text`.
-public struct BetaResponseReasoningSummaryPartAddedEventPartType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct BetaResponseReasoningSummaryPartAddedEventPartType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let summaryText = BetaResponseReasoningSummaryPartAddedEventPartType(rawValue: "summary_text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,35 +6,14 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AgentsMethods {
-    /// Deletes a reusable agent. See [agent
-    /// configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
+extension AgentsMethods {
+    /// Deletes a reusable agent. See [agent configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
     ///
     /// - Parameters:
     /// - agentId: The ID of the reusable agent.
-    static func deleteAgent(
-        config: ClientConfig,
-        agentId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedAgentResource {
-        try validateLength("agent_id", agentId, min: 0, max: 1_048_576)
+    public static func deleteAgent(config: ClientConfig, agentId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedAgentResource {
+        try validateLength("agent_id", agentId, min: 0, max: 1048576)
 
-        return try await (sdkRequest(
-            "DELETE",
-            ["/agents/", sdkEncodePathSegment(sdkWireString(agentId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteAgent",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse2.self,
-                "401": ErrorResponse2.self,
-                "403": ErrorResponse2.self,
-                "404": ErrorResponse2.self,
-                "409": ErrorResponse2.self,
-                "500": ErrorResponse2.self,
-                "503": ErrorResponse2.self,
-            ]
-        )).data
+        return try (await sdkRequest("DELETE", ["/agents/", sdkEncodePathSegment(sdkWireString(agentId))].joined(), config: config, decoder: .json, operationId: "deleteAgent", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
     }
 }

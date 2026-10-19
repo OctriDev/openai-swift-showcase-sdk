@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaMcptool domain models
+// ResponsesBetaMcptool domain models
 public indirect enum BetaMCPToolCallError {
     case betaMcpProtocolError(BetaMCPProtocolError)
     case betaMcpToolExecutionError(BetaMCPToolExecutionError)
@@ -13,6 +13,7 @@ public indirect enum BetaMCPToolCallError {
 }
 
 extension BetaMCPToolCallError: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension BetaMCPToolCallError: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,10 +37,10 @@ extension BetaMCPToolCallError: Codable {
 extension BetaMCPToolCallError {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "mcp_protocol_error": try .betaMcpProtocolError(BetaMCPProtocolError(from: decoder))
-        case "mcp_tool_execution_error": try .betaMcpToolExecutionError(BetaMCPToolExecutionError(from: decoder))
-        case "http_error": try .betaHttpError(BetaHTTPError(from: decoder))
-        default: nil
+        case "mcp_protocol_error": return .betaMcpProtocolError(try BetaMCPProtocolError(from: decoder))
+        case "mcp_tool_execution_error": return .betaMcpToolExecutionError(try BetaMCPToolExecutionError(from: decoder))
+        case "http_error": return .betaHttpError(try BetaHTTPError(from: decoder))
+        default: return nil
         }
     }
 }
@@ -66,33 +63,22 @@ public indirect enum BetaMCPToolRequireApproval {
 }
 
 extension BetaMCPToolRequireApproval: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for BetaMCPToolRequireApproval"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaMCPToolRequireApproval")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension BetaMCPToolRequireApproval {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(BetaMCPToolRequireApprovalVariant0.self) {
-            return .betaMcpToolRequireApprovalVariant0(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
+        if let value = try? container.decode(BetaMCPToolRequireApprovalVariant0.self) { return .betaMcpToolRequireApprovalVariant0(value) }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
         return nil
     }
 }
@@ -143,82 +129,49 @@ public struct BetaMCPToolCall: Codable {
         case approvalRequestId = "approval_request_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaMCPToolCall {
-    init(from decoder: Decoder) throws {
+extension BetaMCPToolCall {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.serverLabel) else {
-            throw SdkValidationError(
-                field: "server_label",
-                code: "required",
-                message: "Validation failed for 'server_label': value is required"
-            )
+            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.arguments) else {
-            throw SdkValidationError(
-                field: "arguments",
-                code: "required",
-                message: "Validation failed for 'arguments': value is required"
-            )
+            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        name = try container.sdkDecodeRequired(.name)
-        arguments = try container.sdkDecodeRequired(.arguments)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        output = try container.sdkDecodeIfPresent(.output)
-        error = try container.sdkDecodeIfPresent(.error)
-        status = try container.sdkDecodeIfPresent(.status)
-        approvalRequestId = try container.sdkDecodeIfPresent(.approvalRequestId)
-        try sdkValidateRawEnum("type", type, BetaMCPToolCallType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.arguments = try container.sdkDecodeRequired(.arguments)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.output = try container.sdkDecodeIfPresent(.output)
+        self.error = try container.sdkDecodeIfPresent(.error)
+        self.status = try container.sdkDecodeIfPresent(.status)
+        self.approvalRequestId = try container.sdkDecodeIfPresent(.approvalRequestId)
+            try sdkValidateRawEnum("type", self.type, BetaMCPToolCallType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaMCPToolCall {
-    init(
-        type: BetaMCPToolCallType,
-        id: String,
-        serverLabel: String,
-        name: String,
-        arguments: String,
-        agent: BetaAgentTag? = nil,
-        output: String? = nil,
-        error: BetaMCPToolCallError? = nil,
-        status: BetaMCPToolCallStatus? = nil,
-        approvalRequestId: String? = nil
-    ) throws {
+extension BetaMCPToolCall {
+    public init(type: BetaMCPToolCallType, id: String, serverLabel: String, name: String, arguments: String, agent: BetaAgentTag? = nil, output: String? = nil, error: BetaMCPToolCallError? = nil, status: BetaMCPToolCallStatus? = nil, approvalRequestId: String? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.serverLabel, self.name) = (serverLabel, name)
         (self.arguments, self.agent) = (arguments, agent)
         (self.output, self.error) = (output, error)
         (self.status, self.approvalRequestId) = (status, approvalRequestId)
-        try sdkValidateRawEnum("type", self.type, BetaMCPToolCallType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaMCPToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -236,20 +189,20 @@ public struct BetaMCPToolFilter: Codable {
     }
 
     init() {
-        (toolNames, readOnly) = (nil, nil)
+        (self.toolNames, self.readOnly) = (nil, nil)
     }
 }
 
-public extension BetaMCPToolFilter {
-    init(from decoder: Decoder) throws {
+extension BetaMCPToolFilter {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        toolNames = try container.sdkDecodeIfPresent(.toolNames)
-        readOnly = try container.sdkDecodeIfPresent(.readOnly)
+        self.toolNames = try container.sdkDecodeIfPresent(.toolNames)
+        self.readOnly = try container.sdkDecodeIfPresent(.readOnly)
     }
 }
 
-public extension BetaMCPToolFilter {
-    init(toolNames: [String]? = nil, readOnly: Bool? = nil) {
+extension BetaMCPToolFilter {
+    public init(toolNames: [String]? = nil, readOnly: Bool? = nil) {
         self.init()
         (self.toolNames, self.readOnly) = (toolNames, readOnly)
     }
@@ -303,75 +256,52 @@ public struct BetaMCPTool: Codable {
         case deferLoading = "defer_loading"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaMCPTool {
-    init(from decoder: Decoder) throws {
+extension BetaMCPTool {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.serverLabel) else {
-            throw SdkValidationError(
-                field: "server_label",
-                code: "required",
-                message: "Validation failed for 'server_label': value is required"
-            )
+            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        serverUrl = try container.sdkDecodeIfPresent(.serverUrl)
-        connectorId = try container.sdkDecodeIfPresent(.connectorId)
-        tunnelId = try container.sdkDecodeIfPresent(.tunnelId)
-        authorization = try container.sdkDecodeIfPresent(.authorization)
-        serverDescription = try container.sdkDecodeIfPresent(.serverDescription)
-        headers = try container.sdkDecodeIfPresent(.headers)
-        allowedTools = try container.sdkDecodeIfPresent(.allowedTools)
-        allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
-        requireApproval = try container.sdkDecodeIfPresent(.requireApproval)
-        deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
-        try sdkValidateRawEnum("type", type, BetaMCPToolType.allCases.map(\.rawValue))
-        if let value = serverUrl {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        self.serverUrl = try container.sdkDecodeIfPresent(.serverUrl)
+        self.connectorId = try container.sdkDecodeIfPresent(.connectorId)
+        self.tunnelId = try container.sdkDecodeIfPresent(.tunnelId)
+        self.authorization = try container.sdkDecodeIfPresent(.authorization)
+        self.serverDescription = try container.sdkDecodeIfPresent(.serverDescription)
+        self.headers = try container.sdkDecodeIfPresent(.headers)
+        self.allowedTools = try container.sdkDecodeIfPresent(.allowedTools)
+        self.allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
+        self.requireApproval = try container.sdkDecodeIfPresent(.requireApproval)
+        self.deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
+            try sdkValidateRawEnum("type", self.type, BetaMCPToolType.allCases.map(\.rawValue))
+        if let value = self.serverUrl {
             try sdkValidateUri("server_url", value)
         }
-        if let value = tunnelId {
+        if let value = self.tunnelId {
             try sdkValidatePattern("tunnel_id", value, sdkPatternca748f96eefb)
         }
-        if let value = allowedCallers {
+        if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
     }
 }
 
-public extension BetaMCPTool {
-    init(
-        type: BetaMCPToolType,
-        serverLabel: String,
-        serverUrl: String? = nil,
-        connectorId: BetaMCPToolConnectorId? = nil,
-        tunnelId: String? = nil,
-        authorization: String? = nil,
-        serverDescription: String? = nil,
-        headers: [String: String]? = nil,
-        allowedTools: BetaMCPToolAllowedTools? = nil,
-        allowedCallers: [BetaCallableToolAllowedCaller]? = nil,
-        requireApproval: BetaMCPToolRequireApproval? = nil,
-        deferLoading: Bool? = nil
-    ) throws {
+extension BetaMCPTool {
+    public init(type: BetaMCPToolType, serverLabel: String, serverUrl: String? = nil, connectorId: BetaMCPToolConnectorId? = nil, tunnelId: String? = nil, authorization: String? = nil, serverDescription: String? = nil, headers: [String: String]? = nil, allowedTools: BetaMCPToolAllowedTools? = nil, allowedCallers: [BetaCallableToolAllowedCaller]? = nil, requireApproval: BetaMCPToolRequireApproval? = nil, deferLoading: Bool? = nil) throws {
         (self.type, self.serverLabel) = (type, serverLabel)
         (self.serverUrl, self.connectorId) = (serverUrl, connectorId)
         (self.tunnelId, self.authorization) = (tunnelId, authorization)
         (self.serverDescription, self.headers) = (serverDescription, headers)
         (self.allowedTools, self.allowedCallers) = (allowedTools, allowedCallers)
         (self.requireApproval, self.deferLoading) = (requireApproval, deferLoading)
-        try sdkValidateRawEnum("type", self.type, BetaMCPToolType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaMCPToolType.allCases.map(\.rawValue))
         if let value = self.serverUrl {
             try sdkValidateUri("server_url", value)
         }
@@ -390,32 +320,22 @@ public indirect enum BetaMCPToolAllowedTools {
 }
 
 extension BetaMCPToolAllowedTools: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for BetaMCPToolAllowedTools"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaMCPToolAllowedTools")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension BetaMCPToolAllowedTools {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode([String].self) {
-            return .stringList(value)
-        }
-        if let value = try? container.decode(BetaMCPToolFilter.self) {
-            return .betaMcpToolFilter(value)
-        }
+        if let value = try? container.decode([String].self) { return .stringList(value) }
+        if let value = try? container.decode(BetaMCPToolFilter.self) { return .betaMcpToolFilter(value) }
         return nil
     }
 }
@@ -442,38 +362,28 @@ public struct BetaMCPToolExecutionError: Codable {
         case content
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaMCPToolExecutionError {
-    init(from decoder: Decoder) throws {
+extension BetaMCPToolExecutionError {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        content = try container.sdkDecodeRequired(.content)
-        try sdkValidateRawEnum("type", type, BetaMCPToolExecutionErrorType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.content = try container.sdkDecodeRequired(.content)
+            try sdkValidateRawEnum("type", self.type, BetaMCPToolExecutionErrorType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaMCPToolExecutionError {
-    init(type: BetaMCPToolExecutionErrorType, content: JSONValue) throws {
+extension BetaMCPToolExecutionError {
+    public init(type: BetaMCPToolExecutionErrorType, content: JSONValue) throws {
         (self.type, self.content) = (type, content)
-        try sdkValidateRawEnum("type", self.type, BetaMCPToolExecutionErrorType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaMCPToolExecutionErrorType.allCases.map(\.rawValue))
     }
 }
 
@@ -491,20 +401,20 @@ public struct BetaMCPToolRequireApprovalVariant0: Codable {
     }
 
     init() {
-        (always, never) = (nil, nil)
+        (self.always, self.never) = (nil, nil)
     }
 }
 
-public extension BetaMCPToolRequireApprovalVariant0 {
-    init(from decoder: Decoder) throws {
+extension BetaMCPToolRequireApprovalVariant0 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        always = try container.sdkDecodeIfPresent(.always)
-        never = try container.sdkDecodeIfPresent(.never)
+        self.always = try container.sdkDecodeIfPresent(.always)
+        self.never = try container.sdkDecodeIfPresent(.never)
     }
 }
 
-public extension BetaMCPToolRequireApprovalVariant0 {
-    init(always: BetaMCPToolFilter? = nil, never: BetaMCPToolFilter? = nil) {
+extension BetaMCPToolRequireApprovalVariant0 {
+    public init(always: BetaMCPToolFilter? = nil, never: BetaMCPToolFilter? = nil) {
         self.init()
         (self.always, self.never) = (always, never)
     }
@@ -518,10 +428,7 @@ public extension BetaMCPToolRequireApprovalVariant0 {
 public struct BetaMCPToolConnectorId: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let connectorDropbox = BetaMCPToolConnectorId(rawValue: "connector_dropbox")
     public static let connectorGmail = BetaMCPToolConnectorId(rawValue: "connector_gmail")
     public static let connectorGooglecalendar = BetaMCPToolConnectorId(rawValue: "connector_googlecalendar")
@@ -533,7 +440,7 @@ public struct BetaMCPToolConnectorId: RawRepresentable, Hashable, Codable, Senda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -547,16 +454,13 @@ public struct BetaMCPToolConnectorId: RawRepresentable, Hashable, Codable, Senda
 public struct BetaMCPToolRequireApprovalVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let always = BetaMCPToolRequireApprovalVariant1(rawValue: "always")
     public static let never = BetaMCPToolRequireApprovalVariant1(rawValue: "never")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -587,10 +491,7 @@ public enum BetaMCPToolCallType: String, CaseIterable, Codable {
 public struct BetaMCPToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaMCPToolCallStatus(rawValue: "in_progress")
     public static let completed = BetaMCPToolCallStatus(rawValue: "completed")
     public static let incomplete = BetaMCPToolCallStatus(rawValue: "incomplete")
@@ -599,7 +500,7 @@ public struct BetaMCPToolCallStatus: RawRepresentable, Hashable, Codable, Sendab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

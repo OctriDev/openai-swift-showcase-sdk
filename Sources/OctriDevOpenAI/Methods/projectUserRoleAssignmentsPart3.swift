@@ -6,47 +6,20 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectUserRoleAssignmentsMethods {
+extension ProjectUserRoleAssignmentsMethods {
     /// Assigns a project role to a user within a project.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project to update.
     /// - userId: The ID of the user that should receive the project role.
     /// - roleId: Identifier of the role to assign.
-    static func assignProjectUserRole(
-        config: ClientConfig,
-        projectId: String,
-        userId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> UserRoleAssignment {
+    public static func assignProjectUserRole(config: ClientConfig, projectId: String, userId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> UserRoleAssignment {
         let requestBody = AssignProjectUserRoleRequestBody(roleId: roleId)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/users/",
-                sdkEncodePathSegment(sdkWireString(userId)),
-                "/roles",
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "assignProjectUserRole",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/users/", sdkEncodePathSegment(sdkWireString(userId)), "/roles"].joined(), config: config, body: requestBody, decoder: .json, operationId: "assignProjectUserRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Retrieves a project role assigned to a user. Use `project_id`, `user_id`, and `role_id` to identify the role
-    /// assignment and its project context.
+    /// Retrieves a project role assigned to a user. Use `project_id`, `user_id`, and `role_id` to identify the role assignment and its project context.
     ///
     /// Retrieves a project role assigned to a user.
     ///
@@ -54,33 +27,7 @@ public extension ProjectUserRoleAssignmentsMethods {
     /// - projectId: The ID of the project to inspect.
     /// - userId: The ID of the user to inspect.
     /// - roleId: The ID of the project role to retrieve for the user.
-    static func retrieveProjectUserRole(
-        config: ClientConfig,
-        projectId: String,
-        userId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AssignedRoleDetails {
-        try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/users/",
-                sdkEncodePathSegment(sdkWireString(userId)),
-                "/roles/",
-                sdkEncodePathSegment(sdkWireString(roleId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveProjectUserRole",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func retrieveProjectUserRole(config: ClientConfig, projectId: String, userId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> AssignedRoleDetails {
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/users/", sdkEncodePathSegment(sdkWireString(userId)), "/roles/", sdkEncodePathSegment(sdkWireString(roleId))].joined(), config: config, decoder: .json, operationId: "retrieveProjectUserRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

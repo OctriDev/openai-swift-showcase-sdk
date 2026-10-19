@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension SpendLimitsMethods {
-    /// Creates or replaces a project's hard spend limit. Supply `threshold_amount`, `currency`, and `interval` to set
-    /// the spending threshold and the period used to evaluate it. The response includes the resulting limit and its
-    /// enforcement state.
+extension SpendLimitsMethods {
+    /// Creates or replaces a project's hard spend limit. Supply `threshold_amount`, `currency`, and `interval` to set the spending threshold and the period used to evaluate it. The response includes the resulting limit and its enforcement state.
     ///
     /// Create or replace a project's hard spend limit.
     ///
@@ -20,31 +18,11 @@ public extension SpendLimitsMethods {
     ///   supported.
     /// - interval: The time interval for evaluating spend against the threshold.
     ///   Currently, only `month` is supported.
-    static func updateSpendLimitsProject(
-        config: ClientConfig,
-        projectId: String,
-        thresholdAmount: Int,
-        currency: UpdateProjectSpendLimitBodyCurrency,
-        interval: UpdateProjectSpendLimitBodyInterval,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectSpendLimitResource {
+    public static func updateSpendLimitsProject(config: ClientConfig, projectId: String, thresholdAmount: Int, currency: UpdateProjectSpendLimitBodyCurrency, interval: UpdateProjectSpendLimitBodyInterval, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendLimitResource {
         try validateRange("threshold_amount", Double(thresholdAmount), min: 1)
 
-        let requestBody = UpdateSpendLimitsProjectRequestBody(
-            thresholdAmount: thresholdAmount,
-            currency: currency,
-            interval: interval
-        )
+        let requestBody = UpdateSpendLimitsProjectRequestBody(thresholdAmount: thresholdAmount, currency: currency, interval: interval)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/spend_limit"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateSpendLimitsProject",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/spend_limit"].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateSpendLimitsProject", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
     }
 }

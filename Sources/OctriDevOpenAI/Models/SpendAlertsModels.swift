@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SpendAlerts domain models
+// SpendAlerts domain models
 /// Paginated list of organization spend alerts.
 public struct OrganizationSpendAlertListResource: Codable {
     /// Always `list`.
@@ -25,65 +25,37 @@ public struct OrganizationSpendAlertListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationSpendAlertListResource {
-    init(from decoder: Decoder) throws {
+extension OrganizationSpendAlertListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(
-                field: "first_id",
-                code: "required",
-                message: "Validation failed for 'first_id': value is required"
-            )
+            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(
-                field: "last_id",
-                code: "required",
-                message: "Validation failed for 'last_id': value is required"
-            )
+            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        firstId = try container.sdkDecodeNullable(.firstId)
-        lastId = try container.sdkDecodeNullable(.lastId)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.firstId = try container.sdkDecodeNullable(.firstId)
+        self.lastId = try container.sdkDecodeNullable(.lastId)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
     }
 }
 
-public extension OrganizationSpendAlertListResource {
-    init(
-        object: OrganizationSpendAlertListResourceObject,
-        data: [OrganizationSpendAlert],
-        firstId: String?,
-        lastId: String?,
-        hasMore: Bool
-    ) {
+extension OrganizationSpendAlertListResource {
+    public init(object: OrganizationSpendAlertListResourceObject, data: [OrganizationSpendAlert], firstId: String?, lastId: String?, hasMore: Bool) {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
@@ -111,65 +83,37 @@ public struct ProjectSpendAlertListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectSpendAlertListResource {
-    init(from decoder: Decoder) throws {
+extension ProjectSpendAlertListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(
-                field: "first_id",
-                code: "required",
-                message: "Validation failed for 'first_id': value is required"
-            )
+            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(
-                field: "last_id",
-                code: "required",
-                message: "Validation failed for 'last_id': value is required"
-            )
+            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        firstId = try container.sdkDecodeNullable(.firstId)
-        lastId = try container.sdkDecodeNullable(.lastId)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.firstId = try container.sdkDecodeNullable(.firstId)
+        self.lastId = try container.sdkDecodeNullable(.lastId)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
     }
 }
 
-public extension ProjectSpendAlertListResource {
-    init(
-        object: ProjectSpendAlertListResourceObject,
-        data: [ProjectSpendAlert],
-        firstId: String?,
-        lastId: String?,
-        hasMore: Bool
-    ) {
+extension ProjectSpendAlertListResource {
+    public init(object: ProjectSpendAlertListResourceObject, data: [ProjectSpendAlert], firstId: String?, lastId: String?, hasMore: Bool) {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
@@ -191,43 +135,29 @@ public struct ProjectSpendAlertDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectSpendAlertDeletedResource {
-    init(from decoder: Decoder) throws {
+extension ProjectSpendAlertDeletedResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension ProjectSpendAlertDeletedResource {
-    init(id: String, object: ProjectSpendAlertDeletedResourceObject, deleted: Bool) {
+extension ProjectSpendAlertDeletedResource {
+    public init(id: String, object: ProjectSpendAlertDeletedResourceObject, deleted: Bool) {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
     }
@@ -257,74 +187,41 @@ public struct ProjectSpendAlert: Codable {
         case notificationChannel = "notification_channel"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectSpendAlert {
-    init(from decoder: Decoder) throws {
+extension ProjectSpendAlert {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(
-                field: "threshold_amount",
-                code: "required",
-                message: "Validation failed for 'threshold_amount': value is required"
-            )
+            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
         }
         guard container.contains(.currency) else {
-            throw SdkValidationError(
-                field: "currency",
-                code: "required",
-                message: "Validation failed for 'currency': value is required"
-            )
+            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
         }
         guard container.contains(.interval) else {
-            throw SdkValidationError(
-                field: "interval",
-                code: "required",
-                message: "Validation failed for 'interval': value is required"
-            )
+            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
         }
         guard container.contains(.notificationChannel) else {
-            throw SdkValidationError(
-                field: "notification_channel",
-                code: "required",
-                message: "Validation failed for 'notification_channel': value is required"
-            )
+            throw SdkValidationError(field: "notification_channel", code: "required", message: "Validation failed for 'notification_channel': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        currency = try container.sdkDecodeRequired(.currency)
-        interval = try container.sdkDecodeRequired(.interval)
-        notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        self.currency = try container.sdkDecodeRequired(.currency)
+        self.interval = try container.sdkDecodeRequired(.interval)
+        self.notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
     }
 }
 
-public extension ProjectSpendAlert {
-    init(
-        id: String,
-        object: ProjectSpendAlertObject,
-        thresholdAmount: Int,
-        currency: ProjectSpendAlertCurrency,
-        interval: ProjectSpendAlertInterval,
-        notificationChannel: SpendAlertNotificationChannel
-    ) {
+extension ProjectSpendAlert {
+    public init(id: String, object: ProjectSpendAlertObject, thresholdAmount: Int, currency: ProjectSpendAlertCurrency, interval: ProjectSpendAlertInterval, notificationChannel: SpendAlertNotificationChannel) {
         (self.id, self.object) = (id, object)
         (self.thresholdAmount, self.currency) = (thresholdAmount, currency)
         (self.interval, self.notificationChannel) = (interval, notificationChannel)
@@ -355,74 +252,41 @@ public struct OrganizationSpendAlert: Codable {
         case notificationChannel = "notification_channel"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationSpendAlert {
-    init(from decoder: Decoder) throws {
+extension OrganizationSpendAlert {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(
-                field: "threshold_amount",
-                code: "required",
-                message: "Validation failed for 'threshold_amount': value is required"
-            )
+            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
         }
         guard container.contains(.currency) else {
-            throw SdkValidationError(
-                field: "currency",
-                code: "required",
-                message: "Validation failed for 'currency': value is required"
-            )
+            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
         }
         guard container.contains(.interval) else {
-            throw SdkValidationError(
-                field: "interval",
-                code: "required",
-                message: "Validation failed for 'interval': value is required"
-            )
+            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
         }
         guard container.contains(.notificationChannel) else {
-            throw SdkValidationError(
-                field: "notification_channel",
-                code: "required",
-                message: "Validation failed for 'notification_channel': value is required"
-            )
+            throw SdkValidationError(field: "notification_channel", code: "required", message: "Validation failed for 'notification_channel': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        currency = try container.sdkDecodeRequired(.currency)
-        interval = try container.sdkDecodeRequired(.interval)
-        notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        self.currency = try container.sdkDecodeRequired(.currency)
+        self.interval = try container.sdkDecodeRequired(.interval)
+        self.notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
     }
 }
 
-public extension OrganizationSpendAlert {
-    init(
-        id: String,
-        object: OrganizationSpendAlertObject,
-        thresholdAmount: Int,
-        currency: OrganizationSpendAlertCurrency,
-        interval: OrganizationSpendAlertInterval,
-        notificationChannel: SpendAlertNotificationChannel
-    ) {
+extension OrganizationSpendAlert {
+    public init(id: String, object: OrganizationSpendAlertObject, thresholdAmount: Int, currency: OrganizationSpendAlertCurrency, interval: OrganizationSpendAlertInterval, notificationChannel: SpendAlertNotificationChannel) {
         (self.id, self.object) = (id, object)
         (self.thresholdAmount, self.currency) = (thresholdAmount, currency)
         (self.interval, self.notificationChannel) = (interval, notificationChannel)
@@ -444,36 +308,26 @@ public struct SpendAlertNotificationChannel: Codable {
         case subjectPrefix = "subject_prefix"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SpendAlertNotificationChannel {
-    init(from decoder: Decoder) throws {
+extension SpendAlertNotificationChannel {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.recipients) else {
-            throw SdkValidationError(
-                field: "recipients",
-                code: "required",
-                message: "Validation failed for 'recipients': value is required"
-            )
+            throw SdkValidationError(field: "recipients", code: "required", message: "Validation failed for 'recipients': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        recipients = try container.sdkDecodeRequired(.recipients)
-        subjectPrefix = try container.sdkDecodeIfPresent(.subjectPrefix)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.recipients = try container.sdkDecodeRequired(.recipients)
+        self.subjectPrefix = try container.sdkDecodeIfPresent(.subjectPrefix)
     }
 }
 
-public extension SpendAlertNotificationChannel {
-    init(type: SpendAlertNotificationChannelType, recipients: [String], subjectPrefix: String? = nil) {
+extension SpendAlertNotificationChannel {
+    public init(type: SpendAlertNotificationChannelType, recipients: [String], subjectPrefix: String? = nil) {
         (self.type, self.recipients) = (type, recipients)
         self.subjectPrefix = subjectPrefix
     }
@@ -497,76 +351,37 @@ public struct CreateSpendAlertBody: Codable {
         case notificationChannel = "notification_channel"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateSpendAlertBody {
-    init(from decoder: Decoder) throws {
+extension CreateSpendAlertBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(
-                field: "threshold_amount",
-                code: "required",
-                message: "Validation failed for 'threshold_amount': value is required"
-            )
+            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
         }
         guard container.contains(.currency) else {
-            throw SdkValidationError(
-                field: "currency",
-                code: "required",
-                message: "Validation failed for 'currency': value is required"
-            )
+            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
         }
         guard container.contains(.interval) else {
-            throw SdkValidationError(
-                field: "interval",
-                code: "required",
-                message: "Validation failed for 'interval': value is required"
-            )
+            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
         }
         guard container.contains(.notificationChannel) else {
-            throw SdkValidationError(
-                field: "notification_channel",
-                code: "required",
-                message: "Validation failed for 'notification_channel': value is required"
-            )
+            throw SdkValidationError(field: "notification_channel", code: "required", message: "Validation failed for 'notification_channel': value is required")
         }
-        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        currency = try container.sdkDecodeRequired(.currency)
-        interval = try container.sdkDecodeRequired(.interval)
-        notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
-        try validateRange(
-            "threshold_amount",
-            Double(thresholdAmount),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        self.currency = try container.sdkDecodeRequired(.currency)
+        self.interval = try container.sdkDecodeRequired(.interval)
+        self.notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
+            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension CreateSpendAlertBody {
-    init(
-        thresholdAmount: Int,
-        currency: CreateSpendAlertBodyCurrency,
-        interval: CreateSpendAlertBodyInterval,
-        notificationChannel: SpendAlertNotificationChannel
-    ) throws {
+extension CreateSpendAlertBody {
+    public init(thresholdAmount: Int, currency: CreateSpendAlertBodyCurrency, interval: CreateSpendAlertBodyInterval, notificationChannel: SpendAlertNotificationChannel) throws {
         (self.thresholdAmount, self.currency) = (thresholdAmount, currency)
         (self.interval, self.notificationChannel) = (interval, notificationChannel)
-        try validateRange(
-            "threshold_amount",
-            Double(self.thresholdAmount),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -585,43 +400,29 @@ public struct OrganizationSpendAlertDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationSpendAlertDeletedResource {
-    init(from decoder: Decoder) throws {
+extension OrganizationSpendAlertDeletedResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension OrganizationSpendAlertDeletedResource {
-    init(id: String, object: OrganizationSpendAlertDeletedResourceObject, deleted: Bool) {
+extension OrganizationSpendAlertDeletedResource {
+    public init(id: String, object: OrganizationSpendAlertDeletedResourceObject, deleted: Bool) {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
     }

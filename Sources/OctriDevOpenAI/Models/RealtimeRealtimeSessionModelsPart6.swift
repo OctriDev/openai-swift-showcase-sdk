@@ -3,20 +3,17 @@
 
 import Foundation
 
-/// RealtimeRealtimeSession domain models
+// RealtimeRealtimeSession domain models
 /// The object type. Always `realtime.session`.
 public struct RealtimeSessionObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let realtimeSession = RealtimeSessionObject(rawValue: "realtime.session")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -26,20 +23,15 @@ public struct RealtimeSessionObject: RawRepresentable, Hashable, Codable, Sendab
 }
 
 /// Required enumerated value serialized in the `include[]` wire field.
-public struct RealtimeSessionCreateResponseIncludeItem: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeSessionCreateResponseIncludeItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let itemInputAudioTranscriptionLogprobs =
-        RealtimeSessionCreateResponseIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let itemInputAudioTranscriptionLogprobs = RealtimeSessionCreateResponseIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -49,20 +41,16 @@ public struct RealtimeSessionCreateResponseIncludeItem: RawRepresentable, Hashab
 }
 
 /// Required enumerated value serialized in the `output_modalities[]` wire field.
-public struct RealtimeSessionCreateResponseGAOutputModalitiesItem: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeSessionCreateResponseGAOutputModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = RealtimeSessionCreateResponseGAOutputModalitiesItem(rawValue: "text")
     public static let audio = RealtimeSessionCreateResponseGAOutputModalitiesItem(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -72,20 +60,15 @@ public struct RealtimeSessionCreateResponseGAOutputModalitiesItem: RawRepresenta
 }
 
 /// Optional enumerated value serialized in the `max_response_output_tokens` wire field.
-public struct RealtimeSessionCreateRequestMaxResponseOutputTokensVariant1: RawRepresentable, Hashable, Codable,
-    Sendable,
-    SdkWireConvertible {
+public struct RealtimeSessionCreateRequestMaxResponseOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inf = RealtimeSessionCreateRequestMaxResponseOutputTokensVariant1(rawValue: "inf")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -99,17 +82,14 @@ public struct RealtimeSessionCreateRequestMaxResponseOutputTokensVariant1: RawRe
 public struct RealtimeSessionInputAudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let pcm16 = RealtimeSessionInputAudioFormat(rawValue: "pcm16")
     public static let g711Ulaw = RealtimeSessionInputAudioFormat(rawValue: "g711_ulaw")
     public static let g711Alaw = RealtimeSessionInputAudioFormat(rawValue: "g711_alaw")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -119,20 +99,15 @@ public struct RealtimeSessionInputAudioFormat: RawRepresentable, Hashable, Codab
 }
 
 /// Required enumerated value serialized in the `include[]` wire field.
-public struct RealtimeSessionCreateResponseGAIncludeItem: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeSessionCreateResponseGAIncludeItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let itemInputAudioTranscriptionLogprobs =
-        RealtimeSessionCreateResponseGAIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let itemInputAudioTranscriptionLogprobs = RealtimeSessionCreateResponseGAIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -142,19 +117,15 @@ public struct RealtimeSessionCreateResponseGAIncludeItem: RawRepresentable, Hash
 }
 
 /// Optional enumerated value serialized in the `max_response_output_tokens` wire field.
-public struct RealtimeSessionMaxResponseOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeSessionMaxResponseOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inf = RealtimeSessionMaxResponseOutputTokensVariant1(rawValue: "inf")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

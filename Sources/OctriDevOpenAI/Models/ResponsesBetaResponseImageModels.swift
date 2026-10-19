@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaResponseImage domain models
+// ResponsesBetaResponseImage domain models
 /// Emitted when a partial image is available during image generation streaming.
 public struct BetaResponseImageGenCallPartialImageEvent: Codable {
     /// The type of the event. Always 'response.image_generation_call.partial_image'.
@@ -43,96 +43,54 @@ public struct BetaResponseImageGenCallPartialImageEvent: Codable {
         case outputFormat = "output_format"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseImageGenCallPartialImageEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseImageGenCallPartialImageEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.partialImageIndex) else {
-            throw SdkValidationError(
-                field: "partial_image_index",
-                code: "required",
-                message: "Validation failed for 'partial_image_index': value is required"
-            )
+            throw SdkValidationError(field: "partial_image_index", code: "required", message: "Validation failed for 'partial_image_index': value is required")
         }
         guard container.contains(.partialImageB64) else {
-            throw SdkValidationError(
-                field: "partial_image_b64",
-                code: "required",
-                message: "Validation failed for 'partial_image_b64': value is required"
-            )
+            throw SdkValidationError(field: "partial_image_b64", code: "required", message: "Validation failed for 'partial_image_b64': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        partialImageIndex = try container.sdkDecodeRequired(.partialImageIndex)
-        partialImageB64 = try container.sdkDecodeRequired(.partialImageB64)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        size = try container.sdkDecodeIfPresent(.size)
-        quality = try container.sdkDecodeIfPresent(.quality)
-        background = try container.sdkDecodeIfPresent(.background)
-        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-        try sdkValidateRawEnum("type", type, BetaResponseImageGenCallPartialImageEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.partialImageIndex = try container.sdkDecodeRequired(.partialImageIndex)
+        self.partialImageB64 = try container.sdkDecodeRequired(.partialImageB64)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.size = try container.sdkDecodeIfPresent(.size)
+        self.quality = try container.sdkDecodeIfPresent(.quality)
+        self.background = try container.sdkDecodeIfPresent(.background)
+        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+            try sdkValidateRawEnum("type", self.type, BetaResponseImageGenCallPartialImageEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseImageGenCallPartialImageEvent {
-    init(
-        type: BetaResponseImageGenCallPartialImageEventType,
-        outputIndex: Int,
-        itemId: String,
-        sequenceNumber: Int,
-        partialImageIndex: Int,
-        partialImageB64: String,
-        agent: BetaAgentTag? = nil,
-        size: String? = nil,
-        quality: String? = nil,
-        background: String? = nil,
-        outputFormat: String? = nil
-    ) throws {
+extension BetaResponseImageGenCallPartialImageEvent {
+    public init(type: BetaResponseImageGenCallPartialImageEventType, outputIndex: Int, itemId: String, sequenceNumber: Int, partialImageIndex: Int, partialImageB64: String, agent: BetaAgentTag? = nil, size: String? = nil, quality: String? = nil, background: String? = nil, outputFormat: String? = nil) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.sequenceNumber) = (itemId, sequenceNumber)
         (self.partialImageIndex, self.partialImageB64) = (partialImageIndex, partialImageB64)
         (self.agent, self.size) = (agent, size)
         (self.quality, self.background) = (quality, background)
         self.outputFormat = outputFormat
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            BetaResponseImageGenCallPartialImageEventType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, BetaResponseImageGenCallPartialImageEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -157,63 +115,39 @@ public struct BetaResponseImageGenCallInProgressEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseImageGenCallInProgressEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseImageGenCallInProgressEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseImageGenCallInProgressEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseImageGenCallInProgressEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseImageGenCallInProgressEvent {
-    init(
-        type: BetaResponseImageGenCallInProgressEventType,
-        outputIndex: Int,
-        itemId: String,
-        sequenceNumber: Int,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseImageGenCallInProgressEvent {
+    public init(type: BetaResponseImageGenCallInProgressEventType, outputIndex: Int, itemId: String, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.sequenceNumber) = (itemId, sequenceNumber)
         self.agent = agent
-        try sdkValidateRawEnum("type", self.type, BetaResponseImageGenCallInProgressEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaResponseImageGenCallInProgressEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -238,63 +172,39 @@ public struct BetaResponseImageGenCallGeneratingEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseImageGenCallGeneratingEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseImageGenCallGeneratingEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseImageGenCallGeneratingEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseImageGenCallGeneratingEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseImageGenCallGeneratingEvent {
-    init(
-        type: BetaResponseImageGenCallGeneratingEventType,
-        outputIndex: Int,
-        itemId: String,
-        sequenceNumber: Int,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseImageGenCallGeneratingEvent {
+    public init(type: BetaResponseImageGenCallGeneratingEventType, outputIndex: Int, itemId: String, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.sequenceNumber) = (itemId, sequenceNumber)
         self.agent = agent
-        try sdkValidateRawEnum("type", self.type, BetaResponseImageGenCallGeneratingEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaResponseImageGenCallGeneratingEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -319,63 +229,39 @@ public struct BetaResponseImageGenCallCompletedEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseImageGenCallCompletedEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseImageGenCallCompletedEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseImageGenCallCompletedEvent {
-    init(
-        type: BetaResponseImageGenCallCompletedEventType,
-        outputIndex: Int,
-        sequenceNumber: Int,
-        itemId: String,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseImageGenCallCompletedEvent {
+    public init(type: BetaResponseImageGenCallCompletedEventType, outputIndex: Int, sequenceNumber: Int, itemId: String, agent: BetaAgentTag? = nil) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.sequenceNumber, self.itemId) = (sequenceNumber, itemId)
         self.agent = agent
-        try sdkValidateRawEnum("type", self.type, BetaResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
     }
 }
 

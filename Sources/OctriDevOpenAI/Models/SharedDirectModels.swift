@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedDirect domain models
+// SharedDirect domain models
 /// Typed representation of the `DirectToolCallCaller` API schema.
 public struct DirectToolCallCaller: Codable {
     /// Required enumerated value serialized in the `type` wire field.
@@ -13,30 +13,24 @@ public struct DirectToolCallCaller: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DirectToolCallCaller {
-    init(from decoder: Decoder) throws {
+extension DirectToolCallCaller {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, DirectToolCallCallerType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, DirectToolCallCallerType.allCases.map(\.rawValue))
     }
 }
 
-public extension DirectToolCallCaller {
-    init(type: DirectToolCallCallerType) throws {
+extension DirectToolCallCaller {
+    public init(type: DirectToolCallCallerType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, DirectToolCallCallerType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, DirectToolCallCallerType.allCases.map(\.rawValue))
     }
 }
 
@@ -49,30 +43,24 @@ public struct DirectToolCallCallerParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DirectToolCallCallerParam {
-    init(from decoder: Decoder) throws {
+extension DirectToolCallCallerParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, DirectToolCallCallerParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, DirectToolCallCallerParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension DirectToolCallCallerParam {
-    init(type: DirectToolCallCallerParamType) throws {
+extension DirectToolCallCallerParam {
+    public init(type: DirectToolCallCallerParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, DirectToolCallCallerParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, DirectToolCallCallerParamType.allCases.map(\.rawValue))
     }
 }
 

@@ -3,18 +3,9 @@
 
 import Foundation
 
-/// ResponsesBetaResponse domain models
-public extension BetaResponseProperties {
-    init(
-        previousResponseId: String? = nil,
-        model: BetaModelIdsResponses? = nil,
-        background: Bool? = nil,
-        maxToolCalls: Int? = nil,
-        text: BetaResponseTextParam? = nil,
-        tools: BetaToolsArray? = nil,
-        toolChoice: BetaToolChoiceParam? = nil,
-        prompt: BetaPrompt? = nil
-    ) {
+// ResponsesBetaResponse domain models
+extension BetaResponseProperties {
+    public init(previousResponseId: String? = nil, model: BetaModelIdsResponses? = nil, background: Bool? = nil, maxToolCalls: Int? = nil, text: BetaResponseTextParam? = nil, tools: BetaToolsArray? = nil, toolChoice: BetaToolChoiceParam? = nil, prompt: BetaPrompt? = nil) {
         self.init()
         (self.previousResponseId, self.model) = (previousResponseId, model)
         (self.background, self.maxToolCalls) = (background, maxToolCalls)
@@ -35,19 +26,19 @@ public struct BetaResponseVariant2IncompleteDetails: Codable {
     }
 
     init() {
-        reason = nil
+        self.reason = nil
     }
 }
 
-public extension BetaResponseVariant2IncompleteDetails {
-    init(from decoder: Decoder) throws {
+extension BetaResponseVariant2IncompleteDetails {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        reason = try container.sdkDecodeIfPresent(.reason)
+        self.reason = try container.sdkDecodeIfPresent(.reason)
     }
 }
 
-public extension BetaResponseVariant2IncompleteDetails {
-    init(reason: BetaResponseVariant2IncompleteDetailsReason? = nil) {
+extension BetaResponseVariant2IncompleteDetails {
+    public init(reason: BetaResponseVariant2IncompleteDetailsReason? = nil) {
         self.init()
         self.reason = reason
     }
@@ -65,35 +56,25 @@ public struct BetaResponseUsageInputTokensDetails: Codable {
         case cacheWriteTokens = "cache_write_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseUsageInputTokensDetails {
-    init(from decoder: Decoder) throws {
+extension BetaResponseUsageInputTokensDetails {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.cachedTokens) else {
-            throw SdkValidationError(
-                field: "cached_tokens",
-                code: "required",
-                message: "Validation failed for 'cached_tokens': value is required"
-            )
+            throw SdkValidationError(field: "cached_tokens", code: "required", message: "Validation failed for 'cached_tokens': value is required")
         }
         guard container.contains(.cacheWriteTokens) else {
-            throw SdkValidationError(
-                field: "cache_write_tokens",
-                code: "required",
-                message: "Validation failed for 'cache_write_tokens': value is required"
-            )
+            throw SdkValidationError(field: "cache_write_tokens", code: "required", message: "Validation failed for 'cache_write_tokens': value is required")
         }
-        cachedTokens = try container.sdkDecodeRequired(.cachedTokens)
-        cacheWriteTokens = try container.sdkDecodeRequired(.cacheWriteTokens)
+        self.cachedTokens = try container.sdkDecodeRequired(.cachedTokens)
+        self.cacheWriteTokens = try container.sdkDecodeRequired(.cacheWriteTokens)
     }
 }
 
-public extension BetaResponseUsageInputTokensDetails {
-    init(cachedTokens: Int, cacheWriteTokens: Int) {
+extension BetaResponseUsageInputTokensDetails {
+    public init(cachedTokens: Int, cacheWriteTokens: Int) {
         (self.cachedTokens, self.cacheWriteTokens) = (cachedTokens, cacheWriteTokens)
     }
 }
@@ -129,53 +110,34 @@ public struct BetaResponseQueuedEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseQueuedEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseQueuedEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.response) else {
-            throw SdkValidationError(
-                field: "response",
-                code: "required",
-                message: "Validation failed for 'response': value is required"
-            )
+            throw SdkValidationError(field: "response", code: "required", message: "Validation failed for 'response': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        response = try container.sdkDecodeRequired(.response)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseQueuedEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.response = try container.sdkDecodeRequired(.response)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseQueuedEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseQueuedEvent {
-    init(
-        type: BetaResponseQueuedEventType,
-        response: BetaResponse,
-        sequenceNumber: Int,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseQueuedEvent {
+    public init(type: BetaResponseQueuedEventType, response: BetaResponse, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.response) = (type, response)
         (self.sequenceNumber, self.agent) = (sequenceNumber, agent)
-        try sdkValidateRawEnum("type", self.type, BetaResponseQueuedEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaResponseQueuedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -210,53 +172,34 @@ public struct BetaResponseInProgressEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseInProgressEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseInProgressEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.response) else {
-            throw SdkValidationError(
-                field: "response",
-                code: "required",
-                message: "Validation failed for 'response': value is required"
-            )
+            throw SdkValidationError(field: "response", code: "required", message: "Validation failed for 'response': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        response = try container.sdkDecodeRequired(.response)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseInProgressEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.response = try container.sdkDecodeRequired(.response)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseInProgressEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseInProgressEvent {
-    init(
-        type: BetaResponseInProgressEventType,
-        response: BetaResponse,
-        sequenceNumber: Int,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseInProgressEvent {
+    public init(type: BetaResponseInProgressEventType, response: BetaResponse, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.response) = (type, response)
         (self.sequenceNumber, self.agent) = (sequenceNumber, agent)
-        try sdkValidateRawEnum("type", self.type, BetaResponseInProgressEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaResponseInProgressEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -270,27 +213,21 @@ public struct BetaResponseConversation: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseConversation {
-    init(from decoder: Decoder) throws {
+extension BetaResponseConversation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension BetaResponseConversation {
-    init(id: String) {
+extension BetaResponseConversation {
+    public init(id: String) {
         self.id = id
     }
 }
@@ -316,71 +253,39 @@ public struct BetaResponseCompactionCompactingStreamingEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseCompactionCompactingStreamingEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseCompactionCompactingStreamingEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            BetaResponseCompactionCompactingStreamingEventType.allCases.map(\.rawValue)
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseCompactionCompactingStreamingEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseCompactionCompactingStreamingEvent {
-    init(
-        type: BetaResponseCompactionCompactingStreamingEventType,
-        sequenceNumber: Int,
-        outputIndex: Int,
-        itemId: String,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseCompactionCompactingStreamingEvent {
+    public init(type: BetaResponseCompactionCompactingStreamingEventType, sequenceNumber: Int, outputIndex: Int, itemId: String, agent: BetaAgentTag? = nil) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.outputIndex, self.itemId) = (outputIndex, itemId)
         self.agent = agent
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            BetaResponseCompactionCompactingStreamingEventType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, BetaResponseCompactionCompactingStreamingEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -522,94 +427,54 @@ public struct BetaResponse: Codable {
         case maxOutputTokens = "max_output_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponse {
-    init(from decoder: Decoder) throws {
+extension BetaResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        metadata = try container.sdkDecodeNullable(.metadata)
-        temperature = try container.sdkDecodeNullable(.temperature)
-        topP = try container.sdkDecodeNullable(.topP)
-        model = try container.sdkDecodeRequired(.model)
-        tools = try container.sdkDecodeRequired(.tools)
-        toolChoice = try container.sdkDecodeRequired(.toolChoice)
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        accessPrograms = try container.sdkDecodeNullable(.accessPrograms)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        error = try container.sdkDecodeNullable(.error)
-        incompleteDetails = try container.sdkDecodeNullable(.incompleteDetails)
-        output = try container.sdkDecodeRequired(.output)
-        instructions = try container.sdkDecodeNullable(.instructions)
-        parallelToolCalls = try container.sdkDecodeRequired(.parallelToolCalls)
-        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        user = try container.sdkDecodeIfPresent(.user)
-        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
-        previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
-        background = try container.sdkDecodeIfPresent(.background)
-        maxToolCalls = try container.sdkDecodeIfPresent(.maxToolCalls)
-        text = try container.sdkDecodeIfPresent(.text)
-        prompt = try container.sdkDecodeIfPresent(.prompt)
-        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        truncation = try container.sdkDecodeIfPresent(.truncation)
-        status = try container.sdkDecodeIfPresent(.status)
-        completedAt = try container.sdkDecodeIfPresent(.completedAt)
-        reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        outputText = try container.sdkDecodeIfPresent(.outputText)
-        usage = try container.sdkDecodeIfPresent(.usage)
-        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        promptCacheDiagnostics = try container.sdkDecodeIfPresent(.promptCacheDiagnostics)
-        moderation = try container.sdkDecodeIfPresent(.moderation)
-        conversation = try container.sdkDecodeIfPresent(.conversation)
-        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        self.metadata = try container.sdkDecodeNullable(.metadata)
+        self.temperature = try container.sdkDecodeNullable(.temperature)
+        self.topP = try container.sdkDecodeNullable(.topP)
+        self.model = try container.sdkDecodeRequired(.model)
+        self.tools = try container.sdkDecodeRequired(.tools)
+        self.toolChoice = try container.sdkDecodeRequired(.toolChoice)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.accessPrograms = try container.sdkDecodeNullable(.accessPrograms)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.error = try container.sdkDecodeNullable(.error)
+        self.incompleteDetails = try container.sdkDecodeNullable(.incompleteDetails)
+        self.output = try container.sdkDecodeRequired(.output)
+        self.instructions = try container.sdkDecodeNullable(.instructions)
+        self.parallelToolCalls = try container.sdkDecodeRequired(.parallelToolCalls)
+        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        self.user = try container.sdkDecodeIfPresent(.user)
+        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        self.previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
+        self.background = try container.sdkDecodeIfPresent(.background)
+        self.maxToolCalls = try container.sdkDecodeIfPresent(.maxToolCalls)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.prompt = try container.sdkDecodeIfPresent(.prompt)
+        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        self.truncation = try container.sdkDecodeIfPresent(.truncation)
+        self.status = try container.sdkDecodeIfPresent(.status)
+        self.completedAt = try container.sdkDecodeIfPresent(.completedAt)
+        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        self.outputText = try container.sdkDecodeIfPresent(.outputText)
+        self.usage = try container.sdkDecodeIfPresent(.usage)
+        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        self.promptCacheDiagnostics = try container.sdkDecodeIfPresent(.promptCacheDiagnostics)
+        self.moderation = try container.sdkDecodeIfPresent(.moderation)
+        self.conversation = try container.sdkDecodeIfPresent(.conversation)
+        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
     }
 }
 
-public extension BetaResponse {
-    init(
-        metadata: BetaMetadata?,
-        temperature: Double?,
-        topP: Double?,
-        model: BetaModelIdsResponses,
-        tools: BetaToolsArray,
-        toolChoice: BetaToolChoiceParam,
-        id: String,
-        object: BetaResponseVariant2Object,
-        accessPrograms: BetaAccessProgramsBody?,
-        createdAt: Double,
-        error: BetaResponseError?,
-        incompleteDetails: BetaResponseVariant2IncompleteDetails?,
-        output: [BetaOutputItem],
-        instructions: BetaResponseVariant2Instructions?,
-        parallelToolCalls: Bool,
-        topLogprobs: Int? = nil,
-        user: String? = nil,
-        safetyIdentifier: String? = nil,
-        promptCacheKey: String? = nil,
-        promptCacheRetention: BetaModelResponsePropertiesPromptCacheRetentionVariant0? = nil,
-        previousResponseId: String? = nil,
-        background: Bool? = nil,
-        maxToolCalls: Int? = nil,
-        text: BetaResponseTextParam? = nil,
-        prompt: BetaPrompt? = nil,
-        serviceTier: BetaServiceTierResponsesVariant0? = nil,
-        truncation: BetaResponseVariant2TruncationVariant0? = nil,
-        status: BetaResponseVariant2Status? = nil,
-        completedAt: Double? = nil,
-        reasoning: BetaReasoning? = nil,
-        outputText: String? = nil,
-        usage: BetaResponseUsage? = nil,
-        promptCacheOptions: BetaPromptCacheOptions? = nil,
-        promptCacheDiagnostics: BetaPromptCacheDiagnostics? = nil,
-        moderation: BetaModeration? = nil,
-        conversation: BetaResponseConversation? = nil,
-        maxOutputTokens: Int? = nil
-    ) {
+extension BetaResponse {
+    public init(metadata: BetaMetadata?, temperature: Double?, topP: Double?, model: BetaModelIdsResponses, tools: BetaToolsArray, toolChoice: BetaToolChoiceParam, id: String, object: BetaResponseVariant2Object, accessPrograms: BetaAccessProgramsBody?, createdAt: Double, error: BetaResponseError?, incompleteDetails: BetaResponseVariant2IncompleteDetails?, output: [BetaOutputItem], instructions: BetaResponseVariant2Instructions?, parallelToolCalls: Bool, topLogprobs: Int? = nil, user: String? = nil, safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: BetaModelResponsePropertiesPromptCacheRetentionVariant0? = nil, previousResponseId: String? = nil, background: Bool? = nil, maxToolCalls: Int? = nil, text: BetaResponseTextParam? = nil, prompt: BetaPrompt? = nil, serviceTier: BetaServiceTierResponsesVariant0? = nil, truncation: BetaResponseVariant2TruncationVariant0? = nil, status: BetaResponseVariant2Status? = nil, completedAt: Double? = nil, reasoning: BetaReasoning? = nil, outputText: String? = nil, usage: BetaResponseUsage? = nil, promptCacheOptions: BetaPromptCacheOptions? = nil, promptCacheDiagnostics: BetaPromptCacheDiagnostics? = nil, moderation: BetaModeration? = nil, conversation: BetaResponseConversation? = nil, maxOutputTokens: Int? = nil) {
         (self.metadata, self.temperature) = (metadata, temperature)
         (self.topP, self.model) = (topP, model)
         (self.tools, self.toolChoice) = (tools, toolChoice)

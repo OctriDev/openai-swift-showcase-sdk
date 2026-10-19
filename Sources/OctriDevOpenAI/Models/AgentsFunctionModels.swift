@@ -3,39 +3,29 @@
 
 import Foundation
 
-/// AgentsFunction domain models
+// AgentsFunction domain models
 public indirect enum FunctionCallOutputParam {
     case stringValue(String)
     case inputContentParamList([InputContentParam])
 }
 
 extension FunctionCallOutputParam: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for FunctionCallOutputParam"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for FunctionCallOutputParam")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension FunctionCallOutputParam {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode([InputContentParam].self) {
-            return .inputContentParamList(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode([InputContentParam].self) { return .inputContentParamList(value) }
         return nil
     }
 }
@@ -56,32 +46,22 @@ public indirect enum FunctionCallOutputResource {
 }
 
 extension FunctionCallOutputResource: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for FunctionCallOutputResource"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for FunctionCallOutputResource")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension FunctionCallOutputResource {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode([InputContentResource].self) {
-            return .inputContentResourceList(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode([InputContentResource].self) { return .inputContentResourceList(value) }
         return nil
     }
 }
@@ -123,97 +103,59 @@ public struct FunctionCallItemResource: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension FunctionCallItemResource {
-    init(from decoder: Decoder) throws {
+extension FunctionCallItemResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.turnId) else {
-            throw SdkValidationError(
-                field: "turn_id",
-                code: "required",
-                message: "Validation failed for 'turn_id': value is required"
-            )
+            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.arguments) else {
-            throw SdkValidationError(
-                field: "arguments",
-                code: "required",
-                message: "Validation failed for 'arguments': value is required"
-            )
+            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        turnId = try container.sdkDecodeRequired(.turnId)
-        callId = try container.sdkDecodeRequired(.callId)
-        name = try container.sdkDecodeRequired(.name)
-        arguments = try container.sdkDecodeRequired(.arguments)
-        status = try container.sdkDecodeRequired(.status)
-        try sdkValidateRawEnum("type", type, FunctionCallItemResourceType.allCases.map(\.rawValue))
-        try validateLength("id", id, min: 0, max: nil)
-        try validateLength("turn_id", turnId, min: 0, max: nil)
-        try validateLength("call_id", callId, min: 0, max: nil)
-        try validateLength("name", name, min: 0, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.turnId = try container.sdkDecodeRequired(.turnId)
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.arguments = try container.sdkDecodeRequired(.arguments)
+        self.status = try container.sdkDecodeRequired(.status)
+            try sdkValidateRawEnum("type", self.type, FunctionCallItemResourceType.allCases.map(\.rawValue))
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try validateLength("call_id", self.callId, min: 0, max: nil)
+            try validateLength("name", self.name, min: 0, max: nil)
     }
 }
 
-public extension FunctionCallItemResource {
-    init(
-        type: FunctionCallItemResourceType,
-        id: String,
-        turnId: String,
-        callId: String,
-        name: String,
-        arguments: JSONValue,
-        status: FunctionCallStatusResource
-    ) throws {
+extension FunctionCallItemResource {
+    public init(type: FunctionCallItemResourceType, id: String, turnId: String, callId: String, name: String, arguments: JSONValue, status: FunctionCallStatusResource) throws {
         (self.type, self.id) = (type, id)
         (self.turnId, self.callId) = (turnId, callId)
         (self.name, self.arguments) = (name, arguments)
         self.status = status
-        try sdkValidateRawEnum("type", self.type, FunctionCallItemResourceType.allCases.map(\.rawValue))
-        try validateLength("id", self.id, min: 0, max: nil)
-        try validateLength("turn_id", self.turnId, min: 0, max: nil)
-        try validateLength("call_id", self.callId, min: 0, max: nil)
-        try validateLength("name", self.name, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, FunctionCallItemResourceType.allCases.map(\.rawValue))
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try validateLength("call_id", self.callId, min: 0, max: nil)
+            try validateLength("name", self.name, min: 0, max: nil)
     }
 }
 
@@ -244,98 +186,60 @@ public struct FunctionCallOutputItemResource: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension FunctionCallOutputItemResource {
-    init(from decoder: Decoder) throws {
+extension FunctionCallOutputItemResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.turnId) else {
-            throw SdkValidationError(
-                field: "turn_id",
-                code: "required",
-                message: "Validation failed for 'turn_id': value is required"
-            )
+            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
         guard container.contains(.error) else {
-            throw SdkValidationError(
-                field: "error",
-                code: "required",
-                message: "Validation failed for 'error': value is required"
-            )
+            throw SdkValidationError(field: "error", code: "required", message: "Validation failed for 'error': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        turnId = try container.sdkDecodeRequired(.turnId)
-        type = try container.sdkDecodeRequired(.type)
-        callId = try container.sdkDecodeRequired(.callId)
-        status = try container.sdkDecodeRequired(.status)
-        output = try container.sdkDecodeNullable(.output)
-        error = try container.sdkDecodeNullable(.error)
-        try validateLength("id", id, min: 0, max: nil)
-        try validateLength("turn_id", turnId, min: 0, max: nil)
-        try sdkValidateRawEnum("type", type, FunctionCallOutputItemResourceType.allCases.map(\.rawValue))
-        try validateLength("call_id", callId, min: 0, max: nil)
-        if let value = error {
+        self.id = try container.sdkDecodeRequired(.id)
+        self.turnId = try container.sdkDecodeRequired(.turnId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.output = try container.sdkDecodeNullable(.output)
+        self.error = try container.sdkDecodeNullable(.error)
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, FunctionCallOutputItemResourceType.allCases.map(\.rawValue))
+            try validateLength("call_id", self.callId, min: 0, max: nil)
+        if let value = self.error {
             try validateLength("error", value, min: 0, max: nil)
         }
     }
 }
 
-public extension FunctionCallOutputItemResource {
-    init(
-        id: String,
-        turnId: String,
-        type: FunctionCallOutputItemResourceType,
-        callId: String,
-        status: FunctionCallStatusResource,
-        output: FunctionCallOutputResource?,
-        error: String?
-    ) throws {
+extension FunctionCallOutputItemResource {
+    public init(id: String, turnId: String, type: FunctionCallOutputItemResourceType, callId: String, status: FunctionCallStatusResource, output: FunctionCallOutputResource?, error: String?) throws {
         (self.id, self.turnId) = (id, turnId)
         (self.type, self.callId) = (type, callId)
         (self.status, self.output) = (status, output)
         self.error = error
-        try validateLength("id", self.id, min: 0, max: nil)
-        try validateLength("turn_id", self.turnId, min: 0, max: nil)
-        try sdkValidateRawEnum("type", self.type, FunctionCallOutputItemResourceType.allCases.map(\.rawValue))
-        try validateLength("call_id", self.callId, min: 0, max: nil)
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, FunctionCallOutputItemResourceType.allCases.map(\.rawValue))
+            try validateLength("call_id", self.callId, min: 0, max: nil)
         if let value = self.error {
             try validateLength("error", value, min: 0, max: nil)
         }
@@ -346,10 +250,7 @@ public extension FunctionCallOutputItemResource {
 public struct FunctionCallStatusResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = FunctionCallStatusResource(rawValue: "in_progress")
     public static let completed = FunctionCallStatusResource(rawValue: "completed")
     public static let failed = FunctionCallStatusResource(rawValue: "failed")
@@ -357,7 +258,7 @@ public struct FunctionCallStatusResource: RawRepresentable, Hashable, Codable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

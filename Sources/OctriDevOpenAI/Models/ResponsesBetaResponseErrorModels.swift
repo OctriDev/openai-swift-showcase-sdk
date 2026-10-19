@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaResponseError domain models
+// ResponsesBetaResponseError domain models
 /// Emitted when an error occurs.
 public struct BetaResponseErrorEvent: Codable {
     /// The type of the event. Always `error`.
@@ -28,72 +28,43 @@ public struct BetaResponseErrorEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseErrorEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseErrorEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
         guard container.contains(.param) else {
-            throw SdkValidationError(
-                field: "param",
-                code: "required",
-                message: "Validation failed for 'param': value is required"
-            )
+            throw SdkValidationError(field: "param", code: "required", message: "Validation failed for 'param': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        code = try container.sdkDecodeNullable(.code)
-        message = try container.sdkDecodeRequired(.message)
-        param = try container.sdkDecodeNullable(.param)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseErrorEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.code = try container.sdkDecodeNullable(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+        self.param = try container.sdkDecodeNullable(.param)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseErrorEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseErrorEvent {
-    init(
-        type: BetaResponseErrorEventType,
-        code: String?,
-        message: String,
-        param: String?,
-        sequenceNumber: Int,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseErrorEvent {
+    public init(type: BetaResponseErrorEventType, code: String?, message: String, param: String?, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.code) = (type, code)
         (self.message, self.param) = (message, param)
         (self.sequenceNumber, self.agent) = (sequenceNumber, agent)
-        try sdkValidateRawEnum("type", self.type, BetaResponseErrorEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaResponseErrorEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -118,44 +89,28 @@ public struct BetaResponseError: Codable {
         case misalignment
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseError {
-    init(from decoder: Decoder) throws {
+extension BetaResponseError {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        type = try container.sdkDecodeIfPresent(.type)
-        param = try container.sdkDecodeIfPresent(.param)
-        misalignment = try container.sdkDecodeIfPresent(.misalignment)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.param = try container.sdkDecodeIfPresent(.param)
+        self.misalignment = try container.sdkDecodeIfPresent(.misalignment)
     }
 }
 
-public extension BetaResponseError {
-    init(
-        code: BetaResponseErrorCode,
-        message: String,
-        type: String? = nil,
-        param: String? = nil,
-        misalignment: BetaMisalignmentErrorDetailsResource? = nil
-    ) {
+extension BetaResponseError {
+    public init(code: BetaResponseErrorCode, message: String, type: String? = nil, param: String? = nil, misalignment: BetaMisalignmentErrorDetailsResource? = nil) {
         (self.code, self.message) = (code, message)
         (self.type, self.param) = (type, param)
         self.misalignment = misalignment
@@ -184,10 +139,7 @@ public enum BetaResponseErrorEventType: String, CaseIterable, Codable {
 public struct BetaResponseErrorCode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let serverError = BetaResponseErrorCode(rawValue: "server_error")
     public static let rateLimitExceeded = BetaResponseErrorCode(rawValue: "rate_limit_exceeded")
     public static let invalidPrompt = BetaResponseErrorCode(rawValue: "invalid_prompt")
@@ -212,7 +164,7 @@ public struct BetaResponseErrorCode: RawRepresentable, Hashable, Codable, Sendab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

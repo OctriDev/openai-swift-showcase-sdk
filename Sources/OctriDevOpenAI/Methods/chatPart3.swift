@@ -6,68 +6,19 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ChatMethods {
-    /// Creates a model response for a chat conversation. Supply `model` and at least one item in `messages`; set
-    /// `stream` to receive server-sent events instead of a single response object. The response contains completion
-    /// choices and usage information when available.
+extension ChatMethods {
+    /// Creates a model response for a chat conversation. Supply `model` and at least one item in `messages`; set `stream` to receive server-sent events instead of a single response object. The response contains completion choices and usage information when available.
     ///
-    /// **Starting a new project?** We recommend trying
-    /// [Responses](https://developers.openai.com/api/reference/resources/responses) to take advantage of the latest
-    /// OpenAI platform features. Compare [Chat Completions with
-    /// Responses](https://developers.openai.com/api/docs/guides/migrate-to-responses?api-mode=responses). --- Creates a
-    /// model response for the given chat conversation. Learn more in the [text
-    /// generation](https://developers.openai.com/api/docs/guides/text),
-    /// [vision](https://developers.openai.com/api/docs/guides/images-vision), and
-    /// [audio](https://developers.openai.com/api/docs/guides/audio) guides. Parameter support can differ depending on
-    /// the model used to generate the response, particularly for newer reasoning models. Parameters that are only
-    /// supported for reasoning models are noted below. For the current state of unsupported parameters in reasoning
-    /// models, [refer to the reasoning guide](https://developers.openai.com/api/docs/guides/reasoning). Returns a chat
-    /// completion object, or a streamed sequence of chat completion chunk objects if the request is streamed.
-    static func createChatCompletion(
-        config: ClientConfig,
-        body: CreateChatCompletionRequest,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateChatCompletionResponse {
-        try await (sdkRequest(
-            "POST",
-            "/chat/completions",
-            config: config,
-            rawBody: sdkEncodeBody(body, contentType: "application/json"),
-            decoder: .json,
-            operationId: "createChatCompletion",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "401": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-                "503": ErrorResponse.self,
-            ]
-        )).data
+    /// **Starting a new project?** We recommend trying [Responses](https://developers.openai.com/api/reference/resources/responses) to take advantage of the latest OpenAI platform features. Compare [Chat Completions with Responses](https://developers.openai.com/api/docs/guides/migrate-to-responses?api-mode=responses). --- Creates a model response for the given chat conversation. Learn more in the [text generation](https://developers.openai.com/api/docs/guides/text), [vision](https://developers.openai.com/api/docs/guides/images-vision), and [audio](https://developers.openai.com/api/docs/guides/audio) guides. Parameter support can differ depending on the model used to generate the response, particularly for newer reasoning models. Parameters that are only supported for reasoning models are noted below. For the current state of unsupported parameters in reasoning models, [refer to the reasoning guide](https://developers.openai.com/api/docs/guides/reasoning). Returns a chat completion object, or a streamed sequence of chat completion chunk objects if the request is streamed.
+    public static func createChatCompletion(config: ClientConfig, body: CreateChatCompletionRequest, requestOptions: RequestOptions? = nil) async throws -> CreateChatCompletionResponse {
+        return try (await sdkRequest("POST", "/chat/completions", config: config, rawBody: (try sdkEncodeBody(body, contentType: "application/json")), decoder: .json, operationId: "createChatCompletion", options: requestOptions, errors: ["400": ErrorResponse.self, "401": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self])).data
     }
 
-    /// Creates a model response for a chat conversation. Supply `model` and at least one item in `messages`; set
-    /// `stream` to receive server-sent events instead of a single response object. The response contains completion
-    /// choices and usage information when available.
+    /// Creates a model response for a chat conversation. Supply `model` and at least one item in `messages`; set `stream` to receive server-sent events instead of a single response object. The response contains completion choices and usage information when available.
     ///
-    /// **Starting a new project?** We recommend trying
-    /// [Responses](https://developers.openai.com/api/reference/resources/responses) to take advantage of the latest
-    /// OpenAI platform features. Compare [Chat Completions with
-    /// Responses](https://developers.openai.com/api/docs/guides/migrate-to-responses?api-mode=responses). --- Creates a
-    /// model response for the given chat conversation. Learn more in the [text
-    /// generation](https://developers.openai.com/api/docs/guides/text),
-    /// [vision](https://developers.openai.com/api/docs/guides/images-vision), and
-    /// [audio](https://developers.openai.com/api/docs/guides/audio) guides. Parameter support can differ depending on
-    /// the model used to generate the response, particularly for newer reasoning models. Parameters that are only
-    /// supported for reasoning models are noted below. For the current state of unsupported parameters in reasoning
-    /// models, [refer to the reasoning guide](https://developers.openai.com/api/docs/guides/reasoning). Returns a chat
-    /// completion object, or a streamed sequence of chat completion chunk objects if the request is streamed.
-    static func createChatCompletionStream(
-        config: ClientConfig,
-        body: CreateChatCompletionRequest,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<CreateChatCompletionStreamResponse, Swift.Error> {
+    /// **Starting a new project?** We recommend trying [Responses](https://developers.openai.com/api/reference/resources/responses) to take advantage of the latest OpenAI platform features. Compare [Chat Completions with Responses](https://developers.openai.com/api/docs/guides/migrate-to-responses?api-mode=responses). --- Creates a model response for the given chat conversation. Learn more in the [text generation](https://developers.openai.com/api/docs/guides/text), [vision](https://developers.openai.com/api/docs/guides/images-vision), and [audio](https://developers.openai.com/api/docs/guides/audio) guides. Parameter support can differ depending on the model used to generate the response, particularly for newer reasoning models. Parameters that are only supported for reasoning models are noted below. For the current state of unsupported parameters in reasoning models, [refer to the reasoning guide](https://developers.openai.com/api/docs/guides/reasoning). Returns a chat completion object, or a streamed sequence of chat completion chunk objects if the request is streamed.
+    public static func createChatCompletionStream(config: ClientConfig, body: CreateChatCompletionRequest, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<CreateChatCompletionStreamResponse, Swift.Error> {
+
         let upstream = try await sdkStream(
             "POST",
             "/chat/completions",
@@ -78,14 +29,7 @@ public extension ChatMethods {
             streamMediaType: "text/event-stream",
             chunkDomain: "bytes",
             options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "401": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-                "503": ErrorResponse.self,
-            ]
+            errors: ["400": ErrorResponse.self, "401": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self]
         )
         return AsyncThrowingStream { continuation in
             let streamTask = _Concurrency.Task {
@@ -95,11 +39,8 @@ public extension ChatMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
-                            CreateChatCompletionStreamResponse.self,
-                            from: Data(event.data.utf8)
-                        ) }
-
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(CreateChatCompletionStreamResponse.self, from: Data(event.data.utf8)) }
+                        
                         continuation.yield(payload)
                     }
                     continuation.finish()
@@ -111,24 +52,11 @@ public extension ChatMethods {
         }
     }
 
-    /// Get a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to
-    /// `true` will be returned.
+    /// Get a stored chat completion. Only Chat Completions that have been created with the `store` parameter set to `true` will be returned.
     ///
     /// - Parameters:
     /// - completionId: The ID of the chat completion to retrieve.
-    static func getChatCompletion(
-        config: ClientConfig,
-        completionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateChatCompletionResponse {
-        try await (sdkRequest(
-            "GET",
-            ["/chat/completions/", sdkEncodePathSegment(sdkWireString(completionId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getChatCompletion",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self]
-        )).data
+    public static func getChatCompletion(config: ClientConfig, completionId: String, requestOptions: RequestOptions? = nil) async throws -> CreateChatCompletionResponse {
+        return try (await sdkRequest("GET", ["/chat/completions/", sdkEncodePathSegment(sdkWireString(completionId))].joined(), config: config, decoder: .json, operationId: "getChatCompletion", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

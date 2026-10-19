@@ -3,72 +3,46 @@
 
 import Foundation
 
-/// VaultsVault domain models
-public extension VaultListResource {
-    init(from decoder: Decoder) throws {
+// VaultsVault domain models
+extension VaultListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(
-                field: "first_id",
-                code: "required",
-                message: "Validation failed for 'first_id': value is required"
-            )
+            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(
-                field: "last_id",
-                code: "required",
-                message: "Validation failed for 'last_id': value is required"
-            )
+            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        firstId = try container.sdkDecodeNullable(.firstId)
-        lastId = try container.sdkDecodeNullable(.lastId)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        try validateItems("data", data, min: 0, max: 2000)
-        if let value = firstId {
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.firstId = try container.sdkDecodeNullable(.firstId)
+        self.lastId = try container.sdkDecodeNullable(.lastId)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+            try validateItems("data", self.data, min: 0, max: 2000)
+        if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
-        if let value = lastId {
+        if let value = self.lastId {
             try validateLength("last_id", value, min: 0, max: nil)
         }
     }
 }
 
-public extension VaultListResource {
-    init(
-        object: VaultListResourceObject,
-        data: [VaultResource],
-        firstId: String?,
-        lastId: String?,
-        hasMore: Bool
-    ) throws {
+extension VaultListResource {
+    public init(object: VaultListResourceObject, data: [VaultResource], firstId: String?, lastId: String?, hasMore: Bool) throws {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
-        try validateItems("data", self.data, min: 0, max: 2000)
+            try validateItems("data", self.data, min: 0, max: 2000)
         if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
@@ -91,40 +65,30 @@ public struct VaultCredentialNetworkingParamLimited: Codable {
         case allowedHosts = "allowed_hosts"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VaultCredentialNetworkingParamLimited {
-    init(from decoder: Decoder) throws {
+extension VaultCredentialNetworkingParamLimited {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.allowedHosts) else {
-            throw SdkValidationError(
-                field: "allowed_hosts",
-                code: "required",
-                message: "Validation failed for 'allowed_hosts': value is required"
-            )
+            throw SdkValidationError(field: "allowed_hosts", code: "required", message: "Validation failed for 'allowed_hosts': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        allowedHosts = try container.sdkDecodeRequired(.allowedHosts)
-        try sdkValidateRawEnum("type", type, VaultCredentialNetworkingParamLimitedType.allCases.map(\.rawValue))
-        try validateItems("allowed_hosts", allowedHosts, min: 1, max: 16)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.allowedHosts = try container.sdkDecodeRequired(.allowedHosts)
+            try sdkValidateRawEnum("type", self.type, VaultCredentialNetworkingParamLimitedType.allCases.map(\.rawValue))
+            try validateItems("allowed_hosts", self.allowedHosts, min: 1, max: 16)
     }
 }
 
-public extension VaultCredentialNetworkingParamLimited {
-    init(type: VaultCredentialNetworkingParamLimitedType, allowedHosts: [String]) throws {
+extension VaultCredentialNetworkingParamLimited {
+    public init(type: VaultCredentialNetworkingParamLimitedType, allowedHosts: [String]) throws {
         (self.type, self.allowedHosts) = (type, allowedHosts)
-        try sdkValidateRawEnum("type", self.type, VaultCredentialNetworkingParamLimitedType.allCases.map(\.rawValue))
-        try validateItems("allowed_hosts", self.allowedHosts, min: 1, max: 16)
+            try sdkValidateRawEnum("type", self.type, VaultCredentialNetworkingParamLimitedType.allCases.map(\.rawValue))
+            try validateItems("allowed_hosts", self.allowedHosts, min: 1, max: 16)
     }
 }
 
@@ -150,76 +114,48 @@ public struct VaultCredentialListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VaultCredentialListResource {
-    init(from decoder: Decoder) throws {
+extension VaultCredentialListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(
-                field: "first_id",
-                code: "required",
-                message: "Validation failed for 'first_id': value is required"
-            )
+            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(
-                field: "last_id",
-                code: "required",
-                message: "Validation failed for 'last_id': value is required"
-            )
+            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        firstId = try container.sdkDecodeNullable(.firstId)
-        lastId = try container.sdkDecodeNullable(.lastId)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        try validateItems("data", data, min: 0, max: 2000)
-        if let value = firstId {
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.firstId = try container.sdkDecodeNullable(.firstId)
+        self.lastId = try container.sdkDecodeNullable(.lastId)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+            try validateItems("data", self.data, min: 0, max: 2000)
+        if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
-        if let value = lastId {
+        if let value = self.lastId {
             try validateLength("last_id", value, min: 0, max: nil)
         }
     }
 }
 
-public extension VaultCredentialListResource {
-    init(
-        object: VaultCredentialListResourceObject,
-        data: [VaultCredentialResource],
-        firstId: String?,
-        lastId: String?,
-        hasMore: Bool
-    ) throws {
+extension VaultCredentialListResource {
+    public init(object: VaultCredentialListResourceObject, data: [VaultCredentialResource], firstId: String?, lastId: String?, hasMore: Bool) throws {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
-        try validateItems("data", self.data, min: 0, max: 2000)
+            try validateItems("data", self.data, min: 0, max: 2000)
         if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
@@ -246,61 +182,35 @@ public struct VaultCredentialAuthResourceEnvironmentVariable: Codable {
         case networking
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VaultCredentialAuthResourceEnvironmentVariable {
-    init(from decoder: Decoder) throws {
+extension VaultCredentialAuthResourceEnvironmentVariable {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.secretName) else {
-            throw SdkValidationError(
-                field: "secret_name",
-                code: "required",
-                message: "Validation failed for 'secret_name': value is required"
-            )
+            throw SdkValidationError(field: "secret_name", code: "required", message: "Validation failed for 'secret_name': value is required")
         }
         guard container.contains(.networking) else {
-            throw SdkValidationError(
-                field: "networking",
-                code: "required",
-                message: "Validation failed for 'networking': value is required"
-            )
+            throw SdkValidationError(field: "networking", code: "required", message: "Validation failed for 'networking': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        secretName = try container.sdkDecodeRequired(.secretName)
-        networking = try container.sdkDecodeRequired(.networking)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            VaultCredentialAuthResourceEnvironmentVariableType.allCases.map(\.rawValue)
-        )
-        try validateLength("secret_name", secretName, min: 0, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.secretName = try container.sdkDecodeRequired(.secretName)
+        self.networking = try container.sdkDecodeRequired(.networking)
+            try sdkValidateRawEnum("type", self.type, VaultCredentialAuthResourceEnvironmentVariableType.allCases.map(\.rawValue))
+            try validateLength("secret_name", self.secretName, min: 0, max: nil)
     }
 }
 
-public extension VaultCredentialAuthResourceEnvironmentVariable {
-    init(
-        type: VaultCredentialAuthResourceEnvironmentVariableType,
-        secretName: String,
-        networking: VaultCredentialNetworkingResource
-    ) throws {
+extension VaultCredentialAuthResourceEnvironmentVariable {
+    public init(type: VaultCredentialAuthResourceEnvironmentVariableType, secretName: String, networking: VaultCredentialNetworkingResource) throws {
         (self.type, self.secretName) = (type, secretName)
         self.networking = networking
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            VaultCredentialAuthResourceEnvironmentVariableType.allCases.map(\.rawValue)
-        )
-        try validateLength("secret_name", self.secretName, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, VaultCredentialAuthResourceEnvironmentVariableType.allCases.map(\.rawValue))
+            try validateLength("secret_name", self.secretName, min: 0, max: nil)
     }
 }
 
@@ -325,67 +235,45 @@ public struct VaultResource: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VaultResource {
-    init(from decoder: Decoder) throws {
+extension VaultResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.metadata) else {
-            throw SdkValidationError(
-                field: "metadata",
-                code: "required",
-                message: "Validation failed for 'metadata': value is required"
-            )
+            throw SdkValidationError(field: "metadata", code: "required", message: "Validation failed for 'metadata': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        name = try container.sdkDecodeNullable(.name)
-        metadata = try container.sdkDecodeRequired(.metadata)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        try validateLength("id", id, min: 0, max: nil)
-        if let value = name {
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.name = try container.sdkDecodeNullable(.name)
+        self.metadata = try container.sdkDecodeRequired(.metadata)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+            try validateLength("id", self.id, min: 0, max: nil)
+        if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }
     }
 }
 
-public extension VaultResource {
-    init(id: String, object: VaultResourceObject, name: String?, metadata: [String: String], createdAt: Int) throws {
+extension VaultResource {
+    public init(id: String, object: VaultResourceObject, name: String?, metadata: [String: String], createdAt: Int) throws {
         (self.id, self.object) = (id, object)
         (self.name, self.metadata) = (name, metadata)
         self.createdAt = createdAt
-        try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("id", self.id, min: 0, max: nil)
         if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }
@@ -396,15 +284,12 @@ public extension VaultResource {
 public struct VaultListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = VaultListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -435,16 +320,13 @@ public enum VaultCredentialNetworkingResourceLimitedType: String, CaseIterable, 
 public struct VaultStatusParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let active = VaultStatusParam(rawValue: "active")
     public static let archived = VaultStatusParam(rawValue: "archived")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -475,15 +357,12 @@ public enum VaultCredentialAuthResourceMcpOauthType: String, CaseIterable, Codab
 public struct VaultCredentialResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let vaultCredential = VaultCredentialResourceObject(rawValue: "vault.credential")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -496,15 +375,12 @@ public struct VaultCredentialResourceObject: RawRepresentable, Hashable, Codable
 public struct VaultCredentialListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = VaultCredentialListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -535,15 +411,12 @@ public enum VaultCredentialAuthResourceEnvironmentVariableType: String, CaseIter
 public struct VaultResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let vault = VaultResourceObject(rawValue: "vault")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

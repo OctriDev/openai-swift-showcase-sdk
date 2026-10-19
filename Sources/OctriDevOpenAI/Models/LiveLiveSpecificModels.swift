@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveSpecific domain models
+// LiveLiveSpecific domain models
 /// Typed representation of the `LiveSpecificFileSearchParam` API schema.
 public struct LiveSpecificFileSearchParam: Codable {
     /// The tool to call. Always `file_search`.
@@ -13,30 +13,24 @@ public struct LiveSpecificFileSearchParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSpecificFileSearchParam {
-    init(from decoder: Decoder) throws {
+extension LiveSpecificFileSearchParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveSpecificFileSearchParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveSpecificFileSearchParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSpecificFileSearchParam {
-    init(type: LiveSpecificFileSearchParamType) throws {
+extension LiveSpecificFileSearchParam {
+    public init(type: LiveSpecificFileSearchParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveSpecificFileSearchParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSpecificFileSearchParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -49,30 +43,24 @@ public struct LiveSpecificFunctionShellParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSpecificFunctionShellParam {
-    init(from decoder: Decoder) throws {
+extension LiveSpecificFunctionShellParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveSpecificFunctionShellParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveSpecificFunctionShellParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSpecificFunctionShellParam {
-    init(type: LiveSpecificFunctionShellParamType) throws {
+extension LiveSpecificFunctionShellParam {
+    public init(type: LiveSpecificFunctionShellParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveSpecificFunctionShellParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSpecificFunctionShellParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -85,30 +73,24 @@ public struct LiveSpecificCodeInterpreterParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSpecificCodeInterpreterParam {
-    init(from decoder: Decoder) throws {
+extension LiveSpecificCodeInterpreterParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveSpecificCodeInterpreterParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveSpecificCodeInterpreterParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSpecificCodeInterpreterParam {
-    init(type: LiveSpecificCodeInterpreterParamType) throws {
+extension LiveSpecificCodeInterpreterParam {
+    public init(type: LiveSpecificCodeInterpreterParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveSpecificCodeInterpreterParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSpecificCodeInterpreterParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -121,30 +103,24 @@ public struct LiveSpecificApplyPatchParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSpecificApplyPatchParam {
-    init(from decoder: Decoder) throws {
+extension LiveSpecificApplyPatchParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveSpecificApplyPatchParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveSpecificApplyPatchParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSpecificApplyPatchParam {
-    init(type: LiveSpecificApplyPatchParamType) throws {
+extension LiveSpecificApplyPatchParam {
+    public init(type: LiveSpecificApplyPatchParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveSpecificApplyPatchParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSpecificApplyPatchParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -157,30 +133,24 @@ public struct LiveSpecificProgrammaticToolCallingParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSpecificProgrammaticToolCallingParam {
-    init(from decoder: Decoder) throws {
+extension LiveSpecificProgrammaticToolCallingParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveSpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveSpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSpecificProgrammaticToolCallingParam {
-    init(type: LiveSpecificProgrammaticToolCallingParamType) throws {
+extension LiveSpecificProgrammaticToolCallingParam {
+    public init(type: LiveSpecificProgrammaticToolCallingParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveSpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -193,30 +163,24 @@ public struct LiveSpecificWebSearchParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSpecificWebSearchParam {
-    init(from decoder: Decoder) throws {
+extension LiveSpecificWebSearchParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveSpecificWebSearchParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveSpecificWebSearchParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSpecificWebSearchParam {
-    init(type: LiveSpecificWebSearchParamType) throws {
+extension LiveSpecificWebSearchParam {
+    public init(type: LiveSpecificWebSearchParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveSpecificWebSearchParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSpecificWebSearchParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -229,30 +193,24 @@ public struct LiveSpecificImageGenParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSpecificImageGenParam {
-    init(from decoder: Decoder) throws {
+extension LiveSpecificImageGenParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveSpecificImageGenParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveSpecificImageGenParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSpecificImageGenParam {
-    init(type: LiveSpecificImageGenParamType) throws {
+extension LiveSpecificImageGenParam {
+    public init(type: LiveSpecificImageGenParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveSpecificImageGenParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSpecificImageGenParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -268,38 +226,28 @@ public struct LiveSpecificCustomToolParam: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSpecificCustomToolParam {
-    init(from decoder: Decoder) throws {
+extension LiveSpecificCustomToolParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeRequired(.name)
-        try sdkValidateRawEnum("type", type, LiveSpecificCustomToolParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeRequired(.name)
+            try sdkValidateRawEnum("type", self.type, LiveSpecificCustomToolParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSpecificCustomToolParam {
-    init(type: LiveSpecificCustomToolParamType, name: String) throws {
+extension LiveSpecificCustomToolParam {
+    public init(type: LiveSpecificCustomToolParamType, name: String) throws {
         (self.type, self.name) = (type, name)
-        try sdkValidateRawEnum("type", self.type, LiveSpecificCustomToolParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSpecificCustomToolParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -312,30 +260,24 @@ public struct LiveSpecificComputerParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSpecificComputerParam {
-    init(from decoder: Decoder) throws {
+extension LiveSpecificComputerParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveSpecificComputerParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveSpecificComputerParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSpecificComputerParam {
-    init(type: LiveSpecificComputerParamType) throws {
+extension LiveSpecificComputerParam {
+    public init(type: LiveSpecificComputerParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveSpecificComputerParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSpecificComputerParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -348,30 +290,24 @@ public struct LiveSpecificWebSearchPreviewParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSpecificWebSearchPreviewParam {
-    init(from decoder: Decoder) throws {
+extension LiveSpecificWebSearchPreviewParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveSpecificWebSearchPreviewParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveSpecificWebSearchPreviewParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveSpecificWebSearchPreviewParam {
-    init(type: LiveSpecificWebSearchPreviewParamType) throws {
+extension LiveSpecificWebSearchPreviewParam {
+    public init(type: LiveSpecificWebSearchPreviewParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveSpecificWebSearchPreviewParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveSpecificWebSearchPreviewParamType.allCases.map(\.rawValue))
     }
 }
 

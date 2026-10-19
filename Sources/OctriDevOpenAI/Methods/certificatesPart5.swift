@@ -6,61 +6,23 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension CertificatesMethods {
+extension CertificatesMethods {
     /// Modify a certificate. Note that only the name can be modified.
     ///
     /// - Parameters:
     /// - certificateId: Unique ID of the certificate to modify.
     /// - name: The updated name for the certificate
-    static func modifyCertificate(
-        config: ClientConfig,
-        certificateId: String,
-        name: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Certificate {
+    public static func modifyCertificate(config: ClientConfig, certificateId: String, name: String? = nil, requestOptions: RequestOptions? = nil) async throws -> Certificate {
         let requestBody = ModifyCertificateRequestBody(name: name)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "modifyCertificate",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "modifyCertificate", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 
-    /// Delete a certificate from the organization. The certificate must be inactive for the organization and all
-    /// projects.
+    /// Delete a certificate from the organization. The certificate must be inactive for the organization and all projects.
     ///
     /// - Parameters:
     /// - certificateId: Unique ID of the certificate to delete.
-    static func deleteCertificate(
-        config: ClientConfig,
-        certificateId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeleteCertificateResponse {
-        try await (sdkRequest(
-            "DELETE",
-            ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteCertificate",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func deleteCertificate(config: ClientConfig, certificateId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteCertificateResponse {
+        return try (await sdkRequest("DELETE", ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(), config: config, decoder: .json, operationId: "deleteCertificate", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

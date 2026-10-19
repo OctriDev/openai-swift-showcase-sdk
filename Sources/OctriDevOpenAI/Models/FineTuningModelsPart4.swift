@@ -3,19 +3,9 @@
 
 import Foundation
 
-/// FineTuning domain models
-public extension CreateFineTuningJobRequest {
-    init(
-        model: String,
-        trainingFile: String,
-        hyperparameters: CreateFineTuningJobRequestHyperparameters? = nil,
-        suffix: String? = nil,
-        validationFile: String? = nil,
-        integrations: [CreateFineTuningJobRequestIntegrationsItem]? = nil,
-        seed: Int? = nil,
-        method: FineTuneMethod? = nil,
-        metadata: Metadata? = nil
-    ) throws {
+// FineTuning domain models
+extension CreateFineTuningJobRequest {
+    public init(model: String, trainingFile: String, hyperparameters: CreateFineTuningJobRequestHyperparameters? = nil, suffix: String? = nil, validationFile: String? = nil, integrations: [CreateFineTuningJobRequestIntegrationsItem]? = nil, seed: Int? = nil, method: FineTuneMethod? = nil, metadata: Metadata? = nil) throws {
         (self.model, self.trainingFile) = (model, trainingFile)
         (self.hyperparameters, self.suffix) = (hyperparameters, suffix)
         (self.validationFile, self.integrations) = (validationFile, integrations)
@@ -25,15 +15,7 @@ public extension CreateFineTuningJobRequest {
             try validateLength("suffix", value, min: 1, max: 64)
         }
         if let value = self.seed {
-            try validateRange(
-                "seed",
-                Double(value),
-                min: 0,
-                max: 2_147_483_647,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("seed", Double(value), min: 0, max: 2147483647, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -44,32 +26,22 @@ public indirect enum CreateFineTuningJobRequestHyperparametersBatchSize {
 }
 
 extension CreateFineTuningJobRequestHyperparametersBatchSize: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateFineTuningJobRequestHyperparametersBatchSize"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateFineTuningJobRequestHyperparametersBatchSize")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateFineTuningJobRequestHyperparametersBatchSize {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) { return .intValue(value) }
         return nil
     }
 }
@@ -99,32 +71,22 @@ public indirect enum FineTuneReinforcementHyperparametersNEpochs {
 }
 
 extension FineTuneReinforcementHyperparametersNEpochs: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for FineTuneReinforcementHyperparametersNEpochs"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for FineTuneReinforcementHyperparametersNEpochs")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension FineTuneReinforcementHyperparametersNEpochs {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) { return .intValue(value) }
         return nil
     }
 }
@@ -154,32 +116,22 @@ public indirect enum CreateFineTuningJobRequestHyperparametersNEpochs {
 }
 
 extension CreateFineTuningJobRequestHyperparametersNEpochs: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateFineTuningJobRequestHyperparametersNEpochs"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateFineTuningJobRequestHyperparametersNEpochs")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateFineTuningJobRequestHyperparametersNEpochs {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) { return .intValue(value) }
         return nil
     }
 }
@@ -209,32 +161,22 @@ public indirect enum FineTuneDPOHyperparametersNEpochs {
 }
 
 extension FineTuneDPOHyperparametersNEpochs: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for FineTuneDPOHyperparametersNEpochs"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for FineTuneDPOHyperparametersNEpochs")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension FineTuneDPOHyperparametersNEpochs {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) { return .intValue(value) }
         return nil
     }
 }
@@ -272,35 +214,25 @@ public struct FineTuningIntegration: Codable {
         case wandb
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension FineTuningIntegration {
-    init(from decoder: Decoder) throws {
+extension FineTuningIntegration {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.wandb) else {
-            throw SdkValidationError(
-                field: "wandb",
-                code: "required",
-                message: "Validation failed for 'wandb': value is required"
-            )
+            throw SdkValidationError(field: "wandb", code: "required", message: "Validation failed for 'wandb': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        wandb = try container.sdkDecodeRequired(.wandb)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.wandb = try container.sdkDecodeRequired(.wandb)
     }
 }
 
-public extension FineTuningIntegration {
-    init(type: FineTuningIntegrationType, wandb: FineTuningIntegrationWandb) {
+extension FineTuningIntegration {
+    public init(type: FineTuningIntegrationType, wandb: FineTuningIntegrationWandb) {
         (self.type, self.wandb) = (type, wandb)
     }
 }
@@ -311,32 +243,22 @@ public indirect enum FineTuneDPOHyperparametersLearningRateMultiplier {
 }
 
 extension FineTuneDPOHyperparametersLearningRateMultiplier: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for FineTuneDPOHyperparametersLearningRateMultiplier"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for FineTuneDPOHyperparametersLearningRateMultiplier")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension FineTuneDPOHyperparametersLearningRateMultiplier {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(Double.self) {
-            return .doubleValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Double.self) { return .doubleValue(value) }
         return nil
     }
 }
@@ -366,32 +288,22 @@ public indirect enum FineTuningJobHyperparametersBatchSize {
 }
 
 extension FineTuningJobHyperparametersBatchSize: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for FineTuningJobHyperparametersBatchSize"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for FineTuningJobHyperparametersBatchSize")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension FineTuningJobHyperparametersBatchSize {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) { return .intValue(value) }
         return nil
     }
 }
@@ -421,32 +333,22 @@ public indirect enum FineTuningJobHyperparametersLearningRateMultiplier {
 }
 
 extension FineTuningJobHyperparametersLearningRateMultiplier: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for FineTuningJobHyperparametersLearningRateMultiplier"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for FineTuningJobHyperparametersLearningRateMultiplier")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension FineTuningJobHyperparametersLearningRateMultiplier {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(Double.self) {
-            return .doubleValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Double.self) { return .doubleValue(value) }
         return nil
     }
 }
@@ -497,83 +399,45 @@ public struct RunGraderResponseMetadata: Codable {
         case sampledModelName = "sampled_model_name"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RunGraderResponseMetadata {
-    init(from decoder: Decoder) throws {
+extension RunGraderResponseMetadata {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.errors) else {
-            throw SdkValidationError(
-                field: "errors",
-                code: "required",
-                message: "Validation failed for 'errors': value is required"
-            )
+            throw SdkValidationError(field: "errors", code: "required", message: "Validation failed for 'errors': value is required")
         }
         guard container.contains(.executionTime) else {
-            throw SdkValidationError(
-                field: "execution_time",
-                code: "required",
-                message: "Validation failed for 'execution_time': value is required"
-            )
+            throw SdkValidationError(field: "execution_time", code: "required", message: "Validation failed for 'execution_time': value is required")
         }
         guard container.contains(.scores) else {
-            throw SdkValidationError(
-                field: "scores",
-                code: "required",
-                message: "Validation failed for 'scores': value is required"
-            )
+            throw SdkValidationError(field: "scores", code: "required", message: "Validation failed for 'scores': value is required")
         }
         guard container.contains(.tokenUsage) else {
-            throw SdkValidationError(
-                field: "token_usage",
-                code: "required",
-                message: "Validation failed for 'token_usage': value is required"
-            )
+            throw SdkValidationError(field: "token_usage", code: "required", message: "Validation failed for 'token_usage': value is required")
         }
         guard container.contains(.sampledModelName) else {
-            throw SdkValidationError(
-                field: "sampled_model_name",
-                code: "required",
-                message: "Validation failed for 'sampled_model_name': value is required"
-            )
+            throw SdkValidationError(field: "sampled_model_name", code: "required", message: "Validation failed for 'sampled_model_name': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        type = try container.sdkDecodeRequired(.type)
-        errors = try container.sdkDecodeRequired(.errors)
-        executionTime = try container.sdkDecodeRequired(.executionTime)
-        scores = try container.sdkDecodeRequired(.scores)
-        tokenUsage = try container.sdkDecodeNullable(.tokenUsage)
-        sampledModelName = try container.sdkDecodeNullable(.sampledModelName)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.errors = try container.sdkDecodeRequired(.errors)
+        self.executionTime = try container.sdkDecodeRequired(.executionTime)
+        self.scores = try container.sdkDecodeRequired(.scores)
+        self.tokenUsage = try container.sdkDecodeNullable(.tokenUsage)
+        self.sampledModelName = try container.sdkDecodeNullable(.sampledModelName)
     }
 }
 
-public extension RunGraderResponseMetadata {
-    init(
-        name: String,
-        type: String,
-        errors: RunGraderResponseMetadataErrors,
-        executionTime: Double,
-        scores: [String: JSONValue],
-        tokenUsage: RunGraderResponseMetadataTokenUsage?,
-        sampledModelName: String?
-    ) {
+extension RunGraderResponseMetadata {
+    public init(name: String, type: String, errors: RunGraderResponseMetadataErrors, executionTime: Double, scores: [String: JSONValue], tokenUsage: RunGraderResponseMetadataTokenUsage?, sampledModelName: String?) {
         (self.name, self.type) = (name, type)
         (self.errors, self.executionTime) = (errors, executionTime)
         (self.scores, self.tokenUsage) = (scores, tokenUsage)
@@ -587,32 +451,22 @@ public indirect enum FineTuneDPOHyperparametersBatchSize {
 }
 
 extension FineTuneDPOHyperparametersBatchSize: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for FineTuneDPOHyperparametersBatchSize"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for FineTuneDPOHyperparametersBatchSize")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension FineTuneDPOHyperparametersBatchSize {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) { return .intValue(value) }
         return nil
     }
 }

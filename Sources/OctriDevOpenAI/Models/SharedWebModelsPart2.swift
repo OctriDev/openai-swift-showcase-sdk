@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedWeb domain models
+// SharedWeb domain models
 /// The type of the web search tool. One of `web_search_preview` or `web_search_preview_2025_03_11`.
 public enum WebSearchPreviewToolType: String, CaseIterable, Codable {
     case webSearchPreview = "web_search_preview"

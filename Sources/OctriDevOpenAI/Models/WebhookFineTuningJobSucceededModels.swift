@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// WebhookFineTuningJobSucceeded domain models
+// WebhookFineTuningJobSucceeded domain models
 /// Sent when a fine-tuning job has succeeded.
 public struct WebhookFineTuningJobSucceeded: Codable {
     /// The Unix timestamp (in seconds) of when the fine-tuning job succeeded.
@@ -25,58 +25,34 @@ public struct WebhookFineTuningJobSucceeded: Codable {
         case object
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookFineTuningJobSucceeded {
-    init(from decoder: Decoder) throws {
+extension WebhookFineTuningJobSucceeded {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        id = try container.sdkDecodeRequired(.id)
-        data = try container.sdkDecodeRequired(.data)
-        type = try container.sdkDecodeRequired(.type)
-        object = try container.sdkDecodeIfPresent(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.object = try container.sdkDecodeIfPresent(.object)
     }
 }
 
-public extension WebhookFineTuningJobSucceeded {
-    init(
-        createdAt: Int,
-        id: String,
-        data: WebhookFineTuningJobSucceededData,
-        type: WebhookFineTuningJobSucceededType,
-        object: WebhookFineTuningJobSucceededObject? = nil
-    ) {
+extension WebhookFineTuningJobSucceeded {
+    public init(createdAt: Int, id: String, data: WebhookFineTuningJobSucceededData, type: WebhookFineTuningJobSucceededType, object: WebhookFineTuningJobSucceededObject? = nil) {
         (self.createdAt, self.id) = (createdAt, id)
         (self.data, self.type) = (data, type)
         self.object = object
@@ -92,27 +68,21 @@ public struct WebhookFineTuningJobSucceededData: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookFineTuningJobSucceededData {
-    init(from decoder: Decoder) throws {
+extension WebhookFineTuningJobSucceededData {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension WebhookFineTuningJobSucceededData {
-    init(id: String) {
+extension WebhookFineTuningJobSucceededData {
+    public init(id: String) {
         self.id = id
     }
 }
@@ -121,15 +91,12 @@ public extension WebhookFineTuningJobSucceededData {
 public struct WebhookFineTuningJobSucceededType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let fineTuningJobSucceeded = WebhookFineTuningJobSucceededType(rawValue: "fine_tuning.job.succeeded")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -142,15 +109,12 @@ public struct WebhookFineTuningJobSucceededType: RawRepresentable, Hashable, Cod
 public struct WebhookFineTuningJobSucceededObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let event = WebhookFineTuningJobSucceededObject(rawValue: "event")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

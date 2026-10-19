@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedTool domain models
+// SharedTool domain models
 public indirect enum Tool {
     case functionTool(FunctionTool)
     case fileSearchTool(FileSearchTool)
@@ -26,6 +26,7 @@ public indirect enum Tool {
 }
 
 extension Tool: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -33,19 +34,13 @@ extension Tool: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-        if try encodeGroup2(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup2(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -56,24 +51,23 @@ extension Tool: Codable {
 extension Tool {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": try .functionTool(FunctionTool(from: decoder))
-        case "file_search": try .fileSearchTool(FileSearchTool(from: decoder))
-        case "computer": try .computerTool(ComputerTool(from: decoder))
-        case "computer_use_preview": try .computerUsePreviewTool(ComputerUsePreviewTool(from: decoder))
-        case "web_search", "web_search_2025_08_26": try .webSearchTool(WebSearchTool(from: decoder))
-        case "mcp": try .mCpTool(MCPTool(from: decoder))
-        case "code_interpreter": try .codeInterpreterTool(CodeInterpreterTool(from: decoder))
-        case "programmatic_tool_calling": try .programmaticToolCallingParam(ProgrammaticToolCallingParam(from: decoder))
-        case "image_generation": try .imageGenTool(ImageGenTool(from: decoder))
-        case "local_shell": try .localShellToolParam(LocalShellToolParam(from: decoder))
-        case "shell": try .functionShellToolParam(FunctionShellToolParam(from: decoder))
-        case "custom": try .customToolParam(CustomToolParam(from: decoder))
-        case "namespace": try .namespaceToolParam(NamespaceToolParam(from: decoder))
-        case "tool_search": try .toolSearchToolParam(ToolSearchToolParam(from: decoder))
-        case "web_search_preview",
-             "web_search_preview_2025_03_11": try .webSearchPreviewTool(WebSearchPreviewTool(from: decoder))
-        case "apply_patch": try .applyPatchToolParam(ApplyPatchToolParam(from: decoder))
-        default: nil
+        case "function": return .functionTool(try FunctionTool(from: decoder))
+        case "file_search": return .fileSearchTool(try FileSearchTool(from: decoder))
+        case "computer": return .computerTool(try ComputerTool(from: decoder))
+        case "computer_use_preview": return .computerUsePreviewTool(try ComputerUsePreviewTool(from: decoder))
+        case "web_search", "web_search_2025_08_26": return .webSearchTool(try WebSearchTool(from: decoder))
+        case "mcp": return .mCpTool(try MCPTool(from: decoder))
+        case "code_interpreter": return .codeInterpreterTool(try CodeInterpreterTool(from: decoder))
+        case "programmatic_tool_calling": return .programmaticToolCallingParam(try ProgrammaticToolCallingParam(from: decoder))
+        case "image_generation": return .imageGenTool(try ImageGenTool(from: decoder))
+        case "local_shell": return .localShellToolParam(try LocalShellToolParam(from: decoder))
+        case "shell": return .functionShellToolParam(try FunctionShellToolParam(from: decoder))
+        case "custom": return .customToolParam(try CustomToolParam(from: decoder))
+        case "namespace": return .namespaceToolParam(try NamespaceToolParam(from: decoder))
+        case "tool_search": return .toolSearchToolParam(try ToolSearchToolParam(from: decoder))
+        case "web_search_preview", "web_search_preview_2025_03_11": return .webSearchPreviewTool(try WebSearchPreviewTool(from: decoder))
+        case "apply_patch": return .applyPatchToolParam(try ApplyPatchToolParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -120,6 +114,7 @@ public indirect enum ToolCallCaller {
 }
 
 extension ToolCallCaller: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -127,16 +122,12 @@ extension ToolCallCaller: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -147,9 +138,9 @@ extension ToolCallCaller: Codable {
 extension ToolCallCaller {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "direct": try .directToolCallCaller(DirectToolCallCaller(from: decoder))
-        case "program": try .programToolCallCaller(ProgramToolCallCaller(from: decoder))
-        default: nil
+        case "direct": return .directToolCallCaller(try DirectToolCallCaller(from: decoder))
+        case "program": return .programToolCallCaller(try ProgramToolCallCaller(from: decoder))
+        default: return nil
         }
     }
 }
@@ -173,6 +164,7 @@ public indirect enum ToolCallCallerParam {
 }
 
 extension ToolCallCallerParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -180,16 +172,12 @@ extension ToolCallCallerParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -200,9 +188,9 @@ extension ToolCallCallerParam: Codable {
 extension ToolCallCallerParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "direct": try .directToolCallCallerParam(DirectToolCallCallerParam(from: decoder))
-        case "program": try .programToolCallCallerParam(ProgramToolCallCallerParam(from: decoder))
-        default: nil
+        case "direct": return .directToolCallCallerParam(try DirectToolCallCallerParam(from: decoder))
+        case "program": return .programToolCallCallerParam(try ProgramToolCallCallerParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -226,6 +214,7 @@ public indirect enum ToolSearchOutputNamespaceToolParamToolsItem {
 }
 
 extension ToolSearchOutputNamespaceToolParamToolsItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -233,16 +222,12 @@ extension ToolSearchOutputNamespaceToolParamToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -253,9 +238,9 @@ extension ToolSearchOutputNamespaceToolParamToolsItem: Codable {
 extension ToolSearchOutputNamespaceToolParamToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": try .toolSearchOutputFunctionToolParam(ToolSearchOutputFunctionToolParam(from: decoder))
-        case "custom": try .customToolParam(CustomToolParam(from: decoder))
-        default: nil
+        case "function": return .toolSearchOutputFunctionToolParam(try ToolSearchOutputFunctionToolParam(from: decoder))
+        case "custom": return .customToolParam(try CustomToolParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -293,6 +278,7 @@ public indirect enum ToolSearchOutputTool {
 }
 
 extension ToolSearchOutputTool: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -300,19 +286,13 @@ extension ToolSearchOutputTool: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-        if try encodeGroup2(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup2(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -323,24 +303,23 @@ extension ToolSearchOutputTool: Codable {
 extension ToolSearchOutputTool {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": try .functionTool(FunctionTool(from: decoder))
-        case "file_search": try .fileSearchTool(FileSearchTool(from: decoder))
-        case "computer": try .computerTool(ComputerTool(from: decoder))
-        case "computer_use_preview": try .computerUsePreviewTool(ComputerUsePreviewTool(from: decoder))
-        case "web_search", "web_search_2025_08_26": try .webSearchTool(WebSearchTool(from: decoder))
-        case "mcp": try .mCpTool(MCPTool(from: decoder))
-        case "code_interpreter": try .codeInterpreterTool(CodeInterpreterTool(from: decoder))
-        case "programmatic_tool_calling": try .programmaticToolCallingParam(ProgrammaticToolCallingParam(from: decoder))
-        case "image_generation": try .imageGenTool(ImageGenTool(from: decoder))
-        case "local_shell": try .localShellToolParam(LocalShellToolParam(from: decoder))
-        case "shell": try .functionShellToolParam(FunctionShellToolParam(from: decoder))
-        case "custom": try .customToolParam(CustomToolParam(from: decoder))
-        case "namespace": try .toolSearchOutputNamespaceToolParam(ToolSearchOutputNamespaceToolParam(from: decoder))
-        case "tool_search": try .toolSearchToolParam(ToolSearchToolParam(from: decoder))
-        case "web_search_preview",
-             "web_search_preview_2025_03_11": try .webSearchPreviewTool(WebSearchPreviewTool(from: decoder))
-        case "apply_patch": try .applyPatchToolParam(ApplyPatchToolParam(from: decoder))
-        default: nil
+        case "function": return .functionTool(try FunctionTool(from: decoder))
+        case "file_search": return .fileSearchTool(try FileSearchTool(from: decoder))
+        case "computer": return .computerTool(try ComputerTool(from: decoder))
+        case "computer_use_preview": return .computerUsePreviewTool(try ComputerUsePreviewTool(from: decoder))
+        case "web_search", "web_search_2025_08_26": return .webSearchTool(try WebSearchTool(from: decoder))
+        case "mcp": return .mCpTool(try MCPTool(from: decoder))
+        case "code_interpreter": return .codeInterpreterTool(try CodeInterpreterTool(from: decoder))
+        case "programmatic_tool_calling": return .programmaticToolCallingParam(try ProgrammaticToolCallingParam(from: decoder))
+        case "image_generation": return .imageGenTool(try ImageGenTool(from: decoder))
+        case "local_shell": return .localShellToolParam(try LocalShellToolParam(from: decoder))
+        case "shell": return .functionShellToolParam(try FunctionShellToolParam(from: decoder))
+        case "custom": return .customToolParam(try CustomToolParam(from: decoder))
+        case "namespace": return .toolSearchOutputNamespaceToolParam(try ToolSearchOutputNamespaceToolParam(from: decoder))
+        case "tool_search": return .toolSearchToolParam(try ToolSearchToolParam(from: decoder))
+        case "web_search_preview", "web_search_preview_2025_03_11": return .webSearchPreviewTool(try WebSearchPreviewTool(from: decoder))
+        case "apply_patch": return .applyPatchToolParam(try ApplyPatchToolParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -403,51 +382,34 @@ public struct ToolSearchOutputItemParam: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ToolSearchOutputItemParam {
-    init(from decoder: Decoder) throws {
+extension ToolSearchOutputItemParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.tools) else {
-            throw SdkValidationError(
-                field: "tools",
-                code: "required",
-                message: "Validation failed for 'tools': value is required"
-            )
+            throw SdkValidationError(field: "tools", code: "required", message: "Validation failed for 'tools': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        tools = try container.sdkDecodeRequired(.tools)
-        id = try container.sdkDecodeIfPresent(.id)
-        callId = try container.sdkDecodeIfPresent(.callId)
-        execution = try container.sdkDecodeIfPresent(.execution)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("type", type, ToolSearchOutputItemParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.tools = try container.sdkDecodeRequired(.tools)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.callId = try container.sdkDecodeIfPresent(.callId)
+        self.execution = try container.sdkDecodeIfPresent(.execution)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("type", self.type, ToolSearchOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension ToolSearchOutputItemParam {
-    init(
-        type: ToolSearchOutputItemParamType,
-        tools: [ToolSearchOutputTool],
-        id: String? = nil,
-        callId: String? = nil,
-        execution: ToolSearchExecutionType? = nil,
-        status: FunctionCallItemStatus? = nil
-    ) throws {
+extension ToolSearchOutputItemParam {
+    public init(type: ToolSearchOutputItemParamType, tools: [ToolSearchOutputTool], id: String? = nil, callId: String? = nil, execution: ToolSearchExecutionType? = nil, status: FunctionCallItemStatus? = nil) throws {
         (self.type, self.tools) = (type, tools)
         (self.id, self.callId) = (id, callId)
         (self.execution, self.status) = (execution, status)
-        try sdkValidateRawEnum("type", self.type, ToolSearchOutputItemParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ToolSearchOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -486,66 +448,46 @@ public struct ToolSearchOutputFunctionToolParam: Codable {
         case allowedCallers = "allowed_callers"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ToolSearchOutputFunctionToolParam {
-    init(from decoder: Decoder) throws {
+extension ToolSearchOutputFunctionToolParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        type = try container.sdkDecodeRequired(.type)
-        description = try container.sdkDecodeIfPresent(.description)
-        parameters = try container.sdkDecodeIfPresent(.parameters)
-        strict = try container.sdkDecodeIfPresent(.strict)
-        async = try container.sdkDecodeIfPresent(.async)
-        outputSchema = try container.sdkDecodeIfPresent(.outputSchema)
-        deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
-        allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
-        try validateLength("name", name, min: 1, max: 128)
-        try sdkValidatePattern("name", name, sdkPatternf0df21cce759)
-        try sdkValidateRawEnum("type", type, ToolSearchOutputFunctionToolParamType.allCases.map(\.rawValue))
-        if let value = allowedCallers {
+        self.name = try container.sdkDecodeRequired(.name)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.description = try container.sdkDecodeIfPresent(.description)
+        self.parameters = try container.sdkDecodeIfPresent(.parameters)
+        self.strict = try container.sdkDecodeIfPresent(.strict)
+        self.async = try container.sdkDecodeIfPresent(.async)
+        self.outputSchema = try container.sdkDecodeIfPresent(.outputSchema)
+        self.deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
+        self.allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
+            try validateLength("name", self.name, min: 1, max: 128)
+            try sdkValidatePattern("name", self.name, sdkPatternf0df21cce759)
+            try sdkValidateRawEnum("type", self.type, ToolSearchOutputFunctionToolParamType.allCases.map(\.rawValue))
+        if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
     }
 }
 
-public extension ToolSearchOutputFunctionToolParam {
-    init(
-        name: String,
-        type: ToolSearchOutputFunctionToolParamType,
-        description: String? = nil,
-        parameters: EmptyModelParam? = nil,
-        strict: Bool? = nil,
-        async: Bool? = nil,
-        outputSchema: [String: JSONValue]? = nil,
-        deferLoading: Bool? = nil,
-        allowedCallers: [CallableToolAllowedCaller]? = nil
-    ) throws {
+extension ToolSearchOutputFunctionToolParam {
+    public init(name: String, type: ToolSearchOutputFunctionToolParamType, description: String? = nil, parameters: EmptyModelParam? = nil, strict: Bool? = nil, async: Bool? = nil, outputSchema: [String: JSONValue]? = nil, deferLoading: Bool? = nil, allowedCallers: [CallableToolAllowedCaller]? = nil) throws {
         (self.name, self.type) = (name, type)
         (self.description, self.parameters) = (description, parameters)
         (self.strict, self.async) = (strict, async)
         (self.outputSchema, self.deferLoading) = (outputSchema, deferLoading)
         self.allowedCallers = allowedCallers
-        try validateLength("name", self.name, min: 1, max: 128)
-        try sdkValidatePattern("name", self.name, sdkPatternf0df21cce759)
-        try sdkValidateRawEnum("type", self.type, ToolSearchOutputFunctionToolParamType.allCases.map(\.rawValue))
+            try validateLength("name", self.name, min: 1, max: 128)
+            try sdkValidatePattern("name", self.name, sdkPatternf0df21cce759)
+            try sdkValidateRawEnum("type", self.type, ToolSearchOutputFunctionToolParamType.allCases.map(\.rawValue))
         if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
@@ -570,38 +512,27 @@ public struct ToolSearchToolParam: Codable {
         case parameters
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ToolSearchToolParam {
-    init(from decoder: Decoder) throws {
+extension ToolSearchToolParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        execution = try container.sdkDecodeIfPresent(.execution)
-        description = try container.sdkDecodeIfPresent(.description)
-        parameters = try container.sdkDecodeIfPresent(.parameters)
-        try sdkValidateRawEnum("type", type, ToolSearchToolParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.execution = try container.sdkDecodeIfPresent(.execution)
+        self.description = try container.sdkDecodeIfPresent(.description)
+        self.parameters = try container.sdkDecodeIfPresent(.parameters)
+            try sdkValidateRawEnum("type", self.type, ToolSearchToolParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension ToolSearchToolParam {
-    init(
-        type: ToolSearchToolParamType,
-        execution: ToolSearchExecutionType? = nil,
-        description: String? = nil,
-        parameters: EmptyModelParam? = nil
-    ) throws {
+extension ToolSearchToolParam {
+    public init(type: ToolSearchToolParamType, execution: ToolSearchExecutionType? = nil, description: String? = nil, parameters: EmptyModelParam? = nil) throws {
         (self.type, self.execution) = (type, execution)
         (self.description, self.parameters) = (description, parameters)
-        try sdkValidateRawEnum("type", self.type, ToolSearchToolParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ToolSearchToolParamType.allCases.map(\.rawValue))
     }
 }

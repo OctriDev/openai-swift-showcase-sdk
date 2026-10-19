@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// RealtimeRealtime domain models
+// RealtimeRealtime domain models
 public indirect enum RealtimeAudioFormats {
     case realtimeAudioFormatsVariant0(RealtimeAudioFormatsVariant0)
     case realtimeAudioFormatsVariant1(RealtimeAudioFormatsVariant1)
@@ -11,26 +11,18 @@ public indirect enum RealtimeAudioFormats {
 }
 
 extension RealtimeAudioFormats: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for RealtimeAudioFormats"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeAudioFormats")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
@@ -51,18 +43,9 @@ extension RealtimeAudioFormats {
 
 extension RealtimeAudioFormats {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(RealtimeAudioFormatsVariant0.self) {
-            return .realtimeAudioFormatsVariant0(value)
-        }
-        if let value = try? container
-            .decode(RealtimeAudioFormatsVariant1.self) {
-            return .realtimeAudioFormatsVariant1(value)
-        }
-        if let value = try? container
-            .decode(RealtimeAudioFormatsVariant2.self) {
-            return .realtimeAudioFormatsVariant2(value)
-        }
+        if let value = try? container.decode(RealtimeAudioFormatsVariant0.self) { return .realtimeAudioFormatsVariant0(value) }
+        if let value = try? container.decode(RealtimeAudioFormatsVariant1.self) { return .realtimeAudioFormatsVariant1(value) }
+        if let value = try? container.decode(RealtimeAudioFormatsVariant2.self) { return .realtimeAudioFormatsVariant2(value) }
         return nil
     }
 }
@@ -84,33 +67,22 @@ public indirect enum RealtimeTruncation {
 }
 
 extension RealtimeTruncation: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for RealtimeTruncation"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeTruncation")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension RealtimeTruncation {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container
-            .decode(RealtimeTruncationVariant1.self) {
-            return .realtimeTruncationVariant1(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(RealtimeTruncationVariant1.self) { return .realtimeTruncationVariant1(value) }
         return nil
     }
 }
@@ -131,26 +103,18 @@ public indirect enum RealtimeTurnDetection {
 }
 
 extension RealtimeTurnDetection: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for RealtimeTurnDetection"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeTurnDetection")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
@@ -168,14 +132,8 @@ extension RealtimeTurnDetection {
 
 extension RealtimeTurnDetection {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(RealtimeTurnDetectionVariant0.self) {
-            return .realtimeTurnDetectionVariant0(value)
-        }
-        if let value = try? container
-            .decode(RealtimeTurnDetectionVariant1.self) {
-            return .realtimeTurnDetectionVariant1(value)
-        }
+        if let value = try? container.decode(RealtimeTurnDetectionVariant0.self) { return .realtimeTurnDetectionVariant0(value) }
+        if let value = try? container.decode(RealtimeTurnDetectionVariant1.self) { return .realtimeTurnDetectionVariant1(value) }
         return nil
     }
 }
@@ -200,22 +158,22 @@ public struct RealtimeAudioFormatsVariant2: Codable {
     }
 
     init() {
-        type = nil
+        self.type = nil
     }
 }
 
-public extension RealtimeAudioFormatsVariant2 {
-    init(from decoder: Decoder) throws {
+extension RealtimeAudioFormatsVariant2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        if let value = type {
+        self.type = try container.sdkDecodeIfPresent(.type)
+        if let value = self.type {
             try sdkValidateRawEnum("type", value, RealtimeAudioFormatsVariant2Type.allCases.map(\.rawValue))
         }
     }
 }
 
-public extension RealtimeAudioFormatsVariant2 {
-    init(type: RealtimeAudioFormatsVariant2Type? = nil) throws {
+extension RealtimeAudioFormatsVariant2 {
+    public init(type: RealtimeAudioFormatsVariant2Type? = nil) throws {
         self.init()
         self.type = type
         if let value = self.type {
@@ -234,22 +192,22 @@ public struct RealtimeAudioFormatsVariant1: Codable {
     }
 
     init() {
-        type = nil
+        self.type = nil
     }
 }
 
-public extension RealtimeAudioFormatsVariant1 {
-    init(from decoder: Decoder) throws {
+extension RealtimeAudioFormatsVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        if let value = type {
+        self.type = try container.sdkDecodeIfPresent(.type)
+        if let value = self.type {
             try sdkValidateRawEnum("type", value, RealtimeAudioFormatsVariant1Type.allCases.map(\.rawValue))
         }
     }
 }
 
-public extension RealtimeAudioFormatsVariant1 {
-    init(type: RealtimeAudioFormatsVariant1Type? = nil) throws {
+extension RealtimeAudioFormatsVariant1 {
+    public init(type: RealtimeAudioFormatsVariant1Type? = nil) throws {
         self.init()
         self.type = type
         if let value = self.type {
@@ -279,39 +237,28 @@ public struct RealtimeTurnDetectionVariant1: Codable {
         case interruptResponse = "interrupt_response"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeTurnDetectionVariant1 {
-    init(from decoder: Decoder) throws {
+extension RealtimeTurnDetectionVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        eagerness = try container.sdkDecodeIfPresent(.eagerness)
-        createResponse = try container.sdkDecodeIfPresent(.createResponse)
-        interruptResponse = try container.sdkDecodeIfPresent(.interruptResponse)
-        try sdkValidateRawEnum("type", type, RealtimeTurnDetectionVariant1Type.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.eagerness = try container.sdkDecodeIfPresent(.eagerness)
+        self.createResponse = try container.sdkDecodeIfPresent(.createResponse)
+        self.interruptResponse = try container.sdkDecodeIfPresent(.interruptResponse)
+            try sdkValidateRawEnum("type", self.type, RealtimeTurnDetectionVariant1Type.allCases.map(\.rawValue))
     }
 }
 
-public extension RealtimeTurnDetectionVariant1 {
-    init(
-        type: RealtimeTurnDetectionVariant1Type,
-        eagerness: RealtimeTurnDetectionVariant1Eagerness? = nil,
-        createResponse: Bool? = nil,
-        interruptResponse: Bool? = nil
-    ) throws {
+extension RealtimeTurnDetectionVariant1 {
+    public init(type: RealtimeTurnDetectionVariant1Type, eagerness: RealtimeTurnDetectionVariant1Eagerness? = nil, createResponse: Bool? = nil, interruptResponse: Bool? = nil) throws {
         (self.type, self.eagerness) = (type, eagerness)
         (self.createResponse, self.interruptResponse) = (createResponse, interruptResponse)
-        try sdkValidateRawEnum("type", self.type, RealtimeTurnDetectionVariant1Type.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, RealtimeTurnDetectionVariant1Type.allCases.map(\.rawValue))
     }
 }
 
@@ -335,30 +282,25 @@ public struct RealtimeFunctionTool: Codable {
     }
 
     init() {
-        (type, name, description, parameters) = (nil, nil, nil, nil)
+        (self.type, self.name, self.description, self.parameters) = (nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeFunctionTool {
-    init(from decoder: Decoder) throws {
+extension RealtimeFunctionTool {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        name = try container.sdkDecodeIfPresent(.name)
-        description = try container.sdkDecodeIfPresent(.description)
-        parameters = try container.sdkDecodeIfPresent(.parameters)
-        if let value = type {
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.description = try container.sdkDecodeIfPresent(.description)
+        self.parameters = try container.sdkDecodeIfPresent(.parameters)
+        if let value = self.type {
             try sdkValidateRawEnum("type", value, RealtimeFunctionToolType.allCases.map(\.rawValue))
         }
     }
 }
 
-public extension RealtimeFunctionTool {
-    init(
-        type: RealtimeFunctionToolType? = nil,
-        name: String? = nil,
-        description: String? = nil,
-        parameters: [String: JSONValue]? = nil
-    ) throws {
+extension RealtimeFunctionTool {
+    public init(type: RealtimeFunctionToolType? = nil, name: String? = nil, description: String? = nil, parameters: [String: JSONValue]? = nil) throws {
         self.init()
         (self.type, self.name) = (type, name)
         (self.description, self.parameters) = (description, parameters)
@@ -407,47 +349,33 @@ public struct RealtimeTurnDetectionVariant0: Codable {
         case idleTimeoutMs = "idle_timeout_ms"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeTurnDetectionVariant0 {
-    init(from decoder: Decoder) throws {
+extension RealtimeTurnDetectionVariant0 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        threshold = try container.sdkDecodeIfPresent(.threshold)
-        prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
-        silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
-        createResponse = try container.sdkDecodeIfPresent(.createResponse)
-        interruptResponse = try container.sdkDecodeIfPresent(.interruptResponse)
-        idleTimeoutMs = try container.sdkDecodeIfPresent(.idleTimeoutMs)
-        try sdkValidateRawEnum("type", type, RealtimeTurnDetectionVariant0Type.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.threshold = try container.sdkDecodeIfPresent(.threshold)
+        self.prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
+        self.silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
+        self.createResponse = try container.sdkDecodeIfPresent(.createResponse)
+        self.interruptResponse = try container.sdkDecodeIfPresent(.interruptResponse)
+        self.idleTimeoutMs = try container.sdkDecodeIfPresent(.idleTimeoutMs)
+            try sdkValidateRawEnum("type", self.type, RealtimeTurnDetectionVariant0Type.allCases.map(\.rawValue))
     }
 }
 
-public extension RealtimeTurnDetectionVariant0 {
-    init(
-        type: RealtimeTurnDetectionVariant0Type,
-        threshold: Double? = nil,
-        prefixPaddingMs: Int? = nil,
-        silenceDurationMs: Int? = nil,
-        createResponse: Bool? = nil,
-        interruptResponse: Bool? = nil,
-        idleTimeoutMs: Int? = nil
-    ) throws {
+extension RealtimeTurnDetectionVariant0 {
+    public init(type: RealtimeTurnDetectionVariant0Type, threshold: Double? = nil, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil, createResponse: Bool? = nil, interruptResponse: Bool? = nil, idleTimeoutMs: Int? = nil) throws {
         (self.type, self.threshold) = (type, threshold)
         (self.prefixPaddingMs, self.silenceDurationMs) = (prefixPaddingMs, silenceDurationMs)
         (self.createResponse, self.interruptResponse) = (createResponse, interruptResponse)
         self.idleTimeoutMs = idleTimeoutMs
-        try sdkValidateRawEnum("type", self.type, RealtimeTurnDetectionVariant0Type.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, RealtimeTurnDetectionVariant0Type.allCases.map(\.rawValue))
     }
 }
 
@@ -465,42 +393,26 @@ public struct RealtimeTruncationVariant1TokenLimits: Codable {
     }
 
     init() {
-        postInstructions = nil
+        self.postInstructions = nil
     }
 }
 
-public extension RealtimeTruncationVariant1TokenLimits {
-    init(from decoder: Decoder) throws {
+extension RealtimeTruncationVariant1TokenLimits {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        postInstructions = try container.sdkDecodeIfPresent(.postInstructions)
-        if let value = postInstructions {
-            try validateRange(
-                "post_instructions",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.postInstructions = try container.sdkDecodeIfPresent(.postInstructions)
+        if let value = self.postInstructions {
+            try validateRange("post_instructions", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension RealtimeTruncationVariant1TokenLimits {
-    init(postInstructions: Int? = nil) throws {
+extension RealtimeTruncationVariant1TokenLimits {
+    public init(postInstructions: Int? = nil) throws {
         self.init()
         self.postInstructions = postInstructions
         if let value = self.postInstructions {
-            try validateRange(
-                "post_instructions",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("post_instructions", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -520,47 +432,33 @@ public struct RealtimeMCPHTTPError: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeMCPHTTPError {
-    init(from decoder: Decoder) throws {
+extension RealtimeMCPHTTPError {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        try sdkValidateRawEnum("type", type, RealtimeMCPHTTPErrorType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+            try sdkValidateRawEnum("type", self.type, RealtimeMCPHTTPErrorType.allCases.map(\.rawValue))
     }
 }
 
-public extension RealtimeMCPHTTPError {
-    init(type: RealtimeMCPHTTPErrorType, code: Int, message: String) throws {
+extension RealtimeMCPHTTPError {
+    public init(type: RealtimeMCPHTTPErrorType, code: Int, message: String) throws {
         (self.type, self.code) = (type, code)
         self.message = message
-        try sdkValidateRawEnum("type", self.type, RealtimeMCPHTTPErrorType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, RealtimeMCPHTTPErrorType.allCases.map(\.rawValue))
     }
 }
 
@@ -577,23 +475,23 @@ public struct RealtimeAudioFormatsVariant0: Codable {
     }
 
     init() {
-        (type, rate) = (nil, nil)
+        (self.type, self.rate) = (nil, nil)
     }
 }
 
-public extension RealtimeAudioFormatsVariant0 {
-    init(from decoder: Decoder) throws {
+extension RealtimeAudioFormatsVariant0 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        rate = try container.sdkDecodeIfPresent(.rate)
-        if let value = type {
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.rate = try container.sdkDecodeIfPresent(.rate)
+        if let value = self.type {
             try sdkValidateRawEnum("type", value, RealtimeAudioFormatsVariant0Type.allCases.map(\.rawValue))
         }
     }
 }
 
-public extension RealtimeAudioFormatsVariant0 {
-    init(type: RealtimeAudioFormatsVariant0Type? = nil, rate: Int? = nil) throws {
+extension RealtimeAudioFormatsVariant0 {
+    public init(type: RealtimeAudioFormatsVariant0Type? = nil, rate: Int? = nil) throws {
         self.init()
         (self.type, self.rate) = (type, rate)
         if let value = self.type {

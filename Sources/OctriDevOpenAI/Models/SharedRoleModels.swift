@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedRole domain models
+// SharedRole domain models
 /// Details about a role that can be assigned through the public Roles API.
 public struct Role: Codable {
     /// Always `role`.
@@ -31,83 +31,45 @@ public struct Role: Codable {
         case predefinedRole = "predefined_role"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Role {
-    init(from decoder: Decoder) throws {
+extension Role {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.description) else {
-            throw SdkValidationError(
-                field: "description",
-                code: "required",
-                message: "Validation failed for 'description': value is required"
-            )
+            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
         }
         guard container.contains(.permissions) else {
-            throw SdkValidationError(
-                field: "permissions",
-                code: "required",
-                message: "Validation failed for 'permissions': value is required"
-            )
+            throw SdkValidationError(field: "permissions", code: "required", message: "Validation failed for 'permissions': value is required")
         }
         guard container.contains(.resourceType) else {
-            throw SdkValidationError(
-                field: "resource_type",
-                code: "required",
-                message: "Validation failed for 'resource_type': value is required"
-            )
+            throw SdkValidationError(field: "resource_type", code: "required", message: "Validation failed for 'resource_type': value is required")
         }
         guard container.contains(.predefinedRole) else {
-            throw SdkValidationError(
-                field: "predefined_role",
-                code: "required",
-                message: "Validation failed for 'predefined_role': value is required"
-            )
+            throw SdkValidationError(field: "predefined_role", code: "required", message: "Validation failed for 'predefined_role': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        id = try container.sdkDecodeRequired(.id)
-        name = try container.sdkDecodeRequired(.name)
-        description = try container.sdkDecodeNullable(.description)
-        permissions = try container.sdkDecodeRequired(.permissions)
-        resourceType = try container.sdkDecodeRequired(.resourceType)
-        predefinedRole = try container.sdkDecodeRequired(.predefinedRole)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.description = try container.sdkDecodeNullable(.description)
+        self.permissions = try container.sdkDecodeRequired(.permissions)
+        self.resourceType = try container.sdkDecodeRequired(.resourceType)
+        self.predefinedRole = try container.sdkDecodeRequired(.predefinedRole)
     }
 }
 
-public extension Role {
-    init(
-        object: RoleObject,
-        id: String,
-        name: String,
-        description: String?,
-        permissions: [String],
-        resourceType: String,
-        predefinedRole: Bool
-    ) {
+extension Role {
+    public init(object: RoleObject, id: String, name: String, description: String?, permissions: [String], resourceType: String, predefinedRole: Bool) {
         (self.object, self.id) = (object, id)
         (self.name, self.description) = (name, description)
         (self.permissions, self.resourceType) = (permissions, resourceType)
@@ -133,51 +95,33 @@ public struct RoleListResource: Codable {
         case next
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RoleListResource {
-    init(from decoder: Decoder) throws {
+extension RoleListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
         guard container.contains(.next) else {
-            throw SdkValidationError(
-                field: "next",
-                code: "required",
-                message: "Validation failed for 'next': value is required"
-            )
+            throw SdkValidationError(field: "next", code: "required", message: "Validation failed for 'next': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        next = try container.sdkDecodeNullable(.next)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.next = try container.sdkDecodeNullable(.next)
     }
 }
 
-public extension RoleListResource {
-    init(object: RoleListResourceObject, data: [AssignedRoleDetails], hasMore: Bool, next: String?) {
+extension RoleListResource {
+    public init(object: RoleListResourceObject, data: [AssignedRoleDetails], hasMore: Bool, next: String?) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.next) = (hasMore, next)
     }
@@ -187,15 +131,12 @@ public extension RoleListResource {
 public struct RoleObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let role = RoleObject(rawValue: "role")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -208,15 +149,12 @@ public struct RoleObject: RawRepresentable, Hashable, Codable, Sendable, SdkWire
 public struct RoleListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = RoleListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

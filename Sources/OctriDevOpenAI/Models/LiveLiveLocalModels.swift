@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveLocal domain models
+// LiveLiveLocal domain models
 /// Typed representation of the `LiveLocalSkillParam` API schema.
 public struct LiveLocalSkillParam: Codable {
     /// The name of the skill.
@@ -19,43 +19,29 @@ public struct LiveLocalSkillParam: Codable {
         case path
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveLocalSkillParam {
-    init(from decoder: Decoder) throws {
+extension LiveLocalSkillParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.description) else {
-            throw SdkValidationError(
-                field: "description",
-                code: "required",
-                message: "Validation failed for 'description': value is required"
-            )
+            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
         }
         guard container.contains(.path) else {
-            throw SdkValidationError(
-                field: "path",
-                code: "required",
-                message: "Validation failed for 'path': value is required"
-            )
+            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        description = try container.sdkDecodeRequired(.description)
-        path = try container.sdkDecodeRequired(.path)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.description = try container.sdkDecodeRequired(.description)
+        self.path = try container.sdkDecodeRequired(.path)
     }
 }
 
-public extension LiveLocalSkillParam {
-    init(name: String, description: String, path: String) {
+extension LiveLocalSkillParam {
+    public init(name: String, description: String, path: String) {
         (self.name, self.description) = (name, description)
         self.path = path
     }
@@ -73,34 +59,28 @@ public struct LiveLocalEnvironmentParam: Codable {
         case skills
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveLocalEnvironmentParam {
-    init(from decoder: Decoder) throws {
+extension LiveLocalEnvironmentParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        skills = try container.sdkDecodeIfPresent(.skills)
-        try sdkValidateRawEnum("type", type, LiveLocalEnvironmentParamType.allCases.map(\.rawValue))
-        if let value = skills {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.skills = try container.sdkDecodeIfPresent(.skills)
+            try sdkValidateRawEnum("type", self.type, LiveLocalEnvironmentParamType.allCases.map(\.rawValue))
+        if let value = self.skills {
             try validateItems("skills", value, min: nil, max: 200)
         }
     }
 }
 
-public extension LiveLocalEnvironmentParam {
-    init(type: LiveLocalEnvironmentParamType, skills: [LiveLocalSkillParam]? = nil) throws {
+extension LiveLocalEnvironmentParam {
+    public init(type: LiveLocalEnvironmentParamType, skills: [LiveLocalSkillParam]? = nil) throws {
         (self.type, self.skills) = (type, skills)
-        try sdkValidateRawEnum("type", self.type, LiveLocalEnvironmentParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveLocalEnvironmentParamType.allCases.map(\.rawValue))
         if let value = self.skills {
             try validateItems("skills", value, min: nil, max: 200)
         }

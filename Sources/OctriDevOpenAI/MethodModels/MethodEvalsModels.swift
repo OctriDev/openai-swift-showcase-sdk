@@ -7,7 +7,7 @@ import Foundation
     import FoundationNetworking
 #endif
 
-/// Canonical evals operation model declarations
+// Canonical evals operation model declarations
 public struct DeleteEvalResponse: Codable {
     /// - Example: "eval.deleted"
     public var object: String
@@ -22,43 +22,29 @@ public struct DeleteEvalResponse: Codable {
         case evalId = "eval_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DeleteEvalResponse {
-    init(from decoder: Decoder) throws {
+extension DeleteEvalResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
         guard container.contains(.evalId) else {
-            throw SdkValidationError(
-                field: "eval_id",
-                code: "required",
-                message: "Validation failed for 'eval_id': value is required"
-            )
+            throw SdkValidationError(field: "eval_id", code: "required", message: "Validation failed for 'eval_id': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
-        evalId = try container.sdkDecodeRequired(.evalId)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
+        self.evalId = try container.sdkDecodeRequired(.evalId)
     }
 }
 
-public extension DeleteEvalResponse {
-    init(object: String, deleted: Bool, evalId: String) {
+extension DeleteEvalResponse {
+    public init(object: String, deleted: Bool, evalId: String) {
         (self.object, self.deleted) = (object, deleted)
         self.evalId = evalId
     }
@@ -79,21 +65,21 @@ public struct DeleteEvalRunResponse: Codable {
     }
 
     init() {
-        (object, deleted, runId) = (nil, nil, nil)
+        (self.object, self.deleted, self.runId) = (nil, nil, nil)
     }
 }
 
-public extension DeleteEvalRunResponse {
-    init(from decoder: Decoder) throws {
+extension DeleteEvalRunResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        object = try container.sdkDecodeIfPresent(.object)
-        deleted = try container.sdkDecodeIfPresent(.deleted)
-        runId = try container.sdkDecodeIfPresent(.runId)
+        self.object = try container.sdkDecodeIfPresent(.object)
+        self.deleted = try container.sdkDecodeIfPresent(.deleted)
+        self.runId = try container.sdkDecodeIfPresent(.runId)
     }
 }
 
-public extension DeleteEvalRunResponse {
-    init(object: String? = nil, deleted: Bool? = nil, runId: String? = nil) {
+extension DeleteEvalRunResponse {
+    public init(object: String? = nil, deleted: Bool? = nil, runId: String? = nil) {
         self.init()
         (self.object, self.deleted) = (object, deleted)
         self.runId = runId

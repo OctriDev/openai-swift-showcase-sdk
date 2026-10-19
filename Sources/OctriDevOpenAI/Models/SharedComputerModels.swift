@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedComputer domain models
+// SharedComputer domain models
 public indirect enum ComputerAction {
     case clickParam(ClickParam)
     case doubleClickAction(DoubleClickAction)
@@ -19,6 +19,7 @@ public indirect enum ComputerAction {
 }
 
 extension ComputerAction: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -26,16 +27,12 @@ extension ComputerAction: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -46,16 +43,16 @@ extension ComputerAction: Codable {
 extension ComputerAction {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "click": try .clickParam(ClickParam(from: decoder))
-        case "double_click": try .doubleClickAction(DoubleClickAction(from: decoder))
-        case "drag": try .dragParam(DragParam(from: decoder))
-        case "keypress": try .keyPressAction(KeyPressAction(from: decoder))
-        case "move": try .moveParam(MoveParam(from: decoder))
-        case "screenshot": try .screenshotParam(ScreenshotParam(from: decoder))
-        case "scroll": try .scrollParam(ScrollParam(from: decoder))
-        case "type": try .typeParam(TypeParam(from: decoder))
-        case "wait": try .waitParam(WaitParam(from: decoder))
-        default: nil
+        case "click": return .clickParam(try ClickParam(from: decoder))
+        case "double_click": return .doubleClickAction(try DoubleClickAction(from: decoder))
+        case "drag": return .dragParam(try DragParam(from: decoder))
+        case "keypress": return .keyPressAction(try KeyPressAction(from: decoder))
+        case "move": return .moveParam(try MoveParam(from: decoder))
+        case "screenshot": return .screenshotParam(try ScreenshotParam(from: decoder))
+        case "scroll": return .scrollParam(try ScrollParam(from: decoder))
+        case "type": return .typeParam(try TypeParam(from: decoder))
+        case "wait": return .waitParam(try WaitParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -103,63 +100,39 @@ public struct ComputerScreenshotContent: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ComputerScreenshotContent {
-    init(from decoder: Decoder) throws {
+extension ComputerScreenshotContent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.imageUrl) else {
-            throw SdkValidationError(
-                field: "image_url",
-                code: "required",
-                message: "Validation failed for 'image_url': value is required"
-            )
+            throw SdkValidationError(field: "image_url", code: "required", message: "Validation failed for 'image_url': value is required")
         }
         guard container.contains(.fileId) else {
-            throw SdkValidationError(
-                field: "file_id",
-                code: "required",
-                message: "Validation failed for 'file_id': value is required"
-            )
+            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
         }
         guard container.contains(.detail) else {
-            throw SdkValidationError(
-                field: "detail",
-                code: "required",
-                message: "Validation failed for 'detail': value is required"
-            )
+            throw SdkValidationError(field: "detail", code: "required", message: "Validation failed for 'detail': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        imageUrl = try container.sdkDecodeNullable(.imageUrl)
-        fileId = try container.sdkDecodeNullable(.fileId)
-        detail = try container.sdkDecodeRequired(.detail)
-        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-        try sdkValidateRawEnum("type", type, ComputerScreenshotContentType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.imageUrl = try container.sdkDecodeNullable(.imageUrl)
+        self.fileId = try container.sdkDecodeNullable(.fileId)
+        self.detail = try container.sdkDecodeRequired(.detail)
+        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+            try sdkValidateRawEnum("type", self.type, ComputerScreenshotContentType.allCases.map(\.rawValue))
     }
 }
 
-public extension ComputerScreenshotContent {
-    init(
-        type: ComputerScreenshotContentType,
-        imageUrl: String?,
-        fileId: String?,
-        detail: ImageDetail,
-        promptCacheBreakpoint: PromptCacheBreakpointConfig? = nil
-    ) throws {
+extension ComputerScreenshotContent {
+    public init(type: ComputerScreenshotContentType, imageUrl: String?, fileId: String?, detail: ImageDetail, promptCacheBreakpoint: PromptCacheBreakpointConfig? = nil) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
         (self.fileId, self.detail) = (fileId, detail)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-        try sdkValidateRawEnum("type", self.type, ComputerScreenshotContentType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ComputerScreenshotContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -176,28 +149,22 @@ public struct ComputerToolCallOutputResourceVariant1: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ComputerToolCallOutputResourceVariant1 {
-    init(from decoder: Decoder) throws {
+extension ComputerToolCallOutputResourceVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
-        status = try container.sdkDecodeRequired(.status)
-        createdBy = try container.sdkDecodeIfPresent(.createdBy)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
     }
 }
 
-public extension ComputerToolCallOutputResourceVariant1 {
-    init(status: ComputerCallOutputStatus, createdBy: String? = nil) {
+extension ComputerToolCallOutputResourceVariant1 {
+    public init(status: ComputerCallOutputStatus, createdBy: String? = nil) {
         (self.status, self.createdBy) = (status, createdBy)
     }
 }
@@ -231,75 +198,45 @@ public struct ComputerToolCall: Codable {
         case actions
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ComputerToolCall {
-    init(from decoder: Decoder) throws {
+extension ComputerToolCall {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.pendingSafetyChecks) else {
-            throw SdkValidationError(
-                field: "pending_safety_checks",
-                code: "required",
-                message: "Validation failed for 'pending_safety_checks': value is required"
-            )
+            throw SdkValidationError(field: "pending_safety_checks", code: "required", message: "Validation failed for 'pending_safety_checks': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        callId = try container.sdkDecodeRequired(.callId)
-        pendingSafetyChecks = try container.sdkDecodeRequired(.pendingSafetyChecks)
-        status = try container.sdkDecodeRequired(.status)
-        action = try container.sdkDecodeIfPresent(.action)
-        actions = try container.sdkDecodeIfPresent(.actions)
-        try sdkValidateRawEnum("type", type, ComputerToolCallType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.pendingSafetyChecks = try container.sdkDecodeRequired(.pendingSafetyChecks)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.action = try container.sdkDecodeIfPresent(.action)
+        self.actions = try container.sdkDecodeIfPresent(.actions)
+            try sdkValidateRawEnum("type", self.type, ComputerToolCallType.allCases.map(\.rawValue))
     }
 }
 
-public extension ComputerToolCall {
-    init(
-        type: ComputerToolCallType,
-        id: String,
-        callId: String,
-        pendingSafetyChecks: [ComputerCallSafetyCheckParam],
-        status: ComputerToolCallStatus,
-        action: ComputerAction? = nil,
-        actions: ComputerActionList? = nil
-    ) throws {
+extension ComputerToolCall {
+    public init(type: ComputerToolCallType, id: String, callId: String, pendingSafetyChecks: [ComputerCallSafetyCheckParam], status: ComputerToolCallStatus, action: ComputerAction? = nil, actions: ComputerActionList? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.pendingSafetyChecks) = (callId, pendingSafetyChecks)
         (self.status, self.action) = (status, action)
         self.actions = actions
-        try sdkValidateRawEnum("type", self.type, ComputerToolCallType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ComputerToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -318,32 +255,26 @@ public struct ComputerScreenshotImage: Codable {
         case fileId = "file_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ComputerScreenshotImage {
-    init(from decoder: Decoder) throws {
+extension ComputerScreenshotImage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        if let value = imageUrl {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        if let value = self.imageUrl {
             try sdkValidateUri("image_url", value)
         }
     }
 }
 
-public extension ComputerScreenshotImage {
-    init(type: ComputerScreenshotImageType, imageUrl: String? = nil, fileId: String? = nil) throws {
+extension ComputerScreenshotImage {
+    public init(type: ComputerScreenshotImageType, imageUrl: String? = nil, fileId: String? = nil) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
         self.fileId = fileId
         if let value = self.imageUrl {
@@ -377,58 +308,37 @@ public struct ComputerToolCallOutput: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ComputerToolCallOutput {
-    init(from decoder: Decoder) throws {
+extension ComputerToolCallOutput {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        callId = try container.sdkDecodeRequired(.callId)
-        output = try container.sdkDecodeRequired(.output)
-        id = try container.sdkDecodeIfPresent(.id)
-        acknowledgedSafetyChecks = try container.sdkDecodeIfPresent(.acknowledgedSafetyChecks)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("type", type, ComputerToolCallOutputType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.output = try container.sdkDecodeRequired(.output)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.acknowledgedSafetyChecks = try container.sdkDecodeIfPresent(.acknowledgedSafetyChecks)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("type", self.type, ComputerToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 
-public extension ComputerToolCallOutput {
-    init(
-        type: ComputerToolCallOutputType,
-        callId: String,
-        output: ComputerScreenshotImage,
-        id: String? = nil,
-        acknowledgedSafetyChecks: [ComputerCallSafetyCheckParam]? = nil,
-        status: ComputerToolCallOutputStatus? = nil
-    ) throws {
+extension ComputerToolCallOutput {
+    public init(type: ComputerToolCallOutputType, callId: String, output: ComputerScreenshotImage, id: String? = nil, acknowledgedSafetyChecks: [ComputerCallSafetyCheckParam]? = nil, status: ComputerToolCallOutputStatus? = nil) throws {
         (self.type, self.callId) = (type, callId)
         (self.output, self.id) = (output, id)
         (self.acknowledgedSafetyChecks, self.status) = (acknowledgedSafetyChecks, status)
-        try sdkValidateRawEnum("type", self.type, ComputerToolCallOutputType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ComputerToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 
@@ -456,60 +366,39 @@ public struct ComputerCallOutputItemParam: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ComputerCallOutputItemParam {
-    init(from decoder: Decoder) throws {
+extension ComputerCallOutputItemParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
-        callId = try container.sdkDecodeRequired(.callId)
-        type = try container.sdkDecodeRequired(.type)
-        output = try container.sdkDecodeRequired(.output)
-        id = try container.sdkDecodeIfPresent(.id)
-        acknowledgedSafetyChecks = try container.sdkDecodeIfPresent(.acknowledgedSafetyChecks)
-        status = try container.sdkDecodeIfPresent(.status)
-        try validateLength("call_id", callId, min: 1, max: 64)
-        try sdkValidateRawEnum("type", type, ComputerCallOutputItemParamType.allCases.map(\.rawValue))
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.output = try container.sdkDecodeRequired(.output)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.acknowledgedSafetyChecks = try container.sdkDecodeIfPresent(.acknowledgedSafetyChecks)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try validateLength("call_id", self.callId, min: 1, max: 64)
+            try sdkValidateRawEnum("type", self.type, ComputerCallOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension ComputerCallOutputItemParam {
-    init(
-        callId: String,
-        type: ComputerCallOutputItemParamType,
-        output: ComputerScreenshotImage,
-        id: String? = nil,
-        acknowledgedSafetyChecks: [ComputerCallSafetyCheckParam]? = nil,
-        status: FunctionCallItemStatus? = nil
-    ) throws {
+extension ComputerCallOutputItemParam {
+    public init(callId: String, type: ComputerCallOutputItemParamType, output: ComputerScreenshotImage, id: String? = nil, acknowledgedSafetyChecks: [ComputerCallSafetyCheckParam]? = nil, status: FunctionCallItemStatus? = nil) throws {
         (self.callId, self.type) = (callId, type)
         (self.output, self.id) = (output, id)
         (self.acknowledgedSafetyChecks, self.status) = (acknowledgedSafetyChecks, status)
-        try validateLength("call_id", self.callId, min: 1, max: 64)
-        try sdkValidateRawEnum("type", self.type, ComputerCallOutputItemParamType.allCases.map(\.rawValue))
+            try validateLength("call_id", self.callId, min: 1, max: 64)
+            try sdkValidateRawEnum("type", self.type, ComputerCallOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -541,75 +430,45 @@ public struct ComputerToolCallOutputResource: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ComputerToolCallOutputResource {
-    init(from decoder: Decoder) throws {
+extension ComputerToolCallOutputResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        callId = try container.sdkDecodeRequired(.callId)
-        output = try container.sdkDecodeRequired(.output)
-        status = try container.sdkDecodeRequired(.status)
-        acknowledgedSafetyChecks = try container.sdkDecodeIfPresent(.acknowledgedSafetyChecks)
-        createdBy = try container.sdkDecodeIfPresent(.createdBy)
-        try sdkValidateRawEnum("type", type, ComputerToolCallOutputType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.output = try container.sdkDecodeRequired(.output)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.acknowledgedSafetyChecks = try container.sdkDecodeIfPresent(.acknowledgedSafetyChecks)
+        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
+            try sdkValidateRawEnum("type", self.type, ComputerToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 
-public extension ComputerToolCallOutputResource {
-    init(
-        type: ComputerToolCallOutputType,
-        id: String,
-        callId: String,
-        output: ComputerScreenshotImage,
-        status: ComputerCallOutputStatus,
-        acknowledgedSafetyChecks: [ComputerCallSafetyCheckParam]? = nil,
-        createdBy: String? = nil
-    ) throws {
+extension ComputerToolCallOutputResource {
+    public init(type: ComputerToolCallOutputType, id: String, callId: String, output: ComputerScreenshotImage, status: ComputerCallOutputStatus, acknowledgedSafetyChecks: [ComputerCallSafetyCheckParam]? = nil, createdBy: String? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.output) = (callId, output)
         (self.status, self.acknowledgedSafetyChecks) = (status, acknowledgedSafetyChecks)
         self.createdBy = createdBy
-        try sdkValidateRawEnum("type", self.type, ComputerToolCallOutputType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ComputerToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 
@@ -628,7 +487,5 @@ public struct ComputerCallSafetyCheckParam: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

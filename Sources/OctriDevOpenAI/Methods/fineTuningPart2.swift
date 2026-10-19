@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension FineTuningMethods {
-    /// Runs a grader against a model sample and, optionally, a data source item. Supply a grader definition and
-    /// `model_sample` to receive the overall reward, grader metadata, and any sub-rewards.
+extension FineTuningMethods {
+    /// Runs a grader against a model sample and, optionally, a data source item. Supply a grader definition and `model_sample` to receive the overall reward, grader metadata, and any sub-rewards.
     ///
     /// Run a grader.
     ///
@@ -23,50 +22,21 @@ public extension FineTuningMethods {
     ///   populate the `item` namespace. See [the
     ///   guide](https://developers.openai.com/api/docs/guides/graders) for more
     ///   details.
-    static func runGrader(
-        config: ClientConfig,
-        grader: RunGraderRequestGrader,
-        modelSample: String,
-        item: [String: JSONValue]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RunGraderResponse {
+    public static func runGrader(config: ClientConfig, grader: RunGraderRequestGrader, modelSample: String, item: [String: JSONValue]? = nil, requestOptions: RequestOptions? = nil) async throws -> RunGraderResponse {
         let requestBody = RunGraderRequestBody(grader: grader, modelSample: modelSample, item: item)
 
-        return try await (sdkRequest(
-            "POST",
-            "/fine_tuning/alpha/graders/run",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "runGrader",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/fine_tuning/alpha/graders/run", config: config, body: requestBody, decoder: .json, operationId: "runGrader", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Validates a grader definition without running it against a model sample. Supply a `grader` that matches one of
-    /// the supported grader types to receive the validated definition.
+    /// Validates a grader definition without running it against a model sample. Supply a `grader` that matches one of the supported grader types to receive the validated definition.
     ///
     /// Validate a grader.
     ///
     /// - Parameters:
     /// - grader: The grader used for the fine-tuning job.
-    static func validateGrader(
-        config: ClientConfig,
-        grader: ValidateGraderRequestGrader,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ValidateGraderResponse {
+    public static func validateGrader(config: ClientConfig, grader: ValidateGraderRequestGrader, requestOptions: RequestOptions? = nil) async throws -> ValidateGraderResponse {
         let requestBody = ValidateGraderRequestBody(grader: grader)
 
-        return try await (sdkRequest(
-            "POST",
-            "/fine_tuning/alpha/graders/validate",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "validateGrader",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/fine_tuning/alpha/graders/validate", config: config, body: requestBody, decoder: .json, operationId: "validateGrader", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension VaultsMethods {
-    /// Updates the name or metadata of an active vault. Omitted fields remain unchanged. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+extension VaultsMethods {
+    /// Updates the name or metadata of an active vault. Omitted fields remain unchanged. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
     ///
     /// - Parameters:
     /// - vaultId: The ID of the vault.
@@ -18,69 +17,25 @@ public extension VaultsMethods {
     /// - name: A replacement name. Omit to leave unchanged, or pass null to clear
     ///   it. The name is trimmed before storage. It must contain 1 to 256 UTF-8 bytes
     ///   after trimming.
-    static func updateVault(
-        config: ClientConfig,
-        vaultId: String,
-        metadata: [String: String]? = nil,
-        name: SdkOptional<String>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VaultResource {
-        try validateLength("vault_id", vaultId, min: 0, max: 1_048_576)
+    public static func updateVault(config: ClientConfig, vaultId: String, metadata: [String: String]? = nil, name: SdkOptional<String>? = nil, requestOptions: RequestOptions? = nil) async throws -> VaultResource {
+        try validateLength("vault_id", vaultId, min: 0, max: 1048576)
 
         if let name = name?.valueOrNil {
-            try validateLength("name", name, min: 1, max: 1_048_576)
+            try validateLength("name", name, min: 1, max: 1048576)
         }
 
         let requestBody = UpdateVaultRequestBody(metadata: metadata, name: name)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/vaults/", sdkEncodePathSegment(sdkWireString(vaultId))].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateVault",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse2.self,
-                "401": ErrorResponse2.self,
-                "403": ErrorResponse2.self,
-                "404": ErrorResponse2.self,
-                "409": ErrorResponse2.self,
-                "500": ErrorResponse2.self,
-                "503": ErrorResponse2.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/vaults/", sdkEncodePathSegment(sdkWireString(vaultId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateVault", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
     }
 
-    /// Deletes a vault and all its credentials. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    /// Deletes a vault and all its credentials. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
     ///
     /// - Parameters:
     /// - vaultId: The ID of the vault.
-    static func deleteVault(
-        config: ClientConfig,
-        vaultId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedVaultResource {
-        try validateLength("vault_id", vaultId, min: 0, max: 1_048_576)
+    public static func deleteVault(config: ClientConfig, vaultId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedVaultResource {
+        try validateLength("vault_id", vaultId, min: 0, max: 1048576)
 
-        return try await (sdkRequest(
-            "DELETE",
-            ["/vaults/", sdkEncodePathSegment(sdkWireString(vaultId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteVault",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse2.self,
-                "401": ErrorResponse2.self,
-                "403": ErrorResponse2.self,
-                "404": ErrorResponse2.self,
-                "409": ErrorResponse2.self,
-                "500": ErrorResponse2.self,
-                "503": ErrorResponse2.self,
-            ]
-        )).data
+        return try (await sdkRequest("DELETE", ["/vaults/", sdkEncodePathSegment(sdkWireString(vaultId))].joined(), config: config, decoder: .json, operationId: "deleteVault", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
     }
 }

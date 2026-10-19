@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaDirect domain models
+// ResponsesBetaDirect domain models
 /// Typed representation of the `BetaDirectToolCallCaller` API schema.
 public struct BetaDirectToolCallCaller: Codable {
     /// Required enumerated value serialized in the `type` wire field.
@@ -13,30 +13,24 @@ public struct BetaDirectToolCallCaller: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaDirectToolCallCaller {
-    init(from decoder: Decoder) throws {
+extension BetaDirectToolCallCaller {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, BetaDirectToolCallCallerType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, BetaDirectToolCallCallerType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaDirectToolCallCaller {
-    init(type: BetaDirectToolCallCallerType) throws {
+extension BetaDirectToolCallCaller {
+    public init(type: BetaDirectToolCallCallerType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, BetaDirectToolCallCallerType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaDirectToolCallCallerType.allCases.map(\.rawValue))
     }
 }
 
@@ -49,30 +43,24 @@ public struct BetaDirectToolCallCallerParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaDirectToolCallCallerParam {
-    init(from decoder: Decoder) throws {
+extension BetaDirectToolCallCallerParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, BetaDirectToolCallCallerParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, BetaDirectToolCallCallerParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaDirectToolCallCallerParam {
-    init(type: BetaDirectToolCallCallerParamType) throws {
+extension BetaDirectToolCallCallerParam {
+    public init(type: BetaDirectToolCallCallerParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, BetaDirectToolCallCallerParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaDirectToolCallCallerParamType.allCases.map(\.rawValue))
     }
 }
 

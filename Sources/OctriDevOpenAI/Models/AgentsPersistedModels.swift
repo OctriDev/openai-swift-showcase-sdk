@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsPersisted domain models
+// AgentsPersisted domain models
 public indirect enum PersistedAgentToolConfigParam {
     case persistedAgentToolConfigParamFunction(PersistedAgentToolConfigParamFunction)
     case persistedAgentToolConfigParamToolSearch(PersistedAgentToolConfigParamToolSearch)
@@ -16,6 +16,7 @@ public indirect enum PersistedAgentToolConfigParam {
 }
 
 extension PersistedAgentToolConfigParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -23,16 +24,12 @@ extension PersistedAgentToolConfigParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -43,24 +40,16 @@ extension PersistedAgentToolConfigParam: Codable {
 extension PersistedAgentToolConfigParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": try .persistedAgentToolConfigParamFunction(
-                PersistedAgentToolConfigParamFunction(from: decoder)
-            )
-        case "tool_search": try .persistedAgentToolConfigParamToolSearch(
-                PersistedAgentToolConfigParamToolSearch(from: decoder)
-            )
+        case "function": return .persistedAgentToolConfigParamFunction(try PersistedAgentToolConfigParamFunction(from: decoder))
+        case "tool_search": return .persistedAgentToolConfigParamToolSearch(try PersistedAgentToolConfigParamToolSearch(from: decoder))
         case "programmatic_tool_calling":
-            try .persistedAgentToolConfigParamProgrammaticToolCalling(
-                PersistedAgentToolConfigParamProgrammaticToolCalling(from: decoder)
-            )
-        case "mcp": try .persistedAgentToolConfigParamMcp(PersistedAgentToolConfigParamMcp(from: decoder))
-        case "web_search": try .persistedAgentToolConfigParamWebSearch(
-                PersistedAgentToolConfigParamWebSearch(from: decoder)
-            )
-        case "computer_use": try .persistedAgentToolConfigParamComputerUse(
-                PersistedAgentToolConfigParamComputerUse(from: decoder)
-            )
-        default: nil
+        return .persistedAgentToolConfigParamProgrammaticToolCalling(
+            try PersistedAgentToolConfigParamProgrammaticToolCalling(from: decoder)
+        )
+        case "mcp": return .persistedAgentToolConfigParamMcp(try PersistedAgentToolConfigParamMcp(from: decoder))
+        case "web_search": return .persistedAgentToolConfigParamWebSearch(try PersistedAgentToolConfigParamWebSearch(from: decoder))
+        case "computer_use": return .persistedAgentToolConfigParamComputerUse(try PersistedAgentToolConfigParamComputerUse(from: decoder))
+        default: return nil
         }
     }
 }
@@ -92,6 +81,7 @@ public indirect enum PersistedAgentToolResource {
 }
 
 extension PersistedAgentToolResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -99,16 +89,12 @@ extension PersistedAgentToolResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -119,20 +105,14 @@ extension PersistedAgentToolResource: Codable {
 extension PersistedAgentToolResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": try .persistedAgentToolResourceFunction(PersistedAgentToolResourceFunction(from: decoder))
-        case "tool_search": try .persistedAgentToolResourceToolSearch(
-                PersistedAgentToolResourceToolSearch(from: decoder)
-            )
+        case "function": return .persistedAgentToolResourceFunction(try PersistedAgentToolResourceFunction(from: decoder))
+        case "tool_search": return .persistedAgentToolResourceToolSearch(try PersistedAgentToolResourceToolSearch(from: decoder))
         case "programmatic_tool_calling":
-            try .persistedAgentToolResourceProgrammaticToolCalling(
-                PersistedAgentToolResourceProgrammaticToolCalling(from: decoder)
-            )
-        case "mcp": try .persistedAgentToolResourceMcp(PersistedAgentToolResourceMcp(from: decoder))
-        case "web_search": try .persistedAgentToolResourceWebSearch(PersistedAgentToolResourceWebSearch(from: decoder))
-        case "computer_use": try .persistedAgentToolResourceComputerUse(
-                PersistedAgentToolResourceComputerUse(from: decoder)
-            )
-        default: nil
+        return .persistedAgentToolResourceProgrammaticToolCalling(try PersistedAgentToolResourceProgrammaticToolCalling(from: decoder))
+        case "mcp": return .persistedAgentToolResourceMcp(try PersistedAgentToolResourceMcp(from: decoder))
+        case "web_search": return .persistedAgentToolResourceWebSearch(try PersistedAgentToolResourceWebSearch(from: decoder))
+        case "computer_use": return .persistedAgentToolResourceComputerUse(try PersistedAgentToolResourceComputerUse(from: decoder))
+        default: return nil
         }
     }
 }
@@ -160,6 +140,7 @@ public indirect enum PersistedMcpTransportConfigParam {
 }
 
 extension PersistedMcpTransportConfigParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -167,16 +148,12 @@ extension PersistedMcpTransportConfigParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -187,9 +164,9 @@ extension PersistedMcpTransportConfigParam: Codable {
 extension PersistedMcpTransportConfigParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "http": try .persistedMcpTransportConfigParamHttp(PersistedMcpTransportConfigParamHttp(from: decoder))
-        case "stdio": try .persistedMcpTransportConfigParamStdio(PersistedMcpTransportConfigParamStdio(from: decoder))
-        default: nil
+        case "http": return .persistedMcpTransportConfigParamHttp(try PersistedMcpTransportConfigParamHttp(from: decoder))
+        case "stdio": return .persistedMcpTransportConfigParamStdio(try PersistedMcpTransportConfigParamStdio(from: decoder))
+        default: return nil
         }
     }
 }
@@ -213,6 +190,7 @@ public indirect enum PersistedMcpTransportResource {
 }
 
 extension PersistedMcpTransportResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -220,16 +198,12 @@ extension PersistedMcpTransportResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -240,9 +214,9 @@ extension PersistedMcpTransportResource: Codable {
 extension PersistedMcpTransportResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "http": try .persistedMcpTransportResourceHttp(PersistedMcpTransportResourceHttp(from: decoder))
-        case "stdio": try .persistedMcpTransportResourceStdio(PersistedMcpTransportResourceStdio(from: decoder))
-        default: nil
+        case "http": return .persistedMcpTransportResourceHttp(try PersistedMcpTransportResourceHttp(from: decoder))
+        case "stdio": return .persistedMcpTransportResourceStdio(try PersistedMcpTransportResourceStdio(from: decoder))
+        default: return nil
         }
     }
 }
@@ -279,66 +253,46 @@ public struct PersistedMcpTransportConfigParamStdio: Codable {
         case envVars = "env_vars"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension PersistedMcpTransportConfigParamStdio {
-    init(from decoder: Decoder) throws {
+extension PersistedMcpTransportConfigParamStdio {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.command) else {
-            throw SdkValidationError(
-                field: "command",
-                code: "required",
-                message: "Validation failed for 'command': value is required"
-            )
+            throw SdkValidationError(field: "command", code: "required", message: "Validation failed for 'command': value is required")
         }
         guard container.contains(.cwd) else {
-            throw SdkValidationError(
-                field: "cwd",
-                code: "required",
-                message: "Validation failed for 'cwd': value is required"
-            )
+            throw SdkValidationError(field: "cwd", code: "required", message: "Validation failed for 'cwd': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        command = try container.sdkDecodeRequired(.command)
-        cwd = try container.sdkDecodeRequired(.cwd)
-        args = try container.sdkDecodeIfPresent(.args)
-        envVars = try container.sdkDecodeIfPresent(.envVars)
-        try sdkValidateRawEnum("type", type, PersistedMcpTransportConfigParamStdioType.allCases.map(\.rawValue))
-        try validateLength("command", command, min: 0, max: 1_048_576)
-        try validateLength("cwd", cwd, min: 0, max: 1_048_576)
-        if let value = args {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.command = try container.sdkDecodeRequired(.command)
+        self.cwd = try container.sdkDecodeRequired(.cwd)
+        self.args = try container.sdkDecodeIfPresent(.args)
+        self.envVars = try container.sdkDecodeIfPresent(.envVars)
+            try sdkValidateRawEnum("type", self.type, PersistedMcpTransportConfigParamStdioType.allCases.map(\.rawValue))
+            try validateLength("command", self.command, min: 0, max: 1048576)
+            try validateLength("cwd", self.cwd, min: 0, max: 1048576)
+        if let value = self.args {
             try validateItems("args", value, min: 0, max: 16384)
         }
-        if let value = envVars {
+        if let value = self.envVars {
             try validateItems("env_vars", value, min: 0, max: 16384)
         }
     }
 }
 
-public extension PersistedMcpTransportConfigParamStdio {
-    init(
-        type: PersistedMcpTransportConfigParamStdioType,
-        command: String,
-        cwd: String,
-        args: [String]? = nil,
-        envVars: [String]? = nil
-    ) throws {
+extension PersistedMcpTransportConfigParamStdio {
+    public init(type: PersistedMcpTransportConfigParamStdioType, command: String, cwd: String, args: [String]? = nil, envVars: [String]? = nil) throws {
         (self.type, self.command) = (type, command)
         (self.cwd, self.args) = (cwd, args)
         self.envVars = envVars
-        try sdkValidateRawEnum("type", self.type, PersistedMcpTransportConfigParamStdioType.allCases.map(\.rawValue))
-        try validateLength("command", self.command, min: 0, max: 1_048_576)
-        try validateLength("cwd", self.cwd, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, PersistedMcpTransportConfigParamStdioType.allCases.map(\.rawValue))
+            try validateLength("command", self.command, min: 0, max: 1048576)
+            try validateLength("cwd", self.cwd, min: 0, max: 1048576)
         if let value = self.args {
             try validateItems("args", value, min: 0, max: 16384)
         }
@@ -379,73 +333,50 @@ public struct PersistedAgentToolConfigParamMcp: Codable {
         case connectionOrigin = "connection_origin"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension PersistedAgentToolConfigParamMcp {
-    init(from decoder: Decoder) throws {
+extension PersistedAgentToolConfigParamMcp {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.serverLabel) else {
-            throw SdkValidationError(
-                field: "server_label",
-                code: "required",
-                message: "Validation failed for 'server_label': value is required"
-            )
+            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
         }
         guard container.contains(.transport) else {
-            throw SdkValidationError(
-                field: "transport",
-                code: "required",
-                message: "Validation failed for 'transport': value is required"
-            )
+            throw SdkValidationError(field: "transport", code: "required", message: "Validation failed for 'transport': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        transport = try container.sdkDecodeRequired(.transport)
-        credentialId = try container.sdkDecodeIfPresent(.credentialId)
-        requestMetadata = try container.sdkDecodeIfPresent(.requestMetadata)
-        allowedTools = try container.sdkDecodeIfPresent(.allowedTools)
-        required = try container.sdkDecodeIfPresent(.required)
-        connectionOrigin = try container.sdkDecodeIfPresent(.connectionOrigin)
-        try sdkValidateRawEnum("type", type, PersistedAgentToolConfigParamMcpType.allCases.map(\.rawValue))
-        try validateLength("server_label", serverLabel, min: 0, max: 1_048_576)
-        if let value = credentialId {
-            try validateLength("credential_id", value, min: 0, max: 1_048_576)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        self.transport = try container.sdkDecodeRequired(.transport)
+        self.credentialId = try container.sdkDecodeIfPresent(.credentialId)
+        self.requestMetadata = try container.sdkDecodeIfPresent(.requestMetadata)
+        self.allowedTools = try container.sdkDecodeIfPresent(.allowedTools)
+        self.required = try container.sdkDecodeIfPresent(.required)
+        self.connectionOrigin = try container.sdkDecodeIfPresent(.connectionOrigin)
+            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamMcpType.allCases.map(\.rawValue))
+            try validateLength("server_label", self.serverLabel, min: 0, max: 1048576)
+        if let value = self.credentialId {
+            try validateLength("credential_id", value, min: 0, max: 1048576)
         }
-        if let value = allowedTools {
+        if let value = self.allowedTools {
             try validateItems("allowed_tools", value, min: 0, max: 16384)
         }
     }
 }
 
-public extension PersistedAgentToolConfigParamMcp {
-    init(
-        type: PersistedAgentToolConfigParamMcpType,
-        serverLabel: String,
-        transport: PersistedMcpTransportConfigParam,
-        credentialId: String? = nil,
-        requestMetadata: [String: JSONValue]? = nil,
-        allowedTools: [String]? = nil,
-        required: Bool? = nil,
-        connectionOrigin: McpConnectionOriginParam? = nil
-    ) throws {
+extension PersistedAgentToolConfigParamMcp {
+    public init(type: PersistedAgentToolConfigParamMcpType, serverLabel: String, transport: PersistedMcpTransportConfigParam, credentialId: String? = nil, requestMetadata: [String: JSONValue]? = nil, allowedTools: [String]? = nil, required: Bool? = nil, connectionOrigin: McpConnectionOriginParam? = nil) throws {
         (self.type, self.serverLabel) = (type, serverLabel)
         (self.transport, self.credentialId) = (transport, credentialId)
         (self.requestMetadata, self.allowedTools) = (requestMetadata, allowedTools)
         (self.required, self.connectionOrigin) = (required, connectionOrigin)
-        try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamMcpType.allCases.map(\.rawValue))
-        try validateLength("server_label", self.serverLabel, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamMcpType.allCases.map(\.rawValue))
+            try validateLength("server_label", self.serverLabel, min: 0, max: 1048576)
         if let value = self.credentialId {
-            try validateLength("credential_id", value, min: 0, max: 1_048_576)
+            try validateLength("credential_id", value, min: 0, max: 1048576)
         }
         if let value = self.allowedTools {
             try validateItems("allowed_tools", value, min: 0, max: 16384)
@@ -468,49 +399,35 @@ public struct PersistedMcpTransportResourceHttp: Codable {
         case headers
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension PersistedMcpTransportResourceHttp {
-    init(from decoder: Decoder) throws {
+extension PersistedMcpTransportResourceHttp {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.serverUrl) else {
-            throw SdkValidationError(
-                field: "server_url",
-                code: "required",
-                message: "Validation failed for 'server_url': value is required"
-            )
+            throw SdkValidationError(field: "server_url", code: "required", message: "Validation failed for 'server_url': value is required")
         }
         guard container.contains(.headers) else {
-            throw SdkValidationError(
-                field: "headers",
-                code: "required",
-                message: "Validation failed for 'headers': value is required"
-            )
+            throw SdkValidationError(field: "headers", code: "required", message: "Validation failed for 'headers': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        serverUrl = try container.sdkDecodeRequired(.serverUrl)
-        headers = try container.sdkDecodeRequired(.headers)
-        try sdkValidateRawEnum("type", type, PersistedMcpTransportResourceHttpType.allCases.map(\.rawValue))
-        try validateLength("server_url", serverUrl, min: 0, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.serverUrl = try container.sdkDecodeRequired(.serverUrl)
+        self.headers = try container.sdkDecodeRequired(.headers)
+            try sdkValidateRawEnum("type", self.type, PersistedMcpTransportResourceHttpType.allCases.map(\.rawValue))
+            try validateLength("server_url", self.serverUrl, min: 0, max: nil)
     }
 }
 
-public extension PersistedMcpTransportResourceHttp {
-    init(type: PersistedMcpTransportResourceHttpType, serverUrl: String, headers: [String: String]) throws {
+extension PersistedMcpTransportResourceHttp {
+    public init(type: PersistedMcpTransportResourceHttpType, serverUrl: String, headers: [String: String]) throws {
         (self.type, self.serverUrl) = (type, serverUrl)
         self.headers = headers
-        try sdkValidateRawEnum("type", self.type, PersistedMcpTransportResourceHttpType.allCases.map(\.rawValue))
-        try validateLength("server_url", self.serverUrl, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, PersistedMcpTransportResourceHttpType.allCases.map(\.rawValue))
+            try validateLength("server_url", self.serverUrl, min: 0, max: nil)
     }
 }
 
@@ -529,42 +446,32 @@ public struct PersistedMcpTransportConfigParamHttp: Codable {
         case headers
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension PersistedMcpTransportConfigParamHttp {
-    init(from decoder: Decoder) throws {
+extension PersistedMcpTransportConfigParamHttp {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.serverUrl) else {
-            throw SdkValidationError(
-                field: "server_url",
-                code: "required",
-                message: "Validation failed for 'server_url': value is required"
-            )
+            throw SdkValidationError(field: "server_url", code: "required", message: "Validation failed for 'server_url': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        serverUrl = try container.sdkDecodeRequired(.serverUrl)
-        headers = try container.sdkDecodeIfPresent(.headers)
-        try sdkValidateRawEnum("type", type, PersistedMcpTransportConfigParamHttpType.allCases.map(\.rawValue))
-        try validateLength("server_url", serverUrl, min: 0, max: 1_048_576)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.serverUrl = try container.sdkDecodeRequired(.serverUrl)
+        self.headers = try container.sdkDecodeIfPresent(.headers)
+            try sdkValidateRawEnum("type", self.type, PersistedMcpTransportConfigParamHttpType.allCases.map(\.rawValue))
+            try validateLength("server_url", self.serverUrl, min: 0, max: 1048576)
     }
 }
 
-public extension PersistedMcpTransportConfigParamHttp {
-    init(type: PersistedMcpTransportConfigParamHttpType, serverUrl: String, headers: [String: String]? = nil) throws {
+extension PersistedMcpTransportConfigParamHttp {
+    public init(type: PersistedMcpTransportConfigParamHttpType, serverUrl: String, headers: [String: String]? = nil) throws {
         (self.type, self.serverUrl) = (type, serverUrl)
         self.headers = headers
-        try sdkValidateRawEnum("type", self.type, PersistedMcpTransportConfigParamHttpType.allCases.map(\.rawValue))
-        try validateLength("server_url", self.serverUrl, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, PersistedMcpTransportConfigParamHttpType.allCases.map(\.rawValue))
+            try validateLength("server_url", self.serverUrl, min: 0, max: 1048576)
     }
 }
 
@@ -580,7 +487,5 @@ public struct PersistedAgentToolResourceComputerUse: Codable {
         case includeScreenshots = "include_screenshots"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

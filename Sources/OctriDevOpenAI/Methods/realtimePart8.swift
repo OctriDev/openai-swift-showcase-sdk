@@ -6,12 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension RealtimeMethods {
-    /// Create a Realtime translation client secret with an associated translation session configuration. Client secrets
-    /// are short-lived tokens that can be passed to a client app, such as a web frontend or mobile client, which grants
-    /// access to the Realtime Translation API without leaking your main API key. You can configure a custom TTL for
-    /// each client secret. Returns the created client secret and the effective translation session object. The client
-    /// secret is a string that looks like `ek_1234`.
+extension RealtimeMethods {
+    /// Create a Realtime translation client secret with an associated translation session configuration. Client secrets are short-lived tokens that can be passed to a client app, such as a web frontend or mobile client, which grants access to the Realtime Translation API without leaking your main API key. You can configure a custom TTL for each client secret. Returns the created client secret and the effective translation session object. The client secret is a string that looks like `ek_1234`.
     ///
     /// - Parameters:
     /// - session: Realtime translation session configuration. Translation sessions
@@ -21,23 +17,9 @@ public extension RealtimeMethods {
     ///   refers to the time after which a client secret will no longer be valid for
     ///   creating sessions. The session itself may continue after that time once
     ///   started. A secret can be used to create multiple sessions until it expires.
-    static func createRealtimeTranslationClientSecret(
-        config: ClientConfig,
-        session: RealtimeTranslationSessionCreateRequest,
-        expiresAfter: RealtimeTranslationClientSecretCreateRequestExpiresAfter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RealtimeTranslationClientSecretCreateResponse {
+    public static func createRealtimeTranslationClientSecret(config: ClientConfig, session: RealtimeTranslationSessionCreateRequest, expiresAfter: RealtimeTranslationClientSecretCreateRequestExpiresAfter? = nil, requestOptions: RequestOptions? = nil) async throws -> RealtimeTranslationClientSecretCreateResponse {
         let requestBody = CreateRealtimeTranslationClientSecretRequestBody(session: session, expiresAfter: expiresAfter)
 
-        return try await (sdkRequest(
-            "POST",
-            "/realtime/translations/client_secrets",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createRealtimeTranslationClientSecret",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/realtime/translations/client_secrets", config: config, body: requestBody, decoder: .json, operationId: "createRealtimeTranslationClientSecret", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

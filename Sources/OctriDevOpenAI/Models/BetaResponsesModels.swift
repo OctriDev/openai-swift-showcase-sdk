@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// BetaResponses domain models
+// BetaResponses domain models
 public indirect enum BetaResponsesClientEvent {
     case betaResponsesClientEventResponseCreate(BetaResponsesClientEventResponseCreate)
     case betaResponseSteerEvent(BetaResponseSteerEvent)
@@ -13,6 +13,7 @@ public indirect enum BetaResponsesClientEvent {
 }
 
 extension BetaResponsesClientEvent: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension BetaResponsesClientEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,12 +37,10 @@ extension BetaResponsesClientEvent: Codable {
 extension BetaResponsesClientEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "response.create": try .betaResponsesClientEventResponseCreate(
-                BetaResponsesClientEventResponseCreate(from: decoder)
-            )
-        case "response.steer": try .betaResponseSteerEvent(BetaResponseSteerEvent(from: decoder))
-        case "response.inject": try .betaResponseInjectEvent(BetaResponseInjectEvent(from: decoder))
-        default: nil
+        case "response.create": return .betaResponsesClientEventResponseCreate(try BetaResponsesClientEventResponseCreate(from: decoder))
+        case "response.steer": return .betaResponseSteerEvent(try BetaResponseSteerEvent(from: decoder))
+        case "response.inject": return .betaResponseInjectEvent(try BetaResponseInjectEvent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -130,6 +125,7 @@ public indirect enum BetaResponsesServerEvent {
 }
 
 extension BetaResponsesServerEvent: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -137,330 +133,125 @@ extension BetaResponsesServerEvent: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-                self = value; return
-            }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) {
-            self = value; return
-        }
-        if let value = Self.decodeUntaggedGroup2(from: container) {
-            self = value; return
-        }
-        if let value = Self.decodeUntaggedGroup3(from: container) {
-            self = value; return
-        }
-        if let value = Self.decodeUntaggedGroup4(from: container) {
-            self = value; return
-        }
-        if let value = Self.decodeUntaggedGroup5(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for BetaResponsesServerEvent"
-        )
+        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup2(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup3(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup4(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup5(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaResponsesServerEvent")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-        if try encodeGroup2(to: encoder) {
-            return
-        }
-        if try encodeGroup3(to: encoder) {
-            return
-        }
-        if try encodeGroup4(to: encoder) {
-            return
-        }
-        if try encodeGroup5(to: encoder) {
-            return
-        }
-        if try encodeGroup6(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup3(to: encoder) { return }
+        if try encodeGroup4(to: encoder) { return }
+        if try encodeGroup5(to: encoder) { return }
+        if try encodeGroup6(to: encoder) { return }
     }
 }
 
 extension BetaResponsesServerEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "error": try .betaResponseWsError(BetaResponseWsError(from: decoder))
-        case "response.steer.accepted": try .betaResponseSteerAcceptedEvent(
-                BetaResponseSteerAcceptedEvent(from: decoder)
-            )
-        case "response.steer.pending": try .betaResponseSteerPendingEvent(BetaResponseSteerPendingEvent(from: decoder))
-        case "response.steer.failed": try .betaResponseSteerFailedEvent(BetaResponseSteerFailedEvent(from: decoder))
-        case "response.inject.created": try .betaResponseInjectCreatedEvent(
-                BetaResponseInjectCreatedEvent(from: decoder)
-            )
-        case "response.inject.failed": try .betaResponseInjectFailedEvent(BetaResponseInjectFailedEvent(from: decoder))
-        default: nil
+        case "error": return .betaResponseWsError(try BetaResponseWsError(from: decoder))
+        case "response.steer.accepted": return .betaResponseSteerAcceptedEvent(try BetaResponseSteerAcceptedEvent(from: decoder))
+        case "response.steer.pending": return .betaResponseSteerPendingEvent(try BetaResponseSteerPendingEvent(from: decoder))
+        case "response.steer.failed": return .betaResponseSteerFailedEvent(try BetaResponseSteerFailedEvent(from: decoder))
+        case "response.inject.created": return .betaResponseInjectCreatedEvent(try BetaResponseInjectCreatedEvent(from: decoder))
+        case "response.inject.failed": return .betaResponseInjectFailedEvent(try BetaResponseInjectFailedEvent(from: decoder))
+        default: return nil
         }
     }
 }
 
 extension BetaResponsesServerEvent {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant0.self) {
-            return .betaResponsesServerEventVariant0(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant1.self) {
-            return .betaResponsesServerEventVariant1(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant2.self) {
-            return .betaResponsesServerEventVariant2(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant3.self) {
-            return .betaResponsesServerEventVariant3(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant4.self) {
-            return .betaResponsesServerEventVariant4(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant5.self) {
-            return .betaResponsesServerEventVariant5(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant6.self) {
-            return .betaResponsesServerEventVariant6(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant7.self) {
-            return .betaResponsesServerEventVariant7(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant8.self) {
-            return .betaResponsesServerEventVariant8(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant9.self) {
-            return .betaResponsesServerEventVariant9(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant10.self) {
-            return .betaResponsesServerEventVariant10(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant11.self) {
-            return .betaResponsesServerEventVariant11(value)
-        }
+        if let value = try? container.decode(BetaResponsesServerEventVariant0.self) { return .betaResponsesServerEventVariant0(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant1.self) { return .betaResponsesServerEventVariant1(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant2.self) { return .betaResponsesServerEventVariant2(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant3.self) { return .betaResponsesServerEventVariant3(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant4.self) { return .betaResponsesServerEventVariant4(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant5.self) { return .betaResponsesServerEventVariant5(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant6.self) { return .betaResponsesServerEventVariant6(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant7.self) { return .betaResponsesServerEventVariant7(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant8.self) { return .betaResponsesServerEventVariant8(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant9.self) { return .betaResponsesServerEventVariant9(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant10.self) { return .betaResponsesServerEventVariant10(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant11.self) { return .betaResponsesServerEventVariant11(value) }
         return nil
     }
 }
 
 extension BetaResponsesServerEvent {
     static func decodeUntaggedGroup2(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant12.self) {
-            return .betaResponsesServerEventVariant12(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant13.self) {
-            return .betaResponsesServerEventVariant13(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant14.self) {
-            return .betaResponsesServerEventVariant14(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant15.self) {
-            return .betaResponsesServerEventVariant15(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant16.self) {
-            return .betaResponsesServerEventVariant16(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant17.self) {
-            return .betaResponsesServerEventVariant17(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant18.self) {
-            return .betaResponsesServerEventVariant18(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant19.self) {
-            return .betaResponsesServerEventVariant19(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant20.self) {
-            return .betaResponsesServerEventVariant20(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant21.self) {
-            return .betaResponsesServerEventVariant21(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant22.self) {
-            return .betaResponsesServerEventVariant22(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant23.self) {
-            return .betaResponsesServerEventVariant23(value)
-        }
+        if let value = try? container.decode(BetaResponsesServerEventVariant12.self) { return .betaResponsesServerEventVariant12(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant13.self) { return .betaResponsesServerEventVariant13(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant14.self) { return .betaResponsesServerEventVariant14(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant15.self) { return .betaResponsesServerEventVariant15(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant16.self) { return .betaResponsesServerEventVariant16(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant17.self) { return .betaResponsesServerEventVariant17(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant18.self) { return .betaResponsesServerEventVariant18(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant19.self) { return .betaResponsesServerEventVariant19(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant20.self) { return .betaResponsesServerEventVariant20(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant21.self) { return .betaResponsesServerEventVariant21(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant22.self) { return .betaResponsesServerEventVariant22(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant23.self) { return .betaResponsesServerEventVariant23(value) }
         return nil
     }
 }
 
 extension BetaResponsesServerEvent {
     static func decodeUntaggedGroup3(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant24.self) {
-            return .betaResponsesServerEventVariant24(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant25.self) {
-            return .betaResponsesServerEventVariant25(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant26.self) {
-            return .betaResponsesServerEventVariant26(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant27.self) {
-            return .betaResponsesServerEventVariant27(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant28.self) {
-            return .betaResponsesServerEventVariant28(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant29.self) {
-            return .betaResponsesServerEventVariant29(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant30.self) {
-            return .betaResponsesServerEventVariant30(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant31.self) {
-            return .betaResponsesServerEventVariant31(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant32.self) {
-            return .betaResponsesServerEventVariant32(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant33.self) {
-            return .betaResponsesServerEventVariant33(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant34.self) {
-            return .betaResponsesServerEventVariant34(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant35.self) {
-            return .betaResponsesServerEventVariant35(value)
-        }
+        if let value = try? container.decode(BetaResponsesServerEventVariant24.self) { return .betaResponsesServerEventVariant24(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant25.self) { return .betaResponsesServerEventVariant25(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant26.self) { return .betaResponsesServerEventVariant26(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant27.self) { return .betaResponsesServerEventVariant27(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant28.self) { return .betaResponsesServerEventVariant28(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant29.self) { return .betaResponsesServerEventVariant29(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant30.self) { return .betaResponsesServerEventVariant30(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant31.self) { return .betaResponsesServerEventVariant31(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant32.self) { return .betaResponsesServerEventVariant32(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant33.self) { return .betaResponsesServerEventVariant33(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant34.self) { return .betaResponsesServerEventVariant34(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant35.self) { return .betaResponsesServerEventVariant35(value) }
         return nil
     }
 }
 
 extension BetaResponsesServerEvent {
     static func decodeUntaggedGroup4(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant36.self) {
-            return .betaResponsesServerEventVariant36(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant37.self) {
-            return .betaResponsesServerEventVariant37(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant38.self) {
-            return .betaResponsesServerEventVariant38(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant39.self) {
-            return .betaResponsesServerEventVariant39(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant40.self) {
-            return .betaResponsesServerEventVariant40(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant41.self) {
-            return .betaResponsesServerEventVariant41(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant42.self) {
-            return .betaResponsesServerEventVariant42(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant43.self) {
-            return .betaResponsesServerEventVariant43(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant44.self) {
-            return .betaResponsesServerEventVariant44(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant45.self) {
-            return .betaResponsesServerEventVariant45(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant46.self) {
-            return .betaResponsesServerEventVariant46(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant47.self) {
-            return .betaResponsesServerEventVariant47(value)
-        }
+        if let value = try? container.decode(BetaResponsesServerEventVariant36.self) { return .betaResponsesServerEventVariant36(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant37.self) { return .betaResponsesServerEventVariant37(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant38.self) { return .betaResponsesServerEventVariant38(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant39.self) { return .betaResponsesServerEventVariant39(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant40.self) { return .betaResponsesServerEventVariant40(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant41.self) { return .betaResponsesServerEventVariant41(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant42.self) { return .betaResponsesServerEventVariant42(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant43.self) { return .betaResponsesServerEventVariant43(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant44.self) { return .betaResponsesServerEventVariant44(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant45.self) { return .betaResponsesServerEventVariant45(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant46.self) { return .betaResponsesServerEventVariant46(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant47.self) { return .betaResponsesServerEventVariant47(value) }
         return nil
     }
 }
 
 extension BetaResponsesServerEvent {
     static func decodeUntaggedGroup5(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant48.self) {
-            return .betaResponsesServerEventVariant48(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant49.self) {
-            return .betaResponsesServerEventVariant49(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant50.self) {
-            return .betaResponsesServerEventVariant50(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant51.self) {
-            return .betaResponsesServerEventVariant51(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant52.self) {
-            return .betaResponsesServerEventVariant52(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant53.self) {
-            return .betaResponsesServerEventVariant53(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant54.self) {
-            return .betaResponsesServerEventVariant54(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant55.self) {
-            return .betaResponsesServerEventVariant55(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant56.self) {
-            return .betaResponsesServerEventVariant56(value)
-        }
-        if let value = try? container
-            .decode(BetaResponsesServerEventVariant57.self) {
-            return .betaResponsesServerEventVariant57(value)
-        }
+        if let value = try? container.decode(BetaResponsesServerEventVariant48.self) { return .betaResponsesServerEventVariant48(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant49.self) { return .betaResponsesServerEventVariant49(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant50.self) { return .betaResponsesServerEventVariant50(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant51.self) { return .betaResponsesServerEventVariant51(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant52.self) { return .betaResponsesServerEventVariant52(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant53.self) { return .betaResponsesServerEventVariant53(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant54.self) { return .betaResponsesServerEventVariant54(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant55.self) { return .betaResponsesServerEventVariant55(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant56.self) { return .betaResponsesServerEventVariant56(value) }
+        if let value = try? container.decode(BetaResponsesServerEventVariant57.self) { return .betaResponsesServerEventVariant57(value) }
         return nil
     }
 }

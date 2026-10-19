@@ -6,66 +6,29 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ContainersMethods {
-    /// Deletes a container by its unique identifier. Use this operation when the container is no longer needed; the
-    /// response confirms whether the container was deleted.
+extension ContainersMethods {
+    /// Deletes a container by its unique identifier. Use this operation when the container is no longer needed; the response confirms whether the container was deleted.
     ///
     /// Delete Container
     ///
     /// - Parameters:
     /// - containerId: The ID of the container to delete.
-    static func deleteContainer(
-        config: ClientConfig,
-        containerId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeleteContainerResponse {
-        try await (sdkRequest(
-            "DELETE",
-            ["/containers/", sdkEncodePathSegment(sdkWireString(containerId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "DeleteContainer",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func deleteContainer(config: ClientConfig, containerId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteContainerResponse {
+        return try (await sdkRequest("DELETE", ["/containers/", sdkEncodePathSegment(sdkWireString(containerId))].joined(), config: config, decoder: .json, operationId: "DeleteContainer", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Creates a file in a container from raw multipart file content or a file ID supplied in a JSON request. Choose
-    /// the request format based on whether you are uploading file content or referencing a file, and use `container_id`
-    /// to identify the destination container.
+    /// Creates a file in a container from raw multipart file content or a file ID supplied in a JSON request. Choose the request format based on whether you are uploading file content or referencing a file, and use `container_id` to identify the destination container.
     ///
-    /// Create a Container File You can send either a multipart/form-data request with the raw file content, or a JSON
-    /// request with a file ID.
+    /// Create a Container File You can send either a multipart/form-data request with the raw file content, or a JSON request with a file ID.
     ///
     /// - Parameters:
     /// - fileId: Name of the file to create.
     /// - file: The File object (not file name) to be uploaded.
-    static func createContainerFile(
-        config: ClientConfig,
-        containerId: String,
-        fileId: String? = nil,
-        file: Data? = nil,
-        contentType: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ContainerFileResource {
+    public static func createContainerFile(config: ClientConfig, containerId: String, fileId: String? = nil, file: Data? = nil, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ContainerFileResource {
         let requestBody = CreateContainerFileRequestBody(fileId: fileId, file: file)
 
-        let encodedBody = try sdkEncodeStructuredBody(
-            requestBody,
-            contentType: contentType ?? "application/json",
-            files: ["file"]
-        )
+        let encodedBody = try sdkEncodeStructuredBody(requestBody, contentType: contentType ?? "application/json", files: ["file"])
 
-        return try await (sdkRequest(
-            "POST",
-            ["/containers/", sdkEncodePathSegment(sdkWireString(containerId)), "/files"].joined(),
-            config: config,
-            rawBody: encodedBody.data,
-            contentType: encodedBody.contentType,
-            decoder: .json,
-            operationId: "CreateContainerFile",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/containers/", sdkEncodePathSegment(sdkWireString(containerId)), "/files"].joined(), config: config, rawBody: encodedBody.data, contentType: encodedBody.contentType, decoder: .json, operationId: "CreateContainerFile", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

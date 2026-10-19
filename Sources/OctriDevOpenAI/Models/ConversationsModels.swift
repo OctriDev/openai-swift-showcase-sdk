@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Conversations domain models
+// Conversations domain models
 public indirect enum ConversationItem {
     case message(Message)
     case functionToolCallResource(FunctionToolCallResource)
@@ -39,6 +39,7 @@ public indirect enum ConversationItem {
 }
 
 extension ConversationItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -46,25 +47,15 @@ extension ConversationItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
-        if let value = try Self.decodeGroup2(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup2(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-        if try encodeGroup2(to: encoder) {
-            return
-        }
-        if try encodeGroup3(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup3(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -75,27 +66,27 @@ extension ConversationItem: Codable {
 extension ConversationItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "message": try .message(Message(from: decoder))
-        case "function_call": try .functionToolCallResource(FunctionToolCallResource(from: decoder))
-        case "function_call_output": try .functionToolCallOutputResource(FunctionToolCallOutputResource(from: decoder))
-        case "file_search_call": try .fileSearchToolCall(FileSearchToolCall(from: decoder))
-        case "web_search_call": try .webSearchToolCall(WebSearchToolCall(from: decoder))
-        case "image_generation_call": try .imageGenToolCall(ImageGenToolCall(from: decoder))
-        case "computer_call": try .computerToolCall(ComputerToolCall(from: decoder))
-        case "computer_call_output": try .computerToolCallOutputResource(ComputerToolCallOutputResource(from: decoder))
-        case "tool_search_call": try .toolSearchCall(ToolSearchCall(from: decoder))
-        case "tool_search_output": try .toolSearchOutput(ToolSearchOutput(from: decoder))
-        case "additional_tools": try .additionalTools(AdditionalTools(from: decoder))
-        case "configuration_update": try .responseConfigurationUpdate(ResponseConfigurationUpdate(from: decoder))
-        case "reasoning": try .reasoningItem(ReasoningItem(from: decoder))
-        case "program": try .program(Program(from: decoder))
-        case "program_output": try .programOutput(ProgramOutput(from: decoder))
-        case "compaction": try .compactionBody(CompactionBody(from: decoder))
-        case "code_interpreter_call": try .codeInterpreterToolCall(CodeInterpreterToolCall(from: decoder))
-        case "local_shell_call": try .localShellToolCall(LocalShellToolCall(from: decoder))
-        case "local_shell_call_output": try .localShellToolCallOutput(LocalShellToolCallOutput(from: decoder))
-        case "shell_call": try .functionShellCall(FunctionShellCall(from: decoder))
-        default: nil
+        case "message": return .message(try Message(from: decoder))
+        case "function_call": return .functionToolCallResource(try FunctionToolCallResource(from: decoder))
+        case "function_call_output": return .functionToolCallOutputResource(try FunctionToolCallOutputResource(from: decoder))
+        case "file_search_call": return .fileSearchToolCall(try FileSearchToolCall(from: decoder))
+        case "web_search_call": return .webSearchToolCall(try WebSearchToolCall(from: decoder))
+        case "image_generation_call": return .imageGenToolCall(try ImageGenToolCall(from: decoder))
+        case "computer_call": return .computerToolCall(try ComputerToolCall(from: decoder))
+        case "computer_call_output": return .computerToolCallOutputResource(try ComputerToolCallOutputResource(from: decoder))
+        case "tool_search_call": return .toolSearchCall(try ToolSearchCall(from: decoder))
+        case "tool_search_output": return .toolSearchOutput(try ToolSearchOutput(from: decoder))
+        case "additional_tools": return .additionalTools(try AdditionalTools(from: decoder))
+        case "configuration_update": return .responseConfigurationUpdate(try ResponseConfigurationUpdate(from: decoder))
+        case "reasoning": return .reasoningItem(try ReasoningItem(from: decoder))
+        case "program": return .program(try Program(from: decoder))
+        case "program_output": return .programOutput(try ProgramOutput(from: decoder))
+        case "compaction": return .compactionBody(try CompactionBody(from: decoder))
+        case "code_interpreter_call": return .codeInterpreterToolCall(try CodeInterpreterToolCall(from: decoder))
+        case "local_shell_call": return .localShellToolCall(try LocalShellToolCall(from: decoder))
+        case "local_shell_call_output": return .localShellToolCallOutput(try LocalShellToolCallOutput(from: decoder))
+        case "shell_call": return .functionShellCall(try FunctionShellCall(from: decoder))
+        default: return nil
         }
     }
 }
@@ -103,16 +94,16 @@ extension ConversationItem {
 extension ConversationItem {
     static func decodeGroup2(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "shell_call_output": try .functionShellCallOutput(FunctionShellCallOutput(from: decoder))
-        case "apply_patch_call": try .applyPatchToolCall(ApplyPatchToolCall(from: decoder))
-        case "apply_patch_call_output": try .applyPatchToolCallOutput(ApplyPatchToolCallOutput(from: decoder))
-        case "mcp_list_tools": try .mCpListTools(MCPListTools(from: decoder))
-        case "mcp_approval_request": try .mCpApprovalRequest(MCPApprovalRequest(from: decoder))
-        case "mcp_approval_response": try .mCpApprovalResponseResource(MCPApprovalResponseResource(from: decoder))
-        case "mcp_call": try .mCpToolCall(MCPToolCall(from: decoder))
-        case "custom_tool_call": try .customToolCall(CustomToolCall(from: decoder))
-        case "custom_tool_call_output": try .customToolCallOutput(CustomToolCallOutput(from: decoder))
-        default: nil
+        case "shell_call_output": return .functionShellCallOutput(try FunctionShellCallOutput(from: decoder))
+        case "apply_patch_call": return .applyPatchToolCall(try ApplyPatchToolCall(from: decoder))
+        case "apply_patch_call_output": return .applyPatchToolCallOutput(try ApplyPatchToolCallOutput(from: decoder))
+        case "mcp_list_tools": return .mCpListTools(try MCPListTools(from: decoder))
+        case "mcp_approval_request": return .mCpApprovalRequest(try MCPApprovalRequest(from: decoder))
+        case "mcp_approval_response": return .mCpApprovalResponseResource(try MCPApprovalResponseResource(from: decoder))
+        case "mcp_call": return .mCpToolCall(try MCPToolCall(from: decoder))
+        case "custom_tool_call": return .customToolCall(try CustomToolCall(from: decoder))
+        case "custom_tool_call_output": return .customToolCallOutput(try CustomToolCallOutput(from: decoder))
+        default: return nil
         }
     }
 }
@@ -188,43 +179,29 @@ public struct DeletedConversationResource: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DeletedConversationResource {
-    init(from decoder: Decoder) throws {
+extension DeletedConversationResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
-        id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension DeletedConversationResource {
-    init(object: DeletedConversationResourceObject, deleted: Bool, id: String) {
+extension DeletedConversationResource {
+    public init(object: DeletedConversationResourceObject, deleted: Bool, id: String) {
         (self.object, self.deleted) = (object, deleted)
         self.id = id
     }
@@ -251,59 +228,37 @@ public struct ConversationItemList: Codable {
         case lastId = "last_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConversationItemList {
-    init(from decoder: Decoder) throws {
+extension ConversationItemList {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(
-                field: "first_id",
-                code: "required",
-                message: "Validation failed for 'first_id': value is required"
-            )
+            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(
-                field: "last_id",
-                code: "required",
-                message: "Validation failed for 'last_id': value is required"
-            )
+            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        firstId = try container.sdkDecodeRequired(.firstId)
-        lastId = try container.sdkDecodeRequired(.lastId)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.firstId = try container.sdkDecodeRequired(.firstId)
+        self.lastId = try container.sdkDecodeRequired(.lastId)
     }
 }
 
-public extension ConversationItemList {
-    init(object: ConversationItemListObject, data: [ConversationItem], hasMore: Bool, firstId: String, lastId: String) {
+extension ConversationItemList {
+    public init(object: ConversationItemListObject, data: [ConversationItem], hasMore: Bool, firstId: String, lastId: String) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.firstId) = (hasMore, firstId)
         self.lastId = lastId
@@ -323,23 +278,23 @@ public struct CreateConversationBody: Codable {
     }
 
     init() {
-        (metadata, items) = (nil, nil)
+        (self.metadata, self.items) = (nil, nil)
     }
 }
 
-public extension CreateConversationBody {
-    init(from decoder: Decoder) throws {
+extension CreateConversationBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        items = try container.sdkDecodeIfPresent(.items)
-        if let value = items {
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.items = try container.sdkDecodeIfPresent(.items)
+        if let value = self.items {
             try validateItems("items", value, min: nil, max: 20)
         }
     }
 }
 
-public extension CreateConversationBody {
-    init(metadata: Metadata? = nil, items: [InputItem]? = nil) throws {
+extension CreateConversationBody {
+    public init(metadata: Metadata? = nil, items: [InputItem]? = nil) throws {
         self.init()
         (self.metadata, self.items) = (metadata, items)
         if let value = self.items {
@@ -369,51 +324,33 @@ public struct ConversationResource: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConversationResource {
-    init(from decoder: Decoder) throws {
+extension ConversationResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.metadata) else {
-            throw SdkValidationError(
-                field: "metadata",
-                code: "required",
-                message: "Validation failed for 'metadata': value is required"
-            )
+            throw SdkValidationError(field: "metadata", code: "required", message: "Validation failed for 'metadata': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        metadata = try container.sdkDecodeRequired(.metadata)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.metadata = try container.sdkDecodeRequired(.metadata)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
     }
 }
 
-public extension ConversationResource {
-    init(id: String, object: ConversationResourceObject, metadata: [String: String], createdAt: Int) {
+extension ConversationResource {
+    public init(id: String, object: ConversationResourceObject, metadata: [String: String], createdAt: Int) {
         (self.id, self.object) = (id, object)
         (self.metadata, self.createdAt) = (metadata, createdAt)
     }
@@ -431,27 +368,21 @@ public struct UpdateConversationBody: Codable {
         case metadata
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateConversationBody {
-    init(from decoder: Decoder) throws {
+extension UpdateConversationBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.metadata) else {
-            throw SdkValidationError(
-                field: "metadata",
-                code: "required",
-                message: "Validation failed for 'metadata': value is required"
-            )
+            throw SdkValidationError(field: "metadata", code: "required", message: "Validation failed for 'metadata': value is required")
         }
-        metadata = try container.sdkDecodeNullable(.metadata)
+        self.metadata = try container.sdkDecodeNullable(.metadata)
     }
 }
 
-public extension UpdateConversationBody {
-    init(metadata: Metadata?) {
+extension UpdateConversationBody {
+    public init(metadata: Metadata?) {
         self.metadata = metadata
     }
 }
@@ -460,15 +391,12 @@ public extension UpdateConversationBody {
 public struct ConversationResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let conversation = ConversationResourceObject(rawValue: "conversation")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -481,15 +409,12 @@ public struct ConversationResourceObject: RawRepresentable, Hashable, Codable, S
 public struct ConversationItemListObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = ConversationItemListObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -502,15 +427,12 @@ public struct ConversationItemListObject: RawRepresentable, Hashable, Codable, S
 public struct DeletedConversationResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let conversationDeleted = DeletedConversationResourceObject(rawValue: "conversation.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

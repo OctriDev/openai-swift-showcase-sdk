@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedMcplist domain models
+// SharedMcplist domain models
 /// A list of tools available on an MCP server.
 public struct MCPListTools: Codable {
     /// The type of the item. Always `mcp_list_tools`.
@@ -25,63 +25,39 @@ public struct MCPListTools: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MCPListTools {
-    init(from decoder: Decoder) throws {
+extension MCPListTools {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.serverLabel) else {
-            throw SdkValidationError(
-                field: "server_label",
-                code: "required",
-                message: "Validation failed for 'server_label': value is required"
-            )
+            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
         }
         guard container.contains(.tools) else {
-            throw SdkValidationError(
-                field: "tools",
-                code: "required",
-                message: "Validation failed for 'tools': value is required"
-            )
+            throw SdkValidationError(field: "tools", code: "required", message: "Validation failed for 'tools': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        tools = try container.sdkDecodeRequired(.tools)
-        error = try container.sdkDecodeIfPresent(.error)
-        try sdkValidateRawEnum("type", type, MCPListToolsType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        self.tools = try container.sdkDecodeRequired(.tools)
+        self.error = try container.sdkDecodeIfPresent(.error)
+            try sdkValidateRawEnum("type", self.type, MCPListToolsType.allCases.map(\.rawValue))
     }
 }
 
-public extension MCPListTools {
-    init(
-        type: MCPListToolsType,
-        id: String,
-        serverLabel: String,
-        tools: [MCPListToolsTool],
-        error: String? = nil
-    ) throws {
+extension MCPListTools {
+    public init(type: MCPListToolsType, id: String, serverLabel: String, tools: [MCPListToolsTool], error: String? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.serverLabel, self.tools) = (serverLabel, tools)
         self.error = error
-        try sdkValidateRawEnum("type", self.type, MCPListToolsType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, MCPListToolsType.allCases.map(\.rawValue))
     }
 }
 
@@ -103,42 +79,27 @@ public struct MCPListToolsTool: Codable {
         case annotations
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MCPListToolsTool {
-    init(from decoder: Decoder) throws {
+extension MCPListToolsTool {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.inputSchema) else {
-            throw SdkValidationError(
-                field: "input_schema",
-                code: "required",
-                message: "Validation failed for 'input_schema': value is required"
-            )
+            throw SdkValidationError(field: "input_schema", code: "required", message: "Validation failed for 'input_schema': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        inputSchema = try container.sdkDecodeRequired(.inputSchema)
-        description = try container.sdkDecodeIfPresent(.description)
-        annotations = try container.sdkDecodeIfPresent(.annotations)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.inputSchema = try container.sdkDecodeRequired(.inputSchema)
+        self.description = try container.sdkDecodeIfPresent(.description)
+        self.annotations = try container.sdkDecodeIfPresent(.annotations)
     }
 }
 
-public extension MCPListToolsTool {
-    init(
-        name: String,
-        inputSchema: [String: JSONValue],
-        description: String? = nil,
-        annotations: [String: JSONValue]? = nil
-    ) {
+extension MCPListToolsTool {
+    public init(name: String, inputSchema: [String: JSONValue], description: String? = nil, annotations: [String: JSONValue]? = nil) {
         (self.name, self.inputSchema) = (name, inputSchema)
         (self.description, self.annotations) = (description, annotations)
     }

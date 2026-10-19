@@ -36,9 +36,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.retrieveSessionArtifact(
-                sessionId: decoded("\"session-1\""),
-                artifactId: decoded("\"artifact-1\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            artifactId: decoded("\"artifact-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -54,8 +54,7 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testRetrieveAgentSessionArtifactContentRetrieveAgentSessionArtifactContentReachesMockAndDecodesResponse(
-    ) async throws {
+    func testRetrieveAgentSessionArtifactContentRetrieveAgentSessionArtifactContentReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -67,8 +66,7 @@ extension SdkMethodTests {
         XCTAssertEqual(actual.count, 12)
     }
 
-    func testRetrieveAgentSessionArtifactContentRetrieveAgentSessionArtifaX662541ea12ReachesMockAndDecodesResponse(
-    ) async throws {
+    func testRetrieveAgentSessionArtifactContentRetrieveAgentSessionArtifaX662541ea12ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -79,9 +77,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.retrieveSessionArtifactContent(
-                sessionId: decoded("\"session-1\""),
-                artifactId: decoded("\"artifact-1\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            artifactId: decoded("\"artifact-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -127,9 +125,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.retrieveSessionSubagent(
-                sessionId: decoded("\"session-1\""),
-                subagentId: decoded("\"subagent-1\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            subagentId: decoded("\"subagent-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -145,8 +143,7 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testRetrieveAgentSessionSubagentTurnRetrieveAgentSessionSubagentTurnReachesMockAndDecodesResponse(
-    ) async throws {
+    func testRetrieveAgentSessionSubagentTurnRetrieveAgentSessionSubagentTurnReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -166,8 +163,7 @@ extension SdkMethodTests {
         )
     }
 
-    func testRetrieveAgentSessionSubagentTurnRetrieveAgentSessionSubagentTurn400ReachesMockAndDecodesResponse(
-    ) async throws {
+    func testRetrieveAgentSessionSubagentTurnRetrieveAgentSessionSubagentTurn400ReachesMockAndDecodesResponse() async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -178,10 +174,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.retrieveSessionSubagentTurn(
-                sessionId: decoded("\"session-1\""),
-                subagentId: decoded("\"subagent-1\""),
-                turnId: decoded("\"turn-1\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            subagentId: decoded("\"subagent-1\""),
+            turnId: decoded("\"turn-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -227,9 +223,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.retrieveSessionTurn(
-                sessionId: decoded("\"session-1\""),
-                turnId: decoded("\"turn-1\"")
-            )
+            sessionId: decoded("\"session-1\""),
+            turnId: decoded("\"turn-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -274,8 +270,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.batch.retrieve(
-                batchId: decoded("\"batch-1\"")
-            )
+            batchId: decoded("\"batch-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -320,8 +316,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.chatkit.retrieveThread(
-                threadId: decoded("\"cthr_123\"")
-            )
+            threadId: decoded("\"cthr_123\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -366,8 +362,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.containers.retrieve(
-                containerId: decoded("\"container-1\"")
-            )
+            containerId: decoded("\"container-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -413,9 +409,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.containers.retrieveFile(
-                containerId: decoded("\"container-1\""),
-                fileId: decoded("\"file-1\"")
-            )
+            containerId: decoded("\"container-1\""),
+            fileId: decoded("\"file-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -454,9 +450,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.containers.retrieveFileContent(
-                containerId: decoded("\"container-1\""),
-                fileId: decoded("\"file-1\"")
-            )
+            containerId: decoded("\"container-1\""),
+            fileId: decoded("\"file-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -501,8 +497,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.externalStorage.retrieve(
-                externalStorageId: decoded("\"extstorage_123\"")
-            )
+            externalStorageId: decoded("\"extstorage_123\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -547,8 +543,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.files.retrieve(
-                fileId: decoded("\"file-1\"")
-            )
+            fileId: decoded("\"file-1\"")
+        )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)

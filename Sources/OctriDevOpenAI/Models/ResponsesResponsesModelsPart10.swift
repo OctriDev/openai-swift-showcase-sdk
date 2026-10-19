@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesResponses domain models
+// ResponsesResponses domain models
 public indirect enum ResponsesWebSocketStreamEventVariant0 {
     case responseAudioDeltaEvent(ResponseAudioDeltaEvent)
     case responseAudioDoneEvent(ResponseAudioDoneEvent)
@@ -68,6 +68,7 @@ public indirect enum ResponsesWebSocketStreamEventVariant0 {
 }
 
 extension ResponsesWebSocketStreamEventVariant0: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -75,34 +76,18 @@ extension ResponsesWebSocketStreamEventVariant0: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
-        if let value = try Self.decodeGroup2(discriminator, from: decoder) {
-            self = value; return
-        }
-        if let value = try Self.decodeGroup3(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup2(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup3(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-        if try encodeGroup2(to: encoder) {
-            return
-        }
-        if try encodeGroup3(to: encoder) {
-            return
-        }
-        if try encodeGroup4(to: encoder) {
-            return
-        }
-        if try encodeGroup5(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup3(to: encoder) { return }
+        if try encodeGroup4(to: encoder) { return }
+        if try encodeGroup5(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -113,48 +98,40 @@ extension ResponsesWebSocketStreamEventVariant0: Codable {
 extension ResponsesWebSocketStreamEventVariant0 {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "response.audio.delta": try .responseAudioDeltaEvent(ResponseAudioDeltaEvent(from: decoder))
-        case "response.audio.done": try .responseAudioDoneEvent(ResponseAudioDoneEvent(from: decoder))
+        case "response.audio.delta": return .responseAudioDeltaEvent(try ResponseAudioDeltaEvent(from: decoder))
+        case "response.audio.done": return .responseAudioDoneEvent(try ResponseAudioDoneEvent(from: decoder))
         case "response.audio.transcript.delta":
-            try .responseAudioTranscriptDeltaEvent(ResponseAudioTranscriptDeltaEvent(from: decoder))
-        case "response.audio.transcript.done": try .responseAudioTranscriptDoneEvent(
-                ResponseAudioTranscriptDoneEvent(from: decoder)
-            )
+        return .responseAudioTranscriptDeltaEvent(try ResponseAudioTranscriptDeltaEvent(from: decoder))
+        case "response.audio.transcript.done": return .responseAudioTranscriptDoneEvent(try ResponseAudioTranscriptDoneEvent(from: decoder))
         case "response.code_interpreter_call_code.delta":
-            try .responseCodeInterpreterCallCodeDeltaEvent(ResponseCodeInterpreterCallCodeDeltaEvent(from: decoder))
+        return .responseCodeInterpreterCallCodeDeltaEvent(try ResponseCodeInterpreterCallCodeDeltaEvent(from: decoder))
         case "response.code_interpreter_call_code.done":
-            try .responseCodeInterpreterCallCodeDoneEvent(ResponseCodeInterpreterCallCodeDoneEvent(from: decoder))
+        return .responseCodeInterpreterCallCodeDoneEvent(try ResponseCodeInterpreterCallCodeDoneEvent(from: decoder))
         case "response.code_interpreter_call.completed":
-            try .responseCodeInterpreterCallCompletedEvent(ResponseCodeInterpreterCallCompletedEvent(from: decoder))
+        return .responseCodeInterpreterCallCompletedEvent(try ResponseCodeInterpreterCallCompletedEvent(from: decoder))
         case "response.code_interpreter_call.in_progress":
-            try .responseCodeInterpreterCallInProgressEvent(ResponseCodeInterpreterCallInProgressEvent(from: decoder))
+        return .responseCodeInterpreterCallInProgressEvent(try ResponseCodeInterpreterCallInProgressEvent(from: decoder))
         case "response.code_interpreter_call.interpreting":
-            try .responseCodeInterpreterCallInterpretingEvent(
-                ResponseCodeInterpreterCallInterpretingEvent(from: decoder)
-            )
+        return .responseCodeInterpreterCallInterpretingEvent(try ResponseCodeInterpreterCallInterpretingEvent(from: decoder))
         case "response.compaction.compacting":
-            try .responseCompactionCompactingStreamingEvent(ResponseCompactionCompactingStreamingEvent(from: decoder))
-        case "response.completed": try .responseCompletedEvent(ResponseCompletedEvent(from: decoder))
-        case "response.content_part.added": try .responseContentPartAddedEvent(
-                ResponseContentPartAddedEvent(from: decoder)
-            )
-        case "response.content_part.done": try .responseContentPartDoneEvent(
-                ResponseContentPartDoneEvent(from: decoder)
-            )
-        case "response.created": try .responseCreatedEvent(ResponseCreatedEvent(from: decoder))
+        return .responseCompactionCompactingStreamingEvent(try ResponseCompactionCompactingStreamingEvent(from: decoder))
+        case "response.completed": return .responseCompletedEvent(try ResponseCompletedEvent(from: decoder))
+        case "response.content_part.added": return .responseContentPartAddedEvent(try ResponseContentPartAddedEvent(from: decoder))
+        case "response.content_part.done": return .responseContentPartDoneEvent(try ResponseContentPartDoneEvent(from: decoder))
+        case "response.created": return .responseCreatedEvent(try ResponseCreatedEvent(from: decoder))
         case "response.file_search_call.completed":
-            try .responseFileSearchCallCompletedEvent(ResponseFileSearchCallCompletedEvent(from: decoder))
+        return .responseFileSearchCallCompletedEvent(try ResponseFileSearchCallCompletedEvent(from: decoder))
         case "response.file_search_call.in_progress":
-            try .responseFileSearchCallInProgressEvent(ResponseFileSearchCallInProgressEvent(from: decoder))
+        return .responseFileSearchCallInProgressEvent(try ResponseFileSearchCallInProgressEvent(from: decoder))
         case "response.file_search_call.searching":
-            try .responseFileSearchCallSearchingEvent(ResponseFileSearchCallSearchingEvent(from: decoder))
+        return .responseFileSearchCallSearchingEvent(try ResponseFileSearchCallSearchingEvent(from: decoder))
         case "response.function_call_arguments.delta":
-            try .responseFunctionCallArgumentsDeltaEvent(ResponseFunctionCallArgumentsDeltaEvent(from: decoder))
+        return .responseFunctionCallArgumentsDeltaEvent(try ResponseFunctionCallArgumentsDeltaEvent(from: decoder))
         case "response.function_call_arguments.done":
-            try .responseFunctionCallArgumentsDoneEvent(ResponseFunctionCallArgumentsDoneEvent(from: decoder))
+        return .responseFunctionCallArgumentsDoneEvent(try ResponseFunctionCallArgumentsDoneEvent(from: decoder))
         case "response.shell_call_command.added":
-            try .responseShellCallCommandAddedStreamingEvent(ResponseShellCallCommandAddedStreamingEvent(from: decoder))
-        default: nil
+        return .responseShellCallCommandAddedStreamingEvent(try ResponseShellCallCommandAddedStreamingEvent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -163,45 +140,35 @@ extension ResponsesWebSocketStreamEventVariant0 {
     static func decodeGroup2(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "response.shell_call_command.delta":
-            try .responseShellCallCommandDeltaStreamingEvent(ResponseShellCallCommandDeltaStreamingEvent(from: decoder))
+        return .responseShellCallCommandDeltaStreamingEvent(try ResponseShellCallCommandDeltaStreamingEvent(from: decoder))
         case "response.shell_call_command.done":
-            try .responseShellCallCommandDoneStreamingEvent(ResponseShellCallCommandDoneStreamingEvent(from: decoder))
+        return .responseShellCallCommandDoneStreamingEvent(try ResponseShellCallCommandDoneStreamingEvent(from: decoder))
         case "response.shell_call_output_content.delta":
-            try .responseShellCallOutputContentDeltaStreamingEvent(
-                ResponseShellCallOutputContentDeltaStreamingEvent(from: decoder)
-            )
+        return .responseShellCallOutputContentDeltaStreamingEvent(try ResponseShellCallOutputContentDeltaStreamingEvent(from: decoder))
         case "response.shell_call_output_content.done":
-            try .responseShellCallOutputContentDoneStreamingEvent(
-                ResponseShellCallOutputContentDoneStreamingEvent(from: decoder)
-            )
-        case "response.in_progress": try .responseInProgressEvent(ResponseInProgressEvent(from: decoder))
-        case "response.failed": try .responseFailedEvent(ResponseFailedEvent(from: decoder))
-        case "response.incomplete": try .responseIncompleteEvent(ResponseIncompleteEvent(from: decoder))
-        case "response.output_item.added": try .responseOutputItemAddedEvent(
-                ResponseOutputItemAddedEvent(from: decoder)
-            )
-        case "response.output_item.done": try .responseOutputItemDoneEvent(ResponseOutputItemDoneEvent(from: decoder))
+        return .responseShellCallOutputContentDoneStreamingEvent(try ResponseShellCallOutputContentDoneStreamingEvent(from: decoder))
+        case "response.in_progress": return .responseInProgressEvent(try ResponseInProgressEvent(from: decoder))
+        case "response.failed": return .responseFailedEvent(try ResponseFailedEvent(from: decoder))
+        case "response.incomplete": return .responseIncompleteEvent(try ResponseIncompleteEvent(from: decoder))
+        case "response.output_item.added": return .responseOutputItemAddedEvent(try ResponseOutputItemAddedEvent(from: decoder))
+        case "response.output_item.done": return .responseOutputItemDoneEvent(try ResponseOutputItemDoneEvent(from: decoder))
         case "response.reasoning_summary_part.added":
-            try .responseReasoningSummaryPartAddedEvent(ResponseReasoningSummaryPartAddedEvent(from: decoder))
+        return .responseReasoningSummaryPartAddedEvent(try ResponseReasoningSummaryPartAddedEvent(from: decoder))
         case "response.reasoning_summary_part.done":
-            try .responseReasoningSummaryPartDoneEvent(ResponseReasoningSummaryPartDoneEvent(from: decoder))
+        return .responseReasoningSummaryPartDoneEvent(try ResponseReasoningSummaryPartDoneEvent(from: decoder))
         case "response.reasoning_summary_text.delta":
-            try .responseReasoningSummaryTextDeltaEvent(ResponseReasoningSummaryTextDeltaEvent(from: decoder))
+        return .responseReasoningSummaryTextDeltaEvent(try ResponseReasoningSummaryTextDeltaEvent(from: decoder))
         case "response.reasoning_summary_text.done":
-            try .responseReasoningSummaryTextDoneEvent(ResponseReasoningSummaryTextDoneEvent(from: decoder))
-        case "response.reasoning_text.delta": try .responseReasoningTextDeltaEvent(
-                ResponseReasoningTextDeltaEvent(from: decoder)
-            )
-        case "response.reasoning_text.done": try .responseReasoningTextDoneEvent(
-                ResponseReasoningTextDoneEvent(from: decoder)
-            )
-        case "response.refusal.delta": try .responseRefusalDeltaEvent(ResponseRefusalDeltaEvent(from: decoder))
-        case "response.refusal.done": try .responseRefusalDoneEvent(ResponseRefusalDoneEvent(from: decoder))
-        case "response.output_text.delta": try .responseTextDeltaEvent(ResponseTextDeltaEvent(from: decoder))
-        case "response.output_text.done": try .responseTextDoneEvent(ResponseTextDoneEvent(from: decoder))
+        return .responseReasoningSummaryTextDoneEvent(try ResponseReasoningSummaryTextDoneEvent(from: decoder))
+        case "response.reasoning_text.delta": return .responseReasoningTextDeltaEvent(try ResponseReasoningTextDeltaEvent(from: decoder))
+        case "response.reasoning_text.done": return .responseReasoningTextDoneEvent(try ResponseReasoningTextDoneEvent(from: decoder))
+        case "response.refusal.delta": return .responseRefusalDeltaEvent(try ResponseRefusalDeltaEvent(from: decoder))
+        case "response.refusal.done": return .responseRefusalDoneEvent(try ResponseRefusalDoneEvent(from: decoder))
+        case "response.output_text.delta": return .responseTextDeltaEvent(try ResponseTextDeltaEvent(from: decoder))
+        case "response.output_text.done": return .responseTextDoneEvent(try ResponseTextDoneEvent(from: decoder))
         case "response.web_search_call.completed":
-            try .responseWebSearchCallCompletedEvent(ResponseWebSearchCallCompletedEvent(from: decoder))
-        default: nil
+        return .responseWebSearchCallCompletedEvent(try ResponseWebSearchCallCompletedEvent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -210,43 +177,37 @@ extension ResponsesWebSocketStreamEventVariant0 {
     static func decodeGroup3(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "response.web_search_call.in_progress":
-            try .responseWebSearchCallInProgressEvent(ResponseWebSearchCallInProgressEvent(from: decoder))
+        return .responseWebSearchCallInProgressEvent(try ResponseWebSearchCallInProgressEvent(from: decoder))
         case "response.web_search_call.searching":
-            try .responseWebSearchCallSearchingEvent(ResponseWebSearchCallSearchingEvent(from: decoder))
+        return .responseWebSearchCallSearchingEvent(try ResponseWebSearchCallSearchingEvent(from: decoder))
         case "response.image_generation_call.completed":
-            try .responseImageGenCallCompletedEvent(ResponseImageGenCallCompletedEvent(from: decoder))
+        return .responseImageGenCallCompletedEvent(try ResponseImageGenCallCompletedEvent(from: decoder))
         case "response.image_generation_call.generating":
-            try .responseImageGenCallGeneratingEvent(ResponseImageGenCallGeneratingEvent(from: decoder))
+        return .responseImageGenCallGeneratingEvent(try ResponseImageGenCallGeneratingEvent(from: decoder))
         case "response.image_generation_call.in_progress":
-            try .responseImageGenCallInProgressEvent(ResponseImageGenCallInProgressEvent(from: decoder))
+        return .responseImageGenCallInProgressEvent(try ResponseImageGenCallInProgressEvent(from: decoder))
         case "response.image_generation_call.partial_image":
-            try .responseImageGenCallPartialImageEvent(ResponseImageGenCallPartialImageEvent(from: decoder))
+        return .responseImageGenCallPartialImageEvent(try ResponseImageGenCallPartialImageEvent(from: decoder))
         case "response.mcp_call_arguments.delta":
-            try .responseMcpCallArgumentsDeltaEvent(ResponseMCPCallArgumentsDeltaEvent(from: decoder))
+        return .responseMcpCallArgumentsDeltaEvent(try ResponseMCPCallArgumentsDeltaEvent(from: decoder))
         case "response.mcp_call_arguments.done":
-            try .responseMcpCallArgumentsDoneEvent(ResponseMCPCallArgumentsDoneEvent(from: decoder))
-        case "response.mcp_call.completed": try .responseMcpCallCompletedEvent(
-                ResponseMCPCallCompletedEvent(from: decoder)
-            )
-        case "response.mcp_call.failed": try .responseMcpCallFailedEvent(ResponseMCPCallFailedEvent(from: decoder))
-        case "response.mcp_call.in_progress": try .responseMcpCallInProgressEvent(
-                ResponseMCPCallInProgressEvent(from: decoder)
-            )
+        return .responseMcpCallArgumentsDoneEvent(try ResponseMCPCallArgumentsDoneEvent(from: decoder))
+        case "response.mcp_call.completed": return .responseMcpCallCompletedEvent(try ResponseMCPCallCompletedEvent(from: decoder))
+        case "response.mcp_call.failed": return .responseMcpCallFailedEvent(try ResponseMCPCallFailedEvent(from: decoder))
+        case "response.mcp_call.in_progress": return .responseMcpCallInProgressEvent(try ResponseMCPCallInProgressEvent(from: decoder))
         case "response.mcp_list_tools.completed":
-            try .responseMcpListToolsCompletedEvent(ResponseMCPListToolsCompletedEvent(from: decoder))
-        case "response.mcp_list_tools.failed": try .responseMcpListToolsFailedEvent(
-                ResponseMCPListToolsFailedEvent(from: decoder)
-            )
+        return .responseMcpListToolsCompletedEvent(try ResponseMCPListToolsCompletedEvent(from: decoder))
+        case "response.mcp_list_tools.failed": return .responseMcpListToolsFailedEvent(try ResponseMCPListToolsFailedEvent(from: decoder))
         case "response.mcp_list_tools.in_progress":
-            try .responseMcpListToolsInProgressEvent(ResponseMCPListToolsInProgressEvent(from: decoder))
+        return .responseMcpListToolsInProgressEvent(try ResponseMCPListToolsInProgressEvent(from: decoder))
         case "response.output_text.annotation.added":
-            try .responseOutputTextAnnotationAddedEvent(ResponseOutputTextAnnotationAddedEvent(from: decoder))
-        case "response.queued": try .responseQueuedEvent(ResponseQueuedEvent(from: decoder))
+        return .responseOutputTextAnnotationAddedEvent(try ResponseOutputTextAnnotationAddedEvent(from: decoder))
+        case "response.queued": return .responseQueuedEvent(try ResponseQueuedEvent(from: decoder))
         case "response.custom_tool_call_input.delta":
-            try .responseCustomToolCallInputDeltaEvent(ResponseCustomToolCallInputDeltaEvent(from: decoder))
+        return .responseCustomToolCallInputDeltaEvent(try ResponseCustomToolCallInputDeltaEvent(from: decoder))
         case "response.custom_tool_call_input.done":
-            try .responseCustomToolCallInputDoneEvent(ResponseCustomToolCallInputDoneEvent(from: decoder))
-        default: nil
+        return .responseCustomToolCallInputDoneEvent(try ResponseCustomToolCallInputDoneEvent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -364,19 +325,19 @@ public struct ResponsesServerEventVariant33Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant33Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant33Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant33Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant33Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -392,19 +353,19 @@ public struct ResponsesServerEventVariant5Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant5Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant5Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant5Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant5Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -441,91 +402,52 @@ public struct ResponsesServerEventVariant54: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponsesServerEventVariant54 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant54 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.contentIndex) else {
-            throw SdkValidationError(
-                field: "content_index",
-                code: "required",
-                message: "Validation failed for 'content_index': value is required"
-            )
+            throw SdkValidationError(field: "content_index", code: "required", message: "Validation failed for 'content_index': value is required")
         }
         guard container.contains(.annotationIndex) else {
-            throw SdkValidationError(
-                field: "annotation_index",
-                code: "required",
-                message: "Validation failed for 'annotation_index': value is required"
-            )
+            throw SdkValidationError(field: "annotation_index", code: "required", message: "Validation failed for 'annotation_index': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.annotation) else {
-            throw SdkValidationError(
-                field: "annotation",
-                code: "required",
-                message: "Validation failed for 'annotation': value is required"
-            )
+            throw SdkValidationError(field: "annotation", code: "required", message: "Validation failed for 'annotation': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        contentIndex = try container.sdkDecodeRequired(.contentIndex)
-        annotationIndex = try container.sdkDecodeRequired(.annotationIndex)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        annotation = try container.sdkDecodeNullable(.annotation)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseOutputTextAnnotationAddedEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.contentIndex = try container.sdkDecodeRequired(.contentIndex)
+        self.annotationIndex = try container.sdkDecodeRequired(.annotationIndex)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.annotation = try container.sdkDecodeNullable(.annotation)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseOutputTextAnnotationAddedEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponsesServerEventVariant54 {
-    init(
-        type: ResponseOutputTextAnnotationAddedEventType,
-        itemId: String,
-        outputIndex: Int,
-        contentIndex: Int,
-        annotationIndex: Int,
-        sequenceNumber: Int,
-        annotation: Annotation?,
-        streamId: String? = nil
-    ) throws {
+extension ResponsesServerEventVariant54 {
+    public init(type: ResponseOutputTextAnnotationAddedEventType, itemId: String, outputIndex: Int, contentIndex: Int, annotationIndex: Int, sequenceNumber: Int, annotation: Annotation?, streamId: String? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.contentIndex) = (outputIndex, contentIndex)
         (self.annotationIndex, self.sequenceNumber) = (annotationIndex, sequenceNumber)
         (self.annotation, self.streamId) = (annotation, streamId)
-        try sdkValidateRawEnum("type", self.type, ResponseOutputTextAnnotationAddedEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseOutputTextAnnotationAddedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -539,19 +461,19 @@ public struct ResponsesServerEventVariant23Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant23Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant23Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant23Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant23Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }

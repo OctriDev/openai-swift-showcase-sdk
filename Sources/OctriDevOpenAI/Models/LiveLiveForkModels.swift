@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveFork domain models
+// LiveLiveFork domain models
 public indirect enum LiveForkClientEvent {
     case liveForkSessionStartEvent(LiveForkSessionStartEvent)
     case liveSessionUpdateParam(LiveSessionUpdateParam)
@@ -25,6 +25,7 @@ public indirect enum LiveForkClientEvent {
 }
 
 extension LiveForkClientEvent: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -32,19 +33,13 @@ extension LiveForkClientEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-        if try encodeGroup2(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup2(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -55,23 +50,23 @@ extension LiveForkClientEvent: Codable {
 extension LiveForkClientEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "session.start": try .liveForkSessionStartEvent(LiveForkSessionStartEvent(from: decoder))
-        case "session.update": try .liveSessionUpdateParam(LiveSessionUpdateParam(from: decoder))
-        case "session.input_audio.append": try .liveInputAudioAppendEvent(LiveInputAudioAppendEvent(from: decoder))
-        case "session.input_audio.mute": try .liveInputAudioMuteParam(LiveInputAudioMuteParam(from: decoder))
-        case "session.input_audio.unmute": try .liveInputAudioUnmuteParam(LiveInputAudioUnmuteParam(from: decoder))
+        case "session.start": return .liveForkSessionStartEvent(try LiveForkSessionStartEvent(from: decoder))
+        case "session.update": return .liveSessionUpdateParam(try LiveSessionUpdateParam(from: decoder))
+        case "session.input_audio.append": return .liveInputAudioAppendEvent(try LiveInputAudioAppendEvent(from: decoder))
+        case "session.input_audio.mute": return .liveInputAudioMuteParam(try LiveInputAudioMuteParam(from: decoder))
+        case "session.input_audio.unmute": return .liveInputAudioUnmuteParam(try LiveInputAudioUnmuteParam(from: decoder))
         case "session.output_audio.fixture.play":
-            try .liveOutputAudioFixturePlayParam(LiveOutputAudioFixturePlayParam(from: decoder))
-        case "session.instructions.append": try .liveInstructionsAppendParam(LiveInstructionsAppendParam(from: decoder))
-        case "session.thinking.append": try .liveThinkingAppendParam(LiveThinkingAppendParam(from: decoder))
-        case "session.commentary.append": try .liveCommentaryAppendParam(LiveCommentaryAppendParam(from: decoder))
-        case "decision.create": try .liveDecisionCreateParam(LiveDecisionCreateParam(from: decoder))
-        case "decision.item.create": try .liveDecisionItemCreateParam(LiveDecisionItemCreateParam(from: decoder))
-        case "decision.item.delete": try .liveDecisionItemDeleteParam(LiveDecisionItemDeleteParam(from: decoder))
-        case "response.item.create": try .liveResponseItemCreateParam(LiveResponseItemCreateParam(from: decoder))
-        case "response.create": try .liveResponseCreateParam(LiveResponseCreateParam(from: decoder))
-        case "session.close": try .liveSessionCloseParam(LiveSessionCloseParam(from: decoder))
-        default: nil
+        return .liveOutputAudioFixturePlayParam(try LiveOutputAudioFixturePlayParam(from: decoder))
+        case "session.instructions.append": return .liveInstructionsAppendParam(try LiveInstructionsAppendParam(from: decoder))
+        case "session.thinking.append": return .liveThinkingAppendParam(try LiveThinkingAppendParam(from: decoder))
+        case "session.commentary.append": return .liveCommentaryAppendParam(try LiveCommentaryAppendParam(from: decoder))
+        case "decision.create": return .liveDecisionCreateParam(try LiveDecisionCreateParam(from: decoder))
+        case "decision.item.create": return .liveDecisionItemCreateParam(try LiveDecisionItemCreateParam(from: decoder))
+        case "decision.item.delete": return .liveDecisionItemDeleteParam(try LiveDecisionItemDeleteParam(from: decoder))
+        case "response.item.create": return .liveResponseItemCreateParam(try LiveResponseItemCreateParam(from: decoder))
+        case "response.create": return .liveResponseCreateParam(try LiveResponseCreateParam(from: decoder))
+        case "session.close": return .liveSessionCloseParam(try LiveSessionCloseParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -125,28 +120,22 @@ public struct LiveForkRequest: Codable {
         case session
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveForkRequest {
-    init(from decoder: Decoder) throws {
+extension LiveForkRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.transport) else {
-            throw SdkValidationError(
-                field: "transport",
-                code: "required",
-                message: "Validation failed for 'transport': value is required"
-            )
+            throw SdkValidationError(field: "transport", code: "required", message: "Validation failed for 'transport': value is required")
         }
-        transport = try container.sdkDecodeRequired(.transport)
-        session = try container.sdkDecodeIfPresent(.session)
+        self.transport = try container.sdkDecodeRequired(.transport)
+        self.session = try container.sdkDecodeIfPresent(.session)
     }
 }
 
-public extension LiveForkRequest {
-    init(transport: LiveWebRTCTransport, session: LiveMediaSessionForkParams? = nil) {
+extension LiveForkRequest {
+    public init(transport: LiveWebRTCTransport, session: LiveMediaSessionForkParams? = nil) {
         (self.transport, self.session) = (transport, session)
     }
 }
@@ -174,27 +163,22 @@ public struct LiveForkSessionConfigParam: Codable {
     }
 
     init() {
-        (audio, delegation, store, client) = (nil, nil, nil, nil)
+        (self.audio, self.delegation, self.store, self.client) = (nil, nil, nil, nil)
     }
 }
 
-public extension LiveForkSessionConfigParam {
-    init(from decoder: Decoder) throws {
+extension LiveForkSessionConfigParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        audio = try container.sdkDecodeIfPresent(.audio)
-        delegation = try container.sdkDecodeIfPresent(.delegation)
-        store = try container.sdkDecodeIfPresent(.store)
-        client = try container.sdkDecodeIfPresent(.client)
+        self.audio = try container.sdkDecodeIfPresent(.audio)
+        self.delegation = try container.sdkDecodeIfPresent(.delegation)
+        self.store = try container.sdkDecodeIfPresent(.store)
+        self.client = try container.sdkDecodeIfPresent(.client)
     }
 }
 
-public extension LiveForkSessionConfigParam {
-    init(
-        audio: LiveForkAudioParam? = nil,
-        delegation: LiveResponsesDelegationUpdateParam? = nil,
-        store: Bool? = nil,
-        client: LiveClientConfigParam? = nil
-    ) {
+extension LiveForkSessionConfigParam {
+    public init(audio: LiveForkAudioParam? = nil, delegation: LiveResponsesDelegationUpdateParam? = nil, store: Bool? = nil, client: LiveClientConfigParam? = nil) {
         self.init()
         (self.audio, self.delegation) = (audio, delegation)
         (self.store, self.client) = (store, client)
@@ -212,19 +196,19 @@ public struct LiveForkAudioParam: Codable {
     }
 
     init() {
-        format = nil
+        self.format = nil
     }
 }
 
-public extension LiveForkAudioParam {
-    init(from decoder: Decoder) throws {
+extension LiveForkAudioParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        format = try container.sdkDecodeIfPresent(.format)
+        self.format = try container.sdkDecodeIfPresent(.format)
     }
 }
 
-public extension LiveForkAudioParam {
-    init(format: LiveAudioFormat? = nil) {
+extension LiveForkAudioParam {
+    public init(format: LiveAudioFormat? = nil) {
         self.init()
         self.format = format
     }
@@ -248,40 +232,30 @@ public struct LiveForkSessionStartEvent: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveForkSessionStartEvent {
-    init(from decoder: Decoder) throws {
+extension LiveForkSessionStartEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.session) else {
-            throw SdkValidationError(
-                field: "session",
-                code: "required",
-                message: "Validation failed for 'session': value is required"
-            )
+            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        session = try container.sdkDecodeRequired(.session)
-        eventId = try container.sdkDecodeIfPresent(.eventId)
-        try sdkValidateRawEnum("type", type, LiveForkSessionStartEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.session = try container.sdkDecodeRequired(.session)
+        self.eventId = try container.sdkDecodeIfPresent(.eventId)
+            try sdkValidateRawEnum("type", self.type, LiveForkSessionStartEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveForkSessionStartEvent {
-    init(type: LiveForkSessionStartEventType, session: LiveForkSessionConfigParam, eventId: String? = nil) throws {
+extension LiveForkSessionStartEvent {
+    public init(type: LiveForkSessionStartEventType, session: LiveForkSessionConfigParam, eventId: String? = nil) throws {
         (self.type, self.session) = (type, session)
         self.eventId = eventId
-        try sdkValidateRawEnum("type", self.type, LiveForkSessionStartEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveForkSessionStartEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -294,27 +268,21 @@ public struct LiveForkPathParams: Codable {
         case sessionId = "session_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveForkPathParams {
-    init(from decoder: Decoder) throws {
+extension LiveForkPathParams {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.sessionId) else {
-            throw SdkValidationError(
-                field: "session_id",
-                code: "required",
-                message: "Validation failed for 'session_id': value is required"
-            )
+            throw SdkValidationError(field: "session_id", code: "required", message: "Validation failed for 'session_id': value is required")
         }
-        sessionId = try container.sdkDecodeRequired(.sessionId)
+        self.sessionId = try container.sdkDecodeRequired(.sessionId)
     }
 }
 
-public extension LiveForkPathParams {
-    init(sessionId: String) {
+extension LiveForkPathParams {
+    public init(sessionId: String) {
         self.sessionId = sessionId
     }
 }

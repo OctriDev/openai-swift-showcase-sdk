@@ -3,23 +3,19 @@
 
 import Foundation
 
-/// VectorStores domain models
+// VectorStores domain models
 /// Enable re-ranking; set to `none` to disable, which can help reduce latency.
-public struct VectorStoreSearchRequestRankingOptionsRanker: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct VectorStoreSearchRequestRankingOptionsRanker: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let none = VectorStoreSearchRequestRankingOptionsRanker(rawValue: "none")
     public static let auto = VectorStoreSearchRequestRankingOptionsRanker(rawValue: "auto")
     public static let default20241115 = VectorStoreSearchRequestRankingOptionsRanker(rawValue: "default-2024-11-15")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -50,15 +46,12 @@ public enum OtherChunkingStrategyResponseParamType: String, CaseIterable, Codabl
 public struct DeleteVectorStoreResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let vectorStoreDeleted = DeleteVectorStoreResponseObject(rawValue: "vector_store.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -71,15 +64,12 @@ public struct DeleteVectorStoreResponseObject: RawRepresentable, Hashable, Codab
 public struct VectorStoreFileObjectObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let vectorStoreFile = VectorStoreFileObjectObject(rawValue: "vector_store.file")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -92,15 +82,12 @@ public struct VectorStoreFileObjectObject: RawRepresentable, Hashable, Codable, 
 public struct VectorStoreExpirationAfterAnchor: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let lastActiveAt = VectorStoreExpirationAfterAnchor(rawValue: "last_active_at")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
