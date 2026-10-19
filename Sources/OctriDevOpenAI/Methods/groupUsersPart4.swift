@@ -6,15 +6,40 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension GroupUsersMethods {
-    /// Removes a user's membership from a group. Supply `group_id` and `user_id` to identify the group membership to remove. The response confirms whether the membership was deleted.
+public extension GroupUsersMethods {
+    /// Removes a user's membership from a group. Supply `group_id` and `user_id` to identify the group membership to
+    /// remove. The response confirms whether the membership was deleted.
     ///
     /// Removes a user from a group.
     ///
     /// - Parameters:
     /// - groupId: The ID of the group to update.
     /// - userId: The ID of the user to remove from the group.
-    public static func removeGroupUser(config: ClientConfig, groupId: String, userId: String, requestOptions: RequestOptions? = nil) async throws -> GroupUserDeletedResource {
-        return try (await sdkRequest("DELETE", ["/organization/groups/", sdkEncodePathSegment(sdkWireString(groupId)), "/users/", sdkEncodePathSegment(sdkWireString(userId))].joined(), config: config, decoder: .json, operationId: "removeGroupUser", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func removeGroupUser(
+        config: ClientConfig,
+        groupId: String,
+        userId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> GroupUserDeletedResource {
+        try await (sdkRequest(
+            "DELETE",
+            [
+                "/organization/groups/",
+                sdkEncodePathSegment(sdkWireString(groupId)),
+                "/users/",
+                sdkEncodePathSegment(sdkWireString(userId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "removeGroupUser",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "409": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

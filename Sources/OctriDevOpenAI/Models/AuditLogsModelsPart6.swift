@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AuditLogs domain models
+/// AuditLogs domain models
 /// A log of a user action or configuration change within this organization.
 public struct AuditLog: Codable {
     /// The ID of this log.
@@ -205,10 +205,14 @@ extension AuditLog {
     }
 }
 
-extension AuditLog {
-    public init(from decoder: Decoder) throws {
+public extension AuditLog {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.init(sdkRequiredFields: try container.sdkDecodeRequired(.id), type: try container.sdkDecodeRequired(.type), effectiveAt: try container.sdkDecodeRequired(.effectiveAt))
+        try self.init(
+            sdkRequiredFields: container.sdkDecodeRequired(.id),
+            type: container.sdkDecodeRequired(.type),
+            effectiveAt: container.sdkDecodeRequired(.effectiveAt)
+        )
         try sdkDecodeFieldsPart1(container)
         try sdkDecodeFieldsPart2(container)
         try sdkDecodeFieldsPart3(container)
@@ -217,8 +221,71 @@ extension AuditLog {
     }
 }
 
-extension AuditLog {
-    public init(id: String, type: AuditLogEventType, effectiveAt: Int, project: AuditLogProject? = nil, actor: AuditLogActor? = nil, apiKeyCreated: AuditLogApiKeyCreated? = nil, apiKeyUpdated: AuditLogApiKeyUpdated? = nil, apiKeyDeleted: AuditLogApiKeyDeleted? = nil, checkpointPermissionCreated: AuditLogCheckpointPermissionCreated? = nil, checkpointPermissionDeleted: AuditLogCheckpointPermissionDeleted? = nil, externalKeyRegistered: AuditLogExternalKeyRegistered? = nil, externalKeyRemoved: AuditLogExternalKeyRemoved? = nil, externalStorageRegistered: AuditLogExternalStorageRegistered? = nil, externalStorageRemoved: AuditLogExternalStorageRemoved? = nil, groupCreated: AuditLogGroupCreated? = nil, groupUpdated: AuditLogGroupUpdated? = nil, groupDeleted: AuditLogGroupDeleted? = nil, scimEnabled: AuditLogScimEnabled? = nil, scimDisabled: AuditLogScimDisabled? = nil, inviteSent: AuditLogInviteSent? = nil, inviteAccepted: AuditLogInviteAccepted? = nil, inviteDeleted: AuditLogInviteDeleted? = nil, ipAllowlistCreated: AuditLogIpAllowlistCreated? = nil, ipAllowlistUpdated: AuditLogIpAllowlistUpdated? = nil, ipAllowlistDeleted: AuditLogIpAllowlistDeleted? = nil, ipAllowlistConfigActivated: AuditLogIpAllowlistConfigActivated? = nil, ipAllowlistConfigDeactivated: AuditLogIpAllowlistConfigDeactivated? = nil, loginSucceeded: [String: JSONValue]? = nil, loginFailed: AuditLogLoginFailed? = nil, logoutSucceeded: [String: JSONValue]? = nil, logoutFailed: AuditLogLogoutFailed? = nil, organizationUpdated: AuditLogOrganizationUpdated? = nil, projectCreated: AuditLogProjectCreated? = nil, projectUpdated: AuditLogProjectUpdated? = nil, projectArchived: AuditLogProjectArchived? = nil, projectDeleted: AuditLogProjectDeleted? = nil, rateLimitUpdated: AuditLogRateLimitUpdated? = nil, rateLimitDeleted: AuditLogRateLimitDeleted? = nil, roleCreated: AuditLogRoleCreated? = nil, roleUpdated: AuditLogRoleUpdated? = nil, roleDeleted: AuditLogRoleDeleted? = nil, roleAssignmentCreated: AuditLogRoleAssignmentCreated? = nil, roleAssignmentDeleted: AuditLogRoleAssignmentDeleted? = nil, roleBoundToResource: AuditLogRoleBoundToResource? = nil, roleUnboundFromResource: AuditLogRoleUnboundFromResource? = nil, serviceAccountCreated: AuditLogServiceAccountCreated? = nil, serviceAccountUpdated: AuditLogServiceAccountUpdated? = nil, serviceAccountDeleted: AuditLogServiceAccountDeleted? = nil, workloadIdentityProviderCreated: AuditLogWorkloadIdentityProviderCreated? = nil, workloadIdentityProviderUpdated: AuditLogWorkloadIdentityProviderUpdated? = nil, workloadIdentityProviderDeleted: AuditLogWorkloadIdentityProviderDeleted? = nil, workloadIdentityProviderMappingCreated: AuditLogWorkloadIdentityProviderMappingCreated? = nil, workloadIdentityProviderMappingUpdated: AuditLogWorkloadIdentityProviderMappingUpdated? = nil, workloadIdentityProviderMappingDeleted: AuditLogWorkloadIdentityProviderMappingDeleted? = nil, userAdded: AuditLogUserAdded? = nil, userUpdated: AuditLogUserUpdated? = nil, userDeleted: AuditLogUserDeleted? = nil, certificateCreated: AuditLogCertificateCreated? = nil, certificateUpdated: AuditLogCertificateUpdated? = nil, certificateDeleted: AuditLogCertificateDeleted? = nil, certificatesActivated: AuditLogCertificatesActivated? = nil, certificatesDeactivated: AuditLogCertificatesDeactivated? = nil) {
+public extension AuditLog {
+    init(
+        id: String,
+        type: AuditLogEventType,
+        effectiveAt: Int,
+        project: AuditLogProject? = nil,
+        actor: AuditLogActor? = nil,
+        apiKeyCreated: AuditLogApiKeyCreated? = nil,
+        apiKeyUpdated: AuditLogApiKeyUpdated? = nil,
+        apiKeyDeleted: AuditLogApiKeyDeleted? = nil,
+        checkpointPermissionCreated: AuditLogCheckpointPermissionCreated? = nil,
+        checkpointPermissionDeleted: AuditLogCheckpointPermissionDeleted? = nil,
+        externalKeyRegistered: AuditLogExternalKeyRegistered? = nil,
+        externalKeyRemoved: AuditLogExternalKeyRemoved? = nil,
+        externalStorageRegistered: AuditLogExternalStorageRegistered? = nil,
+        externalStorageRemoved: AuditLogExternalStorageRemoved? = nil,
+        groupCreated: AuditLogGroupCreated? = nil,
+        groupUpdated: AuditLogGroupUpdated? = nil,
+        groupDeleted: AuditLogGroupDeleted? = nil,
+        scimEnabled: AuditLogScimEnabled? = nil,
+        scimDisabled: AuditLogScimDisabled? = nil,
+        inviteSent: AuditLogInviteSent? = nil,
+        inviteAccepted: AuditLogInviteAccepted? = nil,
+        inviteDeleted: AuditLogInviteDeleted? = nil,
+        ipAllowlistCreated: AuditLogIpAllowlistCreated? = nil,
+        ipAllowlistUpdated: AuditLogIpAllowlistUpdated? = nil,
+        ipAllowlistDeleted: AuditLogIpAllowlistDeleted? = nil,
+        ipAllowlistConfigActivated: AuditLogIpAllowlistConfigActivated? = nil,
+        ipAllowlistConfigDeactivated: AuditLogIpAllowlistConfigDeactivated? = nil,
+        loginSucceeded: [String: JSONValue]? = nil,
+        loginFailed: AuditLogLoginFailed? = nil,
+        logoutSucceeded: [String: JSONValue]? = nil,
+        logoutFailed: AuditLogLogoutFailed? = nil,
+        organizationUpdated: AuditLogOrganizationUpdated? = nil,
+        projectCreated: AuditLogProjectCreated? = nil,
+        projectUpdated: AuditLogProjectUpdated? = nil,
+        projectArchived: AuditLogProjectArchived? = nil,
+        projectDeleted: AuditLogProjectDeleted? = nil,
+        rateLimitUpdated: AuditLogRateLimitUpdated? = nil,
+        rateLimitDeleted: AuditLogRateLimitDeleted? = nil,
+        roleCreated: AuditLogRoleCreated? = nil,
+        roleUpdated: AuditLogRoleUpdated? = nil,
+        roleDeleted: AuditLogRoleDeleted? = nil,
+        roleAssignmentCreated: AuditLogRoleAssignmentCreated? = nil,
+        roleAssignmentDeleted: AuditLogRoleAssignmentDeleted? = nil,
+        roleBoundToResource: AuditLogRoleBoundToResource? = nil,
+        roleUnboundFromResource: AuditLogRoleUnboundFromResource? = nil,
+        serviceAccountCreated: AuditLogServiceAccountCreated? = nil,
+        serviceAccountUpdated: AuditLogServiceAccountUpdated? = nil,
+        serviceAccountDeleted: AuditLogServiceAccountDeleted? = nil,
+        workloadIdentityProviderCreated: AuditLogWorkloadIdentityProviderCreated? = nil,
+        workloadIdentityProviderUpdated: AuditLogWorkloadIdentityProviderUpdated? = nil,
+        workloadIdentityProviderDeleted: AuditLogWorkloadIdentityProviderDeleted? = nil,
+        workloadIdentityProviderMappingCreated: AuditLogWorkloadIdentityProviderMappingCreated? = nil,
+        workloadIdentityProviderMappingUpdated: AuditLogWorkloadIdentityProviderMappingUpdated? = nil,
+        workloadIdentityProviderMappingDeleted: AuditLogWorkloadIdentityProviderMappingDeleted? = nil,
+        userAdded: AuditLogUserAdded? = nil,
+        userUpdated: AuditLogUserUpdated? = nil,
+        userDeleted: AuditLogUserDeleted? = nil,
+        certificateCreated: AuditLogCertificateCreated? = nil,
+        certificateUpdated: AuditLogCertificateUpdated? = nil,
+        certificateDeleted: AuditLogCertificateDeleted? = nil,
+        certificatesActivated: AuditLogCertificatesActivated? = nil,
+        certificatesDeactivated: AuditLogCertificatesDeactivated? = nil
+    ) {
         self.init(sdkRequiredFields: id, type: type, effectiveAt: effectiveAt)
         sdkSet1(project, actor, apiKeyCreated, apiKeyUpdated, apiKeyDeleted)
         sdkSet2(checkpointPermissionCreated, checkpointPermissionDeleted, externalKeyRegistered, externalKeyRemoved)
@@ -238,7 +305,13 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet1(_ project: AuditLogProject?, _ actor: AuditLogActor?, _ apiKeyCreated: AuditLogApiKeyCreated?, _ apiKeyUpdated: AuditLogApiKeyUpdated?, _ apiKeyDeleted: AuditLogApiKeyDeleted?) {
+    mutating func sdkSet1(
+        _ project: AuditLogProject?,
+        _ actor: AuditLogActor?,
+        _ apiKeyCreated: AuditLogApiKeyCreated?,
+        _ apiKeyUpdated: AuditLogApiKeyUpdated?,
+        _ apiKeyDeleted: AuditLogApiKeyDeleted?
+    ) {
         self.project = project
         self.actor = actor
         self.apiKeyCreated = apiKeyCreated
@@ -248,7 +321,12 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet2(_ checkpointPermissionCreated: AuditLogCheckpointPermissionCreated?, _ checkpointPermissionDeleted: AuditLogCheckpointPermissionDeleted?, _ externalKeyRegistered: AuditLogExternalKeyRegistered?, _ externalKeyRemoved: AuditLogExternalKeyRemoved?) {
+    mutating func sdkSet2(
+        _ checkpointPermissionCreated: AuditLogCheckpointPermissionCreated?,
+        _ checkpointPermissionDeleted: AuditLogCheckpointPermissionDeleted?,
+        _ externalKeyRegistered: AuditLogExternalKeyRegistered?,
+        _ externalKeyRemoved: AuditLogExternalKeyRemoved?
+    ) {
         self.checkpointPermissionCreated = checkpointPermissionCreated
         self.checkpointPermissionDeleted = checkpointPermissionDeleted
         self.externalKeyRegistered = externalKeyRegistered
@@ -257,7 +335,13 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet3(_ externalStorageRegistered: AuditLogExternalStorageRegistered?, _ externalStorageRemoved: AuditLogExternalStorageRemoved?, _ groupCreated: AuditLogGroupCreated?, _ groupUpdated: AuditLogGroupUpdated?, _ groupDeleted: AuditLogGroupDeleted?) {
+    mutating func sdkSet3(
+        _ externalStorageRegistered: AuditLogExternalStorageRegistered?,
+        _ externalStorageRemoved: AuditLogExternalStorageRemoved?,
+        _ groupCreated: AuditLogGroupCreated?,
+        _ groupUpdated: AuditLogGroupUpdated?,
+        _ groupDeleted: AuditLogGroupDeleted?
+    ) {
         self.externalStorageRegistered = externalStorageRegistered
         self.externalStorageRemoved = externalStorageRemoved
         self.groupCreated = groupCreated
@@ -267,7 +351,13 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet4(_ scimEnabled: AuditLogScimEnabled?, _ scimDisabled: AuditLogScimDisabled?, _ inviteSent: AuditLogInviteSent?, _ inviteAccepted: AuditLogInviteAccepted?, _ inviteDeleted: AuditLogInviteDeleted?) {
+    mutating func sdkSet4(
+        _ scimEnabled: AuditLogScimEnabled?,
+        _ scimDisabled: AuditLogScimDisabled?,
+        _ inviteSent: AuditLogInviteSent?,
+        _ inviteAccepted: AuditLogInviteAccepted?,
+        _ inviteDeleted: AuditLogInviteDeleted?
+    ) {
         self.scimEnabled = scimEnabled
         self.scimDisabled = scimDisabled
         self.inviteSent = inviteSent
@@ -277,7 +367,12 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet5(_ ipAllowlistCreated: AuditLogIpAllowlistCreated?, _ ipAllowlistUpdated: AuditLogIpAllowlistUpdated?, _ ipAllowlistDeleted: AuditLogIpAllowlistDeleted?, _ ipAllowlistConfigActivated: AuditLogIpAllowlistConfigActivated?) {
+    mutating func sdkSet5(
+        _ ipAllowlistCreated: AuditLogIpAllowlistCreated?,
+        _ ipAllowlistUpdated: AuditLogIpAllowlistUpdated?,
+        _ ipAllowlistDeleted: AuditLogIpAllowlistDeleted?,
+        _ ipAllowlistConfigActivated: AuditLogIpAllowlistConfigActivated?
+    ) {
         self.ipAllowlistCreated = ipAllowlistCreated
         self.ipAllowlistUpdated = ipAllowlistUpdated
         self.ipAllowlistDeleted = ipAllowlistDeleted
@@ -286,7 +381,13 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet6(_ ipAllowlistConfigDeactivated: AuditLogIpAllowlistConfigDeactivated?, _ loginSucceeded: [String: JSONValue]?, _ loginFailed: AuditLogLoginFailed?, _ logoutSucceeded: [String: JSONValue]?, _ logoutFailed: AuditLogLogoutFailed?) {
+    mutating func sdkSet6(
+        _ ipAllowlistConfigDeactivated: AuditLogIpAllowlistConfigDeactivated?,
+        _ loginSucceeded: [String: JSONValue]?,
+        _ loginFailed: AuditLogLoginFailed?,
+        _ logoutSucceeded: [String: JSONValue]?,
+        _ logoutFailed: AuditLogLogoutFailed?
+    ) {
         self.ipAllowlistConfigDeactivated = ipAllowlistConfigDeactivated
         self.loginSucceeded = loginSucceeded
         self.loginFailed = loginFailed
@@ -296,7 +397,13 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet7(_ organizationUpdated: AuditLogOrganizationUpdated?, _ projectCreated: AuditLogProjectCreated?, _ projectUpdated: AuditLogProjectUpdated?, _ projectArchived: AuditLogProjectArchived?, _ projectDeleted: AuditLogProjectDeleted?) {
+    mutating func sdkSet7(
+        _ organizationUpdated: AuditLogOrganizationUpdated?,
+        _ projectCreated: AuditLogProjectCreated?,
+        _ projectUpdated: AuditLogProjectUpdated?,
+        _ projectArchived: AuditLogProjectArchived?,
+        _ projectDeleted: AuditLogProjectDeleted?
+    ) {
         self.organizationUpdated = organizationUpdated
         self.projectCreated = projectCreated
         self.projectUpdated = projectUpdated
@@ -306,7 +413,13 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet8(_ rateLimitUpdated: AuditLogRateLimitUpdated?, _ rateLimitDeleted: AuditLogRateLimitDeleted?, _ roleCreated: AuditLogRoleCreated?, _ roleUpdated: AuditLogRoleUpdated?, _ roleDeleted: AuditLogRoleDeleted?) {
+    mutating func sdkSet8(
+        _ rateLimitUpdated: AuditLogRateLimitUpdated?,
+        _ rateLimitDeleted: AuditLogRateLimitDeleted?,
+        _ roleCreated: AuditLogRoleCreated?,
+        _ roleUpdated: AuditLogRoleUpdated?,
+        _ roleDeleted: AuditLogRoleDeleted?
+    ) {
         self.rateLimitUpdated = rateLimitUpdated
         self.rateLimitDeleted = rateLimitDeleted
         self.roleCreated = roleCreated
@@ -316,7 +429,12 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet9(_ roleAssignmentCreated: AuditLogRoleAssignmentCreated?, _ roleAssignmentDeleted: AuditLogRoleAssignmentDeleted?, _ roleBoundToResource: AuditLogRoleBoundToResource?, _ roleUnboundFromResource: AuditLogRoleUnboundFromResource?) {
+    mutating func sdkSet9(
+        _ roleAssignmentCreated: AuditLogRoleAssignmentCreated?,
+        _ roleAssignmentDeleted: AuditLogRoleAssignmentDeleted?,
+        _ roleBoundToResource: AuditLogRoleBoundToResource?,
+        _ roleUnboundFromResource: AuditLogRoleUnboundFromResource?
+    ) {
         self.roleAssignmentCreated = roleAssignmentCreated
         self.roleAssignmentDeleted = roleAssignmentDeleted
         self.roleBoundToResource = roleBoundToResource
@@ -325,7 +443,12 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet10(_ serviceAccountCreated: AuditLogServiceAccountCreated?, _ serviceAccountUpdated: AuditLogServiceAccountUpdated?, _ serviceAccountDeleted: AuditLogServiceAccountDeleted?, _ workloadIdentityProviderCreated: AuditLogWorkloadIdentityProviderCreated?) {
+    mutating func sdkSet10(
+        _ serviceAccountCreated: AuditLogServiceAccountCreated?,
+        _ serviceAccountUpdated: AuditLogServiceAccountUpdated?,
+        _ serviceAccountDeleted: AuditLogServiceAccountDeleted?,
+        _ workloadIdentityProviderCreated: AuditLogWorkloadIdentityProviderCreated?
+    ) {
         self.serviceAccountCreated = serviceAccountCreated
         self.serviceAccountUpdated = serviceAccountUpdated
         self.serviceAccountDeleted = serviceAccountDeleted
@@ -334,21 +457,33 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet11(_ workloadIdentityProviderUpdated: AuditLogWorkloadIdentityProviderUpdated?, _ workloadIdentityProviderDeleted: AuditLogWorkloadIdentityProviderDeleted?) {
+    mutating func sdkSet11(
+        _ workloadIdentityProviderUpdated: AuditLogWorkloadIdentityProviderUpdated?,
+        _ workloadIdentityProviderDeleted: AuditLogWorkloadIdentityProviderDeleted?
+    ) {
         self.workloadIdentityProviderUpdated = workloadIdentityProviderUpdated
         self.workloadIdentityProviderDeleted = workloadIdentityProviderDeleted
     }
 }
 
 extension AuditLog {
-    mutating func sdkSet12(_ workloadIdentityProviderMappingCreated: AuditLogWorkloadIdentityProviderMappingCreated?, _ workloadIdentityProviderMappingUpdated: AuditLogWorkloadIdentityProviderMappingUpdated?) {
+    mutating func sdkSet12(
+        _ workloadIdentityProviderMappingCreated: AuditLogWorkloadIdentityProviderMappingCreated?,
+        _ workloadIdentityProviderMappingUpdated: AuditLogWorkloadIdentityProviderMappingUpdated?
+    ) {
         self.workloadIdentityProviderMappingCreated = workloadIdentityProviderMappingCreated
         self.workloadIdentityProviderMappingUpdated = workloadIdentityProviderMappingUpdated
     }
 }
 
 extension AuditLog {
-    mutating func sdkSet13(_ workloadIdentityProviderMappingDeleted: AuditLogWorkloadIdentityProviderMappingDeleted?, _ userAdded: AuditLogUserAdded?, _ userUpdated: AuditLogUserUpdated?, _ userDeleted: AuditLogUserDeleted?, _ certificateCreated: AuditLogCertificateCreated?) {
+    mutating func sdkSet13(
+        _ workloadIdentityProviderMappingDeleted: AuditLogWorkloadIdentityProviderMappingDeleted?,
+        _ userAdded: AuditLogUserAdded?,
+        _ userUpdated: AuditLogUserUpdated?,
+        _ userDeleted: AuditLogUserDeleted?,
+        _ certificateCreated: AuditLogCertificateCreated?
+    ) {
         self.workloadIdentityProviderMappingDeleted = workloadIdentityProviderMappingDeleted
         self.userAdded = userAdded
         self.userUpdated = userUpdated
@@ -358,7 +493,12 @@ extension AuditLog {
 }
 
 extension AuditLog {
-    mutating func sdkSet14(_ certificateUpdated: AuditLogCertificateUpdated?, _ certificateDeleted: AuditLogCertificateDeleted?, _ certificatesActivated: AuditLogCertificatesActivated?, _ certificatesDeactivated: AuditLogCertificatesDeactivated?) {
+    mutating func sdkSet14(
+        _ certificateUpdated: AuditLogCertificateUpdated?,
+        _ certificateDeleted: AuditLogCertificateDeleted?,
+        _ certificatesActivated: AuditLogCertificatesActivated?,
+        _ certificatesDeactivated: AuditLogCertificatesDeactivated?
+    ) {
         self.certificateUpdated = certificateUpdated
         self.certificateDeleted = certificateDeleted
         self.certificatesActivated = certificatesActivated
@@ -368,85 +508,88 @@ extension AuditLog {
 
 extension AuditLog {
     mutating func sdkDecodeFieldsPart1(_ container: KeyedDecodingContainer<CodingKeys>) throws {
-        self.project = try container.sdkDecodeIfPresent(.project)
-        self.actor = try container.sdkDecodeIfPresent(.actor)
-        self.apiKeyCreated = try container.sdkDecodeIfPresent(.apiKeyCreated)
-        self.apiKeyUpdated = try container.sdkDecodeIfPresent(.apiKeyUpdated)
-        self.apiKeyDeleted = try container.sdkDecodeIfPresent(.apiKeyDeleted)
-        self.checkpointPermissionCreated = try container.sdkDecodeIfPresent(.checkpointPermissionCreated)
-        self.checkpointPermissionDeleted = try container.sdkDecodeIfPresent(.checkpointPermissionDeleted)
-        self.externalKeyRegistered = try container.sdkDecodeIfPresent(.externalKeyRegistered)
-        self.externalKeyRemoved = try container.sdkDecodeIfPresent(.externalKeyRemoved)
-        self.externalStorageRegistered = try container.sdkDecodeIfPresent(.externalStorageRegistered)
-        self.externalStorageRemoved = try container.sdkDecodeIfPresent(.externalStorageRemoved)
-        self.groupCreated = try container.sdkDecodeIfPresent(.groupCreated)
+        project = try container.sdkDecodeIfPresent(.project)
+        actor = try container.sdkDecodeIfPresent(.actor)
+        apiKeyCreated = try container.sdkDecodeIfPresent(.apiKeyCreated)
+        apiKeyUpdated = try container.sdkDecodeIfPresent(.apiKeyUpdated)
+        apiKeyDeleted = try container.sdkDecodeIfPresent(.apiKeyDeleted)
+        checkpointPermissionCreated = try container.sdkDecodeIfPresent(.checkpointPermissionCreated)
+        checkpointPermissionDeleted = try container.sdkDecodeIfPresent(.checkpointPermissionDeleted)
+        externalKeyRegistered = try container.sdkDecodeIfPresent(.externalKeyRegistered)
+        externalKeyRemoved = try container.sdkDecodeIfPresent(.externalKeyRemoved)
+        externalStorageRegistered = try container.sdkDecodeIfPresent(.externalStorageRegistered)
+        externalStorageRemoved = try container.sdkDecodeIfPresent(.externalStorageRemoved)
+        groupCreated = try container.sdkDecodeIfPresent(.groupCreated)
     }
 }
 
 extension AuditLog {
     mutating func sdkDecodeFieldsPart2(_ container: KeyedDecodingContainer<CodingKeys>) throws {
-        self.groupUpdated = try container.sdkDecodeIfPresent(.groupUpdated)
-        self.groupDeleted = try container.sdkDecodeIfPresent(.groupDeleted)
-        self.scimEnabled = try container.sdkDecodeIfPresent(.scimEnabled)
-        self.scimDisabled = try container.sdkDecodeIfPresent(.scimDisabled)
-        self.inviteSent = try container.sdkDecodeIfPresent(.inviteSent)
-        self.inviteAccepted = try container.sdkDecodeIfPresent(.inviteAccepted)
-        self.inviteDeleted = try container.sdkDecodeIfPresent(.inviteDeleted)
-        self.ipAllowlistCreated = try container.sdkDecodeIfPresent(.ipAllowlistCreated)
-        self.ipAllowlistUpdated = try container.sdkDecodeIfPresent(.ipAllowlistUpdated)
-        self.ipAllowlistDeleted = try container.sdkDecodeIfPresent(.ipAllowlistDeleted)
-        self.ipAllowlistConfigActivated = try container.sdkDecodeIfPresent(.ipAllowlistConfigActivated)
-        self.ipAllowlistConfigDeactivated = try container.sdkDecodeIfPresent(.ipAllowlistConfigDeactivated)
+        groupUpdated = try container.sdkDecodeIfPresent(.groupUpdated)
+        groupDeleted = try container.sdkDecodeIfPresent(.groupDeleted)
+        scimEnabled = try container.sdkDecodeIfPresent(.scimEnabled)
+        scimDisabled = try container.sdkDecodeIfPresent(.scimDisabled)
+        inviteSent = try container.sdkDecodeIfPresent(.inviteSent)
+        inviteAccepted = try container.sdkDecodeIfPresent(.inviteAccepted)
+        inviteDeleted = try container.sdkDecodeIfPresent(.inviteDeleted)
+        ipAllowlistCreated = try container.sdkDecodeIfPresent(.ipAllowlistCreated)
+        ipAllowlistUpdated = try container.sdkDecodeIfPresent(.ipAllowlistUpdated)
+        ipAllowlistDeleted = try container.sdkDecodeIfPresent(.ipAllowlistDeleted)
+        ipAllowlistConfigActivated = try container.sdkDecodeIfPresent(.ipAllowlistConfigActivated)
+        ipAllowlistConfigDeactivated = try container.sdkDecodeIfPresent(.ipAllowlistConfigDeactivated)
     }
 }
 
 extension AuditLog {
     mutating func sdkDecodeFieldsPart3(_ container: KeyedDecodingContainer<CodingKeys>) throws {
-        self.loginSucceeded = try container.sdkDecodeIfPresent(.loginSucceeded)
-        self.loginFailed = try container.sdkDecodeIfPresent(.loginFailed)
-        self.logoutSucceeded = try container.sdkDecodeIfPresent(.logoutSucceeded)
-        self.logoutFailed = try container.sdkDecodeIfPresent(.logoutFailed)
-        self.organizationUpdated = try container.sdkDecodeIfPresent(.organizationUpdated)
-        self.projectCreated = try container.sdkDecodeIfPresent(.projectCreated)
-        self.projectUpdated = try container.sdkDecodeIfPresent(.projectUpdated)
-        self.projectArchived = try container.sdkDecodeIfPresent(.projectArchived)
-        self.projectDeleted = try container.sdkDecodeIfPresent(.projectDeleted)
-        self.rateLimitUpdated = try container.sdkDecodeIfPresent(.rateLimitUpdated)
-        self.rateLimitDeleted = try container.sdkDecodeIfPresent(.rateLimitDeleted)
-        self.roleCreated = try container.sdkDecodeIfPresent(.roleCreated)
+        loginSucceeded = try container.sdkDecodeIfPresent(.loginSucceeded)
+        loginFailed = try container.sdkDecodeIfPresent(.loginFailed)
+        logoutSucceeded = try container.sdkDecodeIfPresent(.logoutSucceeded)
+        logoutFailed = try container.sdkDecodeIfPresent(.logoutFailed)
+        organizationUpdated = try container.sdkDecodeIfPresent(.organizationUpdated)
+        projectCreated = try container.sdkDecodeIfPresent(.projectCreated)
+        projectUpdated = try container.sdkDecodeIfPresent(.projectUpdated)
+        projectArchived = try container.sdkDecodeIfPresent(.projectArchived)
+        projectDeleted = try container.sdkDecodeIfPresent(.projectDeleted)
+        rateLimitUpdated = try container.sdkDecodeIfPresent(.rateLimitUpdated)
+        rateLimitDeleted = try container.sdkDecodeIfPresent(.rateLimitDeleted)
+        roleCreated = try container.sdkDecodeIfPresent(.roleCreated)
     }
 }
 
 extension AuditLog {
     mutating func sdkDecodeFieldsPart4(_ container: KeyedDecodingContainer<CodingKeys>) throws {
-        self.roleUpdated = try container.sdkDecodeIfPresent(.roleUpdated)
-        self.roleDeleted = try container.sdkDecodeIfPresent(.roleDeleted)
-        self.roleAssignmentCreated = try container.sdkDecodeIfPresent(.roleAssignmentCreated)
-        self.roleAssignmentDeleted = try container.sdkDecodeIfPresent(.roleAssignmentDeleted)
-        self.roleBoundToResource = try container.sdkDecodeIfPresent(.roleBoundToResource)
-        self.roleUnboundFromResource = try container.sdkDecodeIfPresent(.roleUnboundFromResource)
-        self.serviceAccountCreated = try container.sdkDecodeIfPresent(.serviceAccountCreated)
-        self.serviceAccountUpdated = try container.sdkDecodeIfPresent(.serviceAccountUpdated)
-        self.serviceAccountDeleted = try container.sdkDecodeIfPresent(.serviceAccountDeleted)
-        self.workloadIdentityProviderCreated = try container.sdkDecodeIfPresent(.workloadIdentityProviderCreated)
-        self.workloadIdentityProviderUpdated = try container.sdkDecodeIfPresent(.workloadIdentityProviderUpdated)
-        self.workloadIdentityProviderDeleted = try container.sdkDecodeIfPresent(.workloadIdentityProviderDeleted)
+        roleUpdated = try container.sdkDecodeIfPresent(.roleUpdated)
+        roleDeleted = try container.sdkDecodeIfPresent(.roleDeleted)
+        roleAssignmentCreated = try container.sdkDecodeIfPresent(.roleAssignmentCreated)
+        roleAssignmentDeleted = try container.sdkDecodeIfPresent(.roleAssignmentDeleted)
+        roleBoundToResource = try container.sdkDecodeIfPresent(.roleBoundToResource)
+        roleUnboundFromResource = try container.sdkDecodeIfPresent(.roleUnboundFromResource)
+        serviceAccountCreated = try container.sdkDecodeIfPresent(.serviceAccountCreated)
+        serviceAccountUpdated = try container.sdkDecodeIfPresent(.serviceAccountUpdated)
+        serviceAccountDeleted = try container.sdkDecodeIfPresent(.serviceAccountDeleted)
+        workloadIdentityProviderCreated = try container.sdkDecodeIfPresent(.workloadIdentityProviderCreated)
+        workloadIdentityProviderUpdated = try container.sdkDecodeIfPresent(.workloadIdentityProviderUpdated)
+        workloadIdentityProviderDeleted = try container.sdkDecodeIfPresent(.workloadIdentityProviderDeleted)
     }
 }
 
 extension AuditLog {
     mutating func sdkDecodeFieldsPart5(_ container: KeyedDecodingContainer<CodingKeys>) throws {
-        self.workloadIdentityProviderMappingCreated = try container.sdkDecodeIfPresent(.workloadIdentityProviderMappingCreated)
-        self.workloadIdentityProviderMappingUpdated = try container.sdkDecodeIfPresent(.workloadIdentityProviderMappingUpdated)
-        self.workloadIdentityProviderMappingDeleted = try container.sdkDecodeIfPresent(.workloadIdentityProviderMappingDeleted)
-        self.userAdded = try container.sdkDecodeIfPresent(.userAdded)
-        self.userUpdated = try container.sdkDecodeIfPresent(.userUpdated)
-        self.userDeleted = try container.sdkDecodeIfPresent(.userDeleted)
-        self.certificateCreated = try container.sdkDecodeIfPresent(.certificateCreated)
-        self.certificateUpdated = try container.sdkDecodeIfPresent(.certificateUpdated)
-        self.certificateDeleted = try container.sdkDecodeIfPresent(.certificateDeleted)
-        self.certificatesActivated = try container.sdkDecodeIfPresent(.certificatesActivated)
-        self.certificatesDeactivated = try container.sdkDecodeIfPresent(.certificatesDeactivated)
+        workloadIdentityProviderMappingCreated = try container
+            .sdkDecodeIfPresent(.workloadIdentityProviderMappingCreated)
+        workloadIdentityProviderMappingUpdated = try container
+            .sdkDecodeIfPresent(.workloadIdentityProviderMappingUpdated)
+        workloadIdentityProviderMappingDeleted = try container
+            .sdkDecodeIfPresent(.workloadIdentityProviderMappingDeleted)
+        userAdded = try container.sdkDecodeIfPresent(.userAdded)
+        userUpdated = try container.sdkDecodeIfPresent(.userUpdated)
+        userDeleted = try container.sdkDecodeIfPresent(.userDeleted)
+        certificateCreated = try container.sdkDecodeIfPresent(.certificateCreated)
+        certificateUpdated = try container.sdkDecodeIfPresent(.certificateUpdated)
+        certificateDeleted = try container.sdkDecodeIfPresent(.certificateDeleted)
+        certificatesActivated = try container.sdkDecodeIfPresent(.certificatesActivated)
+        certificatesDeactivated = try container.sdkDecodeIfPresent(.certificatesDeactivated)
     }
 }
 
@@ -454,7 +597,10 @@ extension AuditLog {
 public struct AuditLogRoleBoundToResourceSource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let roleToggle = AuditLogRoleBoundToResourceSource(rawValue: "role_toggle")
     public static let roleConnectorUpdate = AuditLogRoleBoundToResourceSource(rawValue: "role_connector_update")
     public static let roleDelete = AuditLogRoleBoundToResourceSource(rawValue: "role_delete")
@@ -463,7 +609,7 @@ public struct AuditLogRoleBoundToResourceSource: RawRepresentable, Hashable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

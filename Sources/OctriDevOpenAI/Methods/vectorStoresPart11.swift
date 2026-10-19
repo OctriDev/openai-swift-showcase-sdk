@@ -6,26 +6,72 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VectorStoresMethods {
-    /// Retrieves a file attachment and its processing details from a vector store. Use `vector_store_id` and `file_id` to identify the attachment whose status and configuration you need.
+public extension VectorStoresMethods {
+    /// Retrieves a file attachment and its processing details from a vector store. Use `vector_store_id` and `file_id`
+    /// to identify the attachment whose status and configuration you need.
     ///
     /// Retrieves a vector store file.
     ///
     /// - Parameters:
     /// - vectorStoreId: The ID of the vector store that the file belongs to.
     /// - fileId: The ID of the file being retrieved.
-    public static func getVectorStoreFile(config: ClientConfig, vectorStoreId: String, fileId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileObject {
-        return try (await sdkRequest("GET", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/files/", sdkEncodePathSegment(sdkWireString(fileId))].joined(), config: config, decoder: .json, operationId: "getVectorStoreFile", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+    static func getVectorStoreFile(
+        config: ClientConfig,
+        vectorStoreId: String,
+        fileId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VectorStoreFileObject {
+        try await (sdkRequest(
+            "GET",
+            [
+                "/vector_stores/",
+                sdkEncodePathSegment(sdkWireString(vectorStoreId)),
+                "/files/",
+                sdkEncodePathSegment(sdkWireString(fileId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getVectorStoreFile",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self]
+        )).data
     }
 
-    /// Deletes a file attachment from a vector store without deleting the underlying file. Use the file deletion operation separately if you also need to delete the file itself.
+    /// Deletes a file attachment from a vector store without deleting the underlying file. Use the file deletion
+    /// operation separately if you also need to delete the file itself.
     ///
-    /// Delete a vector store file. This will remove the file from the vector store but the file itself will not be deleted. To delete the file, use the [delete file](https://developers.openai.com/api/reference/resources/files/methods/delete) endpoint.
+    /// Delete a vector store file. This will remove the file from the vector store but the file itself will not be
+    /// deleted. To delete the file, use the [delete
+    /// file](https://developers.openai.com/api/reference/resources/files/methods/delete) endpoint.
     ///
     /// - Parameters:
     /// - vectorStoreId: The ID of the vector store that the file belongs to.
     /// - fileId: The ID of the file to delete.
-    public static func deleteVectorStoreFile(config: ClientConfig, vectorStoreId: String, fileId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteVectorStoreFileResponse {
-        return try (await sdkRequest("DELETE", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/files/", sdkEncodePathSegment(sdkWireString(fileId))].joined(), config: config, decoder: .json, operationId: "deleteVectorStoreFile", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+    static func deleteVectorStoreFile(
+        config: ClientConfig,
+        vectorStoreId: String,
+        fileId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeleteVectorStoreFileResponse {
+        try await (sdkRequest(
+            "DELETE",
+            [
+                "/vector_stores/",
+                sdkEncodePathSegment(sdkWireString(vectorStoreId)),
+                "/files/",
+                sdkEncodePathSegment(sdkWireString(fileId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteVectorStoreFile",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "409": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+            ]
+        )).data
     }
 }

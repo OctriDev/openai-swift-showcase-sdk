@@ -6,10 +6,22 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension UploadsMethods {
-    /// Creates an upload that accepts file parts before they are assembled into a usable file. Provide the filename, purpose, byte count, and MIME type; uploads can contain up to 8 GB and expire after one hour. Add parts to the upload, then complete it to create the file.
+public extension UploadsMethods {
+    /// Creates an upload that accepts file parts before they are assembled into a usable file. Provide the filename,
+    /// purpose, byte count, and MIME type; uploads can contain up to 8 GB and expire after one hour. Add parts to the
+    /// upload, then complete it to create the file.
     ///
-    /// Creates an intermediate [Upload](https://developers.openai.com/api/reference/resources/uploads) object that you can add [Parts](https://developers.openai.com/api/reference/resources/uploads/subresources/parts) to. Currently, an Upload can accept at most 8 GB in total and expires after an hour after you create it. Once you complete the Upload, we will create a [File](https://developers.openai.com/api/reference/resources/files) object that contains all the parts you uploaded. This File is usable in the rest of our platform as a regular File object. For certain `purpose` values, the correct `mime_type` must be specified. Please refer to documentation for the [supported MIME types for your use case](https://developers.openai.com/api/docs/guides/tools-file-search#supported-files). For guidance on the proper filename extensions for each purpose, please follow the documentation on [creating a File](https://developers.openai.com/api/reference/resources/files/methods/create). Returns the Upload object with status `pending`.
+    /// Creates an intermediate [Upload](https://developers.openai.com/api/reference/resources/uploads) object that you
+    /// can add [Parts](https://developers.openai.com/api/reference/resources/uploads/subresources/parts) to. Currently,
+    /// an Upload can accept at most 8 GB in total and expires after an hour after you create it. Once you complete the
+    /// Upload, we will create a [File](https://developers.openai.com/api/reference/resources/files) object that
+    /// contains all the parts you uploaded. This File is usable in the rest of our platform as a regular File object.
+    /// For certain `purpose` values, the correct `mime_type` must be specified. Please refer to documentation for the
+    /// [supported MIME types for your use
+    /// case](https://developers.openai.com/api/docs/guides/tools-file-search#supported-files). For guidance on the
+    /// proper filename extensions for each purpose, please follow the documentation on [creating a
+    /// File](https://developers.openai.com/api/reference/resources/files/methods/create). Returns the Upload object
+    /// with status `pending`.
     ///
     /// - Parameters:
     /// - filename: The name of the file to upload.
@@ -25,9 +37,32 @@ extension UploadsMethods {
     /// - expiresAfter: The expiration policy for a file. By default, files with
     ///   `purpose=batch` expire after 30 days and all other files are persisted until
     ///   they are manually deleted.
-    public static func createUpload(config: ClientConfig, filename: String, purpose: CreateUploadRequestPurpose, bytes: Int, mimeType: String, expiresAfter: FileExpirationAfter? = nil, requestOptions: RequestOptions? = nil) async throws -> Upload {
-        let requestBody = CreateUploadRequestBody(filename: filename, purpose: purpose, bytes: bytes, mimeType: mimeType, expiresAfter: expiresAfter)
+    static func createUpload(
+        config: ClientConfig,
+        filename: String,
+        purpose: CreateUploadRequestPurpose,
+        bytes: Int,
+        mimeType: String,
+        expiresAfter: FileExpirationAfter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Upload {
+        let requestBody = CreateUploadRequestBody(
+            filename: filename,
+            purpose: purpose,
+            bytes: bytes,
+            mimeType: mimeType,
+            expiresAfter: expiresAfter
+        )
 
-        return try (await sdkRequest("POST", "/uploads", config: config, body: requestBody, decoder: .json, operationId: "createUpload", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/uploads",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createUpload",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

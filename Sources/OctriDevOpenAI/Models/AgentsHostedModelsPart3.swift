@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsHosted domain models
+/// AgentsHosted domain models
 /// A file supplied inline when the session was created.
 public struct HostedEnvironmentFileResourceInline: Codable {
     /// The type of the object. Always `inline`.
@@ -22,43 +22,77 @@ public struct HostedEnvironmentFileResourceInline: Codable {
         case sizeBytes = "size_bytes"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension HostedEnvironmentFileResourceInline {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.path) else {
-            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
-        }
-        guard container.contains(.sizeBytes) else {
-            throw SdkValidationError(field: "size_bytes", code: "required", message: "Validation failed for 'size_bytes': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.path = try container.sdkDecodeRequired(.path)
-        self.sizeBytes = try container.sdkDecodeRequired(.sizeBytes)
-            try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileResourceInlineType.allCases.map(\.rawValue))
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("path", self.path, min: 0, max: nil)
-            try validateRange("size_bytes", Double(self.sizeBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension HostedEnvironmentFileResourceInline {
-    public init(type: HostedEnvironmentFileResourceInlineType, id: String, path: String, sizeBytes: Int) throws {
+public extension HostedEnvironmentFileResourceInline {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.path) else {
+            throw SdkValidationError(
+                field: "path",
+                code: "required",
+                message: "Validation failed for 'path': value is required"
+            )
+        }
+        guard container.contains(.sizeBytes) else {
+            throw SdkValidationError(
+                field: "size_bytes",
+                code: "required",
+                message: "Validation failed for 'size_bytes': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        path = try container.sdkDecodeRequired(.path)
+        sizeBytes = try container.sdkDecodeRequired(.sizeBytes)
+        try sdkValidateRawEnum("type", type, HostedEnvironmentFileResourceInlineType.allCases.map(\.rawValue))
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("path", path, min: 0, max: nil)
+        try validateRange(
+            "size_bytes",
+            Double(sizeBytes),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension HostedEnvironmentFileResourceInline {
+    init(type: HostedEnvironmentFileResourceInlineType, id: String, path: String, sizeBytes: Int) throws {
         (self.type, self.id) = (type, id)
         (self.path, self.sizeBytes) = (path, sizeBytes)
-            try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileResourceInlineType.allCases.map(\.rawValue))
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("path", self.path, min: 0, max: nil)
-            try validateRange("size_bytes", Double(self.sizeBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileResourceInlineType.allCases.map(\.rawValue))
+        try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("path", self.path, min: 0, max: nil)
+        try validateRange(
+            "size_bytes",
+            Double(self.sizeBytes),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -83,50 +117,94 @@ public struct HostedEnvironmentFileResourceFileId: Codable {
         case sizeBytes = "size_bytes"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension HostedEnvironmentFileResourceFileId {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.fileId) else {
-            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
-        }
-        guard container.contains(.path) else {
-            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
-        }
-        guard container.contains(.sizeBytes) else {
-            throw SdkValidationError(field: "size_bytes", code: "required", message: "Validation failed for 'size_bytes': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.fileId = try container.sdkDecodeRequired(.fileId)
-        self.path = try container.sdkDecodeRequired(.path)
-        self.sizeBytes = try container.sdkDecodeRequired(.sizeBytes)
-            try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileResourceFileIdType.allCases.map(\.rawValue))
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("file_id", self.fileId, min: 0, max: nil)
-            try validateLength("path", self.path, min: 0, max: nil)
-            try validateRange("size_bytes", Double(self.sizeBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension HostedEnvironmentFileResourceFileId {
-    public init(type: HostedEnvironmentFileResourceFileIdType, id: String, fileId: String, path: String, sizeBytes: Int) throws {
+public extension HostedEnvironmentFileResourceFileId {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.fileId) else {
+            throw SdkValidationError(
+                field: "file_id",
+                code: "required",
+                message: "Validation failed for 'file_id': value is required"
+            )
+        }
+        guard container.contains(.path) else {
+            throw SdkValidationError(
+                field: "path",
+                code: "required",
+                message: "Validation failed for 'path': value is required"
+            )
+        }
+        guard container.contains(.sizeBytes) else {
+            throw SdkValidationError(
+                field: "size_bytes",
+                code: "required",
+                message: "Validation failed for 'size_bytes': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        fileId = try container.sdkDecodeRequired(.fileId)
+        path = try container.sdkDecodeRequired(.path)
+        sizeBytes = try container.sdkDecodeRequired(.sizeBytes)
+        try sdkValidateRawEnum("type", type, HostedEnvironmentFileResourceFileIdType.allCases.map(\.rawValue))
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("file_id", fileId, min: 0, max: nil)
+        try validateLength("path", path, min: 0, max: nil)
+        try validateRange(
+            "size_bytes",
+            Double(sizeBytes),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension HostedEnvironmentFileResourceFileId {
+    init(
+        type: HostedEnvironmentFileResourceFileIdType,
+        id: String,
+        fileId: String,
+        path: String,
+        sizeBytes: Int
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.fileId, self.path) = (fileId, path)
         self.sizeBytes = sizeBytes
-            try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileResourceFileIdType.allCases.map(\.rawValue))
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("file_id", self.fileId, min: 0, max: nil)
-            try validateLength("path", self.path, min: 0, max: nil)
-            try validateRange("size_bytes", Double(self.sizeBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileResourceFileIdType.allCases.map(\.rawValue))
+        try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("file_id", self.fileId, min: 0, max: nil)
+        try validateLength("path", self.path, min: 0, max: nil)
+        try validateRange(
+            "size_bytes",
+            Double(self.sizeBytes),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -145,37 +223,47 @@ public struct HostedSkillParamSkillReference: Codable {
         case version
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension HostedSkillParamSkillReference {
-    public init(from decoder: Decoder) throws {
+public extension HostedSkillParamSkillReference {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.skillId) else {
-            throw SdkValidationError(field: "skill_id", code: "required", message: "Validation failed for 'skill_id': value is required")
+            throw SdkValidationError(
+                field: "skill_id",
+                code: "required",
+                message: "Validation failed for 'skill_id': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.skillId = try container.sdkDecodeRequired(.skillId)
-        self.version = try container.sdkDecodeIfPresent(.version)
-            try sdkValidateRawEnum("type", self.type, HostedSkillParamSkillReferenceType.allCases.map(\.rawValue))
-            try validateLength("skill_id", self.skillId, min: 1, max: 64)
-        if let value = self.version {
-            try validateLength("version", value, min: 0, max: 1048576)
+        type = try container.sdkDecodeRequired(.type)
+        skillId = try container.sdkDecodeRequired(.skillId)
+        version = try container.sdkDecodeIfPresent(.version)
+        try sdkValidateRawEnum("type", type, HostedSkillParamSkillReferenceType.allCases.map(\.rawValue))
+        try validateLength("skill_id", skillId, min: 1, max: 64)
+        if let value = version {
+            try validateLength("version", value, min: 0, max: 1_048_576)
         }
     }
 }
 
-extension HostedSkillParamSkillReference {
-    public init(type: HostedSkillParamSkillReferenceType, skillId: String, version: String? = nil) throws {
+public extension HostedSkillParamSkillReference {
+    init(type: HostedSkillParamSkillReferenceType, skillId: String, version: String? = nil) throws {
         (self.type, self.skillId) = (type, skillId)
         self.version = version
-            try sdkValidateRawEnum("type", self.type, HostedSkillParamSkillReferenceType.allCases.map(\.rawValue))
-            try validateLength("skill_id", self.skillId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, HostedSkillParamSkillReferenceType.allCases.map(\.rawValue))
+        try validateLength("skill_id", self.skillId, min: 1, max: 64)
         if let value = self.version {
-            try validateLength("version", value, min: 0, max: 1048576)
+            try validateLength("version", value, min: 0, max: 1_048_576)
         }
     }
 }

@@ -6,28 +6,56 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AudioMethods {
-    /// Retrieves a voice consent recording by its identifier. Use `consent_id` to select the recording whose metadata you need.
+public extension AudioMethods {
+    /// Retrieves a voice consent recording by its identifier. Use `consent_id` to select the recording whose metadata
+    /// you need.
     ///
     /// Retrieves a voice consent recording.
     ///
     /// - Parameters:
     /// - consentId: The ID of the consent recording to retrieve.
-    public static func getVoiceConsent(config: ClientConfig, consentId: String, requestOptions: RequestOptions? = nil) async throws -> VoiceConsentResource {
-        return try (await sdkRequest("GET", ["/audio/voice_consents/", sdkEncodePathSegment(sdkWireString(consentId))].joined(), config: config, decoder: .json, operationId: "getVoiceConsent", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
+    static func getVoiceConsent(
+        config: ClientConfig,
+        consentId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VoiceConsentResource {
+        try await (sdkRequest(
+            "GET",
+            ["/audio/voice_consents/", sdkEncodePathSegment(sdkWireString(consentId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getVoiceConsent",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
-    /// Updates the metadata for a voice consent recording. Supply the required `name` field to change its label; this operation does not update the recording itself.
+    /// Updates the metadata for a voice consent recording. Supply the required `name` field to change its label; this
+    /// operation does not update the recording itself.
     ///
     /// Updates a voice consent recording (metadata only).
     ///
     /// - Parameters:
     /// - consentId: The ID of the consent recording to update.
     /// - name: The updated label for this consent recording.
-    public static func updateVoiceConsent(config: ClientConfig, consentId: String, name: String, requestOptions: RequestOptions? = nil) async throws -> VoiceConsentResource {
+    static func updateVoiceConsent(
+        config: ClientConfig,
+        consentId: String,
+        name: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VoiceConsentResource {
         let requestBody = UpdateVoiceConsentRequestBody(name: name)
 
-        return try (await sdkRequest("POST", ["/audio/voice_consents/", sdkEncodePathSegment(sdkWireString(consentId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateVoiceConsent", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/audio/voice_consents/", sdkEncodePathSegment(sdkWireString(consentId))].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "updateVoiceConsent",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
     /// Deletes a voice consent recording. Use `consent_id` to identify the recording to remove.
@@ -36,7 +64,19 @@ extension AudioMethods {
     ///
     /// - Parameters:
     /// - consentId: The ID of the consent recording to delete.
-    public static func deleteVoiceConsent(config: ClientConfig, consentId: String, requestOptions: RequestOptions? = nil) async throws -> VoiceConsentDeletedResource {
-        return try (await sdkRequest("DELETE", ["/audio/voice_consents/", sdkEncodePathSegment(sdkWireString(consentId))].joined(), config: config, decoder: .json, operationId: "deleteVoiceConsent", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
+    static func deleteVoiceConsent(
+        config: ClientConfig,
+        consentId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VoiceConsentDeletedResource {
+        try await (sdkRequest(
+            "DELETE",
+            ["/audio/voice_consents/", sdkEncodePathSegment(sdkWireString(consentId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteVoiceConsent",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 }

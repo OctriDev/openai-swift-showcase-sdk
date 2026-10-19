@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AgentsMethods {
-    public struct CreateAgentSessionOptions: Codable {
+public extension AgentsMethods {
+    struct CreateAgentSessionOptions: Codable {
         public var environment: EnvironmentParam
         public var spendControl: SdkOptional<SessionSpendControlParam>?
         public var metadata: SdkOptional<[String: String]>?
@@ -22,7 +22,8 @@ extension AgentsMethods {
         }
     }
 
-    /// Creates a managed agent session, optionally submits initial input, and returns the session or streams its events when stream is true. See [running sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions).
+    /// Creates a managed agent session, optionally submits initial input, and returns the session or streams its events
+    /// when stream is true. See [running sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions).
     ///
     /// - Parameters:
     /// - environment: An inline execution environment or a reference to an
@@ -43,7 +44,11 @@ extension AgentsMethods {
     ///   environments.
     /// - stream: Whether to stream session events as server-sent events. Defaults
     ///   to `false`.
-    public static func createAgentSession(config: ClientConfig, options: CreateAgentSessionOptions, requestOptions: RequestOptions? = nil) async throws -> SessionResource {
+    static func createAgentSession(
+        config: ClientConfig,
+        options: CreateAgentSessionOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SessionResource {
         if let agentId = options.agentId {
             try validateLength("agent_id", agentId, min: 0, max: 64)
         }
@@ -54,6 +59,24 @@ extension AgentsMethods {
 
         let requestBody = CreateAgentSessionRequestBody(options: options)
 
-        return try (await sdkRequest("POST", "/agents/sessions", config: config, body: requestBody, decoder: .json, operationId: "createAgentSession", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "429": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/agents/sessions",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createAgentSession",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "429": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 }

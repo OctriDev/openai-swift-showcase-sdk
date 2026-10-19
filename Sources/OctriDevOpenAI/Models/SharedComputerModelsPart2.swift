@@ -3,21 +3,25 @@
 
 import Foundation
 
-// SharedComputer domain models
-extension ComputerCallSafetyCheckParam {
-    public init(from decoder: Decoder) throws {
+/// SharedComputer domain models
+public extension ComputerCallSafetyCheckParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
         }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.code = try container.sdkDecodeIfPresent(.code)
-        self.message = try container.sdkDecodeIfPresent(.message)
+        id = try container.sdkDecodeRequired(.id)
+        code = try container.sdkDecodeIfPresent(.code)
+        message = try container.sdkDecodeIfPresent(.message)
     }
 }
 
-extension ComputerCallSafetyCheckParam {
-    public init(id: String, code: String? = nil, message: String? = nil) {
+public extension ComputerCallSafetyCheckParam {
+    init(id: String, code: String? = nil, message: String? = nil) {
         (self.id, self.code) = (id, code)
         self.message = message
     }
@@ -41,37 +45,60 @@ public struct ComputerUsePreviewTool: Codable {
         case displayHeight = "display_height"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ComputerUsePreviewTool {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.environment) else {
-            throw SdkValidationError(field: "environment", code: "required", message: "Validation failed for 'environment': value is required")
-        }
-        guard container.contains(.displayWidth) else {
-            throw SdkValidationError(field: "display_width", code: "required", message: "Validation failed for 'display_width': value is required")
-        }
-        guard container.contains(.displayHeight) else {
-            throw SdkValidationError(field: "display_height", code: "required", message: "Validation failed for 'display_height': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.environment = try container.sdkDecodeRequired(.environment)
-        self.displayWidth = try container.sdkDecodeRequired(.displayWidth)
-        self.displayHeight = try container.sdkDecodeRequired(.displayHeight)
-            try sdkValidateRawEnum("type", self.type, ComputerUsePreviewToolType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ComputerUsePreviewTool {
-    public init(type: ComputerUsePreviewToolType, environment: ComputerEnvironment, displayWidth: Int, displayHeight: Int) throws {
+public extension ComputerUsePreviewTool {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.environment) else {
+            throw SdkValidationError(
+                field: "environment",
+                code: "required",
+                message: "Validation failed for 'environment': value is required"
+            )
+        }
+        guard container.contains(.displayWidth) else {
+            throw SdkValidationError(
+                field: "display_width",
+                code: "required",
+                message: "Validation failed for 'display_width': value is required"
+            )
+        }
+        guard container.contains(.displayHeight) else {
+            throw SdkValidationError(
+                field: "display_height",
+                code: "required",
+                message: "Validation failed for 'display_height': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        environment = try container.sdkDecodeRequired(.environment)
+        displayWidth = try container.sdkDecodeRequired(.displayWidth)
+        displayHeight = try container.sdkDecodeRequired(.displayHeight)
+        try sdkValidateRawEnum("type", type, ComputerUsePreviewToolType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ComputerUsePreviewTool {
+    init(
+        type: ComputerUsePreviewToolType,
+        environment: ComputerEnvironment,
+        displayWidth: Int,
+        displayHeight: Int
+    ) throws {
         (self.type, self.environment) = (type, environment)
         (self.displayWidth, self.displayHeight) = (displayWidth, displayHeight)
-            try sdkValidateRawEnum("type", self.type, ComputerUsePreviewToolType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ComputerUsePreviewToolType.allCases.map(\.rawValue))
     }
 }
 
@@ -84,24 +111,30 @@ public struct ComputerTool: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ComputerTool {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, ComputerToolType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ComputerTool {
-    public init(type: ComputerToolType) throws {
+public extension ComputerTool {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, ComputerToolType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ComputerTool {
+    init(type: ComputerToolType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, ComputerToolType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ComputerToolType.allCases.map(\.rawValue))
     }
 }
 
@@ -128,14 +161,17 @@ public enum ComputerToolCallType: String, CaseIterable, Codable {
 public struct ComputerToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = ComputerToolCallStatus(rawValue: "in_progress")
     public static let completed = ComputerToolCallStatus(rawValue: "completed")
     public static let incomplete = ComputerToolCallStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -148,12 +184,15 @@ public struct ComputerToolCallStatus: RawRepresentable, Hashable, Codable, Senda
 public struct ComputerScreenshotImageType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let computerScreenshot = ComputerScreenshotImageType(rawValue: "computer_screenshot")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -202,14 +241,17 @@ public enum ComputerToolType: String, CaseIterable, Codable {
 public struct ComputerCallOutputStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = ComputerCallOutputStatus(rawValue: "completed")
     public static let incomplete = ComputerCallOutputStatus(rawValue: "incomplete")
     public static let failed = ComputerCallOutputStatus(rawValue: "failed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -240,7 +282,10 @@ public enum ComputerCallOutputItemParamType: String, CaseIterable, Codable {
 public struct ComputerEnvironment: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let windows = ComputerEnvironment(rawValue: "windows")
     public static let mac = ComputerEnvironment(rawValue: "mac")
     public static let linux = ComputerEnvironment(rawValue: "linux")
@@ -249,7 +294,7 @@ public struct ComputerEnvironment: RawRepresentable, Hashable, Codable, Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -281,14 +326,17 @@ public enum ComputerUsePreviewToolType: String, CaseIterable, Codable {
 public struct ComputerToolCallOutputStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = ComputerToolCallOutputStatus(rawValue: "in_progress")
     public static let completed = ComputerToolCallOutputStatus(rawValue: "completed")
     public static let incomplete = ComputerToolCallOutputStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

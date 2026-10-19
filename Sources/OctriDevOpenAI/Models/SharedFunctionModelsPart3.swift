@@ -3,15 +3,23 @@
 
 import Foundation
 
-// SharedFunction domain models
-extension FunctionShellCallItemParam {
-    public init(callId: String, type: FunctionShellCallItemParamType, action: FunctionShellActionParam, id: String? = nil, caller: ToolCallCallerParam? = nil, status: FunctionShellCallItemStatus? = nil, environment: FunctionShellCallItemParamEnvironment? = nil) throws {
+/// SharedFunction domain models
+public extension FunctionShellCallItemParam {
+    init(
+        callId: String,
+        type: FunctionShellCallItemParamType,
+        action: FunctionShellActionParam,
+        id: String? = nil,
+        caller: ToolCallCallerParam? = nil,
+        status: FunctionShellCallItemStatus? = nil,
+        environment: FunctionShellCallItemParamEnvironment? = nil
+    ) throws {
         (self.callId, self.type) = (callId, type)
         (self.action, self.id) = (action, id)
         (self.caller, self.status) = (caller, status)
         self.environment = environment
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try sdkValidateRawEnum("type", self.type, FunctionShellCallItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, FunctionShellCallItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -46,37 +54,56 @@ public struct FunctionToolCallOutput: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FunctionToolCallOutput {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.output = try container.sdkDecodeRequired(.output)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.callId = try container.sdkDecodeIfPresent(.callId)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.namespace = try container.sdkDecodeIfPresent(.namespace)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-        self.status = try container.sdkDecodeIfPresent(.status)
-            try sdkValidateRawEnum("type", self.type, FunctionToolCallOutputType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FunctionToolCallOutput {
-    public init(type: FunctionToolCallOutputType, output: FunctionToolCallOutputOutput, id: String? = nil, callId: String? = nil, name: String? = nil, namespace: String? = nil, caller: ToolCallCallerParam? = nil, status: FunctionToolCallOutputStatus? = nil) throws {
+public extension FunctionToolCallOutput {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        output = try container.sdkDecodeRequired(.output)
+        id = try container.sdkDecodeIfPresent(.id)
+        callId = try container.sdkDecodeIfPresent(.callId)
+        name = try container.sdkDecodeIfPresent(.name)
+        namespace = try container.sdkDecodeIfPresent(.namespace)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        status = try container.sdkDecodeIfPresent(.status)
+        try sdkValidateRawEnum("type", type, FunctionToolCallOutputType.allCases.map(\.rawValue))
+    }
+}
+
+public extension FunctionToolCallOutput {
+    init(
+        type: FunctionToolCallOutputType,
+        output: FunctionToolCallOutputOutput,
+        id: String? = nil,
+        callId: String? = nil,
+        name: String? = nil,
+        namespace: String? = nil,
+        caller: ToolCallCallerParam? = nil,
+        status: FunctionToolCallOutputStatus? = nil
+    ) throws {
         (self.type, self.output) = (type, output)
         (self.id, self.callId) = (id, callId)
         (self.name, self.namespace) = (name, namespace)
         (self.caller, self.status) = (caller, status)
-            try sdkValidateRawEnum("type", self.type, FunctionToolCallOutputType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, FunctionToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 
@@ -115,46 +142,66 @@ public struct FunctionToolParam: Codable {
         case allowedCallers = "allowed_callers"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension FunctionToolParam {
-    public init(from decoder: Decoder) throws {
+public extension FunctionToolParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.description = try container.sdkDecodeIfPresent(.description)
-        self.parameters = try container.sdkDecodeIfPresent(.parameters)
-        self.strict = try container.sdkDecodeIfPresent(.strict)
-        self.async = try container.sdkDecodeIfPresent(.async)
-        self.outputSchema = try container.sdkDecodeIfPresent(.outputSchema)
-        self.deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
-        self.allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
-            try validateLength("name", self.name, min: 1, max: 128)
-            try sdkValidatePattern("name", self.name, sdkPatterna828669d9fe5)
-            try sdkValidateRawEnum("type", self.type, FunctionToolParamType.allCases.map(\.rawValue))
-        if let value = self.allowedCallers {
+        name = try container.sdkDecodeRequired(.name)
+        type = try container.sdkDecodeRequired(.type)
+        description = try container.sdkDecodeIfPresent(.description)
+        parameters = try container.sdkDecodeIfPresent(.parameters)
+        strict = try container.sdkDecodeIfPresent(.strict)
+        async = try container.sdkDecodeIfPresent(.async)
+        outputSchema = try container.sdkDecodeIfPresent(.outputSchema)
+        deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
+        allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
+        try validateLength("name", name, min: 1, max: 128)
+        try sdkValidatePattern("name", name, sdkPatterna828669d9fe5)
+        try sdkValidateRawEnum("type", type, FunctionToolParamType.allCases.map(\.rawValue))
+        if let value = allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
     }
 }
 
-extension FunctionToolParam {
-    public init(name: String, type: FunctionToolParamType, description: String? = nil, parameters: EmptyModelParam? = nil, strict: Bool? = nil, async: Bool? = nil, outputSchema: [String: JSONValue]? = nil, deferLoading: Bool? = nil, allowedCallers: [CallableToolAllowedCaller]? = nil) throws {
+public extension FunctionToolParam {
+    init(
+        name: String,
+        type: FunctionToolParamType,
+        description: String? = nil,
+        parameters: EmptyModelParam? = nil,
+        strict: Bool? = nil,
+        async: Bool? = nil,
+        outputSchema: [String: JSONValue]? = nil,
+        deferLoading: Bool? = nil,
+        allowedCallers: [CallableToolAllowedCaller]? = nil
+    ) throws {
         (self.name, self.type) = (name, type)
         (self.description, self.parameters) = (description, parameters)
         (self.strict, self.async) = (strict, async)
         (self.outputSchema, self.deferLoading) = (outputSchema, deferLoading)
         self.allowedCallers = allowedCallers
-            try validateLength("name", self.name, min: 1, max: 128)
-            try sdkValidatePattern("name", self.name, sdkPatterna828669d9fe5)
-            try sdkValidateRawEnum("type", self.type, FunctionToolParamType.allCases.map(\.rawValue))
+        try validateLength("name", self.name, min: 1, max: 128)
+        try sdkValidatePattern("name", self.name, sdkPatterna828669d9fe5)
+        try sdkValidateRawEnum("type", self.type, FunctionToolParamType.allCases.map(\.rawValue))
         if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
@@ -176,29 +223,43 @@ public struct FunctionShellAction: Codable {
         case maxOutputLength = "max_output_length"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FunctionShellAction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.commands) else {
-            throw SdkValidationError(field: "commands", code: "required", message: "Validation failed for 'commands': value is required")
-        }
-        guard container.contains(.timeoutMs) else {
-            throw SdkValidationError(field: "timeout_ms", code: "required", message: "Validation failed for 'timeout_ms': value is required")
-        }
-        guard container.contains(.maxOutputLength) else {
-            throw SdkValidationError(field: "max_output_length", code: "required", message: "Validation failed for 'max_output_length': value is required")
-        }
-        self.commands = try container.sdkDecodeRequired(.commands)
-        self.timeoutMs = try container.sdkDecodeNullable(.timeoutMs)
-        self.maxOutputLength = try container.sdkDecodeNullable(.maxOutputLength)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FunctionShellAction {
-    public init(commands: [String], timeoutMs: Int?, maxOutputLength: Int?) {
+public extension FunctionShellAction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.commands) else {
+            throw SdkValidationError(
+                field: "commands",
+                code: "required",
+                message: "Validation failed for 'commands': value is required"
+            )
+        }
+        guard container.contains(.timeoutMs) else {
+            throw SdkValidationError(
+                field: "timeout_ms",
+                code: "required",
+                message: "Validation failed for 'timeout_ms': value is required"
+            )
+        }
+        guard container.contains(.maxOutputLength) else {
+            throw SdkValidationError(
+                field: "max_output_length",
+                code: "required",
+                message: "Validation failed for 'max_output_length': value is required"
+            )
+        }
+        commands = try container.sdkDecodeRequired(.commands)
+        timeoutMs = try container.sdkDecodeNullable(.timeoutMs)
+        maxOutputLength = try container.sdkDecodeNullable(.maxOutputLength)
+    }
+}
+
+public extension FunctionShellAction {
+    init(commands: [String], timeoutMs: Int?, maxOutputLength: Int?) {
         (self.commands, self.timeoutMs) = (commands, timeoutMs)
         self.maxOutputLength = maxOutputLength
     }
@@ -234,37 +295,56 @@ public struct FunctionCallOutputItemParam: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FunctionCallOutputItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.output = try container.sdkDecodeRequired(.output)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.callId = try container.sdkDecodeIfPresent(.callId)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.namespace = try container.sdkDecodeIfPresent(.namespace)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-        self.status = try container.sdkDecodeIfPresent(.status)
-            try sdkValidateRawEnum("type", self.type, FunctionCallOutputItemParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FunctionCallOutputItemParam {
-    public init(type: FunctionCallOutputItemParamType, output: FunctionCallOutputItemParamOutput, id: String? = nil, callId: String? = nil, name: String? = nil, namespace: String? = nil, caller: ToolCallCallerParam? = nil, status: FunctionCallItemStatus? = nil) throws {
+public extension FunctionCallOutputItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        output = try container.sdkDecodeRequired(.output)
+        id = try container.sdkDecodeIfPresent(.id)
+        callId = try container.sdkDecodeIfPresent(.callId)
+        name = try container.sdkDecodeIfPresent(.name)
+        namespace = try container.sdkDecodeIfPresent(.namespace)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        status = try container.sdkDecodeIfPresent(.status)
+        try sdkValidateRawEnum("type", type, FunctionCallOutputItemParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension FunctionCallOutputItemParam {
+    init(
+        type: FunctionCallOutputItemParamType,
+        output: FunctionCallOutputItemParamOutput,
+        id: String? = nil,
+        callId: String? = nil,
+        name: String? = nil,
+        namespace: String? = nil,
+        caller: ToolCallCallerParam? = nil,
+        status: FunctionCallItemStatus? = nil
+    ) throws {
         (self.type, self.output) = (type, output)
         (self.id, self.callId) = (id, callId)
         (self.name, self.namespace) = (name, namespace)
         (self.caller, self.status) = (caller, status)
-            try sdkValidateRawEnum("type", self.type, FunctionCallOutputItemParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, FunctionCallOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -284,26 +364,36 @@ public struct FunctionToolCallResourceVariant1: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FunctionToolCallResourceVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FunctionToolCallResourceVariant1 {
-    public init(id: String, status: FunctionCallStatus, createdBy: String? = nil) {
+public extension FunctionToolCallResourceVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        status = try container.sdkDecodeRequired(.status)
+        createdBy = try container.sdkDecodeIfPresent(.createdBy)
+    }
+}
+
+public extension FunctionToolCallResourceVariant1 {
+    init(id: String, status: FunctionCallStatus, createdBy: String? = nil) {
         (self.id, self.status) = (id, status)
         self.createdBy = createdBy
     }
@@ -318,24 +408,34 @@ public struct FunctionShellCallOutputTimeoutOutcomeParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FunctionShellCallOutputTimeoutOutcomeParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, FunctionShellCallOutputTimeoutOutcomeParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FunctionShellCallOutputTimeoutOutcomeParam {
-    public init(type: FunctionShellCallOutputTimeoutOutcomeParamType) throws {
+public extension FunctionShellCallOutputTimeoutOutcomeParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, FunctionShellCallOutputTimeoutOutcomeParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension FunctionShellCallOutputTimeoutOutcomeParam {
+    init(type: FunctionShellCallOutputTimeoutOutcomeParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, FunctionShellCallOutputTimeoutOutcomeParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            FunctionShellCallOutputTimeoutOutcomeParamType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -354,23 +454,29 @@ public struct FunctionShellActionParam: Codable {
         case maxOutputLength = "max_output_length"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FunctionShellActionParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.commands) else {
-            throw SdkValidationError(field: "commands", code: "required", message: "Validation failed for 'commands': value is required")
-        }
-        self.commands = try container.sdkDecodeRequired(.commands)
-        self.timeoutMs = try container.sdkDecodeIfPresent(.timeoutMs)
-        self.maxOutputLength = try container.sdkDecodeIfPresent(.maxOutputLength)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FunctionShellActionParam {
-    public init(commands: [String], timeoutMs: Int? = nil, maxOutputLength: Int? = nil) {
+public extension FunctionShellActionParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.commands) else {
+            throw SdkValidationError(
+                field: "commands",
+                code: "required",
+                message: "Validation failed for 'commands': value is required"
+            )
+        }
+        commands = try container.sdkDecodeRequired(.commands)
+        timeoutMs = try container.sdkDecodeIfPresent(.timeoutMs)
+        maxOutputLength = try container.sdkDecodeIfPresent(.maxOutputLength)
+    }
+}
+
+public extension FunctionShellActionParam {
+    init(commands: [String], timeoutMs: Int? = nil, maxOutputLength: Int? = nil) {
         (self.commands, self.timeoutMs) = (commands, timeoutMs)
         self.maxOutputLength = maxOutputLength
     }
@@ -403,41 +509,63 @@ public struct FunctionShellCallOutputItemParam: Codable {
         case maxOutputLength = "max_output_length"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FunctionShellCallOutputItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.output = try container.sdkDecodeRequired(.output)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-        self.status = try container.sdkDecodeIfPresent(.status)
-        self.maxOutputLength = try container.sdkDecodeIfPresent(.maxOutputLength)
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try sdkValidateRawEnum("type", self.type, FunctionShellCallOutputItemParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FunctionShellCallOutputItemParam {
-    public init(callId: String, type: FunctionShellCallOutputItemParamType, output: [FunctionShellCallOutputContentParam], id: String? = nil, caller: ToolCallCallerParam? = nil, status: FunctionShellCallItemStatus? = nil, maxOutputLength: Int? = nil) throws {
+public extension FunctionShellCallOutputItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        callId = try container.sdkDecodeRequired(.callId)
+        type = try container.sdkDecodeRequired(.type)
+        output = try container.sdkDecodeRequired(.output)
+        id = try container.sdkDecodeIfPresent(.id)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        status = try container.sdkDecodeIfPresent(.status)
+        maxOutputLength = try container.sdkDecodeIfPresent(.maxOutputLength)
+        try validateLength("call_id", callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", type, FunctionShellCallOutputItemParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension FunctionShellCallOutputItemParam {
+    init(
+        callId: String,
+        type: FunctionShellCallOutputItemParamType,
+        output: [FunctionShellCallOutputContentParam],
+        id: String? = nil,
+        caller: ToolCallCallerParam? = nil,
+        status: FunctionShellCallItemStatus? = nil,
+        maxOutputLength: Int? = nil
+    ) throws {
         (self.callId, self.type) = (callId, type)
         (self.output, self.id) = (output, id)
         (self.caller, self.status) = (caller, status)
         self.maxOutputLength = maxOutputLength
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try sdkValidateRawEnum("type", self.type, FunctionShellCallOutputItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, FunctionShellCallOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -447,25 +575,33 @@ public indirect enum FunctionCallOutputItemParamOutput {
 }
 
 extension FunctionCallOutputItemParamOutput: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for FunctionCallOutputItemParamOutput")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for FunctionCallOutputItemParamOutput"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension FunctionCallOutputItemParamOutput {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         if let value = try? container.decode(
             [FunctionCallOutputItemParamOutputItem].self
         ) {
-            return             .functionCallOutputItemParamOutputItemList(value)
+            return .functionCallOutputItemParamOutputItemList(value)
         }
         return nil
     }
@@ -496,5 +632,7 @@ public struct FunctionShellCallOutputContentParam: Codable {
         case outcome
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

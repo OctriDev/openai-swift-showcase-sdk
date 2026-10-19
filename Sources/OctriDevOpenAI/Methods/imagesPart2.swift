@@ -6,22 +6,54 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ImagesMethods {
-    /// Creates an edited image from one or more source images and a text prompt. Send multipart form data with uploaded image files, or JSON with image references; use `mask` to limit edits to designated areas. You can choose the output format, size, and quality, and optionally stream partial image results.
+public extension ImagesMethods {
+    /// Creates an edited image from one or more source images and a text prompt. Send multipart form data with uploaded
+    /// image files, or JSON with image references; use `mask` to limit edits to designated areas. You can choose the
+    /// output format, size, and quality, and optionally stream partial image results.
     ///
-    /// Creates an edited or extended image given one or more source images and a prompt. This endpoint supports GPT Image models.
-    public static func createImageEdit(config: ClientConfig, body: CreateImageEditBody, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ImagesResponse {
+    /// Creates an edited or extended image given one or more source images and a prompt. This endpoint supports GPT
+    /// Image models.
+    static func createImageEdit(
+        config: ClientConfig,
+        body: CreateImageEditBody,
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ImagesResponse {
         let encodedBody = try body.encoded(contentType: contentType)
 
-        return try (await sdkRequest("POST", "/images/edits", config: config, rawBody: encodedBody.data, contentType: encodedBody.contentType, decoder: .json, operationId: "createImageEdit", options: requestOptions, errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "410": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/images/edits",
+            config: config,
+            rawBody: encodedBody.data,
+            contentType: encodedBody.contentType,
+            decoder: .json,
+            operationId: "createImageEdit",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": ErrorResponse.self,
+                "410": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
+        )).data
     }
 
-    /// Creates an edited image from one or more source images and a text prompt. Send multipart form data with uploaded image files, or JSON with image references; use `mask` to limit edits to designated areas. You can choose the output format, size, and quality, and optionally stream partial image results.
+    /// Creates an edited image from one or more source images and a text prompt. Send multipart form data with uploaded
+    /// image files, or JSON with image references; use `mask` to limit edits to designated areas. You can choose the
+    /// output format, size, and quality, and optionally stream partial image results.
     ///
-    /// Creates an edited or extended image given one or more source images and a prompt. This endpoint supports GPT Image models.
-    public static func createImageEditStream(config: ClientConfig, body: CreateImageEditStreamBody, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<ImageEditStreamEvent, Swift.Error> {
+    /// Creates an edited or extended image given one or more source images and a prompt. This endpoint supports GPT
+    /// Image models.
+    static func createImageEditStream(
+        config: ClientConfig,
+        body: CreateImageEditStreamBody,
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AsyncThrowingStream<ImageEditStreamEvent, Swift.Error> {
         let encodedBody = try body.encoded(contentType: contentType)
-
 
         let upstream = try await sdkStream(
             "POST",
@@ -34,7 +66,14 @@ extension ImagesMethods {
             streamMediaType: "text/event-stream",
             chunkDomain: "bytes",
             options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "410": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self]
+            errors: [
+                "400": ErrorResponse.self,
+                "403": ErrorResponse.self,
+                "410": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
         )
         return AsyncThrowingStream { continuation in
             let streamTask = _Concurrency.Task {
@@ -44,8 +83,11 @@ extension ImagesMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(ImageEditStreamEvent.self, from: Data(event.data.utf8)) }
-                        
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
+                            ImageEditStreamEvent.self,
+                            from: Data(event.data.utf8)
+                        ) }
+
                         continuation.yield(payload)
                     }
                     continuation.finish()

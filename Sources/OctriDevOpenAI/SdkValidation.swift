@@ -4,91 +4,76 @@
 import Foundation
 
 let sdkPattern130c1c9d5879 = [
-
     "\\S",
 
 ].joined()
 
 let sdkPatternc91b15b68ef1 = [
-
     "^(?:error|info|[a-z][a-z0-9_-]*(?:\\.[a-z0-9_-]+)+)$",
 
 ].joined()
 
 let sdkPatternf0df21cce759 = [
-
     "^(?![\\s\\S]*[\\r\\n])[a-zA-Z0-9_.-]+$",
 
 ].joined()
 
 let sdkPattern641661f20055 = [
-
     "^(data:|https?://)",
 
 ].joined()
 
 let sdkPatternfa202ab8c4e1 = [
-
     "^[0-9A-D*#]$",
 
 ].joined()
 
 let sdkPatterna828669d9fe5 = [
-
     "^[a-zA-Z0-9_-]+$",
 
 ].joined()
 
 let sdkPatterneb0f36186b1b = [
-
     "^[a-zA-Z0-9_.-]+$",
 
 ].joined()
 
 let sdkPattern9d6a83b704ec = [
-
     "^[A-Za-z0-9_.-]+$",
 
 ].joined()
 
 let sdkPatterneb620d46ef36 = [
-
     "^[A-Za-z0-9._~:-]+$",
 
 ].joined()
 
 let sdkPattern5c9c06609f56 = [
-
     "^\\+[1-9][0-9]{1,14}$",
 
 ].joined()
 
 let sdkPatternb270991c96c4 = [
-
     "^alert_[0-9a-f]{32}$",
 
 ].joined()
 
 let sdkPattern00dfa865ee9b = [
-
     "^data:",
 
 ].joined()
 
 let sdkPattern5e721644673b = [
-
     "^https://",
 
 ].joined()
 
 let sdkPatternd847f230c5ef = [
-
     "^live_[A-Za-z0-9_-]{1,128}$",
 
 ].joined()
 
 let sdkPatternca748f96eefb = [
-
     "^tunnel_[a-z0-9]{32}$",
 
 ].joined()
@@ -106,24 +91,52 @@ private func sdkCompileRegex(_ field: String, _ pattern: String) throws -> NSReg
 }
 
 /// Validates numeric bounds.
-public func validateRange(_ field: String, _ value: Double, min: Double? = nil, max: Double? = nil, exclusiveMin: Double? = nil, exclusiveMax: Double? = nil, multipleOf: Double? = nil) throws {
+public func validateRange(
+    _ field: String,
+    _ value: Double,
+    min: Double? = nil,
+    max: Double? = nil,
+    exclusiveMin: Double? = nil,
+    exclusiveMax: Double? = nil,
+    multipleOf: Double? = nil
+) throws {
     if let min, value < min {
-        throw SdkValidationError(field: field, code: "range", message: "Validation failed for '\(field)': must be >= \(min)")
+        throw SdkValidationError(
+            field: field,
+            code: "range",
+            message: "Validation failed for '\(field)': must be >= \(min)"
+        )
     }
     if let max, value > max {
-        throw SdkValidationError(field: field, code: "range", message: "Validation failed for '\(field)': must be <= \(max)")
+        throw SdkValidationError(
+            field: field,
+            code: "range",
+            message: "Validation failed for '\(field)': must be <= \(max)"
+        )
     }
     if let exclusiveMin, value <= exclusiveMin {
-        throw SdkValidationError(field: field, code: "range", message: "Validation failed for '\(field)': must be > \(exclusiveMin)")
+        throw SdkValidationError(
+            field: field,
+            code: "range",
+            message: "Validation failed for '\(field)': must be > \(exclusiveMin)"
+        )
     }
     if let exclusiveMax, value >= exclusiveMax {
-        throw SdkValidationError(field: field, code: "range", message: "Validation failed for '\(field)': must be < \(exclusiveMax)")
+        throw SdkValidationError(
+            field: field,
+            code: "range",
+            message: "Validation failed for '\(field)': must be < \(exclusiveMax)"
+        )
     }
     if let multipleOf, multipleOf != 0 {
         // A decimal step has no exact binary form: 19.99 / 0.01 is 1998.9999999999998.
         let quotient = value / multipleOf
         if abs(quotient - quotient.rounded()) > 1e-9 {
-            throw SdkValidationError(field: field, code: "range", message: "Validation failed for '\(field)': must be a multiple of \(multipleOf)")
+            throw SdkValidationError(
+                field: field,
+                code: "range",
+                message: "Validation failed for '\(field)': must be a multiple of \(multipleOf)"
+            )
         }
     }
 }
@@ -148,25 +161,41 @@ public func sdkNumericValue(_ value: Any) -> Double? {
 /// Validates string length bounds.
 public func validateLength(_ field: String, _ value: String, min: Int? = nil, max: Int? = nil) throws {
     if let min, value.count < min {
-        throw SdkValidationError(field: field, code: "length", message: "Validation failed for '\(field)': length must be >= \(min)")
+        throw SdkValidationError(
+            field: field,
+            code: "length",
+            message: "Validation failed for '\(field)': length must be >= \(min)"
+        )
     }
     if let max, value.count > max {
-        throw SdkValidationError(field: field, code: "length", message: "Validation failed for '\(field)': length must be <= \(max)")
+        throw SdkValidationError(
+            field: field,
+            code: "length",
+            message: "Validation failed for '\(field)': length must be <= \(max)"
+        )
     }
 }
 
 /// Validates array length bounds.
-public func validateItems<T>(_ field: String, _ value: [T], min: Int? = nil, max: Int? = nil) throws {
+public func validateItems(_ field: String, _ value: [some Any], min: Int? = nil, max: Int? = nil) throws {
     if let min, value.count < min {
-        throw SdkValidationError(field: field, code: "items", message: "Validation failed for '\(field)': must have at least \(min) items")
+        throw SdkValidationError(
+            field: field,
+            code: "items",
+            message: "Validation failed for '\(field)': must have at least \(min) items"
+        )
     }
     if let max, value.count > max {
-        throw SdkValidationError(field: field, code: "items", message: "Validation failed for '\(field)': must have at most \(max) items")
+        throw SdkValidationError(
+            field: field,
+            code: "items",
+            message: "Validation failed for '\(field)': must have at most \(max) items"
+        )
     }
 }
 
 /// Validates that a value is one of the allowed values.
-public func sdkValidateEnum<V>(_ field: String, _ value: V, _ allowed: [String]) throws {
+public func sdkValidateEnum(_ field: String, _ value: some Any, _ allowed: [String]) throws {
     let s = "\(value)"
     if !allowed.contains(s) {
         throw SdkValidationError(
@@ -178,7 +207,8 @@ public func sdkValidateEnum<V>(_ field: String, _ value: V, _ allowed: [String])
 }
 
 /// Validates the wire value of a string-backed model enum.
-public func sdkValidateRawEnum<V: RawRepresentable>(_ field: String, _ value: V, _ allowed: [String]) throws where V.RawValue == String {
+public func sdkValidateRawEnum<V: RawRepresentable>(_ field: String, _ value: V, _ allowed: [String]) throws
+    where V.RawValue == String {
     try sdkValidateEnum(field, value.rawValue, allowed)
 }
 
@@ -186,14 +216,22 @@ public func sdkValidateRawEnum<V: RawRepresentable>(_ field: String, _ value: V,
 public func sdkValidatePattern(_ field: String, _ value: String, _ pattern: String) throws {
     let re = try sdkCompileRegex(field, pattern)
     if re.firstMatch(in: value, range: NSRange(value.startIndex..., in: value)) == nil {
-        throw SdkValidationError(field: field, code: "pattern", message: "Validation failed for '\(field)': pattern must match \(pattern)")
+        throw SdkValidationError(
+            field: field,
+            code: "pattern",
+            message: "Validation failed for '\(field)': pattern must match \(pattern)"
+        )
     }
 }
 
 /// Validates URI format.
 public func sdkValidateUri(_ field: String, _ value: String) throws {
     guard URL(string: value) != nil else {
-        throw SdkValidationError(field: field, code: "format:uri", message: "Validation failed for '\(field)': must be a valid URI")
+        throw SdkValidationError(
+            field: field,
+            code: "format:uri",
+            message: "Validation failed for '\(field)': must be a valid URI"
+        )
     }
 }
 
@@ -201,9 +239,13 @@ public func sdkValidateUri(_ field: String, _ value: String) throws {
 public func sdkValidateDate(_ field: String, _ value: String) throws {
     let fmt = DateFormatter(); fmt.dateFormat = "yyyy-MM-dd"
     guard fmt.date(from: value) != nil else {
-        throw SdkValidationError(field: field, code: "format:date", message: "Validation failed for '\(field)': must be a valid date (YYYY-MM-DD)")
+        throw SdkValidationError(
+            field: field,
+            code: "format:date",
+            message: "Validation failed for '\(field)': must be a valid date (YYYY-MM-DD)"
+        )
     }
 }
 
 /// Date-typed SDK values have already been parsed successfully.
-public func sdkValidateDate(_ field: String, _ value: Date) throws {}
+public func sdkValidateDate(_: String, _: Date) throws {}

@@ -3,9 +3,9 @@
 
 import Foundation
 
-// Audio domain models
-extension CreateVoiceConsentRequest {
-    public init(name: String, recording: Data, language: String) {
+/// Audio domain models
+public extension CreateVoiceConsentRequest {
+    init(name: String, recording: Data, language: String) {
         (self.name, self.recording) = (name, recording)
         self.language = language
     }
@@ -27,29 +27,43 @@ public struct VoiceConsentDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VoiceConsentDeletedResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VoiceConsentDeletedResource {
-    public init(id: String, object: VoiceConsentDeletedResourceObject, deleted: Bool) {
+public extension VoiceConsentDeletedResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+    }
+}
+
+public extension VoiceConsentDeletedResource {
+    init(id: String, object: VoiceConsentDeletedResourceObject, deleted: Bool) {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
     }
@@ -64,21 +78,27 @@ public struct UpdateVoiceConsentRequest: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UpdateVoiceConsentRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UpdateVoiceConsentRequest {
-    public init(name: String) {
+public extension UpdateVoiceConsentRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+    }
+}
+
+public extension UpdateVoiceConsentRequest {
+    init(name: String) {
         self.name = name
     }
 }
@@ -115,50 +135,88 @@ public struct CreateSpeechRequest: Codable {
         case streamFormat = "stream_format"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateSpeechRequest {
-    public init(from decoder: Decoder) throws {
+public extension CreateSpeechRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
         }
         guard container.contains(.input) else {
-            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
+            throw SdkValidationError(
+                field: "input",
+                code: "required",
+                message: "Validation failed for 'input': value is required"
+            )
         }
         guard container.contains(.voice) else {
-            throw SdkValidationError(field: "voice", code: "required", message: "Validation failed for 'voice': value is required")
+            throw SdkValidationError(
+                field: "voice",
+                code: "required",
+                message: "Validation failed for 'voice': value is required"
+            )
         }
-        self.model = try container.sdkDecodeRequired(.model)
-        self.input = try container.sdkDecodeRequired(.input)
-        self.voice = try container.sdkDecodeRequired(.voice)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        self.speed = try container.sdkDecodeIfPresent(.speed)
-        self.streamFormat = try container.sdkDecodeIfPresent(.streamFormat)
-            try validateLength("input", self.input, min: nil, max: 4096)
-        if let value = self.instructions {
+        model = try container.sdkDecodeRequired(.model)
+        input = try container.sdkDecodeRequired(.input)
+        voice = try container.sdkDecodeRequired(.voice)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        speed = try container.sdkDecodeIfPresent(.speed)
+        streamFormat = try container.sdkDecodeIfPresent(.streamFormat)
+        try validateLength("input", input, min: nil, max: 4096)
+        if let value = instructions {
             try validateLength("instructions", value, min: nil, max: 4096)
         }
-        if let value = self.speed {
-            try validateRange("speed", Double(value), min: 0.25, max: 4, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = speed {
+            try validateRange(
+                "speed",
+                Double(value),
+                min: 0.25,
+                max: 4,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension CreateSpeechRequest {
-    public init(model: String, input: String, voice: CreateSpeechRequestVoice, instructions: String? = nil, responseFormat: CreateSpeechRequestResponseFormat? = nil, speed: Double? = nil, streamFormat: CreateSpeechRequestStreamFormat? = nil) throws {
+public extension CreateSpeechRequest {
+    init(
+        model: String,
+        input: String,
+        voice: CreateSpeechRequestVoice,
+        instructions: String? = nil,
+        responseFormat: CreateSpeechRequestResponseFormat? = nil,
+        speed: Double? = nil,
+        streamFormat: CreateSpeechRequestStreamFormat? = nil
+    ) throws {
         (self.model, self.input) = (model, input)
         (self.voice, self.instructions) = (voice, instructions)
         (self.responseFormat, self.speed) = (responseFormat, speed)
         self.streamFormat = streamFormat
-            try validateLength("input", self.input, min: nil, max: 4096)
+        try validateLength("input", self.input, min: nil, max: 4096)
         if let value = self.instructions {
             try validateLength("instructions", value, min: nil, max: 4096)
         }
         if let value = self.speed {
-            try validateRange("speed", Double(value), min: 0.25, max: 4, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "speed",
+                Double(value),
+                min: 0.25,
+                max: 4,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -167,12 +225,15 @@ extension CreateSpeechRequest {
 public struct TranscriptionInclude: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let logprobs = TranscriptionInclude(rawValue: "logprobs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -206,7 +267,10 @@ public enum TranscriptTextSegmentEventType: String, CaseIterable, Codable {
 public struct AudioResponseFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let json = AudioResponseFormat(rawValue: "json")
     public static let text = AudioResponseFormat(rawValue: "text")
     public static let srt = AudioResponseFormat(rawValue: "srt")
@@ -216,7 +280,7 @@ public struct AudioResponseFormat: RawRepresentable, Hashable, Codable, Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -265,12 +329,15 @@ public enum TranscriptTextDoneEventType: String, CaseIterable, Codable {
 public struct VoiceConsentResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let audioVoiceConsent = VoiceConsentResourceObject(rawValue: "audio.voice_consent")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -283,12 +350,15 @@ public struct VoiceConsentResourceObject: RawRepresentable, Hashable, Codable, S
 public struct VoiceConsentDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let audioVoiceConsent = VoiceConsentDeletedResourceObject(rawValue: "audio.voice_consent")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -298,15 +368,19 @@ public struct VoiceConsentDeletedResourceObject: RawRepresentable, Hashable, Cod
 }
 
 /// The type of task that was run. Always `transcribe`.
-public struct CreateTranscriptionResponseDiarizedJsonTask: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateTranscriptionResponseDiarizedJsonTask: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let transcribe = CreateTranscriptionResponseDiarizedJsonTask(rawValue: "transcribe")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -337,12 +411,15 @@ public enum TranscriptTextDeltaEventType: String, CaseIterable, Codable {
 public struct VadConfigType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let serverVad = VadConfigType(rawValue: "server_vad")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -355,14 +432,17 @@ public struct VadConfigType: RawRepresentable, Hashable, Codable, Sendable, SdkW
 public struct CreateSpeechRequestVoiceVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let fable = CreateSpeechRequestVoiceVariant1(rawValue: "fable")
     public static let onyx = CreateSpeechRequestVoiceVariant1(rawValue: "onyx")
     public static let nova = CreateSpeechRequestVoiceVariant1(rawValue: "nova")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -372,10 +452,14 @@ public struct CreateSpeechRequestVoiceVariant1: RawRepresentable, Hashable, Coda
 }
 
 /// The format of the output, in one of these options: `json`, `text`, `srt`, `verbose_json`, or `vtt`.
-public struct CreateTranslationRequestResponseFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateTranslationRequestResponseFormat: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let json = CreateTranslationRequestResponseFormat(rawValue: "json")
     public static let text = CreateTranslationRequestResponseFormat(rawValue: "text")
     public static let srt = CreateTranslationRequestResponseFormat(rawValue: "srt")
@@ -384,7 +468,7 @@ public struct CreateTranslationRequestResponseFormat: RawRepresentable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -398,13 +482,16 @@ public struct CreateTranslationRequestResponseFormat: RawRepresentable, Hashable
 public struct CreateSpeechRequestStreamFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let sse = CreateSpeechRequestStreamFormat(rawValue: "sse")
     public static let audio = CreateSpeechRequestStreamFormat(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -417,12 +504,15 @@ public struct CreateSpeechRequestStreamFormat: RawRepresentable, Hashable, Codab
 public struct VoiceResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let audioVoice = VoiceResourceObject(rawValue: "audio.voice")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -453,12 +543,15 @@ public enum SpeechAudioDeltaEventType: String, CaseIterable, Codable {
 public struct VoiceConsentListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = VoiceConsentListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -471,12 +564,15 @@ public struct VoiceConsentListResourceObject: RawRepresentable, Hashable, Codabl
 public struct VoiceResourceType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let audioSample = VoiceResourceType(rawValue: "audio_sample")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -486,15 +582,19 @@ public struct VoiceResourceType: RawRepresentable, Hashable, Codable, Sendable, 
 }
 
 /// Automatically set chunking parameters based on the audio. Must be set to `"auto"`.
-public struct CreateTranscriptionRequestChunkingStrategyVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateTranscriptionRequestChunkingStrategyVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = CreateTranscriptionRequestChunkingStrategyVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -504,16 +604,20 @@ public struct CreateTranscriptionRequestChunkingStrategyVariant0: RawRepresentab
 }
 
 /// Required enumerated value serialized in the `timestamp_granularities[]` wire field.
-public struct CreateTranscriptionRequestTimestampGranularitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateTranscriptionRequestTimestampGranularitiesItem: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let word = CreateTranscriptionRequestTimestampGranularitiesItem(rawValue: "word")
     public static let segment = CreateTranscriptionRequestTimestampGranularitiesItem(rawValue: "segment")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -526,7 +630,10 @@ public struct CreateTranscriptionRequestTimestampGranularitiesItem: RawRepresent
 public struct CreateSpeechRequestResponseFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let mp3 = CreateSpeechRequestResponseFormat(rawValue: "mp3")
     public static let opus = CreateSpeechRequestResponseFormat(rawValue: "opus")
     public static let aac = CreateSpeechRequestResponseFormat(rawValue: "aac")
@@ -536,7 +643,7 @@ public struct CreateSpeechRequestResponseFormat: RawRepresentable, Hashable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

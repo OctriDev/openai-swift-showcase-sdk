@@ -3,32 +3,54 @@
 
 import Foundation
 
-// Images domain models
-extension ImageGenUsage {
-    public init(from decoder: Decoder) throws {
+/// Images domain models
+public extension ImageGenUsage {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.inputTokens) else {
-            throw SdkValidationError(field: "input_tokens", code: "required", message: "Validation failed for 'input_tokens': value is required")
+            throw SdkValidationError(
+                field: "input_tokens",
+                code: "required",
+                message: "Validation failed for 'input_tokens': value is required"
+            )
         }
         guard container.contains(.totalTokens) else {
-            throw SdkValidationError(field: "total_tokens", code: "required", message: "Validation failed for 'total_tokens': value is required")
+            throw SdkValidationError(
+                field: "total_tokens",
+                code: "required",
+                message: "Validation failed for 'total_tokens': value is required"
+            )
         }
         guard container.contains(.outputTokens) else {
-            throw SdkValidationError(field: "output_tokens", code: "required", message: "Validation failed for 'output_tokens': value is required")
+            throw SdkValidationError(
+                field: "output_tokens",
+                code: "required",
+                message: "Validation failed for 'output_tokens': value is required"
+            )
         }
         guard container.contains(.inputTokensDetails) else {
-            throw SdkValidationError(field: "input_tokens_details", code: "required", message: "Validation failed for 'input_tokens_details': value is required")
+            throw SdkValidationError(
+                field: "input_tokens_details",
+                code: "required",
+                message: "Validation failed for 'input_tokens_details': value is required"
+            )
         }
-        self.inputTokens = try container.sdkDecodeRequired(.inputTokens)
-        self.totalTokens = try container.sdkDecodeRequired(.totalTokens)
-        self.outputTokens = try container.sdkDecodeRequired(.outputTokens)
-        self.inputTokensDetails = try container.sdkDecodeRequired(.inputTokensDetails)
-        self.outputTokensDetails = try container.sdkDecodeIfPresent(.outputTokensDetails)
+        inputTokens = try container.sdkDecodeRequired(.inputTokens)
+        totalTokens = try container.sdkDecodeRequired(.totalTokens)
+        outputTokens = try container.sdkDecodeRequired(.outputTokens)
+        inputTokensDetails = try container.sdkDecodeRequired(.inputTokensDetails)
+        outputTokensDetails = try container.sdkDecodeIfPresent(.outputTokensDetails)
     }
 }
 
-extension ImageGenUsage {
-    public init(inputTokens: Int, totalTokens: Int, outputTokens: Int, inputTokensDetails: ImageGenInputUsageDetails, outputTokensDetails: ImageGenOutputTokensDetails? = nil) {
+public extension ImageGenUsage {
+    init(
+        inputTokens: Int,
+        totalTokens: Int,
+        outputTokens: Int,
+        inputTokensDetails: ImageGenInputUsageDetails,
+        outputTokensDetails: ImageGenOutputTokensDetails? = nil
+    ) {
         (self.inputTokens, self.totalTokens) = (inputTokens, totalTokens)
         (self.outputTokens, self.inputTokensDetails) = (outputTokens, inputTokensDetails)
         self.outputTokensDetails = outputTokensDetails
@@ -70,33 +92,45 @@ public struct ImageGenCompletedEvent: Codable {
         case safetyIdentifier = "safety_identifier"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ImageGenCompletedEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.b64Json = try container.sdkDecodeRequired(.b64Json)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.size = try container.sdkDecodeRequired(.size)
-        self.quality = try container.sdkDecodeRequired(.quality)
-        self.background = try container.sdkDecodeRequired(.background)
-        self.outputFormat = try container.sdkDecodeRequired(.outputFormat)
-        self.usage = try container.sdkDecodeRequired(.usage)
-        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-            try sdkValidateRawEnum("type", self.type, ImageGenCompletedEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ImageGenCompletedEvent {
-    public init(type: ImageGenCompletedEventType, b64Json: String, createdAt: Int, size: String, quality: ImageGenCompletedEventQuality, background: ImageGenCompletedEventBackground, outputFormat: ImageGenCompletedEventOutputFormat, usage: ImagesUsage, safetyIdentifier: String? = nil) throws {
+public extension ImageGenCompletedEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        type = try container.sdkDecodeRequired(.type)
+        b64Json = try container.sdkDecodeRequired(.b64Json)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        size = try container.sdkDecodeRequired(.size)
+        quality = try container.sdkDecodeRequired(.quality)
+        background = try container.sdkDecodeRequired(.background)
+        outputFormat = try container.sdkDecodeRequired(.outputFormat)
+        usage = try container.sdkDecodeRequired(.usage)
+        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        try sdkValidateRawEnum("type", type, ImageGenCompletedEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ImageGenCompletedEvent {
+    init(
+        type: ImageGenCompletedEventType,
+        b64Json: String,
+        createdAt: Int,
+        size: String,
+        quality: ImageGenCompletedEventQuality,
+        background: ImageGenCompletedEventBackground,
+        outputFormat: ImageGenCompletedEventOutputFormat,
+        usage: ImagesUsage,
+        safetyIdentifier: String? = nil
+    ) throws {
         (self.type, self.b64Json) = (type, b64Json)
         (self.createdAt, self.size) = (createdAt, size)
         (self.quality, self.background) = (quality, background)
         (self.outputFormat, self.usage) = (outputFormat, usage)
         self.safetyIdentifier = safetyIdentifier
-            try sdkValidateRawEnum("type", self.type, ImageGenCompletedEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ImageGenCompletedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -187,44 +221,78 @@ public struct CreateImageRequest: Codable {
         case user
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateImageRequest {
-    public init(from decoder: Decoder) throws {
+public extension CreateImageRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.prompt) else {
-            throw SdkValidationError(field: "prompt", code: "required", message: "Validation failed for 'prompt': value is required")
+            throw SdkValidationError(
+                field: "prompt",
+                code: "required",
+                message: "Validation failed for 'prompt': value is required"
+            )
         }
         guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
         }
-        self.prompt = try container.sdkDecodeRequired(.prompt)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.n = try container.sdkDecodeIfPresent(.n)
-        self.quality = try container.sdkDecodeIfPresent(.quality)
-        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-        self.outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
-        self.stream = try container.sdkDecodeIfPresent(.stream)
-        self.partialImages = try container.sdkDecodeIfPresent(.partialImages)
-        self.size = try container.sdkDecodeIfPresent(.size)
-        self.moderation = try container.sdkDecodeIfPresent(.moderation)
-        self.background = try container.sdkDecodeIfPresent(.background)
-        self.style = try container.sdkDecodeIfPresent(.style)
-        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        self.user = try container.sdkDecodeIfPresent(.user)
-        if let value = self.n {
-            try validateRange("n", Double(value), min: 1, max: 10, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        prompt = try container.sdkDecodeRequired(.prompt)
+        model = try container.sdkDecodeRequired(.model)
+        n = try container.sdkDecodeIfPresent(.n)
+        quality = try container.sdkDecodeIfPresent(.quality)
+        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+        outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
+        stream = try container.sdkDecodeIfPresent(.stream)
+        partialImages = try container.sdkDecodeIfPresent(.partialImages)
+        size = try container.sdkDecodeIfPresent(.size)
+        moderation = try container.sdkDecodeIfPresent(.moderation)
+        background = try container.sdkDecodeIfPresent(.background)
+        style = try container.sdkDecodeIfPresent(.style)
+        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        user = try container.sdkDecodeIfPresent(.user)
+        if let value = n {
+            try validateRange(
+                "n",
+                Double(value),
+                min: 1,
+                max: 10,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.safetyIdentifier {
+        if let value = safetyIdentifier {
             try validateLength("safety_identifier", value, min: nil, max: 128)
         }
     }
 }
 
-extension CreateImageRequest {
-    public init(prompt: String, model: String, n: Int? = nil, quality: CreateImageRequestQualityVariant0? = nil, responseFormat: CreateImageRequestResponseFormat? = nil, outputFormat: CreateImageRequestOutputFormatVariant0? = nil, outputCompression: Int? = nil, stream: Bool? = nil, partialImages: Int? = nil, size: String? = nil, moderation: CreateImageRequestModerationVariant0? = nil, background: CreateImageRequestBackgroundVariant0? = nil, style: CreateImageRequestStyle? = nil, safetyIdentifier: String? = nil, user: String? = nil) throws {
+public extension CreateImageRequest {
+    init(
+        prompt: String,
+        model: String,
+        n: Int? = nil,
+        quality: CreateImageRequestQualityVariant0? = nil,
+        responseFormat: CreateImageRequestResponseFormat? = nil,
+        outputFormat: CreateImageRequestOutputFormatVariant0? = nil,
+        outputCompression: Int? = nil,
+        stream: Bool? = nil,
+        partialImages: Int? = nil,
+        size: String? = nil,
+        moderation: CreateImageRequestModerationVariant0? = nil,
+        background: CreateImageRequestBackgroundVariant0? = nil,
+        style: CreateImageRequestStyle? = nil,
+        safetyIdentifier: String? = nil,
+        user: String? = nil
+    ) throws {
         (self.prompt, self.model) = (prompt, model)
         (self.n, self.quality) = (n, quality)
         (self.responseFormat, self.outputFormat) = (responseFormat, outputFormat)
@@ -234,7 +302,15 @@ extension CreateImageRequest {
         (self.style, self.safetyIdentifier) = (style, safetyIdentifier)
         self.user = user
         if let value = self.n {
-            try validateRange("n", Double(value), min: 1, max: 10, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "n",
+                Double(value),
+                min: 1,
+                max: 10,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.safetyIdentifier {
             try validateLength("safety_identifier", value, min: nil, max: 128)
@@ -247,13 +323,16 @@ extension CreateImageRequest {
 public struct CreateImageRequestResponseFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let url = CreateImageRequestResponseFormat(rawValue: "url")
     public static let b64Json = CreateImageRequestResponseFormat(rawValue: "b64_json")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -263,16 +342,20 @@ public struct CreateImageRequestResponseFormat: RawRepresentable, Hashable, Coda
 }
 
 /// Optional enumerated value serialized in the `input_fidelity` wire field.
-public struct EditImageBodyJsonParamInputFidelityVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct EditImageBodyJsonParamInputFidelityVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let high = EditImageBodyJsonParamInputFidelityVariant0(rawValue: "high")
     public static let low = EditImageBodyJsonParamInputFidelityVariant0(rawValue: "low")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -285,14 +368,17 @@ public struct EditImageBodyJsonParamInputFidelityVariant0: RawRepresentable, Has
 public struct CreateImageRequestBackgroundVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let transparent = CreateImageRequestBackgroundVariant0(rawValue: "transparent")
     public static let opaque = CreateImageRequestBackgroundVariant0(rawValue: "opaque")
     public static let auto = CreateImageRequestBackgroundVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -306,13 +392,16 @@ public struct CreateImageRequestBackgroundVariant0: RawRepresentable, Hashable, 
 public struct CreateImageRequestStyle: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let vivid = CreateImageRequestStyle(rawValue: "vivid")
     public static let natural = CreateImageRequestStyle(rawValue: "natural")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -322,17 +411,21 @@ public struct CreateImageRequestStyle: RawRepresentable, Hashable, Codable, Send
 }
 
 /// Optional enumerated value serialized in the `output_format` wire field.
-public struct CreateImageRequestOutputFormatVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateImageRequestOutputFormatVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let png = CreateImageRequestOutputFormatVariant0(rawValue: "png")
     public static let jpeg = CreateImageRequestOutputFormatVariant0(rawValue: "jpeg")
     public static let webp = CreateImageRequestOutputFormatVariant0(rawValue: "webp")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -363,7 +456,10 @@ public enum ImageGenPartialImageEventType: String, CaseIterable, Codable {
 public struct ImagesResponseQuality: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = ImagesResponseQuality(rawValue: "low")
     public static let medium = ImagesResponseQuality(rawValue: "medium")
     public static let high = ImagesResponseQuality(rawValue: "high")
@@ -372,7 +468,7 @@ public struct ImagesResponseQuality: RawRepresentable, Hashable, Codable, Sendab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -385,14 +481,17 @@ public struct ImagesResponseQuality: RawRepresentable, Hashable, Codable, Sendab
 public struct ImageGenCompletedEventBackground: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let transparent = ImageGenCompletedEventBackground(rawValue: "transparent")
     public static let opaque = ImageGenCompletedEventBackground(rawValue: "opaque")
     public static let auto = ImageGenCompletedEventBackground(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -402,17 +501,21 @@ public struct ImageGenCompletedEventBackground: RawRepresentable, Hashable, Coda
 }
 
 /// The output format for the requested edited image.
-public struct ImageEditPartialImageEventOutputFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ImageEditPartialImageEventOutputFormat: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let png = ImageEditPartialImageEventOutputFormat(rawValue: "png")
     public static let webp = ImageEditPartialImageEventOutputFormat(rawValue: "webp")
     public static let jpeg = ImageEditPartialImageEventOutputFormat(rawValue: "jpeg")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -422,17 +525,21 @@ public struct ImageEditPartialImageEventOutputFormat: RawRepresentable, Hashable
 }
 
 /// Optional enumerated value serialized in the `background` wire field.
-public struct CreateImageEditRequestBackgroundVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateImageEditRequestBackgroundVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let transparent = CreateImageEditRequestBackgroundVariant0(rawValue: "transparent")
     public static let opaque = CreateImageEditRequestBackgroundVariant0(rawValue: "opaque")
     public static let auto = CreateImageEditRequestBackgroundVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -445,7 +552,10 @@ public struct CreateImageEditRequestBackgroundVariant0: RawRepresentable, Hashab
 public struct ImageGenCompletedEventQuality: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = ImageGenCompletedEventQuality(rawValue: "low")
     public static let medium = ImageGenCompletedEventQuality(rawValue: "medium")
     public static let high = ImageGenCompletedEventQuality(rawValue: "high")
@@ -455,7 +565,7 @@ public struct ImageGenCompletedEventQuality: RawRepresentable, Hashable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -468,14 +578,17 @@ public struct ImageGenCompletedEventQuality: RawRepresentable, Hashable, Codable
 public struct ImageGenPartialImageEventOutputFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let png = ImageGenPartialImageEventOutputFormat(rawValue: "png")
     public static let webp = ImageGenPartialImageEventOutputFormat(rawValue: "webp")
     public static let jpeg = ImageGenPartialImageEventOutputFormat(rawValue: "jpeg")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -488,7 +601,10 @@ public struct ImageGenPartialImageEventOutputFormat: RawRepresentable, Hashable,
 public struct CreateImageRequestQualityVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = CreateImageRequestQualityVariant0(rawValue: "low")
     public static let medium = CreateImageRequestQualityVariant0(rawValue: "medium")
     public static let high = CreateImageRequestQualityVariant0(rawValue: "high")
@@ -500,7 +616,7 @@ public struct CreateImageRequestQualityVariant0: RawRepresentable, Hashable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -15,11 +15,11 @@ struct UpdateProjectHostedToolPermissionsRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.fileSearch, forKey: SdkCodingKey("file_search"))
-        try keyedContainer.encodeIfPresent(self.webSearch, forKey: SdkCodingKey("web_search"))
-        try keyedContainer.encodeIfPresent(self.imageGeneration, forKey: SdkCodingKey("image_generation"))
-        try keyedContainer.encodeIfPresent(self.mcp, forKey: SdkCodingKey("mcp"))
-        try keyedContainer.encodeIfPresent(self.codeInterpreter, forKey: SdkCodingKey("code_interpreter"))
+        try keyedContainer.encodeIfPresent(fileSearch, forKey: SdkCodingKey("file_search"))
+        try keyedContainer.encodeIfPresent(webSearch, forKey: SdkCodingKey("web_search"))
+        try keyedContainer.encodeIfPresent(imageGeneration, forKey: SdkCodingKey("image_generation"))
+        try keyedContainer.encodeIfPresent(mcp, forKey: SdkCodingKey("mcp"))
+        try keyedContainer.encodeIfPresent(codeInterpreter, forKey: SdkCodingKey("code_interpreter"))
     }
 }
 
@@ -31,10 +31,10 @@ struct CreateProjectSpendAlertRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
-        try keyedContainer.encode(self.currency, forKey: SdkCodingKey("currency"))
-        try keyedContainer.encode(self.interval, forKey: SdkCodingKey("interval"))
-        try keyedContainer.encode(self.notificationChannel, forKey: SdkCodingKey("notification_channel"))
+        try keyedContainer.encode(thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
+        try keyedContainer.encode(currency, forKey: SdkCodingKey("currency"))
+        try keyedContainer.encode(interval, forKey: SdkCodingKey("interval"))
+        try keyedContainer.encode(notificationChannel, forKey: SdkCodingKey("notification_channel"))
     }
 }
 
@@ -46,10 +46,10 @@ struct UpdateProjectSpendAlertRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
-        try keyedContainer.encode(self.currency, forKey: SdkCodingKey("currency"))
-        try keyedContainer.encode(self.interval, forKey: SdkCodingKey("interval"))
-        try keyedContainer.encode(self.notificationChannel, forKey: SdkCodingKey("notification_channel"))
+        try keyedContainer.encode(thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
+        try keyedContainer.encode(currency, forKey: SdkCodingKey("currency"))
+        try keyedContainer.encode(interval, forKey: SdkCodingKey("interval"))
+        try keyedContainer.encode(notificationChannel, forKey: SdkCodingKey("notification_channel"))
     }
 }
 
@@ -61,10 +61,10 @@ struct CreateOrganizationSpendAlertRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
-        try keyedContainer.encode(self.currency, forKey: SdkCodingKey("currency"))
-        try keyedContainer.encode(self.interval, forKey: SdkCodingKey("interval"))
-        try keyedContainer.encode(self.notificationChannel, forKey: SdkCodingKey("notification_channel"))
+        try keyedContainer.encode(thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
+        try keyedContainer.encode(currency, forKey: SdkCodingKey("currency"))
+        try keyedContainer.encode(interval, forKey: SdkCodingKey("interval"))
+        try keyedContainer.encode(notificationChannel, forKey: SdkCodingKey("notification_channel"))
     }
 }
 
@@ -76,10 +76,10 @@ struct UpdateOrganizationSpendAlertRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
-        try keyedContainer.encode(self.currency, forKey: SdkCodingKey("currency"))
-        try keyedContainer.encode(self.interval, forKey: SdkCodingKey("interval"))
-        try keyedContainer.encode(self.notificationChannel, forKey: SdkCodingKey("notification_channel"))
+        try keyedContainer.encode(thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
+        try keyedContainer.encode(currency, forKey: SdkCodingKey("currency"))
+        try keyedContainer.encode(interval, forKey: SdkCodingKey("interval"))
+        try keyedContainer.encode(notificationChannel, forKey: SdkCodingKey("notification_channel"))
     }
 }
 
@@ -90,9 +90,9 @@ struct CreateRoleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.roleName, forKey: SdkCodingKey("role_name"))
-        try keyedContainer.encode(self.permissions, forKey: SdkCodingKey("permissions"))
-        try keyedContainer.encodeIfPresent(self.description, forKey: SdkCodingKey("description"))
+        try keyedContainer.encode(roleName, forKey: SdkCodingKey("role_name"))
+        try keyedContainer.encode(permissions, forKey: SdkCodingKey("permissions"))
+        try keyedContainer.encodeIfPresent(description, forKey: SdkCodingKey("description"))
     }
 }
 
@@ -103,9 +103,9 @@ struct UpdateRoleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.permissions, forKey: SdkCodingKey("permissions"))
-        try keyedContainer.encodeIfPresent(self.description, forKey: SdkCodingKey("description"))
-        try keyedContainer.encodeIfPresent(self.roleName, forKey: SdkCodingKey("role_name"))
+        try keyedContainer.encodeIfPresent(permissions, forKey: SdkCodingKey("permissions"))
+        try keyedContainer.encodeIfPresent(description, forKey: SdkCodingKey("description"))
+        try keyedContainer.encodeIfPresent(roleName, forKey: SdkCodingKey("role_name"))
     }
 }
 
@@ -116,9 +116,9 @@ struct CreateRolesProjectRoleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.roleName, forKey: SdkCodingKey("role_name"))
-        try keyedContainer.encode(self.permissions, forKey: SdkCodingKey("permissions"))
-        try keyedContainer.encodeIfPresent(self.description, forKey: SdkCodingKey("description"))
+        try keyedContainer.encode(roleName, forKey: SdkCodingKey("role_name"))
+        try keyedContainer.encode(permissions, forKey: SdkCodingKey("permissions"))
+        try keyedContainer.encodeIfPresent(description, forKey: SdkCodingKey("description"))
     }
 }
 
@@ -129,9 +129,9 @@ struct UpdateRolesProjectRoleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.permissions, forKey: SdkCodingKey("permissions"))
-        try keyedContainer.encodeIfPresent(self.description, forKey: SdkCodingKey("description"))
-        try keyedContainer.encodeIfPresent(self.roleName, forKey: SdkCodingKey("role_name"))
+        try keyedContainer.encodeIfPresent(permissions, forKey: SdkCodingKey("permissions"))
+        try keyedContainer.encodeIfPresent(description, forKey: SdkCodingKey("description"))
+        try keyedContainer.encodeIfPresent(roleName, forKey: SdkCodingKey("role_name"))
     }
 }
 
@@ -143,10 +143,10 @@ struct ModifyUserRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.role, forKey: SdkCodingKey("role"))
-        try keyedContainer.encodeIfPresent(self.roleId, forKey: SdkCodingKey("role_id"))
-        try keyedContainer.encodeIfPresent(self.technicalLevel, forKey: SdkCodingKey("technical_level"))
-        try keyedContainer.encodeIfPresent(self.developerPersona, forKey: SdkCodingKey("developer_persona"))
+        try keyedContainer.encodeIfPresent(role, forKey: SdkCodingKey("role"))
+        try keyedContainer.encodeIfPresent(roleId, forKey: SdkCodingKey("role_id"))
+        try keyedContainer.encodeIfPresent(technicalLevel, forKey: SdkCodingKey("technical_level"))
+        try keyedContainer.encodeIfPresent(developerPersona, forKey: SdkCodingKey("developer_persona"))
     }
 }
 
@@ -155,7 +155,7 @@ struct AssignUserRoleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.roleId, forKey: SdkCodingKey("role_id"))
+        try keyedContainer.encode(roleId, forKey: SdkCodingKey("role_id"))
     }
 }
 
@@ -164,7 +164,7 @@ struct AssignProjectGroupRoleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.roleId, forKey: SdkCodingKey("role_id"))
+        try keyedContainer.encode(roleId, forKey: SdkCodingKey("role_id"))
     }
 }
 
@@ -173,7 +173,7 @@ struct AssignProjectUserRoleRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.roleId, forKey: SdkCodingKey("role_id"))
+        try keyedContainer.encode(roleId, forKey: SdkCodingKey("role_id"))
     }
 }
 
@@ -188,9 +188,9 @@ public enum CreateRealtimeCallBody {
     func encoded(contentType: String?) throws -> (data: Data, contentType: String) {
         switch self {
         case let .realtimeCallCreateRequest(value):
-            return try sdkEncodeStructuredBody(value, contentType: contentType ?? "multipart/form-data")
+            try sdkEncodeStructuredBody(value, contentType: contentType ?? "multipart/form-data")
         case let .bytes(value):
-            return (value, contentType ?? "application/sdp")
+            (value, contentType ?? "application/sdp")
         }
     }
 }

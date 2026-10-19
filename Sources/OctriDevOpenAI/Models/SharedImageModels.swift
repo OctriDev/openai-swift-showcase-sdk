@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedImage domain models
+/// SharedImage domain models
 /// Optional mask for inpainting. Contains `image_url` (string, optional) and `file_id` (string, optional).
 public struct ImageGenToolInputImageMask: Codable {
     /// Base64-encoded mask image.
@@ -17,20 +17,20 @@ public struct ImageGenToolInputImageMask: Codable {
     }
 
     init() {
-        (self.imageUrl, self.fileId) = (nil, nil)
+        (imageUrl, fileId) = (nil, nil)
     }
 }
 
-extension ImageGenToolInputImageMask {
-    public init(from decoder: Decoder) throws {
+public extension ImageGenToolInputImageMask {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
-        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
+        fileId = try container.sdkDecodeIfPresent(.fileId)
     }
 }
 
-extension ImageGenToolInputImageMask {
-    public init(imageUrl: String? = nil, fileId: String? = nil) {
+public extension ImageGenToolInputImageMask {
+    init(imageUrl: String? = nil, fileId: String? = nil) {
         self.init()
         (self.imageUrl, self.fileId) = (imageUrl, fileId)
     }
@@ -75,48 +75,78 @@ public struct ImageGenToolCall: Codable {
         case revisedPrompt = "revised_prompt"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ImageGenToolCall {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.result) else {
-            throw SdkValidationError(field: "result", code: "required", message: "Validation failed for 'result': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.result = try container.sdkDecodeNullable(.result)
-        self.error = try container.sdkDecodeIfPresent(.error)
-        self.size = try container.sdkDecodeIfPresent(.size)
-        self.quality = try container.sdkDecodeIfPresent(.quality)
-        self.action = try container.sdkDecodeIfPresent(.action)
-        self.background = try container.sdkDecodeIfPresent(.background)
-        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-        self.revisedPrompt = try container.sdkDecodeIfPresent(.revisedPrompt)
-            try sdkValidateRawEnum("type", self.type, ImageGenToolCallType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ImageGenToolCall {
-    public init(type: ImageGenToolCallType, id: String, status: ImageGenToolCallStatus, result: String?, error: ImageGenToolCallError? = nil, size: String? = nil, quality: ImageGenToolCallQualityVariant0? = nil, action: ImageGenActionEnum? = nil, background: ImageBackground? = nil, outputFormat: ImageOutputFormat? = nil, revisedPrompt: String? = nil) throws {
+public extension ImageGenToolCall {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        guard container.contains(.result) else {
+            throw SdkValidationError(
+                field: "result",
+                code: "required",
+                message: "Validation failed for 'result': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        status = try container.sdkDecodeRequired(.status)
+        result = try container.sdkDecodeNullable(.result)
+        error = try container.sdkDecodeIfPresent(.error)
+        size = try container.sdkDecodeIfPresent(.size)
+        quality = try container.sdkDecodeIfPresent(.quality)
+        action = try container.sdkDecodeIfPresent(.action)
+        background = try container.sdkDecodeIfPresent(.background)
+        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+        revisedPrompt = try container.sdkDecodeIfPresent(.revisedPrompt)
+        try sdkValidateRawEnum("type", type, ImageGenToolCallType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ImageGenToolCall {
+    init(
+        type: ImageGenToolCallType,
+        id: String,
+        status: ImageGenToolCallStatus,
+        result: String?,
+        error: ImageGenToolCallError? = nil,
+        size: String? = nil,
+        quality: ImageGenToolCallQualityVariant0? = nil,
+        action: ImageGenActionEnum? = nil,
+        background: ImageBackground? = nil,
+        outputFormat: ImageOutputFormat? = nil,
+        revisedPrompt: String? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.status, self.result) = (status, result)
         (self.error, self.size) = (error, size)
         (self.quality, self.action) = (quality, action)
         (self.background, self.outputFormat) = (background, outputFormat)
         self.revisedPrompt = revisedPrompt
-            try sdkValidateRawEnum("type", self.type, ImageGenToolCallType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ImageGenToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -141,34 +171,58 @@ public struct ImageGenToolCallError: Codable {
         case moderationDetails = "moderation_details"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ImageGenToolCallError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        guard container.contains(.param) else {
-            throw SdkValidationError(field: "param", code: "required", message: "Validation failed for 'param': value is required")
-        }
-        self.code = try container.sdkDecodeNullable(.code)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.param = try container.sdkDecodeNullable(.param)
-        self.moderationDetails = try container.sdkDecodeIfPresent(.moderationDetails)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ImageGenToolCallError {
-    public init(code: String?, type: String, message: String, param: String?, moderationDetails: ImageGenToolCallModerationDetails? = nil) {
+public extension ImageGenToolCallError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        guard container.contains(.param) else {
+            throw SdkValidationError(
+                field: "param",
+                code: "required",
+                message: "Validation failed for 'param': value is required"
+            )
+        }
+        code = try container.sdkDecodeNullable(.code)
+        type = try container.sdkDecodeRequired(.type)
+        message = try container.sdkDecodeRequired(.message)
+        param = try container.sdkDecodeNullable(.param)
+        moderationDetails = try container.sdkDecodeIfPresent(.moderationDetails)
+    }
+}
+
+public extension ImageGenToolCallError {
+    init(
+        code: String?,
+        type: String,
+        message: String,
+        param: String?,
+        moderationDetails: ImageGenToolCallModerationDetails? = nil
+    ) {
         (self.code, self.type) = (code, type)
         (self.message, self.param) = (message, param)
         self.moderationDetails = moderationDetails
@@ -227,51 +281,102 @@ public struct ImageGenTool: Codable {
         case action
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension ImageGenTool {
-    public init(from decoder: Decoder) throws {
+public extension ImageGenTool {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.quality = try container.sdkDecodeIfPresent(.quality)
-        self.size = try container.sdkDecodeIfPresent(.size)
-        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-        self.outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
-        self.moderation = try container.sdkDecodeIfPresent(.moderation)
-        self.background = try container.sdkDecodeIfPresent(.background)
-        self.inputFidelity = try container.sdkDecodeIfPresent(.inputFidelity)
-        self.inputImageMask = try container.sdkDecodeIfPresent(.inputImageMask)
-        self.partialImages = try container.sdkDecodeIfPresent(.partialImages)
-        self.action = try container.sdkDecodeIfPresent(.action)
-            try sdkValidateRawEnum("type", self.type, ImageGenToolType.allCases.map(\.rawValue))
-        if let value = self.outputCompression {
-            try validateRange("output_compression", Double(value), min: 0, max: 100, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        type = try container.sdkDecodeRequired(.type)
+        model = try container.sdkDecodeIfPresent(.model)
+        quality = try container.sdkDecodeIfPresent(.quality)
+        size = try container.sdkDecodeIfPresent(.size)
+        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+        outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
+        moderation = try container.sdkDecodeIfPresent(.moderation)
+        background = try container.sdkDecodeIfPresent(.background)
+        inputFidelity = try container.sdkDecodeIfPresent(.inputFidelity)
+        inputImageMask = try container.sdkDecodeIfPresent(.inputImageMask)
+        partialImages = try container.sdkDecodeIfPresent(.partialImages)
+        action = try container.sdkDecodeIfPresent(.action)
+        try sdkValidateRawEnum("type", type, ImageGenToolType.allCases.map(\.rawValue))
+        if let value = outputCompression {
+            try validateRange(
+                "output_compression",
+                Double(value),
+                min: 0,
+                max: 100,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.partialImages {
-            try validateRange("partial_images", Double(value), min: 0, max: 3, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = partialImages {
+            try validateRange(
+                "partial_images",
+                Double(value),
+                min: 0,
+                max: 3,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension ImageGenTool {
-    public init(type: ImageGenToolType, model: String? = nil, quality: ImageGenToolQuality? = nil, size: String? = nil, outputFormat: ImageGenToolOutputFormat? = nil, outputCompression: Int? = nil, moderation: ImageGenToolModeration? = nil, background: ImageGenToolBackground? = nil, inputFidelity: InputFidelity? = nil, inputImageMask: ImageGenToolInputImageMask? = nil, partialImages: Int? = nil, action: ImageGenActionEnum? = nil) throws {
+public extension ImageGenTool {
+    init(
+        type: ImageGenToolType,
+        model: String? = nil,
+        quality: ImageGenToolQuality? = nil,
+        size: String? = nil,
+        outputFormat: ImageGenToolOutputFormat? = nil,
+        outputCompression: Int? = nil,
+        moderation: ImageGenToolModeration? = nil,
+        background: ImageGenToolBackground? = nil,
+        inputFidelity: InputFidelity? = nil,
+        inputImageMask: ImageGenToolInputImageMask? = nil,
+        partialImages: Int? = nil,
+        action: ImageGenActionEnum? = nil
+    ) throws {
         (self.type, self.model) = (type, model)
         (self.quality, self.size) = (quality, size)
         (self.outputFormat, self.outputCompression) = (outputFormat, outputCompression)
         (self.moderation, self.background) = (moderation, background)
         (self.inputFidelity, self.inputImageMask) = (inputFidelity, inputImageMask)
         (self.partialImages, self.action) = (partialImages, action)
-            try sdkValidateRawEnum("type", self.type, ImageGenToolType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ImageGenToolType.allCases.map(\.rawValue))
         if let value = self.outputCompression {
-            try validateRange("output_compression", Double(value), min: 0, max: 100, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "output_compression",
+                Double(value),
+                min: 0,
+                max: 100,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.partialImages {
-            try validateRange("partial_images", Double(value), min: 0, max: 3, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "partial_images",
+                Double(value),
+                min: 0,
+                max: 3,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -288,25 +393,35 @@ public struct ImageGenToolCallModerationDetails: Codable {
         case categories
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ImageGenToolCallModerationDetails {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.moderationStage) else {
-            throw SdkValidationError(field: "moderation_stage", code: "required", message: "Validation failed for 'moderation_stage': value is required")
-        }
-        guard container.contains(.categories) else {
-            throw SdkValidationError(field: "categories", code: "required", message: "Validation failed for 'categories': value is required")
-        }
-        self.moderationStage = try container.sdkDecodeRequired(.moderationStage)
-        self.categories = try container.sdkDecodeRequired(.categories)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ImageGenToolCallModerationDetails {
-    public init(moderationStage: ImageGenToolCallModerationDetailsModerationStage, categories: [String]) {
+public extension ImageGenToolCallModerationDetails {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.moderationStage) else {
+            throw SdkValidationError(
+                field: "moderation_stage",
+                code: "required",
+                message: "Validation failed for 'moderation_stage': value is required"
+            )
+        }
+        guard container.contains(.categories) else {
+            throw SdkValidationError(
+                field: "categories",
+                code: "required",
+                message: "Validation failed for 'categories': value is required"
+            )
+        }
+        moderationStage = try container.sdkDecodeRequired(.moderationStage)
+        categories = try container.sdkDecodeRequired(.categories)
+    }
+}
+
+public extension ImageGenToolCallModerationDetails {
+    init(moderationStage: ImageGenToolCallModerationDetailsModerationStage, categories: [String]) {
         (self.moderationStage, self.categories) = (moderationStage, categories)
     }
 }
@@ -315,7 +430,10 @@ extension ImageGenToolCallModerationDetails {
 public struct ImageDetail: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = ImageDetail(rawValue: "low")
     public static let high = ImageDetail(rawValue: "high")
     public static let auto = ImageDetail(rawValue: "auto")
@@ -323,7 +441,7 @@ public struct ImageDetail: RawRepresentable, Hashable, Codable, Sendable, SdkWir
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -340,14 +458,17 @@ public struct ImageDetail: RawRepresentable, Hashable, Codable, Sendable, SdkWir
 public struct ImageGenToolBackground: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let transparent = ImageGenToolBackground(rawValue: "transparent")
     public static let opaque = ImageGenToolBackground(rawValue: "opaque")
     public static let auto = ImageGenToolBackground(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -361,7 +482,10 @@ public struct ImageGenToolBackground: RawRepresentable, Hashable, Codable, Senda
 public struct ImageGenToolCallQualityVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = ImageGenToolCallQualityVariant0(rawValue: "low")
     public static let medium = ImageGenToolCallQualityVariant0(rawValue: "medium")
     public static let high = ImageGenToolCallQualityVariant0(rawValue: "high")
@@ -371,7 +495,7 @@ public struct ImageGenToolCallQualityVariant0: RawRepresentable, Hashable, Codab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -402,14 +526,17 @@ public enum ImageGenToolCallType: String, CaseIterable, Codable {
 public struct ImageOutputFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let png = ImageOutputFormat(rawValue: "png")
     public static let webp = ImageOutputFormat(rawValue: "webp")
     public static let jpeg = ImageOutputFormat(rawValue: "jpeg")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -422,14 +549,17 @@ public struct ImageOutputFormat: RawRepresentable, Hashable, Codable, Sendable, 
 public struct ImageGenActionEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let generate = ImageGenActionEnum(rawValue: "generate")
     public static let edit = ImageGenActionEnum(rawValue: "edit")
     public static let auto = ImageGenActionEnum(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -442,13 +572,16 @@ public struct ImageGenActionEnum: RawRepresentable, Hashable, Codable, Sendable,
 public struct ImageGenToolModeration: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = ImageGenToolModeration(rawValue: "auto")
     public static let low = ImageGenToolModeration(rawValue: "low")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -461,14 +594,17 @@ public struct ImageGenToolModeration: RawRepresentable, Hashable, Codable, Senda
 public struct ImageGenToolOutputFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let png = ImageGenToolOutputFormat(rawValue: "png")
     public static let webp = ImageGenToolOutputFormat(rawValue: "webp")
     public static let jpeg = ImageGenToolOutputFormat(rawValue: "jpeg")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -481,7 +617,10 @@ public struct ImageGenToolOutputFormat: RawRepresentable, Hashable, Codable, Sen
 public struct ImageGenToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = ImageGenToolCallStatus(rawValue: "in_progress")
     public static let completed = ImageGenToolCallStatus(rawValue: "completed")
     public static let generating = ImageGenToolCallStatus(rawValue: "generating")
@@ -489,7 +628,7 @@ public struct ImageGenToolCallStatus: RawRepresentable, Hashable, Codable, Senda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

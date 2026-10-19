@@ -3,7 +3,7 @@
 
 import Foundation
 
-// VaultsDeleted domain models
+/// VaultsDeleted domain models
 /// Confirmation that a vault credential was deleted.
 public struct DeletedVaultCredentialResource: Codable {
     /// The ID of the deleted credential.
@@ -19,33 +19,47 @@ public struct DeletedVaultCredentialResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DeletedVaultCredentialResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
-            try validateLength("id", self.id, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DeletedVaultCredentialResource {
-    public init(id: String, object: DeletedVaultCredentialResourceObject, deleted: Bool) throws {
+public extension DeletedVaultCredentialResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+        try validateLength("id", id, min: 0, max: nil)
+    }
+}
+
+public extension DeletedVaultCredentialResource {
+    init(id: String, object: DeletedVaultCredentialResourceObject, deleted: Bool) throws {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
-            try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
     }
 }
 
@@ -64,33 +78,47 @@ public struct DeletedVaultResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension DeletedVaultResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
-            try validateLength("id", self.id, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension DeletedVaultResource {
-    public init(id: String, object: DeletedVaultResourceObject, deleted: Bool) throws {
+public extension DeletedVaultResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+        try validateLength("id", id, min: 0, max: nil)
+    }
+}
+
+public extension DeletedVaultResource {
+    init(id: String, object: DeletedVaultResourceObject, deleted: Bool) throws {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
-            try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
     }
 }
 
@@ -98,12 +126,15 @@ extension DeletedVaultResource {
 public struct DeletedVaultResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let vaultDeleted = DeletedVaultResourceObject(rawValue: "vault.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -116,12 +147,16 @@ public struct DeletedVaultResourceObject: RawRepresentable, Hashable, Codable, S
 public struct DeletedVaultCredentialResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let vaultCredentialDeleted = DeletedVaultCredentialResourceObject(rawValue: "vault.credential.deleted")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let vaultCredentialDeleted =
+        DeletedVaultCredentialResourceObject(rawValue: "vault.credential.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

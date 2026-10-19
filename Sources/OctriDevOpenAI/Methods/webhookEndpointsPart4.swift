@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension WebhookEndpointsMethods {
+public extension WebhookEndpointsMethods {
     /// Updates a webhook endpoint for the authenticated project.
     ///
     /// - Parameters:
@@ -15,30 +15,58 @@ extension WebhookEndpointsMethods {
     /// - url: A new HTTPS URL that receives webhook deliveries.
     /// - eventTypes: The complete set of event types that should trigger
     ///   deliveries.
-    public static func updateWebhookEndpoint(config: ClientConfig, webhookEndpointId: String, name: String? = nil, url: String? = nil, eventTypes: [ProjectEventTypeEnum]? = nil, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointBody {
-        if let name = name {
+    static func updateWebhookEndpoint(
+        config: ClientConfig,
+        webhookEndpointId: String,
+        name: String? = nil,
+        url: String? = nil,
+        eventTypes: [ProjectEventTypeEnum]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> WebhookEndpointBody {
+        if let name {
             try validateLength("name", name, min: 1, max: 256)
         }
 
-        if let url = url {
+        if let url {
             try validateLength("url", url, max: 2048)
             try sdkValidatePattern("url", url, sdkPattern5e721644673b)
         }
 
-        if let eventTypes = eventTypes {
+        if let eventTypes {
             try validateItems("event_types", eventTypes, min: 1)
         }
 
         let requestBody = UpdateWebhookEndpointRequestBody(name: name, url: url, eventTypes: eventTypes)
 
-        return try (await sdkRequest("POST", ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "UpdateWebhookEndpoint", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId))].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "UpdateWebhookEndpoint",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
     /// Deletes a webhook endpoint for the authenticated project.
     ///
     /// - Parameters:
     /// - webhookEndpointId: The ID of the webhook endpoint to delete.
-    public static func deleteWebhookEndpoint(config: ClientConfig, webhookEndpointId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedWebhookEndpointResource {
-        return try (await sdkRequest("DELETE", ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId))].joined(), config: config, decoder: .json, operationId: "DeleteWebhookEndpoint", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
+    static func deleteWebhookEndpoint(
+        config: ClientConfig,
+        webhookEndpointId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeletedWebhookEndpointResource {
+        try await (sdkRequest(
+            "DELETE",
+            ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "DeleteWebhookEndpoint",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 }

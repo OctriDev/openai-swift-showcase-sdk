@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AssistantsMethods {
-    public struct ModifyAssistantOptions: Codable {
+public extension AssistantsMethods {
+    struct ModifyAssistantOptions: Codable {
         public var assistantId: String
         public var model: ModifyAssistantRequestModel?
         public var reasoningEffort: SdkOptional<ReasoningEffort>?
@@ -26,7 +26,9 @@ extension AssistantsMethods {
         }
     }
 
-    /// Updates an assistant's model, instructions, tools, or other configuration. Supply only the fields you want to change; fields not included in the request are not specified for update. This operation is closing down and will be removed on a date not specified here.
+    /// Updates an assistant's model, instructions, tools, or other configuration. Supply only the fields you want to
+    /// change; fields not included in the request are not specified for update. This operation is closing down and will
+    /// be removed on a date not specified here.
     ///
     /// Modifies an assistant.
     ///
@@ -63,13 +65,26 @@ extension AssistantsMethods {
     ///   wire field.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func modifyAssistant(config: ClientConfig, options: ModifyAssistantOptions, requestOptions: RequestOptions? = nil) async throws -> AssistantObject {
+    static func modifyAssistant(
+        config: ClientConfig,
+        options: ModifyAssistantOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AssistantObject {
         if let tools = options.tools {
             try validateItems("tools", tools, max: 128)
         }
 
         let requestBody = ModifyAssistantRequestBody(options: options)
 
-        return try (await sdkRequest("POST", ["/assistants/", sdkEncodePathSegment(sdkWireString(options.assistantId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "modifyAssistant", options: requestOptions, errors: ["429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/assistants/", sdkEncodePathSegment(sdkWireString(options.assistantId))].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "modifyAssistant",
+            options: requestOptions,
+            errors: ["429": ErrorResponse.self]
+        )).data
     }
 }

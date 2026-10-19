@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaResponsePrompt domain models
+/// ResponsesBetaResponsePrompt domain models
 public typealias BetaResponsePromptVariables = [String: BetaResponsePromptVariablesValue]
 
 /// Options for prompt caching. Supported for `gpt-5.6` and later models. By default, OpenAI automatically chooses
@@ -35,22 +35,27 @@ public struct BetaResponsePromptCacheOptionsParam: Codable {
     }
 
     init() {
-        (self.ttl, self.mode, self.prewarm, self.comparisonResponseId) = (nil, nil, nil, nil)
+        (ttl, mode, prewarm, comparisonResponseId) = (nil, nil, nil, nil)
     }
 }
 
-extension BetaResponsePromptCacheOptionsParam {
-    public init(from decoder: Decoder) throws {
+public extension BetaResponsePromptCacheOptionsParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.ttl = try container.sdkDecodeIfPresent(.ttl)
-        self.mode = try container.sdkDecodeIfPresent(.mode)
-        self.prewarm = try container.sdkDecodeIfPresent(.prewarm)
-        self.comparisonResponseId = try container.sdkDecodeIfPresent(.comparisonResponseId)
+        ttl = try container.sdkDecodeIfPresent(.ttl)
+        mode = try container.sdkDecodeIfPresent(.mode)
+        prewarm = try container.sdkDecodeIfPresent(.prewarm)
+        comparisonResponseId = try container.sdkDecodeIfPresent(.comparisonResponseId)
     }
 }
 
-extension BetaResponsePromptCacheOptionsParam {
-    public init(ttl: BetaPromptCacheTTLEnum? = nil, mode: BetaPromptCacheModeEnum? = nil, prewarm: Bool? = nil, comparisonResponseId: String? = nil) {
+public extension BetaResponsePromptCacheOptionsParam {
+    init(
+        ttl: BetaPromptCacheTTLEnum? = nil,
+        mode: BetaPromptCacheModeEnum? = nil,
+        prewarm: Bool? = nil,
+        comparisonResponseId: String? = nil
+    ) {
         self.init()
         (self.ttl, self.mode) = (ttl, mode)
         (self.prewarm, self.comparisonResponseId) = (prewarm, comparisonResponseId)
@@ -67,7 +72,6 @@ public indirect enum BetaResponsePromptVariablesValue {
 }
 
 extension BetaResponsePromptVariablesValue: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -75,20 +79,29 @@ extension BetaResponsePromptVariablesValue: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaResponsePromptVariablesValue")
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for BetaResponsePromptVariablesValue"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -99,20 +112,28 @@ extension BetaResponsePromptVariablesValue: Codable {
 extension BetaResponsePromptVariablesValue {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .betaInputTextContent(try BetaInputTextContent(from: decoder))
-        case "input_image": return .betaInputImageContent(try BetaInputImageContent(from: decoder))
-        case "input_file": return .betaInputFileContent(try BetaInputFileContent(from: decoder))
-        default: return nil
+        case "input_text": try .betaInputTextContent(BetaInputTextContent(from: decoder))
+        case "input_image": try .betaInputImageContent(BetaInputImageContent(from: decoder))
+        case "input_file": try .betaInputFileContent(BetaInputFileContent(from: decoder))
+        default: nil
         }
     }
 }
 
 extension BetaResponsePromptVariablesValue {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(BetaInputTextContent.self) { return .betaInputTextContent(value) }
-        if let value = try? container.decode(BetaInputImageContent.self) { return .betaInputImageContent(value) }
-        if let value = try? container.decode(BetaInputFileContent.self) { return .betaInputFileContent(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(BetaInputTextContent.self) {
+            return .betaInputTextContent(value)
+        }
+        if let value = try? container.decode(BetaInputImageContent.self) {
+            return .betaInputImageContent(value)
+        }
+        if let value = try? container.decode(BetaInputFileContent.self) {
+            return .betaInputFileContent(value)
+        }
         return nil
     }
 }

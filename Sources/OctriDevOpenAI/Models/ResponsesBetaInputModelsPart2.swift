@@ -3,14 +3,22 @@
 
 import Foundation
 
-// ResponsesBetaInput domain models
-extension BetaInputFileContentParam {
-    public init(type: BetaInputFileContentParamType, fileId: String? = nil, filename: String? = nil, fileData: String? = nil, fileUrl: String? = nil, detail: BetaFileDetailEnum? = nil, promptCacheBreakpoint: BetaPromptCacheBreakpointParam? = nil) throws {
+/// ResponsesBetaInput domain models
+public extension BetaInputFileContentParam {
+    init(
+        type: BetaInputFileContentParamType,
+        fileId: String? = nil,
+        filename: String? = nil,
+        fileData: String? = nil,
+        fileUrl: String? = nil,
+        detail: BetaFileDetailEnum? = nil,
+        promptCacheBreakpoint: BetaPromptCacheBreakpointParam? = nil
+    ) throws {
         (self.type, self.fileId) = (type, fileId)
         (self.filename, self.fileData) = (filename, fileData)
         (self.fileUrl, self.detail) = (fileUrl, detail)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-            try sdkValidateRawEnum("type", self.type, BetaInputFileContentParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaInputFileContentParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -29,32 +37,46 @@ public struct BetaInputTextContentParam: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaInputTextContentParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-            try sdkValidateRawEnum("type", self.type, BetaInputTextContentParamType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: nil, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaInputTextContentParam {
-    public init(type: BetaInputTextContentParamType, text: String, promptCacheBreakpoint: BetaPromptCacheBreakpointParam? = nil) throws {
+public extension BetaInputTextContentParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+        try sdkValidateRawEnum("type", type, BetaInputTextContentParamType.allCases.map(\.rawValue))
+        try validateLength("text", text, min: nil, max: 10_485_760)
+    }
+}
+
+public extension BetaInputTextContentParam {
+    init(
+        type: BetaInputTextContentParamType,
+        text: String,
+        promptCacheBreakpoint: BetaPromptCacheBreakpointParam? = nil
+    ) throws {
         (self.type, self.text) = (type, text)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-            try sdkValidateRawEnum("type", self.type, BetaInputTextContentParamType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: nil, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, BetaInputTextContentParamType.allCases.map(\.rawValue))
+        try validateLength("text", self.text, min: nil, max: 10_485_760)
     }
 }
 
@@ -67,21 +89,27 @@ public struct BetaInputMessageResourceVariant1: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaInputMessageResourceVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaInputMessageResourceVariant1 {
-    public init(id: String) {
+public extension BetaInputMessageResourceVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+    }
+}
+
+public extension BetaInputMessageResourceVariant1 {
+    init(id: String) {
         self.id = id
     }
 }
@@ -102,30 +130,44 @@ public struct BetaInputTextContent: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaInputTextContent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-            try sdkValidateRawEnum("type", self.type, BetaInputTextContentType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaInputTextContent {
-    public init(type: BetaInputTextContentType, text: String, promptCacheBreakpoint: BetaPromptCacheBreakpointConfig? = nil) throws {
+public extension BetaInputTextContent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+        try sdkValidateRawEnum("type", type, BetaInputTextContentType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaInputTextContent {
+    init(
+        type: BetaInputTextContentType,
+        text: String,
+        promptCacheBreakpoint: BetaPromptCacheBreakpointConfig? = nil
+    ) throws {
         (self.type, self.text) = (type, text)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-            try sdkValidateRawEnum("type", self.type, BetaInputTextContentType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaInputTextContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -169,14 +211,17 @@ public enum BetaInputImageContentParamAutoParamType: String, CaseIterable, Codab
 public struct BetaInputMessageRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = BetaInputMessageRole(rawValue: "user")
     public static let system = BetaInputMessageRole(rawValue: "system")
     public static let developer = BetaInputMessageRole(rawValue: "developer")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -209,13 +254,16 @@ public enum BetaInputTextContentParamType: String, CaseIterable, Codable {
 public struct BetaInputFidelity: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let high = BetaInputFidelity(rawValue: "high")
     public static let low = BetaInputFidelity(rawValue: "low")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -265,14 +313,17 @@ public enum BetaInputTextContentType: String, CaseIterable, Codable {
 public struct BetaInputMessageStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = BetaInputMessageStatus(rawValue: "in_progress")
     public static let completed = BetaInputMessageStatus(rawValue: "completed")
     public static let incomplete = BetaInputMessageStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

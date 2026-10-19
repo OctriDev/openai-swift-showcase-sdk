@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponseFormatText domain models
+/// ResponseFormatText domain models
 /// Configure the model to generate valid Python code. See the custom grammars guide for more details.
 public struct ResponseFormatTextPython: Codable {
     /// The type of response format being defined. Always `python`.
@@ -13,21 +13,27 @@ public struct ResponseFormatTextPython: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseFormatTextPython {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseFormatTextPython {
-    public init(type: ResponseFormatTextPythonType) {
+public extension ResponseFormatTextPython {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+    }
+}
+
+public extension ResponseFormatTextPython {
+    init(type: ResponseFormatTextPythonType) {
         self.type = type
     }
 }
@@ -44,25 +50,35 @@ public struct ResponseFormatTextGrammar: Codable {
         case grammar
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ResponseFormatTextGrammar {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.grammar) else {
-            throw SdkValidationError(field: "grammar", code: "required", message: "Validation failed for 'grammar': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.grammar = try container.sdkDecodeRequired(.grammar)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ResponseFormatTextGrammar {
-    public init(type: ResponseFormatTextGrammarType, grammar: String) {
+public extension ResponseFormatTextGrammar {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.grammar) else {
+            throw SdkValidationError(
+                field: "grammar",
+                code: "required",
+                message: "Validation failed for 'grammar': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        grammar = try container.sdkDecodeRequired(.grammar)
+    }
+}
+
+public extension ResponseFormatTextGrammar {
+    init(type: ResponseFormatTextGrammarType, grammar: String) {
         (self.type, self.grammar) = (type, grammar)
     }
 }
@@ -71,12 +87,15 @@ extension ResponseFormatTextGrammar {
 public struct ResponseFormatTextPythonType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let python = ResponseFormatTextPythonType(rawValue: "python")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -89,12 +108,15 @@ public struct ResponseFormatTextPythonType: RawRepresentable, Hashable, Codable,
 public struct ResponseFormatTextGrammarType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let grammar = ResponseFormatTextGrammarType(rawValue: "grammar")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

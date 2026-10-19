@@ -6,32 +6,73 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension CertificatesMethods {
-    /// Deactivates organization-level certificates in a single request. Supply between 1 and 10 certificate IDs; the operation is atomic and idempotent.
+public extension CertificatesMethods {
+    /// Deactivates organization-level certificates in a single request. Supply between 1 and 10 certificate IDs; the
+    /// operation is atomic and idempotent.
     ///
-    /// Deactivate certificates at the organization level. You can atomically and idempotently deactivate up to 10 certificates at a time.
+    /// Deactivate certificates at the organization level. You can atomically and idempotently deactivate up to 10
+    /// certificates at a time.
     ///
     /// - Parameters:
     /// - certificateIds: Required array value serialized in the `certificate_ids`
     ///   wire field.
-    public static func deactivateCertificatesForOrganization(config: ClientConfig, certificateIds: [String], requestOptions: RequestOptions? = nil) async throws -> OrganizationCertificateDeactivationResponse {
+    static func deactivateCertificatesForOrganization(
+        config: ClientConfig,
+        certificateIds: [String],
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OrganizationCertificateDeactivationResponse {
         try validateItems("certificate_ids", certificateIds, min: 1, max: 10)
 
         let requestBody = DeactivateCertificatesForOrganizationRequestBody(certificateIds: certificateIds)
 
-        return try (await sdkRequest("POST", "/organization/certificates/deactivate", config: config, body: requestBody, decoder: .json, operationId: "deactivateCertificatesForOrganization", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/organization/certificates/deactivate",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "deactivateCertificatesForOrganization",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+            ]
+        )).data
     }
 
-    /// Get a certificate that has been uploaded to the organization. You can get a certificate regardless of whether it is active or not.
+    /// Get a certificate that has been uploaded to the organization. You can get a certificate regardless of whether it
+    /// is active or not.
     ///
     /// - Parameters:
     /// - certificateId: Unique ID of the certificate to retrieve.
     /// - include: A list of additional fields to include in the response. Currently
     ///   the only supported value is `content` to fetch the PEM content of the
     ///   certificate.
-    public static func getCertificate(config: ClientConfig, certificateId: String, include: [GetCertificateParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> Certificate {
-        return try (await sdkRequest("GET", ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(), config: config, query: [
-            SdkQueryParameter("include", values: include, style: "form", explode: true),
-        ], decoder: .json, operationId: "getCertificate", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func getCertificate(
+        config: ClientConfig,
+        certificateId: String,
+        include: [GetCertificateParameterItem]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Certificate {
+        try await (sdkRequest(
+            "GET",
+            ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("include", values: include, style: "form", explode: true),
+            ],
+            decoder: .json,
+            operationId: "getCertificate",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

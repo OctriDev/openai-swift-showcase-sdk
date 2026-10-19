@@ -3,23 +3,31 @@
 
 import Foundation
 
-// Projects domain models
-extension ProjectModelPermissionsUpdateRequest {
-    public init(from decoder: Decoder) throws {
+/// Projects domain models
+public extension ProjectModelPermissionsUpdateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.mode) else {
-            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
+            throw SdkValidationError(
+                field: "mode",
+                code: "required",
+                message: "Validation failed for 'mode': value is required"
+            )
         }
         guard container.contains(.modelIds) else {
-            throw SdkValidationError(field: "model_ids", code: "required", message: "Validation failed for 'model_ids': value is required")
+            throw SdkValidationError(
+                field: "model_ids",
+                code: "required",
+                message: "Validation failed for 'model_ids': value is required"
+            )
         }
-        self.mode = try container.sdkDecodeRequired(.mode)
-        self.modelIds = try container.sdkDecodeRequired(.modelIds)
+        mode = try container.sdkDecodeRequired(.mode)
+        modelIds = try container.sdkDecodeRequired(.modelIds)
     }
 }
 
-extension ProjectModelPermissionsUpdateRequest {
-    public init(mode: ProjectModelPermissionsUpdateRequestMode, modelIds: [String]) {
+public extension ProjectModelPermissionsUpdateRequest {
+    init(mode: ProjectModelPermissionsUpdateRequestMode, modelIds: [String]) {
         (self.mode, self.modelIds) = (mode, modelIds)
     }
 }
@@ -39,29 +47,43 @@ public struct ProjectApiKeyDeleteResponse: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectApiKeyDeleteResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectApiKeyDeleteResponse {
-    public init(object: ProjectApiKeyDeleteResponseObject, id: String, deleted: Bool) {
+public extension ProjectApiKeyDeleteResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        deleted = try container.sdkDecodeRequired(.deleted)
+    }
+}
+
+public extension ProjectApiKeyDeleteResponse {
+    init(object: ProjectApiKeyDeleteResponseObject, id: String, deleted: Bool) {
         (self.object, self.id) = (object, id)
         self.deleted = deleted
     }
@@ -84,21 +106,21 @@ public struct ProjectUpdateRequest: Codable {
     }
 
     init() {
-        (self.name, self.externalKeyId, self.geography) = (nil, nil, nil)
+        (name, externalKeyId, geography) = (nil, nil, nil)
     }
 }
 
-extension ProjectUpdateRequest {
-    public init(from decoder: Decoder) throws {
+public extension ProjectUpdateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.externalKeyId = try container.sdkDecodeIfPresent(.externalKeyId)
-        self.geography = try container.sdkDecodeIfPresent(.geography)
+        name = try container.sdkDecodeIfPresent(.name)
+        externalKeyId = try container.sdkDecodeIfPresent(.externalKeyId)
+        geography = try container.sdkDecodeIfPresent(.geography)
     }
 }
 
-extension ProjectUpdateRequest {
-    public init(name: String? = nil, externalKeyId: String? = nil, geography: String? = nil) {
+public extension ProjectUpdateRequest {
+    init(name: String? = nil, externalKeyId: String? = nil, geography: String? = nil) {
         self.init()
         (self.name, self.externalKeyId) = (name, externalKeyId)
         self.geography = geography
@@ -126,31 +148,45 @@ public struct ProjectUserListResponse: Codable {
         case lastId = "last_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectUserListResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-        self.firstId = try container.sdkDecodeIfPresent(.firstId)
-        self.lastId = try container.sdkDecodeIfPresent(.lastId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectUserListResponse {
-    public init(object: String, data: [ProjectUser], hasMore: Bool, firstId: String? = nil, lastId: String? = nil) {
+public extension ProjectUserListResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        firstId = try container.sdkDecodeIfPresent(.firstId)
+        lastId = try container.sdkDecodeIfPresent(.lastId)
+    }
+}
+
+public extension ProjectUserListResponse {
+    init(object: String, data: [ProjectUser], hasMore: Bool, firstId: String? = nil, lastId: String? = nil) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.firstId) = (hasMore, firstId)
         self.lastId = lastId
@@ -181,38 +217,67 @@ public struct ProjectServiceAccountApiKey: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectServiceAccountApiKey {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.value) else {
-            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.value = try container.sdkDecodeRequired(.value)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectServiceAccountApiKey {
-    public init(object: ProjectServiceAccountApiKeyObject, value: String, name: String, createdAt: Int, id: String, expiresAt: Int? = nil) {
+public extension ProjectServiceAccountApiKey {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.value) else {
+            throw SdkValidationError(
+                field: "value",
+                code: "required",
+                message: "Validation failed for 'value': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        value = try container.sdkDecodeRequired(.value)
+        name = try container.sdkDecodeRequired(.name)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        id = try container.sdkDecodeRequired(.id)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+    }
+}
+
+public extension ProjectServiceAccountApiKey {
+    init(
+        object: ProjectServiceAccountApiKeyObject,
+        value: String,
+        name: String,
+        createdAt: Int,
+        id: String,
+        expiresAt: Int? = nil
+    ) {
         (self.object, self.value) = (object, value)
         (self.name, self.createdAt) = (name, createdAt)
         (self.id, self.expiresAt) = (id, expiresAt)
@@ -242,24 +307,35 @@ public struct ProjectCreateRequest: Codable {
         case externalKeyId = "external_key_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectCreateRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.geography = try container.sdkDecodeIfPresent(.geography)
-        self.residency = try container.sdkDecodeIfPresent(.residency)
-        self.externalKeyId = try container.sdkDecodeIfPresent(.externalKeyId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectCreateRequest {
-    public init(name: String, geography: String? = nil, residency: PublicProjectResidency? = nil, externalKeyId: String? = nil) {
+public extension ProjectCreateRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        geography = try container.sdkDecodeIfPresent(.geography)
+        residency = try container.sdkDecodeIfPresent(.residency)
+        externalKeyId = try container.sdkDecodeIfPresent(.externalKeyId)
+    }
+}
+
+public extension ProjectCreateRequest {
+    init(
+        name: String,
+        geography: String? = nil,
+        residency: PublicProjectResidency? = nil,
+        externalKeyId: String? = nil
+    ) {
         (self.name, self.geography) = (name, geography)
         (self.residency, self.externalKeyId) = (residency, externalKeyId)
     }
@@ -280,29 +356,43 @@ public struct ProjectModelPermissions: Codable {
         case modelIds = "model_ids"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectModelPermissions {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.mode) else {
-            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
-        }
-        guard container.contains(.modelIds) else {
-            throw SdkValidationError(field: "model_ids", code: "required", message: "Validation failed for 'model_ids': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.mode = try container.sdkDecodeRequired(.mode)
-        self.modelIds = try container.sdkDecodeRequired(.modelIds)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectModelPermissions {
-    public init(object: ProjectModelPermissionsObject, mode: ProjectModelPermissionsMode, modelIds: [String]) {
+public extension ProjectModelPermissions {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.mode) else {
+            throw SdkValidationError(
+                field: "mode",
+                code: "required",
+                message: "Validation failed for 'mode': value is required"
+            )
+        }
+        guard container.contains(.modelIds) else {
+            throw SdkValidationError(
+                field: "model_ids",
+                code: "required",
+                message: "Validation failed for 'model_ids': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        mode = try container.sdkDecodeRequired(.mode)
+        modelIds = try container.sdkDecodeRequired(.modelIds)
+    }
+}
+
+public extension ProjectModelPermissions {
+    init(object: ProjectModelPermissionsObject, mode: ProjectModelPermissionsMode, modelIds: [String]) {
         (self.object, self.mode) = (object, mode)
         self.modelIds = modelIds
     }
@@ -329,31 +419,51 @@ public struct ProjectListResponse: Codable {
         case lastId = "last_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectListResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-        self.firstId = try container.sdkDecodeIfPresent(.firstId)
-        self.lastId = try container.sdkDecodeIfPresent(.lastId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectListResponse {
-    public init(object: ProjectListResponseObject, data: [Project], hasMore: Bool, firstId: String? = nil, lastId: String? = nil) {
+public extension ProjectListResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        firstId = try container.sdkDecodeIfPresent(.firstId)
+        lastId = try container.sdkDecodeIfPresent(.lastId)
+    }
+}
+
+public extension ProjectListResponse {
+    init(
+        object: ProjectListResponseObject,
+        data: [Project],
+        hasMore: Bool,
+        firstId: String? = nil,
+        lastId: String? = nil
+    ) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.firstId) = (hasMore, firstId)
         self.lastId = lastId
@@ -385,25 +495,38 @@ public struct ProjectRateLimitUpdateRequest: Codable {
     }
 
     init() {
-        (self.maxRequestsPer1Minute, self.maxTokensPer1Minute, self.maxImagesPer1Minute, self.maxAudioMegabytesPer1Minute, self.maxRequestsPer1Day) = (nil, nil, nil, nil, nil)
-        self.batch1DayMaxInputTokens = nil
+        (
+            maxRequestsPer1Minute,
+            maxTokensPer1Minute,
+            maxImagesPer1Minute,
+            maxAudioMegabytesPer1Minute,
+            maxRequestsPer1Day
+        ) = (nil, nil, nil, nil, nil)
+        batch1DayMaxInputTokens = nil
     }
 }
 
-extension ProjectRateLimitUpdateRequest {
-    public init(from decoder: Decoder) throws {
+public extension ProjectRateLimitUpdateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.maxRequestsPer1Minute = try container.sdkDecodeIfPresent(.maxRequestsPer1Minute)
-        self.maxTokensPer1Minute = try container.sdkDecodeIfPresent(.maxTokensPer1Minute)
-        self.maxImagesPer1Minute = try container.sdkDecodeIfPresent(.maxImagesPer1Minute)
-        self.maxAudioMegabytesPer1Minute = try container.sdkDecodeIfPresent(.maxAudioMegabytesPer1Minute)
-        self.maxRequestsPer1Day = try container.sdkDecodeIfPresent(.maxRequestsPer1Day)
-        self.batch1DayMaxInputTokens = try container.sdkDecodeIfPresent(.batch1DayMaxInputTokens)
+        maxRequestsPer1Minute = try container.sdkDecodeIfPresent(.maxRequestsPer1Minute)
+        maxTokensPer1Minute = try container.sdkDecodeIfPresent(.maxTokensPer1Minute)
+        maxImagesPer1Minute = try container.sdkDecodeIfPresent(.maxImagesPer1Minute)
+        maxAudioMegabytesPer1Minute = try container.sdkDecodeIfPresent(.maxAudioMegabytesPer1Minute)
+        maxRequestsPer1Day = try container.sdkDecodeIfPresent(.maxRequestsPer1Day)
+        batch1DayMaxInputTokens = try container.sdkDecodeIfPresent(.batch1DayMaxInputTokens)
     }
 }
 
-extension ProjectRateLimitUpdateRequest {
-    public init(maxRequestsPer1Minute: Int? = nil, maxTokensPer1Minute: Int? = nil, maxImagesPer1Minute: Int? = nil, maxAudioMegabytesPer1Minute: Int? = nil, maxRequestsPer1Day: Int? = nil, batch1DayMaxInputTokens: Int? = nil) {
+public extension ProjectRateLimitUpdateRequest {
+    init(
+        maxRequestsPer1Minute: Int? = nil,
+        maxTokensPer1Minute: Int? = nil,
+        maxImagesPer1Minute: Int? = nil,
+        maxAudioMegabytesPer1Minute: Int? = nil,
+        maxRequestsPer1Day: Int? = nil,
+        batch1DayMaxInputTokens: Int? = nil
+    ) {
         self.init()
         self.maxRequestsPer1Minute = maxRequestsPer1Minute
         (self.maxTokensPer1Minute, self.maxImagesPer1Minute) = (maxTokensPer1Minute, maxImagesPer1Minute)
@@ -428,29 +551,43 @@ public struct ProjectServiceAccountDeleteResponse: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectServiceAccountDeleteResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectServiceAccountDeleteResponse {
-    public init(object: ProjectServiceAccountDeleteResponseObject, id: String, deleted: Bool) {
+public extension ProjectServiceAccountDeleteResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        deleted = try container.sdkDecodeRequired(.deleted)
+    }
+}
+
+public extension ProjectServiceAccountDeleteResponse {
+    init(object: ProjectServiceAccountDeleteResponseObject, id: String, deleted: Bool) {
         (self.object, self.id) = (object, id)
         self.deleted = deleted
     }
@@ -460,12 +597,16 @@ extension ProjectServiceAccountDeleteResponse {
 public struct ProjectServiceAccountApiKeyObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationProjectServiceAccountApiKey = ProjectServiceAccountApiKeyObject(rawValue: "organization.project.service_account.api_key")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationProjectServiceAccountApiKey =
+        ProjectServiceAccountApiKeyObject(rawValue: "organization.project.service_account.api_key")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,9 +3,20 @@
 
 import Foundation
 
-// ChatCreate domain models
-extension CreateChatCompletionResponse {
-    public init(id: String, choices: [CreateChatCompletionResponseChoicesItem], created: Int, model: String, object: CreateChatCompletionResponseObject, metadata: Metadata? = nil, serviceTier: ServiceTierVariant0? = nil, systemFingerprint: String? = nil, usage: CompletionUsage? = nil, moderation: ChatCompletionModeration? = nil) {
+/// ChatCreate domain models
+public extension CreateChatCompletionResponse {
+    init(
+        id: String,
+        choices: [CreateChatCompletionResponseChoicesItem],
+        created: Int,
+        model: String,
+        object: CreateChatCompletionResponseObject,
+        metadata: Metadata? = nil,
+        serviceTier: ServiceTierVariant0? = nil,
+        systemFingerprint: String? = nil,
+        usage: CompletionUsage? = nil,
+        moderation: ChatCompletionModeration? = nil
+    ) {
         (self.id, self.choices) = (id, choices)
         (self.created, self.model) = (created, model)
         (self.object, self.metadata) = (object, metadata)
@@ -26,25 +37,35 @@ public struct CreateChatCompletionRequestVariant1WebSearchOptionsUserLocation: C
         case approximate
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateChatCompletionRequestVariant1WebSearchOptionsUserLocation {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.approximate) else {
-            throw SdkValidationError(field: "approximate", code: "required", message: "Validation failed for 'approximate': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.approximate = try container.sdkDecodeRequired(.approximate)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateChatCompletionRequestVariant1WebSearchOptionsUserLocation {
-    public init(type: CreateChatCompletionRequestVariant1WebSearchOptionsUserLocationType, approximate: WebSearchLocation) {
+public extension CreateChatCompletionRequestVariant1WebSearchOptionsUserLocation {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.approximate) else {
+            throw SdkValidationError(
+                field: "approximate",
+                code: "required",
+                message: "Validation failed for 'approximate': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        approximate = try container.sdkDecodeRequired(.approximate)
+    }
+}
+
+public extension CreateChatCompletionRequestVariant1WebSearchOptionsUserLocation {
+    init(type: CreateChatCompletionRequestVariant1WebSearchOptionsUserLocationType, approximate: WebSearchLocation) {
         (self.type, self.approximate) = (type, approximate)
     }
 }
@@ -72,27 +93,42 @@ public struct CreateChatCompletionStreamResponseChoicesItem: Codable {
         case finishReason = "finish_reason"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateChatCompletionStreamResponseChoicesItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.delta) else {
-            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
-        }
-        guard container.contains(.index) else {
-            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
-        }
-        self.delta = try container.sdkDecodeRequired(.delta)
-        self.index = try container.sdkDecodeRequired(.index)
-        self.logprobs = try container.sdkDecodeIfPresent(.logprobs)
-        self.finishReason = try container.sdkDecodeIfPresent(.finishReason)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateChatCompletionStreamResponseChoicesItem {
-    public init(delta: ChatCompletionStreamResponseDelta, index: Int, logprobs: CreateChatCompletionStreamResponseChoicesItemLogprobs? = nil, finishReason: CreateChatCompletionStreamResponseChoicesItemFinishReason? = nil) {
+public extension CreateChatCompletionStreamResponseChoicesItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.delta) else {
+            throw SdkValidationError(
+                field: "delta",
+                code: "required",
+                message: "Validation failed for 'delta': value is required"
+            )
+        }
+        guard container.contains(.index) else {
+            throw SdkValidationError(
+                field: "index",
+                code: "required",
+                message: "Validation failed for 'index': value is required"
+            )
+        }
+        delta = try container.sdkDecodeRequired(.delta)
+        index = try container.sdkDecodeRequired(.index)
+        logprobs = try container.sdkDecodeIfPresent(.logprobs)
+        finishReason = try container.sdkDecodeIfPresent(.finishReason)
+    }
+}
+
+public extension CreateChatCompletionStreamResponseChoicesItem {
+    init(
+        delta: ChatCompletionStreamResponseDelta,
+        index: Int,
+        logprobs: CreateChatCompletionStreamResponseChoicesItemLogprobs? = nil,
+        finishReason: CreateChatCompletionStreamResponseChoicesItemFinishReason? = nil
+    ) {
         (self.delta, self.index) = (delta, index)
         (self.logprobs, self.finishReason) = (logprobs, finishReason)
     }
@@ -104,22 +140,33 @@ public indirect enum CreateChatCompletionRequestVariant1FunctionCall {
 }
 
 extension CreateChatCompletionRequestVariant1FunctionCall: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateChatCompletionRequestVariant1FunctionCall")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateChatCompletionRequestVariant1FunctionCall"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension CreateChatCompletionRequestVariant1FunctionCall {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(ChatCompletionFunctionCallOption.self) { return .chatCompletionFunctionCallOption(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container
+            .decode(ChatCompletionFunctionCallOption.self) {
+            return .chatCompletionFunctionCallOption(value)
+        }
         return nil
     }
 }
@@ -149,25 +196,35 @@ public struct CreateChatCompletionRequestVariant1Audio: Codable {
         case format
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateChatCompletionRequestVariant1Audio {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.voice) else {
-            throw SdkValidationError(field: "voice", code: "required", message: "Validation failed for 'voice': value is required")
-        }
-        guard container.contains(.format) else {
-            throw SdkValidationError(field: "format", code: "required", message: "Validation failed for 'format': value is required")
-        }
-        self.voice = try container.sdkDecodeRequired(.voice)
-        self.format = try container.sdkDecodeRequired(.format)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateChatCompletionRequestVariant1Audio {
-    public init(voice: VoiceIdsOrCustomVoice, format: CreateChatCompletionRequestVariant1AudioFormat) {
+public extension CreateChatCompletionRequestVariant1Audio {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.voice) else {
+            throw SdkValidationError(
+                field: "voice",
+                code: "required",
+                message: "Validation failed for 'voice': value is required"
+            )
+        }
+        guard container.contains(.format) else {
+            throw SdkValidationError(
+                field: "format",
+                code: "required",
+                message: "Validation failed for 'format': value is required"
+            )
+        }
+        voice = try container.sdkDecodeRequired(.voice)
+        format = try container.sdkDecodeRequired(.format)
+    }
+}
+
+public extension CreateChatCompletionRequestVariant1Audio {
+    init(voice: VoiceIdsOrCustomVoice, format: CreateChatCompletionRequestVariant1AudioFormat) {
         (self.voice, self.format) = (voice, format)
     }
 }
@@ -193,48 +250,76 @@ public struct CreateChatCompletionResponseChoicesItem: Codable {
         case logprobs
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateChatCompletionResponseChoicesItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.finishReason) else {
-            throw SdkValidationError(field: "finish_reason", code: "required", message: "Validation failed for 'finish_reason': value is required")
-        }
-        guard container.contains(.index) else {
-            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        guard container.contains(.logprobs) else {
-            throw SdkValidationError(field: "logprobs", code: "required", message: "Validation failed for 'logprobs': value is required")
-        }
-        self.finishReason = try container.sdkDecodeRequired(.finishReason)
-        self.index = try container.sdkDecodeRequired(.index)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.logprobs = try container.sdkDecodeNullable(.logprobs)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateChatCompletionResponseChoicesItem {
-    public init(finishReason: CreateChatCompletionResponseChoicesItemFinishReason, index: Int, message: ChatCompletionResponseMessage, logprobs: CreateChatCompletionResponseChoicesItemLogprobs?) {
+public extension CreateChatCompletionResponseChoicesItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.finishReason) else {
+            throw SdkValidationError(
+                field: "finish_reason",
+                code: "required",
+                message: "Validation failed for 'finish_reason': value is required"
+            )
+        }
+        guard container.contains(.index) else {
+            throw SdkValidationError(
+                field: "index",
+                code: "required",
+                message: "Validation failed for 'index': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        guard container.contains(.logprobs) else {
+            throw SdkValidationError(
+                field: "logprobs",
+                code: "required",
+                message: "Validation failed for 'logprobs': value is required"
+            )
+        }
+        finishReason = try container.sdkDecodeRequired(.finishReason)
+        index = try container.sdkDecodeRequired(.index)
+        message = try container.sdkDecodeRequired(.message)
+        logprobs = try container.sdkDecodeNullable(.logprobs)
+    }
+}
+
+public extension CreateChatCompletionResponseChoicesItem {
+    init(
+        finishReason: CreateChatCompletionResponseChoicesItemFinishReason,
+        index: Int,
+        message: ChatCompletionResponseMessage,
+        logprobs: CreateChatCompletionResponseChoicesItemLogprobs?
+    ) {
         (self.finishReason, self.index) = (finishReason, index)
         (self.message, self.logprobs) = (message, logprobs)
     }
 }
 
 /// The type of location approximation. Always `approximate`.
-public struct CreateChatCompletionRequestVariant1WebSearchOptionsUserLocationType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateChatCompletionRequestVariant1WebSearchOptionsUserLocationType: RawRepresentable, Hashable, Codable,
+    Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let approximate = CreateChatCompletionRequestVariant1WebSearchOptionsUserLocationType(rawValue: "approximate")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let approximate =
+        CreateChatCompletionRequestVariant1WebSearchOptionsUserLocationType(rawValue: "approximate")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -247,12 +332,15 @@ public struct CreateChatCompletionRequestVariant1WebSearchOptionsUserLocationTyp
 public struct CreateChatCompletionResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let chatCompletion = CreateChatCompletionResponseObject(rawValue: "chat.completion")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -265,10 +353,14 @@ public struct CreateChatCompletionResponseObject: RawRepresentable, Hashable, Co
 /// a provided stop sequence, `length` if the maximum number of tokens specified in the request was reached,
 /// `content_filter` if content was omitted due to a flag from our content filters, `tool_calls` if the model
 /// called a tool, or `function_call` (deprecated) if the model called a function. Read the Model Spec for more.
-public struct CreateChatCompletionResponseChoicesItemFinishReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateChatCompletionResponseChoicesItemFinishReason: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let stop = CreateChatCompletionResponseChoicesItemFinishReason(rawValue: "stop")
     public static let length = CreateChatCompletionResponseChoicesItemFinishReason(rawValue: "length")
     public static let toolCalls = CreateChatCompletionResponseChoicesItemFinishReason(rawValue: "tool_calls")
@@ -277,7 +369,7 @@ public struct CreateChatCompletionResponseChoicesItemFinishReason: RawRepresenta
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -291,19 +383,25 @@ public struct CreateChatCompletionResponseChoicesItemFinishReason: RawRepresenta
 /// `content_filter` if content was omitted due to a flag from our content filters, `tool_calls` if the model
 /// called a tool, or `function_call` (deprecated) if the model called a function. Omitted from the final audio
 /// update containing only `delta.audio.expires_at`.
-public struct CreateChatCompletionStreamResponseChoicesItemFinishReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateChatCompletionStreamResponseChoicesItemFinishReason: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let stop = CreateChatCompletionStreamResponseChoicesItemFinishReason(rawValue: "stop")
     public static let length = CreateChatCompletionStreamResponseChoicesItemFinishReason(rawValue: "length")
     public static let toolCalls = CreateChatCompletionStreamResponseChoicesItemFinishReason(rawValue: "tool_calls")
-    public static let contentFilter = CreateChatCompletionStreamResponseChoicesItemFinishReason(rawValue: "content_filter")
-    public static let functionCall = CreateChatCompletionStreamResponseChoicesItemFinishReason(rawValue: "function_call")
+    public static let contentFilter =
+        CreateChatCompletionStreamResponseChoicesItemFinishReason(rawValue: "content_filter")
+    public static let functionCall =
+        CreateChatCompletionStreamResponseChoicesItemFinishReason(rawValue: "function_call")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -313,15 +411,19 @@ public struct CreateChatCompletionStreamResponseChoicesItemFinishReason: RawRepr
 }
 
 /// The object type, which is always `chat.completion.chunk`.
-public struct CreateChatCompletionStreamResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateChatCompletionStreamResponseObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let chatCompletionChunk = CreateChatCompletionStreamResponseObject(rawValue: "chat.completion.chunk")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -332,16 +434,20 @@ public struct CreateChatCompletionStreamResponseObject: RawRepresentable, Hashab
 
 /// `none` means the model will not call a function and instead generates a message. `auto` means the model can
 /// pick between generating a message or calling a function.
-public struct CreateChatCompletionRequestVariant1FunctionCallVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateChatCompletionRequestVariant1FunctionCallVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let none = CreateChatCompletionRequestVariant1FunctionCallVariant0(rawValue: "none")
     public static let auto = CreateChatCompletionRequestVariant1FunctionCallVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -351,10 +457,14 @@ public struct CreateChatCompletionRequestVariant1FunctionCallVariant0: RawRepres
 }
 
 /// Specifies the output audio format. Must be one of `wav`, `mp3`, `flac`, `opus`, or `pcm16`.
-public struct CreateChatCompletionRequestVariant1AudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateChatCompletionRequestVariant1AudioFormat: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let wav = CreateChatCompletionRequestVariant1AudioFormat(rawValue: "wav")
     public static let aac = CreateChatCompletionRequestVariant1AudioFormat(rawValue: "aac")
     public static let mp3 = CreateChatCompletionRequestVariant1AudioFormat(rawValue: "mp3")
@@ -364,7 +474,7 @@ public struct CreateChatCompletionRequestVariant1AudioFormat: RawRepresentable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

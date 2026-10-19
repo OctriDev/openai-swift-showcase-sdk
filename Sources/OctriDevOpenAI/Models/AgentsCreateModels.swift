@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsCreate domain models
+/// AgentsCreate domain models
 public indirect enum CreateEnvironmentParam {
     case createEnvironmentParamOpenaiHosted(CreateEnvironmentParamOpenaiHosted)
     /// A member whose `type` names no branch this SDK knows, kept as received.
@@ -11,7 +11,6 @@ public indirect enum CreateEnvironmentParam {
 }
 
 extension CreateEnvironmentParam: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,12 +18,16 @@ extension CreateEnvironmentParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -35,8 +38,8 @@ extension CreateEnvironmentParam: Codable {
 extension CreateEnvironmentParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "openai_hosted": return .createEnvironmentParamOpenaiHosted(try CreateEnvironmentParamOpenaiHosted(from: decoder))
-        default: return nil
+        case "openai_hosted": try .createEnvironmentParamOpenaiHosted(CreateEnvironmentParamOpenaiHosted(from: decoder))
+        default: nil
         }
     }
 }
@@ -57,22 +60,32 @@ public indirect enum CreateSessionInputParam {
 }
 
 extension CreateSessionInputParam: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateSessionInputParam")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateSessionInputParam"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension CreateSessionInputParam {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode([InputMessageParam].self) { return .inputMessageParamList(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode([InputMessageParam].self) {
+            return .inputMessageParamList(value)
+        }
         return nil
     }
 }
@@ -117,26 +130,37 @@ public struct CreateSubagentCallItemResource: Codable {
         case reasoningEffort = "reasoning_effort"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateSubagentCallItemResource {
-    public init(from decoder: Decoder) throws {
+public extension CreateSubagentCallItemResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.turnId = try container.sdkDecodeRequired(.turnId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.agentId = try container.sdkDecodeRequired(.agentId)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.model = try container.sdkDecodeNullable(.model)
-        self.reasoningEffort = try container.sdkDecodeNullable(.reasoningEffort)
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        turnId = try container.sdkDecodeRequired(.turnId)
+        status = try container.sdkDecodeRequired(.status)
+        agentId = try container.sdkDecodeRequired(.agentId)
+        content = try container.sdkDecodeRequired(.content)
+        model = try container.sdkDecodeNullable(.model)
+        reasoningEffort = try container.sdkDecodeNullable(.reasoningEffort)
         try sdkValidateConstraints()
     }
 }
 
-extension CreateSubagentCallItemResource {
-    public init(type: CreateSubagentCallItemResourceType, id: String, turnId: String, status: FunctionCallStatusResource, agentId: String, content: [AgentContentResource], model: String?, reasoningEffort: String?) throws {
+public extension CreateSubagentCallItemResource {
+    init(
+        type: CreateSubagentCallItemResourceType,
+        id: String,
+        turnId: String,
+        status: FunctionCallStatusResource,
+        agentId: String,
+        content: [AgentContentResource],
+        model: String?,
+        reasoningEffort: String?
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.turnId, self.status) = (turnId, status)
         (self.agentId, self.content) = (agentId, content)
@@ -147,15 +171,15 @@ extension CreateSubagentCallItemResource {
 
 extension CreateSubagentCallItemResource {
     func sdkValidateConstraints() throws {
-            try sdkValidateRawEnum("type", self.type, CreateSubagentCallItemResourceType.allCases.map(\.rawValue))
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("turn_id", self.turnId, min: 0, max: nil)
-            try validateLength("agent_id", self.agentId, min: 0, max: nil)
-            try validateItems("content", self.content, min: 0, max: 2000)
-        if let value = self.model {
+        try sdkValidateRawEnum("type", type, CreateSubagentCallItemResourceType.allCases.map(\.rawValue))
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("turn_id", turnId, min: 0, max: nil)
+        try validateLength("agent_id", agentId, min: 0, max: nil)
+        try validateItems("content", content, min: 0, max: 2000)
+        if let value = model {
             try validateLength("model", value, min: 0, max: nil)
         }
-        if let value = self.reasoningEffort {
+        if let value = reasoningEffort {
             try validateLength("reasoning_effort", value, min: 0, max: nil)
         }
     }
@@ -197,50 +221,66 @@ public struct CreateAgentParams: Codable {
         case multiAgent = "multi_agent"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateAgentParams {
-    public init(from decoder: Decoder) throws {
+public extension CreateAgentParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
         }
-        self.model = try container.sdkDecodeRequired(.model)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        self.text = try container.sdkDecodeIfPresent(.text)
-        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
-            try validateLength("model", self.model, min: 0, max: 1048576)
-        if let value = self.name {
+        model = try container.sdkDecodeRequired(.model)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        name = try container.sdkDecodeIfPresent(.name)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        text = try container.sdkDecodeIfPresent(.text)
+        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
+        try validateLength("model", model, min: 0, max: 1_048_576)
+        if let value = name {
             try validateLength("name", value, min: 0, max: 128)
         }
-        if let value = self.instructions {
-            try validateLength("instructions", value, min: 0, max: 1048576)
+        if let value = instructions {
+            try validateLength("instructions", value, min: 0, max: 1_048_576)
         }
-        if let value = self.tools {
+        if let value = tools {
             try validateItems("tools", value, min: 0, max: 2000)
         }
     }
 }
 
-extension CreateAgentParams {
-    public init(model: String, metadata: [String: String]? = nil, name: String? = nil, reasoning: ReasoningParam? = nil, text: TextParam? = nil, serviceTier: ServiceTierParam? = nil, instructions: String? = nil, tools: [PersistedAgentToolConfigParam]? = nil, multiAgent: MultiAgentConfigCurrentParam? = nil) throws {
+public extension CreateAgentParams {
+    init(
+        model: String,
+        metadata: [String: String]? = nil,
+        name: String? = nil,
+        reasoning: ReasoningParam? = nil,
+        text: TextParam? = nil,
+        serviceTier: ServiceTierParam? = nil,
+        instructions: String? = nil,
+        tools: [PersistedAgentToolConfigParam]? = nil,
+        multiAgent: MultiAgentConfigCurrentParam? = nil
+    ) throws {
         (self.model, self.metadata) = (model, metadata)
         (self.name, self.reasoning) = (name, reasoning)
         (self.text, self.serviceTier) = (text, serviceTier)
         (self.instructions, self.tools) = (instructions, tools)
         self.multiAgent = multiAgent
-            try validateLength("model", self.model, min: 0, max: 1048576)
+        try validateLength("model", self.model, min: 0, max: 1_048_576)
         if let value = self.name {
             try validateLength("name", value, min: 0, max: 128)
         }
         if let value = self.instructions {
-            try validateLength("instructions", value, min: 0, max: 1048576)
+            try validateLength("instructions", value, min: 0, max: 1_048_576)
         }
         if let value = self.tools {
             try validateItems("tools", value, min: 0, max: 2000)
@@ -286,47 +326,58 @@ public struct CreateEnvironmentTemplateParams: Codable {
     }
 
     init() {
-        (self.packages, self.setupCommands, self.network, self.desktop, self.env) = (nil, nil, nil, nil, nil)
-        (self.capabilityDirectories, self.skills, self.plugins, self.files, self.name) = (nil, nil, nil, nil, nil)
+        (packages, setupCommands, network, desktop, env) = (nil, nil, nil, nil, nil)
+        (capabilityDirectories, skills, plugins, files, name) = (nil, nil, nil, nil, nil)
     }
 }
 
-extension CreateEnvironmentTemplateParams {
-    public init(from decoder: Decoder) throws {
+public extension CreateEnvironmentTemplateParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.packages = try container.sdkDecodeIfPresent(.packages)
-        self.setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
-        self.network = try container.sdkDecodeIfPresent(.network)
-        self.desktop = try container.sdkDecodeIfPresent(.desktop)
-        self.env = try container.sdkDecodeIfPresent(.env)
-        self.capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
-        self.skills = try container.sdkDecodeIfPresent(.skills)
-        self.plugins = try container.sdkDecodeIfPresent(.plugins)
-        self.files = try container.sdkDecodeIfPresent(.files)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        if let value = self.setupCommands {
+        packages = try container.sdkDecodeIfPresent(.packages)
+        setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
+        network = try container.sdkDecodeIfPresent(.network)
+        desktop = try container.sdkDecodeIfPresent(.desktop)
+        env = try container.sdkDecodeIfPresent(.env)
+        capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
+        skills = try container.sdkDecodeIfPresent(.skills)
+        plugins = try container.sdkDecodeIfPresent(.plugins)
+        files = try container.sdkDecodeIfPresent(.files)
+        name = try container.sdkDecodeIfPresent(.name)
+        if let value = setupCommands {
             try validateItems("setup_commands", value, min: 0, max: 16)
         }
-        if let value = self.capabilityDirectories {
+        if let value = capabilityDirectories {
             try validateItems("capability_directories", value, min: 0, max: 16384)
         }
-        if let value = self.skills {
+        if let value = skills {
             try validateItems("skills", value, min: 0, max: 200)
         }
-        if let value = self.plugins {
+        if let value = plugins {
             try validateItems("plugins", value, min: 0, max: 32)
         }
-        if let value = self.files {
+        if let value = files {
             try validateItems("files", value, min: 0, max: 50)
         }
-        if let value = self.name {
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
     }
 }
 
-extension CreateEnvironmentTemplateParams {
-    public init(packages: EnvironmentPackagesParam? = nil, setupCommands: [SetupCommandParam]? = nil, network: NetworkPolicyParam? = nil, desktop: DesktopParam? = nil, env: [String: String]? = nil, capabilityDirectories: [String]? = nil, skills: [HostedSkillParam]? = nil, plugins: [HostedPluginParam]? = nil, files: [HostedEnvironmentFileParam]? = nil, name: String? = nil) throws {
+public extension CreateEnvironmentTemplateParams {
+    init(
+        packages: EnvironmentPackagesParam? = nil,
+        setupCommands: [SetupCommandParam]? = nil,
+        network: NetworkPolicyParam? = nil,
+        desktop: DesktopParam? = nil,
+        env: [String: String]? = nil,
+        capabilityDirectories: [String]? = nil,
+        skills: [HostedSkillParam]? = nil,
+        plugins: [HostedPluginParam]? = nil,
+        files: [HostedEnvironmentFileParam]? = nil,
+        name: String? = nil
+    ) throws {
         self.init()
         (self.packages, self.setupCommands) = (packages, setupCommands)
         (self.network, self.desktop) = (network, desktop)
@@ -366,25 +417,31 @@ public struct CreateAgentEnvironmentParams: Codable {
         case vaultIds = "vault_ids"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateAgentEnvironmentParams {
-    public init(from decoder: Decoder) throws {
+public extension CreateAgentEnvironmentParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.environment) else {
-            throw SdkValidationError(field: "environment", code: "required", message: "Validation failed for 'environment': value is required")
+            throw SdkValidationError(
+                field: "environment",
+                code: "required",
+                message: "Validation failed for 'environment': value is required"
+            )
         }
-        self.environment = try container.sdkDecodeRequired(.environment)
-        self.vaultIds = try container.sdkDecodeIfPresent(.vaultIds)
-        if let value = self.vaultIds {
+        environment = try container.sdkDecodeRequired(.environment)
+        vaultIds = try container.sdkDecodeIfPresent(.vaultIds)
+        if let value = vaultIds {
             try validateItems("vault_ids", value, min: 0, max: 10)
         }
     }
 }
 
-extension CreateAgentEnvironmentParams {
-    public init(environment: CreateEnvironmentParam, vaultIds: [String]? = nil) throws {
+public extension CreateAgentEnvironmentParams {
+    init(environment: CreateEnvironmentParam, vaultIds: [String]? = nil) throws {
         (self.environment, self.vaultIds) = (environment, vaultIds)
         if let value = self.vaultIds {
             try validateItems("vault_ids", value, min: 0, max: 10)
@@ -401,24 +458,30 @@ public struct CreateSessionEventsParams: Codable {
         case events
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateSessionEventsParams {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.events) else {
-            throw SdkValidationError(field: "events", code: "required", message: "Validation failed for 'events': value is required")
-        }
-        self.events = try container.sdkDecodeRequired(.events)
-            try validateItems("events", self.events, min: 0, max: 16384)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateSessionEventsParams {
-    public init(events: [SessionInputParam]) throws {
+public extension CreateSessionEventsParams {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.events) else {
+            throw SdkValidationError(
+                field: "events",
+                code: "required",
+                message: "Validation failed for 'events': value is required"
+            )
+        }
+        events = try container.sdkDecodeRequired(.events)
+        try validateItems("events", events, min: 0, max: 16384)
+    }
+}
+
+public extension CreateSessionEventsParams {
+    init(events: [SessionInputParam]) throws {
         self.events = events
-            try validateItems("events", self.events, min: 0, max: 16384)
+        try validateItems("events", self.events, min: 0, max: 16384)
     }
 }
 
@@ -463,32 +526,50 @@ public struct CreateEnvironmentParamOpenaiHosted: Codable {
         case environmentTemplateId = "environment_template_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateEnvironmentParamOpenaiHosted {
-    public init(from decoder: Decoder) throws {
+public extension CreateEnvironmentParamOpenaiHosted {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.packages = try container.sdkDecodeIfPresent(.packages)
-        self.setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
-        self.network = try container.sdkDecodeIfPresent(.network)
-        self.desktop = try container.sdkDecodeIfPresent(.desktop)
-        self.env = try container.sdkDecodeIfPresent(.env)
-        self.capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
-        self.skills = try container.sdkDecodeIfPresent(.skills)
-        self.plugins = try container.sdkDecodeIfPresent(.plugins)
-        self.files = try container.sdkDecodeIfPresent(.files)
-        self.environmentTemplateId = try container.sdkDecodeIfPresent(.environmentTemplateId)
+        type = try container.sdkDecodeRequired(.type)
+        packages = try container.sdkDecodeIfPresent(.packages)
+        setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
+        network = try container.sdkDecodeIfPresent(.network)
+        desktop = try container.sdkDecodeIfPresent(.desktop)
+        env = try container.sdkDecodeIfPresent(.env)
+        capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
+        skills = try container.sdkDecodeIfPresent(.skills)
+        plugins = try container.sdkDecodeIfPresent(.plugins)
+        files = try container.sdkDecodeIfPresent(.files)
+        environmentTemplateId = try container.sdkDecodeIfPresent(.environmentTemplateId)
         try sdkValidateConstraints()
     }
 }
 
-extension CreateEnvironmentParamOpenaiHosted {
-    public init(type: CreateEnvironmentParamOpenaiHostedType, packages: EnvironmentPackagesParam? = nil, setupCommands: [SetupCommandParam]? = nil, network: NetworkPolicyParam? = nil, desktop: DesktopParam? = nil, env: [String: String]? = nil, capabilityDirectories: [String]? = nil, skills: [HostedSkillParam]? = nil, plugins: [HostedPluginParam]? = nil, files: [HostedEnvironmentFileParam]? = nil, environmentTemplateId: String? = nil) throws {
+public extension CreateEnvironmentParamOpenaiHosted {
+    init(
+        type: CreateEnvironmentParamOpenaiHostedType,
+        packages: EnvironmentPackagesParam? = nil,
+        setupCommands: [SetupCommandParam]? = nil,
+        network: NetworkPolicyParam? = nil,
+        desktop: DesktopParam? = nil,
+        env: [String: String]? = nil,
+        capabilityDirectories: [String]? = nil,
+        skills: [HostedSkillParam]? = nil,
+        plugins: [HostedPluginParam]? = nil,
+        files: [HostedEnvironmentFileParam]? = nil,
+        environmentTemplateId: String? = nil
+    ) throws {
         (self.type, self.packages) = (type, packages)
         (self.setupCommands, self.network) = (setupCommands, network)
         (self.desktop, self.env) = (desktop, env)
@@ -501,23 +582,23 @@ extension CreateEnvironmentParamOpenaiHosted {
 
 extension CreateEnvironmentParamOpenaiHosted {
     func sdkValidateConstraints() throws {
-            try sdkValidateRawEnum("type", self.type, CreateEnvironmentParamOpenaiHostedType.allCases.map(\.rawValue))
-        if let value = self.setupCommands {
+        try sdkValidateRawEnum("type", type, CreateEnvironmentParamOpenaiHostedType.allCases.map(\.rawValue))
+        if let value = setupCommands {
             try validateItems("setup_commands", value, min: 0, max: 16)
         }
-        if let value = self.capabilityDirectories {
+        if let value = capabilityDirectories {
             try validateItems("capability_directories", value, min: 0, max: 16384)
         }
-        if let value = self.skills {
+        if let value = skills {
             try validateItems("skills", value, min: 0, max: 200)
         }
-        if let value = self.plugins {
+        if let value = plugins {
             try validateItems("plugins", value, min: 0, max: 32)
         }
-        if let value = self.files {
+        if let value = files {
             try validateItems("files", value, min: 0, max: 50)
         }
-        if let value = self.environmentTemplateId {
+        if let value = environmentTemplateId {
             try validateLength("environment_template_id", value, min: 0, max: 64)
         }
     }
