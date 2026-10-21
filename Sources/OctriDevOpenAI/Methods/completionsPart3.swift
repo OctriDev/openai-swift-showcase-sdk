@@ -6,26 +6,26 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension CompletionsMethods {
-    public struct CreateCompletionStreamOptions {
+public extension CompletionsMethods {
+    struct CreateCompletionStreamOptions {
         public var model: String
         public var prompt: CreateCompletionRequestPrompt?
         public var stream: Bool?
-        public var bestOf: SdkOptional<Int>? = nil
-        public var echo: SdkOptional<Bool>? = nil
-        public var frequencyPenalty: SdkOptional<Double>? = nil
-        public var logitBias: SdkOptional<[String: Int]>? = nil
-        public var logprobs: SdkOptional<Int>? = nil
-        public var maxTokens: SdkOptional<Int>? = nil
-        public var n: SdkOptional<Int>? = nil
-        public var presencePenalty: SdkOptional<Double>? = nil
-        public var seed: SdkOptional<Int>? = nil
-        public var stop: SdkOptional<StopConfiguration>? = nil
-        public var streamOptions: SdkOptional<ChatCompletionStreamOptions>? = nil
-        public var suffix: SdkOptional<String>? = nil
-        public var temperature: SdkOptional<Double>? = nil
-        public var topP: SdkOptional<Double>? = nil
-        public var user: String? = nil
+        public var bestOf: SdkOptional<Int>?
+        public var echo: SdkOptional<Bool>?
+        public var frequencyPenalty: SdkOptional<Double>?
+        public var logitBias: SdkOptional<[String: Int]>?
+        public var logprobs: SdkOptional<Int>?
+        public var maxTokens: SdkOptional<Int>?
+        public var n: SdkOptional<Int>?
+        public var presencePenalty: SdkOptional<Double>?
+        public var seed: SdkOptional<Int>?
+        public var stop: SdkOptional<StopConfiguration>?
+        public var streamOptions: SdkOptional<ChatCompletionStreamOptions>?
+        public var suffix: SdkOptional<String>?
+        public var temperature: SdkOptional<Double>?
+        public var topP: SdkOptional<Double>?
+        public var user: String?
 
         public init(model: String, prompt: CreateCompletionRequestPrompt?, stream: Bool?) {
             self.model = model
@@ -34,9 +34,12 @@ extension CompletionsMethods {
         }
     }
 
-    /// Creates a completion from a prompt using the specified model and generation parameters. Supply `model` and `prompt`; use `stream` to receive partial results as server-sent events instead of a single response. The response contains generated text choices and usage statistics.
+    /// Creates a completion from a prompt using the specified model and generation parameters. Supply `model` and
+    /// `prompt`; use `stream` to receive partial results as server-sent events instead of a single response. The
+    /// response contains generated text choices and usage statistics.
     ///
-    /// Creates a completion for the provided prompt and parameters. Returns a completion object, or a sequence of completion objects if the request is streamed.
+    /// Creates a completion for the provided prompt and parameters. Returns a completion object, or a sequence of
+    /// completion objects if the request is streamed.
     ///
     /// - Parameters:
     /// - model: ID of the model to use. You can use the [List
@@ -125,9 +128,12 @@ extension CompletionsMethods {
     ///   OpenAI to monitor and detect abuse. [Learn
     ///   more](https://developers.openai.com/api/docs/guides/safety-best-practices#im
     ///   plement-safety-identifiers).
-    public static func createCompletionStream(config: ClientConfig, options: CreateCompletionStreamOptions, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<CreateCompletionResponse, Swift.Error> {
+    static func createCompletionStream(
+        config: ClientConfig,
+        options: CreateCompletionStreamOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AsyncThrowingStream<CreateCompletionResponse, Swift.Error> {
         let requestBody = CreateCompletionStreamStreamRequestBody(options: options)
-
 
         let upstream = try await sdkStream(
             "POST",
@@ -139,7 +145,14 @@ extension CompletionsMethods {
             streamMediaType: "text/event-stream",
             chunkDomain: "bytes",
             options: requestOptions,
-            errors: ["400": ErrorResponse.self, "401": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self]
+            errors: [
+                "400": ErrorResponse.self,
+                "401": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
         )
         return AsyncThrowingStream { continuation in
             let streamTask = _Concurrency.Task {
@@ -149,8 +162,11 @@ extension CompletionsMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(CreateCompletionResponse.self, from: Data(event.data.utf8)) }
-                        
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
+                            CreateCompletionResponse.self,
+                            from: Data(event.data.utf8)
+                        ) }
+
                         continuation.yield(payload)
                     }
                     continuation.finish()

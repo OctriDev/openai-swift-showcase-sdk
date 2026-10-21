@@ -6,8 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AgentsMethods {
-    /// Lists live files on a connected execution environment with optional directory filtering and opaque cursor pagination. See [environment files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
+public extension AgentsMethods {
+    /// Lists live files on a connected execution environment with optional directory filtering and opaque cursor
+    /// pagination. See [environment
+    /// files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
     ///
     /// - Parameters:
     /// - environmentId: The ID of the environment.
@@ -16,38 +18,91 @@ extension AgentsMethods {
     /// - order: Sort by case-sensitive path components. Defaults to descending.
     /// - page: The opaque token from the previous page. Keep the same path, order,
     ///   and limit.
-    public static func listAgentEnvironmentFiles(config: ClientConfig, environmentId: String, path: String? = nil, limit: Int? = nil, order: ListOrderParam? = nil, page: String? = nil, requestOptions: RequestOptions? = nil) async throws -> EnvironmentFileListResource {
-        try validateLength("environment_id", environmentId, min: 0, max: 1048576)
+    static func listAgentEnvironmentFiles(
+        config: ClientConfig,
+        environmentId: String,
+        path: String? = nil,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        page: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> EnvironmentFileListResource {
+        try validateLength("environment_id", environmentId, min: 0, max: 1_048_576)
 
-        if let path = path {
-            try validateLength("path", path, min: 0, max: 1048576)
+        if let path {
+            try validateLength("path", path, min: 0, max: 1_048_576)
         }
 
-        if let limit = limit {
+        if let limit {
             try validateRange("limit", Double(limit), min: 1, max: 100)
         }
 
-        if let page = page {
-            try validateLength("page", page, min: 0, max: 1048576)
+        if let page {
+            try validateLength("page", page, min: 0, max: 1_048_576)
         }
 
-        return try (await sdkRequest("GET", ["/agents/environments/", sdkEncodePathSegment(sdkWireString(environmentId)), "/files"].joined(), config: config, query: [
-            SdkQueryParameter("path", value: path),
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("page", value: page),
-        ], decoder: .json, operationId: "listAgentEnvironmentFiles", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/agents/environments/", sdkEncodePathSegment(sdkWireString(environmentId)), "/files"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("path", value: path),
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("page", value: page),
+            ],
+            decoder: .json,
+            operationId: "listAgentEnvironmentFiles",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 
-    /// Writes a file to a connected agent execution environment, using either inline base64 data or a file uploaded through the Files API. Choose the `inline` or `file_id` body variant and provide the absolute destination `path`; writing to an existing regular file at that path replaces it. Upload the file between turns and wait for success before starting the next turn.
+    /// Writes a file to a connected agent execution environment, using either inline base64 data or a file uploaded
+    /// through the Files API. Choose the `inline` or `file_id` body variant and provide the absolute destination
+    /// `path`; writing to an existing regular file at that path replaces it. Upload the file between turns and wait for
+    /// success before starting the next turn.
     ///
-    /// Copies inline bytes or a Files API file into a connected execution environment, replacing an existing regular file at the same path. Upload between turns and wait for success before starting the next turn. See [environment files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
+    /// Copies inline bytes or a Files API file into a connected execution environment, replacing an existing regular
+    /// file at the same path. Upload between turns and wait for success before starting the next turn. See [environment
+    /// files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
     ///
     /// - Parameters:
     /// - environmentId: The ID of the environment.
-    public static func createAgentEnvironmentFile(config: ClientConfig, environmentId: String, body: HostedEnvironmentFileParam? = nil, requestOptions: RequestOptions? = nil) async throws -> EnvironmentFileResource {
-        try validateLength("environment_id", environmentId, min: 0, max: 1048576)
+    static func createAgentEnvironmentFile(
+        config: ClientConfig,
+        environmentId: String,
+        body: HostedEnvironmentFileParam? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> EnvironmentFileResource {
+        try validateLength("environment_id", environmentId, min: 0, max: 1_048_576)
 
-        return try (await sdkRequest("POST", ["/agents/environments/", sdkEncodePathSegment(sdkWireString(environmentId)), "/files"].joined(), config: config, rawBody: (try body.map { try sdkEncodeBody($0, contentType: "application/json") }), decoder: .json, operationId: "createAgentEnvironmentFile", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "429": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/agents/environments/", sdkEncodePathSegment(sdkWireString(environmentId)), "/files"].joined(),
+            config: config,
+            rawBody: (body.map { try sdkEncodeBody($0, contentType: "application/json") }),
+            decoder: .json,
+            operationId: "createAgentEnvironmentFile",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "429": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 }

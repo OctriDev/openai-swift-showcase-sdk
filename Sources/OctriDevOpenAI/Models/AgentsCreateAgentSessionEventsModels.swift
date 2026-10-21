@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsCreate domain models
+/// AgentsCreate domain models
 /// Input events submitted to an existing session.
 public struct CreateSessionEventsParams: Codable {
     /// The input events to submit to the session.
@@ -13,23 +13,29 @@ public struct CreateSessionEventsParams: Codable {
         case events
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateSessionEventsParams {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.events) else {
-            throw SdkValidationError(field: "events", code: "required", message: "Validation failed for 'events': value is required")
-        }
-        self.events = try container.sdkDecodeRequired(.events)
-            try validateItems("events", self.events, min: 0, max: 16384)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateSessionEventsParams {
-    public init(events: [SessionInputParam]) throws {
+public extension CreateSessionEventsParams {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.events) else {
+            throw SdkValidationError(
+                field: "events",
+                code: "required",
+                message: "Validation failed for 'events': value is required"
+            )
+        }
+        events = try container.sdkDecodeRequired(.events)
+        try validateItems("events", events, min: 0, max: 16384)
+    }
+}
+
+public extension CreateSessionEventsParams {
+    init(events: [SessionInputParam]) throws {
         self.events = events
-            try validateItems("events", self.events, min: 0, max: 16384)
+        try validateItems("events", self.events, min: 0, max: 16384)
     }
 }

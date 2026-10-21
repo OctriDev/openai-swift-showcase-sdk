@@ -6,8 +6,12 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension RealtimeMethods {
-    /// Create an ephemeral API token for use in client-side applications with the Realtime API specifically for realtime transcriptions. Can be configured with the same session parameters as the `transcription_session.update` client event. It responds with a session object, plus a `client_secret` key which contains a usable ephemeral API token that can be used to authenticate browser clients for the Realtime API. Returns the created Realtime transcription session object, plus an ephemeral key.
+public extension RealtimeMethods {
+    /// Create an ephemeral API token for use in client-side applications with the Realtime API specifically for
+    /// realtime transcriptions. Can be configured with the same session parameters as the
+    /// `transcription_session.update` client event. It responds with a session object, plus a `client_secret` key which
+    /// contains a usable ephemeral API token that can be used to authenticate browser clients for the Realtime API.
+    /// Returns the created Realtime transcription session object, plus an ephemeral key.
     ///
     /// - Parameters:
     /// - turnDetection: Configuration for turn detection. Can be set to `null` to
@@ -26,9 +30,31 @@ extension RealtimeMethods {
     ///   offer additional guidance to the transcription service.
     /// - include: The set of items to include in the transcription. Current
     ///   available items are: `item.input_audio_transcription.logprobs`
-    public static func createRealtimeTranscriptionSession(config: ClientConfig, turnDetection: RealtimeTranscriptionSessionCreateRequestTurnDetection? = nil, inputAudioNoiseReduction: RealtimeTranscriptionSessionCreateRequestInputAudioNoiseReduction? = nil, inputAudioFormat: RealtimeTranscriptionSessionCreateRequestInputAudioFormat? = nil, inputAudioTranscription: AudioTranscription? = nil, include: [RealtimeTranscriptionSessionCreateRequestIncludeItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> RealtimeTranscriptionSessionCreateResponse {
-        let requestBody = CreateRealtimeTranscriptionSessionRequestBody(turnDetection: turnDetection, inputAudioNoiseReduction: inputAudioNoiseReduction, inputAudioFormat: inputAudioFormat, inputAudioTranscription: inputAudioTranscription, include: include)
+    static func createRealtimeTranscriptionSession(
+        config: ClientConfig,
+        turnDetection: RealtimeTranscriptionSessionCreateRequestTurnDetection? = nil,
+        inputAudioNoiseReduction: RealtimeTranscriptionSessionCreateRequestInputAudioNoiseReduction? = nil,
+        inputAudioFormat: RealtimeTranscriptionSessionCreateRequestInputAudioFormat? = nil,
+        inputAudioTranscription: AudioTranscription? = nil,
+        include: [RealtimeTranscriptionSessionCreateRequestIncludeItem]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> RealtimeTranscriptionSessionCreateResponse {
+        let requestBody = CreateRealtimeTranscriptionSessionRequestBody(
+            turnDetection: turnDetection,
+            inputAudioNoiseReduction: inputAudioNoiseReduction,
+            inputAudioFormat: inputAudioFormat,
+            inputAudioTranscription: inputAudioTranscription,
+            include: include
+        )
 
-        return try (await sdkRequest("POST", "/realtime/transcription_sessions", config: config, body: requestBody, decoder: .json, operationId: "createRealtimeTranscriptionSession", options: requestOptions)).data
+        return try await (sdkRequest(
+            "POST",
+            "/realtime/transcription_sessions",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createRealtimeTranscriptionSession",
+            options: requestOptions
+        )).data
     }
 }

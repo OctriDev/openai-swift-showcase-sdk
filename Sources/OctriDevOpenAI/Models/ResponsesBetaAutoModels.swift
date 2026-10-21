@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaAuto domain models
+/// ResponsesBetaAuto domain models
 public indirect enum BetaAutoCodeInterpreterToolParamNetworkPolicy {
     case betaContainerNetworkPolicyDisabledParam(BetaContainerNetworkPolicyDisabledParam)
     case betaContainerNetworkPolicyAllowlistParam(BetaContainerNetworkPolicyAllowlistParam)
@@ -12,7 +12,6 @@ public indirect enum BetaAutoCodeInterpreterToolParamNetworkPolicy {
 }
 
 extension BetaAutoCodeInterpreterToolParamNetworkPolicy: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension BetaAutoCodeInterpreterToolParamNetworkPolicy: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,13 @@ extension BetaAutoCodeInterpreterToolParamNetworkPolicy: Codable {
 extension BetaAutoCodeInterpreterToolParamNetworkPolicy {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "disabled": return .betaContainerNetworkPolicyDisabledParam(try BetaContainerNetworkPolicyDisabledParam(from: decoder))
-        case "allowlist": return .betaContainerNetworkPolicyAllowlistParam(try BetaContainerNetworkPolicyAllowlistParam(from: decoder))
-        default: return nil
+        case "disabled": try .betaContainerNetworkPolicyDisabledParam(
+                BetaContainerNetworkPolicyDisabledParam(from: decoder)
+            )
+        case "allowlist": try .betaContainerNetworkPolicyAllowlistParam(
+                BetaContainerNetworkPolicyAllowlistParam(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -72,27 +79,38 @@ public struct BetaAutoCodeInterpreterToolParam: Codable {
         case networkPolicy = "network_policy"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension BetaAutoCodeInterpreterToolParam {
-    public init(from decoder: Decoder) throws {
+public extension BetaAutoCodeInterpreterToolParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        self.memoryLimit = try container.sdkDecodeIfPresent(.memoryLimit)
-        self.networkPolicy = try container.sdkDecodeIfPresent(.networkPolicy)
-        if let value = self.fileIds {
+        type = try container.sdkDecodeRequired(.type)
+        fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        memoryLimit = try container.sdkDecodeIfPresent(.memoryLimit)
+        networkPolicy = try container.sdkDecodeIfPresent(.networkPolicy)
+        if let value = fileIds {
             try validateItems("file_ids", value, min: nil, max: 50)
         }
     }
 }
 
-extension BetaAutoCodeInterpreterToolParam {
-    public init(type: BetaAutoCodeInterpreterToolParamType, fileIds: [String]? = nil, memoryLimit: BetaContainerMemoryLimit? = nil, networkPolicy: BetaAutoCodeInterpreterToolParamNetworkPolicy? = nil) throws {
+public extension BetaAutoCodeInterpreterToolParam {
+    init(
+        type: BetaAutoCodeInterpreterToolParamType,
+        fileIds: [String]? = nil,
+        memoryLimit: BetaContainerMemoryLimit? = nil,
+        networkPolicy: BetaAutoCodeInterpreterToolParamNetworkPolicy? = nil
+    ) throws {
         (self.type, self.fileIds) = (type, fileIds)
         (self.memoryLimit, self.networkPolicy) = (memoryLimit, networkPolicy)
         if let value = self.fileIds {
@@ -105,12 +123,15 @@ extension BetaAutoCodeInterpreterToolParam {
 public struct BetaAutoCodeInterpreterToolParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = BetaAutoCodeInterpreterToolParamType(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

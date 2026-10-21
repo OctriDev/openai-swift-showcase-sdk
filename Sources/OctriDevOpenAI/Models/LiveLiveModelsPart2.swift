@@ -3,22 +3,26 @@
 
 import Foundation
 
-// LiveLive domain models
-extension LiveComputerToolInputParam {
-    public init(from decoder: Decoder) throws {
+/// LiveLive domain models
+public extension LiveComputerToolInputParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, LiveComputerToolInputParamType.allCases.map(\.rawValue))
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, LiveComputerToolInputParamType.allCases.map(\.rawValue))
     }
 }
 
-extension LiveComputerToolInputParam {
-    public init(type: LiveComputerToolInputParamType) throws {
+public extension LiveComputerToolInputParam {
+    init(type: LiveComputerToolInputParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, LiveComputerToolInputParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveComputerToolInputParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -44,31 +48,45 @@ public struct LiveLiveError: Codable {
         case clientEventId = "client_event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveLiveError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.code = try container.sdkDecodeRequired(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.param = try container.sdkDecodeIfPresent(.param)
-        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveLiveError {
-    public init(type: String, code: String, message: String, param: String? = nil, clientEventId: String? = nil) {
+public extension LiveLiveError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        code = try container.sdkDecodeRequired(.code)
+        message = try container.sdkDecodeRequired(.message)
+        param = try container.sdkDecodeIfPresent(.param)
+        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+    }
+}
+
+public extension LiveLiveError {
+    init(type: String, code: String, message: String, param: String? = nil, clientEventId: String? = nil) {
         (self.type, self.code) = (type, code)
         (self.message, self.param) = (message, param)
         self.clientEventId = clientEventId
@@ -84,24 +102,30 @@ public struct LiveFileSearchToolInputParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveFileSearchToolInputParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, LiveFileSearchToolInputParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveFileSearchToolInputParam {
-    public init(type: LiveFileSearchToolInputParamType) throws {
+public extension LiveFileSearchToolInputParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, LiveFileSearchToolInputParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveFileSearchToolInputParam {
+    init(type: LiveFileSearchToolInputParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, LiveFileSearchToolInputParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveFileSearchToolInputParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -160,15 +184,19 @@ public enum LiveComputerToolInputParamType: String, CaseIterable, Codable {
 }
 
 /// Optional enumerated value serialized in the `allowed_client_events` wire field.
-public struct LiveDataChannelConfigParamAllowedClientEventsVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct LiveDataChannelConfigParamAllowedClientEventsVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let all = LiveDataChannelConfigParamAllowedClientEventsVariant0(rawValue: "all")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -199,14 +227,17 @@ public enum LiveFileSearchToolInputParamType: String, CaseIterable, Codable {
 public struct LiveTextVerbosity: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = LiveTextVerbosity(rawValue: "low")
     public static let medium = LiveTextVerbosity(rawValue: "medium")
     public static let high = LiveTextVerbosity(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -309,7 +340,10 @@ public enum LiveNamespaceToolInputParamType: String, CaseIterable, Codable {
 public struct LiveDetailEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = LiveDetailEnum(rawValue: "low")
     public static let high = LiveDetailEnum(rawValue: "high")
     public static let auto = LiveDetailEnum(rawValue: "auto")
@@ -317,7 +351,7 @@ public struct LiveDetailEnum: RawRepresentable, Hashable, Codable, Sendable, Sdk
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -345,15 +379,19 @@ public enum LiveSkillReferenceParamType: String, CaseIterable, Codable {
 }
 
 /// Optional enumerated value serialized in the `allowed_server_events` wire field.
-public struct LiveDataChannelConfigParamAllowedServerEventsVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct LiveDataChannelConfigParamAllowedServerEventsVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let all = LiveDataChannelConfigParamAllowedServerEventsVariant0(rawValue: "all")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -38,11 +38,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.create(
-            name: decoded("\"Example Name\""),
-            geography: decoded("\"geography\""),
-            residency: decoded("\"GLOBAL\""),
-            externalKeyId: decoded("\"external_key-1\"")
-        )
+                name: decoded("\"Example Name\""),
+                geography: decoded("\"geography\""),
+                residency: decoded("\"GLOBAL\""),
+                externalKeyId: decoded("\"external_key-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -90,11 +90,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.createServiceAccount(
-            projectId: decoded("\"project-1\""),
-            name: decoded("\"Example Name\""),
-            createServiceAccountOnly: decoded("false"),
-            expiresInSeconds: decoded("1")
-        )
+                projectId: decoded("\"project-1\""),
+                name: decoded("\"Example Name\""),
+                createServiceAccountOnly: decoded("false"),
+                expiresInSeconds: decoded("1")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -143,12 +143,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.spendAlerts.create(
-            projectId: decoded("\"project-1\""),
-            thresholdAmount: decoded("0"),
-            currency: decoded("\"USD\""),
-            interval: decoded("\"month\""),
-            notificationChannel: decoded(sdkMethodFixture138Value1)
-        )
+                projectId: decoded("\"project-1\""),
+                thresholdAmount: decoded("0"),
+                currency: decoded("\"USD\""),
+                interval: decoded("\"month\""),
+                notificationChannel: decoded(sdkMethodFixture138Value1)
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -164,7 +164,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testCreateProjectsServiceAccountApiKeyCreateProjectsServiceAccountApiKeyReachesMockAndDecodesResponse() async throws {
+    func testCreateProjectsServiceAccountApiKeyCreateProjectsServiceAccountApiKeyReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -186,7 +187,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testCreateProjectsServiceAccountApiKeyCreateProjectsServiceAccountApiKey400ReachesMockAndDecodesResponse() async throws {
+    func testCreateProjectsServiceAccountApiKeyCreateProjectsServiceAccountApiKey400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -197,12 +199,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.createServiceAccountApiKey(
-            projectId: decoded("\"project-1\""),
-            serviceAccountId: decoded("\"service_account-1\""),
-            name: decoded("\"Example Name\""),
-            scopes: decoded("[\"scopes\"]"),
-            expiresInSeconds: decoded("1")
-        )
+                projectId: decoded("\"project-1\""),
+                serviceAccountId: decoded("\"service_account-1\""),
+                name: decoded("\"Example Name\""),
+                scopes: decoded("[\"scopes\"]"),
+                expiresInSeconds: decoded("1")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -250,11 +252,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.createUser(
-            projectId: decoded("\"project-1\""),
-            role: decoded("\"role\""),
-            userId: decoded("\"user-1\""),
-            email: decoded("\"user@example.com\"")
-        )
+                projectId: decoded("\"project-1\""),
+                role: decoded("\"role\""),
+                userId: decoded("\"user-1\""),
+                email: decoded("\"user@example.com\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -336,9 +338,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.realtime.createClientSecret(
-            expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":600}"),
-            session: decoded(sdkMethodFixture146Value1)
-        )
+                expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":600}"),
+                session: decoded(sdkMethodFixture146Value1)
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -359,7 +361,8 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try RealtimeMethods.CreateRealtimeSessionOptions(clientSecret: decoded("{\"value\":\"value\",\"expires_at\":1}"))
+        var options = try RealtimeMethods
+            .CreateRealtimeSessionOptions(clientSecret: decoded("{\"value\":\"value\",\"expires_at\":1}"))
         options.modalities = try decoded("[\"text\"]")
         options.instructions = try decoded("\"instructions\"")
         options.voice = try decoded("\"ash\"")
@@ -388,7 +391,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testCreateRealtimeTranscriptionSessionCreateRealtimeTranscriptionSessionReachesMockAndDecodesResponse() async throws {
+    func testCreateRealtimeTranscriptionSessionCreateRealtimeTranscriptionSessionReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -410,7 +414,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testCreateRealtimeTranslationClientSecretCreateRealtimeTranslatioX098a222d8dReachesMockAndDecodesResponse() async throws {
+    func testCreateRealtimeTranslationClientSecretCreateRealtimeTranslatioX098a222d8dReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -429,7 +434,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testCreateRealtimeTranslationClientSecretCreateRealtimeTranslatioX2e35becd3eReachesMockAndDecodesResponse() async throws {
+    func testCreateRealtimeTranslationClientSecretCreateRealtimeTranslatioX2e35becd3eReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -440,9 +446,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.realtime.createTranslationClientSecret(
-            session: decoded(sdkMethodFixture150Value1),
-            expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":600}")
-        )
+                session: decoded(sdkMethodFixture150Value1),
+                expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":600}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -487,8 +493,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.responses.create(
-            body: decoded(sdkMethodFixture152Value1)
-        )
+                body: decoded(sdkMethodFixture152Value1)
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

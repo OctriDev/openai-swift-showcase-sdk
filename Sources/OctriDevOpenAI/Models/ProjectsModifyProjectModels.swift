@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Projects domain models
+/// Projects domain models
 /// Typed representation of the `ProjectUpdateRequest` API schema.
 public struct ProjectUpdateRequest: Codable {
     /// The updated name of the project, this name appears in reports.
@@ -21,21 +21,21 @@ public struct ProjectUpdateRequest: Codable {
     }
 
     init() {
-        (self.name, self.externalKeyId, self.geography) = (nil, nil, nil)
+        (name, externalKeyId, geography) = (nil, nil, nil)
     }
 }
 
-extension ProjectUpdateRequest {
-    public init(from decoder: Decoder) throws {
+public extension ProjectUpdateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.externalKeyId = try container.sdkDecodeIfPresent(.externalKeyId)
-        self.geography = try container.sdkDecodeIfPresent(.geography)
+        name = try container.sdkDecodeIfPresent(.name)
+        externalKeyId = try container.sdkDecodeIfPresent(.externalKeyId)
+        geography = try container.sdkDecodeIfPresent(.geography)
     }
 }
 
-extension ProjectUpdateRequest {
-    public init(name: String? = nil, externalKeyId: String? = nil, geography: String? = nil) {
+public extension ProjectUpdateRequest {
+    init(name: String? = nil, externalKeyId: String? = nil, geography: String? = nil) {
         self.init()
         (self.name, self.externalKeyId) = (name, externalKeyId)
         self.geography = geography

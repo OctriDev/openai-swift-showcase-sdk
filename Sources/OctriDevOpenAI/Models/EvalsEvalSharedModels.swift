@@ -3,7 +3,7 @@
 
 import Foundation
 
-// EvalsEval domain models
+/// EvalsEval domain models
 public indirect enum EvalDataSourceConfig {
     case evalCustomDataSourceConfig(EvalCustomDataSourceConfig)
     case evalLogsDataSourceConfig(EvalLogsDataSourceConfig)
@@ -13,7 +13,6 @@ public indirect enum EvalDataSourceConfig {
 }
 
 extension EvalDataSourceConfig: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension EvalDataSourceConfig: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,12 @@ extension EvalDataSourceConfig: Codable {
 extension EvalDataSourceConfig {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "custom": return .evalCustomDataSourceConfig(try EvalCustomDataSourceConfig(from: decoder))
-        case "logs": return .evalLogsDataSourceConfig(try EvalLogsDataSourceConfig(from: decoder))
-        case "stored_completions": return .evalStoredCompletionsDataSourceConfig(try EvalStoredCompletionsDataSourceConfig(from: decoder))
-        default: return nil
+        case "custom": try .evalCustomDataSourceConfig(EvalCustomDataSourceConfig(from: decoder))
+        case "logs": try .evalLogsDataSourceConfig(EvalLogsDataSourceConfig(from: decoder))
+        case "stored_completions": try .evalStoredCompletionsDataSourceConfig(
+                EvalStoredCompletionsDataSourceConfig(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -66,7 +71,6 @@ public indirect enum EvalRunDataSource {
 }
 
 extension EvalRunDataSource: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -74,12 +78,16 @@ extension EvalRunDataSource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -90,10 +98,10 @@ extension EvalRunDataSource: Codable {
 extension EvalRunDataSource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "jsonl": return .createEvalJsonlRunDataSource(try CreateEvalJsonlRunDataSource(from: decoder))
-        case "completions": return .createEvalCompletionsRunDataSource(try CreateEvalCompletionsRunDataSource(from: decoder))
-        case "responses": return .createEvalResponsesRunDataSource(try CreateEvalResponsesRunDataSource(from: decoder))
-        default: return nil
+        case "jsonl": try .createEvalJsonlRunDataSource(CreateEvalJsonlRunDataSource(from: decoder))
+        case "completions": try .createEvalCompletionsRunDataSource(CreateEvalCompletionsRunDataSource(from: decoder))
+        case "responses": try .createEvalResponsesRunDataSource(CreateEvalResponsesRunDataSource(from: decoder))
+        default: nil
         }
     }
 }
@@ -121,7 +129,6 @@ public indirect enum EvalTestingCriteriaItem {
 }
 
 extension EvalTestingCriteriaItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -129,12 +136,16 @@ extension EvalTestingCriteriaItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -145,12 +156,12 @@ extension EvalTestingCriteriaItem: Codable {
 extension EvalTestingCriteriaItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "label_model": return .evalGraderLabelModel(try EvalGraderLabelModel(from: decoder))
-        case "string_check": return .evalGraderStringCheck(try EvalGraderStringCheck(from: decoder))
-        case "text_similarity": return .evalGraderTextSimilarity(try EvalGraderTextSimilarity(from: decoder))
-        case "python": return .evalGraderPython(try EvalGraderPython(from: decoder))
-        case "score_model": return .evalGraderScoreModel(try EvalGraderScoreModel(from: decoder))
-        default: return nil
+        case "label_model": try .evalGraderLabelModel(EvalGraderLabelModel(from: decoder))
+        case "string_check": try .evalGraderStringCheck(EvalGraderStringCheck(from: decoder))
+        case "text_similarity": try .evalGraderTextSimilarity(EvalGraderTextSimilarity(from: decoder))
+        case "python": try .evalGraderPython(EvalGraderPython(from: decoder))
+        case "score_model": try .evalGraderScoreModel(EvalGraderScoreModel(from: decoder))
+        default: nil
         }
     }
 }
@@ -187,33 +198,51 @@ public struct EvalRunOutputItemSampleUsage: Codable {
         case cachedTokens = "cached_tokens"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension EvalRunOutputItemSampleUsage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.totalTokens) else {
-            throw SdkValidationError(field: "total_tokens", code: "required", message: "Validation failed for 'total_tokens': value is required")
-        }
-        guard container.contains(.completionTokens) else {
-            throw SdkValidationError(field: "completion_tokens", code: "required", message: "Validation failed for 'completion_tokens': value is required")
-        }
-        guard container.contains(.promptTokens) else {
-            throw SdkValidationError(field: "prompt_tokens", code: "required", message: "Validation failed for 'prompt_tokens': value is required")
-        }
-        guard container.contains(.cachedTokens) else {
-            throw SdkValidationError(field: "cached_tokens", code: "required", message: "Validation failed for 'cached_tokens': value is required")
-        }
-        self.totalTokens = try container.sdkDecodeRequired(.totalTokens)
-        self.completionTokens = try container.sdkDecodeRequired(.completionTokens)
-        self.promptTokens = try container.sdkDecodeRequired(.promptTokens)
-        self.cachedTokens = try container.sdkDecodeRequired(.cachedTokens)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension EvalRunOutputItemSampleUsage {
-    public init(totalTokens: Int, completionTokens: Int, promptTokens: Int, cachedTokens: Int) {
+public extension EvalRunOutputItemSampleUsage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.totalTokens) else {
+            throw SdkValidationError(
+                field: "total_tokens",
+                code: "required",
+                message: "Validation failed for 'total_tokens': value is required"
+            )
+        }
+        guard container.contains(.completionTokens) else {
+            throw SdkValidationError(
+                field: "completion_tokens",
+                code: "required",
+                message: "Validation failed for 'completion_tokens': value is required"
+            )
+        }
+        guard container.contains(.promptTokens) else {
+            throw SdkValidationError(
+                field: "prompt_tokens",
+                code: "required",
+                message: "Validation failed for 'prompt_tokens': value is required"
+            )
+        }
+        guard container.contains(.cachedTokens) else {
+            throw SdkValidationError(
+                field: "cached_tokens",
+                code: "required",
+                message: "Validation failed for 'cached_tokens': value is required"
+            )
+        }
+        totalTokens = try container.sdkDecodeRequired(.totalTokens)
+        completionTokens = try container.sdkDecodeRequired(.completionTokens)
+        promptTokens = try container.sdkDecodeRequired(.promptTokens)
+        cachedTokens = try container.sdkDecodeRequired(.cachedTokens)
+    }
+}
+
+public extension EvalRunOutputItemSampleUsage {
+    init(totalTokens: Int, completionTokens: Int, promptTokens: Int, cachedTokens: Int) {
         (self.totalTokens, self.completionTokens) = (totalTokens, completionTokens)
         (self.promptTokens, self.cachedTokens) = (promptTokens, cachedTokens)
     }
@@ -270,32 +299,49 @@ public struct EvalRun: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension EvalRun {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.evalId = try container.sdkDecodeRequired(.evalId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.model = try container.sdkDecodeNullable(.model)
-        self.name = try container.sdkDecodeNullable(.name)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.reportUrl = try container.sdkDecodeRequired(.reportUrl)
-        self.resultCounts = try container.sdkDecodeRequired(.resultCounts)
-        self.perModelUsage = try container.sdkDecodeNullable(.perModelUsage)
-        self.perTestingCriteriaResults = try container.sdkDecodeNullable(.perTestingCriteriaResults)
-        self.dataSource = try container.sdkDecodeRequired(.dataSource)
-        self.metadata = try container.sdkDecodeNullable(.metadata)
-        self.error = try container.sdkDecodeNullable(.error)
-            try sdkValidateUri("report_url", self.reportUrl)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension EvalRun {
-    public init(object: EvalRunObject, id: String, evalId: String, status: String, model: String?, name: String?, createdAt: Int, reportUrl: String, resultCounts: EvalRunResultCounts, perModelUsage: [EvalRunPerModelUsageItem]?, perTestingCriteriaResults: [EvalRunPerTestingCriteriaResultsItem]?, dataSource: EvalRunDataSource, metadata: Metadata?, error: EvalApiError?) throws {
+public extension EvalRun {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        evalId = try container.sdkDecodeRequired(.evalId)
+        status = try container.sdkDecodeRequired(.status)
+        model = try container.sdkDecodeNullable(.model)
+        name = try container.sdkDecodeNullable(.name)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        reportUrl = try container.sdkDecodeRequired(.reportUrl)
+        resultCounts = try container.sdkDecodeRequired(.resultCounts)
+        perModelUsage = try container.sdkDecodeNullable(.perModelUsage)
+        perTestingCriteriaResults = try container.sdkDecodeNullable(.perTestingCriteriaResults)
+        dataSource = try container.sdkDecodeRequired(.dataSource)
+        metadata = try container.sdkDecodeNullable(.metadata)
+        error = try container.sdkDecodeNullable(.error)
+        try sdkValidateUri("report_url", reportUrl)
+    }
+}
+
+public extension EvalRun {
+    init(
+        object: EvalRunObject,
+        id: String,
+        evalId: String,
+        status: String,
+        model: String?,
+        name: String?,
+        createdAt: Int,
+        reportUrl: String,
+        resultCounts: EvalRunResultCounts,
+        perModelUsage: [EvalRunPerModelUsageItem]?,
+        perTestingCriteriaResults: [EvalRunPerTestingCriteriaResultsItem]?,
+        dataSource: EvalRunDataSource,
+        metadata: Metadata?,
+        error: EvalApiError?
+    ) throws {
         (self.object, self.id) = (object, id)
         (self.evalId, self.status) = (evalId, status)
         (self.model, self.name) = (model, name)
@@ -303,7 +349,7 @@ extension EvalRun {
         (self.resultCounts, self.perModelUsage) = (resultCounts, perModelUsage)
         (self.perTestingCriteriaResults, self.dataSource) = (perTestingCriteriaResults, dataSource)
         (self.metadata, self.error) = (metadata, error)
-            try sdkValidateUri("report_url", self.reportUrl)
+        try sdkValidateUri("report_url", self.reportUrl)
     }
 }
 
@@ -316,21 +362,27 @@ public struct EvalGraderTextSimilarityVariant1: Codable {
         case passThreshold = "pass_threshold"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension EvalGraderTextSimilarityVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.passThreshold) else {
-            throw SdkValidationError(field: "pass_threshold", code: "required", message: "Validation failed for 'pass_threshold': value is required")
-        }
-        self.passThreshold = try container.sdkDecodeRequired(.passThreshold)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension EvalGraderTextSimilarityVariant1 {
-    public init(passThreshold: Double) {
+public extension EvalGraderTextSimilarityVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.passThreshold) else {
+            throw SdkValidationError(
+                field: "pass_threshold",
+                code: "required",
+                message: "Validation failed for 'pass_threshold': value is required"
+            )
+        }
+        passThreshold = try container.sdkDecodeRequired(.passThreshold)
+    }
+}
+
+public extension EvalGraderTextSimilarityVariant1 {
+    init(passThreshold: Double) {
         self.passThreshold = passThreshold
     }
 }
@@ -345,19 +397,19 @@ public struct EvalGraderScoreModelVariant1: Codable {
     }
 
     init() {
-        self.passThreshold = nil
+        passThreshold = nil
     }
 }
 
-extension EvalGraderScoreModelVariant1 {
-    public init(from decoder: Decoder) throws {
+public extension EvalGraderScoreModelVariant1 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.passThreshold = try container.sdkDecodeIfPresent(.passThreshold)
+        passThreshold = try container.sdkDecodeIfPresent(.passThreshold)
     }
 }
 
-extension EvalGraderScoreModelVariant1 {
-    public init(passThreshold: Double? = nil) {
+public extension EvalGraderScoreModelVariant1 {
+    init(passThreshold: Double? = nil) {
         self.init()
         self.passThreshold = passThreshold
     }
@@ -375,28 +427,38 @@ public struct EvalJsonlFileIdSource: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension EvalJsonlFileIdSource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-            try sdkValidateRawEnum("type", self.type, EvalJsonlFileIdSourceType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension EvalJsonlFileIdSource {
-    public init(type: EvalJsonlFileIdSourceType, id: String) throws {
+public extension EvalJsonlFileIdSource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        try sdkValidateRawEnum("type", type, EvalJsonlFileIdSourceType.allCases.map(\.rawValue))
+    }
+}
+
+public extension EvalJsonlFileIdSource {
+    init(type: EvalJsonlFileIdSourceType, id: String) throws {
         (self.type, self.id) = (type, id)
-            try sdkValidateRawEnum("type", self.type, EvalJsonlFileIdSourceType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, EvalJsonlFileIdSourceType.allCases.map(\.rawValue))
     }
 }
 
@@ -424,46 +486,79 @@ public struct EvalGraderLabelModel: Codable {
         case passingLabels = "passing_labels"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension EvalGraderLabelModel {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        guard container.contains(.input) else {
-            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
-        }
-        guard container.contains(.labels) else {
-            throw SdkValidationError(field: "labels", code: "required", message: "Validation failed for 'labels': value is required")
-        }
-        guard container.contains(.passingLabels) else {
-            throw SdkValidationError(field: "passing_labels", code: "required", message: "Validation failed for 'passing_labels': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.input = try container.sdkDecodeRequired(.input)
-        self.labels = try container.sdkDecodeRequired(.labels)
-        self.passingLabels = try container.sdkDecodeRequired(.passingLabels)
-            try sdkValidateRawEnum("type", self.type, GraderLabelModelType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension EvalGraderLabelModel {
-    public init(type: GraderLabelModelType, name: String, model: String, input: [EvalItem], labels: [String], passingLabels: [String]) throws {
+public extension EvalGraderLabelModel {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        guard container.contains(.input) else {
+            throw SdkValidationError(
+                field: "input",
+                code: "required",
+                message: "Validation failed for 'input': value is required"
+            )
+        }
+        guard container.contains(.labels) else {
+            throw SdkValidationError(
+                field: "labels",
+                code: "required",
+                message: "Validation failed for 'labels': value is required"
+            )
+        }
+        guard container.contains(.passingLabels) else {
+            throw SdkValidationError(
+                field: "passing_labels",
+                code: "required",
+                message: "Validation failed for 'passing_labels': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        model = try container.sdkDecodeRequired(.model)
+        input = try container.sdkDecodeRequired(.input)
+        labels = try container.sdkDecodeRequired(.labels)
+        passingLabels = try container.sdkDecodeRequired(.passingLabels)
+        try sdkValidateRawEnum("type", type, GraderLabelModelType.allCases.map(\.rawValue))
+    }
+}
+
+public extension EvalGraderLabelModel {
+    init(
+        type: GraderLabelModelType,
+        name: String,
+        model: String,
+        input: [EvalItem],
+        labels: [String],
+        passingLabels: [String]
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.model, self.input) = (model, input)
         (self.labels, self.passingLabels) = (labels, passingLabels)
-            try sdkValidateRawEnum("type", self.type, GraderLabelModelType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, GraderLabelModelType.allCases.map(\.rawValue))
     }
 }
 
@@ -491,5 +586,7 @@ public struct EvalRunPerModelUsageItem: Codable {
         case cachedTokens = "cached_tokens"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedMisalignment domain models
+/// SharedMisalignment domain models
 public typealias MisalignmentErrorType = String
 
 /// Typed representation of the `_MisalignmentSteer` API schema.
@@ -15,21 +15,27 @@ public struct MisalignmentSteer: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension MisalignmentSteer {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        self.message = try container.sdkDecodeRequired(.message)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension MisalignmentSteer {
-    public init(message: String) {
+public extension MisalignmentSteer {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        message = try container.sdkDecodeRequired(.message)
+    }
+}
+
+public extension MisalignmentSteer {
+    init(message: String) {
         self.message = message
     }
 }
@@ -53,22 +59,27 @@ public struct MisalignmentErrorDetailsResource: Codable {
     }
 
     init() {
-        (self.reviewTarget, self.errorType, self.detailedExplanation, self.steer) = (nil, nil, nil, nil)
+        (reviewTarget, errorType, detailedExplanation, steer) = (nil, nil, nil, nil)
     }
 }
 
-extension MisalignmentErrorDetailsResource {
-    public init(from decoder: Decoder) throws {
+public extension MisalignmentErrorDetailsResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.reviewTarget = try container.sdkDecodeIfPresent(.reviewTarget)
-        self.errorType = try container.sdkDecodeIfPresent(.errorType)
-        self.detailedExplanation = try container.sdkDecodeIfPresent(.detailedExplanation)
-        self.steer = try container.sdkDecodeIfPresent(.steer)
+        reviewTarget = try container.sdkDecodeIfPresent(.reviewTarget)
+        errorType = try container.sdkDecodeIfPresent(.errorType)
+        detailedExplanation = try container.sdkDecodeIfPresent(.detailedExplanation)
+        steer = try container.sdkDecodeIfPresent(.steer)
     }
 }
 
-extension MisalignmentErrorDetailsResource {
-    public init(reviewTarget: String? = nil, errorType: MisalignmentErrorType? = nil, detailedExplanation: String? = nil, steer: MisalignmentSteer? = nil) {
+public extension MisalignmentErrorDetailsResource {
+    init(
+        reviewTarget: String? = nil,
+        errorType: MisalignmentErrorType? = nil,
+        detailedExplanation: String? = nil,
+        steer: MisalignmentSteer? = nil
+    ) {
         self.init()
         (self.reviewTarget, self.errorType) = (reviewTarget, errorType)
         (self.detailedExplanation, self.steer) = (detailedExplanation, steer)

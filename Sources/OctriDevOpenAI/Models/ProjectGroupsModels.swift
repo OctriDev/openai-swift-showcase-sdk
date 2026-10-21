@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ProjectGroups domain models
+/// ProjectGroups domain models
 /// Paginated list of groups that have access to a project.
 public struct ProjectGroupListResource: Codable {
     /// Always `list`.
@@ -22,33 +22,51 @@ public struct ProjectGroupListResource: Codable {
         case next
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectGroupListResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        guard container.contains(.next) else {
-            throw SdkValidationError(field: "next", code: "required", message: "Validation failed for 'next': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-        self.next = try container.sdkDecodeNullable(.next)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectGroupListResource {
-    public init(object: ProjectGroupListResourceObject, data: [ProjectGroup], hasMore: Bool, next: String?) {
+public extension ProjectGroupListResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        guard container.contains(.next) else {
+            throw SdkValidationError(
+                field: "next",
+                code: "required",
+                message: "Validation failed for 'next': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        next = try container.sdkDecodeNullable(.next)
+    }
+}
+
+public extension ProjectGroupListResource {
+    init(object: ProjectGroupListResourceObject, data: [ProjectGroup], hasMore: Bool, next: String?) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.next) = (hasMore, next)
     }
@@ -66,25 +84,35 @@ public struct ProjectGroupDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectGroupDeletedResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectGroupDeletedResource {
-    public init(object: ProjectGroupDeletedResourceObject, deleted: Bool) {
+public extension ProjectGroupDeletedResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+    }
+}
+
+public extension ProjectGroupDeletedResource {
+    init(object: ProjectGroupDeletedResourceObject, deleted: Bool) {
         (self.object, self.deleted) = (object, deleted)
     }
 }
@@ -101,25 +129,35 @@ public struct InviteProjectGroupBody: Codable {
         case role
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension InviteProjectGroupBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.groupId) else {
-            throw SdkValidationError(field: "group_id", code: "required", message: "Validation failed for 'group_id': value is required")
-        }
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        self.groupId = try container.sdkDecodeRequired(.groupId)
-        self.role = try container.sdkDecodeRequired(.role)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension InviteProjectGroupBody {
-    public init(groupId: String, role: String) {
+public extension InviteProjectGroupBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.groupId) else {
+            throw SdkValidationError(
+                field: "group_id",
+                code: "required",
+                message: "Validation failed for 'group_id': value is required"
+            )
+        }
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        groupId = try container.sdkDecodeRequired(.groupId)
+        role = try container.sdkDecodeRequired(.role)
+    }
+}
+
+public extension InviteProjectGroupBody {
+    init(groupId: String, role: String) {
         (self.groupId, self.role) = (groupId, role)
     }
 }
@@ -148,41 +186,74 @@ public struct ProjectGroup: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectGroup {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.projectId) else {
-            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
-        }
-        guard container.contains(.groupId) else {
-            throw SdkValidationError(field: "group_id", code: "required", message: "Validation failed for 'group_id': value is required")
-        }
-        guard container.contains(.groupName) else {
-            throw SdkValidationError(field: "group_name", code: "required", message: "Validation failed for 'group_name': value is required")
-        }
-        guard container.contains(.groupType) else {
-            throw SdkValidationError(field: "group_type", code: "required", message: "Validation failed for 'group_type': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.projectId = try container.sdkDecodeRequired(.projectId)
-        self.groupId = try container.sdkDecodeRequired(.groupId)
-        self.groupName = try container.sdkDecodeRequired(.groupName)
-        self.groupType = try container.sdkDecodeRequired(.groupType)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectGroup {
-    public init(object: ProjectGroupObject, projectId: String, groupId: String, groupName: String, groupType: ProjectGroupGroupType, createdAt: Int) {
+public extension ProjectGroup {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.projectId) else {
+            throw SdkValidationError(
+                field: "project_id",
+                code: "required",
+                message: "Validation failed for 'project_id': value is required"
+            )
+        }
+        guard container.contains(.groupId) else {
+            throw SdkValidationError(
+                field: "group_id",
+                code: "required",
+                message: "Validation failed for 'group_id': value is required"
+            )
+        }
+        guard container.contains(.groupName) else {
+            throw SdkValidationError(
+                field: "group_name",
+                code: "required",
+                message: "Validation failed for 'group_name': value is required"
+            )
+        }
+        guard container.contains(.groupType) else {
+            throw SdkValidationError(
+                field: "group_type",
+                code: "required",
+                message: "Validation failed for 'group_type': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        projectId = try container.sdkDecodeRequired(.projectId)
+        groupId = try container.sdkDecodeRequired(.groupId)
+        groupName = try container.sdkDecodeRequired(.groupName)
+        groupType = try container.sdkDecodeRequired(.groupType)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+    }
+}
+
+public extension ProjectGroup {
+    init(
+        object: ProjectGroupObject,
+        projectId: String,
+        groupId: String,
+        groupName: String,
+        groupType: ProjectGroupGroupType,
+        createdAt: Int
+    ) {
         (self.object, self.projectId) = (object, projectId)
         (self.groupId, self.groupName) = (groupId, groupName)
         (self.groupType, self.createdAt) = (groupType, createdAt)
@@ -193,13 +264,16 @@ extension ProjectGroup {
 public struct ProjectGroupGroupType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let group = ProjectGroupGroupType(rawValue: "group")
     public static let tenantGroup = ProjectGroupGroupType(rawValue: "tenant_group")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -212,12 +286,15 @@ public struct ProjectGroupGroupType: RawRepresentable, Hashable, Codable, Sendab
 public struct ProjectGroupObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let projectGroup = ProjectGroupObject(rawValue: "project.group")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -230,12 +307,15 @@ public struct ProjectGroupObject: RawRepresentable, Hashable, Codable, Sendable,
 public struct ProjectGroupListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = ProjectGroupListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -248,12 +328,15 @@ public struct ProjectGroupListResourceObject: RawRepresentable, Hashable, Codabl
 public struct ProjectGroupDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let projectGroupDeleted = ProjectGroupDeletedResourceObject(rawValue: "project.group.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

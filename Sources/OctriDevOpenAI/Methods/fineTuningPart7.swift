@@ -6,14 +6,27 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension FineTuningMethods {
-    /// Cancels a fine-tuning job immediately. Use `fine_tuning_job_id` to identify the job you want to stop. The response returns the job object with its current status.
+public extension FineTuningMethods {
+    /// Cancels a fine-tuning job immediately. Use `fine_tuning_job_id` to identify the job you want to stop. The
+    /// response returns the job object with its current status.
     ///
     /// Immediately cancel a fine-tune job.
     ///
     /// - Parameters:
     /// - fineTuningJobId: The ID of the fine-tuning job to cancel.
-    public static func cancelFineTuningJob(config: ClientConfig, fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
-        return try (await sdkRequest("POST", ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId)), "/cancel"].joined(), config: config, decoder: .json, operationId: "cancelFineTuningJob", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func cancelFineTuningJob(
+        config: ClientConfig,
+        fineTuningJobId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> FineTuningJob {
+        try await (sdkRequest(
+            "POST",
+            ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId)), "/cancel"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "cancelFineTuningJob",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

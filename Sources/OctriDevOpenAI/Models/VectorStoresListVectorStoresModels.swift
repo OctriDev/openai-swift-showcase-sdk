@@ -3,7 +3,7 @@
 
 import Foundation
 
-// VectorStores domain models
+/// VectorStores domain models
 /// Typed representation of the `ListVectorStoresResponse` API schema.
 public struct ListVectorStoresResponse: Codable {
     /// Required `string` value serialized in the `object` wire field.
@@ -28,37 +28,59 @@ public struct ListVectorStoresResponse: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListVectorStoresResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.firstId) else {
-            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
-        }
-        guard container.contains(.lastId) else {
-            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.firstId = try container.sdkDecodeRequired(.firstId)
-        self.lastId = try container.sdkDecodeRequired(.lastId)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListVectorStoresResponse {
-    public init(object: String, data: [VectorStoreObject], firstId: String, lastId: String, hasMore: Bool) {
+public extension ListVectorStoresResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.firstId) else {
+            throw SdkValidationError(
+                field: "first_id",
+                code: "required",
+                message: "Validation failed for 'first_id': value is required"
+            )
+        }
+        guard container.contains(.lastId) else {
+            throw SdkValidationError(
+                field: "last_id",
+                code: "required",
+                message: "Validation failed for 'last_id': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        firstId = try container.sdkDecodeRequired(.firstId)
+        lastId = try container.sdkDecodeRequired(.lastId)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+    }
+}
+
+public extension ListVectorStoresResponse {
+    init(object: String, data: [VectorStoreObject], firstId: String, lastId: String, hasMore: Bool) {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore

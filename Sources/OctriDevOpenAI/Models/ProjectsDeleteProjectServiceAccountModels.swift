@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Projects domain models
+/// Projects domain models
 /// Typed representation of the `ProjectServiceAccountDeleteResponse` API schema.
 public struct ProjectServiceAccountDeleteResponse: Codable {
     /// Required enumerated value serialized in the `object` wire field.
@@ -19,44 +19,63 @@ public struct ProjectServiceAccountDeleteResponse: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectServiceAccountDeleteResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectServiceAccountDeleteResponse {
-    public init(object: ProjectServiceAccountDeleteResponseObject, id: String, deleted: Bool) {
+public extension ProjectServiceAccountDeleteResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        deleted = try container.sdkDecodeRequired(.deleted)
+    }
+}
+
+public extension ProjectServiceAccountDeleteResponse {
+    init(object: ProjectServiceAccountDeleteResponseObject, id: String, deleted: Bool) {
         (self.object, self.id) = (object, id)
         self.deleted = deleted
     }
 }
 
 /// Required enumerated value serialized in the `object` wire field.
-public struct ProjectServiceAccountDeleteResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ProjectServiceAccountDeleteResponseObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationProjectServiceAccountDeleted = ProjectServiceAccountDeleteResponseObject(rawValue: "organization.project.service_account.deleted")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationProjectServiceAccountDeleted =
+        ProjectServiceAccountDeleteResponseObject(rawValue: "organization.project.service_account.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

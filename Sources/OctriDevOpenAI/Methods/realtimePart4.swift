@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension RealtimeMethods {
+public extension RealtimeMethods {
     /// End an active Realtime API call, whether it was initiated over SIP or WebRTC.
     ///
     /// - Parameters:
@@ -18,8 +18,20 @@ extension RealtimeMethods {
     ///   [`POST
     ///   /v1/realtime/calls`](https://developers.openai.com/api/reference/resources/r
     ///   ealtime/subresources/calls/methods/create).
-    public static func hangupRealtimeCall(config: ClientConfig, callId: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
-        return try (await sdkRequest("POST", ["/realtime/calls/", sdkEncodePathSegment(sdkWireString(callId)), "/hangup"].joined(), config: config, decoder: .empty, operationId: "hangupRealtimeCall", options: requestOptions, errors: ["404": ErrorResponse.self])).data
+    static func hangupRealtimeCall(
+        config: ClientConfig,
+        callId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
+        try await (sdkRequest(
+            "POST",
+            ["/realtime/calls/", sdkEncodePathSegment(sdkWireString(callId)), "/hangup"].joined(),
+            config: config,
+            decoder: .empty,
+            operationId: "hangupRealtimeCall",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self]
+        )).data
     }
 
     /// Transfer an active SIP call to a new destination using the SIP REFER verb.
@@ -30,9 +42,23 @@ extension RealtimeMethods {
     ///   rces/webhooks#realtime.call.incoming) webhook.
     /// - targetUri: URI that should appear in the SIP Refer-To header. Supports
     ///   values like `tel:+14155550123` or `sip:agent@example.com`.
-    public static func referRealtimeCall(config: ClientConfig, callId: String, targetUri: String, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+    static func referRealtimeCall(
+        config: ClientConfig,
+        callId: String,
+        targetUri: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SdkEmptyResponse {
         let requestBody = ReferRealtimeCallRequestBody(targetUri: targetUri)
 
-        return try (await sdkRequest("POST", ["/realtime/calls/", sdkEncodePathSegment(sdkWireString(callId)), "/refer"].joined(), config: config, body: requestBody, decoder: .empty, operationId: "referRealtimeCall", options: requestOptions, errors: ["404": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/realtime/calls/", sdkEncodePathSegment(sdkWireString(callId)), "/refer"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .empty,
+            operationId: "referRealtimeCall",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self]
+        )).data
     }
 }

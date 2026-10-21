@@ -6,49 +6,96 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AgentsMethods {
-    /// Lists reusable environment templates without returning confidential values. See [reusing a hosted setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
+public extension AgentsMethods {
+    /// Lists reusable environment templates without returning confidential values. See [reusing a hosted
+    /// setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
     ///
     /// - Parameters:
     /// - limit: The maximum number of resources to return, between 1 and 100.
     ///   Defaults to 20.
     /// - order: The order in which resources are returned. Defaults to `desc`.
     /// - after: Return resources after this resource ID in the selected order.
-    public static func listAgentEnvironmentTemplates(config: ClientConfig, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> EnvironmentTemplateListResource {
-        if let limit = limit {
+    static func listAgentEnvironmentTemplates(
+        config: ClientConfig,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> EnvironmentTemplateListResource {
+        if let limit {
             try validateRange("limit", Double(limit), min: 1, max: 100)
         }
 
-        if let after = after {
-            try validateLength("after", after, min: 0, max: 1048576)
+        if let after {
+            try validateLength("after", after, min: 0, max: 1_048_576)
         }
 
-        return try (await sdkRequest("GET", "/agents/environments/templates", config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-        ], decoder: .json, operationId: "listAgentEnvironmentTemplates", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "GET",
+            "/agents/environments/templates",
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+            ],
+            decoder: .json,
+            operationId: "listAgentEnvironmentTemplates",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 
-    /// Lists reusable environment templates without returning confidential values. See [reusing a hosted setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
+    /// Lists reusable environment templates without returning confidential values. See [reusing a hosted
+    /// setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
     ///
     /// - Parameters:
     /// - limit: The maximum number of resources to return, between 1 and 100.
     ///   Defaults to 20.
     /// - order: The order in which resources are returned. Defaults to `desc`.
     /// - after: Return resources after this resource ID in the selected order.
-    public static func listAgentEnvironmentTemplatesPaginated(config: ClientConfig, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<EnvironmentTemplateResource, Swift.Error> {
-        return AsyncThrowingStream<EnvironmentTemplateResource, Swift.Error> { (continuation: AsyncThrowingStream<EnvironmentTemplateResource, Swift.Error>.Continuation) in
+    static func listAgentEnvironmentTemplatesPaginated(
+        config: ClientConfig,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<EnvironmentTemplateResource, Swift.Error> {
+        AsyncThrowingStream<EnvironmentTemplateResource, Swift.Error> { (continuation: AsyncThrowingStream<
+            EnvironmentTemplateResource,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAgentEnvironmentTemplates(config: config, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listAgentEnvironmentTemplates(
+                            config: config,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -61,25 +108,50 @@ extension AgentsMethods {
         }
     }
 
-    public struct ListAgentEnvironmentTemplatesPage {
+    struct ListAgentEnvironmentTemplatesPage {
         public let data: EnvironmentTemplateListResource
         public let items: [EnvironmentTemplateResource]
         public let hasMore: Bool
     }
 
-    public static func listAgentEnvironmentTemplatesPages(config: ClientConfig, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListAgentEnvironmentTemplatesPage, Swift.Error> {
-        return AsyncThrowingStream<ListAgentEnvironmentTemplatesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListAgentEnvironmentTemplatesPage, Swift.Error>.Continuation) in
+    static func listAgentEnvironmentTemplatesPages(
+        config: ClientConfig,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListAgentEnvironmentTemplatesPage, Swift.Error> {
+        AsyncThrowingStream<ListAgentEnvironmentTemplatesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListAgentEnvironmentTemplatesPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAgentEnvironmentTemplates(config: config, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listAgentEnvironmentTemplates(
+                            config: config,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListAgentEnvironmentTemplatesPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageContinuation.yield(ListAgentEnvironmentTemplatesPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

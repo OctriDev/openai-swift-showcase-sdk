@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Skills domain models
+/// Skills domain models
 /// Uploads a new immutable version of a skill.
 public struct CreateSkillVersionBody: Codable {
     /// Skill files to upload (directory upload) or a single zip file.
@@ -16,24 +16,30 @@ public struct CreateSkillVersionBody: Codable {
         case `default`
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateSkillVersionBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.files) else {
-            throw SdkValidationError(field: "files", code: "required", message: "Validation failed for 'files': value is required")
-        }
-        self.files = try container.sdkDecodeRequired(.files)
-        self.`default` = try container.sdkDecodeIfPresent(.`default`)
-            try validateItems("files", self.files, min: nil, max: 500)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateSkillVersionBody {
-    public init(files: [Data], `default`: Bool? = nil) throws {
-        (self.files, self.`default`) = (files, `default`)
-            try validateItems("files", self.files, min: nil, max: 500)
+public extension CreateSkillVersionBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.files) else {
+            throw SdkValidationError(
+                field: "files",
+                code: "required",
+                message: "Validation failed for 'files': value is required"
+            )
+        }
+        files = try container.sdkDecodeRequired(.files)
+        self.default = try container.sdkDecodeIfPresent(.default)
+        try validateItems("files", files, min: nil, max: 500)
+    }
+}
+
+public extension CreateSkillVersionBody {
+    init(files: [Data], default: Bool? = nil) throws {
+        (self.files, self.default) = (files, `default`)
+        try validateItems("files", self.files, min: nil, max: 500)
     }
 }

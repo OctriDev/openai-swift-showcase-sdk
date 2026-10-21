@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsTurn domain models
+/// AgentsTurn domain models
 /// The canonical public representation of a session turn.
 public struct TurnResource: Codable {
     /// The ID of the turn.
@@ -45,43 +45,57 @@ public struct TurnResource: Codable {
         case usage
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension TurnResource {
-    public init(from decoder: Decoder) throws {
+public extension TurnResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.sessionId = try container.sdkDecodeRequired(.sessionId)
-        self.agentId = try container.sdkDecodeRequired(.agentId)
-        self.subagentId = try container.sdkDecodeNullable(.subagentId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.startedAt = try container.sdkDecodeNullable(.startedAt)
-        self.completedAt = try container.sdkDecodeNullable(.completedAt)
-        self.error = try container.sdkDecodeNullable(.error)
-        self.usage = try container.sdkDecodeNullable(.usage)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("session_id", self.sessionId, min: 0, max: nil)
-            try validateLength("agent_id", self.agentId, min: 0, max: nil)
-        if let value = self.subagentId {
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        sessionId = try container.sdkDecodeRequired(.sessionId)
+        agentId = try container.sdkDecodeRequired(.agentId)
+        subagentId = try container.sdkDecodeNullable(.subagentId)
+        status = try container.sdkDecodeRequired(.status)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        startedAt = try container.sdkDecodeNullable(.startedAt)
+        completedAt = try container.sdkDecodeNullable(.completedAt)
+        error = try container.sdkDecodeNullable(.error)
+        usage = try container.sdkDecodeNullable(.usage)
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("session_id", sessionId, min: 0, max: nil)
+        try validateLength("agent_id", agentId, min: 0, max: nil)
+        if let value = subagentId {
             try validateLength("subagent_id", value, min: 0, max: nil)
         }
     }
 }
 
-extension TurnResource {
-    public init(id: String, object: TurnObjectResource, sessionId: String, agentId: String, subagentId: String?, status: TurnStatusResource, createdAt: Int, startedAt: Int?, completedAt: Int?, error: SessionTurnErrorResource?, usage: TokenUsageResource?) throws {
+public extension TurnResource {
+    init(
+        id: String,
+        object: TurnObjectResource,
+        sessionId: String,
+        agentId: String,
+        subagentId: String?,
+        status: TurnStatusResource,
+        createdAt: Int,
+        startedAt: Int?,
+        completedAt: Int?,
+        error: SessionTurnErrorResource?,
+        usage: TokenUsageResource?
+    ) throws {
         (self.id, self.object) = (id, object)
         (self.sessionId, self.agentId) = (sessionId, agentId)
         (self.subagentId, self.status) = (subagentId, status)
         (self.createdAt, self.startedAt) = (createdAt, startedAt)
         (self.completedAt, self.error) = (completedAt, error)
         self.usage = usage
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("session_id", self.sessionId, min: 0, max: nil)
-            try validateLength("agent_id", self.agentId, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("session_id", self.sessionId, min: 0, max: nil)
+        try validateLength("agent_id", self.agentId, min: 0, max: nil)
         if let value = self.subagentId {
             try validateLength("subagent_id", value, min: 0, max: nil)
         }
@@ -92,12 +106,15 @@ extension TurnResource {
 public struct TurnObjectResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let agentSessionTurn = TurnObjectResource(rawValue: "agent.session.turn")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -110,7 +127,10 @@ public struct TurnObjectResource: RawRepresentable, Hashable, Codable, Sendable,
 public struct TurnStatusResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let queued = TurnStatusResource(rawValue: "queued")
     public static let inProgress = TurnStatusResource(rawValue: "in_progress")
     public static let waiting = TurnStatusResource(rawValue: "waiting")
@@ -120,7 +140,7 @@ public struct TurnStatusResource: RawRepresentable, Hashable, Codable, Sendable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,22 +3,34 @@
 
 import Foundation
 
-// AssistantsCreate domain models
-extension CreateAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b {
-    public init(from decoder: Decoder) throws {
+/// AssistantsCreate domain models
+public extension CreateAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXed1d215e47.allCases.map(\.rawValue))
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXed1d215e47.allCases.map(\.rawValue)
+        )
     }
 }
 
-extension CreateAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b {
-    public init(type: CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXed1d215e47) throws {
+public extension CreateAssistantRequestToolResourcesFileSearchVectorStoresItemX3af1be068b {
+    init(type: CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXed1d215e47) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXed1d215e47.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXed1d215e47.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -42,7 +54,7 @@ public enum CreateAssistantRequestToolResourcesFileSearchVectorStoresItemXed1d21
 
 /// Always `static`.
 public enum CreateAssistantRequestToolResourcesFileSearchVectorStoresItemX85198a0c6b: String, CaseIterable, Codable {
-    case `static` = "static"
+    case `static`
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawValue = try container.decode(String.self)

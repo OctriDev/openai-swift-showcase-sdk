@@ -3,7 +3,7 @@
 
 import Foundation
 
-// FineTuning domain models
+/// FineTuning domain models
 public indirect enum RunGraderRequestGrader {
     case graderStringCheck(GraderStringCheck)
     case graderTextSimilarity(GraderTextSimilarity)
@@ -15,7 +15,6 @@ public indirect enum RunGraderRequestGrader {
 }
 
 extension RunGraderRequestGrader: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -23,12 +22,16 @@ extension RunGraderRequestGrader: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,12 +42,12 @@ extension RunGraderRequestGrader: Codable {
 extension RunGraderRequestGrader {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "string_check": return .graderStringCheck(try GraderStringCheck(from: decoder))
-        case "text_similarity": return .graderTextSimilarity(try GraderTextSimilarity(from: decoder))
-        case "python": return .graderPython(try GraderPython(from: decoder))
-        case "score_model": return .graderScoreModel(try GraderScoreModel(from: decoder))
-        case "multi": return .graderMulti(try GraderMulti(from: decoder))
-        default: return nil
+        case "string_check": try .graderStringCheck(GraderStringCheck(from: decoder))
+        case "text_similarity": try .graderTextSimilarity(GraderTextSimilarity(from: decoder))
+        case "python": try .graderPython(GraderPython(from: decoder))
+        case "score_model": try .graderScoreModel(GraderScoreModel(from: decoder))
+        case "multi": try .graderMulti(GraderMulti(from: decoder))
+        default: nil
         }
     }
 }
@@ -80,26 +83,36 @@ public struct RunGraderRequest: Codable {
         case item
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunGraderRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.grader) else {
-            throw SdkValidationError(field: "grader", code: "required", message: "Validation failed for 'grader': value is required")
-        }
-        guard container.contains(.modelSample) else {
-            throw SdkValidationError(field: "model_sample", code: "required", message: "Validation failed for 'model_sample': value is required")
-        }
-        self.grader = try container.sdkDecodeRequired(.grader)
-        self.modelSample = try container.sdkDecodeRequired(.modelSample)
-        self.item = try container.sdkDecodeIfPresent(.item)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunGraderRequest {
-    public init(grader: RunGraderRequestGrader, modelSample: String, item: [String: JSONValue]? = nil) {
+public extension RunGraderRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.grader) else {
+            throw SdkValidationError(
+                field: "grader",
+                code: "required",
+                message: "Validation failed for 'grader': value is required"
+            )
+        }
+        guard container.contains(.modelSample) else {
+            throw SdkValidationError(
+                field: "model_sample",
+                code: "required",
+                message: "Validation failed for 'model_sample': value is required"
+            )
+        }
+        grader = try container.sdkDecodeRequired(.grader)
+        modelSample = try container.sdkDecodeRequired(.modelSample)
+        item = try container.sdkDecodeIfPresent(.item)
+    }
+}
+
+public extension RunGraderRequest {
+    init(grader: RunGraderRequestGrader, modelSample: String, item: [String: JSONValue]? = nil) {
         (self.grader, self.modelSample) = (grader, modelSample)
         self.item = item
     }
@@ -123,27 +136,37 @@ public struct RunGraderResponseMetadataTokenUsage: Codable {
         case cachedTokens = "cached_tokens"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunGraderResponseMetadataTokenUsage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.promptTokens) else {
-            throw SdkValidationError(field: "prompt_tokens", code: "required", message: "Validation failed for 'prompt_tokens': value is required")
-        }
-        guard container.contains(.totalTokens) else {
-            throw SdkValidationError(field: "total_tokens", code: "required", message: "Validation failed for 'total_tokens': value is required")
-        }
-        self.promptTokens = try container.sdkDecodeRequired(.promptTokens)
-        self.totalTokens = try container.sdkDecodeRequired(.totalTokens)
-        self.completionTokens = try container.sdkDecodeIfPresent(.completionTokens)
-        self.cachedTokens = try container.sdkDecodeIfPresent(.cachedTokens)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunGraderResponseMetadataTokenUsage {
-    public init(promptTokens: Int, totalTokens: Int, completionTokens: Int? = nil, cachedTokens: Int? = nil) {
+public extension RunGraderResponseMetadataTokenUsage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.promptTokens) else {
+            throw SdkValidationError(
+                field: "prompt_tokens",
+                code: "required",
+                message: "Validation failed for 'prompt_tokens': value is required"
+            )
+        }
+        guard container.contains(.totalTokens) else {
+            throw SdkValidationError(
+                field: "total_tokens",
+                code: "required",
+                message: "Validation failed for 'total_tokens': value is required"
+            )
+        }
+        promptTokens = try container.sdkDecodeRequired(.promptTokens)
+        totalTokens = try container.sdkDecodeRequired(.totalTokens)
+        completionTokens = try container.sdkDecodeIfPresent(.completionTokens)
+        cachedTokens = try container.sdkDecodeIfPresent(.cachedTokens)
+    }
+}
+
+public extension RunGraderResponseMetadataTokenUsage {
+    init(promptTokens: Int, totalTokens: Int, completionTokens: Int? = nil, cachedTokens: Int? = nil) {
         (self.promptTokens, self.totalTokens) = (promptTokens, totalTokens)
         (self.completionTokens, self.cachedTokens) = (completionTokens, cachedTokens)
     }
@@ -176,45 +199,83 @@ public struct RunGraderResponseMetadata: Codable {
         case sampledModelName = "sampled_model_name"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunGraderResponseMetadata {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.errors) else {
-            throw SdkValidationError(field: "errors", code: "required", message: "Validation failed for 'errors': value is required")
-        }
-        guard container.contains(.executionTime) else {
-            throw SdkValidationError(field: "execution_time", code: "required", message: "Validation failed for 'execution_time': value is required")
-        }
-        guard container.contains(.scores) else {
-            throw SdkValidationError(field: "scores", code: "required", message: "Validation failed for 'scores': value is required")
-        }
-        guard container.contains(.tokenUsage) else {
-            throw SdkValidationError(field: "token_usage", code: "required", message: "Validation failed for 'token_usage': value is required")
-        }
-        guard container.contains(.sampledModelName) else {
-            throw SdkValidationError(field: "sampled_model_name", code: "required", message: "Validation failed for 'sampled_model_name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.errors = try container.sdkDecodeRequired(.errors)
-        self.executionTime = try container.sdkDecodeRequired(.executionTime)
-        self.scores = try container.sdkDecodeRequired(.scores)
-        self.tokenUsage = try container.sdkDecodeNullable(.tokenUsage)
-        self.sampledModelName = try container.sdkDecodeNullable(.sampledModelName)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunGraderResponseMetadata {
-    public init(name: String, type: String, errors: RunGraderResponseMetadataErrors, executionTime: Double, scores: [String: JSONValue], tokenUsage: RunGraderResponseMetadataTokenUsage?, sampledModelName: String?) {
+public extension RunGraderResponseMetadata {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.errors) else {
+            throw SdkValidationError(
+                field: "errors",
+                code: "required",
+                message: "Validation failed for 'errors': value is required"
+            )
+        }
+        guard container.contains(.executionTime) else {
+            throw SdkValidationError(
+                field: "execution_time",
+                code: "required",
+                message: "Validation failed for 'execution_time': value is required"
+            )
+        }
+        guard container.contains(.scores) else {
+            throw SdkValidationError(
+                field: "scores",
+                code: "required",
+                message: "Validation failed for 'scores': value is required"
+            )
+        }
+        guard container.contains(.tokenUsage) else {
+            throw SdkValidationError(
+                field: "token_usage",
+                code: "required",
+                message: "Validation failed for 'token_usage': value is required"
+            )
+        }
+        guard container.contains(.sampledModelName) else {
+            throw SdkValidationError(
+                field: "sampled_model_name",
+                code: "required",
+                message: "Validation failed for 'sampled_model_name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        type = try container.sdkDecodeRequired(.type)
+        errors = try container.sdkDecodeRequired(.errors)
+        executionTime = try container.sdkDecodeRequired(.executionTime)
+        scores = try container.sdkDecodeRequired(.scores)
+        tokenUsage = try container.sdkDecodeNullable(.tokenUsage)
+        sampledModelName = try container.sdkDecodeNullable(.sampledModelName)
+    }
+}
+
+public extension RunGraderResponseMetadata {
+    init(
+        name: String,
+        type: String,
+        errors: RunGraderResponseMetadataErrors,
+        executionTime: Double,
+        scores: [String: JSONValue],
+        tokenUsage: RunGraderResponseMetadataTokenUsage?,
+        sampledModelName: String?
+    ) {
         (self.name, self.type) = (name, type)
         (self.errors, self.executionTime) = (errors, executionTime)
         (self.scores, self.tokenUsage) = (scores, tokenUsage)
@@ -270,31 +331,48 @@ public struct RunGraderResponseMetadataErrors: Codable {
         case modelGraderServerErrorDetails = "model_grader_server_error_details"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunGraderResponseMetadataErrors {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.formulaParseError = try container.sdkDecodeRequired(.formulaParseError)
-        self.sampleParseError = try container.sdkDecodeRequired(.sampleParseError)
-        self.truncatedObservationError = try container.sdkDecodeRequired(.truncatedObservationError)
-        self.unresponsiveRewardError = try container.sdkDecodeRequired(.unresponsiveRewardError)
-        self.invalidVariableError = try container.sdkDecodeRequired(.invalidVariableError)
-        self.otherError = try container.sdkDecodeRequired(.otherError)
-        self.pythonGraderServerError = try container.sdkDecodeRequired(.pythonGraderServerError)
-        self.pythonGraderServerErrorType = try container.sdkDecodeNullable(.pythonGraderServerErrorType)
-        self.pythonGraderRuntimeError = try container.sdkDecodeRequired(.pythonGraderRuntimeError)
-        self.pythonGraderRuntimeErrorDetails = try container.sdkDecodeNullable(.pythonGraderRuntimeErrorDetails)
-        self.modelGraderServerError = try container.sdkDecodeRequired(.modelGraderServerError)
-        self.modelGraderRefusalError = try container.sdkDecodeRequired(.modelGraderRefusalError)
-        self.modelGraderParseError = try container.sdkDecodeRequired(.modelGraderParseError)
-        self.modelGraderServerErrorDetails = try container.sdkDecodeNullable(.modelGraderServerErrorDetails)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunGraderResponseMetadataErrors {
-    public init(formulaParseError: Bool, sampleParseError: Bool, truncatedObservationError: Bool, unresponsiveRewardError: Bool, invalidVariableError: Bool, otherError: Bool, pythonGraderServerError: Bool, pythonGraderServerErrorType: String?, pythonGraderRuntimeError: Bool, pythonGraderRuntimeErrorDetails: String?, modelGraderServerError: Bool, modelGraderRefusalError: Bool, modelGraderParseError: Bool, modelGraderServerErrorDetails: String?) {
+public extension RunGraderResponseMetadataErrors {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        formulaParseError = try container.sdkDecodeRequired(.formulaParseError)
+        sampleParseError = try container.sdkDecodeRequired(.sampleParseError)
+        truncatedObservationError = try container.sdkDecodeRequired(.truncatedObservationError)
+        unresponsiveRewardError = try container.sdkDecodeRequired(.unresponsiveRewardError)
+        invalidVariableError = try container.sdkDecodeRequired(.invalidVariableError)
+        otherError = try container.sdkDecodeRequired(.otherError)
+        pythonGraderServerError = try container.sdkDecodeRequired(.pythonGraderServerError)
+        pythonGraderServerErrorType = try container.sdkDecodeNullable(.pythonGraderServerErrorType)
+        pythonGraderRuntimeError = try container.sdkDecodeRequired(.pythonGraderRuntimeError)
+        pythonGraderRuntimeErrorDetails = try container.sdkDecodeNullable(.pythonGraderRuntimeErrorDetails)
+        modelGraderServerError = try container.sdkDecodeRequired(.modelGraderServerError)
+        modelGraderRefusalError = try container.sdkDecodeRequired(.modelGraderRefusalError)
+        modelGraderParseError = try container.sdkDecodeRequired(.modelGraderParseError)
+        modelGraderServerErrorDetails = try container.sdkDecodeNullable(.modelGraderServerErrorDetails)
+    }
+}
+
+public extension RunGraderResponseMetadataErrors {
+    init(
+        formulaParseError: Bool,
+        sampleParseError: Bool,
+        truncatedObservationError: Bool,
+        unresponsiveRewardError: Bool,
+        invalidVariableError: Bool,
+        otherError: Bool,
+        pythonGraderServerError: Bool,
+        pythonGraderServerErrorType: String?,
+        pythonGraderRuntimeError: Bool,
+        pythonGraderRuntimeErrorDetails: String?,
+        modelGraderServerError: Bool,
+        modelGraderRefusalError: Bool,
+        modelGraderParseError: Bool,
+        modelGraderServerErrorDetails: String?
+    ) {
         (self.formulaParseError, self.sampleParseError) = (formulaParseError, sampleParseError)
         self.truncatedObservationError = truncatedObservationError
         self.unresponsiveRewardError = unresponsiveRewardError
@@ -328,33 +406,56 @@ public struct RunGraderResponse: Codable {
         case modelGraderTokenUsagePerModel = "model_grader_token_usage_per_model"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RunGraderResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.reward) else {
-            throw SdkValidationError(field: "reward", code: "required", message: "Validation failed for 'reward': value is required")
-        }
-        guard container.contains(.metadata) else {
-            throw SdkValidationError(field: "metadata", code: "required", message: "Validation failed for 'metadata': value is required")
-        }
-        guard container.contains(.subRewards) else {
-            throw SdkValidationError(field: "sub_rewards", code: "required", message: "Validation failed for 'sub_rewards': value is required")
-        }
-        guard container.contains(.modelGraderTokenUsagePerModel) else {
-            throw SdkValidationError(field: "model_grader_token_usage_per_model", code: "required", message: "Validation failed for 'model_grader_token_usage_per_model': value is required")
-        }
-        self.reward = try container.sdkDecodeRequired(.reward)
-        self.metadata = try container.sdkDecodeRequired(.metadata)
-        self.subRewards = try container.sdkDecodeRequired(.subRewards)
-        self.modelGraderTokenUsagePerModel = try container.sdkDecodeRequired(.modelGraderTokenUsagePerModel)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RunGraderResponse {
-    public init(reward: Double, metadata: RunGraderResponseMetadata, subRewards: [String: JSONValue], modelGraderTokenUsagePerModel: [String: JSONValue]) {
+public extension RunGraderResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.reward) else {
+            throw SdkValidationError(
+                field: "reward",
+                code: "required",
+                message: "Validation failed for 'reward': value is required"
+            )
+        }
+        guard container.contains(.metadata) else {
+            throw SdkValidationError(
+                field: "metadata",
+                code: "required",
+                message: "Validation failed for 'metadata': value is required"
+            )
+        }
+        guard container.contains(.subRewards) else {
+            throw SdkValidationError(
+                field: "sub_rewards",
+                code: "required",
+                message: "Validation failed for 'sub_rewards': value is required"
+            )
+        }
+        guard container.contains(.modelGraderTokenUsagePerModel) else {
+            throw SdkValidationError(
+                field: "model_grader_token_usage_per_model",
+                code: "required",
+                message: "Validation failed for 'model_grader_token_usage_per_model': value is required"
+            )
+        }
+        reward = try container.sdkDecodeRequired(.reward)
+        metadata = try container.sdkDecodeRequired(.metadata)
+        subRewards = try container.sdkDecodeRequired(.subRewards)
+        modelGraderTokenUsagePerModel = try container.sdkDecodeRequired(.modelGraderTokenUsagePerModel)
+    }
+}
+
+public extension RunGraderResponse {
+    init(
+        reward: Double,
+        metadata: RunGraderResponseMetadata,
+        subRewards: [String: JSONValue],
+        modelGraderTokenUsagePerModel: [String: JSONValue]
+    ) {
         (self.reward, self.metadata) = (reward, metadata)
         (self.subRewards, self.modelGraderTokenUsagePerModel) = (subRewards, modelGraderTokenUsagePerModel)
     }

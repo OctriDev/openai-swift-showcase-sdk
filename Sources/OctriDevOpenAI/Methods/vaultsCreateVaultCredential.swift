@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VaultsMethods {
-    /// Creates a vault credential. Secret values are write-only and are never returned. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+public extension VaultsMethods {
+    /// Creates a vault credential. Secret values are write-only and are never returned. See
+    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
     ///
     /// - Parameters:
     /// - vaultId: The ID of the vault.
@@ -16,26 +17,77 @@ extension VaultsMethods {
     /// - auth: The authentication method and write-only secret values to store.
     /// - metadata: Up to 16 string key-value pairs, with keys up to 64 and values
     ///   up to 512 characters. Defaults to an empty map.
-    public static func createVaultCredential(config: ClientConfig, vaultId: String, name: String, auth: CreateVaultCredentialAuthParam, metadata: [String: String]? = nil, requestOptions: RequestOptions? = nil) async throws -> VaultCredentialResource {
-        try validateLength("vault_id", vaultId, min: 0, max: 1048576)
+    static func createVaultCredential(
+        config: ClientConfig,
+        vaultId: String,
+        name: String,
+        auth: CreateVaultCredentialAuthParam,
+        metadata: [String: String]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VaultCredentialResource {
+        try validateLength("vault_id", vaultId, min: 0, max: 1_048_576)
 
-        try validateLength("name", name, min: 1, max: 1048576)
+        try validateLength("name", name, min: 1, max: 1_048_576)
 
         let requestBody = CreateVaultCredentialRequestBody(name: name, auth: auth, metadata: metadata)
 
-        return try (await sdkRequest("POST", ["/vaults/", sdkEncodePathSegment(sdkWireString(vaultId)), "/credentials"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createVaultCredential", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/vaults/", sdkEncodePathSegment(sdkWireString(vaultId)), "/credentials"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createVaultCredential",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 
-    /// Retrieves vault credential metadata without returning secret values. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    /// Retrieves vault credential metadata without returning secret values. See
+    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
     ///
     /// - Parameters:
     /// - vaultId: The ID of the vault.
     /// - credentialId: The ID of the vault credential.
-    public static func retrieveVaultCredential(config: ClientConfig, vaultId: String, credentialId: String, requestOptions: RequestOptions? = nil) async throws -> VaultCredentialResource {
-        try validateLength("vault_id", vaultId, min: 0, max: 1048576)
+    static func retrieveVaultCredential(
+        config: ClientConfig,
+        vaultId: String,
+        credentialId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VaultCredentialResource {
+        try validateLength("vault_id", vaultId, min: 0, max: 1_048_576)
 
-        try validateLength("credential_id", credentialId, min: 0, max: 1048576)
+        try validateLength("credential_id", credentialId, min: 0, max: 1_048_576)
 
-        return try (await sdkRequest("GET", ["/vaults/", sdkEncodePathSegment(sdkWireString(vaultId)), "/credentials/", sdkEncodePathSegment(sdkWireString(credentialId))].joined(), config: config, decoder: .json, operationId: "retrieveVaultCredential", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/vaults/",
+                sdkEncodePathSegment(sdkWireString(vaultId)),
+                "/credentials/",
+                sdkEncodePathSegment(sdkWireString(credentialId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "retrieveVaultCredential",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 }

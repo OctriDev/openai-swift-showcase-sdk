@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaLocal domain models
+/// ResponsesBetaLocal domain models
 /// A tool that allows the model to execute shell commands in a local environment.
 public struct BetaLocalShellToolParam: Codable {
     /// The type of the local shell tool. Always `local_shell`.
@@ -13,24 +13,30 @@ public struct BetaLocalShellToolParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaLocalShellToolParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, BetaLocalShellToolParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaLocalShellToolParam {
-    public init(type: BetaLocalShellToolParamType) throws {
+public extension BetaLocalShellToolParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, BetaLocalShellToolParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaLocalShellToolParam {
+    init(type: BetaLocalShellToolParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, BetaLocalShellToolParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaLocalShellToolParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -49,29 +55,43 @@ public struct BetaLocalSkillParam: Codable {
         case path
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaLocalSkillParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        guard container.contains(.path) else {
-            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeRequired(.description)
-        self.path = try container.sdkDecodeRequired(.path)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaLocalSkillParam {
-    public init(name: String, description: String, path: String) {
+public extension BetaLocalSkillParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        guard container.contains(.path) else {
+            throw SdkValidationError(
+                field: "path",
+                code: "required",
+                message: "Validation failed for 'path': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeRequired(.description)
+        path = try container.sdkDecodeRequired(.path)
+    }
+}
+
+public extension BetaLocalSkillParam {
+    init(name: String, description: String, path: String) {
         (self.name, self.description) = (name, description)
         self.path = path
     }
@@ -86,24 +106,30 @@ public struct BetaLocalEnvironmentResource: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaLocalEnvironmentResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, BetaLocalEnvironmentResourceType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaLocalEnvironmentResource {
-    public init(type: BetaLocalEnvironmentResourceType) throws {
+public extension BetaLocalEnvironmentResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, BetaLocalEnvironmentResourceType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaLocalEnvironmentResource {
+    init(type: BetaLocalEnvironmentResourceType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, BetaLocalEnvironmentResourceType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaLocalEnvironmentResourceType.allCases.map(\.rawValue))
     }
 }
 
@@ -131,43 +157,72 @@ public struct BetaLocalShellToolCall: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaLocalShellToolCall {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.action) else {
-            throw SdkValidationError(field: "action", code: "required", message: "Validation failed for 'action': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.action = try container.sdkDecodeRequired(.action)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaLocalShellToolCallType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaLocalShellToolCall {
-    public init(type: BetaLocalShellToolCallType, id: String, callId: String, action: BetaLocalShellExecAction, status: BetaLocalShellToolCallStatus, agent: BetaAgentTag? = nil) throws {
+public extension BetaLocalShellToolCall {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.action) else {
+            throw SdkValidationError(
+                field: "action",
+                code: "required",
+                message: "Validation failed for 'action': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        callId = try container.sdkDecodeRequired(.callId)
+        action = try container.sdkDecodeRequired(.action)
+        status = try container.sdkDecodeRequired(.status)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaLocalShellToolCallType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaLocalShellToolCall {
+    init(
+        type: BetaLocalShellToolCallType,
+        id: String,
+        callId: String,
+        action: BetaLocalShellExecAction,
+        status: BetaLocalShellToolCallStatus,
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.action) = (callId, action)
         (self.status, self.agent) = (status, agent)
-            try sdkValidateRawEnum("type", self.type, BetaLocalShellToolCallType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaLocalShellToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -195,32 +250,53 @@ public struct BetaLocalShellExecAction: Codable {
         case user
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaLocalShellExecAction {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.command) else {
-            throw SdkValidationError(field: "command", code: "required", message: "Validation failed for 'command': value is required")
-        }
-        guard container.contains(.env) else {
-            throw SdkValidationError(field: "env", code: "required", message: "Validation failed for 'env': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.command = try container.sdkDecodeRequired(.command)
-        self.env = try container.sdkDecodeRequired(.env)
-        self.timeoutMs = try container.sdkDecodeIfPresent(.timeoutMs)
-        self.workingDirectory = try container.sdkDecodeIfPresent(.workingDirectory)
-        self.user = try container.sdkDecodeIfPresent(.user)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaLocalShellExecAction {
-    public init(type: BetaLocalShellExecActionType, command: [String], env: [String: String], timeoutMs: Int? = nil, workingDirectory: String? = nil, user: String? = nil) {
+public extension BetaLocalShellExecAction {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.command) else {
+            throw SdkValidationError(
+                field: "command",
+                code: "required",
+                message: "Validation failed for 'command': value is required"
+            )
+        }
+        guard container.contains(.env) else {
+            throw SdkValidationError(
+                field: "env",
+                code: "required",
+                message: "Validation failed for 'env': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        command = try container.sdkDecodeRequired(.command)
+        env = try container.sdkDecodeRequired(.env)
+        timeoutMs = try container.sdkDecodeIfPresent(.timeoutMs)
+        workingDirectory = try container.sdkDecodeIfPresent(.workingDirectory)
+        user = try container.sdkDecodeIfPresent(.user)
+    }
+}
+
+public extension BetaLocalShellExecAction {
+    init(
+        type: BetaLocalShellExecActionType,
+        command: [String],
+        env: [String: String],
+        timeoutMs: Int? = nil,
+        workingDirectory: String? = nil,
+        user: String? = nil
+    ) {
         (self.type, self.command) = (type, command)
         (self.env, self.timeoutMs) = (env, timeoutMs)
         (self.workingDirectory, self.user) = (workingDirectory, user)
@@ -248,36 +324,56 @@ public struct BetaLocalShellToolCallOutput: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaLocalShellToolCallOutput {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.output = try container.sdkDecodeRequired(.output)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.status = try container.sdkDecodeIfPresent(.status)
-            try sdkValidateRawEnum("type", self.type, BetaLocalShellToolCallOutputType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaLocalShellToolCallOutput {
-    public init(type: BetaLocalShellToolCallOutputType, id: String, output: String, agent: BetaAgentTag? = nil, status: BetaLocalShellToolCallOutputStatusVariant0? = nil) throws {
+public extension BetaLocalShellToolCallOutput {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.output) else {
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        output = try container.sdkDecodeRequired(.output)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        status = try container.sdkDecodeIfPresent(.status)
+        try sdkValidateRawEnum("type", type, BetaLocalShellToolCallOutputType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaLocalShellToolCallOutput {
+    init(
+        type: BetaLocalShellToolCallOutputType,
+        id: String,
+        output: String,
+        agent: BetaAgentTag? = nil,
+        status: BetaLocalShellToolCallOutputStatusVariant0? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.output, self.agent) = (output, agent)
         self.status = status
-            try sdkValidateRawEnum("type", self.type, BetaLocalShellToolCallOutputType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaLocalShellToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 
@@ -293,28 +389,34 @@ public struct BetaLocalEnvironmentParam: Codable {
         case skills
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension BetaLocalEnvironmentParam {
-    public init(from decoder: Decoder) throws {
+public extension BetaLocalEnvironmentParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.skills = try container.sdkDecodeIfPresent(.skills)
-            try sdkValidateRawEnum("type", self.type, BetaLocalEnvironmentParamType.allCases.map(\.rawValue))
-        if let value = self.skills {
+        type = try container.sdkDecodeRequired(.type)
+        skills = try container.sdkDecodeIfPresent(.skills)
+        try sdkValidateRawEnum("type", type, BetaLocalEnvironmentParamType.allCases.map(\.rawValue))
+        if let value = skills {
             try validateItems("skills", value, min: nil, max: 200)
         }
     }
 }
 
-extension BetaLocalEnvironmentParam {
-    public init(type: BetaLocalEnvironmentParamType, skills: [BetaLocalSkillParam]? = nil) throws {
+public extension BetaLocalEnvironmentParam {
+    init(type: BetaLocalEnvironmentParamType, skills: [BetaLocalSkillParam]? = nil) throws {
         (self.type, self.skills) = (type, skills)
-            try sdkValidateRawEnum("type", self.type, BetaLocalEnvironmentParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaLocalEnvironmentParamType.allCases.map(\.rawValue))
         if let value = self.skills {
             try validateItems("skills", value, min: nil, max: 200)
         }
@@ -361,14 +463,17 @@ public enum BetaLocalShellToolCallOutputType: String, CaseIterable, Codable {
 public struct BetaLocalShellToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = BetaLocalShellToolCallStatus(rawValue: "in_progress")
     public static let completed = BetaLocalShellToolCallStatus(rawValue: "completed")
     public static let incomplete = BetaLocalShellToolCallStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -378,17 +483,21 @@ public struct BetaLocalShellToolCallStatus: RawRepresentable, Hashable, Codable,
 }
 
 /// The status of the item. One of `in_progress`, `completed`, or `incomplete`.
-public struct BetaLocalShellToolCallOutputStatusVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct BetaLocalShellToolCallOutputStatusVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = BetaLocalShellToolCallOutputStatusVariant0(rawValue: "in_progress")
     public static let completed = BetaLocalShellToolCallOutputStatusVariant0(rawValue: "completed")
     public static let incomplete = BetaLocalShellToolCallOutputStatusVariant0(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -401,12 +510,15 @@ public struct BetaLocalShellToolCallOutputStatusVariant0: RawRepresentable, Hash
 public struct BetaLocalShellExecActionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let exec = BetaLocalShellExecActionType(rawValue: "exec")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,35 +6,76 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AdminApiKeysMethods {
-    /// Creates an organization admin API key. Provide a `name` and, optionally, `expires_in_seconds` to set the key's lifetime. The response includes the key value, which is returned only once when the key is created.
+public extension AdminApiKeysMethods {
+    /// Creates an organization admin API key. Provide a `name` and, optionally, `expires_in_seconds` to set the key's
+    /// lifetime. The response includes the key value, which is returned only once when the key is created.
     ///
     /// Create an organization admin API key
     ///
     /// - Parameters:
     /// - expiresInSeconds: The number of seconds until the API key expires. Omit
     ///   this field for a key that does not expire.
-    public static func createAdminApiKeys(config: ClientConfig, name: String, expiresInSeconds: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> AdminApiKeyCreateResponse {
-        if let expiresInSeconds = expiresInSeconds {
-            try validateRange("expires_in_seconds", Double(expiresInSeconds), min: 1, max: 31536000)
+    static func createAdminApiKeys(
+        config: ClientConfig,
+        name: String,
+        expiresInSeconds: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AdminApiKeyCreateResponse {
+        if let expiresInSeconds {
+            try validateRange("expires_in_seconds", Double(expiresInSeconds), min: 1, max: 31_536_000)
         }
 
         let requestBody = CreateAdminApiKeysRequestBody(name: name, expiresInSeconds: expiresInSeconds)
 
-        return try (await sdkRequest("POST", "/organization/admin_api_keys", config: config, body: requestBody, decoder: .json, operationId: "createAdminApiKeys", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/organization/admin_api_keys",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createAdminApiKeys",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
-    /// Retrieves details for an organization API key. Use `key_id` to identify the key whose metadata you need. The response includes the redacted key value, creation and expiration timestamps, last-use time, and owner details.
+    /// Retrieves details for an organization API key. Use `key_id` to identify the key whose metadata you need. The
+    /// response includes the redacted key value, creation and expiration timestamps, last-use time, and owner details.
     ///
     /// Retrieve a single organization API key
-    public static func retrieveAdminApiKeys(config: ClientConfig, keyId: String, requestOptions: RequestOptions? = nil) async throws -> AdminApiKey {
-        return try (await sdkRequest("GET", ["/organization/admin_api_keys/", sdkEncodePathSegment(sdkWireString(keyId))].joined(), config: config, decoder: .json, operationId: "retrieveAdminApiKeys", options: requestOptions, errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
+    static func retrieveAdminApiKeys(
+        config: ClientConfig,
+        keyId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AdminApiKey {
+        try await (sdkRequest(
+            "GET",
+            ["/organization/admin_api_keys/", sdkEncodePathSegment(sdkWireString(keyId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "retrieveAdminApiKeys",
+            options: requestOptions,
+            errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
-    /// Deletes an organization admin API key. Use `key_id` to identify the key to remove. The response confirms deletion with the key identifier and a `deleted` flag.
+    /// Deletes an organization admin API key. Use `key_id` to identify the key to remove. The response confirms
+    /// deletion with the key identifier and a `deleted` flag.
     ///
     /// Delete an organization admin API key
-    public static func deleteAdminApiKeys(config: ClientConfig, keyId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteAdminApiKeysResponse {
-        return try (await sdkRequest("DELETE", ["/organization/admin_api_keys/", sdkEncodePathSegment(sdkWireString(keyId))].joined(), config: config, decoder: .json, operationId: "deleteAdminApiKeys", options: requestOptions, errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
+    static func deleteAdminApiKeys(
+        config: ClientConfig,
+        keyId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeleteAdminApiKeysResponse {
+        try await (sdkRequest(
+            "DELETE",
+            ["/organization/admin_api_keys/", sdkEncodePathSegment(sdkWireString(keyId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteAdminApiKeys",
+            options: requestOptions,
+            errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 }

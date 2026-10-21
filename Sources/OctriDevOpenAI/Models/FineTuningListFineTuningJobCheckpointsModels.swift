@@ -3,7 +3,7 @@
 
 import Foundation
 
-// FineTuning domain models
+/// FineTuning domain models
 /// The `fine_tuning.job.checkpoint` object represents a model checkpoint for a fine-tuning job that is ready to
 /// use.
 public struct FineTuningJobCheckpoint: Codable {
@@ -32,45 +32,83 @@ public struct FineTuningJobCheckpoint: Codable {
         case object
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FineTuningJobCheckpoint {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.fineTunedModelCheckpoint) else {
-            throw SdkValidationError(field: "fine_tuned_model_checkpoint", code: "required", message: "Validation failed for 'fine_tuned_model_checkpoint': value is required")
-        }
-        guard container.contains(.stepNumber) else {
-            throw SdkValidationError(field: "step_number", code: "required", message: "Validation failed for 'step_number': value is required")
-        }
-        guard container.contains(.metrics) else {
-            throw SdkValidationError(field: "metrics", code: "required", message: "Validation failed for 'metrics': value is required")
-        }
-        guard container.contains(.fineTuningJobId) else {
-            throw SdkValidationError(field: "fine_tuning_job_id", code: "required", message: "Validation failed for 'fine_tuning_job_id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.fineTunedModelCheckpoint = try container.sdkDecodeRequired(.fineTunedModelCheckpoint)
-        self.stepNumber = try container.sdkDecodeRequired(.stepNumber)
-        self.metrics = try container.sdkDecodeRequired(.metrics)
-        self.fineTuningJobId = try container.sdkDecodeRequired(.fineTuningJobId)
-        self.object = try container.sdkDecodeRequired(.object)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FineTuningJobCheckpoint {
-    public init(id: String, createdAt: Int, fineTunedModelCheckpoint: String, stepNumber: Int, metrics: FineTuningJobCheckpointMetrics, fineTuningJobId: String, object: FineTuningJobCheckpointObject) {
+public extension FineTuningJobCheckpoint {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.fineTunedModelCheckpoint) else {
+            throw SdkValidationError(
+                field: "fine_tuned_model_checkpoint",
+                code: "required",
+                message: "Validation failed for 'fine_tuned_model_checkpoint': value is required"
+            )
+        }
+        guard container.contains(.stepNumber) else {
+            throw SdkValidationError(
+                field: "step_number",
+                code: "required",
+                message: "Validation failed for 'step_number': value is required"
+            )
+        }
+        guard container.contains(.metrics) else {
+            throw SdkValidationError(
+                field: "metrics",
+                code: "required",
+                message: "Validation failed for 'metrics': value is required"
+            )
+        }
+        guard container.contains(.fineTuningJobId) else {
+            throw SdkValidationError(
+                field: "fine_tuning_job_id",
+                code: "required",
+                message: "Validation failed for 'fine_tuning_job_id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        fineTunedModelCheckpoint = try container.sdkDecodeRequired(.fineTunedModelCheckpoint)
+        stepNumber = try container.sdkDecodeRequired(.stepNumber)
+        metrics = try container.sdkDecodeRequired(.metrics)
+        fineTuningJobId = try container.sdkDecodeRequired(.fineTuningJobId)
+        object = try container.sdkDecodeRequired(.object)
+    }
+}
+
+public extension FineTuningJobCheckpoint {
+    init(
+        id: String,
+        createdAt: Int,
+        fineTunedModelCheckpoint: String,
+        stepNumber: Int,
+        metrics: FineTuningJobCheckpointMetrics,
+        fineTuningJobId: String,
+        object: FineTuningJobCheckpointObject
+    ) {
         (self.id, self.createdAt) = (id, createdAt)
         (self.fineTunedModelCheckpoint, self.stepNumber) = (fineTunedModelCheckpoint, stepNumber)
         (self.metrics, self.fineTuningJobId) = (metrics, fineTuningJobId)
@@ -106,26 +144,34 @@ public struct FineTuningJobCheckpointMetrics: Codable {
     }
 
     init() {
-        (self.step, self.trainLoss, self.trainMeanTokenAccuracy, self.validLoss, self.validMeanTokenAccuracy) = (nil, nil, nil, nil, nil)
-        (self.fullValidLoss, self.fullValidMeanTokenAccuracy) = (nil, nil)
+        (step, trainLoss, trainMeanTokenAccuracy, validLoss, validMeanTokenAccuracy) = (nil, nil, nil, nil, nil)
+        (fullValidLoss, fullValidMeanTokenAccuracy) = (nil, nil)
     }
 }
 
-extension FineTuningJobCheckpointMetrics {
-    public init(from decoder: Decoder) throws {
+public extension FineTuningJobCheckpointMetrics {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.step = try container.sdkDecodeIfPresent(.step)
-        self.trainLoss = try container.sdkDecodeIfPresent(.trainLoss)
-        self.trainMeanTokenAccuracy = try container.sdkDecodeIfPresent(.trainMeanTokenAccuracy)
-        self.validLoss = try container.sdkDecodeIfPresent(.validLoss)
-        self.validMeanTokenAccuracy = try container.sdkDecodeIfPresent(.validMeanTokenAccuracy)
-        self.fullValidLoss = try container.sdkDecodeIfPresent(.fullValidLoss)
-        self.fullValidMeanTokenAccuracy = try container.sdkDecodeIfPresent(.fullValidMeanTokenAccuracy)
+        step = try container.sdkDecodeIfPresent(.step)
+        trainLoss = try container.sdkDecodeIfPresent(.trainLoss)
+        trainMeanTokenAccuracy = try container.sdkDecodeIfPresent(.trainMeanTokenAccuracy)
+        validLoss = try container.sdkDecodeIfPresent(.validLoss)
+        validMeanTokenAccuracy = try container.sdkDecodeIfPresent(.validMeanTokenAccuracy)
+        fullValidLoss = try container.sdkDecodeIfPresent(.fullValidLoss)
+        fullValidMeanTokenAccuracy = try container.sdkDecodeIfPresent(.fullValidMeanTokenAccuracy)
     }
 }
 
-extension FineTuningJobCheckpointMetrics {
-    public init(step: Double? = nil, trainLoss: Double? = nil, trainMeanTokenAccuracy: Double? = nil, validLoss: Double? = nil, validMeanTokenAccuracy: Double? = nil, fullValidLoss: Double? = nil, fullValidMeanTokenAccuracy: Double? = nil) {
+public extension FineTuningJobCheckpointMetrics {
+    init(
+        step: Double? = nil,
+        trainLoss: Double? = nil,
+        trainMeanTokenAccuracy: Double? = nil,
+        validLoss: Double? = nil,
+        validMeanTokenAccuracy: Double? = nil,
+        fullValidLoss: Double? = nil,
+        fullValidMeanTokenAccuracy: Double? = nil
+    ) {
         self.init()
         (self.step, self.trainLoss) = (step, trainLoss)
         (self.trainMeanTokenAccuracy, self.validLoss) = (trainMeanTokenAccuracy, validLoss)
@@ -155,31 +201,51 @@ public struct ListFineTuningJobCheckpointsResponse: Codable {
         case lastId = "last_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListFineTuningJobCheckpointsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        self.data = try container.sdkDecodeRequired(.data)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-        self.firstId = try container.sdkDecodeIfPresent(.firstId)
-        self.lastId = try container.sdkDecodeIfPresent(.lastId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListFineTuningJobCheckpointsResponse {
-    public init(data: [FineTuningJobCheckpoint], object: ListFineTuningJobCheckpointsResponseObject, hasMore: Bool, firstId: String? = nil, lastId: String? = nil) {
+public extension ListFineTuningJobCheckpointsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        data = try container.sdkDecodeRequired(.data)
+        object = try container.sdkDecodeRequired(.object)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        firstId = try container.sdkDecodeIfPresent(.firstId)
+        lastId = try container.sdkDecodeIfPresent(.lastId)
+    }
+}
+
+public extension ListFineTuningJobCheckpointsResponse {
+    init(
+        data: [FineTuningJobCheckpoint],
+        object: ListFineTuningJobCheckpointsResponseObject,
+        hasMore: Bool,
+        firstId: String? = nil,
+        lastId: String? = nil
+    ) {
         (self.data, self.object) = (data, object)
         (self.hasMore, self.firstId) = (hasMore, firstId)
         self.lastId = lastId
@@ -190,12 +256,15 @@ extension ListFineTuningJobCheckpointsResponse {
 public struct FineTuningJobCheckpointObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let fineTuningJobCheckpoint = FineTuningJobCheckpointObject(rawValue: "fine_tuning.job.checkpoint")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -205,15 +274,19 @@ public struct FineTuningJobCheckpointObject: RawRepresentable, Hashable, Codable
 }
 
 /// Required enumerated value serialized in the `object` wire field.
-public struct ListFineTuningJobCheckpointsResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ListFineTuningJobCheckpointsResponseObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = ListFineTuningJobCheckpointsResponseObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,28 +3,52 @@
 
 import Foundation
 
-// LiveLiveSession domain models
-extension LiveSessionAudioFormatPCMUParam {
-    public init(from decoder: Decoder) throws {
+/// LiveLiveSession domain models
+public extension LiveSessionAudioFormatPCMUParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.rate) else {
-            throw SdkValidationError(field: "rate", code: "required", message: "Validation failed for 'rate': value is required")
+            throw SdkValidationError(
+                field: "rate",
+                code: "required",
+                message: "Validation failed for 'rate': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.rate = try container.sdkDecodeRequired(.rate)
-            try sdkValidateRawEnum("type", self.type, LiveSessionAudioFormatPCMUParamType.allCases.map(\.rawValue))
-            try validateRange("rate", Double(self.rate), min: 8000, max: 8000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        type = try container.sdkDecodeRequired(.type)
+        rate = try container.sdkDecodeRequired(.rate)
+        try sdkValidateRawEnum("type", type, LiveSessionAudioFormatPCMUParamType.allCases.map(\.rawValue))
+        try validateRange(
+            "rate",
+            Double(rate),
+            min: 8000,
+            max: 8000,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
-extension LiveSessionAudioFormatPCMUParam {
-    public init(type: LiveSessionAudioFormatPCMUParamType, rate: Int) throws {
+public extension LiveSessionAudioFormatPCMUParam {
+    init(type: LiveSessionAudioFormatPCMUParamType, rate: Int) throws {
         (self.type, self.rate) = (type, rate)
-            try sdkValidateRawEnum("type", self.type, LiveSessionAudioFormatPCMUParamType.allCases.map(\.rawValue))
-            try validateRange("rate", Double(self.rate), min: 8000, max: 8000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try sdkValidateRawEnum("type", self.type, LiveSessionAudioFormatPCMUParamType.allCases.map(\.rawValue))
+        try validateRange(
+            "rate",
+            Double(self.rate),
+            min: 8000,
+            max: 8000,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -50,12 +74,15 @@ public enum LiveSessionAudioFormatPCMParamType: String, CaseIterable, Codable {
 public struct LiveSessionClosedReasonVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let closeRequested = LiveSessionClosedReasonVariant0(rawValue: "close_requested")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -68,12 +95,15 @@ public struct LiveSessionClosedReasonVariant0: RawRepresentable, Hashable, Codab
 public struct LiveSessionClosedReasonVariant3: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let remoteHangup = LiveSessionClosedReasonVariant3(rawValue: "remote_hangup")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -194,12 +224,15 @@ public enum LiveSessionAudioFormatPCMAParamType: String, CaseIterable, Codable {
 public struct LiveSessionClosedReasonVariant4: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let connectionLost = LiveSessionClosedReasonVariant4(rawValue: "connection_lost")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -231,12 +264,15 @@ public enum LiveSessionClosedType: String, CaseIterable, Codable {
 public struct LiveSessionResourceParamStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let active = LiveSessionResourceParamStatus(rawValue: "active")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -285,12 +321,15 @@ public enum LiveSessionUpdatedType: String, CaseIterable, Codable {
 public struct LiveSessionClosedReasonVariant2: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let content = LiveSessionClosedReasonVariant2(rawValue: "content")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -303,12 +342,15 @@ public struct LiveSessionClosedReasonVariant2: RawRepresentable, Hashable, Codab
 public struct LiveSessionClosedReasonVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let expired = LiveSessionClosedReasonVariant1(rawValue: "expired")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

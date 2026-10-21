@@ -6,24 +6,49 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension FilesMethods {
+public extension FilesMethods {
     /// Deletes a file and removes it from all vector stores. Use `file_id` to identify the file to remove.
     ///
     /// Delete a file and remove it from all vector stores.
     ///
     /// - Parameters:
     /// - fileId: The ID of the file to use for this request.
-    public static func deleteFile(config: ClientConfig, fileId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteFileResponse {
-        return try (await sdkRequest("DELETE", ["/files/", sdkEncodePathSegment(sdkWireString(fileId))].joined(), config: config, decoder: .json, operationId: "deleteFile", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func deleteFile(
+        config: ClientConfig,
+        fileId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeleteFileResponse {
+        try await (sdkRequest(
+            "DELETE",
+            ["/files/", sdkEncodePathSegment(sdkWireString(fileId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteFile",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Retrieves metadata for a specific uploaded file. Use `file_id` to identify the file whose purpose, size, status, and timestamps you need.
+    /// Retrieves metadata for a specific uploaded file. Use `file_id` to identify the file whose purpose, size, status,
+    /// and timestamps you need.
     ///
     /// Returns information about a specific file.
     ///
     /// - Parameters:
     /// - fileId: The ID of the file to use for this request.
-    public static func retrieveFile(config: ClientConfig, fileId: String, requestOptions: RequestOptions? = nil) async throws -> OpenAIFile {
-        return try (await sdkRequest("GET", ["/files/", sdkEncodePathSegment(sdkWireString(fileId))].joined(), config: config, decoder: .json, operationId: "retrieveFile", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func retrieveFile(
+        config: ClientConfig,
+        fileId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OpenAIFile {
+        try await (sdkRequest(
+            "GET",
+            ["/files/", sdkEncodePathSegment(sdkWireString(fileId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "retrieveFile",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

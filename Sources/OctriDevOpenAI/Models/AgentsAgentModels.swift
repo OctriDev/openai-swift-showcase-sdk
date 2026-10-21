@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsAgent domain models
+/// AgentsAgent domain models
 public indirect enum AgentContentResource {
     case outputTextResource(OutputTextResource)
     case encryptedContentResource(EncryptedContentResource)
@@ -12,7 +12,6 @@ public indirect enum AgentContentResource {
 }
 
 extension AgentContentResource: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension AgentContentResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,9 @@ extension AgentContentResource: Codable {
 extension AgentContentResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "output_text": return .outputTextResource(try OutputTextResource(from: decoder))
-        case "encrypted_content": return .encryptedContentResource(try EncryptedContentResource(from: decoder))
-        default: return nil
+        case "output_text": try .outputTextResource(OutputTextResource(from: decoder))
+        case "encrypted_content": try .encryptedContentResource(EncryptedContentResource(from: decoder))
+        default: nil
         }
     }
 }
@@ -74,7 +77,6 @@ public indirect enum AgentOutputItemResource {
 }
 
 extension AgentOutputItemResource: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -82,13 +84,19 @@ extension AgentOutputItemResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -99,22 +107,28 @@ extension AgentOutputItemResource: Codable {
 extension AgentOutputItemResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "message": return .assistantMessageItemResource(try AssistantMessageItemResource(from: decoder))
-        case "reasoning": return .reasoningItemResource(try ReasoningItemResource(from: decoder))
-        case "function_call": return .functionCallItemResource(try FunctionCallItemResource(from: decoder))
-        case "mcp_call": return .mcpCallItemResource(try McpCallItemResource(from: decoder))
-        case "computer_use_call": return .computerUseCallItemResource(try ComputerUseCallItemResource(from: decoder))
+        case "message": try .assistantMessageItemResource(AssistantMessageItemResource(from: decoder))
+        case "reasoning": try .reasoningItemResource(ReasoningItemResource(from: decoder))
+        case "function_call": try .functionCallItemResource(FunctionCallItemResource(from: decoder))
+        case "mcp_call": try .mcpCallItemResource(McpCallItemResource(from: decoder))
+        case "computer_use_call": try .computerUseCallItemResource(ComputerUseCallItemResource(from: decoder))
         case "computer_use_approval_request":
-        return .browserAuthenticationRequestItemResource(try BrowserAuthenticationRequestItemResource(from: decoder))
-        case "web_search_call": return .webSearchCallItemResource(try WebSearchCallItemResource(from: decoder))
-        case "command_execution": return .commandExecutionItemResource(try CommandExecutionItemResource(from: decoder))
-        case "create_subagent_call": return .createSubagentCallItemResource(try CreateSubagentCallItemResource(from: decoder))
-        case "send_subagent_input_call": return .sendSubagentInputCallItemResource(try SendSubagentInputCallItemResource(from: decoder))
-        case "resume_subagent_call": return .resumeSubagentCallItemResource(try ResumeSubagentCallItemResource(from: decoder))
-        case "wait_for_subagents_call": return .waitForSubagentsCallItemResource(try WaitForSubagentsCallItemResource(from: decoder))
-        case "interrupt_subagent_call": return .interruptSubagentCallItemResource(try InterruptSubagentCallItemResource(from: decoder))
-        case "close_subagent_call": return .closeSubagentCallItemResource(try CloseSubagentCallItemResource(from: decoder))
-        default: return nil
+            try .browserAuthenticationRequestItemResource(BrowserAuthenticationRequestItemResource(from: decoder))
+        case "web_search_call": try .webSearchCallItemResource(WebSearchCallItemResource(from: decoder))
+        case "command_execution": try .commandExecutionItemResource(CommandExecutionItemResource(from: decoder))
+        case "create_subagent_call": try .createSubagentCallItemResource(CreateSubagentCallItemResource(from: decoder))
+        case "send_subagent_input_call": try .sendSubagentInputCallItemResource(
+                SendSubagentInputCallItemResource(from: decoder)
+            )
+        case "resume_subagent_call": try .resumeSubagentCallItemResource(ResumeSubagentCallItemResource(from: decoder))
+        case "wait_for_subagents_call": try .waitForSubagentsCallItemResource(
+                WaitForSubagentsCallItemResource(from: decoder)
+            )
+        case "interrupt_subagent_call": try .interruptSubagentCallItemResource(
+                InterruptSubagentCallItemResource(from: decoder)
+            )
+        case "close_subagent_call": try .closeSubagentCallItemResource(CloseSubagentCallItemResource(from: decoder))
+        default: nil
         }
     }
 }
@@ -163,7 +177,6 @@ public indirect enum AgentToolConfigParam {
 }
 
 extension AgentToolConfigParam: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -171,12 +184,16 @@ extension AgentToolConfigParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -187,14 +204,14 @@ extension AgentToolConfigParam: Codable {
 extension AgentToolConfigParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": return .agentToolConfigParamFunction(try AgentToolConfigParamFunction(from: decoder))
-        case "tool_search": return .agentToolConfigParamToolSearch(try AgentToolConfigParamToolSearch(from: decoder))
+        case "function": try .agentToolConfigParamFunction(AgentToolConfigParamFunction(from: decoder))
+        case "tool_search": try .agentToolConfigParamToolSearch(AgentToolConfigParamToolSearch(from: decoder))
         case "programmatic_tool_calling":
-        return .agentToolConfigParamProgrammaticToolCalling(try AgentToolConfigParamProgrammaticToolCalling(from: decoder))
-        case "mcp": return .agentToolConfigParamMcp(try AgentToolConfigParamMcp(from: decoder))
-        case "web_search": return .agentToolConfigParamWebSearch(try AgentToolConfigParamWebSearch(from: decoder))
-        case "computer_use": return .agentToolConfigParamComputerUse(try AgentToolConfigParamComputerUse(from: decoder))
-        default: return nil
+            try .agentToolConfigParamProgrammaticToolCalling(AgentToolConfigParamProgrammaticToolCalling(from: decoder))
+        case "mcp": try .agentToolConfigParamMcp(AgentToolConfigParamMcp(from: decoder))
+        case "web_search": try .agentToolConfigParamWebSearch(AgentToolConfigParamWebSearch(from: decoder))
+        case "computer_use": try .agentToolConfigParamComputerUse(AgentToolConfigParamComputerUse(from: decoder))
+        default: nil
         }
     }
 }
@@ -225,7 +242,6 @@ public indirect enum AgentToolResource {
 }
 
 extension AgentToolResource: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -233,12 +249,16 @@ extension AgentToolResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -249,13 +269,13 @@ extension AgentToolResource: Codable {
 extension AgentToolResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": return .agentToolResourceFunction(try AgentToolResourceFunction(from: decoder))
+        case "function": try .agentToolResourceFunction(AgentToolResourceFunction(from: decoder))
         case "programmatic_tool_calling":
-        return .agentToolResourceProgrammaticToolCalling(try AgentToolResourceProgrammaticToolCalling(from: decoder))
-        case "mcp": return .agentToolResourceMcp(try AgentToolResourceMcp(from: decoder))
-        case "web_search": return .agentToolResourceWebSearch(try AgentToolResourceWebSearch(from: decoder))
-        case "computer_use": return .agentToolResourceComputerUse(try AgentToolResourceComputerUse(from: decoder))
-        default: return nil
+            try .agentToolResourceProgrammaticToolCalling(AgentToolResourceProgrammaticToolCalling(from: decoder))
+        case "mcp": try .agentToolResourceMcp(AgentToolResourceMcp(from: decoder))
+        case "web_search": try .agentToolResourceWebSearch(AgentToolResourceWebSearch(from: decoder))
+        case "computer_use": try .agentToolResourceComputerUse(AgentToolResourceComputerUse(from: decoder))
+        default: nil
         }
     }
 }
@@ -296,48 +316,76 @@ public struct AgentEnvironmentListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension AgentEnvironmentListResource {
-    public init(from decoder: Decoder) throws {
+public extension AgentEnvironmentListResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
+            throw SdkValidationError(
+                field: "first_id",
+                code: "required",
+                message: "Validation failed for 'first_id': value is required"
+            )
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
+            throw SdkValidationError(
+                field: "last_id",
+                code: "required",
+                message: "Validation failed for 'last_id': value is required"
+            )
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
         }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.firstId = try container.sdkDecodeNullable(.firstId)
-        self.lastId = try container.sdkDecodeNullable(.lastId)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-            try validateItems("data", self.data, min: 0, max: 2000)
-        if let value = self.firstId {
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        firstId = try container.sdkDecodeNullable(.firstId)
+        lastId = try container.sdkDecodeNullable(.lastId)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        try validateItems("data", data, min: 0, max: 2000)
+        if let value = firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
-        if let value = self.lastId {
+        if let value = lastId {
             try validateLength("last_id", value, min: 0, max: nil)
         }
     }
 }
 
-extension AgentEnvironmentListResource {
-    public init(object: AgentEnvironmentListResourceObject, data: [PublicEnvironmentResource], firstId: String?, lastId: String?, hasMore: Bool) throws {
+public extension AgentEnvironmentListResource {
+    init(
+        object: AgentEnvironmentListResourceObject,
+        data: [PublicEnvironmentResource],
+        firstId: String?,
+        lastId: String?,
+        hasMore: Bool
+    ) throws {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
-            try validateItems("data", self.data, min: 0, max: 2000)
+        try validateItems("data", self.data, min: 0, max: 2000)
         if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
@@ -356,24 +404,30 @@ public struct AgentToolConfigParamToolSearch: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AgentToolConfigParamToolSearch {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AgentToolConfigParamToolSearch {
-    public init(type: AgentToolConfigParamToolSearchType) throws {
+public extension AgentToolConfigParamToolSearch {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, AgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AgentToolConfigParamToolSearch {
+    init(type: AgentToolConfigParamToolSearchType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, AgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
     }
 }
 
@@ -389,25 +443,35 @@ public struct AgentToolConfigParamProgrammaticToolCalling: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AgentToolConfigParamProgrammaticToolCalling {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.enabled = try container.sdkDecodeIfPresent(.enabled)
-            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AgentToolConfigParamProgrammaticToolCalling {
-    public init(type: AgentToolConfigParamProgrammaticToolCallingType, enabled: Bool? = nil) throws {
+public extension AgentToolConfigParamProgrammaticToolCalling {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        enabled = try container.sdkDecodeIfPresent(.enabled)
+        try sdkValidateRawEnum("type", type, AgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AgentToolConfigParamProgrammaticToolCalling {
+    init(type: AgentToolConfigParamProgrammaticToolCallingType, enabled: Bool? = nil) throws {
         (self.type, self.enabled) = (type, enabled)
-            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            AgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -423,28 +487,38 @@ public struct AgentToolResourceProgrammaticToolCalling: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AgentToolResourceProgrammaticToolCalling {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.enabled) else {
-            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.enabled = try container.sdkDecodeRequired(.enabled)
-            try sdkValidateRawEnum("type", self.type, AgentToolResourceProgrammaticToolCallingType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AgentToolResourceProgrammaticToolCalling {
-    public init(type: AgentToolResourceProgrammaticToolCallingType, enabled: Bool) throws {
+public extension AgentToolResourceProgrammaticToolCalling {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.enabled) else {
+            throw SdkValidationError(
+                field: "enabled",
+                code: "required",
+                message: "Validation failed for 'enabled': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        enabled = try container.sdkDecodeRequired(.enabled)
+        try sdkValidateRawEnum("type", type, AgentToolResourceProgrammaticToolCallingType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AgentToolResourceProgrammaticToolCalling {
+    init(type: AgentToolResourceProgrammaticToolCallingType, enabled: Bool) throws {
         (self.type, self.enabled) = (type, enabled)
-            try sdkValidateRawEnum("type", self.type, AgentToolResourceProgrammaticToolCallingType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, AgentToolResourceProgrammaticToolCallingType.allCases.map(\.rawValue))
     }
 }
 
@@ -480,35 +554,49 @@ public struct AgentToolConfigParamMcp: Codable {
         case connectionOrigin = "connection_origin"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension AgentToolConfigParamMcp {
-    public init(from decoder: Decoder) throws {
+public extension AgentToolConfigParamMcp {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.serverLabel) else {
-            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
+            throw SdkValidationError(
+                field: "server_label",
+                code: "required",
+                message: "Validation failed for 'server_label': value is required"
+            )
         }
         guard container.contains(.transport) else {
-            throw SdkValidationError(field: "transport", code: "required", message: "Validation failed for 'transport': value is required")
+            throw SdkValidationError(
+                field: "transport",
+                code: "required",
+                message: "Validation failed for 'transport': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        self.transport = try container.sdkDecodeRequired(.transport)
-        self.credentialId = try container.sdkDecodeIfPresent(.credentialId)
-        self.requestMetadata = try container.sdkDecodeIfPresent(.requestMetadata)
-        self.allowedTools = try container.sdkDecodeIfPresent(.allowedTools)
-        self.required = try container.sdkDecodeIfPresent(.required)
-        self.connectionOrigin = try container.sdkDecodeIfPresent(.connectionOrigin)
-            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamMcpType.allCases.map(\.rawValue))
-            try validateLength("server_label", self.serverLabel, min: 0, max: 1048576)
-        if let value = self.credentialId {
-            try validateLength("credential_id", value, min: 0, max: 1048576)
+        type = try container.sdkDecodeRequired(.type)
+        serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        transport = try container.sdkDecodeRequired(.transport)
+        credentialId = try container.sdkDecodeIfPresent(.credentialId)
+        requestMetadata = try container.sdkDecodeIfPresent(.requestMetadata)
+        allowedTools = try container.sdkDecodeIfPresent(.allowedTools)
+        required = try container.sdkDecodeIfPresent(.required)
+        connectionOrigin = try container.sdkDecodeIfPresent(.connectionOrigin)
+        try sdkValidateRawEnum("type", type, AgentToolConfigParamMcpType.allCases.map(\.rawValue))
+        try validateLength("server_label", serverLabel, min: 0, max: 1_048_576)
+        if let value = credentialId {
+            try validateLength("credential_id", value, min: 0, max: 1_048_576)
         }
-        if let value = self.allowedTools {
+        if let value = allowedTools {
             try validateItems("allowed_tools", value, min: 0, max: 16384)
         }
     }

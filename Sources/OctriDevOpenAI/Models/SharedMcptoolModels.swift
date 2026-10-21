@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedMcptool domain models
+/// SharedMcptool domain models
 public indirect enum MCPToolCallError {
     case mCpProtocolError(MCPProtocolError)
     case mCpToolExecutionError(MCPToolExecutionError)
@@ -13,7 +13,6 @@ public indirect enum MCPToolCallError {
 }
 
 extension MCPToolCallError: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension MCPToolCallError: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension MCPToolCallError: Codable {
 extension MCPToolCallError {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "mcp_protocol_error": return .mCpProtocolError(try MCPProtocolError(from: decoder))
-        case "mcp_tool_execution_error": return .mCpToolExecutionError(try MCPToolExecutionError(from: decoder))
-        case "http_error": return .hTtpError(try HTTPError(from: decoder))
-        default: return nil
+        case "mcp_protocol_error": try .mCpProtocolError(MCPProtocolError(from: decoder))
+        case "mcp_tool_execution_error": try .mCpToolExecutionError(MCPToolExecutionError(from: decoder))
+        case "http_error": try .hTtpError(HTTPError(from: decoder))
+        default: nil
         }
     }
 }
@@ -63,22 +66,33 @@ public indirect enum MCPToolRequireApproval {
 }
 
 extension MCPToolRequireApproval: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for MCPToolRequireApproval")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for MCPToolRequireApproval"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension MCPToolRequireApproval {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(MCPToolRequireApprovalVariant0.self) { return .mCpToolRequireApprovalVariant0(value) }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container
+            .decode(MCPToolRequireApprovalVariant0.self) {
+            return .mCpToolRequireApprovalVariant0(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         return nil
     }
 }
@@ -126,48 +140,80 @@ public struct MCPToolCall: Codable {
         case approvalRequestId = "approval_request_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension MCPToolCall {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.serverLabel) else {
-            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.arguments) else {
-            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.arguments = try container.sdkDecodeRequired(.arguments)
-        self.output = try container.sdkDecodeIfPresent(.output)
-        self.error = try container.sdkDecodeIfPresent(.error)
-        self.status = try container.sdkDecodeIfPresent(.status)
-        self.approvalRequestId = try container.sdkDecodeIfPresent(.approvalRequestId)
-            try sdkValidateRawEnum("type", self.type, MCPToolCallType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension MCPToolCall {
-    public init(type: MCPToolCallType, id: String, serverLabel: String, name: String, arguments: String, output: String? = nil, error: MCPToolCallError? = nil, status: MCPToolCallStatus? = nil, approvalRequestId: String? = nil) throws {
+public extension MCPToolCall {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.serverLabel) else {
+            throw SdkValidationError(
+                field: "server_label",
+                code: "required",
+                message: "Validation failed for 'server_label': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.arguments) else {
+            throw SdkValidationError(
+                field: "arguments",
+                code: "required",
+                message: "Validation failed for 'arguments': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        name = try container.sdkDecodeRequired(.name)
+        arguments = try container.sdkDecodeRequired(.arguments)
+        output = try container.sdkDecodeIfPresent(.output)
+        error = try container.sdkDecodeIfPresent(.error)
+        status = try container.sdkDecodeIfPresent(.status)
+        approvalRequestId = try container.sdkDecodeIfPresent(.approvalRequestId)
+        try sdkValidateRawEnum("type", type, MCPToolCallType.allCases.map(\.rawValue))
+    }
+}
+
+public extension MCPToolCall {
+    init(
+        type: MCPToolCallType,
+        id: String,
+        serverLabel: String,
+        name: String,
+        arguments: String,
+        output: String? = nil,
+        error: MCPToolCallError? = nil,
+        status: MCPToolCallStatus? = nil,
+        approvalRequestId: String? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.serverLabel, self.name) = (serverLabel, name)
         (self.arguments, self.output) = (arguments, output)
         (self.error, self.status) = (error, status)
         self.approvalRequestId = approvalRequestId
-            try sdkValidateRawEnum("type", self.type, MCPToolCallType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, MCPToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -185,20 +231,20 @@ public struct MCPToolRequireApprovalVariant0: Codable {
     }
 
     init() {
-        (self.always, self.never) = (nil, nil)
+        (always, never) = (nil, nil)
     }
 }
 
-extension MCPToolRequireApprovalVariant0 {
-    public init(from decoder: Decoder) throws {
+public extension MCPToolRequireApprovalVariant0 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.always = try container.sdkDecodeIfPresent(.always)
-        self.never = try container.sdkDecodeIfPresent(.never)
+        always = try container.sdkDecodeIfPresent(.always)
+        never = try container.sdkDecodeIfPresent(.never)
     }
 }
 
-extension MCPToolRequireApprovalVariant0 {
-    public init(always: MCPToolFilter? = nil, never: MCPToolFilter? = nil) {
+public extension MCPToolRequireApprovalVariant0 {
+    init(always: MCPToolFilter? = nil, never: MCPToolFilter? = nil) {
         self.init()
         (self.always, self.never) = (always, never)
     }
@@ -252,52 +298,75 @@ public struct MCPTool: Codable {
         case deferLoading = "defer_loading"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension MCPTool {
-    public init(from decoder: Decoder) throws {
+public extension MCPTool {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.serverLabel) else {
-            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
+            throw SdkValidationError(
+                field: "server_label",
+                code: "required",
+                message: "Validation failed for 'server_label': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        self.serverUrl = try container.sdkDecodeIfPresent(.serverUrl)
-        self.connectorId = try container.sdkDecodeIfPresent(.connectorId)
-        self.tunnelId = try container.sdkDecodeIfPresent(.tunnelId)
-        self.authorization = try container.sdkDecodeIfPresent(.authorization)
-        self.serverDescription = try container.sdkDecodeIfPresent(.serverDescription)
-        self.headers = try container.sdkDecodeIfPresent(.headers)
-        self.allowedTools = try container.sdkDecodeIfPresent(.allowedTools)
-        self.allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
-        self.requireApproval = try container.sdkDecodeIfPresent(.requireApproval)
-        self.deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
-            try sdkValidateRawEnum("type", self.type, MCPToolType.allCases.map(\.rawValue))
-        if let value = self.serverUrl {
+        type = try container.sdkDecodeRequired(.type)
+        serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        serverUrl = try container.sdkDecodeIfPresent(.serverUrl)
+        connectorId = try container.sdkDecodeIfPresent(.connectorId)
+        tunnelId = try container.sdkDecodeIfPresent(.tunnelId)
+        authorization = try container.sdkDecodeIfPresent(.authorization)
+        serverDescription = try container.sdkDecodeIfPresent(.serverDescription)
+        headers = try container.sdkDecodeIfPresent(.headers)
+        allowedTools = try container.sdkDecodeIfPresent(.allowedTools)
+        allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
+        requireApproval = try container.sdkDecodeIfPresent(.requireApproval)
+        deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
+        try sdkValidateRawEnum("type", type, MCPToolType.allCases.map(\.rawValue))
+        if let value = serverUrl {
             try sdkValidateUri("server_url", value)
         }
-        if let value = self.tunnelId {
+        if let value = tunnelId {
             try sdkValidatePattern("tunnel_id", value, sdkPatternca748f96eefb)
         }
-        if let value = self.allowedCallers {
+        if let value = allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
     }
 }
 
-extension MCPTool {
-    public init(type: MCPToolType, serverLabel: String, serverUrl: String? = nil, connectorId: MCPToolConnectorId? = nil, tunnelId: String? = nil, authorization: String? = nil, serverDescription: String? = nil, headers: [String: String]? = nil, allowedTools: MCPToolAllowedTools? = nil, allowedCallers: [CallableToolAllowedCaller]? = nil, requireApproval: MCPToolRequireApproval? = nil, deferLoading: Bool? = nil) throws {
+public extension MCPTool {
+    init(
+        type: MCPToolType,
+        serverLabel: String,
+        serverUrl: String? = nil,
+        connectorId: MCPToolConnectorId? = nil,
+        tunnelId: String? = nil,
+        authorization: String? = nil,
+        serverDescription: String? = nil,
+        headers: [String: String]? = nil,
+        allowedTools: MCPToolAllowedTools? = nil,
+        allowedCallers: [CallableToolAllowedCaller]? = nil,
+        requireApproval: MCPToolRequireApproval? = nil,
+        deferLoading: Bool? = nil
+    ) throws {
         (self.type, self.serverLabel) = (type, serverLabel)
         (self.serverUrl, self.connectorId) = (serverUrl, connectorId)
         (self.tunnelId, self.authorization) = (tunnelId, authorization)
         (self.serverDescription, self.headers) = (serverDescription, headers)
         (self.allowedTools, self.allowedCallers) = (allowedTools, allowedCallers)
         (self.requireApproval, self.deferLoading) = (requireApproval, deferLoading)
-            try sdkValidateRawEnum("type", self.type, MCPToolType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, MCPToolType.allCases.map(\.rawValue))
         if let value = self.serverUrl {
             try sdkValidateUri("server_url", value)
         }
@@ -322,28 +391,38 @@ public struct MCPToolExecutionError: Codable {
         case content
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension MCPToolExecutionError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.content = try container.sdkDecodeRequired(.content)
-            try sdkValidateRawEnum("type", self.type, MCPToolExecutionErrorType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension MCPToolExecutionError {
-    public init(type: MCPToolExecutionErrorType, content: JSONValue) throws {
+public extension MCPToolExecutionError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        content = try container.sdkDecodeRequired(.content)
+        try sdkValidateRawEnum("type", type, MCPToolExecutionErrorType.allCases.map(\.rawValue))
+    }
+}
+
+public extension MCPToolExecutionError {
+    init(type: MCPToolExecutionErrorType, content: JSONValue) throws {
         (self.type, self.content) = (type, content)
-            try sdkValidateRawEnum("type", self.type, MCPToolExecutionErrorType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, MCPToolExecutionErrorType.allCases.map(\.rawValue))
     }
 }
 
@@ -353,22 +432,32 @@ public indirect enum MCPToolAllowedTools {
 }
 
 extension MCPToolAllowedTools: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for MCPToolAllowedTools")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for MCPToolAllowedTools"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension MCPToolAllowedTools {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode([String].self) { return .stringList(value) }
-        if let value = try? container.decode(MCPToolFilter.self) { return .mCpToolFilter(value) }
+        if let value = try? container.decode([String].self) {
+            return .stringList(value)
+        }
+        if let value = try? container.decode(MCPToolFilter.self) {
+            return .mCpToolFilter(value)
+        }
         return nil
     }
 }
@@ -397,20 +486,20 @@ public struct MCPToolFilter: Codable {
     }
 
     init() {
-        (self.toolNames, self.readOnly) = (nil, nil)
+        (toolNames, readOnly) = (nil, nil)
     }
 }
 
-extension MCPToolFilter {
-    public init(from decoder: Decoder) throws {
+public extension MCPToolFilter {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.toolNames = try container.sdkDecodeIfPresent(.toolNames)
-        self.readOnly = try container.sdkDecodeIfPresent(.readOnly)
+        toolNames = try container.sdkDecodeIfPresent(.toolNames)
+        readOnly = try container.sdkDecodeIfPresent(.readOnly)
     }
 }
 
-extension MCPToolFilter {
-    public init(toolNames: [String]? = nil, readOnly: Bool? = nil) {
+public extension MCPToolFilter {
+    init(toolNames: [String]? = nil, readOnly: Bool? = nil) {
         self.init()
         (self.toolNames, self.readOnly) = (toolNames, readOnly)
     }
@@ -439,13 +528,16 @@ public enum MCPToolExecutionErrorType: String, CaseIterable, Codable {
 public struct MCPToolRequireApprovalVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let always = MCPToolRequireApprovalVariant1(rawValue: "always")
     public static let never = MCPToolRequireApprovalVariant1(rawValue: "never")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -458,7 +550,10 @@ public struct MCPToolRequireApprovalVariant1: RawRepresentable, Hashable, Codabl
 public struct MCPToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = MCPToolCallStatus(rawValue: "in_progress")
     public static let completed = MCPToolCallStatus(rawValue: "completed")
     public static let incomplete = MCPToolCallStatus(rawValue: "incomplete")
@@ -467,7 +562,7 @@ public struct MCPToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Shared domain models
+/// Shared domain models
 /// Required enumerated value serialized in the `type` wire field.
 public enum OciExternalStorageProviderResponseType: String, CaseIterable, Codable {
     case oci
@@ -26,13 +26,16 @@ public enum OciExternalStorageProviderResponseType: String, CaseIterable, Codabl
 public struct GrammarSyntax1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let lark = GrammarSyntax1(rawValue: "lark")
     public static let regex = GrammarSyntax1(rawValue: "regex")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

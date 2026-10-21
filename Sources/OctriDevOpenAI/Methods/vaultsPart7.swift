@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VaultsMethods {
-    /// Updates credential metadata or rotates its write-only secret. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+public extension VaultsMethods {
+    /// Updates credential metadata or rotates its write-only secret. See
+    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
     ///
     /// - Parameters:
     /// - vaultId: The ID of the vault.
@@ -17,14 +18,43 @@ extension VaultsMethods {
     /// - metadata: Replaces all metadata. Omit to preserve it, or pass {} to clear
     ///   it. Up to 16 string key-value pairs, with keys up to 64 and values up to 512
     ///   characters.
-    public static func rotateVaultCredential(config: ClientConfig, vaultId: String, credentialId: String, auth: RotateVaultCredentialAuthParam? = nil, metadata: [String: String]? = nil, requestOptions: RequestOptions? = nil) async throws -> VaultCredentialResource {
-        try validateLength("vault_id", vaultId, min: 0, max: 1048576)
+    static func rotateVaultCredential(
+        config: ClientConfig,
+        vaultId: String,
+        credentialId: String,
+        auth: RotateVaultCredentialAuthParam? = nil,
+        metadata: [String: String]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VaultCredentialResource {
+        try validateLength("vault_id", vaultId, min: 0, max: 1_048_576)
 
-        try validateLength("credential_id", credentialId, min: 0, max: 1048576)
+        try validateLength("credential_id", credentialId, min: 0, max: 1_048_576)
 
         let requestBody = RotateVaultCredentialRequestBody(auth: auth, metadata: metadata)
 
-        return try (await sdkRequest("POST", ["/vaults/", sdkEncodePathSegment(sdkWireString(vaultId)), "/credentials/", sdkEncodePathSegment(sdkWireString(credentialId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "rotateVaultCredential", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "POST",
+            [
+                "/vaults/",
+                sdkEncodePathSegment(sdkWireString(vaultId)),
+                "/credentials/",
+                sdkEncodePathSegment(sdkWireString(credentialId)),
+            ].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "rotateVaultCredential",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 
     /// Deletes a vault credential. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
@@ -32,11 +62,37 @@ extension VaultsMethods {
     /// - Parameters:
     /// - vaultId: The ID of the vault.
     /// - credentialId: The ID of the vault credential.
-    public static func deleteVaultCredential(config: ClientConfig, vaultId: String, credentialId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedVaultCredentialResource {
-        try validateLength("vault_id", vaultId, min: 0, max: 1048576)
+    static func deleteVaultCredential(
+        config: ClientConfig,
+        vaultId: String,
+        credentialId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeletedVaultCredentialResource {
+        try validateLength("vault_id", vaultId, min: 0, max: 1_048_576)
 
-        try validateLength("credential_id", credentialId, min: 0, max: 1048576)
+        try validateLength("credential_id", credentialId, min: 0, max: 1_048_576)
 
-        return try (await sdkRequest("DELETE", ["/vaults/", sdkEncodePathSegment(sdkWireString(vaultId)), "/credentials/", sdkEncodePathSegment(sdkWireString(credentialId))].joined(), config: config, decoder: .json, operationId: "deleteVaultCredential", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "DELETE",
+            [
+                "/vaults/",
+                sdkEncodePathSegment(sdkWireString(vaultId)),
+                "/credentials/",
+                sdkEncodePathSegment(sdkWireString(credentialId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteVaultCredential",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 }

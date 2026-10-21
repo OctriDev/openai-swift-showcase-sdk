@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsUpdate domain models
+/// AgentsUpdate domain models
 /// Fields to replace on an existing reusable OpenAI-hosted environment template.
 public struct UpdateEnvironmentTemplateParams: Codable {
     /// A replacement human-readable display name, or `null` to clear the name.
@@ -42,47 +42,58 @@ public struct UpdateEnvironmentTemplateParams: Codable {
     }
 
     init() {
-        (self.name, self.packages, self.setupCommands, self.network, self.desktop) = (nil, nil, nil, nil, nil)
-        (self.env, self.capabilityDirectories, self.skills, self.plugins, self.files) = (nil, nil, nil, nil, nil)
+        (name, packages, setupCommands, network, desktop) = (nil, nil, nil, nil, nil)
+        (env, capabilityDirectories, skills, plugins, files) = (nil, nil, nil, nil, nil)
     }
 }
 
-extension UpdateEnvironmentTemplateParams {
-    public init(from decoder: Decoder) throws {
+public extension UpdateEnvironmentTemplateParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.packages = try container.sdkDecodeIfPresent(.packages)
-        self.setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
-        self.network = try container.sdkDecodeIfPresent(.network)
-        self.desktop = try container.sdkDecodeIfPresent(.desktop)
-        self.env = try container.sdkDecodeIfPresent(.env)
-        self.capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
-        self.skills = try container.sdkDecodeIfPresent(.skills)
-        self.plugins = try container.sdkDecodeIfPresent(.plugins)
-        self.files = try container.sdkDecodeIfPresent(.files)
-        if let value = self.name {
+        name = try container.sdkDecodeIfPresent(.name)
+        packages = try container.sdkDecodeIfPresent(.packages)
+        setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
+        network = try container.sdkDecodeIfPresent(.network)
+        desktop = try container.sdkDecodeIfPresent(.desktop)
+        env = try container.sdkDecodeIfPresent(.env)
+        capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
+        skills = try container.sdkDecodeIfPresent(.skills)
+        plugins = try container.sdkDecodeIfPresent(.plugins)
+        files = try container.sdkDecodeIfPresent(.files)
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
-        if let value = self.setupCommands {
+        if let value = setupCommands {
             try validateItems("setup_commands", value, min: 0, max: 16)
         }
-        if let value = self.capabilityDirectories {
+        if let value = capabilityDirectories {
             try validateItems("capability_directories", value, min: 0, max: 16384)
         }
-        if let value = self.skills {
+        if let value = skills {
             try validateItems("skills", value, min: 0, max: 200)
         }
-        if let value = self.plugins {
+        if let value = plugins {
             try validateItems("plugins", value, min: 0, max: 32)
         }
-        if let value = self.files {
+        if let value = files {
             try validateItems("files", value, min: 0, max: 50)
         }
     }
 }
 
-extension UpdateEnvironmentTemplateParams {
-    public init(name: String? = nil, packages: EnvironmentPackagesParam? = nil, setupCommands: [SetupCommandParam]? = nil, network: NetworkPolicyParam? = nil, desktop: DesktopParam? = nil, env: [String: String]? = nil, capabilityDirectories: [String]? = nil, skills: [HostedSkillParam]? = nil, plugins: [HostedPluginParam]? = nil, files: [HostedEnvironmentFileParam]? = nil) throws {
+public extension UpdateEnvironmentTemplateParams {
+    init(
+        name: String? = nil,
+        packages: EnvironmentPackagesParam? = nil,
+        setupCommands: [SetupCommandParam]? = nil,
+        network: NetworkPolicyParam? = nil,
+        desktop: DesktopParam? = nil,
+        env: [String: String]? = nil,
+        capabilityDirectories: [String]? = nil,
+        skills: [HostedSkillParam]? = nil,
+        plugins: [HostedPluginParam]? = nil,
+        files: [HostedEnvironmentFileParam]? = nil
+    ) throws {
         self.init()
         (self.name, self.packages) = (name, packages)
         (self.setupCommands, self.network) = (setupCommands, network)
@@ -120,19 +131,19 @@ public struct UpdateSessionReasoningParam: Codable {
     }
 
     init() {
-        self.effort = nil
+        effort = nil
     }
 }
 
-extension UpdateSessionReasoningParam {
-    public init(from decoder: Decoder) throws {
+public extension UpdateSessionReasoningParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.effort = try container.sdkDecodeIfPresent(.effort)
+        effort = try container.sdkDecodeIfPresent(.effort)
     }
 }
 
-extension UpdateSessionReasoningParam {
-    public init(effort: ReasoningEffortParam? = nil) {
+public extension UpdateSessionReasoningParam {
+    init(effort: ReasoningEffortParam? = nil) {
         self.init()
         self.effort = effort
     }
@@ -175,40 +186,50 @@ public struct UpdateAgentParams: Codable {
     }
 
     init() {
-        (self.model, self.reasoning, self.text, self.serviceTier, self.instructions) = (nil, nil, nil, nil, nil)
-        (self.multiAgent, self.metadata, self.name, self.tools) = (nil, nil, nil, nil)
+        (model, reasoning, text, serviceTier, instructions) = (nil, nil, nil, nil, nil)
+        (multiAgent, metadata, name, tools) = (nil, nil, nil, nil)
     }
 }
 
-extension UpdateAgentParams {
-    public init(from decoder: Decoder) throws {
+public extension UpdateAgentParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        self.text = try container.sdkDecodeIfPresent(.text)
-        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        if let value = self.model {
-            try validateLength("model", value, min: 0, max: 1048576)
+        model = try container.sdkDecodeIfPresent(.model)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        text = try container.sdkDecodeIfPresent(.text)
+        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        name = try container.sdkDecodeIfPresent(.name)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        if let value = model {
+            try validateLength("model", value, min: 0, max: 1_048_576)
         }
-        if let value = self.instructions {
-            try validateLength("instructions", value, min: 0, max: 1048576)
+        if let value = instructions {
+            try validateLength("instructions", value, min: 0, max: 1_048_576)
         }
-        if let value = self.name {
+        if let value = name {
             try validateLength("name", value, min: 0, max: 128)
         }
-        if let value = self.tools {
+        if let value = tools {
             try validateItems("tools", value, min: 0, max: 2000)
         }
     }
 }
 
-extension UpdateAgentParams {
-    public init(model: String? = nil, reasoning: ReasoningParam? = nil, text: TextParam? = nil, serviceTier: ServiceTierParam? = nil, instructions: String? = nil, multiAgent: MultiAgentConfigCurrentParam? = nil, metadata: [String: String]? = nil, name: String? = nil, tools: [PersistedAgentToolConfigParam]? = nil) throws {
+public extension UpdateAgentParams {
+    init(
+        model: String? = nil,
+        reasoning: ReasoningParam? = nil,
+        text: TextParam? = nil,
+        serviceTier: ServiceTierParam? = nil,
+        instructions: String? = nil,
+        multiAgent: MultiAgentConfigCurrentParam? = nil,
+        metadata: [String: String]? = nil,
+        name: String? = nil,
+        tools: [PersistedAgentToolConfigParam]? = nil
+    ) throws {
         self.init()
         (self.model, self.reasoning) = (model, reasoning)
         (self.text, self.serviceTier) = (text, serviceTier)
@@ -216,10 +237,10 @@ extension UpdateAgentParams {
         (self.metadata, self.name) = (metadata, name)
         self.tools = tools
         if let value = self.model {
-            try validateLength("model", value, min: 0, max: 1048576)
+            try validateLength("model", value, min: 0, max: 1_048_576)
         }
         if let value = self.instructions {
-            try validateLength("instructions", value, min: 0, max: 1048576)
+            try validateLength("instructions", value, min: 0, max: 1_048_576)
         }
         if let value = self.name {
             try validateLength("name", value, min: 0, max: 128)
@@ -246,29 +267,33 @@ public struct UpdateSessionAgentParam: Codable {
     }
 
     init() {
-        (self.model, self.reasoning, self.serviceTier) = (nil, nil, nil)
+        (model, reasoning, serviceTier) = (nil, nil, nil)
     }
 }
 
-extension UpdateSessionAgentParam {
-    public init(from decoder: Decoder) throws {
+public extension UpdateSessionAgentParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        if let value = self.model {
-            try validateLength("model", value, min: 0, max: 1048576)
+        model = try container.sdkDecodeIfPresent(.model)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        if let value = model {
+            try validateLength("model", value, min: 0, max: 1_048_576)
         }
     }
 }
 
-extension UpdateSessionAgentParam {
-    public init(model: String? = nil, reasoning: UpdateSessionReasoningParam? = nil, serviceTier: ServiceTierParam? = nil) throws {
+public extension UpdateSessionAgentParam {
+    init(
+        model: String? = nil,
+        reasoning: UpdateSessionReasoningParam? = nil,
+        serviceTier: ServiceTierParam? = nil
+    ) throws {
         self.init()
         (self.model, self.reasoning) = (model, reasoning)
         self.serviceTier = serviceTier
         if let value = self.model {
-            try validateLength("model", value, min: 0, max: 1048576)
+            try validateLength("model", value, min: 0, max: 1_048_576)
         }
     }
 }
@@ -290,21 +315,25 @@ public struct UpdateAgentSessionParams: Codable {
     }
 
     init() {
-        (self.spendControl, self.agent, self.metadata) = (nil, nil, nil)
+        (spendControl, agent, metadata) = (nil, nil, nil)
     }
 }
 
-extension UpdateAgentSessionParams {
-    public init(from decoder: Decoder) throws {
+public extension UpdateAgentSessionParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.spendControl = try container.sdkDecodeIfPresent(.spendControl)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        spendControl = try container.sdkDecodeIfPresent(.spendControl)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
     }
 }
 
-extension UpdateAgentSessionParams {
-    public init(spendControl: SessionSpendControlParam? = nil, agent: UpdateSessionAgentParam? = nil, metadata: [String: String]? = nil) {
+public extension UpdateAgentSessionParams {
+    init(
+        spendControl: SessionSpendControlParam? = nil,
+        agent: UpdateSessionAgentParam? = nil,
+        metadata: [String: String]? = nil
+    ) {
         self.init()
         (self.spendControl, self.agent) = (spendControl, agent)
         self.metadata = metadata

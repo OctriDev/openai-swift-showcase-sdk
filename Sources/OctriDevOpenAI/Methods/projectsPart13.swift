@@ -6,10 +6,13 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectsMethods {
-    /// Creates a service account in a project and, by default, returns an unredacted API key for it. Supply a `name`; set `create_service_account_only` to create the account without default roles or an API key, and use `expires_in_seconds` to configure the initial key's lifetime.
+public extension ProjectsMethods {
+    /// Creates a service account in a project and, by default, returns an unredacted API key for it. Supply a `name`;
+    /// set `create_service_account_only` to create the account without default roles or an API key, and use
+    /// `expires_in_seconds` to configure the initial key's lifetime.
     ///
-    /// Creates a new service account in the project. By default, this also returns an unredacted API key for the service account.
+    /// Creates a new service account in the project. By default, this also returns an unredacted API key for the
+    /// service account.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
@@ -21,9 +24,34 @@ extension ProjectsMethods {
     ///   or project policy requires an expiration. When a policy sets a maximum
     ///   lifetime, this value must be provided and must not exceed that limit. A
     ///   non-null value cannot be used when `create_service_account_only` is true.
-    public static func createProjectServiceAccount(config: ClientConfig, projectId: String, name: String, createServiceAccountOnly: SdkOptional<Bool>? = nil, expiresInSeconds: SdkOptional<Int>? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectServiceAccountCreateResponse {
-        let requestBody = CreateProjectServiceAccountRequestBody(name: name, createServiceAccountOnly: createServiceAccountOnly, expiresInSeconds: expiresInSeconds)
+    static func createProjectServiceAccount(
+        config: ClientConfig,
+        projectId: String,
+        name: String,
+        createServiceAccountOnly: SdkOptional<Bool>? = nil,
+        expiresInSeconds: SdkOptional<Int>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectServiceAccountCreateResponse {
+        let requestBody = CreateProjectServiceAccountRequestBody(
+            name: name,
+            createServiceAccountOnly: createServiceAccountOnly,
+            expiresInSeconds: expiresInSeconds
+        )
 
-        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/service_accounts"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createProjectServiceAccount", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/service_accounts"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createProjectServiceAccount",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

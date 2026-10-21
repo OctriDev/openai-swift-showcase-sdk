@@ -6,8 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension EvalsMethods {
-    /// Lists runs for a specified evaluation, with optional cursor pagination, ordering, and status filtering. Use `after` to continue from a run in a previous response, and use `status` to limit results to runs in a particular state.
+public extension EvalsMethods {
+    /// Lists runs for a specified evaluation, with optional cursor pagination, ordering, and status filtering. Use
+    /// `after` to continue from a run in a previous response, and use `status` to limit results to runs in a particular
+    /// state.
     ///
     /// Get a list of runs for an evaluation.
     ///
@@ -19,16 +21,35 @@ extension EvalsMethods {
     ///   `desc` for descending order. Defaults to `asc`.
     /// - status: Filter runs by status. One of `queued` | `in_progress` | `failed`
     ///   | `completed` | `canceled`.
-    public static func getEvalRuns(config: ClientConfig, evalId: String, after: String? = nil, limit: Int? = nil, order: GetEvalRunsParameter? = nil, status: GetEvalRunsParameterX2bdca0b4? = nil, requestOptions: RequestOptions? = nil) async throws -> EvalRunList {
-        return try (await sdkRequest("GET", ["/evals/", sdkEncodePathSegment(sdkWireString(evalId)), "/runs"].joined(), config: config, query: [
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("status", value: status),
-        ], decoder: .json, operationId: "getEvalRuns", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func getEvalRuns(
+        config: ClientConfig,
+        evalId: String,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: GetEvalRunsParameter? = nil,
+        status: GetEvalRunsParameterX2bdca0b4? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> EvalRunList {
+        try await (sdkRequest(
+            "GET",
+            ["/evals/", sdkEncodePathSegment(sdkWireString(evalId)), "/runs"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("status", value: status),
+            ],
+            decoder: .json,
+            operationId: "getEvalRuns",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Lists runs for a specified evaluation, with optional cursor pagination, ordering, and status filtering. Use `after` to continue from a run in a previous response, and use `status` to limit results to runs in a particular state.
+    /// Lists runs for a specified evaluation, with optional cursor pagination, ordering, and status filtering. Use
+    /// `after` to continue from a run in a previous response, and use `status` to limit results to runs in a particular
+    /// state.
     ///
     /// Get a list of runs for an evaluation.
     ///
@@ -40,17 +61,42 @@ extension EvalsMethods {
     ///   `desc` for descending order. Defaults to `asc`.
     /// - status: Filter runs by status. One of `queued` | `in_progress` | `failed`
     ///   | `completed` | `canceled`.
-    public static func getEvalRunsPaginated(config: ClientConfig, evalId: String, after: String? = nil, limit: Int? = nil, order: GetEvalRunsParameter? = nil, status: GetEvalRunsParameterX2bdca0b4? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<EvalRun, Swift.Error> {
-        return AsyncThrowingStream<EvalRun, Swift.Error> { (continuation: AsyncThrowingStream<EvalRun, Swift.Error>.Continuation) in
+    static func getEvalRunsPaginated(
+        config: ClientConfig,
+        evalId: String,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: GetEvalRunsParameter? = nil,
+        status: GetEvalRunsParameterX2bdca0b4? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<EvalRun, Swift.Error> {
+        AsyncThrowingStream<EvalRun, Swift.Error> { (continuation: AsyncThrowingStream<
+            EvalRun,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await getEvalRuns(config: config, evalId: evalId, after: pageCursor, limit: limit, order: order, status: status, requestOptions: requestOptions)
+                        let pageResponse = try await getEvalRuns(
+                            config: config,
+                            evalId: evalId,
+                            after: pageCursor,
+                            limit: limit,
+                            order: order,
+                            status: status,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -63,24 +109,47 @@ extension EvalsMethods {
         }
     }
 
-    public struct GetEvalRunsPage {
+    struct GetEvalRunsPage {
         public let data: EvalRunList
         public let items: [EvalRun]
         public let hasMore: Bool
     }
 
-    public static func getEvalRunsPages(config: ClientConfig, evalId: String, after: String? = nil, limit: Int? = nil, order: GetEvalRunsParameter? = nil, status: GetEvalRunsParameterX2bdca0b4? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<GetEvalRunsPage, Swift.Error> {
-        return AsyncThrowingStream<GetEvalRunsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<GetEvalRunsPage, Swift.Error>.Continuation) in
+    static func getEvalRunsPages(
+        config: ClientConfig,
+        evalId: String,
+        after: String? = nil,
+        limit: Int? = nil,
+        order: GetEvalRunsParameter? = nil,
+        status: GetEvalRunsParameterX2bdca0b4? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<GetEvalRunsPage, Swift.Error> {
+        AsyncThrowingStream<GetEvalRunsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            GetEvalRunsPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await getEvalRuns(config: config, evalId: evalId, after: pageCursor, limit: limit, order: order, status: status, requestOptions: requestOptions)
+                        let pageResponse = try await getEvalRuns(
+                            config: config,
+                            evalId: evalId,
+                            after: pageCursor,
+                            limit: limit,
+                            order: order,
+                            status: status,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && true
                         pageContinuation.yield(GetEvalRunsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
+                        if !hasMore {
+                            break
+                        }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

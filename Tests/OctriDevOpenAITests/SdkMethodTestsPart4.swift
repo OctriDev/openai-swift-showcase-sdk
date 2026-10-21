@@ -17,9 +17,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.createEnvironmentFile(
-            environmentId: decoded("\"environment-1\""),
-            body: decoded("{\"type\":\"file_id\",\"file_id\":\"file-1\",\"path\":\"x\"}")
-        )
+                environmentId: decoded("\"environment-1\""),
+                body: decoded("{\"type\":\"file_id\",\"file_id\":\"file-1\",\"path\":\"x\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -64,7 +64,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testCreateAgentEnvironmentTemplateCreateAgentEnvironmentTemplate400ReachesMockAndDecodesResponse() async throws {
+    func testCreateAgentEnvironmentTemplateCreateAgentEnvironmentTemplate400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -86,8 +87,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.createEnvironmentTemplate(
-            options: options
-        )
+                options: options
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -148,8 +149,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.createSession(
-            options: options
-        )
+                options: options
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -189,10 +190,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.createSessionEvents(
-            sessionId: decoded("\"session-1\""),
-            events: decoded(sdkMethodFixture74Value1),
-            idempotencyKey: decoded("\"x\"")
-        )
+                sessionId: decoded("\"session-1\""),
+                events: decoded(sdkMethodFixture74Value1),
+                idempotencyKey: decoded("\"x\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -214,7 +215,10 @@ extension SdkMethodTests {
         }
         _ = client
         let stream = try await client.agents.createSessionStream(
-            options: AgentsMethods.CreateAgentSessionStreamOptions(environment: decoded("{\"type\":\"none\"}"), stream: decoded("false"))
+            options: AgentsMethods.CreateAgentSessionStreamOptions(
+                environment: decoded("{\"type\":\"none\"}"),
+                stream: decoded("false")
+            )
         )
         var events = stream.makeAsyncIterator()
         guard let actual = try await events.next() else {
@@ -293,12 +297,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.batch.create(
-            inputFileId: decoded("\"input_file-1\""),
-            endpoint: decoded("\"/v1/responses\""),
-            completionWindow: decoded("\"24h\""),
-            metadata: decoded("{\"key\":\"key\"}"),
-            outputExpiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":3600}")
-        )
+                inputFileId: decoded("\"input_file-1\""),
+                endpoint: decoded("\"/v1/responses\""),
+                completionWindow: decoded("\"24h\""),
+                metadata: decoded("{\"key\":\"key\"}"),
+                outputExpiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":3600}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -343,8 +347,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.chat.createCompletion(
-            body: decoded(sdkMethodFixture80Value1)
-        )
+                body: decoded(sdkMethodFixture80Value1)
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -416,12 +420,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.chatkit.createSession(
-            workflow: decoded(sdkMethodFixture83Value1),
-            user: decoded("\"x\""),
-            expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":1}"),
-            rateLimits: decoded("{\"max_requests_per_1_minute\":1}"),
-            chatkitConfiguration: decoded(sdkMethodFixture83Value2)
-        )
+                workflow: decoded(sdkMethodFixture83Value1),
+                user: decoded("\"x\""),
+                expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":1}"),
+                rateLimits: decoded("{\"max_requests_per_1_minute\":1}"),
+                chatkitConfiguration: decoded(sdkMethodFixture83Value2)
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -442,7 +446,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try CompletionsMethods.CreateCompletionOptions(model: decoded("\"model\""), prompt: decoded("\"<|endoftext|>\""))
+        var options = try CompletionsMethods.CreateCompletionOptions(
+            model: decoded("\"model\""),
+            prompt: decoded("\"<|endoftext|>\"")
+        )
         options.bestOf = try decoded("1")
         options.echo = try decoded("false")
         options.frequencyPenalty = try decoded("0")
@@ -477,7 +484,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try CompletionsMethods.CreateCompletionOptions(model: decoded("\"model\""), prompt: decoded("\"<|endoftext|>\""))
+        var options = try CompletionsMethods.CreateCompletionOptions(
+            model: decoded("\"model\""),
+            prompt: decoded("\"<|endoftext|>\"")
+        )
         options.bestOf = try decoded("1")
         options.echo = try decoded("false")
         options.frequencyPenalty = try decoded("0")
@@ -500,8 +510,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.completions.create(
-            options: options
-        )
+                options: options
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -523,7 +533,11 @@ extension SdkMethodTests {
         }
         _ = client
         let stream = try await client.completions.createStream(
-            options: CompletionsMethods.CreateCompletionStreamOptions(model: decoded("\"model\""), prompt: decoded("\"<|endoftext|>\""), stream: decoded("false"))
+            options: CompletionsMethods.CreateCompletionStreamOptions(
+                model: decoded("\"model\""),
+                prompt: decoded("\"<|endoftext|>\""),
+                stream: decoded("false")
+            )
         )
         var events = stream.makeAsyncIterator()
         guard let actual = try await events.next() else {

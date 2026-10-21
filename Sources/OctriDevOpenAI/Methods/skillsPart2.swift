@@ -6,20 +6,40 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension SkillsMethods {
-    /// Creates a new skill from uploaded files or a ZIP archive. Include `files` with the skill contents, either as a directory upload or a single ZIP file. The response includes the created skill and its version identifiers.
+public extension SkillsMethods {
+    /// Creates a new skill from uploaded files or a ZIP archive. Include `files` with the skill contents, either as a
+    /// directory upload or a single ZIP file. The response includes the created skill and its version identifiers.
     ///
     /// Create a new skill.
     ///
     /// - Parameters:
     /// - files: Skill files to upload (directory upload) or a single zip file.
-    public static func createSkill(config: ClientConfig, files: [Data], contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SkillResource {
+    static func createSkill(
+        config: ClientConfig,
+        files: [Data],
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SkillResource {
         try validateItems("files", files, max: 500)
 
         let requestBody = CreateSkillRequestBody(files: files)
 
-        let encodedBody = try sdkEncodeStructuredBody(requestBody, contentType: contentType ?? "application/json", files: ["files"])
+        let encodedBody = try sdkEncodeStructuredBody(
+            requestBody,
+            contentType: contentType ?? "application/json",
+            files: ["files"]
+        )
 
-        return try (await sdkRequest("POST", "/skills", config: config, rawBody: encodedBody.data, contentType: encodedBody.contentType, decoder: .json, operationId: "CreateSkill", options: requestOptions, errors: ["400": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/skills",
+            config: config,
+            rawBody: encodedBody.data,
+            contentType: encodedBody.contentType,
+            decoder: .json,
+            operationId: "CreateSkill",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self]
+        )).data
     }
 }

@@ -6,12 +6,29 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectsMethods {
+public extension ProjectsMethods {
     /// Archives a project in the organization. Archived projects cannot be used or updated.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
-    public static func archiveProject(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> Project {
-        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/archive"].joined(), config: config, decoder: .json, operationId: "archiveProject", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func archiveProject(
+        config: ClientConfig,
+        projectId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Project {
+        try await (sdkRequest(
+            "POST",
+            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/archive"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "archiveProject",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

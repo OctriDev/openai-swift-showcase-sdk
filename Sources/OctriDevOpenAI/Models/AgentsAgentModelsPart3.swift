@@ -3,46 +3,72 @@
 
 import Foundation
 
-// AgentsAgent domain models
-extension AgentListResource {
-    public init(from decoder: Decoder) throws {
+/// AgentsAgent domain models
+public extension AgentListResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
+            throw SdkValidationError(
+                field: "first_id",
+                code: "required",
+                message: "Validation failed for 'first_id': value is required"
+            )
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
+            throw SdkValidationError(
+                field: "last_id",
+                code: "required",
+                message: "Validation failed for 'last_id': value is required"
+            )
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
         }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.firstId = try container.sdkDecodeNullable(.firstId)
-        self.lastId = try container.sdkDecodeNullable(.lastId)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-            try validateItems("data", self.data, min: 0, max: 2000)
-        if let value = self.firstId {
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        firstId = try container.sdkDecodeNullable(.firstId)
+        lastId = try container.sdkDecodeNullable(.lastId)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        try validateItems("data", data, min: 0, max: 2000)
+        if let value = firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
-        if let value = self.lastId {
+        if let value = lastId {
             try validateLength("last_id", value, min: 0, max: nil)
         }
     }
 }
 
-extension AgentListResource {
-    public init(object: AgentListResourceObject, data: [AgentResource], firstId: String?, lastId: String?, hasMore: Bool) throws {
+public extension AgentListResource {
+    init(
+        object: AgentListResourceObject,
+        data: [AgentResource],
+        firstId: String?,
+        lastId: String?,
+        hasMore: Bool
+    ) throws {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
-            try validateItems("data", self.data, min: 0, max: 2000)
+        try validateItems("data", self.data, min: 0, max: 2000)
         if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
@@ -76,56 +102,89 @@ public struct AgentMessageItemResource: Codable {
         case content
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AgentMessageItemResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.turnId) else {
-            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.senderAgentId) else {
-            throw SdkValidationError(field: "sender_agent_id", code: "required", message: "Validation failed for 'sender_agent_id': value is required")
-        }
-        guard container.contains(.recipientAgentId) else {
-            throw SdkValidationError(field: "recipient_agent_id", code: "required", message: "Validation failed for 'recipient_agent_id': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.turnId = try container.sdkDecodeRequired(.turnId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.senderAgentId = try container.sdkDecodeRequired(.senderAgentId)
-        self.recipientAgentId = try container.sdkDecodeRequired(.recipientAgentId)
-        self.content = try container.sdkDecodeRequired(.content)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("turn_id", self.turnId, min: 0, max: nil)
-            try sdkValidateRawEnum("type", self.type, AgentMessageItemResourceType.allCases.map(\.rawValue))
-            try validateLength("sender_agent_id", self.senderAgentId, min: 0, max: nil)
-            try validateLength("recipient_agent_id", self.recipientAgentId, min: 0, max: nil)
-            try validateItems("content", self.content, min: 0, max: 2000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AgentMessageItemResource {
-    public init(id: String, turnId: String, type: AgentMessageItemResourceType, senderAgentId: String, recipientAgentId: String, content: [AgentContentResource]) throws {
+public extension AgentMessageItemResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.turnId) else {
+            throw SdkValidationError(
+                field: "turn_id",
+                code: "required",
+                message: "Validation failed for 'turn_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.senderAgentId) else {
+            throw SdkValidationError(
+                field: "sender_agent_id",
+                code: "required",
+                message: "Validation failed for 'sender_agent_id': value is required"
+            )
+        }
+        guard container.contains(.recipientAgentId) else {
+            throw SdkValidationError(
+                field: "recipient_agent_id",
+                code: "required",
+                message: "Validation failed for 'recipient_agent_id': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        turnId = try container.sdkDecodeRequired(.turnId)
+        type = try container.sdkDecodeRequired(.type)
+        senderAgentId = try container.sdkDecodeRequired(.senderAgentId)
+        recipientAgentId = try container.sdkDecodeRequired(.recipientAgentId)
+        content = try container.sdkDecodeRequired(.content)
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("turn_id", turnId, min: 0, max: nil)
+        try sdkValidateRawEnum("type", type, AgentMessageItemResourceType.allCases.map(\.rawValue))
+        try validateLength("sender_agent_id", senderAgentId, min: 0, max: nil)
+        try validateLength("recipient_agent_id", recipientAgentId, min: 0, max: nil)
+        try validateItems("content", content, min: 0, max: 2000)
+    }
+}
+
+public extension AgentMessageItemResource {
+    init(
+        id: String,
+        turnId: String,
+        type: AgentMessageItemResourceType,
+        senderAgentId: String,
+        recipientAgentId: String,
+        content: [AgentContentResource]
+    ) throws {
         (self.id, self.turnId) = (id, turnId)
         (self.type, self.senderAgentId) = (type, senderAgentId)
         (self.recipientAgentId, self.content) = (recipientAgentId, content)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("turn_id", self.turnId, min: 0, max: nil)
-            try sdkValidateRawEnum("type", self.type, AgentMessageItemResourceType.allCases.map(\.rawValue))
-            try validateLength("sender_agent_id", self.senderAgentId, min: 0, max: nil)
-            try validateLength("recipient_agent_id", self.recipientAgentId, min: 0, max: nil)
-            try validateItems("content", self.content, min: 0, max: 2000)
+        try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("turn_id", self.turnId, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, AgentMessageItemResourceType.allCases.map(\.rawValue))
+        try validateLength("sender_agent_id", self.senderAgentId, min: 0, max: nil)
+        try validateLength("recipient_agent_id", self.recipientAgentId, min: 0, max: nil)
+        try validateItems("content", self.content, min: 0, max: 2000)
     }
 }
 
@@ -141,25 +200,31 @@ public struct AgentToolConfigParamComputerUse: Codable {
         case includeScreenshots = "include_screenshots"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AgentToolConfigParamComputerUse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.includeScreenshots = try container.sdkDecodeIfPresent(.includeScreenshots)
-            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AgentToolConfigParamComputerUse {
-    public init(type: AgentToolConfigParamComputerUseType, includeScreenshots: Bool? = nil) throws {
+public extension AgentToolConfigParamComputerUse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        includeScreenshots = try container.sdkDecodeIfPresent(.includeScreenshots)
+        try sdkValidateRawEnum("type", type, AgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AgentToolConfigParamComputerUse {
+    init(type: AgentToolConfigParamComputerUseType, includeScreenshots: Bool? = nil) throws {
         (self.type, self.includeScreenshots) = (type, includeScreenshots)
-            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, AgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
     }
 }
 
@@ -167,12 +232,15 @@ extension AgentToolConfigParamComputerUse {
 public struct AgentResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let agent = AgentResourceObject(rawValue: "agent")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -293,12 +361,15 @@ public enum AgentToolConfigParamFunctionType: String, CaseIterable, Codable {
 public struct AgentListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = AgentListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -419,12 +490,15 @@ public enum AgentToolConfigParamMcpType: String, CaseIterable, Codable {
 public struct AgentEnvironmentListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = AgentEnvironmentListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaImage domain models
+/// ResponsesBetaImage domain models
 /// An image generation request made by the model.
 public struct BetaImageGenToolCall: Codable {
     /// The type of the image generation call. Always `image_generation_call`.
@@ -46,49 +46,80 @@ public struct BetaImageGenToolCall: Codable {
         case revisedPrompt = "revised_prompt"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaImageGenToolCall {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.result) else {
-            throw SdkValidationError(field: "result", code: "required", message: "Validation failed for 'result': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.result = try container.sdkDecodeNullable(.result)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.error = try container.sdkDecodeIfPresent(.error)
-        self.size = try container.sdkDecodeIfPresent(.size)
-        self.quality = try container.sdkDecodeIfPresent(.quality)
-        self.action = try container.sdkDecodeIfPresent(.action)
-        self.background = try container.sdkDecodeIfPresent(.background)
-        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-        self.revisedPrompt = try container.sdkDecodeIfPresent(.revisedPrompt)
-            try sdkValidateRawEnum("type", self.type, BetaImageGenToolCallType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaImageGenToolCall {
-    public init(type: BetaImageGenToolCallType, id: String, status: BetaImageGenToolCallStatus, result: String?, agent: BetaAgentTag? = nil, error: BetaImageGenToolCallError? = nil, size: String? = nil, quality: BetaImageGenToolCallQualityVariant0? = nil, action: BetaImageGenActionEnum? = nil, background: BetaImageBackground? = nil, outputFormat: BetaImageOutputFormat? = nil, revisedPrompt: String? = nil) throws {
+public extension BetaImageGenToolCall {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        guard container.contains(.result) else {
+            throw SdkValidationError(
+                field: "result",
+                code: "required",
+                message: "Validation failed for 'result': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        status = try container.sdkDecodeRequired(.status)
+        result = try container.sdkDecodeNullable(.result)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        error = try container.sdkDecodeIfPresent(.error)
+        size = try container.sdkDecodeIfPresent(.size)
+        quality = try container.sdkDecodeIfPresent(.quality)
+        action = try container.sdkDecodeIfPresent(.action)
+        background = try container.sdkDecodeIfPresent(.background)
+        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+        revisedPrompt = try container.sdkDecodeIfPresent(.revisedPrompt)
+        try sdkValidateRawEnum("type", type, BetaImageGenToolCallType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaImageGenToolCall {
+    init(
+        type: BetaImageGenToolCallType,
+        id: String,
+        status: BetaImageGenToolCallStatus,
+        result: String?,
+        agent: BetaAgentTag? = nil,
+        error: BetaImageGenToolCallError? = nil,
+        size: String? = nil,
+        quality: BetaImageGenToolCallQualityVariant0? = nil,
+        action: BetaImageGenActionEnum? = nil,
+        background: BetaImageBackground? = nil,
+        outputFormat: BetaImageOutputFormat? = nil,
+        revisedPrompt: String? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.status, self.result) = (status, result)
         (self.agent, self.error) = (agent, error)
         (self.size, self.quality) = (size, quality)
         (self.action, self.background) = (action, background)
         (self.outputFormat, self.revisedPrompt) = (outputFormat, revisedPrompt)
-            try sdkValidateRawEnum("type", self.type, BetaImageGenToolCallType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaImageGenToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -113,34 +144,58 @@ public struct BetaImageGenToolCallError: Codable {
         case moderationDetails = "moderation_details"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaImageGenToolCallError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        guard container.contains(.param) else {
-            throw SdkValidationError(field: "param", code: "required", message: "Validation failed for 'param': value is required")
-        }
-        self.code = try container.sdkDecodeNullable(.code)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.param = try container.sdkDecodeNullable(.param)
-        self.moderationDetails = try container.sdkDecodeIfPresent(.moderationDetails)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaImageGenToolCallError {
-    public init(code: String?, type: String, message: String, param: String?, moderationDetails: BetaImageGenToolCallModerationDetails? = nil) {
+public extension BetaImageGenToolCallError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        guard container.contains(.param) else {
+            throw SdkValidationError(
+                field: "param",
+                code: "required",
+                message: "Validation failed for 'param': value is required"
+            )
+        }
+        code = try container.sdkDecodeNullable(.code)
+        type = try container.sdkDecodeRequired(.type)
+        message = try container.sdkDecodeRequired(.message)
+        param = try container.sdkDecodeNullable(.param)
+        moderationDetails = try container.sdkDecodeIfPresent(.moderationDetails)
+    }
+}
+
+public extension BetaImageGenToolCallError {
+    init(
+        code: String?,
+        type: String,
+        message: String,
+        param: String?,
+        moderationDetails: BetaImageGenToolCallModerationDetails? = nil
+    ) {
         (self.code, self.type) = (code, type)
         (self.message, self.param) = (message, param)
         self.moderationDetails = moderationDetails
@@ -199,51 +254,102 @@ public struct BetaImageGenTool: Codable {
         case action
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension BetaImageGenTool {
-    public init(from decoder: Decoder) throws {
+public extension BetaImageGenTool {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.quality = try container.sdkDecodeIfPresent(.quality)
-        self.size = try container.sdkDecodeIfPresent(.size)
-        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-        self.outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
-        self.moderation = try container.sdkDecodeIfPresent(.moderation)
-        self.background = try container.sdkDecodeIfPresent(.background)
-        self.inputFidelity = try container.sdkDecodeIfPresent(.inputFidelity)
-        self.inputImageMask = try container.sdkDecodeIfPresent(.inputImageMask)
-        self.partialImages = try container.sdkDecodeIfPresent(.partialImages)
-        self.action = try container.sdkDecodeIfPresent(.action)
-            try sdkValidateRawEnum("type", self.type, BetaImageGenToolType.allCases.map(\.rawValue))
-        if let value = self.outputCompression {
-            try validateRange("output_compression", Double(value), min: 0, max: 100, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        type = try container.sdkDecodeRequired(.type)
+        model = try container.sdkDecodeIfPresent(.model)
+        quality = try container.sdkDecodeIfPresent(.quality)
+        size = try container.sdkDecodeIfPresent(.size)
+        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+        outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
+        moderation = try container.sdkDecodeIfPresent(.moderation)
+        background = try container.sdkDecodeIfPresent(.background)
+        inputFidelity = try container.sdkDecodeIfPresent(.inputFidelity)
+        inputImageMask = try container.sdkDecodeIfPresent(.inputImageMask)
+        partialImages = try container.sdkDecodeIfPresent(.partialImages)
+        action = try container.sdkDecodeIfPresent(.action)
+        try sdkValidateRawEnum("type", type, BetaImageGenToolType.allCases.map(\.rawValue))
+        if let value = outputCompression {
+            try validateRange(
+                "output_compression",
+                Double(value),
+                min: 0,
+                max: 100,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.partialImages {
-            try validateRange("partial_images", Double(value), min: 0, max: 3, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = partialImages {
+            try validateRange(
+                "partial_images",
+                Double(value),
+                min: 0,
+                max: 3,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension BetaImageGenTool {
-    public init(type: BetaImageGenToolType, model: String? = nil, quality: BetaImageGenToolQuality? = nil, size: String? = nil, outputFormat: BetaImageGenToolOutputFormat? = nil, outputCompression: Int? = nil, moderation: BetaImageGenToolModeration? = nil, background: BetaImageGenToolBackground? = nil, inputFidelity: BetaInputFidelity? = nil, inputImageMask: BetaImageGenToolInputImageMask? = nil, partialImages: Int? = nil, action: BetaImageGenActionEnum? = nil) throws {
+public extension BetaImageGenTool {
+    init(
+        type: BetaImageGenToolType,
+        model: String? = nil,
+        quality: BetaImageGenToolQuality? = nil,
+        size: String? = nil,
+        outputFormat: BetaImageGenToolOutputFormat? = nil,
+        outputCompression: Int? = nil,
+        moderation: BetaImageGenToolModeration? = nil,
+        background: BetaImageGenToolBackground? = nil,
+        inputFidelity: BetaInputFidelity? = nil,
+        inputImageMask: BetaImageGenToolInputImageMask? = nil,
+        partialImages: Int? = nil,
+        action: BetaImageGenActionEnum? = nil
+    ) throws {
         (self.type, self.model) = (type, model)
         (self.quality, self.size) = (quality, size)
         (self.outputFormat, self.outputCompression) = (outputFormat, outputCompression)
         (self.moderation, self.background) = (moderation, background)
         (self.inputFidelity, self.inputImageMask) = (inputFidelity, inputImageMask)
         (self.partialImages, self.action) = (partialImages, action)
-            try sdkValidateRawEnum("type", self.type, BetaImageGenToolType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaImageGenToolType.allCases.map(\.rawValue))
         if let value = self.outputCompression {
-            try validateRange("output_compression", Double(value), min: 0, max: 100, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "output_compression",
+                Double(value),
+                min: 0,
+                max: 100,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.partialImages {
-            try validateRange("partial_images", Double(value), min: 0, max: 3, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "partial_images",
+                Double(value),
+                min: 0,
+                max: 3,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -260,25 +366,35 @@ public struct BetaImageGenToolCallModerationDetails: Codable {
         case categories
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaImageGenToolCallModerationDetails {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.moderationStage) else {
-            throw SdkValidationError(field: "moderation_stage", code: "required", message: "Validation failed for 'moderation_stage': value is required")
-        }
-        guard container.contains(.categories) else {
-            throw SdkValidationError(field: "categories", code: "required", message: "Validation failed for 'categories': value is required")
-        }
-        self.moderationStage = try container.sdkDecodeRequired(.moderationStage)
-        self.categories = try container.sdkDecodeRequired(.categories)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaImageGenToolCallModerationDetails {
-    public init(moderationStage: BetaImageGenToolCallModerationDetailsModerationStage, categories: [String]) {
+public extension BetaImageGenToolCallModerationDetails {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.moderationStage) else {
+            throw SdkValidationError(
+                field: "moderation_stage",
+                code: "required",
+                message: "Validation failed for 'moderation_stage': value is required"
+            )
+        }
+        guard container.contains(.categories) else {
+            throw SdkValidationError(
+                field: "categories",
+                code: "required",
+                message: "Validation failed for 'categories': value is required"
+            )
+        }
+        moderationStage = try container.sdkDecodeRequired(.moderationStage)
+        categories = try container.sdkDecodeRequired(.categories)
+    }
+}
+
+public extension BetaImageGenToolCallModerationDetails {
+    init(moderationStage: BetaImageGenToolCallModerationDetailsModerationStage, categories: [String]) {
         (self.moderationStage, self.categories) = (moderationStage, categories)
     }
 }
@@ -296,20 +412,20 @@ public struct BetaImageGenToolInputImageMask: Codable {
     }
 
     init() {
-        (self.imageUrl, self.fileId) = (nil, nil)
+        (imageUrl, fileId) = (nil, nil)
     }
 }
 
-extension BetaImageGenToolInputImageMask {
-    public init(from decoder: Decoder) throws {
+public extension BetaImageGenToolInputImageMask {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
-        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
+        fileId = try container.sdkDecodeIfPresent(.fileId)
     }
 }
 
-extension BetaImageGenToolInputImageMask {
-    public init(imageUrl: String? = nil, fileId: String? = nil) {
+public extension BetaImageGenToolInputImageMask {
+    init(imageUrl: String? = nil, fileId: String? = nil) {
         self.init()
         (self.imageUrl, self.fileId) = (imageUrl, fileId)
     }
@@ -319,14 +435,17 @@ extension BetaImageGenToolInputImageMask {
 public struct BetaImageBackground: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let transparent = BetaImageBackground(rawValue: "transparent")
     public static let opaque = BetaImageBackground(rawValue: "opaque")
     public static let auto = BetaImageBackground(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -339,14 +458,17 @@ public struct BetaImageBackground: RawRepresentable, Hashable, Codable, Sendable
 public struct BetaImageGenToolOutputFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let png = BetaImageGenToolOutputFormat(rawValue: "png")
     public static let webp = BetaImageGenToolOutputFormat(rawValue: "webp")
     public static let jpeg = BetaImageGenToolOutputFormat(rawValue: "jpeg")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -359,7 +481,10 @@ public struct BetaImageGenToolOutputFormat: RawRepresentable, Hashable, Codable,
 public struct BetaImageGenToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = BetaImageGenToolCallStatus(rawValue: "in_progress")
     public static let completed = BetaImageGenToolCallStatus(rawValue: "completed")
     public static let generating = BetaImageGenToolCallStatus(rawValue: "generating")
@@ -367,7 +492,7 @@ public struct BetaImageGenToolCallStatus: RawRepresentable, Hashable, Codable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -380,14 +505,17 @@ public struct BetaImageGenToolCallStatus: RawRepresentable, Hashable, Codable, S
 public struct BetaImageGenActionEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let generate = BetaImageGenActionEnum(rawValue: "generate")
     public static let edit = BetaImageGenActionEnum(rawValue: "edit")
     public static let auto = BetaImageGenActionEnum(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -402,7 +530,10 @@ public struct BetaImageGenActionEnum: RawRepresentable, Hashable, Codable, Senda
 public struct BetaImageGenToolQuality: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = BetaImageGenToolQuality(rawValue: "low")
     public static let medium = BetaImageGenToolQuality(rawValue: "medium")
     public static let high = BetaImageGenToolQuality(rawValue: "high")
@@ -412,7 +543,7 @@ public struct BetaImageGenToolQuality: RawRepresentable, Hashable, Codable, Send
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -426,7 +557,10 @@ public struct BetaImageGenToolQuality: RawRepresentable, Hashable, Codable, Send
 public struct BetaImageGenToolCallQualityVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = BetaImageGenToolCallQualityVariant0(rawValue: "low")
     public static let medium = BetaImageGenToolCallQualityVariant0(rawValue: "medium")
     public static let high = BetaImageGenToolCallQualityVariant0(rawValue: "high")
@@ -436,7 +570,7 @@ public struct BetaImageGenToolCallQualityVariant0: RawRepresentable, Hashable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -467,14 +601,17 @@ public enum BetaImageGenToolType: String, CaseIterable, Codable {
 public struct BetaImageOutputFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let png = BetaImageOutputFormat(rawValue: "png")
     public static let webp = BetaImageOutputFormat(rawValue: "webp")
     public static let jpeg = BetaImageOutputFormat(rawValue: "jpeg")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -491,14 +628,17 @@ public struct BetaImageOutputFormat: RawRepresentable, Hashable, Codable, Sendab
 public struct BetaImageGenToolBackground: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let transparent = BetaImageGenToolBackground(rawValue: "transparent")
     public static let opaque = BetaImageGenToolBackground(rawValue: "opaque")
     public static let auto = BetaImageGenToolBackground(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

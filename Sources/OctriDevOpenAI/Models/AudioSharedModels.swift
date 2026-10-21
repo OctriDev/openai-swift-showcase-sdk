@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Audio domain models
+/// Audio domain models
 /// A consent recording used to authorize creation of a custom voice.
 public struct VoiceConsentResource: Codable {
     /// The object type, which is always `audio.voice_consent`.
@@ -26,37 +26,59 @@ public struct VoiceConsentResource: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VoiceConsentResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.language) else {
-            throw SdkValidationError(field: "language", code: "required", message: "Validation failed for 'language': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.language = try container.sdkDecodeRequired(.language)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VoiceConsentResource {
-    public init(object: VoiceConsentResourceObject, id: String, name: String, language: String, createdAt: Int) {
+public extension VoiceConsentResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.language) else {
+            throw SdkValidationError(
+                field: "language",
+                code: "required",
+                message: "Validation failed for 'language': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        name = try container.sdkDecodeRequired(.name)
+        language = try container.sdkDecodeRequired(.language)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+    }
+}
+
+public extension VoiceConsentResource {
+    init(object: VoiceConsentResourceObject, id: String, name: String, language: String, createdAt: Int) {
         (self.object, self.id) = (object, id)
         (self.name, self.language) = (name, language)
         self.createdAt = createdAt
@@ -100,27 +122,40 @@ public struct TranscriptionSegment: Codable {
         case noSpeechProb = "no_speech_prob"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TranscriptionSegment {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.seek = try container.sdkDecodeRequired(.seek)
-        self.start = try container.sdkDecodeRequired(.start)
-        self.end = try container.sdkDecodeRequired(.end)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.tokens = try container.sdkDecodeRequired(.tokens)
-        self.temperature = try container.sdkDecodeRequired(.temperature)
-        self.avgLogprob = try container.sdkDecodeRequired(.avgLogprob)
-        self.compressionRatio = try container.sdkDecodeRequired(.compressionRatio)
-        self.noSpeechProb = try container.sdkDecodeRequired(.noSpeechProb)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension TranscriptionSegment {
-    public init(id: Int, seek: Int, start: Double, end: Double, text: String, tokens: [Int], temperature: Double, avgLogprob: Double, compressionRatio: Double, noSpeechProb: Double) {
+public extension TranscriptionSegment {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.sdkDecodeRequired(.id)
+        seek = try container.sdkDecodeRequired(.seek)
+        start = try container.sdkDecodeRequired(.start)
+        end = try container.sdkDecodeRequired(.end)
+        text = try container.sdkDecodeRequired(.text)
+        tokens = try container.sdkDecodeRequired(.tokens)
+        temperature = try container.sdkDecodeRequired(.temperature)
+        avgLogprob = try container.sdkDecodeRequired(.avgLogprob)
+        compressionRatio = try container.sdkDecodeRequired(.compressionRatio)
+        noSpeechProb = try container.sdkDecodeRequired(.noSpeechProb)
+    }
+}
+
+public extension TranscriptionSegment {
+    init(
+        id: Int,
+        seek: Int,
+        start: Double,
+        end: Double,
+        text: String,
+        tokens: [Int],
+        temperature: Double,
+        avgLogprob: Double,
+        compressionRatio: Double,
+        noSpeechProb: Double
+    ) {
         (self.id, self.seek) = (id, seek)
         (self.start, self.end) = (start, end)
         (self.text, self.tokens) = (text, tokens)
@@ -133,12 +168,15 @@ extension TranscriptionSegment {
 public struct VoiceConsentResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let audioVoiceConsent = VoiceConsentResourceObject(rawValue: "audio.voice_consent")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

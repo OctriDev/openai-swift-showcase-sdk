@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ChatChatCompletionMessage domain models
+/// ChatChatCompletionMessage domain models
 /// Typed representation of the `ChatCompletionMessageToolCallChunk` API schema.
 public struct ChatCompletionMessageToolCallChunk: Codable {
     /// Required `integer` value serialized in the `index` wire field.
@@ -22,24 +22,35 @@ public struct ChatCompletionMessageToolCallChunk: Codable {
         case function
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChatCompletionMessageToolCallChunk {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.index) else {
-            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
-        }
-        self.index = try container.sdkDecodeRequired(.index)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.function = try container.sdkDecodeIfPresent(.function)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChatCompletionMessageToolCallChunk {
-    public init(index: Int, id: String? = nil, type: ChatCompletionMessageToolCallChunkType? = nil, function: ChatCompletionMessageToolCallChunkFunction? = nil) {
+public extension ChatCompletionMessageToolCallChunk {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.index) else {
+            throw SdkValidationError(
+                field: "index",
+                code: "required",
+                message: "Validation failed for 'index': value is required"
+            )
+        }
+        index = try container.sdkDecodeRequired(.index)
+        id = try container.sdkDecodeIfPresent(.id)
+        type = try container.sdkDecodeIfPresent(.type)
+        function = try container.sdkDecodeIfPresent(.function)
+    }
+}
+
+public extension ChatCompletionMessageToolCallChunk {
+    init(
+        index: Int,
+        id: String? = nil,
+        type: ChatCompletionMessageToolCallChunkType? = nil,
+        function: ChatCompletionMessageToolCallChunkFunction? = nil
+    ) {
         (self.index, self.id) = (index, id)
         (self.type, self.function) = (type, function)
     }
@@ -60,35 +71,39 @@ public struct ChatCompletionMessageToolCallChunkFunction: Codable {
     }
 
     init() {
-        (self.name, self.arguments) = (nil, nil)
+        (name, arguments) = (nil, nil)
     }
 }
 
-extension ChatCompletionMessageToolCallChunkFunction {
-    public init(from decoder: Decoder) throws {
+public extension ChatCompletionMessageToolCallChunkFunction {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.arguments = try container.sdkDecodeIfPresent(.arguments)
+        name = try container.sdkDecodeIfPresent(.name)
+        arguments = try container.sdkDecodeIfPresent(.arguments)
     }
 }
 
-extension ChatCompletionMessageToolCallChunkFunction {
-    public init(name: String? = nil, arguments: String? = nil) {
+public extension ChatCompletionMessageToolCallChunkFunction {
+    init(name: String? = nil, arguments: String? = nil) {
         self.init()
         (self.name, self.arguments) = (name, arguments)
     }
 }
 
 /// The type of the tool. Currently, only `function` is supported.
-public struct ChatCompletionMessageToolCallChunkType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ChatCompletionMessageToolCallChunkType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let function = ChatCompletionMessageToolCallChunkType(rawValue: "function")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

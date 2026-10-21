@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension WebhookEndpointsMethods {
+public extension WebhookEndpointsMethods {
     /// Rotates the signing secret for a webhook endpoint in the authenticated project.
     ///
     /// - Parameters:
@@ -15,10 +15,25 @@ extension WebhookEndpointsMethods {
     /// - keepOldSecretActiveFor24Hours: Whether to keep the previous signing secret
     ///   valid for 24 hours after rotation. Defaults to false, which invalidates the
     ///   previous secret immediately.
-    public static func rotateWebhookEndpointSigningSecret(config: ClientConfig, webhookEndpointId: String, keepOldSecretActiveFor24Hours: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointWithSecretResource {
-        let requestBody = RotateWebhookEndpointSigningSecretRequestBody(keepOldSecretActiveFor24Hours: keepOldSecretActiveFor24Hours)
+    static func rotateWebhookEndpointSigningSecret(
+        config: ClientConfig,
+        webhookEndpointId: String,
+        keepOldSecretActiveFor24Hours: Bool? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> WebhookEndpointWithSecretResource {
+        let requestBody =
+            RotateWebhookEndpointSigningSecretRequestBody(keepOldSecretActiveFor24Hours: keepOldSecretActiveFor24Hours)
 
-        return try (await sdkRequest("POST", ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId)), "/rotate_secret"].joined(), config: config, body: requestBody, decoder: .json, operationId: "RotateWebhookEndpointSigningSecret", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId)), "/rotate_secret"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "RotateWebhookEndpointSigningSecret",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
     /// Sends a sample event to a webhook endpoint for the authenticated project.
@@ -26,9 +41,23 @@ extension WebhookEndpointsMethods {
     /// - Parameters:
     /// - webhookEndpointId: The ID of the webhook endpoint to test.
     /// - eventType: The event type to send as a sample delivery.
-    public static func testWebhookEndpoint(config: ClientConfig, webhookEndpointId: String, eventType: ProjectEventTypeEnum, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointTestResultResource {
+    static func testWebhookEndpoint(
+        config: ClientConfig,
+        webhookEndpointId: String,
+        eventType: ProjectEventTypeEnum,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> WebhookEndpointTestResultResource {
         let requestBody = TestWebhookEndpointRequestBody(eventType: eventType)
 
-        return try (await sdkRequest("POST", ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId)), "/test"].joined(), config: config, body: requestBody, decoder: .json, operationId: "TestWebhookEndpoint", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId)), "/test"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "TestWebhookEndpoint",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self]
+        )).data
     }
 }

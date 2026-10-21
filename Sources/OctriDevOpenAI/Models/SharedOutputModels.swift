@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedOutput domain models
+/// SharedOutput domain models
 public indirect enum OutputMessageContent {
     case outputTextContent(OutputTextContent)
     case refusalContent(RefusalContent)
@@ -12,7 +12,6 @@ public indirect enum OutputMessageContent {
 }
 
 extension OutputMessageContent: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension OutputMessageContent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,9 @@ extension OutputMessageContent: Codable {
 extension OutputMessageContent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "output_text": return .outputTextContent(try OutputTextContent(from: decoder))
-        case "refusal": return .refusalContent(try RefusalContent(from: decoder))
-        default: return nil
+        case "output_text": try .outputTextContent(OutputTextContent(from: decoder))
+        case "refusal": try .refusalContent(RefusalContent(from: decoder))
+        default: nil
         }
     }
 }
@@ -79,43 +82,72 @@ public struct OutputMessage: Codable {
         case phase
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OutputMessage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.role = try container.sdkDecodeRequired(.role)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.phase = try container.sdkDecodeIfPresent(.phase)
-            try sdkValidateRawEnum("type", self.type, OutputMessageType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OutputMessage {
-    public init(id: String, type: OutputMessageType, role: OutputMessageRole, content: [OutputMessageContent], status: OutputMessageStatus, phase: MessagePhase? = nil) throws {
+public extension OutputMessage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        role = try container.sdkDecodeRequired(.role)
+        content = try container.sdkDecodeRequired(.content)
+        status = try container.sdkDecodeRequired(.status)
+        phase = try container.sdkDecodeIfPresent(.phase)
+        try sdkValidateRawEnum("type", type, OutputMessageType.allCases.map(\.rawValue))
+    }
+}
+
+public extension OutputMessage {
+    init(
+        id: String,
+        type: OutputMessageType,
+        role: OutputMessageRole,
+        content: [OutputMessageContent],
+        status: OutputMessageStatus,
+        phase: MessagePhase? = nil
+    ) throws {
         (self.id, self.type) = (id, type)
         (self.role, self.content) = (role, content)
         (self.status, self.phase) = (status, phase)
-            try sdkValidateRawEnum("type", self.type, OutputMessageType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, OutputMessageType.allCases.map(\.rawValue))
     }
 }
 
@@ -137,37 +169,55 @@ public struct OutputTextContent: Codable {
         case logprobs
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OutputTextContent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        guard container.contains(.annotations) else {
-            throw SdkValidationError(field: "annotations", code: "required", message: "Validation failed for 'annotations': value is required")
-        }
-        guard container.contains(.logprobs) else {
-            throw SdkValidationError(field: "logprobs", code: "required", message: "Validation failed for 'logprobs': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.annotations = try container.sdkDecodeRequired(.annotations)
-        self.logprobs = try container.sdkDecodeRequired(.logprobs)
-            try sdkValidateRawEnum("type", self.type, OutputTextContentType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OutputTextContent {
-    public init(type: OutputTextContentType, text: String, annotations: [Annotation], logprobs: [LogProb]) throws {
+public extension OutputTextContent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        guard container.contains(.annotations) else {
+            throw SdkValidationError(
+                field: "annotations",
+                code: "required",
+                message: "Validation failed for 'annotations': value is required"
+            )
+        }
+        guard container.contains(.logprobs) else {
+            throw SdkValidationError(
+                field: "logprobs",
+                code: "required",
+                message: "Validation failed for 'logprobs': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        annotations = try container.sdkDecodeRequired(.annotations)
+        logprobs = try container.sdkDecodeRequired(.logprobs)
+        try sdkValidateRawEnum("type", type, OutputTextContentType.allCases.map(\.rawValue))
+    }
+}
+
+public extension OutputTextContent {
+    init(type: OutputTextContentType, text: String, annotations: [Annotation], logprobs: [LogProb]) throws {
         (self.type, self.text) = (type, text)
         (self.annotations, self.logprobs) = (annotations, logprobs)
-            try sdkValidateRawEnum("type", self.type, OutputTextContentType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, OutputTextContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -176,14 +226,17 @@ extension OutputTextContent {
 public struct OutputMessageStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = OutputMessageStatus(rawValue: "in_progress")
     public static let completed = OutputMessageStatus(rawValue: "completed")
     public static let incomplete = OutputMessageStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -196,12 +249,15 @@ public struct OutputMessageStatus: RawRepresentable, Hashable, Codable, Sendable
 public struct OutputMessageRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let assistant = OutputMessageRole(rawValue: "assistant")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

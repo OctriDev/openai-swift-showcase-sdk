@@ -3,28 +3,40 @@
 
 import Foundation
 
-// Audio domain models
-extension CreateTranslationResponseVerboseJson {
-    public init(from decoder: Decoder) throws {
+/// Audio domain models
+public extension CreateTranslationResponseVerboseJson {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.language) else {
-            throw SdkValidationError(field: "language", code: "required", message: "Validation failed for 'language': value is required")
+            throw SdkValidationError(
+                field: "language",
+                code: "required",
+                message: "Validation failed for 'language': value is required"
+            )
         }
         guard container.contains(.duration) else {
-            throw SdkValidationError(field: "duration", code: "required", message: "Validation failed for 'duration': value is required")
+            throw SdkValidationError(
+                field: "duration",
+                code: "required",
+                message: "Validation failed for 'duration': value is required"
+            )
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
         }
-        self.language = try container.sdkDecodeRequired(.language)
-        self.duration = try container.sdkDecodeRequired(.duration)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.segments = try container.sdkDecodeIfPresent(.segments)
+        language = try container.sdkDecodeRequired(.language)
+        duration = try container.sdkDecodeRequired(.duration)
+        text = try container.sdkDecodeRequired(.text)
+        segments = try container.sdkDecodeIfPresent(.segments)
     }
 }
 
-extension CreateTranslationResponseVerboseJson {
-    public init(language: String, duration: Double, text: String, segments: [TranscriptionSegment]? = nil) {
+public extension CreateTranslationResponseVerboseJson {
+    init(language: String, duration: Double, text: String, segments: [TranscriptionSegment]? = nil) {
         (self.language, self.duration) = (language, duration)
         (self.text, self.segments) = (text, segments)
     }
@@ -51,31 +63,46 @@ public struct TranscriptTextDeltaEvent: Codable {
         case segmentId = "segment_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TranscriptTextDeltaEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.delta) else {
-            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.delta = try container.sdkDecodeRequired(.delta)
-        self.logprobs = try container.sdkDecodeIfPresent(.logprobs)
-        self.segmentId = try container.sdkDecodeIfPresent(.segmentId)
-            try sdkValidateRawEnum("type", self.type, TranscriptTextDeltaEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension TranscriptTextDeltaEvent {
-    public init(type: TranscriptTextDeltaEventType, delta: String, logprobs: [TranscriptTextDeltaEventLogprobsItem]? = nil, segmentId: String? = nil) throws {
+public extension TranscriptTextDeltaEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.delta) else {
+            throw SdkValidationError(
+                field: "delta",
+                code: "required",
+                message: "Validation failed for 'delta': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        delta = try container.sdkDecodeRequired(.delta)
+        logprobs = try container.sdkDecodeIfPresent(.logprobs)
+        segmentId = try container.sdkDecodeIfPresent(.segmentId)
+        try sdkValidateRawEnum("type", type, TranscriptTextDeltaEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension TranscriptTextDeltaEvent {
+    init(
+        type: TranscriptTextDeltaEventType,
+        delta: String,
+        logprobs: [TranscriptTextDeltaEventLogprobsItem]? = nil,
+        segmentId: String? = nil
+    ) throws {
         (self.type, self.delta) = (type, delta)
         (self.logprobs, self.segmentId) = (logprobs, segmentId)
-            try sdkValidateRawEnum("type", self.type, TranscriptTextDeltaEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, TranscriptTextDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -91,28 +118,38 @@ public struct SpeechAudioDeltaEvent: Codable {
         case audio
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SpeechAudioDeltaEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.audio) else {
-            throw SdkValidationError(field: "audio", code: "required", message: "Validation failed for 'audio': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.audio = try container.sdkDecodeRequired(.audio)
-            try sdkValidateRawEnum("type", self.type, SpeechAudioDeltaEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SpeechAudioDeltaEvent {
-    public init(type: SpeechAudioDeltaEventType, audio: String) throws {
+public extension SpeechAudioDeltaEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.audio) else {
+            throw SdkValidationError(
+                field: "audio",
+                code: "required",
+                message: "Validation failed for 'audio': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        audio = try container.sdkDecodeRequired(.audio)
+        try sdkValidateRawEnum("type", type, SpeechAudioDeltaEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension SpeechAudioDeltaEvent {
+    init(type: SpeechAudioDeltaEventType, audio: String) throws {
         (self.type, self.audio) = (type, audio)
-            try sdkValidateRawEnum("type", self.type, SpeechAudioDeltaEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, SpeechAudioDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -125,21 +162,27 @@ public struct TranscriptionLanguage: Codable {
         case code
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TranscriptionLanguage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        self.code = try container.sdkDecodeRequired(.code)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension TranscriptionLanguage {
-    public init(code: String) {
+public extension TranscriptionLanguage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        code = try container.sdkDecodeRequired(.code)
+    }
+}
+
+public extension TranscriptionLanguage {
+    init(code: String) {
         self.code = code
     }
 }
@@ -160,21 +203,21 @@ public struct TranscriptTextDeltaEventLogprobsItem: Codable {
     }
 
     init() {
-        (self.token, self.logprob, self.bytes) = (nil, nil, nil)
+        (token, logprob, bytes) = (nil, nil, nil)
     }
 }
 
-extension TranscriptTextDeltaEventLogprobsItem {
-    public init(from decoder: Decoder) throws {
+public extension TranscriptTextDeltaEventLogprobsItem {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.token = try container.sdkDecodeIfPresent(.token)
-        self.logprob = try container.sdkDecodeIfPresent(.logprob)
-        self.bytes = try container.sdkDecodeIfPresent(.bytes)
+        token = try container.sdkDecodeIfPresent(.token)
+        logprob = try container.sdkDecodeIfPresent(.logprob)
+        bytes = try container.sdkDecodeIfPresent(.bytes)
     }
 }
 
-extension TranscriptTextDeltaEventLogprobsItem {
-    public init(token: String? = nil, logprob: Double? = nil, bytes: [Int]? = nil) {
+public extension TranscriptTextDeltaEventLogprobsItem {
+    init(token: String? = nil, logprob: Double? = nil, bytes: [Int]? = nil) {
         self.init()
         (self.token, self.logprob) = (token, logprob)
         self.bytes = bytes
@@ -206,46 +249,79 @@ public struct TranscriptTextSegmentEvent: Codable {
         case speaker
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TranscriptTextSegmentEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.start) else {
-            throw SdkValidationError(field: "start", code: "required", message: "Validation failed for 'start': value is required")
-        }
-        guard container.contains(.end) else {
-            throw SdkValidationError(field: "end", code: "required", message: "Validation failed for 'end': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        guard container.contains(.speaker) else {
-            throw SdkValidationError(field: "speaker", code: "required", message: "Validation failed for 'speaker': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.start = try container.sdkDecodeRequired(.start)
-        self.end = try container.sdkDecodeRequired(.end)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.speaker = try container.sdkDecodeRequired(.speaker)
-            try sdkValidateRawEnum("type", self.type, TranscriptTextSegmentEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension TranscriptTextSegmentEvent {
-    public init(type: TranscriptTextSegmentEventType, id: String, start: Double, end: Double, text: String, speaker: String) throws {
+public extension TranscriptTextSegmentEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.start) else {
+            throw SdkValidationError(
+                field: "start",
+                code: "required",
+                message: "Validation failed for 'start': value is required"
+            )
+        }
+        guard container.contains(.end) else {
+            throw SdkValidationError(
+                field: "end",
+                code: "required",
+                message: "Validation failed for 'end': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        guard container.contains(.speaker) else {
+            throw SdkValidationError(
+                field: "speaker",
+                code: "required",
+                message: "Validation failed for 'speaker': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        start = try container.sdkDecodeRequired(.start)
+        end = try container.sdkDecodeRequired(.end)
+        text = try container.sdkDecodeRequired(.text)
+        speaker = try container.sdkDecodeRequired(.speaker)
+        try sdkValidateRawEnum("type", type, TranscriptTextSegmentEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension TranscriptTextSegmentEvent {
+    init(
+        type: TranscriptTextSegmentEventType,
+        id: String,
+        start: Double,
+        end: Double,
+        text: String,
+        speaker: String
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.start, self.end) = (start, end)
         (self.text, self.speaker) = (text, speaker)
-            try sdkValidateRawEnum("type", self.type, TranscriptTextSegmentEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, TranscriptTextSegmentEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -270,37 +346,59 @@ public struct VoiceResource: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VoiceResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VoiceResource {
-    public init(object: VoiceResourceObject, id: String, type: VoiceResourceType, name: String, createdAt: Int) {
+public extension VoiceResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+    }
+}
+
+public extension VoiceResource {
+    init(object: VoiceResourceObject, id: String, type: VoiceResourceType, name: String, createdAt: Int) {
         (self.object, self.id) = (object, id)
         (self.type, self.name) = (type, name)
         self.createdAt = createdAt
@@ -329,37 +427,59 @@ public struct VoiceConsentResource: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VoiceConsentResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.language) else {
-            throw SdkValidationError(field: "language", code: "required", message: "Validation failed for 'language': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.language = try container.sdkDecodeRequired(.language)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VoiceConsentResource {
-    public init(object: VoiceConsentResourceObject, id: String, name: String, language: String, createdAt: Int) {
+public extension VoiceConsentResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.language) else {
+            throw SdkValidationError(
+                field: "language",
+                code: "required",
+                message: "Validation failed for 'language': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        name = try container.sdkDecodeRequired(.name)
+        language = try container.sdkDecodeRequired(.language)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+    }
+}
+
+public extension VoiceConsentResource {
+    init(object: VoiceConsentResourceObject, id: String, name: String, language: String, createdAt: Int) {
         (self.object, self.id) = (object, id)
         (self.name, self.language) = (name, language)
         self.createdAt = createdAt
@@ -387,31 +507,51 @@ public struct VoiceConsentListResource: Codable {
         case lastId = "last_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VoiceConsentListResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-        self.firstId = try container.sdkDecodeIfPresent(.firstId)
-        self.lastId = try container.sdkDecodeIfPresent(.lastId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VoiceConsentListResource {
-    public init(object: VoiceConsentListResourceObject, data: [VoiceConsentResource], hasMore: Bool, firstId: String? = nil, lastId: String? = nil) {
+public extension VoiceConsentListResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        firstId = try container.sdkDecodeIfPresent(.firstId)
+        lastId = try container.sdkDecodeIfPresent(.lastId)
+    }
+}
+
+public extension VoiceConsentListResource {
+    init(
+        object: VoiceConsentListResourceObject,
+        data: [VoiceConsentResource],
+        hasMore: Bool,
+        firstId: String? = nil,
+        lastId: String? = nil
+    ) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.firstId) = (hasMore, firstId)
         self.lastId = lastId
@@ -434,21 +574,21 @@ public struct TranscriptTextDoneEventLogprobsItem: Codable {
     }
 
     init() {
-        (self.token, self.logprob, self.bytes) = (nil, nil, nil)
+        (token, logprob, bytes) = (nil, nil, nil)
     }
 }
 
-extension TranscriptTextDoneEventLogprobsItem {
-    public init(from decoder: Decoder) throws {
+public extension TranscriptTextDoneEventLogprobsItem {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.token = try container.sdkDecodeIfPresent(.token)
-        self.logprob = try container.sdkDecodeIfPresent(.logprob)
-        self.bytes = try container.sdkDecodeIfPresent(.bytes)
+        token = try container.sdkDecodeIfPresent(.token)
+        logprob = try container.sdkDecodeIfPresent(.logprob)
+        bytes = try container.sdkDecodeIfPresent(.bytes)
     }
 }
 
-extension TranscriptTextDoneEventLogprobsItem {
-    public init(token: String? = nil, logprob: Double? = nil, bytes: [Int]? = nil) {
+public extension TranscriptTextDoneEventLogprobsItem {
+    init(token: String? = nil, logprob: Double? = nil, bytes: [Int]? = nil) {
         self.init()
         (self.token, self.logprob) = (token, logprob)
         self.bytes = bytes
@@ -464,21 +604,27 @@ public struct CreateTranslationResponseJson: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateTranslationResponseJson {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.text = try container.sdkDecodeRequired(.text)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateTranslationResponseJson {
-    public init(text: String) {
+public extension CreateTranslationResponseJson {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        text = try container.sdkDecodeRequired(.text)
+    }
+}
+
+public extension CreateTranslationResponseJson {
+    init(text: String) {
         self.text = text
     }
 }

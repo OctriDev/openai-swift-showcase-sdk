@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ContainersMethods {
-    /// Lists files associated with a container. Use `after` to continue from a file ID returned in a previous page, and `limit` and `order` to control the result page. The container must exist and must not have expired.
+public extension ContainersMethods {
+    /// Lists files associated with a container. Use `after` to continue from a file ID returned in a previous page, and
+    /// `limit` and `order` to control the result page. The container must exist and must not have expired.
     ///
     /// List Container files
     ///
@@ -20,15 +21,32 @@ extension ContainersMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
-    public static func listContainerFiles(config: ClientConfig, containerId: String, limit: Int? = nil, order: ListContainerFilesParameter? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ContainerFileListResource {
-        return try (await sdkRequest("GET", ["/containers/", sdkEncodePathSegment(sdkWireString(containerId)), "/files"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-        ], decoder: .json, operationId: "ListContainerFiles", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func listContainerFiles(
+        config: ClientConfig,
+        containerId: String,
+        limit: Int? = nil,
+        order: ListContainerFilesParameter? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ContainerFileListResource {
+        try await (sdkRequest(
+            "GET",
+            ["/containers/", sdkEncodePathSegment(sdkWireString(containerId)), "/files"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+            ],
+            decoder: .json,
+            operationId: "ListContainerFiles",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Lists files associated with a container. Use `after` to continue from a file ID returned in a previous page, and `limit` and `order` to control the result page. The container must exist and must not have expired.
+    /// Lists files associated with a container. Use `after` to continue from a file ID returned in a previous page, and
+    /// `limit` and `order` to control the result page. The container must exist and must not have expired.
     ///
     /// List Container files
     ///
@@ -41,17 +59,40 @@ extension ContainersMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
-    public static func listContainerFilesPaginated(config: ClientConfig, containerId: String, limit: Int? = nil, order: ListContainerFilesParameter? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ContainerFileResource, Swift.Error> {
-        return AsyncThrowingStream<ContainerFileResource, Swift.Error> { (continuation: AsyncThrowingStream<ContainerFileResource, Swift.Error>.Continuation) in
+    static func listContainerFilesPaginated(
+        config: ClientConfig,
+        containerId: String,
+        limit: Int? = nil,
+        order: ListContainerFilesParameter? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ContainerFileResource, Swift.Error> {
+        AsyncThrowingStream<ContainerFileResource, Swift.Error> { (continuation: AsyncThrowingStream<
+            ContainerFileResource,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listContainerFiles(config: config, containerId: containerId, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listContainerFiles(
+                            config: config,
+                            containerId: containerId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -64,24 +105,49 @@ extension ContainersMethods {
         }
     }
 
-    public struct ListContainerFilesPage {
+    struct ListContainerFilesPage {
         public let data: ContainerFileListResource
         public let items: [ContainerFileResource]
         public let hasMore: Bool
     }
 
-    public static func listContainerFilesPages(config: ClientConfig, containerId: String, limit: Int? = nil, order: ListContainerFilesParameter? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListContainerFilesPage, Swift.Error> {
-        return AsyncThrowingStream<ListContainerFilesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListContainerFilesPage, Swift.Error>.Continuation) in
+    static func listContainerFilesPages(
+        config: ClientConfig,
+        containerId: String,
+        limit: Int? = nil,
+        order: ListContainerFilesParameter? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListContainerFilesPage, Swift.Error> {
+        AsyncThrowingStream<ListContainerFilesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListContainerFilesPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listContainerFiles(config: config, containerId: containerId, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listContainerFiles(
+                            config: config,
+                            containerId: containerId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && true
-                        pageContinuation.yield(ListContainerFilesPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
+                        pageContinuation.yield(ListContainerFilesPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

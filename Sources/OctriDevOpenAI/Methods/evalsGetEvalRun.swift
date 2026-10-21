@@ -6,26 +6,64 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension EvalsMethods {
-    /// Retrieves a specific run for an evaluation. Use this endpoint to inspect the run's status, results, report URL, and usage details after creating or canceling a run.
+public extension EvalsMethods {
+    /// Retrieves a specific run for an evaluation. Use this endpoint to inspect the run's status, results, report URL,
+    /// and usage details after creating or canceling a run.
     ///
     /// Get an evaluation run by ID.
     ///
     /// - Parameters:
     /// - evalId: The ID of the evaluation to retrieve runs for.
     /// - runId: The ID of the run to retrieve.
-    public static func getEvalRun(config: ClientConfig, evalId: String, runId: String, requestOptions: RequestOptions? = nil) async throws -> EvalRun {
-        return try (await sdkRequest("GET", ["/evals/", sdkEncodePathSegment(sdkWireString(evalId)), "/runs/", sdkEncodePathSegment(sdkWireString(runId))].joined(), config: config, decoder: .json, operationId: "getEvalRun", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func getEvalRun(
+        config: ClientConfig,
+        evalId: String,
+        runId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> EvalRun {
+        try await (sdkRequest(
+            "GET",
+            [
+                "/evals/",
+                sdkEncodePathSegment(sdkWireString(evalId)),
+                "/runs/",
+                sdkEncodePathSegment(sdkWireString(runId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getEvalRun",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Deletes a run from an evaluation. Use this endpoint to remove a finished run; a run cannot be deleted while it is still in progress.
+    /// Deletes a run from an evaluation. Use this endpoint to remove a finished run; a run cannot be deleted while it
+    /// is still in progress.
     ///
     /// Delete an eval run.
     ///
     /// - Parameters:
     /// - evalId: The ID of the evaluation to delete the run from.
     /// - runId: The ID of the run to delete.
-    public static func deleteEvalRun(config: ClientConfig, evalId: String, runId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteEvalRunResponse {
-        return try (await sdkRequest("DELETE", ["/evals/", sdkEncodePathSegment(sdkWireString(evalId)), "/runs/", sdkEncodePathSegment(sdkWireString(runId))].joined(), config: config, decoder: .json, operationId: "deleteEvalRun", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func deleteEvalRun(
+        config: ClientConfig,
+        evalId: String,
+        runId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeleteEvalRunResponse {
+        try await (sdkRequest(
+            "DELETE",
+            [
+                "/evals/",
+                sdkEncodePathSegment(sdkWireString(evalId)),
+                "/runs/",
+                sdkEncodePathSegment(sdkWireString(runId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteEvalRun",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

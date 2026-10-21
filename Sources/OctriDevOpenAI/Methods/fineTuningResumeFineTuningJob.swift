@@ -6,14 +6,27 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension FineTuningMethods {
-    /// Resumes a paused fine-tuning job that supports resuming. Use `fine_tuning_job_id` to identify the job you want to resume. The response returns the job object and its current status.
+public extension FineTuningMethods {
+    /// Resumes a paused fine-tuning job that supports resuming. Use `fine_tuning_job_id` to identify the job you want
+    /// to resume. The response returns the job object and its current status.
     ///
     /// Resume a fine-tune job.
     ///
     /// - Parameters:
     /// - fineTuningJobId: The ID of the fine-tuning job to resume.
-    public static func resumeFineTuningJob(config: ClientConfig, fineTuningJobId: String, requestOptions: RequestOptions? = nil) async throws -> FineTuningJob {
-        return try (await sdkRequest("POST", ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId)), "/resume"].joined(), config: config, decoder: .json, operationId: "resumeFineTuningJob", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func resumeFineTuningJob(
+        config: ClientConfig,
+        fineTuningJobId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> FineTuningJob {
+        try await (sdkRequest(
+            "POST",
+            ["/fine_tuning/jobs/", sdkEncodePathSegment(sdkWireString(fineTuningJobId)), "/resume"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "resumeFineTuningJob",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

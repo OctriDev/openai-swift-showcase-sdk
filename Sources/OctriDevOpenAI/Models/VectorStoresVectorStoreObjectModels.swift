@@ -3,7 +3,7 @@
 
 import Foundation
 
-// VectorStores domain models
+/// VectorStores domain models
 /// A vector store is a collection of processed files can be used by the `file_search` tool.
 public struct VectorStoreObject: Codable {
     /// The identifier, which can be referenced in API endpoints.
@@ -47,28 +47,42 @@ public struct VectorStoreObject: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VectorStoreObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.usageBytes = try container.sdkDecodeRequired(.usageBytes)
-        self.fileCounts = try container.sdkDecodeRequired(.fileCounts)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.lastActiveAt = try container.sdkDecodeNullable(.lastActiveAt)
-        self.metadata = try container.sdkDecodeNullable(.metadata)
-        self.expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VectorStoreObject {
-    public init(id: String, object: VectorStoreObjectObject, createdAt: Int, name: String, usageBytes: Int, fileCounts: VectorStoreObjectFileCounts, status: VectorStoreObjectStatus, lastActiveAt: Int?, metadata: Metadata?, expiresAfter: VectorStoreExpirationAfter? = nil, expiresAt: Int? = nil) {
+public extension VectorStoreObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        name = try container.sdkDecodeRequired(.name)
+        usageBytes = try container.sdkDecodeRequired(.usageBytes)
+        fileCounts = try container.sdkDecodeRequired(.fileCounts)
+        status = try container.sdkDecodeRequired(.status)
+        lastActiveAt = try container.sdkDecodeNullable(.lastActiveAt)
+        metadata = try container.sdkDecodeNullable(.metadata)
+        expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+    }
+}
+
+public extension VectorStoreObject {
+    init(
+        id: String,
+        object: VectorStoreObjectObject,
+        createdAt: Int,
+        name: String,
+        usageBytes: Int,
+        fileCounts: VectorStoreObjectFileCounts,
+        status: VectorStoreObjectStatus,
+        lastActiveAt: Int?,
+        metadata: Metadata?,
+        expiresAfter: VectorStoreExpirationAfter? = nil,
+        expiresAt: Int? = nil
+    ) {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.name) = (createdAt, name)
         (self.usageBytes, self.fileCounts) = (usageBytes, fileCounts)
@@ -97,23 +111,33 @@ public struct CreateVectorStoreFileRequest: Codable {
         case attributes
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateVectorStoreFileRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.fileId) else {
-            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
-        }
-        self.fileId = try container.sdkDecodeRequired(.fileId)
-        self.chunkingStrategy = try container.sdkDecodeIfPresent(.chunkingStrategy)
-        self.attributes = try container.sdkDecodeIfPresent(.attributes)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateVectorStoreFileRequest {
-    public init(fileId: String, chunkingStrategy: ChunkingStrategyRequestParam? = nil, attributes: VectorStoreFileAttributes? = nil) {
+public extension CreateVectorStoreFileRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.fileId) else {
+            throw SdkValidationError(
+                field: "file_id",
+                code: "required",
+                message: "Validation failed for 'file_id': value is required"
+            )
+        }
+        fileId = try container.sdkDecodeRequired(.fileId)
+        chunkingStrategy = try container.sdkDecodeIfPresent(.chunkingStrategy)
+        attributes = try container.sdkDecodeIfPresent(.attributes)
+    }
+}
+
+public extension CreateVectorStoreFileRequest {
+    init(
+        fileId: String,
+        chunkingStrategy: ChunkingStrategyRequestParam? = nil,
+        attributes: VectorStoreFileAttributes? = nil
+    ) {
         (self.fileId, self.chunkingStrategy) = (fileId, chunkingStrategy)
         self.attributes = attributes
     }
@@ -131,28 +155,46 @@ public struct VectorStoreExpirationAfter: Codable {
         case days
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VectorStoreExpirationAfter {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.anchor) else {
-            throw SdkValidationError(field: "anchor", code: "required", message: "Validation failed for 'anchor': value is required")
-        }
-        guard container.contains(.days) else {
-            throw SdkValidationError(field: "days", code: "required", message: "Validation failed for 'days': value is required")
-        }
-        self.anchor = try container.sdkDecodeRequired(.anchor)
-        self.days = try container.sdkDecodeRequired(.days)
-            try validateRange("days", Double(self.days), min: 1, max: 365, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VectorStoreExpirationAfter {
-    public init(anchor: VectorStoreExpirationAfterAnchor, days: Int) throws {
+public extension VectorStoreExpirationAfter {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.anchor) else {
+            throw SdkValidationError(
+                field: "anchor",
+                code: "required",
+                message: "Validation failed for 'anchor': value is required"
+            )
+        }
+        guard container.contains(.days) else {
+            throw SdkValidationError(
+                field: "days",
+                code: "required",
+                message: "Validation failed for 'days': value is required"
+            )
+        }
+        anchor = try container.sdkDecodeRequired(.anchor)
+        days = try container.sdkDecodeRequired(.days)
+        try validateRange("days", Double(days), min: 1, max: 365, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    }
+}
+
+public extension VectorStoreExpirationAfter {
+    init(anchor: VectorStoreExpirationAfterAnchor, days: Int) throws {
         (self.anchor, self.days) = (anchor, days)
-            try validateRange("days", Double(self.days), min: 1, max: 365, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "days",
+            Double(self.days),
+            min: 1,
+            max: 365,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -168,28 +210,38 @@ public struct StaticChunkingStrategyRequestParam: Codable {
         case `static`
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension StaticChunkingStrategyRequestParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.`static`) else {
-            throw SdkValidationError(field: "static", code: "required", message: "Validation failed for 'static': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.`static` = try container.sdkDecodeRequired(.`static`)
-            try sdkValidateRawEnum("type", self.type, StaticChunkingStrategyRequestParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension StaticChunkingStrategyRequestParam {
-    public init(type: StaticChunkingStrategyRequestParamType, `static`: StaticChunkingStrategy) throws {
-        (self.type, self.`static`) = (type, `static`)
-            try sdkValidateRawEnum("type", self.type, StaticChunkingStrategyRequestParamType.allCases.map(\.rawValue))
+public extension StaticChunkingStrategyRequestParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.static) else {
+            throw SdkValidationError(
+                field: "static",
+                code: "required",
+                message: "Validation failed for 'static': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        self.static = try container.sdkDecodeRequired(.static)
+        try sdkValidateRawEnum("type", type, StaticChunkingStrategyRequestParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension StaticChunkingStrategyRequestParam {
+    init(type: StaticChunkingStrategyRequestParamType, static: StaticChunkingStrategy) throws {
+        (self.type, self.static) = (type, `static`)
+        try sdkValidateRawEnum("type", self.type, StaticChunkingStrategyRequestParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -230,47 +282,87 @@ public struct VectorStoreFileObject: Codable {
         case attributes
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VectorStoreFileObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.usageBytes) else {
-            throw SdkValidationError(field: "usage_bytes", code: "required", message: "Validation failed for 'usage_bytes': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.vectorStoreId) else {
-            throw SdkValidationError(field: "vector_store_id", code: "required", message: "Validation failed for 'vector_store_id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.lastError) else {
-            throw SdkValidationError(field: "last_error", code: "required", message: "Validation failed for 'last_error': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.usageBytes = try container.sdkDecodeRequired(.usageBytes)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.vectorStoreId = try container.sdkDecodeRequired(.vectorStoreId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.lastError = try container.sdkDecodeNullable(.lastError)
-        self.chunkingStrategy = try container.sdkDecodeIfPresent(.chunkingStrategy)
-        self.attributes = try container.sdkDecodeIfPresent(.attributes)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VectorStoreFileObject {
-    public init(id: String, object: VectorStoreFileObjectObject, usageBytes: Int, createdAt: Int, vectorStoreId: String, status: VectorStoreFileObjectStatus, lastError: VectorStoreFileObjectLastError?, chunkingStrategy: VectorStoreFileObjectChunkingStrategy? = nil, attributes: VectorStoreFileAttributes? = nil) {
+public extension VectorStoreFileObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.usageBytes) else {
+            throw SdkValidationError(
+                field: "usage_bytes",
+                code: "required",
+                message: "Validation failed for 'usage_bytes': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.vectorStoreId) else {
+            throw SdkValidationError(
+                field: "vector_store_id",
+                code: "required",
+                message: "Validation failed for 'vector_store_id': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        guard container.contains(.lastError) else {
+            throw SdkValidationError(
+                field: "last_error",
+                code: "required",
+                message: "Validation failed for 'last_error': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        usageBytes = try container.sdkDecodeRequired(.usageBytes)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        vectorStoreId = try container.sdkDecodeRequired(.vectorStoreId)
+        status = try container.sdkDecodeRequired(.status)
+        lastError = try container.sdkDecodeNullable(.lastError)
+        chunkingStrategy = try container.sdkDecodeIfPresent(.chunkingStrategy)
+        attributes = try container.sdkDecodeIfPresent(.attributes)
+    }
+}
+
+public extension VectorStoreFileObject {
+    init(
+        id: String,
+        object: VectorStoreFileObjectObject,
+        usageBytes: Int,
+        createdAt: Int,
+        vectorStoreId: String,
+        status: VectorStoreFileObjectStatus,
+        lastError: VectorStoreFileObjectLastError?,
+        chunkingStrategy: VectorStoreFileObjectChunkingStrategy? = nil,
+        attributes: VectorStoreFileAttributes? = nil
+    ) {
         (self.id, self.object) = (id, object)
         (self.usageBytes, self.createdAt) = (usageBytes, createdAt)
         (self.vectorStoreId, self.status) = (vectorStoreId, status)
@@ -300,37 +392,59 @@ public struct VectorStoreObjectFileCounts: Codable {
         case total
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VectorStoreObjectFileCounts {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.inProgress) else {
-            throw SdkValidationError(field: "in_progress", code: "required", message: "Validation failed for 'in_progress': value is required")
-        }
-        guard container.contains(.completed) else {
-            throw SdkValidationError(field: "completed", code: "required", message: "Validation failed for 'completed': value is required")
-        }
-        guard container.contains(.failed) else {
-            throw SdkValidationError(field: "failed", code: "required", message: "Validation failed for 'failed': value is required")
-        }
-        guard container.contains(.cancelled) else {
-            throw SdkValidationError(field: "cancelled", code: "required", message: "Validation failed for 'cancelled': value is required")
-        }
-        guard container.contains(.total) else {
-            throw SdkValidationError(field: "total", code: "required", message: "Validation failed for 'total': value is required")
-        }
-        self.inProgress = try container.sdkDecodeRequired(.inProgress)
-        self.completed = try container.sdkDecodeRequired(.completed)
-        self.failed = try container.sdkDecodeRequired(.failed)
-        self.cancelled = try container.sdkDecodeRequired(.cancelled)
-        self.total = try container.sdkDecodeRequired(.total)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VectorStoreObjectFileCounts {
-    public init(inProgress: Int, completed: Int, failed: Int, cancelled: Int, total: Int) {
+public extension VectorStoreObjectFileCounts {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.inProgress) else {
+            throw SdkValidationError(
+                field: "in_progress",
+                code: "required",
+                message: "Validation failed for 'in_progress': value is required"
+            )
+        }
+        guard container.contains(.completed) else {
+            throw SdkValidationError(
+                field: "completed",
+                code: "required",
+                message: "Validation failed for 'completed': value is required"
+            )
+        }
+        guard container.contains(.failed) else {
+            throw SdkValidationError(
+                field: "failed",
+                code: "required",
+                message: "Validation failed for 'failed': value is required"
+            )
+        }
+        guard container.contains(.cancelled) else {
+            throw SdkValidationError(
+                field: "cancelled",
+                code: "required",
+                message: "Validation failed for 'cancelled': value is required"
+            )
+        }
+        guard container.contains(.total) else {
+            throw SdkValidationError(
+                field: "total",
+                code: "required",
+                message: "Validation failed for 'total': value is required"
+            )
+        }
+        inProgress = try container.sdkDecodeRequired(.inProgress)
+        completed = try container.sdkDecodeRequired(.completed)
+        failed = try container.sdkDecodeRequired(.failed)
+        cancelled = try container.sdkDecodeRequired(.cancelled)
+        total = try container.sdkDecodeRequired(.total)
+    }
+}
+
+public extension VectorStoreObjectFileCounts {
+    init(inProgress: Int, completed: Int, failed: Int, cancelled: Int, total: Int) {
         (self.inProgress, self.completed) = (inProgress, completed)
         (self.failed, self.cancelled) = (failed, cancelled)
         self.total = total
@@ -339,7 +453,7 @@ extension VectorStoreObjectFileCounts {
 
 /// Always `static`.
 public enum StaticChunkingStrategyResponseParamType: String, CaseIterable, Codable {
-    case `static` = "static"
+    case `static`
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawValue = try container.decode(String.self)
@@ -359,12 +473,15 @@ public enum StaticChunkingStrategyResponseParamType: String, CaseIterable, Codab
 public struct VectorStoreFileBatchObjectObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let vectorStoreFileBatch = VectorStoreFileBatchObjectObject(rawValue: "vector_store.file_batch")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -377,14 +494,17 @@ public struct VectorStoreFileBatchObjectObject: RawRepresentable, Hashable, Coda
 public struct VectorStoreFileObjectLastErrorCode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let serverError = VectorStoreFileObjectLastErrorCode(rawValue: "server_error")
     public static let unsupportedFile = VectorStoreFileObjectLastErrorCode(rawValue: "unsupported_file")
     public static let invalidFile = VectorStoreFileObjectLastErrorCode(rawValue: "invalid_file")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -398,7 +518,10 @@ public struct VectorStoreFileObjectLastErrorCode: RawRepresentable, Hashable, Co
 public struct VectorStoreFileBatchObjectStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = VectorStoreFileBatchObjectStatus(rawValue: "in_progress")
     public static let completed = VectorStoreFileBatchObjectStatus(rawValue: "completed")
     public static let cancelled = VectorStoreFileBatchObjectStatus(rawValue: "cancelled")
@@ -406,7 +529,7 @@ public struct VectorStoreFileBatchObjectStatus: RawRepresentable, Hashable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -419,12 +542,15 @@ public struct VectorStoreFileBatchObjectStatus: RawRepresentable, Hashable, Coda
 public struct VectorStoreObjectObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let vectorStore = VectorStoreObjectObject(rawValue: "vector_store")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -438,14 +564,17 @@ public struct VectorStoreObjectObject: RawRepresentable, Hashable, Codable, Send
 public struct VectorStoreObjectStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let expired = VectorStoreObjectStatus(rawValue: "expired")
     public static let inProgress = VectorStoreObjectStatus(rawValue: "in_progress")
     public static let completed = VectorStoreObjectStatus(rawValue: "completed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -459,7 +588,10 @@ public struct VectorStoreObjectStatus: RawRepresentable, Hashable, Codable, Send
 public struct VectorStoreFileObjectStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = VectorStoreFileObjectStatus(rawValue: "in_progress")
     public static let completed = VectorStoreFileObjectStatus(rawValue: "completed")
     public static let cancelled = VectorStoreFileObjectStatus(rawValue: "cancelled")
@@ -467,7 +599,7 @@ public struct VectorStoreFileObjectStatus: RawRepresentable, Hashable, Codable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -478,7 +610,7 @@ public struct VectorStoreFileObjectStatus: RawRepresentable, Hashable, Codable, 
 
 /// Always `static`.
 public enum StaticChunkingStrategyRequestParamType: String, CaseIterable, Codable {
-    case `static` = "static"
+    case `static`
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawValue = try container.decode(String.self)

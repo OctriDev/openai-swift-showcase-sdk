@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedFunction domain models
+/// SharedFunction domain models
 public indirect enum FunctionAndCustomToolCallOutput {
     case inputTextContent(InputTextContent)
     case inputImageContent(InputImageContent)
@@ -13,7 +13,6 @@ public indirect enum FunctionAndCustomToolCallOutput {
 }
 
 extension FunctionAndCustomToolCallOutput: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension FunctionAndCustomToolCallOutput: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension FunctionAndCustomToolCallOutput: Codable {
 extension FunctionAndCustomToolCallOutput {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .inputTextContent(try InputTextContent(from: decoder))
-        case "input_image": return .inputImageContent(try InputImageContent(from: decoder))
-        case "input_file": return .inputFileContent(try InputFileContent(from: decoder))
-        default: return nil
+        case "input_text": try .inputTextContent(InputTextContent(from: decoder))
+        case "input_image": try .inputImageContent(InputImageContent(from: decoder))
+        case "input_file": try .inputFileContent(InputFileContent(from: decoder))
+        default: nil
         }
     }
 }
@@ -66,7 +69,6 @@ public indirect enum FunctionCallOutputItemParamOutputItem {
 }
 
 extension FunctionCallOutputItemParamOutputItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -74,12 +76,16 @@ extension FunctionCallOutputItemParamOutputItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -90,10 +96,10 @@ extension FunctionCallOutputItemParamOutputItem: Codable {
 extension FunctionCallOutputItemParamOutputItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .inputTextContentParam(try InputTextContentParam(from: decoder))
-        case "input_image": return .inputImageContentParamAutoParam(try InputImageContentParamAutoParam(from: decoder))
-        case "input_file": return .inputFileContentParam(try InputFileContentParam(from: decoder))
-        default: return nil
+        case "input_text": try .inputTextContentParam(InputTextContentParam(from: decoder))
+        case "input_image": try .inputImageContentParamAutoParam(InputImageContentParamAutoParam(from: decoder))
+        case "input_file": try .inputFileContentParam(InputFileContentParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -120,7 +126,6 @@ public indirect enum FunctionShellCallEnvironment {
 }
 
 extension FunctionShellCallEnvironment: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -128,12 +133,16 @@ extension FunctionShellCallEnvironment: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -144,9 +153,9 @@ extension FunctionShellCallEnvironment: Codable {
 extension FunctionShellCallEnvironment {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "local": return .localEnvironmentResource(try LocalEnvironmentResource(from: decoder))
-        case "container_reference": return .containerReferenceResource(try ContainerReferenceResource(from: decoder))
-        default: return nil
+        case "local": try .localEnvironmentResource(LocalEnvironmentResource(from: decoder))
+        case "container_reference": try .containerReferenceResource(ContainerReferenceResource(from: decoder))
+        default: nil
         }
     }
 }
@@ -170,7 +179,6 @@ public indirect enum FunctionShellCallItemParamEnvironment {
 }
 
 extension FunctionShellCallItemParamEnvironment: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -178,12 +186,16 @@ extension FunctionShellCallItemParamEnvironment: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -194,9 +206,9 @@ extension FunctionShellCallItemParamEnvironment: Codable {
 extension FunctionShellCallItemParamEnvironment {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "local": return .localEnvironmentParam(try LocalEnvironmentParam(from: decoder))
-        case "container_reference": return .containerReferenceParam(try ContainerReferenceParam(from: decoder))
-        default: return nil
+        case "local": try .localEnvironmentParam(LocalEnvironmentParam(from: decoder))
+        case "container_reference": try .containerReferenceParam(ContainerReferenceParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -220,7 +232,6 @@ public indirect enum FunctionShellCallOutputContentOutcome {
 }
 
 extension FunctionShellCallOutputContentOutcome: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -228,12 +239,16 @@ extension FunctionShellCallOutputContentOutcome: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -244,9 +259,9 @@ extension FunctionShellCallOutputContentOutcome: Codable {
 extension FunctionShellCallOutputContentOutcome {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "timeout": return .functionShellCallOutputTimeoutOutcome(try FunctionShellCallOutputTimeoutOutcome(from: decoder))
-        case "exit": return .functionShellCallOutputExitOutcome(try FunctionShellCallOutputExitOutcome(from: decoder))
-        default: return nil
+        case "timeout": try .functionShellCallOutputTimeoutOutcome(FunctionShellCallOutputTimeoutOutcome(from: decoder))
+        case "exit": try .functionShellCallOutputExitOutcome(FunctionShellCallOutputExitOutcome(from: decoder))
+        default: nil
         }
     }
 }
@@ -270,7 +285,6 @@ public indirect enum FunctionShellCallOutputOutcomeParam {
 }
 
 extension FunctionShellCallOutputOutcomeParam: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -278,12 +292,16 @@ extension FunctionShellCallOutputOutcomeParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -294,9 +312,13 @@ extension FunctionShellCallOutputOutcomeParam: Codable {
 extension FunctionShellCallOutputOutcomeParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "timeout": return .functionShellCallOutputTimeoutOutcomeParam(try FunctionShellCallOutputTimeoutOutcomeParam(from: decoder))
-        case "exit": return .functionShellCallOutputExitOutcomeParam(try FunctionShellCallOutputExitOutcomeParam(from: decoder))
-        default: return nil
+        case "timeout": try .functionShellCallOutputTimeoutOutcomeParam(
+                FunctionShellCallOutputTimeoutOutcomeParam(from: decoder)
+            )
+        case "exit": try .functionShellCallOutputExitOutcomeParam(
+                FunctionShellCallOutputExitOutcomeParam(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -321,7 +343,6 @@ public indirect enum FunctionShellToolParamEnvironment {
 }
 
 extension FunctionShellToolParamEnvironment: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -329,12 +350,16 @@ extension FunctionShellToolParamEnvironment: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -345,10 +370,10 @@ extension FunctionShellToolParamEnvironment: Codable {
 extension FunctionShellToolParamEnvironment {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "container_auto": return .containerAutoParam(try ContainerAutoParam(from: decoder))
-        case "local": return .localEnvironmentParam(try LocalEnvironmentParam(from: decoder))
-        case "container_reference": return .containerReferenceParam(try ContainerReferenceParam(from: decoder))
-        default: return nil
+        case "container_auto": try .containerAutoParam(ContainerAutoParam(from: decoder))
+        case "local": try .localEnvironmentParam(LocalEnvironmentParam(from: decoder))
+        case "container_reference": try .containerReferenceParam(ContainerReferenceParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -380,30 +405,40 @@ public struct FunctionShellToolParam: Codable {
         case allowedCallers = "allowed_callers"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension FunctionShellToolParam {
-    public init(from decoder: Decoder) throws {
+public extension FunctionShellToolParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.environment = try container.sdkDecodeIfPresent(.environment)
-        self.allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
-            try sdkValidateRawEnum("type", self.type, FunctionShellToolParamType.allCases.map(\.rawValue))
-        if let value = self.allowedCallers {
+        type = try container.sdkDecodeRequired(.type)
+        environment = try container.sdkDecodeIfPresent(.environment)
+        allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
+        try sdkValidateRawEnum("type", type, FunctionShellToolParamType.allCases.map(\.rawValue))
+        if let value = allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
     }
 }
 
-extension FunctionShellToolParam {
-    public init(type: FunctionShellToolParamType, environment: FunctionShellToolParamEnvironment? = nil, allowedCallers: [CallableToolAllowedCaller]? = nil) throws {
+public extension FunctionShellToolParam {
+    init(
+        type: FunctionShellToolParamType,
+        environment: FunctionShellToolParamEnvironment? = nil,
+        allowedCallers: [CallableToolAllowedCaller]? = nil
+    ) throws {
         (self.type, self.environment) = (type, environment)
         self.allowedCallers = allowedCallers
-            try sdkValidateRawEnum("type", self.type, FunctionShellToolParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, FunctionShellToolParamType.allCases.map(\.rawValue))
         if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
@@ -422,28 +457,38 @@ public struct FunctionShellCallOutputExitOutcome: Codable {
         case exitCode = "exit_code"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FunctionShellCallOutputExitOutcome {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.exitCode) else {
-            throw SdkValidationError(field: "exit_code", code: "required", message: "Validation failed for 'exit_code': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.exitCode = try container.sdkDecodeRequired(.exitCode)
-            try sdkValidateRawEnum("type", self.type, FunctionShellCallOutputExitOutcomeType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FunctionShellCallOutputExitOutcome {
-    public init(type: FunctionShellCallOutputExitOutcomeType, exitCode: Int) throws {
+public extension FunctionShellCallOutputExitOutcome {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.exitCode) else {
+            throw SdkValidationError(
+                field: "exit_code",
+                code: "required",
+                message: "Validation failed for 'exit_code': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        exitCode = try container.sdkDecodeRequired(.exitCode)
+        try sdkValidateRawEnum("type", type, FunctionShellCallOutputExitOutcomeType.allCases.map(\.rawValue))
+    }
+}
+
+public extension FunctionShellCallOutputExitOutcome {
+    init(type: FunctionShellCallOutputExitOutcomeType, exitCode: Int) throws {
         (self.type, self.exitCode) = (type, exitCode)
-            try sdkValidateRawEnum("type", self.type, FunctionShellCallOutputExitOutcomeType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, FunctionShellCallOutputExitOutcomeType.allCases.map(\.rawValue))
     }
 }
 
@@ -468,24 +513,30 @@ public struct FunctionObject: Codable {
         case strict
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FunctionObject {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeIfPresent(.description)
-        self.parameters = try container.sdkDecodeIfPresent(.parameters)
-        self.strict = try container.sdkDecodeIfPresent(.strict)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FunctionObject {
-    public init(name: String, description: String? = nil, parameters: FunctionParameters? = nil, strict: Bool? = nil) {
+public extension FunctionObject {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeIfPresent(.description)
+        parameters = try container.sdkDecodeIfPresent(.parameters)
+        strict = try container.sdkDecodeIfPresent(.strict)
+    }
+}
+
+public extension FunctionObject {
+    init(name: String, description: String? = nil, parameters: FunctionParameters? = nil, strict: Bool? = nil) {
         (self.name, self.description) = (name, description)
         (self.parameters, self.strict) = (parameters, strict)
     }
@@ -524,5 +575,7 @@ public struct FunctionTool: Codable {
         case allowedCallers = "allowed_callers"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

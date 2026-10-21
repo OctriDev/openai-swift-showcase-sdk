@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Audio domain models
+/// Audio domain models
 public indirect enum CreateVoiceRequest {
     case createVoiceFromConsentRequest(CreateVoiceFromConsentRequest)
     /// A member whose `type` names no branch this SDK knows, kept as received.
@@ -11,7 +11,6 @@ public indirect enum CreateVoiceRequest {
 }
 
 extension CreateVoiceRequest: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,20 +18,29 @@ extension CreateVoiceRequest: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateVoiceRequest")
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateVoiceRequest"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -43,15 +51,18 @@ extension CreateVoiceRequest: Codable {
 extension CreateVoiceRequest {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "audio_sample": return .createVoiceFromConsentRequest(try CreateVoiceFromConsentRequest(from: decoder))
-        default: return nil
+        case "audio_sample": try .createVoiceFromConsentRequest(CreateVoiceFromConsentRequest(from: decoder))
+        default: nil
         }
     }
 }
 
 extension CreateVoiceRequest {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(CreateVoiceFromConsentRequest.self) { return .createVoiceFromConsentRequest(value) }
+        if let value = try? container
+            .decode(CreateVoiceFromConsentRequest.self) {
+            return .createVoiceFromConsentRequest(value)
+        }
         return nil
     }
 }
@@ -87,37 +98,59 @@ public struct VoiceResource: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VoiceResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VoiceResource {
-    public init(object: VoiceResourceObject, id: String, type: VoiceResourceType, name: String, createdAt: Int) {
+public extension VoiceResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+    }
+}
+
+public extension VoiceResource {
+    init(object: VoiceResourceObject, id: String, type: VoiceResourceType, name: String, createdAt: Int) {
         (self.object, self.id) = (object, id)
         (self.type, self.name) = (type, name)
         self.createdAt = createdAt
@@ -143,37 +176,51 @@ public struct CreateVoiceFromConsentRequest: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateVoiceFromConsentRequest {
-    public init(from decoder: Decoder) throws {
+public extension CreateVoiceFromConsentRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
         guard container.contains(.audioSample) else {
-            throw SdkValidationError(field: "audio_sample", code: "required", message: "Validation failed for 'audio_sample': value is required")
+            throw SdkValidationError(
+                field: "audio_sample",
+                code: "required",
+                message: "Validation failed for 'audio_sample': value is required"
+            )
         }
         guard container.contains(.consent) else {
-            throw SdkValidationError(field: "consent", code: "required", message: "Validation failed for 'consent': value is required")
+            throw SdkValidationError(
+                field: "consent",
+                code: "required",
+                message: "Validation failed for 'consent': value is required"
+            )
         }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.audioSample = try container.sdkDecodeRequired(.audioSample)
-        self.consent = try container.sdkDecodeRequired(.consent)
-        self.type = try container.sdkDecodeIfPresent(.type)
-            try validateLength("name", self.name, min: 1, max: 256)
-        if let value = self.type {
+        name = try container.sdkDecodeRequired(.name)
+        audioSample = try container.sdkDecodeRequired(.audioSample)
+        consent = try container.sdkDecodeRequired(.consent)
+        type = try container.sdkDecodeIfPresent(.type)
+        try validateLength("name", name, min: 1, max: 256)
+        if let value = type {
             try sdkValidateRawEnum("type", value, CreateVoiceFromConsentRequestType.allCases.map(\.rawValue))
         }
     }
 }
 
-extension CreateVoiceFromConsentRequest {
-    public init(name: String, audioSample: Data, consent: String, type: CreateVoiceFromConsentRequestType? = nil) throws {
+public extension CreateVoiceFromConsentRequest {
+    init(name: String, audioSample: Data, consent: String, type: CreateVoiceFromConsentRequestType? = nil) throws {
         (self.name, self.audioSample) = (name, audioSample)
         (self.consent, self.type) = (consent, type)
-            try validateLength("name", self.name, min: 1, max: 256)
+        try validateLength("name", self.name, min: 1, max: 256)
         if let value = self.type {
             try sdkValidateRawEnum("type", value, CreateVoiceFromConsentRequestType.allCases.map(\.rawValue))
         }
@@ -184,12 +231,15 @@ extension CreateVoiceFromConsentRequest {
 public struct VoiceResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let audioVoice = VoiceResourceObject(rawValue: "audio.voice")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -202,12 +252,15 @@ public struct VoiceResourceObject: RawRepresentable, Hashable, Codable, Sendable
 public struct VoiceResourceType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let audioSample = VoiceResourceType(rawValue: "audio_sample")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

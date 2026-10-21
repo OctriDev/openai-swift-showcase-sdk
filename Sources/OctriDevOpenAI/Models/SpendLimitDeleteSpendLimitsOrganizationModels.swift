@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SpendLimit domain models
+/// SpendLimit domain models
 /// Confirmation payload returned after deleting an organization hard spend limit.
 public struct OrganizationSpendLimitDeletedResource: Codable {
     /// The object type, which is always `organization.spend_limit.deleted`.
@@ -16,39 +16,54 @@ public struct OrganizationSpendLimitDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OrganizationSpendLimitDeletedResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OrganizationSpendLimitDeletedResource {
-    public init(object: OrganizationSpendLimitDeletedResourceObject, deleted: Bool) {
+public extension OrganizationSpendLimitDeletedResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+    }
+}
+
+public extension OrganizationSpendLimitDeletedResource {
+    init(object: OrganizationSpendLimitDeletedResourceObject, deleted: Bool) {
         (self.object, self.deleted) = (object, deleted)
     }
 }
 
 /// The object type, which is always `organization.spend_limit.deleted`.
-public struct OrganizationSpendLimitDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct OrganizationSpendLimitDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationSpendLimitDeleted = OrganizationSpendLimitDeletedResourceObject(rawValue: "organization.spend_limit.deleted")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationSpendLimitDeleted =
+        OrganizationSpendLimitDeletedResourceObject(rawValue: "organization.spend_limit.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

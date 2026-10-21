@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaCustom domain models
+/// ResponsesBetaCustom domain models
 /// The type of the custom tool. Always `custom`.
 public enum BetaCustomToolParamType: String, CaseIterable, Codable {
     case custom

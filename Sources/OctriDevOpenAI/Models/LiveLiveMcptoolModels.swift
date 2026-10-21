@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveMcptool domain models
+/// LiveLiveMcptool domain models
 /// Typed representation of the `LiveMCPToolInputParam` API schema.
 public struct LiveMCPToolInputParam: Codable {
     /// Required enumerated value serialized in the `type` wire field.
@@ -13,24 +13,30 @@ public struct LiveMCPToolInputParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveMCPToolInputParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, LiveMCPToolInputParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveMCPToolInputParam {
-    public init(type: LiveMCPToolInputParamType) throws {
+public extension LiveMCPToolInputParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, LiveMCPToolInputParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveMCPToolInputParam {
+    init(type: LiveMCPToolInputParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, LiveMCPToolInputParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveMCPToolInputParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -49,30 +55,40 @@ public struct LiveMCPToolChoiceParam: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveMCPToolChoiceParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.serverLabel) else {
-            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        self.name = try container.sdkDecodeIfPresent(.name)
-            try sdkValidateRawEnum("type", self.type, LiveMCPToolChoiceParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveMCPToolChoiceParam {
-    public init(type: LiveMCPToolChoiceParamType, serverLabel: String, name: String? = nil) throws {
+public extension LiveMCPToolChoiceParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.serverLabel) else {
+            throw SdkValidationError(
+                field: "server_label",
+                code: "required",
+                message: "Validation failed for 'server_label': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        name = try container.sdkDecodeIfPresent(.name)
+        try sdkValidateRawEnum("type", type, LiveMCPToolChoiceParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveMCPToolChoiceParam {
+    init(type: LiveMCPToolChoiceParamType, serverLabel: String, name: String? = nil) throws {
         (self.type, self.serverLabel) = (type, serverLabel)
         self.name = name
-            try sdkValidateRawEnum("type", self.type, LiveMCPToolChoiceParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveMCPToolChoiceParamType.allCases.map(\.rawValue))
     }
 }
 

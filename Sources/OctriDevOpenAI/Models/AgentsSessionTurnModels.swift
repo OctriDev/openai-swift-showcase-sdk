@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsSessionTurn domain models
+/// AgentsSessionTurn domain models
 public indirect enum SessionTurnItemResource {
     case messageItemResource(MessageItemResource)
     case reasoningItemResource(ReasoningItemResource)
@@ -27,7 +27,6 @@ public indirect enum SessionTurnItemResource {
 }
 
 extension SessionTurnItemResource: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -35,13 +34,19 @@ extension SessionTurnItemResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -52,26 +57,34 @@ extension SessionTurnItemResource: Codable {
 extension SessionTurnItemResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "message": return .messageItemResource(try MessageItemResource(from: decoder))
-        case "reasoning": return .reasoningItemResource(try ReasoningItemResource(from: decoder))
-        case "function_call": return .functionCallItemResource(try FunctionCallItemResource(from: decoder))
-        case "function_call_output": return .functionCallOutputItemResource(try FunctionCallOutputItemResource(from: decoder))
-        case "agent_message": return .agentMessageItemResource(try AgentMessageItemResource(from: decoder))
-        case "mcp_call": return .mcpCallItemResource(try McpCallItemResource(from: decoder))
-        case "computer_use_call": return .computerUseCallItemResource(try ComputerUseCallItemResource(from: decoder))
+        case "message": try .messageItemResource(MessageItemResource(from: decoder))
+        case "reasoning": try .reasoningItemResource(ReasoningItemResource(from: decoder))
+        case "function_call": try .functionCallItemResource(FunctionCallItemResource(from: decoder))
+        case "function_call_output": try .functionCallOutputItemResource(FunctionCallOutputItemResource(from: decoder))
+        case "agent_message": try .agentMessageItemResource(AgentMessageItemResource(from: decoder))
+        case "mcp_call": try .mcpCallItemResource(McpCallItemResource(from: decoder))
+        case "computer_use_call": try .computerUseCallItemResource(ComputerUseCallItemResource(from: decoder))
         case "computer_use_approval_request":
-        return .browserAuthenticationRequestItemResource(try BrowserAuthenticationRequestItemResource(from: decoder))
+            try .browserAuthenticationRequestItemResource(BrowserAuthenticationRequestItemResource(from: decoder))
         case "computer_use_approval_request_result":
-        return .computerUseApprovalRequestResultItemResource(try ComputerUseApprovalRequestResultItemResource(from: decoder))
-        case "web_search_call": return .webSearchCallItemResource(try WebSearchCallItemResource(from: decoder))
-        case "command_execution": return .commandExecutionItemResource(try CommandExecutionItemResource(from: decoder))
-        case "create_subagent_call": return .createSubagentCallItemResource(try CreateSubagentCallItemResource(from: decoder))
-        case "send_subagent_input_call": return .sendSubagentInputCallItemResource(try SendSubagentInputCallItemResource(from: decoder))
-        case "resume_subagent_call": return .resumeSubagentCallItemResource(try ResumeSubagentCallItemResource(from: decoder))
-        case "wait_for_subagents_call": return .waitForSubagentsCallItemResource(try WaitForSubagentsCallItemResource(from: decoder))
-        case "interrupt_subagent_call": return .interruptSubagentCallItemResource(try InterruptSubagentCallItemResource(from: decoder))
-        case "close_subagent_call": return .closeSubagentCallItemResource(try CloseSubagentCallItemResource(from: decoder))
-        default: return nil
+            try .computerUseApprovalRequestResultItemResource(
+                ComputerUseApprovalRequestResultItemResource(from: decoder)
+            )
+        case "web_search_call": try .webSearchCallItemResource(WebSearchCallItemResource(from: decoder))
+        case "command_execution": try .commandExecutionItemResource(CommandExecutionItemResource(from: decoder))
+        case "create_subagent_call": try .createSubagentCallItemResource(CreateSubagentCallItemResource(from: decoder))
+        case "send_subagent_input_call": try .sendSubagentInputCallItemResource(
+                SendSubagentInputCallItemResource(from: decoder)
+            )
+        case "resume_subagent_call": try .resumeSubagentCallItemResource(ResumeSubagentCallItemResource(from: decoder))
+        case "wait_for_subagents_call": try .waitForSubagentsCallItemResource(
+                WaitForSubagentsCallItemResource(from: decoder)
+            )
+        case "interrupt_subagent_call": try .interruptSubagentCallItemResource(
+                InterruptSubagentCallItemResource(from: decoder)
+            )
+        case "close_subagent_call": try .closeSubagentCallItemResource(CloseSubagentCallItemResource(from: decoder))
+        default: nil
         }
     }
 }
@@ -123,28 +136,38 @@ public struct SessionTurnErrorResource: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SessionTurnErrorResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        self.code = try container.sdkDecodeRequired(.code)
-        self.message = try container.sdkDecodeRequired(.message)
-            try validateLength("message", self.message, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SessionTurnErrorResource {
-    public init(code: SessionTurnErrorCodeResource, message: String) throws {
+public extension SessionTurnErrorResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        code = try container.sdkDecodeRequired(.code)
+        message = try container.sdkDecodeRequired(.message)
+        try validateLength("message", message, min: 0, max: nil)
+    }
+}
+
+public extension SessionTurnErrorResource {
+    init(code: SessionTurnErrorCodeResource, message: String) throws {
         (self.code, self.message) = (code, message)
-            try validateLength("message", self.message, min: 0, max: nil)
+        try validateLength("message", self.message, min: 0, max: nil)
     }
 }
 
@@ -170,48 +193,76 @@ public struct SessionTurnListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension SessionTurnListResource {
-    public init(from decoder: Decoder) throws {
+public extension SessionTurnListResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
+            throw SdkValidationError(
+                field: "first_id",
+                code: "required",
+                message: "Validation failed for 'first_id': value is required"
+            )
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
+            throw SdkValidationError(
+                field: "last_id",
+                code: "required",
+                message: "Validation failed for 'last_id': value is required"
+            )
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
         }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.firstId = try container.sdkDecodeNullable(.firstId)
-        self.lastId = try container.sdkDecodeNullable(.lastId)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-            try validateItems("data", self.data, min: 0, max: 2000)
-        if let value = self.firstId {
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        firstId = try container.sdkDecodeNullable(.firstId)
+        lastId = try container.sdkDecodeNullable(.lastId)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        try validateItems("data", data, min: 0, max: 2000)
+        if let value = firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
-        if let value = self.lastId {
+        if let value = lastId {
             try validateLength("last_id", value, min: 0, max: nil)
         }
     }
 }
 
-extension SessionTurnListResource {
-    public init(object: SessionTurnListResourceObject, data: [TurnResource], firstId: String?, lastId: String?, hasMore: Bool) throws {
+public extension SessionTurnListResource {
+    init(
+        object: SessionTurnListResourceObject,
+        data: [TurnResource],
+        firstId: String?,
+        lastId: String?,
+        hasMore: Bool
+    ) throws {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
-            try validateItems("data", self.data, min: 0, max: 2000)
+        try validateItems("data", self.data, min: 0, max: 2000)
         if let value = self.firstId {
             try validateLength("first_id", value, min: 0, max: nil)
         }
@@ -243,44 +294,72 @@ public struct SessionTurnTraceResource: Codable {
         case otlp
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SessionTurnTraceResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.sessionId) else {
-            throw SdkValidationError(field: "session_id", code: "required", message: "Validation failed for 'session_id': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.otlp) else {
-            throw SdkValidationError(field: "otlp", code: "required", message: "Validation failed for 'otlp': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.sessionId = try container.sdkDecodeRequired(.sessionId)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.otlp = try container.sdkDecodeRequired(.otlp)
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("session_id", self.sessionId, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SessionTurnTraceResource {
-    public init(id: String, object: SessionTurnTraceResourceObject, sessionId: String, createdAt: Int, otlp: [String: JSONValue]) throws {
+public extension SessionTurnTraceResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.sessionId) else {
+            throw SdkValidationError(
+                field: "session_id",
+                code: "required",
+                message: "Validation failed for 'session_id': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.otlp) else {
+            throw SdkValidationError(
+                field: "otlp",
+                code: "required",
+                message: "Validation failed for 'otlp': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        sessionId = try container.sdkDecodeRequired(.sessionId)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        otlp = try container.sdkDecodeRequired(.otlp)
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("session_id", sessionId, min: 0, max: nil)
+    }
+}
+
+public extension SessionTurnTraceResource {
+    init(
+        id: String,
+        object: SessionTurnTraceResourceObject,
+        sessionId: String,
+        createdAt: Int,
+        otlp: [String: JSONValue]
+    ) throws {
         (self.id, self.object) = (id, object)
         (self.sessionId, self.createdAt) = (sessionId, createdAt)
         self.otlp = otlp
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("session_id", self.sessionId, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("session_id", self.sessionId, min: 0, max: nil)
     }
 }
 
@@ -288,12 +367,15 @@ extension SessionTurnTraceResource {
 public struct SessionTurnListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = SessionTurnListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -306,12 +388,15 @@ public struct SessionTurnListResourceObject: RawRepresentable, Hashable, Codable
 public struct SessionTurnTraceResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let agentSessionTrace = SessionTurnTraceResourceObject(rawValue: "agent.session.trace")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -324,34 +409,41 @@ public struct SessionTurnTraceResourceObject: RawRepresentable, Hashable, Codabl
 public struct SessionTurnErrorCodeResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let contextLengthExceeded = SessionTurnErrorCodeResource(rawValue: "context_length_exceeded")
     public static let sessionBudgetExceeded = SessionTurnErrorCodeResource(rawValue: "session_budget_exceeded")
     public static let usageLimitExceeded = SessionTurnErrorCodeResource(rawValue: "usage_limit_exceeded")
     public static let projectSpendLimitExceeded = SessionTurnErrorCodeResource(rawValue: "project_spend_limit_exceeded")
-    public static let organizationSpendLimitExceeded = SessionTurnErrorCodeResource(rawValue: "organization_spend_limit_exceeded")
-    public static let organizationUsageLimitExceeded = SessionTurnErrorCodeResource(rawValue: "organization_usage_limit_exceeded")
+    public static let organizationSpendLimitExceeded =
+        SessionTurnErrorCodeResource(rawValue: "organization_spend_limit_exceeded")
+    public static let organizationUsageLimitExceeded =
+        SessionTurnErrorCodeResource(rawValue: "organization_usage_limit_exceeded")
     public static let billingNotActive = SessionTurnErrorCodeResource(rawValue: "billing_not_active")
     public static let creditBalanceExhausted = SessionTurnErrorCodeResource(rawValue: "credit_balance_exhausted")
     public static let rateLimitExceeded = SessionTurnErrorCodeResource(rawValue: "rate_limit_exceeded")
     public static let flexUnavailable = SessionTurnErrorCodeResource(rawValue: "flex_unavailable")
     public static let serverOverloaded = SessionTurnErrorCodeResource(rawValue: "server_overloaded")
     public static let cyberPolicy = SessionTurnErrorCodeResource(rawValue: "cyber_policy")
-    public static let misalignmentPolicyViolation = SessionTurnErrorCodeResource(rawValue: "misalignment_policy_violation")
+    public static let misalignmentPolicyViolation =
+        SessionTurnErrorCodeResource(rawValue: "misalignment_policy_violation")
     public static let connectionFailed = SessionTurnErrorCodeResource(rawValue: "connection_failed")
     public static let serverError = SessionTurnErrorCodeResource(rawValue: "server_error")
     public static let authenticationError = SessionTurnErrorCodeResource(rawValue: "authentication_error")
     public static let invalidRequest = SessionTurnErrorCodeResource(rawValue: "invalid_request")
     public static let resourceNotFound = SessionTurnErrorCodeResource(rawValue: "resource_not_found")
     public static let sandboxError = SessionTurnErrorCodeResource(rawValue: "sandbox_error")
-    public static let executorVersionIncompatible = SessionTurnErrorCodeResource(rawValue: "executor_version_incompatible")
+    public static let executorVersionIncompatible =
+        SessionTurnErrorCodeResource(rawValue: "executor_version_incompatible")
     public static let activeTurnNotSteerable = SessionTurnErrorCodeResource(rawValue: "active_turn_not_steerable")
     public static let requestTimeout = SessionTurnErrorCodeResource(rawValue: "request_timeout")
     public static let internalError = SessionTurnErrorCodeResource(rawValue: "internal_error")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension SpendAlertsMethods {
-    /// Creates a spend alert for a project to notify recipients when spending reaches a threshold. Provide the threshold in cents, the currency and evaluation interval, and email notification settings.
+public extension SpendAlertsMethods {
+    /// Creates a spend alert for a project to notify recipients when spending reaches a threshold. Provide the
+    /// threshold in cents, the currency and evaluation interval, and email notification settings.
     ///
     /// Creates a project spend alert.
     ///
@@ -17,22 +18,63 @@ extension SpendAlertsMethods {
     /// - currency: The currency for the threshold amount.
     /// - interval: The time interval for evaluating spend against the threshold.
     /// - notificationChannel: Email notification settings for a spend alert.
-    public static func createProjectSpendAlert(config: ClientConfig, projectId: String, thresholdAmount: Int, currency: CreateSpendAlertBodyCurrency, interval: CreateSpendAlertBodyInterval, notificationChannel: SpendAlertNotificationChannel, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendAlert {
+    static func createProjectSpendAlert(
+        config: ClientConfig,
+        projectId: String,
+        thresholdAmount: Int,
+        currency: CreateSpendAlertBodyCurrency,
+        interval: CreateSpendAlertBodyInterval,
+        notificationChannel: SpendAlertNotificationChannel,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectSpendAlert {
         try validateRange("threshold_amount", Double(thresholdAmount), min: 0)
 
-        let requestBody = CreateProjectSpendAlertRequestBody(thresholdAmount: thresholdAmount, currency: currency, interval: interval, notificationChannel: notificationChannel)
+        let requestBody = CreateProjectSpendAlertRequestBody(
+            thresholdAmount: thresholdAmount,
+            currency: currency,
+            interval: interval,
+            notificationChannel: notificationChannel
+        )
 
-        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/spend_alerts"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createProjectSpendAlert", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/spend_alerts"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createProjectSpendAlert",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
-    /// Retrieves a spend alert configured for a project. Use the project and alert identifiers to inspect its threshold, currency, evaluation interval, and notification channel.
+    /// Retrieves a spend alert configured for a project. Use the project and alert identifiers to inspect its
+    /// threshold, currency, evaluation interval, and notification channel.
     ///
     /// Retrieves a project spend alert.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
     /// - alertId: The ID of the spend alert to retrieve.
-    public static func retrieveProjectSpendAlert(config: ClientConfig, projectId: String, alertId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendAlert {
-        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/spend_alerts/", sdkEncodePathSegment(sdkWireString(alertId))].joined(), config: config, decoder: .json, operationId: "retrieveProjectSpendAlert", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
+    static func retrieveProjectSpendAlert(
+        config: ClientConfig,
+        projectId: String,
+        alertId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectSpendAlert {
+        try await (sdkRequest(
+            "GET",
+            [
+                "/organization/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/spend_alerts/",
+                sdkEncodePathSegment(sdkWireString(alertId)),
+            ].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "retrieveProjectSpendAlert",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 }

@@ -6,10 +6,13 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension EvalsMethods {
-    /// Creates and starts a run for an evaluation using a specified data source and model configuration. The run's data source is validated against the schema defined by the evaluation; provide `data_source` in one of the supported formats. Use the returned run identifier to monitor the evaluation run.
+public extension EvalsMethods {
+    /// Creates and starts a run for an evaluation using a specified data source and model configuration. The run's data
+    /// source is validated against the schema defined by the evaluation; provide `data_source` in one of the supported
+    /// formats. Use the returned run identifier to monitor the evaluation run.
     ///
-    /// Kicks off a new run for a given evaluation, specifying the data source, and what model configuration to use to test. The datasource will be validated against the schema specified in the config of the evaluation.
+    /// Kicks off a new run for a given evaluation, specifying the data source, and what model configuration to use to
+    /// test. The datasource will be validated against the schema specified in the config of the evaluation.
     ///
     /// - Parameters:
     /// - evalId: The ID of the evaluation to create a run for.
@@ -20,9 +23,30 @@ extension EvalsMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    public static func createEvalRun(config: ClientConfig, evalId: String, dataSource: CreateEvalRunRequestDataSource, name: String? = nil, metadata: SdkOptional<Metadata>? = nil, requestOptions: RequestOptions? = nil) async throws -> EvalRun {
+    static func createEvalRun(
+        config: ClientConfig,
+        evalId: String,
+        dataSource: CreateEvalRunRequestDataSource,
+        name: String? = nil,
+        metadata: SdkOptional<Metadata>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> EvalRun {
         let requestBody = CreateEvalRunRequestBody(dataSource: dataSource, name: name, metadata: metadata)
 
-        return try (await sdkRequest("POST", ["/evals/", sdkEncodePathSegment(sdkWireString(evalId)), "/runs"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createEvalRun", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/evals/", sdkEncodePathSegment(sdkWireString(evalId)), "/runs"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createEvalRun",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+            ]
+        )).data
     }
 }

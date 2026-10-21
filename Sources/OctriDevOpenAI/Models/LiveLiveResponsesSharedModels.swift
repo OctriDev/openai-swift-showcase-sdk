@@ -3,26 +3,36 @@
 
 import Foundation
 
-// LiveLiveResponses domain models
+/// LiveLiveResponses domain models
 public indirect enum LiveResponsesDelegationSettingsInputParamToolChoice {
     case liveToolChoiceEnum(LiveToolChoiceEnum)
-    case liveResponsesDelegationSettingsInputParamToolChoiceVariant1(LiveResponsesDelegationSettingsInputParamToolChoiceVariant1)
+    case liveResponsesDelegationSettingsInputParamToolChoiceVariant1(
+        LiveResponsesDelegationSettingsInputParamToolChoiceVariant1
+    )
     case liveAllowedToolsChoiceParam(LiveAllowedToolsChoiceParam)
 }
 
 extension LiveResponsesDelegationSettingsInputParamToolChoice: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
         }
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for LiveResponsesDelegationSettingsInputParamToolChoice")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for LiveResponsesDelegationSettingsInputParamToolChoice"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
@@ -44,13 +54,18 @@ extension LiveResponsesDelegationSettingsInputParamToolChoice {
 
 extension LiveResponsesDelegationSettingsInputParamToolChoice {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(LiveToolChoiceEnum.self) { return .liveToolChoiceEnum(value) }
+        if let value = try? container.decode(LiveToolChoiceEnum.self) {
+            return .liveToolChoiceEnum(value)
+        }
         if let value = try? container.decode(
             LiveResponsesDelegationSettingsInputParamToolChoiceVariant1.self
         ) {
-            return             .liveResponsesDelegationSettingsInputParamToolChoiceVariant1(value)
+            return .liveResponsesDelegationSettingsInputParamToolChoiceVariant1(value)
         }
-        if let value = try? container.decode(LiveAllowedToolsChoiceParam.self) { return .liveAllowedToolsChoiceParam(value) }
+        if let value = try? container
+            .decode(LiveAllowedToolsChoiceParam.self) {
+            return .liveAllowedToolsChoiceParam(value)
+        }
         return nil
     }
 }
@@ -60,7 +75,8 @@ extension LiveResponsesDelegationSettingsInputParamToolChoice {
         var container = encoder.singleValueContainer()
         switch self {
         case let .liveToolChoiceEnum(value): try container.encode(value); return true
-        case let .liveResponsesDelegationSettingsInputParamToolChoiceVariant1(value): try container.encode(value); return true
+        case let .liveResponsesDelegationSettingsInputParamToolChoiceVariant1(value): try container
+            .encode(value); return true
         case let .liveAllowedToolsChoiceParam(value): try container.encode(value); return true
         }
     }
@@ -85,7 +101,6 @@ public indirect enum LiveResponsesDelegationSettingsInputParamToolsItem {
 }
 
 extension LiveResponsesDelegationSettingsInputParamToolsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -93,13 +108,19 @@ extension LiveResponsesDelegationSettingsInputParamToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -110,20 +131,26 @@ extension LiveResponsesDelegationSettingsInputParamToolsItem: Codable {
 extension LiveResponsesDelegationSettingsInputParamToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": return .liveFunctionToolInputParam(try LiveFunctionToolInputParam(from: decoder))
-        case "web_search": return .liveWebSearchToolInputParam(try LiveWebSearchToolInputParam(from: decoder))
-        case "file_search": return .liveFileSearchToolInputParam(try LiveFileSearchToolInputParam(from: decoder))
-        case "code_interpreter": return .liveCodeInterpreterToolInputParam(try LiveCodeInterpreterToolInputParam(from: decoder))
-        case "shell": return .liveHostedShellToolInputParam(try LiveHostedShellToolInputParam(from: decoder))
-        case "image_generation": return .liveImageGenerationToolInputParam(try LiveImageGenerationToolInputParam(from: decoder))
-        case "mcp": return .liveMcpToolInputParam(try LiveMCPToolInputParam(from: decoder))
-        case "custom": return .liveCustomToolInputParam(try LiveCustomToolInputParam(from: decoder))
-        case "namespace": return .liveNamespaceToolInputParam(try LiveNamespaceToolInputParam(from: decoder))
-        case "tool_search": return .liveToolSearchToolInputParam(try LiveToolSearchToolInputParam(from: decoder))
-        case "programmatic_tool_calling": return .liveProgrammaticToolInputParam(try LiveProgrammaticToolInputParam(from: decoder))
-        case "computer": return .liveComputerToolInputParam(try LiveComputerToolInputParam(from: decoder))
-        case "apply_patch": return .liveApplyPatchToolInputParam(try LiveApplyPatchToolInputParam(from: decoder))
-        default: return nil
+        case "function": try .liveFunctionToolInputParam(LiveFunctionToolInputParam(from: decoder))
+        case "web_search": try .liveWebSearchToolInputParam(LiveWebSearchToolInputParam(from: decoder))
+        case "file_search": try .liveFileSearchToolInputParam(LiveFileSearchToolInputParam(from: decoder))
+        case "code_interpreter": try .liveCodeInterpreterToolInputParam(
+                LiveCodeInterpreterToolInputParam(from: decoder)
+            )
+        case "shell": try .liveHostedShellToolInputParam(LiveHostedShellToolInputParam(from: decoder))
+        case "image_generation": try .liveImageGenerationToolInputParam(
+                LiveImageGenerationToolInputParam(from: decoder)
+            )
+        case "mcp": try .liveMcpToolInputParam(LiveMCPToolInputParam(from: decoder))
+        case "custom": try .liveCustomToolInputParam(LiveCustomToolInputParam(from: decoder))
+        case "namespace": try .liveNamespaceToolInputParam(LiveNamespaceToolInputParam(from: decoder))
+        case "tool_search": try .liveToolSearchToolInputParam(LiveToolSearchToolInputParam(from: decoder))
+        case "programmatic_tool_calling": try .liveProgrammaticToolInputParam(
+                LiveProgrammaticToolInputParam(from: decoder)
+            )
+        case "computer": try .liveComputerToolInputParam(LiveComputerToolInputParam(from: decoder))
+        case "apply_patch": try .liveApplyPatchToolInputParam(LiveApplyPatchToolInputParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -177,7 +204,6 @@ public indirect enum LiveResponsesDelegationSettingsInputParamToolChoiceVariant1
 }
 
 extension LiveResponsesDelegationSettingsInputParamToolChoiceVariant1: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -185,12 +211,16 @@ extension LiveResponsesDelegationSettingsInputParamToolChoiceVariant1: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -201,20 +231,22 @@ extension LiveResponsesDelegationSettingsInputParamToolChoiceVariant1: Codable {
 extension LiveResponsesDelegationSettingsInputParamToolChoiceVariant1 {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": return .liveFunctionToolChoiceParam(try LiveFunctionToolChoiceParam(from: decoder))
-        case "mcp": return .liveMcpToolChoiceParam(try LiveMCPToolChoiceParam(from: decoder))
-        case "file_search": return .liveSpecificFileSearchParam(try LiveSpecificFileSearchParam(from: decoder))
-        case "web_search": return .liveSpecificWebSearchParam(try LiveSpecificWebSearchParam(from: decoder))
-        case "web_search_preview": return .liveSpecificWebSearchPreviewParam(try LiveSpecificWebSearchPreviewParam(from: decoder))
-        case "image_generation": return .liveSpecificImageGenParam(try LiveSpecificImageGenParam(from: decoder))
-        case "computer": return .liveSpecificComputerParam(try LiveSpecificComputerParam(from: decoder))
-        case "code_interpreter": return .liveSpecificCodeInterpreterParam(try LiveSpecificCodeInterpreterParam(from: decoder))
+        case "function": try .liveFunctionToolChoiceParam(LiveFunctionToolChoiceParam(from: decoder))
+        case "mcp": try .liveMcpToolChoiceParam(LiveMCPToolChoiceParam(from: decoder))
+        case "file_search": try .liveSpecificFileSearchParam(LiveSpecificFileSearchParam(from: decoder))
+        case "web_search": try .liveSpecificWebSearchParam(LiveSpecificWebSearchParam(from: decoder))
+        case "web_search_preview": try .liveSpecificWebSearchPreviewParam(
+                LiveSpecificWebSearchPreviewParam(from: decoder)
+            )
+        case "image_generation": try .liveSpecificImageGenParam(LiveSpecificImageGenParam(from: decoder))
+        case "computer": try .liveSpecificComputerParam(LiveSpecificComputerParam(from: decoder))
+        case "code_interpreter": try .liveSpecificCodeInterpreterParam(LiveSpecificCodeInterpreterParam(from: decoder))
         case "programmatic_tool_calling":
-        return .liveSpecificProgrammaticToolCallingParam(try LiveSpecificProgrammaticToolCallingParam(from: decoder))
-        case "shell": return .liveSpecificFunctionShellParam(try LiveSpecificFunctionShellParam(from: decoder))
-        case "custom": return .liveSpecificCustomToolParam(try LiveSpecificCustomToolParam(from: decoder))
-        case "apply_patch": return .liveSpecificApplyPatchParam(try LiveSpecificApplyPatchParam(from: decoder))
-        default: return nil
+            try .liveSpecificProgrammaticToolCallingParam(LiveSpecificProgrammaticToolCallingParam(from: decoder))
+        case "shell": try .liveSpecificFunctionShellParam(LiveSpecificFunctionShellParam(from: decoder))
+        case "custom": try .liveSpecificCustomToolParam(LiveSpecificCustomToolParam(from: decoder))
+        case "apply_patch": try .liveSpecificApplyPatchParam(LiveSpecificApplyPatchParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -273,29 +305,45 @@ public struct LiveResponsesDelegationSettingsInputParam: Codable {
         case parallelToolCalls = "parallel_tool_calls"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveResponsesDelegationSettingsInputParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        self.model = try container.sdkDecodeRequired(.model)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        self.text = try container.sdkDecodeIfPresent(.text)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveResponsesDelegationSettingsInputParam {
-    public init(model: String, instructions: String? = nil, maxOutputTokens: Int? = nil, serviceTier: LiveResponsesServiceTier? = nil, reasoning: LiveDelegationReasoningInputParam? = nil, text: LiveDelegationTextInputParam? = nil, tools: [LiveResponsesDelegationSettingsInputParamToolsItem]? = nil, toolChoice: LiveResponsesDelegationSettingsInputParamToolChoice? = nil, parallelToolCalls: Bool? = nil) {
+public extension LiveResponsesDelegationSettingsInputParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        model = try container.sdkDecodeRequired(.model)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        text = try container.sdkDecodeIfPresent(.text)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+    }
+}
+
+public extension LiveResponsesDelegationSettingsInputParam {
+    init(
+        model: String,
+        instructions: String? = nil,
+        maxOutputTokens: Int? = nil,
+        serviceTier: LiveResponsesServiceTier? = nil,
+        reasoning: LiveDelegationReasoningInputParam? = nil,
+        text: LiveDelegationTextInputParam? = nil,
+        tools: [LiveResponsesDelegationSettingsInputParamToolsItem]? = nil,
+        toolChoice: LiveResponsesDelegationSettingsInputParamToolChoice? = nil,
+        parallelToolCalls: Bool? = nil
+    ) {
         (self.model, self.instructions) = (model, instructions)
         (self.maxOutputTokens, self.serviceTier) = (maxOutputTokens, serviceTier)
         (self.reasoning, self.text) = (reasoning, text)
@@ -316,28 +364,38 @@ public struct LiveResponsesDelegationParam: Codable {
         case responses
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveResponsesDelegationParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.responses) else {
-            throw SdkValidationError(field: "responses", code: "required", message: "Validation failed for 'responses': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.responses = try container.sdkDecodeRequired(.responses)
-            try sdkValidateRawEnum("type", self.type, LiveResponsesDelegationParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveResponsesDelegationParam {
-    public init(type: LiveResponsesDelegationParamType, responses: LiveResponsesDelegationSettingsInputParam) throws {
+public extension LiveResponsesDelegationParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.responses) else {
+            throw SdkValidationError(
+                field: "responses",
+                code: "required",
+                message: "Validation failed for 'responses': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        responses = try container.sdkDecodeRequired(.responses)
+        try sdkValidateRawEnum("type", type, LiveResponsesDelegationParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveResponsesDelegationParam {
+    init(type: LiveResponsesDelegationParamType, responses: LiveResponsesDelegationSettingsInputParam) throws {
         (self.type, self.responses) = (type, responses)
-            try sdkValidateRawEnum("type", self.type, LiveResponsesDelegationParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveResponsesDelegationParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -345,7 +403,10 @@ extension LiveResponsesDelegationParam {
 public struct LiveResponsesServiceTier: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = LiveResponsesServiceTier(rawValue: "auto")
     public static let `default` = LiveResponsesServiceTier(rawValue: "default")
     public static let fastTierTempPilot = LiveResponsesServiceTier(rawValue: "fast_tier_temp_pilot")
@@ -355,7 +416,7 @@ public struct LiveResponsesServiceTier: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

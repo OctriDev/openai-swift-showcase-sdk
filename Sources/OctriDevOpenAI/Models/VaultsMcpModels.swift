@@ -3,7 +3,7 @@
 
 import Foundation
 
-// VaultsMcp domain models
+/// VaultsMcp domain models
 public indirect enum McpOauthTokenEndpointAuthResource {
     case mcpOauthTokenEndpointAuthResourceNone(McpOauthTokenEndpointAuthResourceNone)
     case mcpOauthTokenEndpointAuthResourceClientSecretBasic(McpOauthTokenEndpointAuthResourceClientSecretBasic)
@@ -13,7 +13,6 @@ public indirect enum McpOauthTokenEndpointAuthResource {
 }
 
 extension McpOauthTokenEndpointAuthResource: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension McpOauthTokenEndpointAuthResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,12 +40,16 @@ extension McpOauthTokenEndpointAuthResource: Codable {
 extension McpOauthTokenEndpointAuthResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "none": return .mcpOauthTokenEndpointAuthResourceNone(try McpOauthTokenEndpointAuthResourceNone(from: decoder))
+        case "none": try .mcpOauthTokenEndpointAuthResourceNone(McpOauthTokenEndpointAuthResourceNone(from: decoder))
         case "client_secret_basic":
-        return .mcpOauthTokenEndpointAuthResourceClientSecretBasic(try McpOauthTokenEndpointAuthResourceClientSecretBasic(from: decoder))
+            try .mcpOauthTokenEndpointAuthResourceClientSecretBasic(
+                McpOauthTokenEndpointAuthResourceClientSecretBasic(from: decoder)
+            )
         case "client_secret_post":
-        return .mcpOauthTokenEndpointAuthResourceClientSecretPost(try McpOauthTokenEndpointAuthResourceClientSecretPost(from: decoder))
-        default: return nil
+            try .mcpOauthTokenEndpointAuthResourceClientSecretPost(
+                McpOauthTokenEndpointAuthResourceClientSecretPost(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -80,50 +87,78 @@ public struct McpOauthRefreshResource: Codable {
         case tokenEndpointAuth = "token_endpoint_auth"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension McpOauthRefreshResource {
-    public init(from decoder: Decoder) throws {
+public extension McpOauthRefreshResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.tokenEndpoint) else {
-            throw SdkValidationError(field: "token_endpoint", code: "required", message: "Validation failed for 'token_endpoint': value is required")
+            throw SdkValidationError(
+                field: "token_endpoint",
+                code: "required",
+                message: "Validation failed for 'token_endpoint': value is required"
+            )
         }
         guard container.contains(.clientId) else {
-            throw SdkValidationError(field: "client_id", code: "required", message: "Validation failed for 'client_id': value is required")
+            throw SdkValidationError(
+                field: "client_id",
+                code: "required",
+                message: "Validation failed for 'client_id': value is required"
+            )
         }
         guard container.contains(.resource) else {
-            throw SdkValidationError(field: "resource", code: "required", message: "Validation failed for 'resource': value is required")
+            throw SdkValidationError(
+                field: "resource",
+                code: "required",
+                message: "Validation failed for 'resource': value is required"
+            )
         }
         guard container.contains(.scope) else {
-            throw SdkValidationError(field: "scope", code: "required", message: "Validation failed for 'scope': value is required")
+            throw SdkValidationError(
+                field: "scope",
+                code: "required",
+                message: "Validation failed for 'scope': value is required"
+            )
         }
         guard container.contains(.tokenEndpointAuth) else {
-            throw SdkValidationError(field: "token_endpoint_auth", code: "required", message: "Validation failed for 'token_endpoint_auth': value is required")
+            throw SdkValidationError(
+                field: "token_endpoint_auth",
+                code: "required",
+                message: "Validation failed for 'token_endpoint_auth': value is required"
+            )
         }
-        self.tokenEndpoint = try container.sdkDecodeRequired(.tokenEndpoint)
-        self.clientId = try container.sdkDecodeRequired(.clientId)
-        self.resource = try container.sdkDecodeNullable(.resource)
-        self.scope = try container.sdkDecodeNullable(.scope)
-        self.tokenEndpointAuth = try container.sdkDecodeRequired(.tokenEndpointAuth)
-            try validateLength("token_endpoint", self.tokenEndpoint, min: 0, max: nil)
-            try validateLength("client_id", self.clientId, min: 0, max: nil)
-        if let value = self.resource {
+        tokenEndpoint = try container.sdkDecodeRequired(.tokenEndpoint)
+        clientId = try container.sdkDecodeRequired(.clientId)
+        resource = try container.sdkDecodeNullable(.resource)
+        scope = try container.sdkDecodeNullable(.scope)
+        tokenEndpointAuth = try container.sdkDecodeRequired(.tokenEndpointAuth)
+        try validateLength("token_endpoint", tokenEndpoint, min: 0, max: nil)
+        try validateLength("client_id", clientId, min: 0, max: nil)
+        if let value = resource {
             try validateLength("resource", value, min: 0, max: nil)
         }
-        if let value = self.scope {
+        if let value = scope {
             try validateLength("scope", value, min: 0, max: nil)
         }
     }
 }
 
-extension McpOauthRefreshResource {
-    public init(tokenEndpoint: String, clientId: String, resource: String?, scope: String?, tokenEndpointAuth: McpOauthTokenEndpointAuthResource) throws {
+public extension McpOauthRefreshResource {
+    init(
+        tokenEndpoint: String,
+        clientId: String,
+        resource: String?,
+        scope: String?,
+        tokenEndpointAuth: McpOauthTokenEndpointAuthResource
+    ) throws {
         (self.tokenEndpoint, self.clientId) = (tokenEndpoint, clientId)
         (self.resource, self.scope) = (resource, scope)
         self.tokenEndpointAuth = tokenEndpointAuth
-            try validateLength("token_endpoint", self.tokenEndpoint, min: 0, max: nil)
-            try validateLength("client_id", self.clientId, min: 0, max: nil)
+        try validateLength("token_endpoint", self.tokenEndpoint, min: 0, max: nil)
+        try validateLength("client_id", self.clientId, min: 0, max: nil)
         if let value = self.resource {
             try validateLength("resource", value, min: 0, max: nil)
         }
@@ -142,24 +177,38 @@ public struct McpOauthTokenEndpointAuthResourceClientSecretPost: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension McpOauthTokenEndpointAuthResourceClientSecretPost {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, McpOauthTokenEndpointAuthResourceClientSecretPostType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension McpOauthTokenEndpointAuthResourceClientSecretPost {
-    public init(type: McpOauthTokenEndpointAuthResourceClientSecretPostType) throws {
+public extension McpOauthTokenEndpointAuthResourceClientSecretPost {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            McpOauthTokenEndpointAuthResourceClientSecretPostType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension McpOauthTokenEndpointAuthResourceClientSecretPost {
+    init(type: McpOauthTokenEndpointAuthResourceClientSecretPostType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, McpOauthTokenEndpointAuthResourceClientSecretPostType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            McpOauthTokenEndpointAuthResourceClientSecretPostType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -172,24 +221,38 @@ public struct McpOauthTokenEndpointAuthResourceClientSecretBasic: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension McpOauthTokenEndpointAuthResourceClientSecretBasic {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, McpOauthTokenEndpointAuthResourceClientSecretBasicType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension McpOauthTokenEndpointAuthResourceClientSecretBasic {
-    public init(type: McpOauthTokenEndpointAuthResourceClientSecretBasicType) throws {
+public extension McpOauthTokenEndpointAuthResourceClientSecretBasic {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            McpOauthTokenEndpointAuthResourceClientSecretBasicType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension McpOauthTokenEndpointAuthResourceClientSecretBasic {
+    init(type: McpOauthTokenEndpointAuthResourceClientSecretBasicType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, McpOauthTokenEndpointAuthResourceClientSecretBasicType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            McpOauthTokenEndpointAuthResourceClientSecretBasicType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -202,24 +265,30 @@ public struct McpOauthTokenEndpointAuthResourceNone: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension McpOauthTokenEndpointAuthResourceNone {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, McpOauthTokenEndpointAuthResourceNoneType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension McpOauthTokenEndpointAuthResourceNone {
-    public init(type: McpOauthTokenEndpointAuthResourceNoneType) throws {
+public extension McpOauthTokenEndpointAuthResourceNone {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, McpOauthTokenEndpointAuthResourceNoneType.allCases.map(\.rawValue))
+    }
+}
+
+public extension McpOauthTokenEndpointAuthResourceNone {
+    init(type: McpOauthTokenEndpointAuthResourceNoneType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, McpOauthTokenEndpointAuthResourceNoneType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, McpOauthTokenEndpointAuthResourceNoneType.allCases.map(\.rawValue))
     }
 }
 

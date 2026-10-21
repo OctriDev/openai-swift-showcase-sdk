@@ -3,21 +3,24 @@
 
 import Foundation
 
-// SharedTool domain models
+/// SharedTool domain models
 /// Controls which (if any) tool is called by the model. `none` means the model will not call any tool and
 /// instead generates a message. `auto` means the model can pick between generating a message or calling one or
 /// more tools. `required` means the model must call one or more tools.
 public struct ToolChoiceOptions: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let none = ToolChoiceOptions(rawValue: "none")
     public static let auto = ToolChoiceOptions(rawValue: "auto")
     public static let required = ToolChoiceOptions(rawValue: "required")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

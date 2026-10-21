@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Usage domain models
+/// Usage domain models
 public indirect enum UsageTimeBucketResultsItem {
     case usageCompletionsResult(UsageCompletionsResult)
     case usageEmbeddingsResult(UsageEmbeddingsResult)
@@ -21,7 +21,6 @@ public indirect enum UsageTimeBucketResultsItem {
 }
 
 extension UsageTimeBucketResultsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "object"
     }
@@ -29,12 +28,16 @@ extension UsageTimeBucketResultsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -45,20 +48,28 @@ extension UsageTimeBucketResultsItem: Codable {
 extension UsageTimeBucketResultsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "organization.usage.completions.result": return .usageCompletionsResult(try UsageCompletionsResult(from: decoder))
-        case "organization.usage.embeddings.result": return .usageEmbeddingsResult(try UsageEmbeddingsResult(from: decoder))
-        case "organization.usage.moderations.result": return .usageModerationsResult(try UsageModerationsResult(from: decoder))
-        case "organization.usage.images.result": return .usageImagesResult(try UsageImagesResult(from: decoder))
-        case "organization.usage.audio_speeches.result": return .usageAudioSpeechesResult(try UsageAudioSpeechesResult(from: decoder))
+        case "organization.usage.completions.result": try .usageCompletionsResult(UsageCompletionsResult(from: decoder))
+        case "organization.usage.embeddings.result": try .usageEmbeddingsResult(UsageEmbeddingsResult(from: decoder))
+        case "organization.usage.moderations.result": try .usageModerationsResult(UsageModerationsResult(from: decoder))
+        case "organization.usage.images.result": try .usageImagesResult(UsageImagesResult(from: decoder))
+        case "organization.usage.audio_speeches.result": try .usageAudioSpeechesResult(
+                UsageAudioSpeechesResult(from: decoder)
+            )
         case "organization.usage.audio_transcriptions.result":
-        return .usageAudioTranscriptionsResult(try UsageAudioTranscriptionsResult(from: decoder))
-        case "organization.usage.vector_stores.result": return .usageVectorStoresResult(try UsageVectorStoresResult(from: decoder))
+            try .usageAudioTranscriptionsResult(UsageAudioTranscriptionsResult(from: decoder))
+        case "organization.usage.vector_stores.result": try .usageVectorStoresResult(
+                UsageVectorStoresResult(from: decoder)
+            )
         case "organization.usage.code_interpreter_sessions.result":
-        return .usageCodeInterpreterSessionsResult(try UsageCodeInterpreterSessionsResult(from: decoder))
-        case "organization.usage.file_searches.result": return .usageFileSearchCallsResult(try UsageFileSearchCallsResult(from: decoder))
-        case "organization.usage.web_searches.result": return .usageWebSearchCallsResult(try UsageWebSearchCallsResult(from: decoder))
-        case "organization.costs.result": return .costsResult(try CostsResult(from: decoder))
-        default: return nil
+            try .usageCodeInterpreterSessionsResult(UsageCodeInterpreterSessionsResult(from: decoder))
+        case "organization.usage.file_searches.result": try .usageFileSearchCallsResult(
+                UsageFileSearchCallsResult(from: decoder)
+            )
+        case "organization.usage.web_searches.result": try .usageWebSearchCallsResult(
+                UsageWebSearchCallsResult(from: decoder)
+            )
+        case "organization.costs.result": try .costsResult(CostsResult(from: decoder))
+        default: nil
         }
     }
 }
@@ -110,39 +121,61 @@ public struct UsageAudioTranscriptionsResult: Codable {
         case model
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UsageAudioTranscriptionsResult {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.seconds) else {
-            throw SdkValidationError(field: "seconds", code: "required", message: "Validation failed for 'seconds': value is required")
-        }
-        guard container.contains(.numModelRequests) else {
-            throw SdkValidationError(field: "num_model_requests", code: "required", message: "Validation failed for 'num_model_requests': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.seconds = try container.sdkDecodeRequired(.seconds)
-        self.numModelRequests = try container.sdkDecodeRequired(.numModelRequests)
-        self.projectId = try container.sdkDecodeIfPresent(.projectId)
-        self.userId = try container.sdkDecodeIfPresent(.userId)
-        self.apiKeyId = try container.sdkDecodeIfPresent(.apiKeyId)
-        self.model = try container.sdkDecodeIfPresent(.model)
-            try sdkValidateRawEnum("object", self.object, UsageAudioTranscriptionsResultObject.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UsageAudioTranscriptionsResult {
-    public init(object: UsageAudioTranscriptionsResultObject, seconds: Int, numModelRequests: Int, projectId: String? = nil, userId: String? = nil, apiKeyId: String? = nil, model: String? = nil) throws {
+public extension UsageAudioTranscriptionsResult {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.seconds) else {
+            throw SdkValidationError(
+                field: "seconds",
+                code: "required",
+                message: "Validation failed for 'seconds': value is required"
+            )
+        }
+        guard container.contains(.numModelRequests) else {
+            throw SdkValidationError(
+                field: "num_model_requests",
+                code: "required",
+                message: "Validation failed for 'num_model_requests': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        seconds = try container.sdkDecodeRequired(.seconds)
+        numModelRequests = try container.sdkDecodeRequired(.numModelRequests)
+        projectId = try container.sdkDecodeIfPresent(.projectId)
+        userId = try container.sdkDecodeIfPresent(.userId)
+        apiKeyId = try container.sdkDecodeIfPresent(.apiKeyId)
+        model = try container.sdkDecodeIfPresent(.model)
+        try sdkValidateRawEnum("object", object, UsageAudioTranscriptionsResultObject.allCases.map(\.rawValue))
+    }
+}
+
+public extension UsageAudioTranscriptionsResult {
+    init(
+        object: UsageAudioTranscriptionsResultObject,
+        seconds: Int,
+        numModelRequests: Int,
+        projectId: String? = nil,
+        userId: String? = nil,
+        apiKeyId: String? = nil,
+        model: String? = nil
+    ) throws {
         (self.object, self.seconds) = (object, seconds)
         (self.numModelRequests, self.projectId) = (numModelRequests, projectId)
         (self.userId, self.apiKeyId) = (userId, apiKeyId)
         self.model = model
-            try sdkValidateRawEnum("object", self.object, UsageAudioTranscriptionsResultObject.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("object", self.object, UsageAudioTranscriptionsResultObject.allCases.map(\.rawValue))
     }
 }
 
@@ -159,20 +192,20 @@ public struct CostsResultAmount: Codable {
     }
 
     init() {
-        (self.value, self.currency) = (nil, nil)
+        (value, currency) = (nil, nil)
     }
 }
 
-extension CostsResultAmount {
-    public init(from decoder: Decoder) throws {
+public extension CostsResultAmount {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.value = try container.sdkDecodeIfPresent(.value)
-        self.currency = try container.sdkDecodeIfPresent(.currency)
+        value = try container.sdkDecodeIfPresent(.value)
+        currency = try container.sdkDecodeIfPresent(.currency)
     }
 }
 
-extension CostsResultAmount {
-    public init(value: Double? = nil, currency: String? = nil) {
+public extension CostsResultAmount {
+    init(value: Double? = nil, currency: String? = nil) {
         self.init()
         (self.value, self.currency) = (value, currency)
     }
@@ -205,39 +238,61 @@ public struct UsageModerationsResult: Codable {
         case model
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UsageModerationsResult {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.inputTokens) else {
-            throw SdkValidationError(field: "input_tokens", code: "required", message: "Validation failed for 'input_tokens': value is required")
-        }
-        guard container.contains(.numModelRequests) else {
-            throw SdkValidationError(field: "num_model_requests", code: "required", message: "Validation failed for 'num_model_requests': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.inputTokens = try container.sdkDecodeRequired(.inputTokens)
-        self.numModelRequests = try container.sdkDecodeRequired(.numModelRequests)
-        self.projectId = try container.sdkDecodeIfPresent(.projectId)
-        self.userId = try container.sdkDecodeIfPresent(.userId)
-        self.apiKeyId = try container.sdkDecodeIfPresent(.apiKeyId)
-        self.model = try container.sdkDecodeIfPresent(.model)
-            try sdkValidateRawEnum("object", self.object, UsageModerationsResultObject.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UsageModerationsResult {
-    public init(object: UsageModerationsResultObject, inputTokens: Int, numModelRequests: Int, projectId: String? = nil, userId: String? = nil, apiKeyId: String? = nil, model: String? = nil) throws {
+public extension UsageModerationsResult {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.inputTokens) else {
+            throw SdkValidationError(
+                field: "input_tokens",
+                code: "required",
+                message: "Validation failed for 'input_tokens': value is required"
+            )
+        }
+        guard container.contains(.numModelRequests) else {
+            throw SdkValidationError(
+                field: "num_model_requests",
+                code: "required",
+                message: "Validation failed for 'num_model_requests': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        inputTokens = try container.sdkDecodeRequired(.inputTokens)
+        numModelRequests = try container.sdkDecodeRequired(.numModelRequests)
+        projectId = try container.sdkDecodeIfPresent(.projectId)
+        userId = try container.sdkDecodeIfPresent(.userId)
+        apiKeyId = try container.sdkDecodeIfPresent(.apiKeyId)
+        model = try container.sdkDecodeIfPresent(.model)
+        try sdkValidateRawEnum("object", object, UsageModerationsResultObject.allCases.map(\.rawValue))
+    }
+}
+
+public extension UsageModerationsResult {
+    init(
+        object: UsageModerationsResultObject,
+        inputTokens: Int,
+        numModelRequests: Int,
+        projectId: String? = nil,
+        userId: String? = nil,
+        apiKeyId: String? = nil,
+        model: String? = nil
+    ) throws {
         (self.object, self.inputTokens) = (object, inputTokens)
         (self.numModelRequests, self.projectId) = (numModelRequests, projectId)
         (self.userId, self.apiKeyId) = (userId, apiKeyId)
         self.model = model
-            try sdkValidateRawEnum("object", self.object, UsageModerationsResultObject.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("object", self.object, UsageModerationsResultObject.allCases.map(\.rawValue))
     }
 }
 
@@ -256,30 +311,40 @@ public struct UsageCodeInterpreterSessionsResult: Codable {
         case projectId = "project_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UsageCodeInterpreterSessionsResult {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.numSessions) else {
-            throw SdkValidationError(field: "num_sessions", code: "required", message: "Validation failed for 'num_sessions': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.numSessions = try container.sdkDecodeRequired(.numSessions)
-        self.projectId = try container.sdkDecodeIfPresent(.projectId)
-            try sdkValidateRawEnum("object", self.object, UsageCodeInterpreterSessionsResultObject.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UsageCodeInterpreterSessionsResult {
-    public init(object: UsageCodeInterpreterSessionsResultObject, numSessions: Int, projectId: String? = nil) throws {
+public extension UsageCodeInterpreterSessionsResult {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.numSessions) else {
+            throw SdkValidationError(
+                field: "num_sessions",
+                code: "required",
+                message: "Validation failed for 'num_sessions': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        numSessions = try container.sdkDecodeRequired(.numSessions)
+        projectId = try container.sdkDecodeIfPresent(.projectId)
+        try sdkValidateRawEnum("object", object, UsageCodeInterpreterSessionsResultObject.allCases.map(\.rawValue))
+    }
+}
+
+public extension UsageCodeInterpreterSessionsResult {
+    init(object: UsageCodeInterpreterSessionsResultObject, numSessions: Int, projectId: String? = nil) throws {
         (self.object, self.numSessions) = (object, numSessions)
         self.projectId = projectId
-            try sdkValidateRawEnum("object", self.object, UsageCodeInterpreterSessionsResultObject.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("object", self.object, UsageCodeInterpreterSessionsResultObject.allCases.map(\.rawValue))
     }
 }
 
@@ -316,42 +381,66 @@ public struct UsageImagesResult: Codable {
         case model
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UsageImagesResult {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.images) else {
-            throw SdkValidationError(field: "images", code: "required", message: "Validation failed for 'images': value is required")
-        }
-        guard container.contains(.numModelRequests) else {
-            throw SdkValidationError(field: "num_model_requests", code: "required", message: "Validation failed for 'num_model_requests': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.images = try container.sdkDecodeRequired(.images)
-        self.numModelRequests = try container.sdkDecodeRequired(.numModelRequests)
-        self.source = try container.sdkDecodeIfPresent(.source)
-        self.size = try container.sdkDecodeIfPresent(.size)
-        self.projectId = try container.sdkDecodeIfPresent(.projectId)
-        self.userId = try container.sdkDecodeIfPresent(.userId)
-        self.apiKeyId = try container.sdkDecodeIfPresent(.apiKeyId)
-        self.model = try container.sdkDecodeIfPresent(.model)
-            try sdkValidateRawEnum("object", self.object, UsageImagesResultObject.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UsageImagesResult {
-    public init(object: UsageImagesResultObject, images: Int, numModelRequests: Int, source: String? = nil, size: String? = nil, projectId: String? = nil, userId: String? = nil, apiKeyId: String? = nil, model: String? = nil) throws {
+public extension UsageImagesResult {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.images) else {
+            throw SdkValidationError(
+                field: "images",
+                code: "required",
+                message: "Validation failed for 'images': value is required"
+            )
+        }
+        guard container.contains(.numModelRequests) else {
+            throw SdkValidationError(
+                field: "num_model_requests",
+                code: "required",
+                message: "Validation failed for 'num_model_requests': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        images = try container.sdkDecodeRequired(.images)
+        numModelRequests = try container.sdkDecodeRequired(.numModelRequests)
+        source = try container.sdkDecodeIfPresent(.source)
+        size = try container.sdkDecodeIfPresent(.size)
+        projectId = try container.sdkDecodeIfPresent(.projectId)
+        userId = try container.sdkDecodeIfPresent(.userId)
+        apiKeyId = try container.sdkDecodeIfPresent(.apiKeyId)
+        model = try container.sdkDecodeIfPresent(.model)
+        try sdkValidateRawEnum("object", object, UsageImagesResultObject.allCases.map(\.rawValue))
+    }
+}
+
+public extension UsageImagesResult {
+    init(
+        object: UsageImagesResultObject,
+        images: Int,
+        numModelRequests: Int,
+        source: String? = nil,
+        size: String? = nil,
+        projectId: String? = nil,
+        userId: String? = nil,
+        apiKeyId: String? = nil,
+        model: String? = nil
+    ) throws {
         (self.object, self.images) = (object, images)
         (self.numModelRequests, self.source) = (numModelRequests, source)
         (self.size, self.projectId) = (size, projectId)
         (self.userId, self.apiKeyId) = (userId, apiKeyId)
         self.model = model
-            try sdkValidateRawEnum("object", self.object, UsageImagesResultObject.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("object", self.object, UsageImagesResultObject.allCases.map(\.rawValue))
     }
 }
 
@@ -390,36 +479,52 @@ public struct CostsResult: Codable {
         case quantityUnit = "quantity_unit"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CostsResult {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.apiSource = try container.sdkDecodeIfPresent(.apiSource)
-        self.amount = try container.sdkDecodeIfPresent(.amount)
-        self.lineItem = try container.sdkDecodeIfPresent(.lineItem)
-        self.projectId = try container.sdkDecodeIfPresent(.projectId)
-        self.userId = try container.sdkDecodeIfPresent(.userId)
-        self.apiKeyId = try container.sdkDecodeIfPresent(.apiKeyId)
-        self.quantity = try container.sdkDecodeIfPresent(.quantity)
-        self.quantityUnit = try container.sdkDecodeIfPresent(.quantityUnit)
-            try sdkValidateRawEnum("object", self.object, CostsResultObject.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CostsResult {
-    public init(object: CostsResultObject, apiSource: CostsResultApiSourceVariant0? = nil, amount: CostsResultAmount? = nil, lineItem: String? = nil, projectId: String? = nil, userId: String? = nil, apiKeyId: String? = nil, quantity: Double? = nil, quantityUnit: String? = nil) throws {
+public extension CostsResult {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        apiSource = try container.sdkDecodeIfPresent(.apiSource)
+        amount = try container.sdkDecodeIfPresent(.amount)
+        lineItem = try container.sdkDecodeIfPresent(.lineItem)
+        projectId = try container.sdkDecodeIfPresent(.projectId)
+        userId = try container.sdkDecodeIfPresent(.userId)
+        apiKeyId = try container.sdkDecodeIfPresent(.apiKeyId)
+        quantity = try container.sdkDecodeIfPresent(.quantity)
+        quantityUnit = try container.sdkDecodeIfPresent(.quantityUnit)
+        try sdkValidateRawEnum("object", object, CostsResultObject.allCases.map(\.rawValue))
+    }
+}
+
+public extension CostsResult {
+    init(
+        object: CostsResultObject,
+        apiSource: CostsResultApiSourceVariant0? = nil,
+        amount: CostsResultAmount? = nil,
+        lineItem: String? = nil,
+        projectId: String? = nil,
+        userId: String? = nil,
+        apiKeyId: String? = nil,
+        quantity: Double? = nil,
+        quantityUnit: String? = nil
+    ) throws {
         (self.object, self.apiSource) = (object, apiSource)
         (self.amount, self.lineItem) = (amount, lineItem)
         (self.projectId, self.userId) = (projectId, userId)
         (self.apiKeyId, self.quantity) = (apiKeyId, quantity)
         self.quantityUnit = quantityUnit
-            try sdkValidateRawEnum("object", self.object, CostsResultObject.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("object", self.object, CostsResultObject.allCases.map(\.rawValue))
     }
 }
 
@@ -441,33 +546,51 @@ public struct UsageTimeBucket: Codable {
         case results
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UsageTimeBucket {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.startTime) else {
-            throw SdkValidationError(field: "start_time", code: "required", message: "Validation failed for 'start_time': value is required")
-        }
-        guard container.contains(.endTime) else {
-            throw SdkValidationError(field: "end_time", code: "required", message: "Validation failed for 'end_time': value is required")
-        }
-        guard container.contains(.results) else {
-            throw SdkValidationError(field: "results", code: "required", message: "Validation failed for 'results': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.startTime = try container.sdkDecodeRequired(.startTime)
-        self.endTime = try container.sdkDecodeRequired(.endTime)
-        self.results = try container.sdkDecodeRequired(.results)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UsageTimeBucket {
-    public init(object: UsageTimeBucketObject, startTime: Int, endTime: Int, results: [UsageTimeBucketResultsItem]) {
+public extension UsageTimeBucket {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.startTime) else {
+            throw SdkValidationError(
+                field: "start_time",
+                code: "required",
+                message: "Validation failed for 'start_time': value is required"
+            )
+        }
+        guard container.contains(.endTime) else {
+            throw SdkValidationError(
+                field: "end_time",
+                code: "required",
+                message: "Validation failed for 'end_time': value is required"
+            )
+        }
+        guard container.contains(.results) else {
+            throw SdkValidationError(
+                field: "results",
+                code: "required",
+                message: "Validation failed for 'results': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        startTime = try container.sdkDecodeRequired(.startTime)
+        endTime = try container.sdkDecodeRequired(.endTime)
+        results = try container.sdkDecodeRequired(.results)
+    }
+}
+
+public extension UsageTimeBucket {
+    init(object: UsageTimeBucketObject, startTime: Int, endTime: Int, results: [UsageTimeBucketResultsItem]) {
         (self.object, self.startTime) = (object, startTime)
         (self.endTime, self.results) = (endTime, results)
     }

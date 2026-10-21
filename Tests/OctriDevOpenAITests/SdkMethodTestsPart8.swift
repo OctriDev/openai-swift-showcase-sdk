@@ -17,10 +17,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.roles.create(
-            roleName: decoded("\"Example Name\""),
-            permissions: decoded("[\"permissions\"]"),
-            description: decoded("\"example text\"")
-        )
+                roleName: decoded("\"Example Name\""),
+                permissions: decoded("[\"permissions\"]"),
+                description: decoded("\"example text\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -68,11 +68,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.roles.createProjectRole(
-            projectId: decoded("\"project-1\""),
-            roleName: decoded("\"Example Name\""),
-            permissions: decoded("[\"permissions\"]"),
-            description: decoded("\"example text\"")
-        )
+                projectId: decoded("\"project-1\""),
+                roleName: decoded("\"Example Name\""),
+                permissions: decoded("[\"permissions\"]"),
+                description: decoded("\"example text\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -93,7 +93,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try AssistantsMethods.CreateRunOptions(threadId: decoded("\"thread-1\""), assistantId: decoded("\"assistant-1\""))
+        var options = try AssistantsMethods.CreateRunOptions(
+            threadId: decoded("\"thread-1\""),
+            assistantId: decoded("\"assistant-1\"")
+        )
         options.include = try decoded("[\"step_details.tool_calls[*].file_search.results[*].content\"]")
         options.model = try decoded("\"gpt-4.1\"")
         options.reasoningEffort = try decoded("\"medium\"")
@@ -130,7 +133,11 @@ extension SdkMethodTests {
         }
         _ = client
         let stream = try await client.assistants.createRunStream(
-            options: AssistantsMethods.CreateRunStreamOptions(threadId: decoded("\"thread-1\""), assistantId: decoded("\"assistant-1\""), stream: decoded("false"))
+            options: AssistantsMethods.CreateRunStreamOptions(
+                threadId: decoded("\"thread-1\""),
+                assistantId: decoded("\"assistant-1\""),
+                stream: decoded("false")
+            )
         )
         var events = stream.makeAsyncIterator()
         guard let actual = try await events.next() else {
@@ -176,8 +183,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.create(
-            files: decoded("[\"ZXhhbXBsZQ==\"]")
-        )
+                files: decoded("[\"ZXhhbXBsZQ==\"]")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -243,10 +250,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.skills.createVersion(
-            skillId: decoded("\"skill_123\""),
-            files: decoded("[\"ZXhhbXBsZQ==\"]"),
-            default: decoded("false")
-        )
+                skillId: decoded("\"skill_123\""),
+                files: decoded("[\"ZXhhbXBsZQ==\"]"),
+                default: decoded("false")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -311,14 +318,14 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.audio.createSpeech(
-            model: decoded("\"model\""),
-            input: decoded("\"input\""),
-            voice: decoded("\"ash\""),
-            instructions: decoded("\"instructions\""),
-            responseFormat: decoded("\"mp3\""),
-            speed: decoded("1"),
-            streamFormat: decoded("\"audio\"")
-        )
+                model: decoded("\"model\""),
+                input: decoded("\"input\""),
+                voice: decoded("\"ash\""),
+                instructions: decoded("\"instructions\""),
+                responseFormat: decoded("\"mp3\""),
+                speed: decoded("1"),
+                streamFormat: decoded("\"audio\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -423,7 +430,10 @@ extension SdkMethodTests {
         }
         _ = client
         let stream = try await client.assistants.createThreadAndRunStream(
-            options: AssistantsMethods.CreateThreadAndRunStreamOptions(assistantId: decoded("\"assistant-1\""), stream: decoded("false"))
+            options: AssistantsMethods.CreateThreadAndRunStreamOptions(
+                assistantId: decoded("\"assistant-1\""),
+                stream: decoded("false")
+            )
         )
         var events = stream.makeAsyncIterator()
         guard let actual = try await events.next() else {
@@ -445,7 +455,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try AudioMethods.CreateTranscriptionOptions(file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"), model: decoded("\"gpt-4o-transcribe\""))
+        var options = try AudioMethods.CreateTranscriptionOptions(
+            file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+            model: decoded("\"gpt-4o-transcribe\"")
+        )
         options.language = try decoded("\"language\"")
         options.languages = try decoded("[\"languages\"]")
         options.keywords = try decoded("[\"keywords\"]")
@@ -476,7 +489,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try AudioMethods.CreateTranscriptionOptions(file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"), model: decoded("\"gpt-4o-transcribe\""))
+        var options = try AudioMethods.CreateTranscriptionOptions(
+            file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+            model: decoded("\"gpt-4o-transcribe\"")
+        )
         options.language = try decoded("\"language\"")
         options.languages = try decoded("[\"languages\"]")
         options.keywords = try decoded("[\"keywords\"]")
@@ -495,8 +511,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.audio.createTranscription(
-            options: options
-        )
+                options: options
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -518,7 +534,11 @@ extension SdkMethodTests {
         }
         _ = client
         let stream = try await client.audio.createTranscriptionStream(
-            options: AudioMethods.CreateTranscriptionStreamOptions(file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"), model: decoded("\"gpt-4o-transcribe\""), stream: decoded("false"))
+            options: AudioMethods.CreateTranscriptionStreamOptions(
+                file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+                model: decoded("\"gpt-4o-transcribe\""),
+                stream: decoded("false")
+            )
         )
         var events = stream.makeAsyncIterator()
         guard let actual = try await events.next() else {

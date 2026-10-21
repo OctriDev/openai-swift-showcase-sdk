@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension UsageMethods {
-    public struct UsageModerationsOptions: Codable {
+public extension UsageMethods {
+    struct UsageModerationsOptions: Codable {
         public var startTime: Int
         public var endTime: Int?
         public var bucketWidth: UsageModerationsParameter?
@@ -43,19 +43,32 @@ extension UsageMethods {
     ///   `bucket_width=1m`: default: 60, max: 1440
     /// - page: A cursor for use in pagination. Corresponding to the `next_page`
     ///   field from the previous response.
-    public static func usageModerations(config: ClientConfig, options: UsageModerationsOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
-        return try (await sdkRequest("GET", "/organization/usage/moderations", config: config, query: [
-            SdkQueryParameter("start_time", value: options.startTime),
-            SdkQueryParameter("end_time", value: options.endTime),
-            SdkQueryParameter("bucket_width", value: options.bucketWidth),
-            SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
-            SdkQueryParameter("user_ids", values: options.userIds, style: "form", explode: true),
-            SdkQueryParameter("api_key_ids", values: options.apiKeyIds, style: "form", explode: true),
-            SdkQueryParameter("models", values: options.models, style: "form", explode: true),
-            SdkQueryParameter("group_by", values: options.groupBy, style: "form", explode: true),
-            SdkQueryParameter("limit", value: options.limit),
-            SdkQueryParameter("page", value: options.page),
-        ], decoder: .json, operationId: "usageModerations", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self])).data
+    static func usageModerations(
+        config: ClientConfig,
+        options: UsageModerationsOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> UsageResponse {
+        try await (sdkRequest(
+            "GET",
+            "/organization/usage/moderations",
+            config: config,
+            query: [
+                SdkQueryParameter("start_time", value: options.startTime),
+                SdkQueryParameter("end_time", value: options.endTime),
+                SdkQueryParameter("bucket_width", value: options.bucketWidth),
+                SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
+                SdkQueryParameter("user_ids", values: options.userIds, style: "form", explode: true),
+                SdkQueryParameter("api_key_ids", values: options.apiKeyIds, style: "form", explode: true),
+                SdkQueryParameter("models", values: options.models, style: "form", explode: true),
+                SdkQueryParameter("group_by", values: options.groupBy, style: "form", explode: true),
+                SdkQueryParameter("limit", value: options.limit),
+                SdkQueryParameter("page", value: options.page),
+            ],
+            decoder: .json,
+            operationId: "usageModerations",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
     /// Get moderations usage details for the organization.
@@ -77,21 +90,40 @@ extension UsageMethods {
     ///   `bucket_width=1m`: default: 60, max: 1440
     /// - page: A cursor for use in pagination. Corresponding to the `next_page`
     ///   field from the previous response.
-    public static func usageModerationsPaginated(config: ClientConfig, options: UsageModerationsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+    static func usageModerationsPaginated(
+        config: ClientConfig,
+        options: UsageModerationsOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
         let page = options.page
-        return AsyncThrowingStream<UsageTimeBucket, Swift.Error> { (continuation: AsyncThrowingStream<UsageTimeBucket, Swift.Error>.Continuation) in
+        return AsyncThrowingStream<UsageTimeBucket, Swift.Error> { (continuation: AsyncThrowingStream<
+            UsageTimeBucket,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = page
                     while true {
                         var nextOptions = options
                         nextOptions.page = pageCursor
-                        let pageResponse = try await usageModerations(config: config, options: nextOptions, requestOptions: requestOptions)
+                        let pageResponse = try await usageModerations(
+                            config: config,
+                            options: nextOptions,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.nextPage else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.nextPage else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -104,28 +136,49 @@ extension UsageMethods {
         }
     }
 
-    public struct UsageModerationsPage {
+    struct UsageModerationsPage {
         public let data: UsageResponse
         public let items: [UsageTimeBucket]
         public let hasMore: Bool
     }
 
-    public static func usageModerationsPages(config: ClientConfig, options: UsageModerationsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageModerationsPage, Swift.Error> {
+    static func usageModerationsPages(
+        config: ClientConfig,
+        options: UsageModerationsOptions,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<UsageModerationsPage, Swift.Error> {
         let page = options.page
-        return AsyncThrowingStream<UsageModerationsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<UsageModerationsPage, Swift.Error>.Continuation) in
+        return AsyncThrowingStream<UsageModerationsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            UsageModerationsPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = page
                     while true {
                         var nextOptions = options
                         nextOptions.page = pageCursor
-                        let pageResponse = try await usageModerations(config: config, options: nextOptions, requestOptions: requestOptions)
+                        let pageResponse = try await usageModerations(
+                            config: config,
+                            options: nextOptions,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.nextPage != nil
-                        pageContinuation.yield(UsageModerationsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.nextPage else { break }
+                        pageContinuation.yield(UsageModerationsPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.nextPage else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

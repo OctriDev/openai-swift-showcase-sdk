@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SpendAlerts domain models
+/// SpendAlerts domain models
 /// Represents a spend alert configured at the project level.
 public struct ProjectSpendAlert: Codable {
     /// The identifier, which can be referenced in API endpoints.
@@ -28,41 +28,74 @@ public struct ProjectSpendAlert: Codable {
         case notificationChannel = "notification_channel"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectSpendAlert {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
-        }
-        guard container.contains(.currency) else {
-            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
-        }
-        guard container.contains(.interval) else {
-            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
-        }
-        guard container.contains(.notificationChannel) else {
-            throw SdkValidationError(field: "notification_channel", code: "required", message: "Validation failed for 'notification_channel': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        self.currency = try container.sdkDecodeRequired(.currency)
-        self.interval = try container.sdkDecodeRequired(.interval)
-        self.notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectSpendAlert {
-    public init(id: String, object: ProjectSpendAlertObject, thresholdAmount: Int, currency: ProjectSpendAlertCurrency, interval: ProjectSpendAlertInterval, notificationChannel: SpendAlertNotificationChannel) {
+public extension ProjectSpendAlert {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.thresholdAmount) else {
+            throw SdkValidationError(
+                field: "threshold_amount",
+                code: "required",
+                message: "Validation failed for 'threshold_amount': value is required"
+            )
+        }
+        guard container.contains(.currency) else {
+            throw SdkValidationError(
+                field: "currency",
+                code: "required",
+                message: "Validation failed for 'currency': value is required"
+            )
+        }
+        guard container.contains(.interval) else {
+            throw SdkValidationError(
+                field: "interval",
+                code: "required",
+                message: "Validation failed for 'interval': value is required"
+            )
+        }
+        guard container.contains(.notificationChannel) else {
+            throw SdkValidationError(
+                field: "notification_channel",
+                code: "required",
+                message: "Validation failed for 'notification_channel': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        currency = try container.sdkDecodeRequired(.currency)
+        interval = try container.sdkDecodeRequired(.interval)
+        notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
+    }
+}
+
+public extension ProjectSpendAlert {
+    init(
+        id: String,
+        object: ProjectSpendAlertObject,
+        thresholdAmount: Int,
+        currency: ProjectSpendAlertCurrency,
+        interval: ProjectSpendAlertInterval,
+        notificationChannel: SpendAlertNotificationChannel
+    ) {
         (self.id, self.object) = (id, object)
         (self.thresholdAmount, self.currency) = (thresholdAmount, currency)
         (self.interval, self.notificationChannel) = (interval, notificationChannel)
@@ -93,41 +126,74 @@ public struct OrganizationSpendAlert: Codable {
         case notificationChannel = "notification_channel"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OrganizationSpendAlert {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
-        }
-        guard container.contains(.currency) else {
-            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
-        }
-        guard container.contains(.interval) else {
-            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
-        }
-        guard container.contains(.notificationChannel) else {
-            throw SdkValidationError(field: "notification_channel", code: "required", message: "Validation failed for 'notification_channel': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        self.currency = try container.sdkDecodeRequired(.currency)
-        self.interval = try container.sdkDecodeRequired(.interval)
-        self.notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OrganizationSpendAlert {
-    public init(id: String, object: OrganizationSpendAlertObject, thresholdAmount: Int, currency: OrganizationSpendAlertCurrency, interval: OrganizationSpendAlertInterval, notificationChannel: SpendAlertNotificationChannel) {
+public extension OrganizationSpendAlert {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.thresholdAmount) else {
+            throw SdkValidationError(
+                field: "threshold_amount",
+                code: "required",
+                message: "Validation failed for 'threshold_amount': value is required"
+            )
+        }
+        guard container.contains(.currency) else {
+            throw SdkValidationError(
+                field: "currency",
+                code: "required",
+                message: "Validation failed for 'currency': value is required"
+            )
+        }
+        guard container.contains(.interval) else {
+            throw SdkValidationError(
+                field: "interval",
+                code: "required",
+                message: "Validation failed for 'interval': value is required"
+            )
+        }
+        guard container.contains(.notificationChannel) else {
+            throw SdkValidationError(
+                field: "notification_channel",
+                code: "required",
+                message: "Validation failed for 'notification_channel': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        currency = try container.sdkDecodeRequired(.currency)
+        interval = try container.sdkDecodeRequired(.interval)
+        notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
+    }
+}
+
+public extension OrganizationSpendAlert {
+    init(
+        id: String,
+        object: OrganizationSpendAlertObject,
+        thresholdAmount: Int,
+        currency: OrganizationSpendAlertCurrency,
+        interval: OrganizationSpendAlertInterval,
+        notificationChannel: SpendAlertNotificationChannel
+    ) {
         (self.id, self.object) = (id, object)
         (self.thresholdAmount, self.currency) = (thresholdAmount, currency)
         (self.interval, self.notificationChannel) = (interval, notificationChannel)
@@ -149,26 +215,36 @@ public struct SpendAlertNotificationChannel: Codable {
         case subjectPrefix = "subject_prefix"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SpendAlertNotificationChannel {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.recipients) else {
-            throw SdkValidationError(field: "recipients", code: "required", message: "Validation failed for 'recipients': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.recipients = try container.sdkDecodeRequired(.recipients)
-        self.subjectPrefix = try container.sdkDecodeIfPresent(.subjectPrefix)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SpendAlertNotificationChannel {
-    public init(type: SpendAlertNotificationChannelType, recipients: [String], subjectPrefix: String? = nil) {
+public extension SpendAlertNotificationChannel {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.recipients) else {
+            throw SdkValidationError(
+                field: "recipients",
+                code: "required",
+                message: "Validation failed for 'recipients': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        recipients = try container.sdkDecodeRequired(.recipients)
+        subjectPrefix = try container.sdkDecodeIfPresent(.subjectPrefix)
+    }
+}
+
+public extension SpendAlertNotificationChannel {
+    init(type: SpendAlertNotificationChannelType, recipients: [String], subjectPrefix: String? = nil) {
         (self.type, self.recipients) = (type, recipients)
         self.subjectPrefix = subjectPrefix
     }
@@ -192,37 +268,76 @@ public struct CreateSpendAlertBody: Codable {
         case notificationChannel = "notification_channel"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateSpendAlertBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
-        }
-        guard container.contains(.currency) else {
-            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
-        }
-        guard container.contains(.interval) else {
-            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
-        }
-        guard container.contains(.notificationChannel) else {
-            throw SdkValidationError(field: "notification_channel", code: "required", message: "Validation failed for 'notification_channel': value is required")
-        }
-        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        self.currency = try container.sdkDecodeRequired(.currency)
-        self.interval = try container.sdkDecodeRequired(.interval)
-        self.notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
-            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateSpendAlertBody {
-    public init(thresholdAmount: Int, currency: CreateSpendAlertBodyCurrency, interval: CreateSpendAlertBodyInterval, notificationChannel: SpendAlertNotificationChannel) throws {
+public extension CreateSpendAlertBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.thresholdAmount) else {
+            throw SdkValidationError(
+                field: "threshold_amount",
+                code: "required",
+                message: "Validation failed for 'threshold_amount': value is required"
+            )
+        }
+        guard container.contains(.currency) else {
+            throw SdkValidationError(
+                field: "currency",
+                code: "required",
+                message: "Validation failed for 'currency': value is required"
+            )
+        }
+        guard container.contains(.interval) else {
+            throw SdkValidationError(
+                field: "interval",
+                code: "required",
+                message: "Validation failed for 'interval': value is required"
+            )
+        }
+        guard container.contains(.notificationChannel) else {
+            throw SdkValidationError(
+                field: "notification_channel",
+                code: "required",
+                message: "Validation failed for 'notification_channel': value is required"
+            )
+        }
+        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        currency = try container.sdkDecodeRequired(.currency)
+        interval = try container.sdkDecodeRequired(.interval)
+        notificationChannel = try container.sdkDecodeRequired(.notificationChannel)
+        try validateRange(
+            "threshold_amount",
+            Double(thresholdAmount),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension CreateSpendAlertBody {
+    init(
+        thresholdAmount: Int,
+        currency: CreateSpendAlertBodyCurrency,
+        interval: CreateSpendAlertBodyInterval,
+        notificationChannel: SpendAlertNotificationChannel
+    ) throws {
         (self.thresholdAmount, self.currency) = (thresholdAmount, currency)
         (self.interval, self.notificationChannel) = (interval, notificationChannel)
-            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "threshold_amount",
+            Double(self.thresholdAmount),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -230,12 +345,15 @@ extension CreateSpendAlertBody {
 public struct OrganizationSpendAlertInterval: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let month = OrganizationSpendAlertInterval(rawValue: "month")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -248,12 +366,15 @@ public struct OrganizationSpendAlertInterval: RawRepresentable, Hashable, Codabl
 public struct ProjectSpendAlertObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let projectSpendAlert = ProjectSpendAlertObject(rawValue: "project.spend_alert")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -266,12 +387,15 @@ public struct ProjectSpendAlertObject: RawRepresentable, Hashable, Codable, Send
 public struct SpendAlertNotificationChannelType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let email = SpendAlertNotificationChannelType(rawValue: "email")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -284,12 +408,15 @@ public struct SpendAlertNotificationChannelType: RawRepresentable, Hashable, Cod
 public struct CreateSpendAlertBodyInterval: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let month = CreateSpendAlertBodyInterval(rawValue: "month")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -302,12 +429,15 @@ public struct CreateSpendAlertBodyInterval: RawRepresentable, Hashable, Codable,
 public struct ProjectSpendAlertInterval: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let month = ProjectSpendAlertInterval(rawValue: "month")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -320,12 +450,15 @@ public struct ProjectSpendAlertInterval: RawRepresentable, Hashable, Codable, Se
 public struct CreateSpendAlertBodyCurrency: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let usd = CreateSpendAlertBodyCurrency(rawValue: "USD")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -338,12 +471,15 @@ public struct CreateSpendAlertBodyCurrency: RawRepresentable, Hashable, Codable,
 public struct OrganizationSpendAlertObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let organizationSpendAlert = OrganizationSpendAlertObject(rawValue: "organization.spend_alert")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -356,12 +492,15 @@ public struct OrganizationSpendAlertObject: RawRepresentable, Hashable, Codable,
 public struct OrganizationSpendAlertCurrency: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let usd = OrganizationSpendAlertCurrency(rawValue: "USD")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -374,12 +513,15 @@ public struct OrganizationSpendAlertCurrency: RawRepresentable, Hashable, Codabl
 public struct ProjectSpendAlertCurrency: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let usd = ProjectSpendAlertCurrency(rawValue: "USD")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

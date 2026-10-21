@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AssistantsMethods {
-    /// Creates a message in a thread. Provide the message `role` and `content`, and optionally include file attachments or metadata. Use this operation to add a user or assistant message to an existing conversation thread.
+public extension AssistantsMethods {
+    /// Creates a message in a thread. Provide the message `role` and `content`, and optionally include file attachments
+    /// or metadata. Use this operation to add a user or assistant message to an existing conversation thread.
     ///
     /// Create a message.
     ///
@@ -28,9 +29,31 @@ extension AssistantsMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    public static func createMessage(config: ClientConfig, threadId: String, role: CreateMessageRequestRole, content: CreateMessageRequestContent, attachments: SdkOptional<[CreateMessageRequestAttachmentsItem]>? = nil, metadata: SdkOptional<Metadata>? = nil, requestOptions: RequestOptions? = nil) async throws -> MessageObject {
-        let requestBody = CreateMessageRequestBody(role: role, content: content, attachments: attachments, metadata: metadata)
+    static func createMessage(
+        config: ClientConfig,
+        threadId: String,
+        role: CreateMessageRequestRole,
+        content: CreateMessageRequestContent,
+        attachments: SdkOptional<[CreateMessageRequestAttachmentsItem]>? = nil,
+        metadata: SdkOptional<Metadata>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> MessageObject {
+        let requestBody = CreateMessageRequestBody(
+            role: role,
+            content: content,
+            attachments: attachments,
+            metadata: metadata
+        )
 
-        return try (await sdkRequest("POST", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/messages"].joined(), config: config, body: requestBody, decoder: .json, operationId: "createMessage", options: requestOptions, errors: ["429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/messages"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createMessage",
+            options: requestOptions,
+            errors: ["429": ErrorResponse.self]
+        )).data
     }
 }
