@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension RolesMethods {
-    /// Lists the roles configured for a project in a paginated response. Use `limit` to set the page size, `after` to
-    /// continue from a cursor, and `order` to choose the sort direction.
+extension RolesMethods {
+    /// Lists the roles configured for a project in a paginated response. Use `limit` to set the page size, `after` to continue from a cursor, and `order` to choose the sort direction.
     ///
     /// Lists the roles configured for a project.
     ///
@@ -18,41 +17,19 @@ public extension RolesMethods {
     /// - after: Cursor for pagination. Provide the value from the previous
     ///   response's `next` field to continue listing roles.
     /// - order: Sort order for the returned roles.
-    static func listRolesProjectRoles(
-        config: ClientConfig,
-        projectId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListRolesProjectRolesParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> PublicRoleListResource {
-        if let limit {
+    public static func listRolesProjectRoles(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, order: ListRolesProjectRolesParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> PublicRoleListResource {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 0, max: 1000)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/roles"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("order", value: order),
-            ],
-            decoder: .json,
-            operationId: "listRolesProjectRoles",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/roles"].joined(), config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("order", value: order),
+        ], decoder: .json, operationId: "listRolesProjectRoles", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists the roles configured for a project in a paginated response. Use `limit` to set the page size, `after` to
-    /// continue from a cursor, and `order` to choose the sort direction.
+    /// Lists the roles configured for a project in a paginated response. Use `limit` to set the page size, `after` to continue from a cursor, and `order` to choose the sort direction.
     ///
     /// Lists the roles configured for a project.
     ///
@@ -62,40 +39,18 @@ public extension RolesMethods {
     /// - after: Cursor for pagination. Provide the value from the previous
     ///   response's `next` field to continue listing roles.
     /// - order: Sort order for the returned roles.
-    static func listRolesProjectRolesPaginated(
-        config: ClientConfig,
-        projectId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListRolesProjectRolesParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<Role, Swift.Error> {
-        AsyncThrowingStream<Role, Swift.Error> { (continuation: AsyncThrowingStream<Role, Swift.Error>.Continuation) in
+    public static func listRolesProjectRolesPaginated(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, order: ListRolesProjectRolesParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<Role, Swift.Error> {
+        return AsyncThrowingStream<Role, Swift.Error> { (continuation: AsyncThrowingStream<Role, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listRolesProjectRoles(
-                            config: config,
-                            projectId: projectId,
-                            limit: limit,
-                            after: pageCursor,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listRolesProjectRoles(config: config, projectId: projectId, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.next else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.next else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -108,52 +63,25 @@ public extension RolesMethods {
         }
     }
 
-    struct ListRolesProjectRolesPage {
+    public struct ListRolesProjectRolesPage {
         public let data: PublicRoleListResource
         public let items: [Role]
         public let hasMore: Bool
     }
 
-    static func listRolesProjectRolesPages(
-        config: ClientConfig,
-        projectId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListRolesProjectRolesParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListRolesProjectRolesPage, Swift.Error> {
-        AsyncThrowingStream<ListRolesProjectRolesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListRolesProjectRolesPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listRolesProjectRolesPages(config: ClientConfig, projectId: String, limit: Int? = nil, after: String? = nil, order: ListRolesProjectRolesParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListRolesProjectRolesPage, Swift.Error> {
+        return AsyncThrowingStream<ListRolesProjectRolesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListRolesProjectRolesPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listRolesProjectRoles(
-                            config: config,
-                            projectId: projectId,
-                            limit: limit,
-                            after: pageCursor,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listRolesProjectRoles(config: config, projectId: projectId, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.next != nil
-                        pageContinuation.yield(ListRolesProjectRolesPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.next else {
-                            break
-                        }
+                        pageContinuation.yield(ListRolesProjectRolesPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.next else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

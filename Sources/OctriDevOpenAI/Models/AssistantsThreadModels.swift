@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AssistantsThread domain models
+// AssistantsThread domain models
 /// Optional object value serialized in the `code_interpreter` wire field.
 public struct ThreadObjectToolResourcesCodeInterpreter: Codable {
     /// A list of file IDs made available to the `code_interpreter` tool. There can be a maximum of 20 files
@@ -15,22 +15,22 @@ public struct ThreadObjectToolResourcesCodeInterpreter: Codable {
     }
 
     init() {
-        fileIds = nil
+        self.fileIds = nil
     }
 }
 
-public extension ThreadObjectToolResourcesCodeInterpreter {
-    init(from decoder: Decoder) throws {
+extension ThreadObjectToolResourcesCodeInterpreter {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        if let value = fileIds {
+        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        if let value = self.fileIds {
             try validateItems("file_ids", value, min: nil, max: 20)
         }
     }
 }
 
-public extension ThreadObjectToolResourcesCodeInterpreter {
-    init(fileIds: [String]? = nil) throws {
+extension ThreadObjectToolResourcesCodeInterpreter {
+    public init(fileIds: [String]? = nil) throws {
         self.init()
         self.fileIds = fileIds
         if let value = self.fileIds {
@@ -54,40 +54,30 @@ public struct ThreadStreamEvent: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ThreadStreamEvent {
-    init(from decoder: Decoder) throws {
+extension ThreadStreamEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.event) else {
-            throw SdkValidationError(
-                field: "event",
-                code: "required",
-                message: "Validation failed for 'event': value is required"
-            )
+            throw SdkValidationError(field: "event", code: "required", message: "Validation failed for 'event': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        event = try container.sdkDecodeRequired(.event)
-        data = try container.sdkDecodeRequired(.data)
-        enabled = try container.sdkDecodeIfPresent(.enabled)
-        try sdkValidateRawEnum("event", event, ThreadStreamEventEvent.allCases.map(\.rawValue))
+        self.event = try container.sdkDecodeRequired(.event)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.enabled = try container.sdkDecodeIfPresent(.enabled)
+            try sdkValidateRawEnum("event", self.event, ThreadStreamEventEvent.allCases.map(\.rawValue))
     }
 }
 
-public extension ThreadStreamEvent {
-    init(event: ThreadStreamEventEvent, data: ThreadObject, enabled: Bool? = nil) throws {
+extension ThreadStreamEvent {
+    public init(event: ThreadStreamEventEvent, data: ThreadObject, enabled: Bool? = nil) throws {
         (self.event, self.data) = (event, data)
         self.enabled = enabled
-        try sdkValidateRawEnum("event", self.event, ThreadStreamEventEvent.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("event", self.event, ThreadStreamEventEvent.allCases.map(\.rawValue))
     }
 }
 
@@ -117,65 +107,37 @@ public struct ThreadObject: Codable {
         case metadata
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ThreadObject {
-    init(from decoder: Decoder) throws {
+extension ThreadObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.toolResources) else {
-            throw SdkValidationError(
-                field: "tool_resources",
-                code: "required",
-                message: "Validation failed for 'tool_resources': value is required"
-            )
+            throw SdkValidationError(field: "tool_resources", code: "required", message: "Validation failed for 'tool_resources': value is required")
         }
         guard container.contains(.metadata) else {
-            throw SdkValidationError(
-                field: "metadata",
-                code: "required",
-                message: "Validation failed for 'metadata': value is required"
-            )
+            throw SdkValidationError(field: "metadata", code: "required", message: "Validation failed for 'metadata': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        toolResources = try container.sdkDecodeNullable(.toolResources)
-        metadata = try container.sdkDecodeNullable(.metadata)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.toolResources = try container.sdkDecodeNullable(.toolResources)
+        self.metadata = try container.sdkDecodeNullable(.metadata)
     }
 }
 
-public extension ThreadObject {
-    init(
-        id: String,
-        object: ThreadObjectObject,
-        createdAt: Int,
-        toolResources: ThreadObjectToolResources?,
-        metadata: Metadata?
-    ) {
+extension ThreadObject {
+    public init(id: String, object: ThreadObjectObject, createdAt: Int, toolResources: ThreadObjectToolResources?, metadata: Metadata?) {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.toolResources) = (createdAt, toolResources)
         self.metadata = metadata
@@ -197,23 +159,20 @@ public struct ThreadObjectToolResources: Codable {
     }
 
     init() {
-        (codeInterpreter, fileSearch) = (nil, nil)
+        (self.codeInterpreter, self.fileSearch) = (nil, nil)
     }
 }
 
-public extension ThreadObjectToolResources {
-    init(from decoder: Decoder) throws {
+extension ThreadObjectToolResources {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
-        fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
+        self.codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
+        self.fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
     }
 }
 
-public extension ThreadObjectToolResources {
-    init(
-        codeInterpreter: ThreadObjectToolResourcesCodeInterpreter? = nil,
-        fileSearch: ThreadObjectToolResourcesFileSearch? = nil
-    ) {
+extension ThreadObjectToolResources {
+    public init(codeInterpreter: ThreadObjectToolResourcesCodeInterpreter? = nil, fileSearch: ThreadObjectToolResourcesFileSearch? = nil) {
         self.init()
         (self.codeInterpreter, self.fileSearch) = (codeInterpreter, fileSearch)
     }
@@ -229,22 +188,22 @@ public struct ThreadObjectToolResourcesFileSearch: Codable {
     }
 
     init() {
-        vectorStoreIds = nil
+        self.vectorStoreIds = nil
     }
 }
 
-public extension ThreadObjectToolResourcesFileSearch {
-    init(from decoder: Decoder) throws {
+extension ThreadObjectToolResourcesFileSearch {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
-        if let value = vectorStoreIds {
+        self.vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
+        if let value = self.vectorStoreIds {
             try validateItems("vector_store_ids", value, min: nil, max: 1)
         }
     }
 }
 
-public extension ThreadObjectToolResourcesFileSearch {
-    init(vectorStoreIds: [String]? = nil) throws {
+extension ThreadObjectToolResourcesFileSearch {
+    public init(vectorStoreIds: [String]? = nil) throws {
         self.init()
         self.vectorStoreIds = vectorStoreIds
         if let value = self.vectorStoreIds {
@@ -275,15 +234,12 @@ public enum ThreadStreamEventEvent: String, CaseIterable, Codable {
 public struct ThreadObjectObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let thread = ThreadObjectObject(rawValue: "thread")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Responses domain models
+// Responses domain models
 public typealias PersonalityEnum = String
 
 public typealias ToolsArray = [Tool]
@@ -62,57 +62,40 @@ public struct CreateResponseVariant2: Codable {
     }
 
     init() {
-        (accessPrograms, promptCacheOptions, serviceTier, truncation, reasoning) = (nil, nil, nil, nil, nil)
-        (input, include, parallelToolCalls, store, instructions) = (nil, nil, nil, nil, nil)
-        (moderation, stream, streamOptions, conversation, contextManagement) = (nil, nil, nil, nil, nil)
-        maxOutputTokens = nil
+        (self.accessPrograms, self.promptCacheOptions, self.serviceTier, self.truncation, self.reasoning) = (nil, nil, nil, nil, nil)
+        (self.input, self.include, self.parallelToolCalls, self.store, self.instructions) = (nil, nil, nil, nil, nil)
+        (self.moderation, self.stream, self.streamOptions, self.conversation, self.contextManagement) = (nil, nil, nil, nil, nil)
+        self.maxOutputTokens = nil
     }
 }
 
-public extension CreateResponseVariant2 {
-    init(from decoder: Decoder) throws {
+extension CreateResponseVariant2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        accessPrograms = try container.sdkDecodeIfPresent(.accessPrograms)
-        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        truncation = try container.sdkDecodeIfPresent(.truncation)
-        reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        input = try container.sdkDecodeIfPresent(.input)
-        include = try container.sdkDecodeIfPresent(.include)
-        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        store = try container.sdkDecodeIfPresent(.store)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        moderation = try container.sdkDecodeIfPresent(.moderation)
-        stream = try container.sdkDecodeIfPresent(.stream)
-        streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
-        conversation = try container.sdkDecodeIfPresent(.conversation)
-        contextManagement = try container.sdkDecodeIfPresent(.contextManagement)
-        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        if let value = contextManagement {
+        self.accessPrograms = try container.sdkDecodeIfPresent(.accessPrograms)
+        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        self.truncation = try container.sdkDecodeIfPresent(.truncation)
+        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        self.input = try container.sdkDecodeIfPresent(.input)
+        self.include = try container.sdkDecodeIfPresent(.include)
+        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        self.store = try container.sdkDecodeIfPresent(.store)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.moderation = try container.sdkDecodeIfPresent(.moderation)
+        self.stream = try container.sdkDecodeIfPresent(.stream)
+        self.streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
+        self.conversation = try container.sdkDecodeIfPresent(.conversation)
+        self.contextManagement = try container.sdkDecodeIfPresent(.contextManagement)
+        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        if let value = self.contextManagement {
             try validateItems("context_management", value, min: 1, max: nil)
         }
     }
 }
 
-public extension CreateResponseVariant2 {
-    init(
-        accessPrograms: AccessProgramsParam? = nil,
-        promptCacheOptions: ResponsePromptCacheOptionsParam? = nil,
-        serviceTier: ServiceTierResponsesVariant0? = nil,
-        truncation: CreateResponseVariant2TruncationVariant0? = nil,
-        reasoning: Reasoning? = nil,
-        input: InputParam? = nil,
-        include: [IncludeEnum]? = nil,
-        parallelToolCalls: Bool? = nil,
-        store: Bool? = nil,
-        instructions: String? = nil,
-        moderation: ModerationParam? = nil,
-        stream: Bool? = nil,
-        streamOptions: ResponseStreamOptions? = nil,
-        conversation: ConversationParam? = nil,
-        contextManagement: [ContextManagementParam]? = nil,
-        maxOutputTokens: Int? = nil
-    ) throws {
+extension CreateResponseVariant2 {
+    public init(accessPrograms: AccessProgramsParam? = nil, promptCacheOptions: ResponsePromptCacheOptionsParam? = nil, serviceTier: ServiceTierResponsesVariant0? = nil, truncation: CreateResponseVariant2TruncationVariant0? = nil, reasoning: Reasoning? = nil, input: InputParam? = nil, include: [IncludeEnum]? = nil, parallelToolCalls: Bool? = nil, store: Bool? = nil, instructions: String? = nil, moderation: ModerationParam? = nil, stream: Bool? = nil, streamOptions: ResponseStreamOptions? = nil, conversation: ConversationParam? = nil, contextManagement: [ContextManagementParam]? = nil, maxOutputTokens: Int? = nil) throws {
         self.init()
         (self.accessPrograms, self.promptCacheOptions) = (accessPrograms, promptCacheOptions)
         (self.serviceTier, self.truncation) = (serviceTier, truncation)
@@ -140,28 +123,22 @@ public struct ContextManagementParam: Codable {
         case compactThreshold = "compact_threshold"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ContextManagementParam {
-    init(from decoder: Decoder) throws {
+extension ContextManagementParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        compactThreshold = try container.sdkDecodeIfPresent(.compactThreshold)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.compactThreshold = try container.sdkDecodeIfPresent(.compactThreshold)
     }
 }
 
-public extension ContextManagementParam {
-    init(type: String, compactThreshold: Int? = nil) {
+extension ContextManagementParam {
+    public init(type: String, compactThreshold: Int? = nil) {
         (self.type, self.compactThreshold) = (type, compactThreshold)
     }
 }
@@ -286,109 +263,62 @@ public struct CreateResponse: Codable {
     }
 
     init() {
-        (metadata, topLogprobs, temperature, topP, user) = (nil, nil, nil, nil, nil)
-        (safetyIdentifier, promptCacheKey, promptCacheRetention, promptCacheOptions, previousResponseId) = (
-            nil,
-            nil,
-            nil,
-            nil,
-            nil
-        )
-        (model, background, maxToolCalls, text, tools) = (nil, nil, nil, nil, nil)
-        (toolChoice, prompt, accessPrograms, serviceTier, truncation) = (nil, nil, nil, nil, nil)
-        (reasoning, input, include, parallelToolCalls, store) = (nil, nil, nil, nil, nil)
-        (instructions, moderation, stream, streamOptions, conversation) = (nil, nil, nil, nil, nil)
-        (contextManagement, maxOutputTokens) = (nil, nil)
+        (self.metadata, self.topLogprobs, self.temperature, self.topP, self.user) = (nil, nil, nil, nil, nil)
+        (self.safetyIdentifier, self.promptCacheKey, self.promptCacheRetention, self.promptCacheOptions, self.previousResponseId) = (nil, nil, nil, nil, nil)
+        (self.model, self.background, self.maxToolCalls, self.text, self.tools) = (nil, nil, nil, nil, nil)
+        (self.toolChoice, self.prompt, self.accessPrograms, self.serviceTier, self.truncation) = (nil, nil, nil, nil, nil)
+        (self.reasoning, self.input, self.include, self.parallelToolCalls, self.store) = (nil, nil, nil, nil, nil)
+        (self.instructions, self.moderation, self.stream, self.streamOptions, self.conversation) = (nil, nil, nil, nil, nil)
+        (self.contextManagement, self.maxOutputTokens) = (nil, nil)
     }
 }
 
-public extension CreateResponse {
-    init(from decoder: Decoder) throws {
+extension CreateResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        topP = try container.sdkDecodeIfPresent(.topP)
-        user = try container.sdkDecodeIfPresent(.user)
-        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
-        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
-        model = try container.sdkDecodeIfPresent(.model)
-        background = try container.sdkDecodeIfPresent(.background)
-        maxToolCalls = try container.sdkDecodeIfPresent(.maxToolCalls)
-        text = try container.sdkDecodeIfPresent(.text)
-        tools = try container.sdkDecodeIfPresent(.tools)
-        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        prompt = try container.sdkDecodeIfPresent(.prompt)
-        accessPrograms = try container.sdkDecodeIfPresent(.accessPrograms)
-        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        truncation = try container.sdkDecodeIfPresent(.truncation)
-        reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        input = try container.sdkDecodeIfPresent(.input)
-        include = try container.sdkDecodeIfPresent(.include)
-        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        store = try container.sdkDecodeIfPresent(.store)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        moderation = try container.sdkDecodeIfPresent(.moderation)
-        stream = try container.sdkDecodeIfPresent(.stream)
-        streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
-        conversation = try container.sdkDecodeIfPresent(.conversation)
-        contextManagement = try container.sdkDecodeIfPresent(.contextManagement)
-        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        if let value = topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        self.temperature = try container.sdkDecodeIfPresent(.temperature)
+        self.topP = try container.sdkDecodeIfPresent(.topP)
+        self.user = try container.sdkDecodeIfPresent(.user)
+        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        self.previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
+        self.model = try container.sdkDecodeIfPresent(.model)
+        self.background = try container.sdkDecodeIfPresent(.background)
+        self.maxToolCalls = try container.sdkDecodeIfPresent(.maxToolCalls)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.tools = try container.sdkDecodeIfPresent(.tools)
+        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        self.prompt = try container.sdkDecodeIfPresent(.prompt)
+        self.accessPrograms = try container.sdkDecodeIfPresent(.accessPrograms)
+        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        self.truncation = try container.sdkDecodeIfPresent(.truncation)
+        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        self.input = try container.sdkDecodeIfPresent(.input)
+        self.include = try container.sdkDecodeIfPresent(.include)
+        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        self.store = try container.sdkDecodeIfPresent(.store)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.moderation = try container.sdkDecodeIfPresent(.moderation)
+        self.stream = try container.sdkDecodeIfPresent(.stream)
+        self.streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
+        self.conversation = try container.sdkDecodeIfPresent(.conversation)
+        self.contextManagement = try container.sdkDecodeIfPresent(.contextManagement)
+        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        if let value = self.topLogprobs {
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = contextManagement {
+        if let value = self.contextManagement {
             try validateItems("context_management", value, min: 1, max: nil)
         }
     }
 }
 
-public extension CreateResponse {
-    init(
-        metadata: Metadata? = nil,
-        topLogprobs: Int? = nil,
-        temperature: Double? = nil,
-        topP: Double? = nil,
-        user: String? = nil,
-        safetyIdentifier: String? = nil,
-        promptCacheKey: String? = nil,
-        promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0? = nil,
-        promptCacheOptions: ResponsePromptCacheOptionsParam? = nil,
-        previousResponseId: String? = nil,
-        model: ModelIdsResponses? = nil,
-        background: Bool? = nil,
-        maxToolCalls: Int? = nil,
-        text: ResponseTextParam? = nil,
-        tools: ToolsArray? = nil,
-        toolChoice: ToolChoiceParam? = nil,
-        prompt: Prompt? = nil,
-        accessPrograms: AccessProgramsParam? = nil,
-        serviceTier: ServiceTierResponsesVariant0? = nil,
-        truncation: CreateResponseVariant2TruncationVariant0? = nil,
-        reasoning: Reasoning? = nil,
-        input: InputParam? = nil,
-        include: [IncludeEnum]? = nil,
-        parallelToolCalls: Bool? = nil,
-        store: Bool? = nil,
-        instructions: String? = nil,
-        moderation: ModerationParam? = nil,
-        stream: Bool? = nil,
-        streamOptions: ResponseStreamOptions? = nil,
-        conversation: ConversationParam? = nil,
-        contextManagement: [ContextManagementParam]? = nil,
-        maxOutputTokens: Int? = nil
-    ) throws {
+extension CreateResponse {
+    public init(metadata: Metadata? = nil, topLogprobs: Int? = nil, temperature: Double? = nil, topP: Double? = nil, user: String? = nil, safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0? = nil, promptCacheOptions: ResponsePromptCacheOptionsParam? = nil, previousResponseId: String? = nil, model: ModelIdsResponses? = nil, background: Bool? = nil, maxToolCalls: Int? = nil, text: ResponseTextParam? = nil, tools: ToolsArray? = nil, toolChoice: ToolChoiceParam? = nil, prompt: Prompt? = nil, accessPrograms: AccessProgramsParam? = nil, serviceTier: ServiceTierResponsesVariant0? = nil, truncation: CreateResponseVariant2TruncationVariant0? = nil, reasoning: Reasoning? = nil, input: InputParam? = nil, include: [IncludeEnum]? = nil, parallelToolCalls: Bool? = nil, store: Bool? = nil, instructions: String? = nil, moderation: ModerationParam? = nil, stream: Bool? = nil, streamOptions: ResponseStreamOptions? = nil, conversation: ConversationParam? = nil, contextManagement: [ContextManagementParam]? = nil, maxOutputTokens: Int? = nil) throws {
         self.init()
         (self.metadata, self.topLogprobs) = (metadata, topLogprobs)
         (self.temperature, self.topP) = (temperature, topP)
@@ -407,15 +337,7 @@ public extension CreateResponse {
         (self.streamOptions, self.conversation) = (streamOptions, conversation)
         (self.contextManagement, self.maxOutputTokens) = (contextManagement, maxOutputTokens)
         if let value = self.topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.contextManagement {
             try validateItems("context_management", value, min: 1, max: nil)
@@ -436,20 +358,20 @@ public struct ShellCallOutputDelta: Codable {
     }
 
     init() {
-        (stdout, stderr) = (nil, nil)
+        (self.stdout, self.stderr) = (nil, nil)
     }
 }
 
-public extension ShellCallOutputDelta {
-    init(from decoder: Decoder) throws {
+extension ShellCallOutputDelta {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        stdout = try container.sdkDecodeIfPresent(.stdout)
-        stderr = try container.sdkDecodeIfPresent(.stderr)
+        self.stdout = try container.sdkDecodeIfPresent(.stdout)
+        self.stderr = try container.sdkDecodeIfPresent(.stderr)
     }
 }
 
-public extension ShellCallOutputDelta {
-    init(stdout: String? = nil, stderr: String? = nil) {
+extension ShellCallOutputDelta {
+    public init(stdout: String? = nil, stderr: String? = nil) {
         self.init()
         (self.stdout, self.stderr) = (stdout, stderr)
     }
@@ -459,17 +381,14 @@ public extension ShellCallOutputDelta {
 public struct CyberAccessProgramEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let standard = CyberAccessProgramEnum(rawValue: "standard")
     public static let daybreakBlue = CyberAccessProgramEnum(rawValue: "daybreak_blue")
     public static let daybreakRed = CyberAccessProgramEnum(rawValue: "daybreak_red")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -482,10 +401,7 @@ public struct CyberAccessProgramEnum: RawRepresentable, Hashable, Codable, Senda
 public struct CacheMissReasonTypeEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let modelChanged = CacheMissReasonTypeEnum(rawValue: "model_changed")
     public static let promptCacheKeyChanged = CacheMissReasonTypeEnum(rawValue: "prompt_cache_key_changed")
     public static let toolsChanged = CacheMissReasonTypeEnum(rawValue: "tools_changed")
@@ -498,7 +414,7 @@ public struct CacheMissReasonTypeEnum: RawRepresentable, Hashable, Codable, Send
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -511,16 +427,13 @@ public struct CacheMissReasonTypeEnum: RawRepresentable, Hashable, Codable, Send
 public struct TruncationEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = TruncationEnum(rawValue: "auto")
     public static let disabled = TruncationEnum(rawValue: "disabled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -533,20 +446,16 @@ public struct TruncationEnum: RawRepresentable, Hashable, Codable, Sendable, Sdk
 /// model's context window size, the model will truncate the response to fit the context window by dropping
 /// items from the beginning of the conversation. - `disabled` (default): If the input size will exceed the
 /// context window size for a model, the request will fail with a 400 error.
-public struct CreateResponseVariant2TruncationVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct CreateResponseVariant2TruncationVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = CreateResponseVariant2TruncationVariant0(rawValue: "auto")
     public static let disabled = CreateResponseVariant2TruncationVariant0(rawValue: "disabled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

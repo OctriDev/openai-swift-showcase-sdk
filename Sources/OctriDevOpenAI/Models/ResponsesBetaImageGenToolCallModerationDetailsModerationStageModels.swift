@@ -3,23 +3,19 @@
 
 import Foundation
 
-/// ResponsesBetaImage domain models
+// ResponsesBetaImage domain models
 /// The stage where moderation blocked the image generation call.
-public struct BetaImageGenToolCallModerationDetailsModerationStage: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct BetaImageGenToolCallModerationDetailsModerationStage: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let input = BetaImageGenToolCallModerationDetailsModerationStage(rawValue: "input")
     public static let output = BetaImageGenToolCallModerationDetailsModerationStage(rawValue: "output")
     public static let unknown = BetaImageGenToolCallModerationDetailsModerationStage(rawValue: "unknown")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -32,16 +28,13 @@ public struct BetaImageGenToolCallModerationDetailsModerationStage: RawRepresent
 public struct BetaImageGenToolModeration: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = BetaImageGenToolModeration(rawValue: "auto")
     public static let low = BetaImageGenToolModeration(rawValue: "low")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -54,10 +47,7 @@ public struct BetaImageGenToolModeration: RawRepresentable, Hashable, Codable, S
 public struct BetaImageDetail: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = BetaImageDetail(rawValue: "low")
     public static let high = BetaImageDetail(rawValue: "high")
     public static let auto = BetaImageDetail(rawValue: "auto")
@@ -65,7 +55,7 @@ public struct BetaImageDetail: RawRepresentable, Hashable, Codable, Sendable, Sd
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

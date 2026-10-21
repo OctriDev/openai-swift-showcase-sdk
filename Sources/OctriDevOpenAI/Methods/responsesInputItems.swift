@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ResponsesMethods {
-    /// Lists the input items used to generate a model response. Use `limit` to set the page size and `order` to choose
-    /// the item order. Use `after` with an item identifier to continue through the results; check `has_more` to
-    /// determine whether additional items are available.
+extension ResponsesMethods {
+    /// Lists the input items used to generate a model response. Use `limit` to set the page size and `order` to choose the item order. Use `after` with an item identifier to continue through the results; check `has_more` to determine whether additional items are available.
     ///
     /// Returns a list of input items for a given response.
     ///
@@ -23,35 +21,16 @@ public extension ResponsesMethods {
     /// - after: An item ID to list items after, used in pagination.
     /// - include: Additional fields to include in the response. See the `include`
     ///   parameter for Response creation above for more information.
-    static func listInputItems(
-        config: ClientConfig,
-        responseId: String,
-        limit: Int? = nil,
-        order: ListInputItemsParameter? = nil,
-        after: String? = nil,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ResponseItemList {
-        try await (sdkRequest(
-            "GET",
-            ["/responses/", sdkEncodePathSegment(sdkWireString(responseId)), "/input_items"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("include", values: include, style: "form", explode: true),
-            ],
-            decoder: .json,
-            operationId: "listInputItems",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func listInputItems(config: ClientConfig, responseId: String, limit: Int? = nil, order: ListInputItemsParameter? = nil, after: String? = nil, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) async throws -> ResponseItemList {
+        return try (await sdkRequest("GET", ["/responses/", sdkEncodePathSegment(sdkWireString(responseId)), "/input_items"].joined(), config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("include", values: include, style: "form", explode: true),
+        ], decoder: .json, operationId: "listInputItems", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists the input items used to generate a model response. Use `limit` to set the page size and `order` to choose
-    /// the item order. Use `after` with an item identifier to continue through the results; check `has_more` to
-    /// determine whether additional items are available.
+    /// Lists the input items used to generate a model response. Use `limit` to set the page size and `order` to choose the item order. Use `after` with an item identifier to continue through the results; check `has_more` to determine whether additional items are available.
     ///
     /// Returns a list of input items for a given response.
     ///
@@ -65,42 +44,17 @@ public extension ResponsesMethods {
     /// - after: An item ID to list items after, used in pagination.
     /// - include: Additional fields to include in the response. See the `include`
     ///   parameter for Response creation above for more information.
-    static func listInputItemsPaginated(
-        config: ClientConfig,
-        responseId: String,
-        limit: Int? = nil,
-        order: ListInputItemsParameter? = nil,
-        after: String? = nil,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ItemResource, Swift.Error> {
-        AsyncThrowingStream<ItemResource, Swift.Error> { (continuation: AsyncThrowingStream<
-            ItemResource,
-            Swift.Error
-        >.Continuation) in
+    public static func listInputItemsPaginated(config: ClientConfig, responseId: String, limit: Int? = nil, order: ListInputItemsParameter? = nil, after: String? = nil, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ItemResource, Swift.Error> {
+        return AsyncThrowingStream<ItemResource, Swift.Error> { (continuation: AsyncThrowingStream<ItemResource, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listInputItems(
-                            config: config,
-                            responseId: responseId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            include: include,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listInputItems(config: config, responseId: responseId, limit: limit, order: order, after: pageCursor, include: include, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -113,51 +67,24 @@ public extension ResponsesMethods {
         }
     }
 
-    struct ListInputItemsPage {
+    public struct ListInputItemsPage {
         public let data: ResponseItemList
         public let items: [ItemResource]
         public let hasMore: Bool
     }
 
-    static func listInputItemsPages(
-        config: ClientConfig,
-        responseId: String,
-        limit: Int? = nil,
-        order: ListInputItemsParameter? = nil,
-        after: String? = nil,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListInputItemsPage, Swift.Error> {
-        AsyncThrowingStream<ListInputItemsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListInputItemsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listInputItemsPages(config: ClientConfig, responseId: String, limit: Int? = nil, order: ListInputItemsParameter? = nil, after: String? = nil, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListInputItemsPage, Swift.Error> {
+        return AsyncThrowingStream<ListInputItemsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListInputItemsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listInputItems(
-                            config: config,
-                            responseId: responseId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            include: include,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listInputItems(config: config, responseId: responseId, limit: limit, order: order, after: pageCursor, include: include, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && true
-                        pageContinuation.yield(ListInputItemsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
+                        pageContinuation.yield(ListInputItemsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

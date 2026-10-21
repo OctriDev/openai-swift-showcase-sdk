@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// FineTuning domain models
+// FineTuning domain models
 public indirect enum ValidateGraderRequestGrader {
     case graderStringCheck(GraderStringCheck)
     case graderTextSimilarity(GraderTextSimilarity)
@@ -15,6 +15,7 @@ public indirect enum ValidateGraderRequestGrader {
 }
 
 extension ValidateGraderRequestGrader: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -22,16 +23,12 @@ extension ValidateGraderRequestGrader: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -42,12 +39,12 @@ extension ValidateGraderRequestGrader: Codable {
 extension ValidateGraderRequestGrader {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "string_check": try .graderStringCheck(GraderStringCheck(from: decoder))
-        case "text_similarity": try .graderTextSimilarity(GraderTextSimilarity(from: decoder))
-        case "python": try .graderPython(GraderPython(from: decoder))
-        case "score_model": try .graderScoreModel(GraderScoreModel(from: decoder))
-        case "multi": try .graderMulti(GraderMulti(from: decoder))
-        default: nil
+        case "string_check": return .graderStringCheck(try GraderStringCheck(from: decoder))
+        case "text_similarity": return .graderTextSimilarity(try GraderTextSimilarity(from: decoder))
+        case "python": return .graderPython(try GraderPython(from: decoder))
+        case "score_model": return .graderScoreModel(try GraderScoreModel(from: decoder))
+        case "multi": return .graderMulti(try GraderMulti(from: decoder))
+        default: return nil
         }
     }
 }
@@ -77,6 +74,7 @@ public indirect enum ValidateGraderResponseGrader {
 }
 
 extension ValidateGraderResponseGrader: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -84,16 +82,12 @@ extension ValidateGraderResponseGrader: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -104,12 +98,12 @@ extension ValidateGraderResponseGrader: Codable {
 extension ValidateGraderResponseGrader {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "string_check": try .graderStringCheck(GraderStringCheck(from: decoder))
-        case "text_similarity": try .graderTextSimilarity(GraderTextSimilarity(from: decoder))
-        case "python": try .graderPython(GraderPython(from: decoder))
-        case "score_model": try .graderScoreModel(GraderScoreModel(from: decoder))
-        case "multi": try .graderMulti(GraderMulti(from: decoder))
-        default: nil
+        case "string_check": return .graderStringCheck(try GraderStringCheck(from: decoder))
+        case "text_similarity": return .graderTextSimilarity(try GraderTextSimilarity(from: decoder))
+        case "python": return .graderPython(try GraderPython(from: decoder))
+        case "score_model": return .graderScoreModel(try GraderScoreModel(from: decoder))
+        case "multi": return .graderMulti(try GraderMulti(from: decoder))
+        default: return nil
         }
     }
 }
@@ -137,27 +131,21 @@ public struct ValidateGraderRequest: Codable {
         case grader
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ValidateGraderRequest {
-    init(from decoder: Decoder) throws {
+extension ValidateGraderRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.grader) else {
-            throw SdkValidationError(
-                field: "grader",
-                code: "required",
-                message: "Validation failed for 'grader': value is required"
-            )
+            throw SdkValidationError(field: "grader", code: "required", message: "Validation failed for 'grader': value is required")
         }
-        grader = try container.sdkDecodeRequired(.grader)
+        self.grader = try container.sdkDecodeRequired(.grader)
     }
 }
 
-public extension ValidateGraderRequest {
-    init(grader: ValidateGraderRequestGrader) {
+extension ValidateGraderRequest {
+    public init(grader: ValidateGraderRequestGrader) {
         self.grader = grader
     }
 }
@@ -172,19 +160,19 @@ public struct ValidateGraderResponse: Codable {
     }
 
     init() {
-        grader = nil
+        self.grader = nil
     }
 }
 
-public extension ValidateGraderResponse {
-    init(from decoder: Decoder) throws {
+extension ValidateGraderResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        grader = try container.sdkDecodeIfPresent(.grader)
+        self.grader = try container.sdkDecodeIfPresent(.grader)
     }
 }
 
-public extension ValidateGraderResponse {
-    init(grader: ValidateGraderResponseGrader? = nil) {
+extension ValidateGraderResponse {
+    public init(grader: ValidateGraderResponseGrader? = nil) {
         self.init()
         self.grader = grader
     }

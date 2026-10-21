@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// WebhookSafetyDeactivationIssued domain models
+// WebhookSafetyDeactivationIssued domain models
 /// Sent when a deactivation is issued for a safety identifier in your organization.
 public struct WebhookSafetyDeactivationIssued: Codable {
     /// The unique ID of the webhook event.
@@ -25,65 +25,37 @@ public struct WebhookSafetyDeactivationIssued: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookSafetyDeactivationIssued {
-    init(from decoder: Decoder) throws {
+extension WebhookSafetyDeactivationIssued {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        type = try container.sdkDecodeRequired(.type)
-        data = try container.sdkDecodeRequired(.data)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.data = try container.sdkDecodeRequired(.data)
     }
 }
 
-public extension WebhookSafetyDeactivationIssued {
-    init(
-        id: String,
-        object: WebhookSafetyDeactivationIssuedObject,
-        createdAt: Int,
-        type: WebhookSafetyDeactivationIssuedType,
-        data: WebhookSafetyDeactivationIssuedData
-    ) {
+extension WebhookSafetyDeactivationIssued {
+    public init(id: String, object: WebhookSafetyDeactivationIssuedObject, createdAt: Int, type: WebhookSafetyDeactivationIssuedType, data: WebhookSafetyDeactivationIssuedData) {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.type) = (createdAt, type)
         self.data = data
@@ -99,27 +71,21 @@ public struct WebhookSafetyDeactivationIssuedData: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookSafetyDeactivationIssuedData {
-    init(from decoder: Decoder) throws {
+extension WebhookSafetyDeactivationIssuedData {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension WebhookSafetyDeactivationIssuedData {
-    init(id: String) {
+extension WebhookSafetyDeactivationIssuedData {
+    public init(id: String) {
         self.id = id
     }
 }
@@ -128,16 +94,12 @@ public extension WebhookSafetyDeactivationIssuedData {
 public struct WebhookSafetyDeactivationIssuedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let safetyDeactivationIssued =
-        WebhookSafetyDeactivationIssuedType(rawValue: "safety.deactivation_issued")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let safetyDeactivationIssued = WebhookSafetyDeactivationIssuedType(rawValue: "safety.deactivation_issued")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -150,15 +112,12 @@ public struct WebhookSafetyDeactivationIssuedType: RawRepresentable, Hashable, C
 public struct WebhookSafetyDeactivationIssuedObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let event = WebhookSafetyDeactivationIssuedObject(rawValue: "event")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

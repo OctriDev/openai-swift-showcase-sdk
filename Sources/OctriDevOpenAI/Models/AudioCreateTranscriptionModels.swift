@@ -3,39 +3,29 @@
 
 import Foundation
 
-/// Audio domain models
+// Audio domain models
 public indirect enum CreateTranscriptionRequestChunkingStrategy {
     case stringValue(String)
     case vadConfig(VadConfig)
 }
 
 extension CreateTranscriptionRequestChunkingStrategy: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateTranscriptionRequestChunkingStrategy"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateTranscriptionRequestChunkingStrategy")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateTranscriptionRequestChunkingStrategy {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(VadConfig.self) {
-            return .vadConfig(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(VadConfig.self) { return .vadConfig(value) }
         return nil
     }
 }
@@ -57,26 +47,18 @@ public indirect enum CreateTranscriptionResponse {
 }
 
 extension CreateTranscriptionResponse: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateTranscriptionResponse"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateTranscriptionResponse")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
@@ -85,16 +67,10 @@ extension CreateTranscriptionResponse {
         if let value = try? container.decode(CreateTranscriptionResponseJson.self), sdkKeepsEveryKey(value, of: raw) {
             return .createTranscriptionResponseJson(value)
         }
-        if let value = try? container.decode(CreateTranscriptionResponseDiarizedJson.self), sdkKeepsEveryKey(
-            value,
-            of: raw
-        ) {
+        if let value = try? container.decode(CreateTranscriptionResponseDiarizedJson.self), sdkKeepsEveryKey(value, of: raw) {
             return .createTranscriptionResponseDiarizedJson(value)
         }
-        if let value = try? container.decode(CreateTranscriptionResponseVerboseJson.self), sdkKeepsEveryKey(
-            value,
-            of: raw
-        ) {
+        if let value = try? container.decode(CreateTranscriptionResponseVerboseJson.self), sdkKeepsEveryKey(value, of: raw) {
             return .createTranscriptionResponseVerboseJson(value)
         }
         return nil
@@ -103,19 +79,16 @@ extension CreateTranscriptionResponse {
 
 extension CreateTranscriptionResponse {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(CreateTranscriptionResponseJson.self) {
-            return .createTranscriptionResponseJson(value)
-        }
+        if let value = try? container.decode(CreateTranscriptionResponseJson.self) { return .createTranscriptionResponseJson(value) }
         if let value = try? container.decode(
             CreateTranscriptionResponseDiarizedJson.self
         ) {
-            return .createTranscriptionResponseDiarizedJson(value)
+            return             .createTranscriptionResponseDiarizedJson(value)
         }
         if let value = try? container.decode(
             CreateTranscriptionResponseVerboseJson.self
         ) {
-            return .createTranscriptionResponseVerboseJson(value)
+            return             .createTranscriptionResponseVerboseJson(value)
         }
         return nil
     }
@@ -140,6 +113,7 @@ public indirect enum CreateTranscriptionResponseDiarizedJsonUsage {
 }
 
 extension CreateTranscriptionResponseDiarizedJsonUsage: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -147,16 +121,12 @@ extension CreateTranscriptionResponseDiarizedJsonUsage: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -167,9 +137,9 @@ extension CreateTranscriptionResponseDiarizedJsonUsage: Codable {
 extension CreateTranscriptionResponseDiarizedJsonUsage {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "tokens": try .transcriptTextUsageTokens(TranscriptTextUsageTokens(from: decoder))
-        case "duration": try .transcriptTextUsageDuration(TranscriptTextUsageDuration(from: decoder))
-        default: nil
+        case "tokens": return .transcriptTextUsageTokens(try TranscriptTextUsageTokens(from: decoder))
+        case "duration": return .transcriptTextUsageDuration(try TranscriptTextUsageDuration(from: decoder))
+        default: return nil
         }
     }
 }
@@ -193,6 +163,7 @@ public indirect enum CreateTranscriptionResponseJsonUsage {
 }
 
 extension CreateTranscriptionResponseJsonUsage: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -200,16 +171,12 @@ extension CreateTranscriptionResponseJsonUsage: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -220,9 +187,9 @@ extension CreateTranscriptionResponseJsonUsage: Codable {
 extension CreateTranscriptionResponseJsonUsage {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "tokens": try .transcriptTextUsageTokens(TranscriptTextUsageTokens(from: decoder))
-        case "duration": try .transcriptTextUsageDuration(TranscriptTextUsageDuration(from: decoder))
-        default: nil
+        case "tokens": return .transcriptTextUsageTokens(try TranscriptTextUsageTokens(from: decoder))
+        case "duration": return .transcriptTextUsageDuration(try TranscriptTextUsageDuration(from: decoder))
+        default: return nil
         }
     }
 }
@@ -247,6 +214,7 @@ public indirect enum CreateTranscriptionResponseStreamEvent {
 }
 
 extension CreateTranscriptionResponseStreamEvent: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -254,16 +222,12 @@ extension CreateTranscriptionResponseStreamEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -274,10 +238,10 @@ extension CreateTranscriptionResponseStreamEvent: Codable {
 extension CreateTranscriptionResponseStreamEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "transcript.text.segment": try .transcriptTextSegmentEvent(TranscriptTextSegmentEvent(from: decoder))
-        case "transcript.text.delta": try .transcriptTextDeltaEvent(TranscriptTextDeltaEvent(from: decoder))
-        case "transcript.text.done": try .transcriptTextDoneEvent(TranscriptTextDoneEvent(from: decoder))
-        default: nil
+        case "transcript.text.segment": return .transcriptTextSegmentEvent(try TranscriptTextSegmentEvent(from: decoder))
+        case "transcript.text.delta": return .transcriptTextDeltaEvent(try TranscriptTextDeltaEvent(from: decoder))
+        case "transcript.text.done": return .transcriptTextDoneEvent(try TranscriptTextDoneEvent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -315,46 +279,31 @@ public struct TranscriptTextDeltaEvent: Codable {
         case segmentId = "segment_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension TranscriptTextDeltaEvent {
-    init(from decoder: Decoder) throws {
+extension TranscriptTextDeltaEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.delta) else {
-            throw SdkValidationError(
-                field: "delta",
-                code: "required",
-                message: "Validation failed for 'delta': value is required"
-            )
+            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        delta = try container.sdkDecodeRequired(.delta)
-        logprobs = try container.sdkDecodeIfPresent(.logprobs)
-        segmentId = try container.sdkDecodeIfPresent(.segmentId)
-        try sdkValidateRawEnum("type", type, TranscriptTextDeltaEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.delta = try container.sdkDecodeRequired(.delta)
+        self.logprobs = try container.sdkDecodeIfPresent(.logprobs)
+        self.segmentId = try container.sdkDecodeIfPresent(.segmentId)
+            try sdkValidateRawEnum("type", self.type, TranscriptTextDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension TranscriptTextDeltaEvent {
-    init(
-        type: TranscriptTextDeltaEventType,
-        delta: String,
-        logprobs: [TranscriptTextDeltaEventLogprobsItem]? = nil,
-        segmentId: String? = nil
-    ) throws {
+extension TranscriptTextDeltaEvent {
+    public init(type: TranscriptTextDeltaEventType, delta: String, logprobs: [TranscriptTextDeltaEventLogprobsItem]? = nil, segmentId: String? = nil) throws {
         (self.type, self.delta) = (type, delta)
         (self.logprobs, self.segmentId) = (logprobs, segmentId)
-        try sdkValidateRawEnum("type", self.type, TranscriptTextDeltaEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, TranscriptTextDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -367,27 +316,21 @@ public struct TranscriptionLanguage: Codable {
         case code
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension TranscriptionLanguage {
-    init(from decoder: Decoder) throws {
+extension TranscriptionLanguage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
-        code = try container.sdkDecodeRequired(.code)
+        self.code = try container.sdkDecodeRequired(.code)
     }
 }
 
-public extension TranscriptionLanguage {
-    init(code: String) {
+extension TranscriptionLanguage {
+    public init(code: String) {
         self.code = code
     }
 }
@@ -408,21 +351,21 @@ public struct TranscriptTextDeltaEventLogprobsItem: Codable {
     }
 
     init() {
-        (token, logprob, bytes) = (nil, nil, nil)
+        (self.token, self.logprob, self.bytes) = (nil, nil, nil)
     }
 }
 
-public extension TranscriptTextDeltaEventLogprobsItem {
-    init(from decoder: Decoder) throws {
+extension TranscriptTextDeltaEventLogprobsItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        token = try container.sdkDecodeIfPresent(.token)
-        logprob = try container.sdkDecodeIfPresent(.logprob)
-        bytes = try container.sdkDecodeIfPresent(.bytes)
+        self.token = try container.sdkDecodeIfPresent(.token)
+        self.logprob = try container.sdkDecodeIfPresent(.logprob)
+        self.bytes = try container.sdkDecodeIfPresent(.bytes)
     }
 }
 
-public extension TranscriptTextDeltaEventLogprobsItem {
-    init(token: String? = nil, logprob: Double? = nil, bytes: [Int]? = nil) {
+extension TranscriptTextDeltaEventLogprobsItem {
+    public init(token: String? = nil, logprob: Double? = nil, bytes: [Int]? = nil) {
         self.init()
         (self.token, self.logprob) = (token, logprob)
         self.bytes = bytes
@@ -454,79 +397,46 @@ public struct TranscriptTextSegmentEvent: Codable {
         case speaker
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension TranscriptTextSegmentEvent {
-    init(from decoder: Decoder) throws {
+extension TranscriptTextSegmentEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.start) else {
-            throw SdkValidationError(
-                field: "start",
-                code: "required",
-                message: "Validation failed for 'start': value is required"
-            )
+            throw SdkValidationError(field: "start", code: "required", message: "Validation failed for 'start': value is required")
         }
         guard container.contains(.end) else {
-            throw SdkValidationError(
-                field: "end",
-                code: "required",
-                message: "Validation failed for 'end': value is required"
-            )
+            throw SdkValidationError(field: "end", code: "required", message: "Validation failed for 'end': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
         guard container.contains(.speaker) else {
-            throw SdkValidationError(
-                field: "speaker",
-                code: "required",
-                message: "Validation failed for 'speaker': value is required"
-            )
+            throw SdkValidationError(field: "speaker", code: "required", message: "Validation failed for 'speaker': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        start = try container.sdkDecodeRequired(.start)
-        end = try container.sdkDecodeRequired(.end)
-        text = try container.sdkDecodeRequired(.text)
-        speaker = try container.sdkDecodeRequired(.speaker)
-        try sdkValidateRawEnum("type", type, TranscriptTextSegmentEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.start = try container.sdkDecodeRequired(.start)
+        self.end = try container.sdkDecodeRequired(.end)
+        self.text = try container.sdkDecodeRequired(.text)
+        self.speaker = try container.sdkDecodeRequired(.speaker)
+            try sdkValidateRawEnum("type", self.type, TranscriptTextSegmentEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension TranscriptTextSegmentEvent {
-    init(
-        type: TranscriptTextSegmentEventType,
-        id: String,
-        start: Double,
-        end: Double,
-        text: String,
-        speaker: String
-    ) throws {
+extension TranscriptTextSegmentEvent {
+    public init(type: TranscriptTextSegmentEventType, id: String, start: Double, end: Double, text: String, speaker: String) throws {
         (self.type, self.id) = (type, id)
         (self.start, self.end) = (start, end)
         (self.text, self.speaker) = (text, speaker)
-        try sdkValidateRawEnum("type", self.type, TranscriptTextSegmentEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, TranscriptTextSegmentEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -546,21 +456,21 @@ public struct TranscriptTextDoneEventLogprobsItem: Codable {
     }
 
     init() {
-        (token, logprob, bytes) = (nil, nil, nil)
+        (self.token, self.logprob, self.bytes) = (nil, nil, nil)
     }
 }
 
-public extension TranscriptTextDoneEventLogprobsItem {
-    init(from decoder: Decoder) throws {
+extension TranscriptTextDoneEventLogprobsItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        token = try container.sdkDecodeIfPresent(.token)
-        logprob = try container.sdkDecodeIfPresent(.logprob)
-        bytes = try container.sdkDecodeIfPresent(.bytes)
+        self.token = try container.sdkDecodeIfPresent(.token)
+        self.logprob = try container.sdkDecodeIfPresent(.logprob)
+        self.bytes = try container.sdkDecodeIfPresent(.bytes)
     }
 }
 
-public extension TranscriptTextDoneEventLogprobsItem {
-    init(token: String? = nil, logprob: Double? = nil, bytes: [Int]? = nil) {
+extension TranscriptTextDoneEventLogprobsItem {
+    public init(token: String? = nil, logprob: Double? = nil, bytes: [Int]? = nil) {
         self.init()
         (self.token, self.logprob) = (token, logprob)
         self.bytes = bytes
@@ -583,21 +493,21 @@ public struct CreateTranscriptionResponseJsonLogprobsItem: Codable {
     }
 
     init() {
-        (token, logprob, bytes) = (nil, nil, nil)
+        (self.token, self.logprob, self.bytes) = (nil, nil, nil)
     }
 }
 
-public extension CreateTranscriptionResponseJsonLogprobsItem {
-    init(from decoder: Decoder) throws {
+extension CreateTranscriptionResponseJsonLogprobsItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        token = try container.sdkDecodeIfPresent(.token)
-        logprob = try container.sdkDecodeIfPresent(.logprob)
-        bytes = try container.sdkDecodeIfPresent(.bytes)
+        self.token = try container.sdkDecodeIfPresent(.token)
+        self.logprob = try container.sdkDecodeIfPresent(.logprob)
+        self.bytes = try container.sdkDecodeIfPresent(.bytes)
     }
 }
 
-public extension CreateTranscriptionResponseJsonLogprobsItem {
-    init(token: String? = nil, logprob: Double? = nil, bytes: [Double]? = nil) {
+extension CreateTranscriptionResponseJsonLogprobsItem {
+    public init(token: String? = nil, logprob: Double? = nil, bytes: [Double]? = nil) {
         self.init()
         (self.token, self.logprob) = (token, logprob)
         self.bytes = bytes

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// CodeInterpreter domain models
+// CodeInterpreter domain models
 /// Required object value serialized in the `files[]` wire field.
 public struct CodeInterpreterFileOutputFilesItem: Codable {
     /// The MIME type of the file.
@@ -16,35 +16,25 @@ public struct CodeInterpreterFileOutputFilesItem: Codable {
         case fileId = "file_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CodeInterpreterFileOutputFilesItem {
-    init(from decoder: Decoder) throws {
+extension CodeInterpreterFileOutputFilesItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.mimeType) else {
-            throw SdkValidationError(
-                field: "mime_type",
-                code: "required",
-                message: "Validation failed for 'mime_type': value is required"
-            )
+            throw SdkValidationError(field: "mime_type", code: "required", message: "Validation failed for 'mime_type': value is required")
         }
         guard container.contains(.fileId) else {
-            throw SdkValidationError(
-                field: "file_id",
-                code: "required",
-                message: "Validation failed for 'file_id': value is required"
-            )
+            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
         }
-        mimeType = try container.sdkDecodeRequired(.mimeType)
-        fileId = try container.sdkDecodeRequired(.fileId)
+        self.mimeType = try container.sdkDecodeRequired(.mimeType)
+        self.fileId = try container.sdkDecodeRequired(.fileId)
     }
 }
 
-public extension CodeInterpreterFileOutputFilesItem {
-    init(mimeType: String, fileId: String) {
+extension CodeInterpreterFileOutputFilesItem {
+    public init(mimeType: String, fileId: String) {
         (self.mimeType, self.fileId) = (mimeType, fileId)
     }
 }
@@ -61,35 +51,25 @@ public struct CodeInterpreterFileOutput: Codable {
         case files
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CodeInterpreterFileOutput {
-    init(from decoder: Decoder) throws {
+extension CodeInterpreterFileOutput {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.files) else {
-            throw SdkValidationError(
-                field: "files",
-                code: "required",
-                message: "Validation failed for 'files': value is required"
-            )
+            throw SdkValidationError(field: "files", code: "required", message: "Validation failed for 'files': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        files = try container.sdkDecodeRequired(.files)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.files = try container.sdkDecodeRequired(.files)
     }
 }
 
-public extension CodeInterpreterFileOutput {
-    init(type: CodeInterpreterFileOutputType, files: [CodeInterpreterFileOutputFilesItem]) {
+extension CodeInterpreterFileOutput {
+    public init(type: CodeInterpreterFileOutputType, files: [CodeInterpreterFileOutputFilesItem]) {
         (self.type, self.files) = (type, files)
     }
 }
@@ -106,35 +86,25 @@ public struct CodeInterpreterTextOutput: Codable {
         case logs
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CodeInterpreterTextOutput {
-    init(from decoder: Decoder) throws {
+extension CodeInterpreterTextOutput {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.logs) else {
-            throw SdkValidationError(
-                field: "logs",
-                code: "required",
-                message: "Validation failed for 'logs': value is required"
-            )
+            throw SdkValidationError(field: "logs", code: "required", message: "Validation failed for 'logs': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        logs = try container.sdkDecodeRequired(.logs)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.logs = try container.sdkDecodeRequired(.logs)
     }
 }
 
-public extension CodeInterpreterTextOutput {
-    init(type: CodeInterpreterTextOutputType, logs: String) {
+extension CodeInterpreterTextOutput {
+    public init(type: CodeInterpreterTextOutputType, logs: String) {
         (self.type, self.logs) = (type, logs)
     }
 }
@@ -143,15 +113,12 @@ public extension CodeInterpreterTextOutput {
 public struct CodeInterpreterFileOutputType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let files = CodeInterpreterFileOutputType(rawValue: "files")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -164,15 +131,12 @@ public struct CodeInterpreterFileOutputType: RawRepresentable, Hashable, Codable
 public struct CodeInterpreterTextOutputType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let logs = CodeInterpreterTextOutputType(rawValue: "logs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

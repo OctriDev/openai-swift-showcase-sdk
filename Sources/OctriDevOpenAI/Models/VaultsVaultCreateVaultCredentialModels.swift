@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// VaultsVault domain models
+// VaultsVault domain models
 public indirect enum VaultCredentialNetworkingParam {
     case vaultCredentialNetworkingParamUnrestricted(VaultCredentialNetworkingParamUnrestricted)
     case vaultCredentialNetworkingParamLimited(VaultCredentialNetworkingParamLimited)
@@ -12,6 +12,7 @@ public indirect enum VaultCredentialNetworkingParam {
 }
 
 extension VaultCredentialNetworkingParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension VaultCredentialNetworkingParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,9 +37,9 @@ extension VaultCredentialNetworkingParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "unrestricted":
-            try .vaultCredentialNetworkingParamUnrestricted(VaultCredentialNetworkingParamUnrestricted(from: decoder))
-        case "limited": try .vaultCredentialNetworkingParamLimited(VaultCredentialNetworkingParamLimited(from: decoder))
-        default: nil
+        return .vaultCredentialNetworkingParamUnrestricted(try VaultCredentialNetworkingParamUnrestricted(from: decoder))
+        case "limited": return .vaultCredentialNetworkingParamLimited(try VaultCredentialNetworkingParamLimited(from: decoder))
+        default: return nil
         }
     }
 }
@@ -68,34 +65,24 @@ public struct VaultCredentialNetworkingParamUnrestricted: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VaultCredentialNetworkingParamUnrestricted {
-    init(from decoder: Decoder) throws {
+extension VaultCredentialNetworkingParamUnrestricted {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, VaultCredentialNetworkingParamUnrestrictedType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, VaultCredentialNetworkingParamUnrestrictedType.allCases.map(\.rawValue))
     }
 }
 
-public extension VaultCredentialNetworkingParamUnrestricted {
-    init(type: VaultCredentialNetworkingParamUnrestrictedType) throws {
+extension VaultCredentialNetworkingParamUnrestricted {
+    public init(type: VaultCredentialNetworkingParamUnrestrictedType) throws {
         self.type = type
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            VaultCredentialNetworkingParamUnrestrictedType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, VaultCredentialNetworkingParamUnrestrictedType.allCases.map(\.rawValue))
     }
 }
 
@@ -112,40 +99,30 @@ public struct VaultCredentialNetworkingParamLimited: Codable {
         case allowedHosts = "allowed_hosts"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VaultCredentialNetworkingParamLimited {
-    init(from decoder: Decoder) throws {
+extension VaultCredentialNetworkingParamLimited {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.allowedHosts) else {
-            throw SdkValidationError(
-                field: "allowed_hosts",
-                code: "required",
-                message: "Validation failed for 'allowed_hosts': value is required"
-            )
+            throw SdkValidationError(field: "allowed_hosts", code: "required", message: "Validation failed for 'allowed_hosts': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        allowedHosts = try container.sdkDecodeRequired(.allowedHosts)
-        try sdkValidateRawEnum("type", type, VaultCredentialNetworkingParamLimitedType.allCases.map(\.rawValue))
-        try validateItems("allowed_hosts", allowedHosts, min: 1, max: 16)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.allowedHosts = try container.sdkDecodeRequired(.allowedHosts)
+            try sdkValidateRawEnum("type", self.type, VaultCredentialNetworkingParamLimitedType.allCases.map(\.rawValue))
+            try validateItems("allowed_hosts", self.allowedHosts, min: 1, max: 16)
     }
 }
 
-public extension VaultCredentialNetworkingParamLimited {
-    init(type: VaultCredentialNetworkingParamLimitedType, allowedHosts: [String]) throws {
+extension VaultCredentialNetworkingParamLimited {
+    public init(type: VaultCredentialNetworkingParamLimitedType, allowedHosts: [String]) throws {
         (self.type, self.allowedHosts) = (type, allowedHosts)
-        try sdkValidateRawEnum("type", self.type, VaultCredentialNetworkingParamLimitedType.allCases.map(\.rawValue))
-        try validateItems("allowed_hosts", self.allowedHosts, min: 1, max: 16)
+            try sdkValidateRawEnum("type", self.type, VaultCredentialNetworkingParamLimitedType.allCases.map(\.rawValue))
+            try validateItems("allowed_hosts", self.allowedHosts, min: 1, max: 16)
     }
 }
 

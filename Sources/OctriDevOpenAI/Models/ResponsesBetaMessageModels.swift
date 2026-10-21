@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaMessage domain models
+// ResponsesBetaMessage domain models
 public indirect enum BetaMessageContentItem {
     case betaInputTextContent(BetaInputTextContent)
     case betaOutputTextContent(BetaOutputTextContent)
@@ -20,6 +20,7 @@ public indirect enum BetaMessageContentItem {
 }
 
 extension BetaMessageContentItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -27,16 +28,12 @@ extension BetaMessageContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -47,17 +44,17 @@ extension BetaMessageContentItem: Codable {
 extension BetaMessageContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": try .betaInputTextContent(BetaInputTextContent(from: decoder))
-        case "output_text": try .betaOutputTextContent(BetaOutputTextContent(from: decoder))
-        case "text": try .betaTextContent(BetaTextContent(from: decoder))
-        case "summary_text": try .betaSummaryTextContent(BetaSummaryTextContent(from: decoder))
-        case "reasoning_text": try .betaReasoningTextContent(BetaReasoningTextContent(from: decoder))
-        case "refusal": try .betaRefusalContent(BetaRefusalContent(from: decoder))
-        case "input_image": try .betaInputImageContent(BetaInputImageContent(from: decoder))
-        case "computer_screenshot": try .betaComputerScreenshotContent(BetaComputerScreenshotContent(from: decoder))
-        case "input_file": try .betaInputFileContent(BetaInputFileContent(from: decoder))
-        case "encrypted_content": try .betaEncryptedContent(BetaEncryptedContent(from: decoder))
-        default: nil
+        case "input_text": return .betaInputTextContent(try BetaInputTextContent(from: decoder))
+        case "output_text": return .betaOutputTextContent(try BetaOutputTextContent(from: decoder))
+        case "text": return .betaTextContent(try BetaTextContent(from: decoder))
+        case "summary_text": return .betaSummaryTextContent(try BetaSummaryTextContent(from: decoder))
+        case "reasoning_text": return .betaReasoningTextContent(try BetaReasoningTextContent(from: decoder))
+        case "refusal": return .betaRefusalContent(try BetaRefusalContent(from: decoder))
+        case "input_image": return .betaInputImageContent(try BetaInputImageContent(from: decoder))
+        case "computer_screenshot": return .betaComputerScreenshotContent(try BetaComputerScreenshotContent(from: decoder))
+        case "input_file": return .betaInputFileContent(try BetaInputFileContent(from: decoder))
+        case "encrypted_content": return .betaEncryptedContent(try BetaEncryptedContent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -110,75 +107,45 @@ public struct BetaMessage: Codable {
         case phase
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaMessage {
-    init(from decoder: Decoder) throws {
+extension BetaMessage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        status = try container.sdkDecodeRequired(.status)
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        phase = try container.sdkDecodeIfPresent(.phase)
-        try sdkValidateRawEnum("type", type, BetaMessageType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.phase = try container.sdkDecodeIfPresent(.phase)
+            try sdkValidateRawEnum("type", self.type, BetaMessageType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaMessage {
-    init(
-        type: BetaMessageType,
-        id: String,
-        status: BetaMessageStatus,
-        role: BetaMessageRole,
-        content: [BetaMessageContentItem],
-        agent: BetaAgentTag? = nil,
-        phase: BetaMessagePhase2? = nil
-    ) throws {
+extension BetaMessage {
+    public init(type: BetaMessageType, id: String, status: BetaMessageStatus, role: BetaMessageRole, content: [BetaMessageContentItem], agent: BetaAgentTag? = nil, phase: BetaMessagePhase2? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.status, self.role) = (status, role)
         (self.content, self.agent) = (content, agent)
         self.phase = phase
-        try sdkValidateRawEnum("type", self.type, BetaMessageType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaMessageType.allCases.map(\.rawValue))
     }
 }
 
@@ -186,16 +153,13 @@ public extension BetaMessage {
 public struct BetaMessagePhase2: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let commentary = BetaMessagePhase2(rawValue: "commentary")
     public static let finalAnswer = BetaMessagePhase2(rawValue: "final_answer")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -208,17 +172,14 @@ public struct BetaMessagePhase2: RawRepresentable, Hashable, Codable, Sendable, 
 public struct BetaMessageStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaMessageStatus(rawValue: "in_progress")
     public static let completed = BetaMessageStatus(rawValue: "completed")
     public static let incomplete = BetaMessageStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -233,16 +194,13 @@ public struct BetaMessageStatus: RawRepresentable, Hashable, Codable, Sendable, 
 public struct BetaMessagePhase: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let commentary = BetaMessagePhase(rawValue: "commentary")
     public static let finalAnswer = BetaMessagePhase(rawValue: "final_answer")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -255,10 +213,7 @@ public struct BetaMessagePhase: RawRepresentable, Hashable, Codable, Sendable, S
 public struct BetaMessageRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let unknown = BetaMessageRole(rawValue: "unknown")
     public static let user = BetaMessageRole(rawValue: "user")
     public static let assistant = BetaMessageRole(rawValue: "assistant")
@@ -270,7 +225,7 @@ public struct BetaMessageRole: RawRepresentable, Hashable, Codable, Sendable, Sd
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

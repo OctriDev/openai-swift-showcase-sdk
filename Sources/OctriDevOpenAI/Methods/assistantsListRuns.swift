@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    /// Lists runs belonging to a thread. Use `order` to sort runs by creation time and `after` or `before` to navigate
-    /// through the results. The returned run statuses show whether each run is queued, active, completed, or in another
-    /// state.
+extension AssistantsMethods {
+    /// Lists runs belonging to a thread. Use `order` to sort runs by creation time and `after` or `before` to navigate through the results. The returned run statuses show whether each run is queued, active, completed, or in another state.
     ///
     /// Returns a list of runs belonging to a thread.
     ///
@@ -27,35 +25,16 @@ public extension AssistantsMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, starting with obj_foo, your subsequent call can include
     ///   before=obj_foo in order to fetch the previous page of the list.
-    static func listRuns(
-        config: ClientConfig,
-        threadId: String,
-        limit: Int? = nil,
-        order: ListRunsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListRunsResponse {
-        try await (sdkRequest(
-            "GET",
-            ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/runs"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("before", value: before),
-            ],
-            decoder: .json,
-            operationId: "listRuns",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+    public static func listRuns(config: ClientConfig, threadId: String, limit: Int? = nil, order: ListRunsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListRunsResponse {
+        return try (await sdkRequest("GET", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/runs"].joined(), config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("before", value: before),
+        ], decoder: .json, operationId: "listRuns", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 
-    /// Lists runs belonging to a thread. Use `order` to sort runs by creation time and `after` or `before` to navigate
-    /// through the results. The returned run statuses show whether each run is queued, active, completed, or in another
-    /// state.
+    /// Lists runs belonging to a thread. Use `order` to sort runs by creation time and `after` or `before` to navigate through the results. The returned run statuses show whether each run is queued, active, completed, or in another state.
     ///
     /// Returns a list of runs belonging to a thread.
     ///
@@ -73,42 +52,17 @@ public extension AssistantsMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, starting with obj_foo, your subsequent call can include
     ///   before=obj_foo in order to fetch the previous page of the list.
-    static func listRunsPaginated(
-        config: ClientConfig,
-        threadId: String,
-        limit: Int? = nil,
-        order: ListRunsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<RunObject, Swift.Error> {
-        AsyncThrowingStream<RunObject, Swift.Error> { (continuation: AsyncThrowingStream<
-            RunObject,
-            Swift.Error
-        >.Continuation) in
+    public static func listRunsPaginated(config: ClientConfig, threadId: String, limit: Int? = nil, order: ListRunsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<RunObject, Swift.Error> {
+        return AsyncThrowingStream<RunObject, Swift.Error> { (continuation: AsyncThrowingStream<RunObject, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listRuns(
-                            config: config,
-                            threadId: threadId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listRuns(config: config, threadId: threadId, limit: limit, order: order, after: pageCursor, before: before, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -121,47 +75,24 @@ public extension AssistantsMethods {
         }
     }
 
-    struct ListRunsPage {
+    public struct ListRunsPage {
         public let data: ListRunsResponse
         public let items: [RunObject]
         public let hasMore: Bool
     }
 
-    static func listRunsPages(
-        config: ClientConfig,
-        threadId: String,
-        limit: Int? = nil,
-        order: ListRunsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListRunsPage, Swift.Error> {
-        AsyncThrowingStream<ListRunsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListRunsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listRunsPages(config: ClientConfig, threadId: String, limit: Int? = nil, order: ListRunsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListRunsPage, Swift.Error> {
+        return AsyncThrowingStream<ListRunsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListRunsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listRuns(
-                            config: config,
-                            threadId: threadId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listRuns(config: config, threadId: threadId, limit: limit, order: order, after: pageCursor, before: before, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && true
                         pageContinuation.yield(ListRunsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore {
-                            break
-                        }
+                        if !hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

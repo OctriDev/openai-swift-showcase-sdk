@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AssistantsAssistants domain models
+// AssistantsAssistants domain models
 public indirect enum AssistantsApiResponseFormatOption {
     case stringValue(String)
     case responseFormatText(ResponseFormatText)
@@ -14,6 +14,7 @@ public indirect enum AssistantsApiResponseFormatOption {
 }
 
 extension AssistantsApiResponseFormatOption: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,29 +22,20 @@ extension AssistantsApiResponseFormatOption: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-                self = value; return
-            }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) {
-            self = value; return
-        }
+        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for AssistantsApiResponseFormatOption"
-        )
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for AssistantsApiResponseFormatOption")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -54,28 +46,20 @@ extension AssistantsApiResponseFormatOption: Codable {
 extension AssistantsApiResponseFormatOption {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "text": try .responseFormatText(ResponseFormatText(from: decoder))
-        case "json_object": try .responseFormatJsonObject(ResponseFormatJsonObject(from: decoder))
-        case "json_schema": try .responseFormatJsonSchema(ResponseFormatJsonSchema(from: decoder))
-        default: nil
+        case "text": return .responseFormatText(try ResponseFormatText(from: decoder))
+        case "json_object": return .responseFormatJsonObject(try ResponseFormatJsonObject(from: decoder))
+        case "json_schema": return .responseFormatJsonSchema(try ResponseFormatJsonSchema(from: decoder))
+        default: return nil
         }
     }
 }
 
 extension AssistantsApiResponseFormatOption {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(ResponseFormatText.self) {
-            return .responseFormatText(value)
-        }
-        if let value = try? container.decode(ResponseFormatJsonObject.self) {
-            return .responseFormatJsonObject(value)
-        }
-        if let value = try? container.decode(ResponseFormatJsonSchema.self) {
-            return .responseFormatJsonSchema(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(ResponseFormatText.self) { return .responseFormatText(value) }
+        if let value = try? container.decode(ResponseFormatJsonObject.self) { return .responseFormatJsonObject(value) }
+        if let value = try? container.decode(ResponseFormatJsonSchema.self) { return .responseFormatJsonSchema(value) }
         return nil
     }
 }
@@ -99,33 +83,22 @@ public indirect enum AssistantsApiToolChoiceOption {
 }
 
 extension AssistantsApiToolChoiceOption: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for AssistantsApiToolChoiceOption"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for AssistantsApiToolChoiceOption")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension AssistantsApiToolChoiceOption {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container
-            .decode(AssistantsNamedToolChoice.self) {
-            return .assistantsNamedToolChoice(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(AssistantsNamedToolChoice.self) { return .assistantsNamedToolChoice(value) }
         return nil
     }
 }
@@ -149,27 +122,21 @@ public struct AssistantsNamedToolChoiceFunction: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AssistantsNamedToolChoiceFunction {
-    init(from decoder: Decoder) throws {
+extension AssistantsNamedToolChoiceFunction {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
+        self.name = try container.sdkDecodeRequired(.name)
     }
 }
 
-public extension AssistantsNamedToolChoiceFunction {
-    init(name: String) {
+extension AssistantsNamedToolChoiceFunction {
+    public init(name: String) {
         self.name = name
     }
 }
@@ -186,28 +153,22 @@ public struct AssistantsNamedToolChoice: Codable {
         case function
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AssistantsNamedToolChoice {
-    init(from decoder: Decoder) throws {
+extension AssistantsNamedToolChoice {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        function = try container.sdkDecodeIfPresent(.function)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.function = try container.sdkDecodeIfPresent(.function)
     }
 }
 
-public extension AssistantsNamedToolChoice {
-    init(type: AssistantsNamedToolChoiceType, function: AssistantsNamedToolChoiceFunction? = nil) {
+extension AssistantsNamedToolChoice {
+    public init(type: AssistantsNamedToolChoiceType, function: AssistantsNamedToolChoiceFunction? = nil) {
         (self.type, self.function) = (type, function)
     }
 }
@@ -218,17 +179,14 @@ public extension AssistantsNamedToolChoice {
 public struct AssistantsApiToolChoiceOptionVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let none = AssistantsApiToolChoiceOptionVariant0(rawValue: "none")
     public static let auto = AssistantsApiToolChoiceOptionVariant0(rawValue: "auto")
     public static let required = AssistantsApiToolChoiceOptionVariant0(rawValue: "required")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -238,19 +196,15 @@ public struct AssistantsApiToolChoiceOptionVariant0: RawRepresentable, Hashable,
 }
 
 /// `auto` is the default value
-public struct AssistantsApiResponseFormatOptionVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct AssistantsApiResponseFormatOptionVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = AssistantsApiResponseFormatOptionVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -263,17 +217,14 @@ public struct AssistantsApiResponseFormatOptionVariant0: RawRepresentable, Hasha
 public struct AssistantsNamedToolChoiceType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let function = AssistantsNamedToolChoiceType(rawValue: "function")
     public static let codeInterpreter = AssistantsNamedToolChoiceType(rawValue: "code_interpreter")
     public static let fileSearch = AssistantsNamedToolChoiceType(rawValue: "file_search")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

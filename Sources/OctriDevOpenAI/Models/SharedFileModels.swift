@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedFile domain models
+// SharedFile domain models
 /// A path to a file.
 public struct FilePath: Codable {
     /// The type of the file path. Always `file_path`.
@@ -19,47 +19,33 @@ public struct FilePath: Codable {
         case index
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension FilePath {
-    init(from decoder: Decoder) throws {
+extension FilePath {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.fileId) else {
-            throw SdkValidationError(
-                field: "file_id",
-                code: "required",
-                message: "Validation failed for 'file_id': value is required"
-            )
+            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
         }
         guard container.contains(.index) else {
-            throw SdkValidationError(
-                field: "index",
-                code: "required",
-                message: "Validation failed for 'index': value is required"
-            )
+            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        fileId = try container.sdkDecodeRequired(.fileId)
-        index = try container.sdkDecodeRequired(.index)
-        try sdkValidateRawEnum("type", type, FilePathType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.fileId = try container.sdkDecodeRequired(.fileId)
+        self.index = try container.sdkDecodeRequired(.index)
+            try sdkValidateRawEnum("type", self.type, FilePathType.allCases.map(\.rawValue))
     }
 }
 
-public extension FilePath {
-    init(type: FilePathType, fileId: String, index: Int) throws {
+extension FilePath {
+    public init(type: FilePathType, fileId: String, index: Int) throws {
         (self.type, self.fileId) = (type, fileId)
         self.index = index
-        try sdkValidateRawEnum("type", self.type, FilePathType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, FilePathType.allCases.map(\.rawValue))
     }
 }
 
@@ -81,55 +67,37 @@ public struct FileCitationBody: Codable {
         case filename
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension FileCitationBody {
-    init(from decoder: Decoder) throws {
+extension FileCitationBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.fileId) else {
-            throw SdkValidationError(
-                field: "file_id",
-                code: "required",
-                message: "Validation failed for 'file_id': value is required"
-            )
+            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
         }
         guard container.contains(.index) else {
-            throw SdkValidationError(
-                field: "index",
-                code: "required",
-                message: "Validation failed for 'index': value is required"
-            )
+            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
         }
         guard container.contains(.filename) else {
-            throw SdkValidationError(
-                field: "filename",
-                code: "required",
-                message: "Validation failed for 'filename': value is required"
-            )
+            throw SdkValidationError(field: "filename", code: "required", message: "Validation failed for 'filename': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        fileId = try container.sdkDecodeRequired(.fileId)
-        index = try container.sdkDecodeRequired(.index)
-        filename = try container.sdkDecodeRequired(.filename)
-        try sdkValidateRawEnum("type", type, FileCitationBodyType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.fileId = try container.sdkDecodeRequired(.fileId)
+        self.index = try container.sdkDecodeRequired(.index)
+        self.filename = try container.sdkDecodeRequired(.filename)
+            try sdkValidateRawEnum("type", self.type, FileCitationBodyType.allCases.map(\.rawValue))
     }
 }
 
-public extension FileCitationBody {
-    init(type: FileCitationBodyType, fileId: String, index: Int, filename: String) throws {
+extension FileCitationBody {
+    public init(type: FileCitationBodyType, fileId: String, index: Int, filename: String) throws {
         (self.type, self.fileId) = (type, fileId)
         (self.index, self.filename) = (index, filename)
-        try sdkValidateRawEnum("type", self.type, FileCitationBodyType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, FileCitationBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -154,63 +122,39 @@ public struct FileSearchToolCall: Codable {
         case results
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension FileSearchToolCall {
-    init(from decoder: Decoder) throws {
+extension FileSearchToolCall {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.queries) else {
-            throw SdkValidationError(
-                field: "queries",
-                code: "required",
-                message: "Validation failed for 'queries': value is required"
-            )
+            throw SdkValidationError(field: "queries", code: "required", message: "Validation failed for 'queries': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        type = try container.sdkDecodeRequired(.type)
-        status = try container.sdkDecodeRequired(.status)
-        queries = try container.sdkDecodeRequired(.queries)
-        results = try container.sdkDecodeIfPresent(.results)
-        try sdkValidateRawEnum("type", type, FileSearchToolCallType.allCases.map(\.rawValue))
+        self.id = try container.sdkDecodeRequired(.id)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.queries = try container.sdkDecodeRequired(.queries)
+        self.results = try container.sdkDecodeIfPresent(.results)
+            try sdkValidateRawEnum("type", self.type, FileSearchToolCallType.allCases.map(\.rawValue))
     }
 }
 
-public extension FileSearchToolCall {
-    init(
-        id: String,
-        type: FileSearchToolCallType,
-        status: FileSearchToolCallStatus,
-        queries: [String],
-        results: [FileSearchToolCallResultsItem]? = nil
-    ) throws {
+extension FileSearchToolCall {
+    public init(id: String, type: FileSearchToolCallType, status: FileSearchToolCallStatus, queries: [String], results: [FileSearchToolCallResultsItem]? = nil) throws {
         (self.id, self.type) = (id, type)
         (self.status, self.queries) = (status, queries)
         self.results = results
-        try sdkValidateRawEnum("type", self.type, FileSearchToolCallType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, FileSearchToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -235,49 +179,33 @@ public struct FileSearchTool: Codable {
         case filters
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension FileSearchTool {
-    init(from decoder: Decoder) throws {
+extension FileSearchTool {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.vectorStoreIds) else {
-            throw SdkValidationError(
-                field: "vector_store_ids",
-                code: "required",
-                message: "Validation failed for 'vector_store_ids': value is required"
-            )
+            throw SdkValidationError(field: "vector_store_ids", code: "required", message: "Validation failed for 'vector_store_ids': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        vectorStoreIds = try container.sdkDecodeRequired(.vectorStoreIds)
-        maxNumResults = try container.sdkDecodeIfPresent(.maxNumResults)
-        rankingOptions = try container.sdkDecodeIfPresent(.rankingOptions)
-        filters = try container.sdkDecodeIfPresent(.filters)
-        try sdkValidateRawEnum("type", type, FileSearchToolType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.vectorStoreIds = try container.sdkDecodeRequired(.vectorStoreIds)
+        self.maxNumResults = try container.sdkDecodeIfPresent(.maxNumResults)
+        self.rankingOptions = try container.sdkDecodeIfPresent(.rankingOptions)
+        self.filters = try container.sdkDecodeIfPresent(.filters)
+            try sdkValidateRawEnum("type", self.type, FileSearchToolType.allCases.map(\.rawValue))
     }
 }
 
-public extension FileSearchTool {
-    init(
-        type: FileSearchToolType,
-        vectorStoreIds: [String],
-        maxNumResults: Int? = nil,
-        rankingOptions: RankingOptions? = nil,
-        filters: Filters? = nil
-    ) throws {
+extension FileSearchTool {
+    public init(type: FileSearchToolType, vectorStoreIds: [String], maxNumResults: Int? = nil, rankingOptions: RankingOptions? = nil, filters: Filters? = nil) throws {
         (self.type, self.vectorStoreIds) = (type, vectorStoreIds)
         (self.maxNumResults, self.rankingOptions) = (maxNumResults, rankingOptions)
         self.filters = filters
-        try sdkValidateRawEnum("type", self.type, FileSearchToolType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, FileSearchToolType.allCases.map(\.rawValue))
     }
 }
 
@@ -295,54 +223,28 @@ public struct FileExpirationAfter: Codable {
         case seconds
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension FileExpirationAfter {
-    init(from decoder: Decoder) throws {
+extension FileExpirationAfter {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.anchor) else {
-            throw SdkValidationError(
-                field: "anchor",
-                code: "required",
-                message: "Validation failed for 'anchor': value is required"
-            )
+            throw SdkValidationError(field: "anchor", code: "required", message: "Validation failed for 'anchor': value is required")
         }
         guard container.contains(.seconds) else {
-            throw SdkValidationError(
-                field: "seconds",
-                code: "required",
-                message: "Validation failed for 'seconds': value is required"
-            )
+            throw SdkValidationError(field: "seconds", code: "required", message: "Validation failed for 'seconds': value is required")
         }
-        anchor = try container.sdkDecodeRequired(.anchor)
-        seconds = try container.sdkDecodeRequired(.seconds)
-        try validateRange(
-            "seconds",
-            Double(seconds),
-            min: 3600,
-            max: 2_592_000,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.anchor = try container.sdkDecodeRequired(.anchor)
+        self.seconds = try container.sdkDecodeRequired(.seconds)
+            try validateRange("seconds", Double(self.seconds), min: 3600, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension FileExpirationAfter {
-    init(anchor: FileExpirationAfterAnchor, seconds: Int) throws {
+extension FileExpirationAfter {
+    public init(anchor: FileExpirationAfterAnchor, seconds: Int) throws {
         (self.anchor, self.seconds) = (anchor, seconds)
-        try validateRange(
-            "seconds",
-            Double(self.seconds),
-            min: 3600,
-            max: 2_592_000,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("seconds", Double(self.seconds), min: 3600, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -371,29 +273,23 @@ public struct FileSearchToolCallResultsItem: Codable {
     }
 
     init() {
-        (fileId, text, filename, attributes, score) = (nil, nil, nil, nil, nil)
+        (self.fileId, self.text, self.filename, self.attributes, self.score) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension FileSearchToolCallResultsItem {
-    init(from decoder: Decoder) throws {
+extension FileSearchToolCallResultsItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        text = try container.sdkDecodeIfPresent(.text)
-        filename = try container.sdkDecodeIfPresent(.filename)
-        attributes = try container.sdkDecodeIfPresent(.attributes)
-        score = try container.sdkDecodeIfPresent(.score)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.filename = try container.sdkDecodeIfPresent(.filename)
+        self.attributes = try container.sdkDecodeIfPresent(.attributes)
+        self.score = try container.sdkDecodeIfPresent(.score)
     }
 }
 
-public extension FileSearchToolCallResultsItem {
-    init(
-        fileId: String? = nil,
-        text: String? = nil,
-        filename: String? = nil,
-        attributes: VectorStoreFileAttributes? = nil,
-        score: Double? = nil
-    ) {
+extension FileSearchToolCallResultsItem {
+    public init(fileId: String? = nil, text: String? = nil, filename: String? = nil, attributes: VectorStoreFileAttributes? = nil, score: Double? = nil) {
         self.init()
         (self.fileId, self.text) = (fileId, text)
         (self.filename, self.attributes) = (filename, attributes)
@@ -405,17 +301,14 @@ public extension FileSearchToolCallResultsItem {
 public struct FileDetailEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = FileDetailEnum(rawValue: "auto")
     public static let low = FileDetailEnum(rawValue: "low")
     public static let high = FileDetailEnum(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -464,17 +357,14 @@ public enum FileSearchToolCallType: String, CaseIterable, Codable {
 public struct FileInputDetail: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = FileInputDetail(rawValue: "auto")
     public static let low = FileInputDetail(rawValue: "low")
     public static let high = FileInputDetail(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -487,10 +377,7 @@ public struct FileInputDetail: RawRepresentable, Hashable, Codable, Sendable, Sd
 public struct FileSearchToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = FileSearchToolCallStatus(rawValue: "in_progress")
     public static let searching = FileSearchToolCallStatus(rawValue: "searching")
     public static let completed = FileSearchToolCallStatus(rawValue: "completed")
@@ -499,7 +386,7 @@ public struct FileSearchToolCallStatus: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -530,15 +417,12 @@ public enum FileSearchToolType: String, CaseIterable, Codable {
 public struct FileExpirationAfterAnchor: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let createdAt = FileExpirationAfterAnchor(rawValue: "created_at")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

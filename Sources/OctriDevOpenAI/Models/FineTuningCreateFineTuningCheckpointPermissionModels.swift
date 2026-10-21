@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// FineTuning domain models
+// FineTuning domain models
 /// Typed representation of the `CreateFineTuningCheckpointPermissionRequest` API schema.
 public struct CreateFineTuningCheckpointPermissionRequest: Codable {
     /// The project identifiers to grant access to.
@@ -13,27 +13,21 @@ public struct CreateFineTuningCheckpointPermissionRequest: Codable {
         case projectIds = "project_ids"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateFineTuningCheckpointPermissionRequest {
-    init(from decoder: Decoder) throws {
+extension CreateFineTuningCheckpointPermissionRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.projectIds) else {
-            throw SdkValidationError(
-                field: "project_ids",
-                code: "required",
-                message: "Validation failed for 'project_ids': value is required"
-            )
+            throw SdkValidationError(field: "project_ids", code: "required", message: "Validation failed for 'project_ids': value is required")
         }
-        projectIds = try container.sdkDecodeRequired(.projectIds)
+        self.projectIds = try container.sdkDecodeRequired(.projectIds)
     }
 }
 
-public extension CreateFineTuningCheckpointPermissionRequest {
-    init(projectIds: [String]) {
+extension CreateFineTuningCheckpointPermissionRequest {
+    public init(projectIds: [String]) {
         self.projectIds = projectIds
     }
 }

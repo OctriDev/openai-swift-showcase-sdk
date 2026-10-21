@@ -6,64 +6,29 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension CertificatesMethods {
-    /// Upload a certificate to the organization. This does **not** automatically activate the certificate.
-    /// Organizations can upload up to 50 certificates.
+extension CertificatesMethods {
+    /// Upload a certificate to the organization. This does **not** automatically activate the certificate. Organizations can upload up to 50 certificates.
     ///
     /// - Parameters:
     /// - certificate: The certificate content in PEM format
     /// - name: An optional name for the certificate
-    static func uploadCertificate(
-        config: ClientConfig,
-        certificate: String,
-        name: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Certificate {
+    public static func uploadCertificate(config: ClientConfig, certificate: String, name: String? = nil, requestOptions: RequestOptions? = nil) async throws -> Certificate {
         let requestBody = UploadCertificateRequestBody(certificate: certificate, name: name)
 
-        return try await (sdkRequest(
-            "POST",
-            "/organization/certificates",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "uploadCertificate",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/organization/certificates", config: config, body: requestBody, decoder: .json, operationId: "uploadCertificate", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Get a certificate that has been uploaded to the organization. You can get a certificate regardless of whether it
-    /// is active or not.
+    /// Get a certificate that has been uploaded to the organization. You can get a certificate regardless of whether it is active or not.
     ///
     /// - Parameters:
     /// - certificateId: Unique ID of the certificate to retrieve.
     /// - include: A list of additional fields to include in the response. Currently
     ///   the only supported value is `content` to fetch the PEM content of the
     ///   certificate.
-    static func getCertificate(
-        config: ClientConfig,
-        certificateId: String,
-        include: [GetCertificateParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Certificate {
-        try await (sdkRequest(
-            "GET",
-            ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("include", values: include, style: "form", explode: true),
-            ],
-            decoder: .json,
-            operationId: "getCertificate",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func getCertificate(config: ClientConfig, certificateId: String, include: [GetCertificateParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> Certificate {
+        return try (await sdkRequest("GET", ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(), config: config, query: [
+            SdkQueryParameter("include", values: include, style: "form", explode: true),
+        ], decoder: .json, operationId: "getCertificate", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
     /// Modify a certificate. Note that only the name can be modified.
@@ -71,29 +36,9 @@ public extension CertificatesMethods {
     /// - Parameters:
     /// - certificateId: Unique ID of the certificate to modify.
     /// - name: The updated name for the certificate
-    static func modifyCertificate(
-        config: ClientConfig,
-        certificateId: String,
-        name: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Certificate {
+    public static func modifyCertificate(config: ClientConfig, certificateId: String, name: String? = nil, requestOptions: RequestOptions? = nil) async throws -> Certificate {
         let requestBody = ModifyCertificateRequestBody(name: name)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "modifyCertificate",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "modifyCertificate", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

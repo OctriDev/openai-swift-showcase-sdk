@@ -6,33 +6,18 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectsMethods {
-    /// Retrieves a project in the organization by its identifier. Use `project_id` to select the project whose name,
-    /// status, and residency configuration you need to inspect.
+extension ProjectsMethods {
+    /// Retrieves a project in the organization by its identifier. Use `project_id` to select the project whose name, status, and residency configuration you need to inspect.
     ///
     /// Retrieves a project.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
-    static func retrieveProject(
-        config: ClientConfig,
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Project {
-        try await (sdkRequest(
-            "GET",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveProject",
-            options: requestOptions,
-            errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func retrieveProject(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> Project {
+        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId))].joined(), config: config, decoder: .json, operationId: "retrieveProject", options: requestOptions, errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Updates a project in the organization. Supply any of `name`, `external_key_id`, or `geography` to change the
-    /// corresponding project value; omitted fields are not specified for update. The `geography` field is retained for
-    /// backward compatibility, while data residency is configured with `residency` when creating a project.
+    /// Updates a project in the organization. Supply any of `name`, `external_key_id`, or `geography` to change the corresponding project value; omitted fields are not specified for update. The `geography` field is retained for backward compatibility, while data residency is configured with `residency` when creating a project.
     ///
     /// Modifies a project in the organization.
     ///
@@ -43,30 +28,9 @@ public extension ProjectsMethods {
     /// - geography: Geography for the project. Deprecated: use `residency` when
     ///   creating a project to configure data residency. This field is retained for
     ///   backward compatibility.
-    static func modifyProject(
-        config: ClientConfig,
-        projectId: String,
-        name: SdkOptional<String>? = nil,
-        externalKeyId: SdkOptional<String>? = nil,
-        geography: SdkOptional<String>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Project {
+    public static func modifyProject(config: ClientConfig, projectId: String, name: SdkOptional<String>? = nil, externalKeyId: SdkOptional<String>? = nil, geography: SdkOptional<String>? = nil, requestOptions: RequestOptions? = nil) async throws -> Project {
         let requestBody = ModifyProjectRequestBody(name: name, externalKeyId: externalKeyId, geography: geography)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId))].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "modifyProject",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "modifyProject", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

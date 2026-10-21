@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedItem domain models
+// SharedItem domain models
 public indirect enum Item {
     case inputMessage(InputMessage)
     case outputMessage(OutputMessage)
@@ -38,6 +38,7 @@ public indirect enum Item {
 }
 
 extension Item: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -45,23 +46,13 @@ extension Item: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-                self = value; return
-            }
-            if let value = try Self.decodeGroup2(discriminator, from: decoder) {
-                self = value; return
-            }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup2(discriminator, from: decoder) { self = value; return }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) {
-            self = value; return
-        }
-        if let value = Self.decodeUntaggedGroup2(from: container) {
-            self = value; return
-        }
-        if let value = Self.decodeUntaggedGroup3(from: container) {
-            self = value; return
-        }
+        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup2(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup3(from: container) { self = value; return }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
@@ -71,15 +62,9 @@ extension Item: Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-        if try encodeGroup2(to: encoder) {
-            return
-        }
-        if try encodeGroup3(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup3(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -90,31 +75,27 @@ extension Item: Codable {
 extension Item {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file_search_call": try .fileSearchToolCall(FileSearchToolCall(from: decoder))
-        case "computer_call": try .computerToolCall(ComputerToolCall(from: decoder))
-        case "computer_call_output": try .computerCallOutputItemParam(ComputerCallOutputItemParam(from: decoder))
-        case "web_search_call": try .webSearchToolCall(WebSearchToolCall(from: decoder))
-        case "function_call": try .functionToolCall(FunctionToolCall(from: decoder))
-        case "function_call_output": try .functionCallOutputItemParam(FunctionCallOutputItemParam(from: decoder))
-        case "tool_search_call": try .toolSearchCallItemParam(ToolSearchCallItemParam(from: decoder))
-        case "tool_search_output": try .toolSearchOutputItemParam(ToolSearchOutputItemParam(from: decoder))
-        case "additional_tools": try .additionalToolsItemParam(AdditionalToolsItemParam(from: decoder))
-        case "configuration_update": try .responseConfigurationUpdateItemParam(
-                ResponseConfigurationUpdateItemParam(from: decoder)
-            )
-        case "reasoning": try .reasoningItem(ReasoningItem(from: decoder))
-        case "compaction": try .compactionSummaryItemParam(CompactionSummaryItemParam(from: decoder))
-        case "image_generation_call": try .imageGenToolCall(ImageGenToolCall(from: decoder))
-        case "code_interpreter_call": try .codeInterpreterToolCall(CodeInterpreterToolCall(from: decoder))
-        case "local_shell_call": try .localShellToolCall(LocalShellToolCall(from: decoder))
-        case "local_shell_call_output": try .localShellToolCallOutput(LocalShellToolCallOutput(from: decoder))
-        case "shell_call": try .functionShellCallItemParam(FunctionShellCallItemParam(from: decoder))
-        case "shell_call_output": try .functionShellCallOutputItemParam(FunctionShellCallOutputItemParam(from: decoder))
-        case "apply_patch_call": try .applyPatchToolCallItemParam(ApplyPatchToolCallItemParam(from: decoder))
-        case "apply_patch_call_output": try .applyPatchToolCallOutputItemParam(
-                ApplyPatchToolCallOutputItemParam(from: decoder)
-            )
-        default: nil
+        case "file_search_call": return .fileSearchToolCall(try FileSearchToolCall(from: decoder))
+        case "computer_call": return .computerToolCall(try ComputerToolCall(from: decoder))
+        case "computer_call_output": return .computerCallOutputItemParam(try ComputerCallOutputItemParam(from: decoder))
+        case "web_search_call": return .webSearchToolCall(try WebSearchToolCall(from: decoder))
+        case "function_call": return .functionToolCall(try FunctionToolCall(from: decoder))
+        case "function_call_output": return .functionCallOutputItemParam(try FunctionCallOutputItemParam(from: decoder))
+        case "tool_search_call": return .toolSearchCallItemParam(try ToolSearchCallItemParam(from: decoder))
+        case "tool_search_output": return .toolSearchOutputItemParam(try ToolSearchOutputItemParam(from: decoder))
+        case "additional_tools": return .additionalToolsItemParam(try AdditionalToolsItemParam(from: decoder))
+        case "configuration_update": return .responseConfigurationUpdateItemParam(try ResponseConfigurationUpdateItemParam(from: decoder))
+        case "reasoning": return .reasoningItem(try ReasoningItem(from: decoder))
+        case "compaction": return .compactionSummaryItemParam(try CompactionSummaryItemParam(from: decoder))
+        case "image_generation_call": return .imageGenToolCall(try ImageGenToolCall(from: decoder))
+        case "code_interpreter_call": return .codeInterpreterToolCall(try CodeInterpreterToolCall(from: decoder))
+        case "local_shell_call": return .localShellToolCall(try LocalShellToolCall(from: decoder))
+        case "local_shell_call_output": return .localShellToolCallOutput(try LocalShellToolCallOutput(from: decoder))
+        case "shell_call": return .functionShellCallItemParam(try FunctionShellCallItemParam(from: decoder))
+        case "shell_call_output": return .functionShellCallOutputItemParam(try FunctionShellCallOutputItemParam(from: decoder))
+        case "apply_patch_call": return .applyPatchToolCallItemParam(try ApplyPatchToolCallItemParam(from: decoder))
+        case "apply_patch_call_output": return .applyPatchToolCallOutputItemParam(try ApplyPatchToolCallOutputItemParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -122,59 +103,34 @@ extension Item {
 extension Item {
     static func decodeGroup2(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "mcp_list_tools": try .mCpListTools(MCPListTools(from: decoder))
-        case "mcp_approval_request": try .mCpApprovalRequest(MCPApprovalRequest(from: decoder))
-        case "mcp_approval_response": try .mCpApprovalResponse(MCPApprovalResponse(from: decoder))
-        case "mcp_call": try .mCpToolCall(MCPToolCall(from: decoder))
-        case "custom_tool_call_output": try .customToolCallOutput(CustomToolCallOutput(from: decoder))
-        case "custom_tool_call": try .customToolCall(CustomToolCall(from: decoder))
-        default: nil
+        case "mcp_list_tools": return .mCpListTools(try MCPListTools(from: decoder))
+        case "mcp_approval_request": return .mCpApprovalRequest(try MCPApprovalRequest(from: decoder))
+        case "mcp_approval_response": return .mCpApprovalResponse(try MCPApprovalResponse(from: decoder))
+        case "mcp_call": return .mCpToolCall(try MCPToolCall(from: decoder))
+        case "custom_tool_call_output": return .customToolCallOutput(try CustomToolCallOutput(from: decoder))
+        case "custom_tool_call": return .customToolCall(try CustomToolCall(from: decoder))
+        default: return nil
         }
     }
 }
 
 extension Item {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(InputMessage.self) {
-            return .inputMessage(value)
-        }
-        if let value = try? container.decode(OutputMessage.self) {
-            return .outputMessage(value)
-        }
-        if let value = try? container.decode(FileSearchToolCall.self) {
-            return .fileSearchToolCall(value)
-        }
-        if let value = try? container.decode(ComputerToolCall.self) {
-            return .computerToolCall(value)
-        }
-        if let value = try? container
-            .decode(ComputerCallOutputItemParam.self) {
-            return .computerCallOutputItemParam(value)
-        }
-        if let value = try? container.decode(WebSearchToolCall.self) {
-            return .webSearchToolCall(value)
-        }
-        if let value = try? container.decode(FunctionToolCall.self) {
-            return .functionToolCall(value)
-        }
-        if let value = try? container
-            .decode(FunctionCallOutputItemParam.self) {
-            return .functionCallOutputItemParam(value)
-        }
-        if let value = try? container.decode(ToolSearchCallItemParam.self) {
-            return .toolSearchCallItemParam(value)
-        }
-        if let value = try? container
-            .decode(ToolSearchOutputItemParam.self) {
-            return .toolSearchOutputItemParam(value)
-        }
-        if let value = try? container.decode(AdditionalToolsItemParam.self) {
-            return .additionalToolsItemParam(value)
-        }
+        if let value = try? container.decode(InputMessage.self) { return .inputMessage(value) }
+        if let value = try? container.decode(OutputMessage.self) { return .outputMessage(value) }
+        if let value = try? container.decode(FileSearchToolCall.self) { return .fileSearchToolCall(value) }
+        if let value = try? container.decode(ComputerToolCall.self) { return .computerToolCall(value) }
+        if let value = try? container.decode(ComputerCallOutputItemParam.self) { return .computerCallOutputItemParam(value) }
+        if let value = try? container.decode(WebSearchToolCall.self) { return .webSearchToolCall(value) }
+        if let value = try? container.decode(FunctionToolCall.self) { return .functionToolCall(value) }
+        if let value = try? container.decode(FunctionCallOutputItemParam.self) { return .functionCallOutputItemParam(value) }
+        if let value = try? container.decode(ToolSearchCallItemParam.self) { return .toolSearchCallItemParam(value) }
+        if let value = try? container.decode(ToolSearchOutputItemParam.self) { return .toolSearchOutputItemParam(value) }
+        if let value = try? container.decode(AdditionalToolsItemParam.self) { return .additionalToolsItemParam(value) }
         if let value = try? container.decode(
             ResponseConfigurationUpdateItemParam.self
         ) {
-            return .responseConfigurationUpdateItemParam(value)
+            return             .responseConfigurationUpdateItemParam(value)
         }
         return nil
     }
@@ -182,65 +138,28 @@ extension Item {
 
 extension Item {
     static func decodeUntaggedGroup2(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(ReasoningItem.self) {
-            return .reasoningItem(value)
-        }
-        if let value = try? container
-            .decode(CompactionSummaryItemParam.self) {
-            return .compactionSummaryItemParam(value)
-        }
-        if let value = try? container.decode(ImageGenToolCall.self) {
-            return .imageGenToolCall(value)
-        }
-        if let value = try? container.decode(CodeInterpreterToolCall.self) {
-            return .codeInterpreterToolCall(value)
-        }
-        if let value = try? container.decode(LocalShellToolCall.self) {
-            return .localShellToolCall(value)
-        }
-        if let value = try? container.decode(LocalShellToolCallOutput.self) {
-            return .localShellToolCallOutput(value)
-        }
-        if let value = try? container
-            .decode(FunctionShellCallItemParam.self) {
-            return .functionShellCallItemParam(value)
-        }
-        if let value = try? container
-            .decode(FunctionShellCallOutputItemParam.self) {
-            return .functionShellCallOutputItemParam(value)
-        }
-        if let value = try? container
-            .decode(ApplyPatchToolCallItemParam.self) {
-            return .applyPatchToolCallItemParam(value)
-        }
-        if let value = try? container
-            .decode(ApplyPatchToolCallOutputItemParam.self) {
-            return .applyPatchToolCallOutputItemParam(value)
-        }
-        if let value = try? container.decode(MCPListTools.self) {
-            return .mCpListTools(value)
-        }
-        if let value = try? container.decode(MCPApprovalRequest.self) {
-            return .mCpApprovalRequest(value)
-        }
+        if let value = try? container.decode(ReasoningItem.self) { return .reasoningItem(value) }
+        if let value = try? container.decode(CompactionSummaryItemParam.self) { return .compactionSummaryItemParam(value) }
+        if let value = try? container.decode(ImageGenToolCall.self) { return .imageGenToolCall(value) }
+        if let value = try? container.decode(CodeInterpreterToolCall.self) { return .codeInterpreterToolCall(value) }
+        if let value = try? container.decode(LocalShellToolCall.self) { return .localShellToolCall(value) }
+        if let value = try? container.decode(LocalShellToolCallOutput.self) { return .localShellToolCallOutput(value) }
+        if let value = try? container.decode(FunctionShellCallItemParam.self) { return .functionShellCallItemParam(value) }
+        if let value = try? container.decode(FunctionShellCallOutputItemParam.self) { return .functionShellCallOutputItemParam(value) }
+        if let value = try? container.decode(ApplyPatchToolCallItemParam.self) { return .applyPatchToolCallItemParam(value) }
+        if let value = try? container.decode(ApplyPatchToolCallOutputItemParam.self) { return .applyPatchToolCallOutputItemParam(value) }
+        if let value = try? container.decode(MCPListTools.self) { return .mCpListTools(value) }
+        if let value = try? container.decode(MCPApprovalRequest.self) { return .mCpApprovalRequest(value) }
         return nil
     }
 }
 
 extension Item {
     static func decodeUntaggedGroup3(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(MCPApprovalResponse.self) {
-            return .mCpApprovalResponse(value)
-        }
-        if let value = try? container.decode(MCPToolCall.self) {
-            return .mCpToolCall(value)
-        }
-        if let value = try? container.decode(CustomToolCallOutput.self) {
-            return .customToolCallOutput(value)
-        }
-        if let value = try? container.decode(CustomToolCall.self) {
-            return .customToolCall(value)
-        }
+        if let value = try? container.decode(MCPApprovalResponse.self) { return .mCpApprovalResponse(value) }
+        if let value = try? container.decode(MCPToolCall.self) { return .mCpToolCall(value) }
+        if let value = try? container.decode(CustomToolCallOutput.self) { return .customToolCallOutput(value) }
+        if let value = try? container.decode(CustomToolCall.self) { return .customToolCall(value) }
         return nil
     }
 }
@@ -312,28 +231,22 @@ public struct ItemReferenceParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ItemReferenceParam {
-    init(from decoder: Decoder) throws {
+extension ItemReferenceParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        type = try container.sdkDecodeIfPresent(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.type = try container.sdkDecodeIfPresent(.type)
     }
 }
 
-public extension ItemReferenceParam {
-    init(id: String, type: ItemReferenceParamTypeVariant0? = nil) {
+extension ItemReferenceParam {
+    public init(id: String, type: ItemReferenceParamTypeVariant0? = nil) {
         (self.id, self.type) = (id, type)
     }
 }
@@ -342,15 +255,12 @@ public extension ItemReferenceParam {
 public struct ItemReferenceParamTypeVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let itemReference = ItemReferenceParamTypeVariant0(rawValue: "item_reference")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

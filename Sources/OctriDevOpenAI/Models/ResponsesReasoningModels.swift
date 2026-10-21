@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesReasoning domain models
+// ResponsesReasoning domain models
 public typealias ReasoningModeEnum = String
 
 /// Configuration options for reasoning models.
@@ -29,29 +29,23 @@ public struct Reasoning: Codable {
     }
 
     init() {
-        (mode, effort, summary, context, generateSummary) = (nil, nil, nil, nil, nil)
+        (self.mode, self.effort, self.summary, self.context, self.generateSummary) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension Reasoning {
-    init(from decoder: Decoder) throws {
+extension Reasoning {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        mode = try container.sdkDecodeIfPresent(.mode)
-        effort = try container.sdkDecodeIfPresent(.effort)
-        summary = try container.sdkDecodeIfPresent(.summary)
-        context = try container.sdkDecodeIfPresent(.context)
-        generateSummary = try container.sdkDecodeIfPresent(.generateSummary)
+        self.mode = try container.sdkDecodeIfPresent(.mode)
+        self.effort = try container.sdkDecodeIfPresent(.effort)
+        self.summary = try container.sdkDecodeIfPresent(.summary)
+        self.context = try container.sdkDecodeIfPresent(.context)
+        self.generateSummary = try container.sdkDecodeIfPresent(.generateSummary)
     }
 }
 
-public extension Reasoning {
-    init(
-        mode: ReasoningModeEnum? = nil,
-        effort: ReasoningEffortVariant0? = nil,
-        summary: ReasoningSummaryVariant0? = nil,
-        context: ReasoningContextVariant0? = nil,
-        generateSummary: ReasoningGenerateSummaryVariant0? = nil
-    ) {
+extension Reasoning {
+    public init(mode: ReasoningModeEnum? = nil, effort: ReasoningEffortVariant0? = nil, summary: ReasoningSummaryVariant0? = nil, context: ReasoningContextVariant0? = nil, generateSummary: ReasoningGenerateSummaryVariant0? = nil) {
         self.init()
         (self.mode, self.effort) = (mode, effort)
         (self.summary, self.context) = (summary, context)
@@ -66,17 +60,14 @@ public extension Reasoning {
 public struct ReasoningContextVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = ReasoningContextVariant0(rawValue: "auto")
     public static let currentTurn = ReasoningContextVariant0(rawValue: "current_turn")
     public static let allTurns = ReasoningContextVariant0(rawValue: "all_turns")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -90,17 +81,14 @@ public struct ReasoningContextVariant0: RawRepresentable, Hashable, Codable, Sen
 public struct ReasoningGenerateSummaryVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = ReasoningGenerateSummaryVariant0(rawValue: "auto")
     public static let concise = ReasoningGenerateSummaryVariant0(rawValue: "concise")
     public static let detailed = ReasoningGenerateSummaryVariant0(rawValue: "detailed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -115,17 +103,14 @@ public struct ReasoningGenerateSummaryVariant0: RawRepresentable, Hashable, Coda
 public struct ReasoningSummaryVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = ReasoningSummaryVariant0(rawValue: "auto")
     public static let concise = ReasoningSummaryVariant0(rawValue: "concise")
     public static let detailed = ReasoningSummaryVariant0(rawValue: "detailed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

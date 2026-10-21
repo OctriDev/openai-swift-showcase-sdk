@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AgentsMethods {
-    /// Lists immutable artifacts published by completed hosted session turns. See [session
-    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+extension AgentsMethods {
+    /// Lists immutable artifacts published by completed hosted session turns. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
     ///
     /// - Parameters:
     /// - sessionId: The ID of the session.
@@ -18,56 +17,30 @@ public extension AgentsMethods {
     /// - after: Return resources after this resource ID in the selected order.
     /// - environmentId: Restrict the listing to artifacts produced by this
     ///   environment.
-    static func listAgentSessionArtifacts(
-        config: ClientConfig,
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        environmentId: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SessionArtifactListResource {
-        try validateLength("session_id", sessionId, min: 0, max: 1_048_576)
+    public static func listAgentSessionArtifacts(config: ClientConfig, sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, environmentId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionArtifactListResource {
+        try validateLength("session_id", sessionId, min: 0, max: 1048576)
 
-        if let limit {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 1, max: 100)
         }
 
-        if let after {
-            try validateLength("after", after, min: 0, max: 1_048_576)
+        if let after = after {
+            try validateLength("after", after, min: 0, max: 1048576)
         }
 
-        if let environmentId {
-            try validateLength("environment_id", environmentId, min: 0, max: 1_048_576)
+        if let environmentId = environmentId {
+            try validateLength("environment_id", environmentId, min: 0, max: 1048576)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            ["/agents/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/artifacts"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("environment_id", value: environmentId),
-            ],
-            decoder: .json,
-            operationId: "listAgentSessionArtifacts",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse2.self,
-                "401": ErrorResponse2.self,
-                "403": ErrorResponse2.self,
-                "404": ErrorResponse2.self,
-                "409": ErrorResponse2.self,
-                "500": ErrorResponse2.self,
-                "503": ErrorResponse2.self,
-            ]
-        )).data
+        return try (await sdkRequest("GET", ["/agents/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/artifacts"].joined(), config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("environment_id", value: environmentId),
+        ], decoder: .json, operationId: "listAgentSessionArtifacts", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
     }
 
-    /// Lists immutable artifacts published by completed hosted session turns. See [session
-    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+    /// Lists immutable artifacts published by completed hosted session turns. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
     ///
     /// - Parameters:
     /// - sessionId: The ID of the session.
@@ -77,45 +50,18 @@ public extension AgentsMethods {
     /// - after: Return resources after this resource ID in the selected order.
     /// - environmentId: Restrict the listing to artifacts produced by this
     ///   environment.
-    static func listAgentSessionArtifactsPaginated(
-        config: ClientConfig,
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        environmentId: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<SessionArtifactResource, Swift.Error> {
-        AsyncThrowingStream<SessionArtifactResource, Swift.Error> { (continuation: AsyncThrowingStream<
-            SessionArtifactResource,
-            Swift.Error
-        >.Continuation) in
+    public static func listAgentSessionArtifactsPaginated(config: ClientConfig, sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, environmentId: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SessionArtifactResource, Swift.Error> {
+        return AsyncThrowingStream<SessionArtifactResource, Swift.Error> { (continuation: AsyncThrowingStream<SessionArtifactResource, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAgentSessionArtifacts(
-                            config: config,
-                            sessionId: sessionId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            environmentId: environmentId,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listAgentSessionArtifacts(config: config, sessionId: sessionId, limit: limit, order: order, after: pageCursor, environmentId: environmentId, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -128,54 +74,25 @@ public extension AgentsMethods {
         }
     }
 
-    struct ListAgentSessionArtifactsPage {
+    public struct ListAgentSessionArtifactsPage {
         public let data: SessionArtifactListResource
         public let items: [SessionArtifactResource]
         public let hasMore: Bool
     }
 
-    static func listAgentSessionArtifactsPages(
-        config: ClientConfig,
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        environmentId: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListAgentSessionArtifactsPage, Swift.Error> {
-        AsyncThrowingStream<ListAgentSessionArtifactsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListAgentSessionArtifactsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listAgentSessionArtifactsPages(config: ClientConfig, sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, environmentId: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListAgentSessionArtifactsPage, Swift.Error> {
+        return AsyncThrowingStream<ListAgentSessionArtifactsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListAgentSessionArtifactsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAgentSessionArtifacts(
-                            config: config,
-                            sessionId: sessionId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            environmentId: environmentId,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listAgentSessionArtifacts(config: config, sessionId: sessionId, limit: limit, order: order, after: pageCursor, environmentId: environmentId, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListAgentSessionArtifactsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        pageContinuation.yield(ListAgentSessionArtifactsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

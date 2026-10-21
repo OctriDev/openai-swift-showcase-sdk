@@ -6,10 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    /// Deletes an assistant configuration identified by `assistant_id`. Use this operation when the assistant is no
-    /// longer needed; the response confirms the deletion. This operation is closing down and will be removed on a date
-    /// not specified here.
+extension AssistantsMethods {
+    /// Deletes an assistant configuration identified by `assistant_id`. Use this operation when the assistant is no longer needed; the response confirms the deletion. This operation is closing down and will be removed on a date not specified here.
     ///
     /// Delete an assistant.
     ///
@@ -17,19 +15,7 @@ public extension AssistantsMethods {
     /// - assistantId: The ID of the assistant to delete.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func deleteAssistant(
-        config: ClientConfig,
-        assistantId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeleteAssistantResponse {
-        try await (sdkRequest(
-            "DELETE",
-            ["/assistants/", sdkEncodePathSegment(sdkWireString(assistantId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteAssistant",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+    public static func deleteAssistant(config: ClientConfig, assistantId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteAssistantResponse {
+        return try (await sdkRequest("DELETE", ["/assistants/", sdkEncodePathSegment(sdkWireString(assistantId))].joined(), config: config, decoder: .json, operationId: "deleteAssistant", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveInitial domain models
+// LiveLiveInitial domain models
 public indirect enum LiveInitialAssistantMessageItemParamContentItem {
     case liveInitialTextContentPartParam(LiveInitialTextContentPartParam)
     case liveInitialOutputTextContentPartParam(LiveInitialOutputTextContentPartParam)
@@ -12,6 +12,7 @@ public indirect enum LiveInitialAssistantMessageItemParamContentItem {
 }
 
 extension LiveInitialAssistantMessageItemParamContentItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,29 +20,20 @@ extension LiveInitialAssistantMessageItemParamContentItem: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-                self = value; return
-            }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) {
-            self = value; return
-        }
+        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for LiveInitialAssistantMessageItemParamContentItem"
-        )
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for LiveInitialAssistantMessageItemParamContentItem")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -52,25 +44,20 @@ extension LiveInitialAssistantMessageItemParamContentItem: Codable {
 extension LiveInitialAssistantMessageItemParamContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "text": try .liveInitialTextContentPartParam(LiveInitialTextContentPartParam(from: decoder))
-        case "output_text": try .liveInitialOutputTextContentPartParam(
-                LiveInitialOutputTextContentPartParam(from: decoder)
-            )
-        default: nil
+        case "text": return .liveInitialTextContentPartParam(try LiveInitialTextContentPartParam(from: decoder))
+        case "output_text": return .liveInitialOutputTextContentPartParam(try LiveInitialOutputTextContentPartParam(from: decoder))
+        default: return nil
         }
     }
 }
 
 extension LiveInitialAssistantMessageItemParamContentItem {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(LiveInitialTextContentPartParam.self) {
-            return .liveInitialTextContentPartParam(value)
-        }
+        if let value = try? container.decode(LiveInitialTextContentPartParam.self) { return .liveInitialTextContentPartParam(value) }
         if let value = try? container.decode(
             LiveInitialOutputTextContentPartParam.self
         ) {
-            return .liveInitialOutputTextContentPartParam(value)
+            return             .liveInitialOutputTextContentPartParam(value)
         }
         return nil
     }
@@ -96,6 +83,7 @@ public indirect enum LiveInitialItem {
 }
 
 extension LiveInitialItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "role"
     }
@@ -103,16 +91,12 @@ extension LiveInitialItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -123,10 +107,10 @@ extension LiveInitialItem: Codable {
 extension LiveInitialItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "developer": try .liveInitialDeveloperMessageItemParam(LiveInitialDeveloperMessageItemParam(from: decoder))
-        case "user": try .liveInitialUserMessageItemParam(LiveInitialUserMessageItemParam(from: decoder))
-        case "assistant": try .liveInitialAssistantMessageItemParam(LiveInitialAssistantMessageItemParam(from: decoder))
-        default: nil
+        case "developer": return .liveInitialDeveloperMessageItemParam(try LiveInitialDeveloperMessageItemParam(from: decoder))
+        case "user": return .liveInitialUserMessageItemParam(try LiveInitialUserMessageItemParam(from: decoder))
+        case "assistant": return .liveInitialAssistantMessageItemParam(try LiveInitialAssistantMessageItemParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -150,35 +134,23 @@ public indirect enum LiveInitialSessionAudioOutputParamVoice {
 }
 
 extension LiveInitialSessionAudioOutputParamVoice: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for LiveInitialSessionAudioOutputParamVoice"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for LiveInitialSessionAudioOutputParamVoice")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension LiveInitialSessionAudioOutputParamVoice {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue1(value)
-        }
-        if let value = try? container.decode(LiveCustomVoiceParam.self) {
-            return .liveCustomVoiceParam(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(String.self) { return .stringValue1(value) }
+        if let value = try? container.decode(LiveCustomVoiceParam.self) { return .liveCustomVoiceParam(value) }
         return nil
     }
 }
@@ -205,19 +177,19 @@ public struct LiveInitialSessionAudioOutputParam: Codable {
     }
 
     init() {
-        voice = nil
+        self.voice = nil
     }
 }
 
-public extension LiveInitialSessionAudioOutputParam {
-    init(from decoder: Decoder) throws {
+extension LiveInitialSessionAudioOutputParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        voice = try container.sdkDecodeIfPresent(.voice)
+        self.voice = try container.sdkDecodeIfPresent(.voice)
     }
 }
 
-public extension LiveInitialSessionAudioOutputParam {
-    init(voice: LiveInitialSessionAudioOutputParamVoice? = nil) {
+extension LiveInitialSessionAudioOutputParam {
+    public init(voice: LiveInitialSessionAudioOutputParamVoice? = nil) {
         self.init()
         self.voice = voice
     }
@@ -244,51 +216,35 @@ public struct LiveInitialDeveloperMessageItemParam: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInitialDeveloperMessageItemParam {
-    init(from decoder: Decoder) throws {
+extension LiveInitialDeveloperMessageItemParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        id = try container.sdkDecodeIfPresent(.id)
-        type = try container.sdkDecodeIfPresent(.type)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("role", role, LiveInitialDeveloperMessageItemParamRole.allCases.map(\.rawValue))
-        try validateItems("content", content, min: 1, max: 1)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("role", self.role, LiveInitialDeveloperMessageItemParamRole.allCases.map(\.rawValue))
+            try validateItems("content", self.content, min: 1, max: 1)
     }
 }
 
-public extension LiveInitialDeveloperMessageItemParam {
-    init(
-        role: LiveInitialDeveloperMessageItemParamRole,
-        content: [LiveInitialInputTextContentPartParam],
-        id: String? = nil,
-        type: LiveInitialDeveloperMessageItemParamType? = nil,
-        status: LiveInitialMessageStatus? = nil
-    ) throws {
+extension LiveInitialDeveloperMessageItemParam {
+    public init(role: LiveInitialDeveloperMessageItemParamRole, content: [LiveInitialInputTextContentPartParam], id: String? = nil, type: LiveInitialDeveloperMessageItemParamType? = nil, status: LiveInitialMessageStatus? = nil) throws {
         (self.role, self.content) = (role, content)
         (self.id, self.type) = (id, type)
         self.status = status
-        try sdkValidateRawEnum("role", self.role, LiveInitialDeveloperMessageItemParamRole.allCases.map(\.rawValue))
-        try validateItems("content", self.content, min: 1, max: 1)
+            try sdkValidateRawEnum("role", self.role, LiveInitialDeveloperMessageItemParamRole.allCases.map(\.rawValue))
+            try validateItems("content", self.content, min: 1, max: 1)
     }
 }
 
@@ -313,51 +269,35 @@ public struct LiveInitialUserMessageItemParam: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInitialUserMessageItemParam {
-    init(from decoder: Decoder) throws {
+extension LiveInitialUserMessageItemParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        id = try container.sdkDecodeIfPresent(.id)
-        type = try container.sdkDecodeIfPresent(.type)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("role", role, LiveInitialUserMessageItemParamRole.allCases.map(\.rawValue))
-        try validateItems("content", content, min: 1, max: 1)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("role", self.role, LiveInitialUserMessageItemParamRole.allCases.map(\.rawValue))
+            try validateItems("content", self.content, min: 1, max: 1)
     }
 }
 
-public extension LiveInitialUserMessageItemParam {
-    init(
-        role: LiveInitialUserMessageItemParamRole,
-        content: [LiveInitialInputTextContentPartParam],
-        id: String? = nil,
-        type: LiveInitialUserMessageItemParamType? = nil,
-        status: LiveInitialMessageStatus? = nil
-    ) throws {
+extension LiveInitialUserMessageItemParam {
+    public init(role: LiveInitialUserMessageItemParamRole, content: [LiveInitialInputTextContentPartParam], id: String? = nil, type: LiveInitialUserMessageItemParamType? = nil, status: LiveInitialMessageStatus? = nil) throws {
         (self.role, self.content) = (role, content)
         (self.id, self.type) = (id, type)
         self.status = status
-        try sdkValidateRawEnum("role", self.role, LiveInitialUserMessageItemParamRole.allCases.map(\.rawValue))
-        try validateItems("content", self.content, min: 1, max: 1)
+            try sdkValidateRawEnum("role", self.role, LiveInitialUserMessageItemParamRole.allCases.map(\.rawValue))
+            try validateItems("content", self.content, min: 1, max: 1)
     }
 }
 
@@ -373,38 +313,28 @@ public struct LiveInitialOutputTextContentPartParam: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInitialOutputTextContentPartParam {
-    init(from decoder: Decoder) throws {
+extension LiveInitialOutputTextContentPartParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        try sdkValidateRawEnum("type", type, LiveInitialOutputTextContentPartParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+            try sdkValidateRawEnum("type", self.type, LiveInitialOutputTextContentPartParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveInitialOutputTextContentPartParam {
-    init(type: LiveInitialOutputTextContentPartParamType, text: String) throws {
+extension LiveInitialOutputTextContentPartParam {
+    public init(type: LiveInitialOutputTextContentPartParamType, text: String) throws {
         (self.type, self.text) = (type, text)
-        try sdkValidateRawEnum("type", self.type, LiveInitialOutputTextContentPartParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveInitialOutputTextContentPartParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -420,28 +350,22 @@ public struct LiveInitialInputTextContentPartParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInitialInputTextContentPartParam {
-    init(from decoder: Decoder) throws {
+extension LiveInitialInputTextContentPartParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        text = try container.sdkDecodeRequired(.text)
-        type = try container.sdkDecodeIfPresent(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+        self.type = try container.sdkDecodeIfPresent(.type)
     }
 }
 
-public extension LiveInitialInputTextContentPartParam {
-    init(text: String, type: LiveInitialInputTextContentPartParamType? = nil) {
+extension LiveInitialInputTextContentPartParam {
+    public init(text: String, type: LiveInitialInputTextContentPartParamType? = nil) {
         (self.text, self.type) = (text, type)
     }
 }
@@ -458,31 +382,25 @@ public struct LiveInitialTextContentPartParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInitialTextContentPartParam {
-    init(from decoder: Decoder) throws {
+extension LiveInitialTextContentPartParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        text = try container.sdkDecodeRequired(.text)
-        type = try container.sdkDecodeIfPresent(.type)
-        if let value = type {
+        self.text = try container.sdkDecodeRequired(.text)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        if let value = self.type {
             try sdkValidateRawEnum("type", value, LiveInitialTextContentPartParamType.allCases.map(\.rawValue))
         }
     }
 }
 
-public extension LiveInitialTextContentPartParam {
-    init(text: String, type: LiveInitialTextContentPartParamType? = nil) throws {
+extension LiveInitialTextContentPartParam {
+    public init(text: String, type: LiveInitialTextContentPartParamType? = nil) throws {
         (self.text, self.type) = (text, type)
         if let value = self.type {
             try sdkValidateRawEnum("type", value, LiveInitialTextContentPartParamType.allCases.map(\.rawValue))
@@ -511,51 +429,35 @@ public struct LiveInitialAssistantMessageItemParam: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInitialAssistantMessageItemParam {
-    init(from decoder: Decoder) throws {
+extension LiveInitialAssistantMessageItemParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        id = try container.sdkDecodeIfPresent(.id)
-        type = try container.sdkDecodeIfPresent(.type)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("role", role, LiveInitialAssistantMessageItemParamRole.allCases.map(\.rawValue))
-        try validateItems("content", content, min: 1, max: 1)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("role", self.role, LiveInitialAssistantMessageItemParamRole.allCases.map(\.rawValue))
+            try validateItems("content", self.content, min: 1, max: 1)
     }
 }
 
-public extension LiveInitialAssistantMessageItemParam {
-    init(
-        role: LiveInitialAssistantMessageItemParamRole,
-        content: [LiveInitialAssistantMessageItemParamContentItem],
-        id: String? = nil,
-        type: LiveInitialAssistantMessageItemParamType? = nil,
-        status: LiveInitialMessageStatus? = nil
-    ) throws {
+extension LiveInitialAssistantMessageItemParam {
+    public init(role: LiveInitialAssistantMessageItemParamRole, content: [LiveInitialAssistantMessageItemParamContentItem], id: String? = nil, type: LiveInitialAssistantMessageItemParamType? = nil, status: LiveInitialMessageStatus? = nil) throws {
         (self.role, self.content) = (role, content)
         (self.id, self.type) = (id, type)
         self.status = status
-        try sdkValidateRawEnum("role", self.role, LiveInitialAssistantMessageItemParamRole.allCases.map(\.rawValue))
-        try validateItems("content", self.content, min: 1, max: 1)
+            try sdkValidateRawEnum("role", self.role, LiveInitialAssistantMessageItemParamRole.allCases.map(\.rawValue))
+            try validateItems("content", self.content, min: 1, max: 1)
     }
 }
 
@@ -574,20 +476,20 @@ public struct LiveInitialSessionAudioParam: Codable {
     }
 
     init() {
-        (format, output) = (nil, nil)
+        (self.format, self.output) = (nil, nil)
     }
 }
 
-public extension LiveInitialSessionAudioParam {
-    init(from decoder: Decoder) throws {
+extension LiveInitialSessionAudioParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        format = try container.sdkDecodeIfPresent(.format)
-        output = try container.sdkDecodeIfPresent(.output)
+        self.format = try container.sdkDecodeIfPresent(.format)
+        self.output = try container.sdkDecodeIfPresent(.output)
     }
 }
 
-public extension LiveInitialSessionAudioParam {
-    init(format: LiveAudioFormat? = nil, output: LiveInitialSessionAudioOutputParam? = nil) {
+extension LiveInitialSessionAudioParam {
+    public init(format: LiveAudioFormat? = nil, output: LiveInitialSessionAudioOutputParam? = nil) {
         self.init()
         (self.format, self.output) = (format, output)
     }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveTransport domain models
+// LiveLiveTransport domain models
 /// A SIP DTMF keypress received from the caller. Delivered only to sideband observers.
 public struct LiveTransportDTMFReceived: Codable {
     /// Required enumerated value serialized in the `type` wire field.
@@ -19,51 +19,37 @@ public struct LiveTransportDTMFReceived: Codable {
         case event
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveTransportDTMFReceived {
-    init(from decoder: Decoder) throws {
+extension LiveTransportDTMFReceived {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.event) else {
-            throw SdkValidationError(
-                field: "event",
-                code: "required",
-                message: "Validation failed for 'event': value is required"
-            )
+            throw SdkValidationError(field: "event", code: "required", message: "Validation failed for 'event': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        eventId = try container.sdkDecodeRequired(.eventId)
-        event = try container.sdkDecodeRequired(.event)
-        try sdkValidateRawEnum("type", type, LiveTransportDTMFReceivedType.allCases.map(\.rawValue))
-        try validateLength("event", event, min: 1, max: 1)
-        try sdkValidatePattern("event", event, sdkPatternfa202ab8c4e1)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.event = try container.sdkDecodeRequired(.event)
+            try sdkValidateRawEnum("type", self.type, LiveTransportDTMFReceivedType.allCases.map(\.rawValue))
+            try validateLength("event", self.event, min: 1, max: 1)
+            try sdkValidatePattern("event", self.event, sdkPatternfa202ab8c4e1)
     }
 }
 
-public extension LiveTransportDTMFReceived {
-    init(type: LiveTransportDTMFReceivedType, eventId: String, event: String) throws {
+extension LiveTransportDTMFReceived {
+    public init(type: LiveTransportDTMFReceivedType, eventId: String, event: String) throws {
         (self.type, self.eventId) = (type, eventId)
         self.event = event
-        try sdkValidateRawEnum("type", self.type, LiveTransportDTMFReceivedType.allCases.map(\.rawValue))
-        try validateLength("event", self.event, min: 1, max: 1)
-        try sdkValidatePattern("event", self.event, sdkPatternfa202ab8c4e1)
+            try sdkValidateRawEnum("type", self.type, LiveTransportDTMFReceivedType.allCases.map(\.rawValue))
+            try validateLength("event", self.event, min: 1, max: 1)
+            try sdkValidatePattern("event", self.event, sdkPatternfa202ab8c4e1)
     }
 }
 
@@ -82,47 +68,33 @@ public struct LiveTransportAnswered: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveTransportAnswered {
-    init(from decoder: Decoder) throws {
+extension LiveTransportAnswered {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.sessionId) else {
-            throw SdkValidationError(
-                field: "session_id",
-                code: "required",
-                message: "Validation failed for 'session_id': value is required"
-            )
+            throw SdkValidationError(field: "session_id", code: "required", message: "Validation failed for 'session_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        eventId = try container.sdkDecodeRequired(.eventId)
-        sessionId = try container.sdkDecodeRequired(.sessionId)
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveTransportAnsweredType.allCases.map(\.rawValue))
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.sessionId = try container.sdkDecodeRequired(.sessionId)
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveTransportAnsweredType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveTransportAnswered {
-    init(eventId: String, sessionId: String, type: LiveTransportAnsweredType) throws {
+extension LiveTransportAnswered {
+    public init(eventId: String, sessionId: String, type: LiveTransportAnsweredType) throws {
         (self.eventId, self.sessionId) = (eventId, sessionId)
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveTransportAnsweredType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveTransportAnsweredType.allCases.map(\.rawValue))
     }
 }
 
@@ -144,55 +116,37 @@ public struct LiveTransportFailed: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveTransportFailed {
-    init(from decoder: Decoder) throws {
+extension LiveTransportFailed {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.sessionId) else {
-            throw SdkValidationError(
-                field: "session_id",
-                code: "required",
-                message: "Validation failed for 'session_id': value is required"
-            )
+            throw SdkValidationError(field: "session_id", code: "required", message: "Validation failed for 'session_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.error) else {
-            throw SdkValidationError(
-                field: "error",
-                code: "required",
-                message: "Validation failed for 'error': value is required"
-            )
+            throw SdkValidationError(field: "error", code: "required", message: "Validation failed for 'error': value is required")
         }
-        eventId = try container.sdkDecodeRequired(.eventId)
-        sessionId = try container.sdkDecodeRequired(.sessionId)
-        type = try container.sdkDecodeRequired(.type)
-        error = try container.sdkDecodeRequired(.error)
-        try sdkValidateRawEnum("type", type, LiveTransportFailedType.allCases.map(\.rawValue))
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.sessionId = try container.sdkDecodeRequired(.sessionId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.error = try container.sdkDecodeRequired(.error)
+            try sdkValidateRawEnum("type", self.type, LiveTransportFailedType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveTransportFailed {
-    init(eventId: String, sessionId: String, type: LiveTransportFailedType, error: LiveTransportCallError) throws {
+extension LiveTransportFailed {
+    public init(eventId: String, sessionId: String, type: LiveTransportFailedType, error: LiveTransportCallError) throws {
         (self.eventId, self.sessionId) = (eventId, sessionId)
         (self.type, self.error) = (type, error)
-        try sdkValidateRawEnum("type", self.type, LiveTransportFailedType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveTransportFailedType.allCases.map(\.rawValue))
     }
 }
 
@@ -214,44 +168,30 @@ public struct LiveTransportCallError: Codable {
         case param
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveTransportCallError {
-    init(from decoder: Decoder) throws {
+extension LiveTransportCallError {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        param = try container.sdkDecodeIfPresent(.param)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+        self.param = try container.sdkDecodeIfPresent(.param)
     }
 }
 
-public extension LiveTransportCallError {
-    init(type: LiveTransportCallErrorType, code: String, message: String, param: String? = nil) {
+extension LiveTransportCallError {
+    public init(type: LiveTransportCallErrorType, code: String, message: String, param: String? = nil) {
         (self.type, self.code) = (type, code)
         (self.message, self.param) = (message, param)
     }
@@ -276,52 +216,38 @@ public struct LiveTransportDTMFSend: Codable {
         case clientEventId = "client_event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveTransportDTMFSend {
-    init(from decoder: Decoder) throws {
+extension LiveTransportDTMFSend {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.event) else {
-            throw SdkValidationError(
-                field: "event",
-                code: "required",
-                message: "Validation failed for 'event': value is required"
-            )
+            throw SdkValidationError(field: "event", code: "required", message: "Validation failed for 'event': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        eventId = try container.sdkDecodeRequired(.eventId)
-        event = try container.sdkDecodeRequired(.event)
-        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
-        try sdkValidateRawEnum("type", type, LiveTransportDTMFSendType.allCases.map(\.rawValue))
-        try validateLength("event", event, min: 1, max: 1)
-        try sdkValidatePattern("event", event, sdkPatternfa202ab8c4e1)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.event = try container.sdkDecodeRequired(.event)
+        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+            try sdkValidateRawEnum("type", self.type, LiveTransportDTMFSendType.allCases.map(\.rawValue))
+            try validateLength("event", self.event, min: 1, max: 1)
+            try sdkValidatePattern("event", self.event, sdkPatternfa202ab8c4e1)
     }
 }
 
-public extension LiveTransportDTMFSend {
-    init(type: LiveTransportDTMFSendType, eventId: String, event: String, clientEventId: String? = nil) throws {
+extension LiveTransportDTMFSend {
+    public init(type: LiveTransportDTMFSendType, eventId: String, event: String, clientEventId: String? = nil) throws {
         (self.type, self.eventId) = (type, eventId)
         (self.event, self.clientEventId) = (event, clientEventId)
-        try sdkValidateRawEnum("type", self.type, LiveTransportDTMFSendType.allCases.map(\.rawValue))
-        try validateLength("event", self.event, min: 1, max: 1)
-        try sdkValidatePattern("event", self.event, sdkPatternfa202ab8c4e1)
+            try sdkValidateRawEnum("type", self.type, LiveTransportDTMFSendType.allCases.map(\.rawValue))
+            try validateLength("event", self.event, min: 1, max: 1)
+            try sdkValidatePattern("event", self.event, sdkPatternfa202ab8c4e1)
     }
 }
 
@@ -340,47 +266,33 @@ public struct LiveTransportRinging: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveTransportRinging {
-    init(from decoder: Decoder) throws {
+extension LiveTransportRinging {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.sessionId) else {
-            throw SdkValidationError(
-                field: "session_id",
-                code: "required",
-                message: "Validation failed for 'session_id': value is required"
-            )
+            throw SdkValidationError(field: "session_id", code: "required", message: "Validation failed for 'session_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        eventId = try container.sdkDecodeRequired(.eventId)
-        sessionId = try container.sdkDecodeRequired(.sessionId)
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveTransportRingingType.allCases.map(\.rawValue))
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.sessionId = try container.sdkDecodeRequired(.sessionId)
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveTransportRingingType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveTransportRinging {
-    init(eventId: String, sessionId: String, type: LiveTransportRingingType) throws {
+extension LiveTransportRinging {
+    public init(eventId: String, sessionId: String, type: LiveTransportRingingType) throws {
         (self.eventId, self.sessionId) = (eventId, sessionId)
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveTransportRingingType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveTransportRingingType.allCases.map(\.rawValue))
     }
 }
 
@@ -388,15 +300,12 @@ public extension LiveTransportRinging {
 public struct LiveTransportCallErrorType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let callError = LiveTransportCallErrorType(rawValue: "call_error")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

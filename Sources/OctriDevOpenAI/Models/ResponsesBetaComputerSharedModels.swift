@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaComputer domain models
+// ResponsesBetaComputer domain models
 public indirect enum BetaComputerAction {
     case betaClickParam(BetaClickParam)
     case betaDoubleClickAction(BetaDoubleClickAction)
@@ -19,6 +19,7 @@ public indirect enum BetaComputerAction {
 }
 
 extension BetaComputerAction: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -26,16 +27,12 @@ extension BetaComputerAction: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -46,16 +43,16 @@ extension BetaComputerAction: Codable {
 extension BetaComputerAction {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "click": try .betaClickParam(BetaClickParam(from: decoder))
-        case "double_click": try .betaDoubleClickAction(BetaDoubleClickAction(from: decoder))
-        case "drag": try .betaDragParam(BetaDragParam(from: decoder))
-        case "keypress": try .betaKeyPressAction(BetaKeyPressAction(from: decoder))
-        case "move": try .betaMoveParam(BetaMoveParam(from: decoder))
-        case "screenshot": try .betaScreenshotParam(BetaScreenshotParam(from: decoder))
-        case "scroll": try .betaScrollParam(BetaScrollParam(from: decoder))
-        case "type": try .betaTypeParam(BetaTypeParam(from: decoder))
-        case "wait": try .betaWaitParam(BetaWaitParam(from: decoder))
-        default: nil
+        case "click": return .betaClickParam(try BetaClickParam(from: decoder))
+        case "double_click": return .betaDoubleClickAction(try BetaDoubleClickAction(from: decoder))
+        case "drag": return .betaDragParam(try BetaDragParam(from: decoder))
+        case "keypress": return .betaKeyPressAction(try BetaKeyPressAction(from: decoder))
+        case "move": return .betaMoveParam(try BetaMoveParam(from: decoder))
+        case "screenshot": return .betaScreenshotParam(try BetaScreenshotParam(from: decoder))
+        case "scroll": return .betaScrollParam(try BetaScrollParam(from: decoder))
+        case "type": return .betaTypeParam(try BetaTypeParam(from: decoder))
+        case "wait": return .betaWaitParam(try BetaWaitParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -107,63 +104,41 @@ public struct BetaComputerCallOutputItemParam: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaComputerCallOutputItemParam {
-    init(from decoder: Decoder) throws {
+extension BetaComputerCallOutputItemParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
-        callId = try container.sdkDecodeRequired(.callId)
-        type = try container.sdkDecodeRequired(.type)
-        output = try container.sdkDecodeRequired(.output)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        id = try container.sdkDecodeIfPresent(.id)
-        acknowledgedSafetyChecks = try container.sdkDecodeIfPresent(.acknowledgedSafetyChecks)
-        status = try container.sdkDecodeIfPresent(.status)
-        try validateLength("call_id", callId, min: 1, max: 64)
-        try sdkValidateRawEnum("type", type, BetaComputerCallOutputItemParamType.allCases.map(\.rawValue))
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.output = try container.sdkDecodeRequired(.output)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.acknowledgedSafetyChecks = try container.sdkDecodeIfPresent(.acknowledgedSafetyChecks)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try validateLength("call_id", self.callId, min: 1, max: 64)
+            try sdkValidateRawEnum("type", self.type, BetaComputerCallOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaComputerCallOutputItemParam {
-    init(
-        callId: String,
-        type: BetaComputerCallOutputItemParamType,
-        output: BetaComputerScreenshotImage,
-        agent: BetaAgentTagParam? = nil,
-        id: String? = nil,
-        acknowledgedSafetyChecks: [BetaComputerCallSafetyCheckParam]? = nil,
-        status: BetaFunctionCallItemStatus? = nil
-    ) throws {
+extension BetaComputerCallOutputItemParam {
+    public init(callId: String, type: BetaComputerCallOutputItemParamType, output: BetaComputerScreenshotImage, agent: BetaAgentTagParam? = nil, id: String? = nil, acknowledgedSafetyChecks: [BetaComputerCallSafetyCheckParam]? = nil, status: BetaFunctionCallItemStatus? = nil) throws {
         (self.callId, self.type) = (callId, type)
         (self.output, self.agent) = (output, agent)
         (self.id, self.acknowledgedSafetyChecks) = (id, acknowledgedSafetyChecks)
         self.status = status
-        try validateLength("call_id", self.callId, min: 1, max: 64)
-        try sdkValidateRawEnum("type", self.type, BetaComputerCallOutputItemParamType.allCases.map(\.rawValue))
+            try validateLength("call_id", self.callId, min: 1, max: 64)
+            try sdkValidateRawEnum("type", self.type, BetaComputerCallOutputItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -195,61 +170,39 @@ public struct BetaComputerToolCallOutput: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaComputerToolCallOutput {
-    init(from decoder: Decoder) throws {
+extension BetaComputerToolCallOutput {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(
-                field: "output",
-                code: "required",
-                message: "Validation failed for 'output': value is required"
-            )
+            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        callId = try container.sdkDecodeRequired(.callId)
-        output = try container.sdkDecodeRequired(.output)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        id = try container.sdkDecodeIfPresent(.id)
-        acknowledgedSafetyChecks = try container.sdkDecodeIfPresent(.acknowledgedSafetyChecks)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("type", type, BetaComputerToolCallOutputType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.callId = try container.sdkDecodeRequired(.callId)
+        self.output = try container.sdkDecodeRequired(.output)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.acknowledgedSafetyChecks = try container.sdkDecodeIfPresent(.acknowledgedSafetyChecks)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("type", self.type, BetaComputerToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaComputerToolCallOutput {
-    init(
-        type: BetaComputerToolCallOutputType,
-        callId: String,
-        output: BetaComputerScreenshotImage,
-        agent: BetaAgentTag? = nil,
-        id: String? = nil,
-        acknowledgedSafetyChecks: [BetaComputerCallSafetyCheckParam]? = nil,
-        status: BetaComputerToolCallOutputStatus? = nil
-    ) throws {
+extension BetaComputerToolCallOutput {
+    public init(type: BetaComputerToolCallOutputType, callId: String, output: BetaComputerScreenshotImage, agent: BetaAgentTag? = nil, id: String? = nil, acknowledgedSafetyChecks: [BetaComputerCallSafetyCheckParam]? = nil, status: BetaComputerToolCallOutputStatus? = nil) throws {
         (self.type, self.callId) = (type, callId)
         (self.output, self.agent) = (output, agent)
         (self.id, self.acknowledgedSafetyChecks) = (id, acknowledgedSafetyChecks)
         self.status = status
-        try sdkValidateRawEnum("type", self.type, BetaComputerToolCallOutputType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaComputerToolCallOutputType.allCases.map(\.rawValue))
     }
 }
 
@@ -276,63 +229,39 @@ public struct BetaComputerScreenshotContent: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaComputerScreenshotContent {
-    init(from decoder: Decoder) throws {
+extension BetaComputerScreenshotContent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.imageUrl) else {
-            throw SdkValidationError(
-                field: "image_url",
-                code: "required",
-                message: "Validation failed for 'image_url': value is required"
-            )
+            throw SdkValidationError(field: "image_url", code: "required", message: "Validation failed for 'image_url': value is required")
         }
         guard container.contains(.fileId) else {
-            throw SdkValidationError(
-                field: "file_id",
-                code: "required",
-                message: "Validation failed for 'file_id': value is required"
-            )
+            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
         }
         guard container.contains(.detail) else {
-            throw SdkValidationError(
-                field: "detail",
-                code: "required",
-                message: "Validation failed for 'detail': value is required"
-            )
+            throw SdkValidationError(field: "detail", code: "required", message: "Validation failed for 'detail': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        imageUrl = try container.sdkDecodeNullable(.imageUrl)
-        fileId = try container.sdkDecodeNullable(.fileId)
-        detail = try container.sdkDecodeRequired(.detail)
-        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-        try sdkValidateRawEnum("type", type, BetaComputerScreenshotContentType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.imageUrl = try container.sdkDecodeNullable(.imageUrl)
+        self.fileId = try container.sdkDecodeNullable(.fileId)
+        self.detail = try container.sdkDecodeRequired(.detail)
+        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+            try sdkValidateRawEnum("type", self.type, BetaComputerScreenshotContentType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaComputerScreenshotContent {
-    init(
-        type: BetaComputerScreenshotContentType,
-        imageUrl: String?,
-        fileId: String?,
-        detail: BetaImageDetail,
-        promptCacheBreakpoint: BetaPromptCacheBreakpointConfig? = nil
-    ) throws {
+extension BetaComputerScreenshotContent {
+    public init(type: BetaComputerScreenshotContentType, imageUrl: String?, fileId: String?, detail: BetaImageDetail, promptCacheBreakpoint: BetaPromptCacheBreakpointConfig? = nil) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
         (self.fileId, self.detail) = (fileId, detail)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-        try sdkValidateRawEnum("type", self.type, BetaComputerScreenshotContentType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaComputerScreenshotContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -354,60 +283,37 @@ public struct BetaComputerUsePreviewTool: Codable {
         case displayHeight = "display_height"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaComputerUsePreviewTool {
-    init(from decoder: Decoder) throws {
+extension BetaComputerUsePreviewTool {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.environment) else {
-            throw SdkValidationError(
-                field: "environment",
-                code: "required",
-                message: "Validation failed for 'environment': value is required"
-            )
+            throw SdkValidationError(field: "environment", code: "required", message: "Validation failed for 'environment': value is required")
         }
         guard container.contains(.displayWidth) else {
-            throw SdkValidationError(
-                field: "display_width",
-                code: "required",
-                message: "Validation failed for 'display_width': value is required"
-            )
+            throw SdkValidationError(field: "display_width", code: "required", message: "Validation failed for 'display_width': value is required")
         }
         guard container.contains(.displayHeight) else {
-            throw SdkValidationError(
-                field: "display_height",
-                code: "required",
-                message: "Validation failed for 'display_height': value is required"
-            )
+            throw SdkValidationError(field: "display_height", code: "required", message: "Validation failed for 'display_height': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        environment = try container.sdkDecodeRequired(.environment)
-        displayWidth = try container.sdkDecodeRequired(.displayWidth)
-        displayHeight = try container.sdkDecodeRequired(.displayHeight)
-        try sdkValidateRawEnum("type", type, BetaComputerUsePreviewToolType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.environment = try container.sdkDecodeRequired(.environment)
+        self.displayWidth = try container.sdkDecodeRequired(.displayWidth)
+        self.displayHeight = try container.sdkDecodeRequired(.displayHeight)
+            try sdkValidateRawEnum("type", self.type, BetaComputerUsePreviewToolType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaComputerUsePreviewTool {
-    init(
-        type: BetaComputerUsePreviewToolType,
-        environment: BetaComputerEnvironment,
-        displayWidth: Int,
-        displayHeight: Int
-    ) throws {
+extension BetaComputerUsePreviewTool {
+    public init(type: BetaComputerUsePreviewToolType, environment: BetaComputerEnvironment, displayWidth: Int, displayHeight: Int) throws {
         (self.type, self.environment) = (type, environment)
         (self.displayWidth, self.displayHeight) = (displayWidth, displayHeight)
-        try sdkValidateRawEnum("type", self.type, BetaComputerUsePreviewToolType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaComputerUsePreviewToolType.allCases.map(\.rawValue))
     }
 }
 
@@ -424,28 +330,22 @@ public struct BetaComputerToolCallOutputResourceVariant1: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaComputerToolCallOutputResourceVariant1 {
-    init(from decoder: Decoder) throws {
+extension BetaComputerToolCallOutputResourceVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
-        status = try container.sdkDecodeRequired(.status)
-        createdBy = try container.sdkDecodeIfPresent(.createdBy)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
     }
 }
 
-public extension BetaComputerToolCallOutputResourceVariant1 {
-    init(status: BetaComputerCallOutputStatus, createdBy: String? = nil) {
+extension BetaComputerToolCallOutputResourceVariant1 {
+    public init(status: BetaComputerCallOutputStatus, createdBy: String? = nil) {
         (self.status, self.createdBy) = (status, createdBy)
     }
 }
@@ -459,30 +359,24 @@ public struct BetaComputerTool: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaComputerTool {
-    init(from decoder: Decoder) throws {
+extension BetaComputerTool {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, BetaComputerToolType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, BetaComputerToolType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaComputerTool {
-    init(type: BetaComputerToolType) throws {
+extension BetaComputerTool {
+    public init(type: BetaComputerToolType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, BetaComputerToolType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaComputerToolType.allCases.map(\.rawValue))
     }
 }
 
@@ -501,32 +395,26 @@ public struct BetaComputerScreenshotImage: Codable {
         case fileId = "file_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaComputerScreenshotImage {
-    init(from decoder: Decoder) throws {
+extension BetaComputerScreenshotImage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        if let value = imageUrl {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        if let value = self.imageUrl {
             try sdkValidateUri("image_url", value)
         }
     }
 }
 
-public extension BetaComputerScreenshotImage {
-    init(type: BetaComputerScreenshotImageType, imageUrl: String? = nil, fileId: String? = nil) throws {
+extension BetaComputerScreenshotImage {
+    public init(type: BetaComputerScreenshotImageType, imageUrl: String? = nil, fileId: String? = nil) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
         self.fileId = fileId
         if let value = self.imageUrl {
@@ -550,29 +438,23 @@ public struct BetaComputerCallSafetyCheckParam: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaComputerCallSafetyCheckParam {
-    init(from decoder: Decoder) throws {
+extension BetaComputerCallSafetyCheckParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        code = try container.sdkDecodeIfPresent(.code)
-        message = try container.sdkDecodeIfPresent(.message)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.code = try container.sdkDecodeIfPresent(.code)
+        self.message = try container.sdkDecodeIfPresent(.message)
     }
 }
 
-public extension BetaComputerCallSafetyCheckParam {
-    init(id: String, code: String? = nil, message: String? = nil) {
+extension BetaComputerCallSafetyCheckParam {
+    public init(id: String, code: String? = nil, message: String? = nil) {
         (self.id, self.code) = (id, code)
         self.message = message
     }
@@ -610,7 +492,5 @@ public struct BetaComputerToolCall: Codable {
         case actions
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

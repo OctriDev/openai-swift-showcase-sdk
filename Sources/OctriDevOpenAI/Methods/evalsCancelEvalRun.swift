@@ -6,35 +6,15 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension EvalsMethods {
-    /// Cancels an ongoing evaluation run. Use this endpoint to stop a run that is still in progress; the response
-    /// contains the canceled run object.
+extension EvalsMethods {
+    /// Cancels an ongoing evaluation run. Use this endpoint to stop a run that is still in progress; the response contains the canceled run object.
     ///
     /// Cancel an ongoing evaluation run.
     ///
     /// - Parameters:
     /// - evalId: The ID of the evaluation whose run you want to cancel.
     /// - runId: The ID of the run to cancel.
-    static func cancelEvalRun(
-        config: ClientConfig,
-        evalId: String,
-        runId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EvalRun {
-        try await (sdkRequest(
-            "POST",
-            [
-                "/evals/",
-                sdkEncodePathSegment(sdkWireString(evalId)),
-                "/runs/",
-                sdkEncodePathSegment(sdkWireString(runId)),
-                "/cancel",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "cancelEvalRun",
-            options: requestOptions,
-            errors: ["429": ErrorResponse.self]
-        )).data
+    public static func cancelEvalRun(config: ClientConfig, evalId: String, runId: String, requestOptions: RequestOptions? = nil) async throws -> EvalRun {
+        return try (await sdkRequest("POST", ["/evals/", sdkEncodePathSegment(sdkWireString(evalId)), "/runs/", sdkEncodePathSegment(sdkWireString(runId)), "/cancel"].joined(), config: config, decoder: .json, operationId: "cancelEvalRun", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 }

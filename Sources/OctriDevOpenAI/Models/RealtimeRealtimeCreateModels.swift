@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// RealtimeRealtimeCreate domain models
+// RealtimeRealtimeCreate domain models
 public indirect enum RealtimeCreateClientSecretRequestSession {
     case realtimeSessionCreateRequestGa(RealtimeSessionCreateRequestGA)
     case realtimeTranscriptionSessionCreateRequestGa(RealtimeTranscriptionSessionCreateRequestGA)
@@ -12,6 +12,7 @@ public indirect enum RealtimeCreateClientSecretRequestSession {
 }
 
 extension RealtimeCreateClientSecretRequestSession: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension RealtimeCreateClientSecretRequestSession: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,10 +36,10 @@ extension RealtimeCreateClientSecretRequestSession: Codable {
 extension RealtimeCreateClientSecretRequestSession {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "realtime": try .realtimeSessionCreateRequestGa(RealtimeSessionCreateRequestGA(from: decoder))
+        case "realtime": return .realtimeSessionCreateRequestGa(try RealtimeSessionCreateRequestGA(from: decoder))
         case "transcription":
-            try .realtimeTranscriptionSessionCreateRequestGa(RealtimeTranscriptionSessionCreateRequestGA(from: decoder))
-        default: nil
+        return .realtimeTranscriptionSessionCreateRequestGa(try RealtimeTranscriptionSessionCreateRequestGA(from: decoder))
+        default: return nil
         }
     }
 }
@@ -66,6 +63,7 @@ public indirect enum RealtimeCreateClientSecretResponseSession {
 }
 
 extension RealtimeCreateClientSecretResponseSession: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -73,16 +71,12 @@ extension RealtimeCreateClientSecretResponseSession: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -93,12 +87,10 @@ extension RealtimeCreateClientSecretResponseSession: Codable {
 extension RealtimeCreateClientSecretResponseSession {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "realtime": try .realtimeSessionCreateResponseGa(RealtimeSessionCreateResponseGA(from: decoder))
+        case "realtime": return .realtimeSessionCreateResponseGa(try RealtimeSessionCreateResponseGA(from: decoder))
         case "transcription":
-            try .realtimeTranscriptionSessionCreateResponseGa(
-                RealtimeTranscriptionSessionCreateResponseGA(from: decoder)
-            )
-        default: nil
+        return .realtimeTranscriptionSessionCreateResponseGa(try RealtimeTranscriptionSessionCreateResponseGA(from: decoder))
+        default: return nil
         }
     }
 }
@@ -129,43 +121,29 @@ public struct RealtimeCreateClientSecretResponse: Codable {
         case session
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeCreateClientSecretResponse {
-    init(from decoder: Decoder) throws {
+extension RealtimeCreateClientSecretResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.value) else {
-            throw SdkValidationError(
-                field: "value",
-                code: "required",
-                message: "Validation failed for 'value': value is required"
-            )
+            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
         }
         guard container.contains(.expiresAt) else {
-            throw SdkValidationError(
-                field: "expires_at",
-                code: "required",
-                message: "Validation failed for 'expires_at': value is required"
-            )
+            throw SdkValidationError(field: "expires_at", code: "required", message: "Validation failed for 'expires_at': value is required")
         }
         guard container.contains(.session) else {
-            throw SdkValidationError(
-                field: "session",
-                code: "required",
-                message: "Validation failed for 'session': value is required"
-            )
+            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
         }
-        value = try container.sdkDecodeRequired(.value)
-        expiresAt = try container.sdkDecodeRequired(.expiresAt)
-        session = try container.sdkDecodeRequired(.session)
+        self.value = try container.sdkDecodeRequired(.value)
+        self.expiresAt = try container.sdkDecodeRequired(.expiresAt)
+        self.session = try container.sdkDecodeRequired(.session)
     }
 }
 
-public extension RealtimeCreateClientSecretResponse {
-    init(value: String, expiresAt: Int, session: RealtimeCreateClientSecretResponseSession) {
+extension RealtimeCreateClientSecretResponse {
+    public init(value: String, expiresAt: Int, session: RealtimeCreateClientSecretResponseSession) {
         (self.value, self.expiresAt) = (value, expiresAt)
         self.session = session
     }
@@ -188,23 +166,20 @@ public struct RealtimeCreateClientSecretRequest: Codable {
     }
 
     init() {
-        (expiresAfter, session) = (nil, nil)
+        (self.expiresAfter, self.session) = (nil, nil)
     }
 }
 
-public extension RealtimeCreateClientSecretRequest {
-    init(from decoder: Decoder) throws {
+extension RealtimeCreateClientSecretRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
-        session = try container.sdkDecodeIfPresent(.session)
+        self.expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
+        self.session = try container.sdkDecodeIfPresent(.session)
     }
 }
 
-public extension RealtimeCreateClientSecretRequest {
-    init(
-        expiresAfter: RealtimeCreateClientSecretRequestExpiresAfter? = nil,
-        session: RealtimeCreateClientSecretRequestSession? = nil
-    ) {
+extension RealtimeCreateClientSecretRequest {
+    public init(expiresAfter: RealtimeCreateClientSecretRequestExpiresAfter? = nil, session: RealtimeCreateClientSecretRequestSession? = nil) {
         self.init()
         (self.expiresAfter, self.session) = (expiresAfter, session)
     }
@@ -227,62 +202,42 @@ public struct RealtimeCreateClientSecretRequestExpiresAfter: Codable {
     }
 
     init() {
-        (anchor, seconds) = (nil, nil)
+        (self.anchor, self.seconds) = (nil, nil)
     }
 }
 
-public extension RealtimeCreateClientSecretRequestExpiresAfter {
-    init(from decoder: Decoder) throws {
+extension RealtimeCreateClientSecretRequestExpiresAfter {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        anchor = try container.sdkDecodeIfPresent(.anchor)
-        seconds = try container.sdkDecodeIfPresent(.seconds)
-        if let value = seconds {
-            try validateRange(
-                "seconds",
-                Double(value),
-                min: 10,
-                max: 7200,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.anchor = try container.sdkDecodeIfPresent(.anchor)
+        self.seconds = try container.sdkDecodeIfPresent(.seconds)
+        if let value = self.seconds {
+            try validateRange("seconds", Double(value), min: 10, max: 7200, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension RealtimeCreateClientSecretRequestExpiresAfter {
-    init(anchor: RealtimeCreateClientSecretRequestExpiresAfterAnchor? = nil, seconds: Int? = nil) throws {
+extension RealtimeCreateClientSecretRequestExpiresAfter {
+    public init(anchor: RealtimeCreateClientSecretRequestExpiresAfterAnchor? = nil, seconds: Int? = nil) throws {
         self.init()
         (self.anchor, self.seconds) = (anchor, seconds)
         if let value = self.seconds {
-            try validateRange(
-                "seconds",
-                Double(value),
-                min: 10,
-                max: 7200,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("seconds", Double(value), min: 10, max: 7200, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
 /// The anchor point for the client secret expiration, meaning that `seconds` will be added to the `created_at`
 /// time of the client secret to produce an expiration timestamp. Only `created_at` is currently supported.
-public struct RealtimeCreateClientSecretRequestExpiresAfterAnchor: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeCreateClientSecretRequestExpiresAfterAnchor: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let createdAt = RealtimeCreateClientSecretRequestExpiresAfterAnchor(rawValue: "created_at")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

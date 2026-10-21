@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsMulti domain models
+// AgentsMulti domain models
 /// Explicit configuration for creating and coordinating subagents.
 public struct MultiAgentConfigCurrentParam: Codable {
     /// Whether subagent tools are enabled.
@@ -16,50 +16,28 @@ public struct MultiAgentConfigCurrentParam: Codable {
         case maxConcurrentSubagents = "max_concurrent_subagents"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MultiAgentConfigCurrentParam {
-    init(from decoder: Decoder) throws {
+extension MultiAgentConfigCurrentParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(
-                field: "enabled",
-                code: "required",
-                message: "Validation failed for 'enabled': value is required"
-            )
+            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
         }
-        enabled = try container.sdkDecodeRequired(.enabled)
-        maxConcurrentSubagents = try container.sdkDecodeIfPresent(.maxConcurrentSubagents)
-        if let value = maxConcurrentSubagents {
-            try validateRange(
-                "max_concurrent_subagents",
-                Double(value),
-                min: 1,
-                max: 4_294_967_295,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.enabled = try container.sdkDecodeRequired(.enabled)
+        self.maxConcurrentSubagents = try container.sdkDecodeIfPresent(.maxConcurrentSubagents)
+        if let value = self.maxConcurrentSubagents {
+            try validateRange("max_concurrent_subagents", Double(value), min: 1, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension MultiAgentConfigCurrentParam {
-    init(enabled: Bool, maxConcurrentSubagents: Int? = nil) throws {
+extension MultiAgentConfigCurrentParam {
+    public init(enabled: Bool, maxConcurrentSubagents: Int? = nil) throws {
         (self.enabled, self.maxConcurrentSubagents) = (enabled, maxConcurrentSubagents)
         if let value = self.maxConcurrentSubagents {
-            try validateRange(
-                "max_concurrent_subagents",
-                Double(value),
-                min: 1,
-                max: 4_294_967_295,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("max_concurrent_subagents", Double(value), min: 1, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -76,57 +54,31 @@ public struct MultiAgentConfigResource: Codable {
         case maxConcurrentSubagents = "max_concurrent_subagents"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MultiAgentConfigResource {
-    init(from decoder: Decoder) throws {
+extension MultiAgentConfigResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(
-                field: "enabled",
-                code: "required",
-                message: "Validation failed for 'enabled': value is required"
-            )
+            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
         }
         guard container.contains(.maxConcurrentSubagents) else {
-            throw SdkValidationError(
-                field: "max_concurrent_subagents",
-                code: "required",
-                message: "Validation failed for 'max_concurrent_subagents': value is required"
-            )
+            throw SdkValidationError(field: "max_concurrent_subagents", code: "required", message: "Validation failed for 'max_concurrent_subagents': value is required")
         }
-        enabled = try container.sdkDecodeRequired(.enabled)
-        maxConcurrentSubagents = try container.sdkDecodeNullable(.maxConcurrentSubagents)
-        if let value = maxConcurrentSubagents {
-            try validateRange(
-                "max_concurrent_subagents",
-                Double(value),
-                min: 1,
-                max: 4_294_967_295,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.enabled = try container.sdkDecodeRequired(.enabled)
+        self.maxConcurrentSubagents = try container.sdkDecodeNullable(.maxConcurrentSubagents)
+        if let value = self.maxConcurrentSubagents {
+            try validateRange("max_concurrent_subagents", Double(value), min: 1, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension MultiAgentConfigResource {
-    init(enabled: Bool, maxConcurrentSubagents: Int?) throws {
+extension MultiAgentConfigResource {
+    public init(enabled: Bool, maxConcurrentSubagents: Int?) throws {
         (self.enabled, self.maxConcurrentSubagents) = (enabled, maxConcurrentSubagents)
         if let value = self.maxConcurrentSubagents {
-            try validateRange(
-                "max_concurrent_subagents",
-                Double(value),
-                min: 1,
-                max: 4_294_967_295,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("max_concurrent_subagents", Double(value), min: 1, max: 4294967295, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }

@@ -9,101 +9,39 @@ public class ProjectGroupsNamespace {
         self.config = config
     }
 
-    /// Lists the groups that have access to a project. Use `after` to continue from the last group in a previous
-    /// response, and set `limit` and `order` to control the page size and sort order.
+/// Lists the groups that have access to a project. Use `after` to continue from the last group in a previous response, and set `limit` and `order` to control the page size and sort order.
     ///
     /// Lists the groups that have access to a project.
-    public func list(
-        projectId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListProjectGroupsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectGroupListResource {
-        try await ProjectGroupsMethods.listProjectGroups(
-            config: config,
-            projectId: projectId,
-            limit: limit,
-            after: after,
-            order: order,
-            requestOptions: requestOptions
-        )
+    public func list(projectId: String, limit: Int? = nil, after: String? = nil, order: ListProjectGroupsParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectGroupListResource {
+        return try await ProjectGroupsMethods.listProjectGroups(config: config, projectId: projectId, limit: limit, after: after, order: order, requestOptions: requestOptions)
     }
 
-    /// Lists the groups that have access to a project. Use `after` to continue from the last group in a previous
-    /// response, and set `limit` and `order` to control the page size and sort order.
+/// Lists the groups that have access to a project. Use `after` to continue from the last group in a previous response, and set `limit` and `order` to control the page size and sort order.
     ///
     /// Lists the groups that have access to a project.
-    public func listPaginated(
-        projectId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListProjectGroupsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ProjectGroup, Swift.Error> {
-        ProjectGroupsMethods.listProjectGroupsPaginated(
-            config: config,
-            projectId: projectId,
-            limit: limit,
-            after: after,
-            order: order,
-            requestOptions: requestOptions
-        )
+    public func listPaginated(projectId: String, limit: Int? = nil, after: String? = nil, order: ListProjectGroupsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ProjectGroup, Swift.Error> {
+        return ProjectGroupsMethods.listProjectGroupsPaginated(config: config, projectId: projectId, limit: limit, after: after, order: order, requestOptions: requestOptions)
     }
 
-    /// Grants a group access to a project with a specified project role. Supply the group ID and role identifier to
-    /// create the group’s project membership.
+/// Grants a group access to a project with a specified project role. Supply the group ID and role identifier to create the group’s project membership.
     ///
     /// Grants a group access to a project.
-    public func add(
-        projectId: String,
-        groupId: String,
-        role: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectGroup {
-        try await ProjectGroupsMethods.addProjectGroup(
-            config: config,
-            projectId: projectId,
-            groupId: groupId,
-            role: role,
-            requestOptions: requestOptions
-        )
+    public func add(projectId: String, groupId: String, role: String, requestOptions: RequestOptions? = nil) async throws -> ProjectGroup {
+        return try await ProjectGroupsMethods.addProjectGroup(config: config, projectId: projectId, groupId: groupId, role: role, requestOptions: requestOptions)
     }
 
-    /// Retrieves a group's membership details for a project. Use `project_id` and `group_id` to identify the project
-    /// and group, and `group_type` to select a group type; it defaults to `group` when omitted.
+/// Retrieves a group's membership details for a project. Use `project_id` and `group_id` to identify the project and group, and `group_type` to select a group type; it defaults to `group` when omitted.
     ///
     /// Retrieves a project's group.
-    public func retrieve(
-        projectId: String,
-        groupId: String,
-        groupType: RetrieveProjectGroupParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectGroup {
-        try await ProjectGroupsMethods.retrieveProjectGroup(
-            config: config,
-            projectId: projectId,
-            groupId: groupId,
-            groupType: groupType,
-            requestOptions: requestOptions
-        )
+    public func retrieve(projectId: String, groupId: String, groupType: RetrieveProjectGroupParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectGroup {
+        return try await ProjectGroupsMethods.retrieveProjectGroup(config: config, projectId: projectId, groupId: groupId, groupType: groupType, requestOptions: requestOptions)
     }
 
-    /// Removes a group's access to a project. Use `project_id` and `group_id` to identify the project membership to
-    /// revoke. The response confirms whether the membership was removed.
+/// Removes a group's access to a project. Use `project_id` and `group_id` to identify the project membership to revoke. The response confirms whether the membership was removed.
     ///
     /// Revokes a group's access to a project.
-    public func remove(
-        projectId: String,
-        groupId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectGroupDeletedResource {
-        try await ProjectGroupsMethods.removeProjectGroup(
-            config: config,
-            projectId: projectId,
-            groupId: groupId,
-            requestOptions: requestOptions
-        )
+    public func remove(projectId: String, groupId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectGroupDeletedResource {
+        return try await ProjectGroupsMethods.removeProjectGroup(config: config, projectId: projectId, groupId: groupId, requestOptions: requestOptions)
     }
 }
 
@@ -113,45 +51,18 @@ public class HostedToolsNamespace {
         self.config = config
     }
 
-    /// Retrieves the hosted tool permission settings for a project. Use `project_id` to identify the project whose
-    /// permissions you want to inspect. The response includes an enabled state for each hosted tool.
+/// Retrieves the hosted tool permission settings for a project. Use `project_id` to identify the project whose permissions you want to inspect. The response includes an enabled state for each hosted tool.
     ///
     /// Returns hosted tool permissions for a project.
-    public func retrievePermissions(
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectHostedToolPermissions {
-        try await HostedToolsMethods.retrieveProjectHostedToolPermissions(
-            config: config,
-            projectId: projectId,
-            requestOptions: requestOptions
-        )
+    public func retrievePermissions(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectHostedToolPermissions {
+        return try await HostedToolsMethods.retrieveProjectHostedToolPermissions(config: config, projectId: projectId, requestOptions: requestOptions)
     }
 
-    /// Updates the hosted tool permissions for a project. Supply settings for the tools you want to change using
-    /// `file_search`, `web_search`, `image_generation`, `mcp`, or `code_interpreter`. The response returns the
-    /// project's resulting permission states.
+/// Updates the hosted tool permissions for a project. Supply settings for the tools you want to change using `file_search`, `web_search`, `image_generation`, `mcp`, or `code_interpreter`. The response returns the project's resulting permission states.
     ///
     /// Updates hosted tool permissions for a project.
-    public func updatePermissions(
-        projectId: String,
-        fileSearch: SdkOptional<HostedToolPermissionUpdate>? = nil,
-        webSearch: SdkOptional<HostedToolPermissionUpdate>? = nil,
-        imageGeneration: SdkOptional<HostedToolPermissionUpdate>? = nil,
-        mcp: SdkOptional<HostedToolPermissionUpdate>? = nil,
-        codeInterpreter: SdkOptional<HostedToolPermissionUpdate>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectHostedToolPermissions {
-        try await HostedToolsMethods.updateProjectHostedToolPermissions(
-            config: config,
-            projectId: projectId,
-            fileSearch: fileSearch,
-            webSearch: webSearch,
-            imageGeneration: imageGeneration,
-            mcp: mcp,
-            codeInterpreter: codeInterpreter,
-            requestOptions: requestOptions
-        )
+    public func updatePermissions(projectId: String, fileSearch: SdkOptional<HostedToolPermissionUpdate>? = nil, webSearch: SdkOptional<HostedToolPermissionUpdate>? = nil, imageGeneration: SdkOptional<HostedToolPermissionUpdate>? = nil, mcp: SdkOptional<HostedToolPermissionUpdate>? = nil, codeInterpreter: SdkOptional<HostedToolPermissionUpdate>? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectHostedToolPermissions {
+        return try await HostedToolsMethods.updateProjectHostedToolPermissions(config: config, projectId: projectId, fileSearch: fileSearch, webSearch: webSearch, imageGeneration: imageGeneration, mcp: mcp, codeInterpreter: codeInterpreter, requestOptions: requestOptions)
     }
 }
 
@@ -161,252 +72,89 @@ public class SpendAlertsNamespace {
         self.config = config
     }
 
-    /// Lists spend alerts configured for a project, with cursor-based pagination. Use `limit` to set the page size,
-    /// `order` to choose the sort direction, and `after` or `before` to move through the results.
+/// Lists spend alerts configured for a project, with cursor-based pagination. Use `limit` to set the page size, `order` to choose the sort direction, and `after` or `before` to move through the results.
     ///
     /// Lists project spend alerts.
-    public func list(
-        projectId: String,
-        limit: Int? = nil,
-        order: ListProjectSpendAlertsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectSpendAlertListResource {
-        try await SpendAlertsMethods.listProjectSpendAlerts(
-            config: config,
-            projectId: projectId,
-            limit: limit,
-            order: order,
-            after: after,
-            before: before,
-            requestOptions: requestOptions
-        )
+    public func list(projectId: String, limit: Int? = nil, order: ListProjectSpendAlertsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendAlertListResource {
+        return try await SpendAlertsMethods.listProjectSpendAlerts(config: config, projectId: projectId, limit: limit, order: order, after: after, before: before, requestOptions: requestOptions)
     }
 
-    /// Lists spend alerts configured for a project, with cursor-based pagination. Use `limit` to set the page size,
-    /// `order` to choose the sort direction, and `after` or `before` to move through the results.
+/// Lists spend alerts configured for a project, with cursor-based pagination. Use `limit` to set the page size, `order` to choose the sort direction, and `after` or `before` to move through the results.
     ///
     /// Lists project spend alerts.
-    public func listPaginated(
-        projectId: String,
-        limit: Int? = nil,
-        order: ListProjectSpendAlertsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ProjectSpendAlert, Swift.Error> {
-        SpendAlertsMethods.listProjectSpendAlertsPaginated(
-            config: config,
-            projectId: projectId,
-            limit: limit,
-            order: order,
-            after: after,
-            before: before,
-            requestOptions: requestOptions
-        )
+    public func listPaginated(projectId: String, limit: Int? = nil, order: ListProjectSpendAlertsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ProjectSpendAlert, Swift.Error> {
+        return SpendAlertsMethods.listProjectSpendAlertsPaginated(config: config, projectId: projectId, limit: limit, order: order, after: after, before: before, requestOptions: requestOptions)
     }
 
-    /// Creates a spend alert for a project to notify recipients when spending reaches a threshold. Provide the
-    /// threshold in cents, the currency and evaluation interval, and email notification settings.
+/// Creates a spend alert for a project to notify recipients when spending reaches a threshold. Provide the threshold in cents, the currency and evaluation interval, and email notification settings.
     ///
     /// Creates a project spend alert.
-    public func create(
-        projectId: String,
-        thresholdAmount: Int,
-        currency: CreateSpendAlertBodyCurrency,
-        interval: CreateSpendAlertBodyInterval,
-        notificationChannel: SpendAlertNotificationChannel,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectSpendAlert {
-        try await SpendAlertsMethods.createProjectSpendAlert(
-            config: config,
-            projectId: projectId,
-            thresholdAmount: thresholdAmount,
-            currency: currency,
-            interval: interval,
-            notificationChannel: notificationChannel,
-            requestOptions: requestOptions
-        )
+    public func create(projectId: String, thresholdAmount: Int, currency: CreateSpendAlertBodyCurrency, interval: CreateSpendAlertBodyInterval, notificationChannel: SpendAlertNotificationChannel, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendAlert {
+        return try await SpendAlertsMethods.createProjectSpendAlert(config: config, projectId: projectId, thresholdAmount: thresholdAmount, currency: currency, interval: interval, notificationChannel: notificationChannel, requestOptions: requestOptions)
     }
 
-    /// Retrieves a spend alert configured for a project. Use the project and alert identifiers to inspect its
-    /// threshold, currency, evaluation interval, and notification channel.
+/// Retrieves a spend alert configured for a project. Use the project and alert identifiers to inspect its threshold, currency, evaluation interval, and notification channel.
     ///
     /// Retrieves a project spend alert.
-    public func retrieve(
-        projectId: String,
-        alertId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectSpendAlert {
-        try await SpendAlertsMethods.retrieveProjectSpendAlert(
-            config: config,
-            projectId: projectId,
-            alertId: alertId,
-            requestOptions: requestOptions
-        )
+    public func retrieve(projectId: String, alertId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendAlert {
+        return try await SpendAlertsMethods.retrieveProjectSpendAlert(config: config, projectId: projectId, alertId: alertId, requestOptions: requestOptions)
     }
 
-    /// Updates a spend alert configured for a project. Provide the alert's threshold, currency, evaluation interval,
-    /// and notification channel in the request body.
+/// Updates a spend alert configured for a project. Provide the alert's threshold, currency, evaluation interval, and notification channel in the request body.
     ///
     /// Updates a project spend alert.
-    public func update(
-        projectId: String,
-        alertId: String,
-        thresholdAmount: Int,
-        currency: CreateSpendAlertBodyCurrency,
-        interval: CreateSpendAlertBodyInterval,
-        notificationChannel: SpendAlertNotificationChannel,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectSpendAlert {
-        try await SpendAlertsMethods.updateProjectSpendAlert(
-            config: config,
-            projectId: projectId,
-            alertId: alertId,
-            thresholdAmount: thresholdAmount,
-            currency: currency,
-            interval: interval,
-            notificationChannel: notificationChannel,
-            requestOptions: requestOptions
-        )
+    public func update(projectId: String, alertId: String, thresholdAmount: Int, currency: CreateSpendAlertBodyCurrency, interval: CreateSpendAlertBodyInterval, notificationChannel: SpendAlertNotificationChannel, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendAlert {
+        return try await SpendAlertsMethods.updateProjectSpendAlert(config: config, projectId: projectId, alertId: alertId, thresholdAmount: thresholdAmount, currency: currency, interval: interval, notificationChannel: notificationChannel, requestOptions: requestOptions)
     }
 
-    /// Deletes a spend alert from a project. Use the project and alert identifiers to select the alert to remove, then
-    /// check the deletion confirmation in the response.
+/// Deletes a spend alert from a project. Use the project and alert identifiers to select the alert to remove, then check the deletion confirmation in the response.
     ///
     /// Deletes a project spend alert.
-    public func delete(
-        projectId: String,
-        alertId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectSpendAlertDeletedResource {
-        try await SpendAlertsMethods.deleteProjectSpendAlert(
-            config: config,
-            projectId: projectId,
-            alertId: alertId,
-            requestOptions: requestOptions
-        )
+    public func delete(projectId: String, alertId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendAlertDeletedResource {
+        return try await SpendAlertsMethods.deleteProjectSpendAlert(config: config, projectId: projectId, alertId: alertId, requestOptions: requestOptions)
     }
 
-    /// Lists spend alerts configured for the organization. Use `limit` and `order` to control the result page, and use
-    /// `after` or `before` to navigate from a spend alert in a previous response. The response includes cursor IDs and
-    /// a `has_more` flag for pagination.
+/// Lists spend alerts configured for the organization. Use `limit` and `order` to control the result page, and use `after` or `before` to navigate from a spend alert in a previous response. The response includes cursor IDs and a `has_more` flag for pagination.
     ///
     /// Lists organization spend alerts.
-    public func listOrganization(
-        limit: Int? = nil,
-        order: ListOrganizationSpendAlertsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationSpendAlertListResource {
-        try await SpendAlertsMethods.listOrganizationSpendAlerts(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            before: before,
-            requestOptions: requestOptions
-        )
+    public func listOrganization(limit: Int? = nil, order: ListOrganizationSpendAlertsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendAlertListResource {
+        return try await SpendAlertsMethods.listOrganizationSpendAlerts(config: config, limit: limit, order: order, after: after, before: before, requestOptions: requestOptions)
     }
 
-    /// Lists spend alerts configured for the organization. Use `limit` and `order` to control the result page, and use
-    /// `after` or `before` to navigate from a spend alert in a previous response. The response includes cursor IDs and
-    /// a `has_more` flag for pagination.
+/// Lists spend alerts configured for the organization. Use `limit` and `order` to control the result page, and use `after` or `before` to navigate from a spend alert in a previous response. The response includes cursor IDs and a `has_more` flag for pagination.
     ///
     /// Lists organization spend alerts.
-    public func listOrganizationPaginated(
-        limit: Int? = nil,
-        order: ListOrganizationSpendAlertsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<OrganizationSpendAlert, Swift.Error> {
-        SpendAlertsMethods.listOrganizationSpendAlertsPaginated(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            before: before,
-            requestOptions: requestOptions
-        )
+    public func listOrganizationPaginated(limit: Int? = nil, order: ListOrganizationSpendAlertsParameter? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<OrganizationSpendAlert, Swift.Error> {
+        return SpendAlertsMethods.listOrganizationSpendAlertsPaginated(config: config, limit: limit, order: order, after: after, before: before, requestOptions: requestOptions)
     }
 }
 
-public extension SpendAlertsNamespace {
-    /// Creates a spend alert at the organization level. Set `threshold_amount` in cents and configure the monthly
-    /// evaluation interval and email notification recipients. The response includes the created alert and its
-    /// identifier.
+extension SpendAlertsNamespace {
+/// Creates a spend alert at the organization level. Set `threshold_amount` in cents and configure the monthly evaluation interval and email notification recipients. The response includes the created alert and its identifier.
     ///
     /// Creates an organization spend alert.
-    func createOrganization(
-        thresholdAmount: Int,
-        currency: CreateSpendAlertBodyCurrency,
-        interval: CreateSpendAlertBodyInterval,
-        notificationChannel: SpendAlertNotificationChannel,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationSpendAlert {
-        try await SpendAlertsMethods.createOrganizationSpendAlert(
-            config: config,
-            thresholdAmount: thresholdAmount,
-            currency: currency,
-            interval: interval,
-            notificationChannel: notificationChannel,
-            requestOptions: requestOptions
-        )
+    public func createOrganization(thresholdAmount: Int, currency: CreateSpendAlertBodyCurrency, interval: CreateSpendAlertBodyInterval, notificationChannel: SpendAlertNotificationChannel, requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendAlert {
+        return try await SpendAlertsMethods.createOrganizationSpendAlert(config: config, thresholdAmount: thresholdAmount, currency: currency, interval: interval, notificationChannel: notificationChannel, requestOptions: requestOptions)
     }
 
-    /// Retrieves a spend alert configured at the organization level. Use `alert_id` to identify the alert whose
-    /// threshold and notification settings you want to view.
+/// Retrieves a spend alert configured at the organization level. Use `alert_id` to identify the alert whose threshold and notification settings you want to view.
     ///
     /// Retrieves an organization spend alert.
-    func retrieveOrganization(
-        alertId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationSpendAlert {
-        try await SpendAlertsMethods.retrieveOrganizationSpendAlert(
-            config: config,
-            alertId: alertId,
-            requestOptions: requestOptions
-        )
+    public func retrieveOrganization(alertId: String, requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendAlert {
+        return try await SpendAlertsMethods.retrieveOrganizationSpendAlert(config: config, alertId: alertId, requestOptions: requestOptions)
     }
 
-    /// Updates a spend alert configured at the organization level. Provide the threshold, currency, evaluation
-    /// interval, and email notification settings for the alert. The response contains the updated alert configuration.
+/// Updates a spend alert configured at the organization level. Provide the threshold, currency, evaluation interval, and email notification settings for the alert. The response contains the updated alert configuration.
     ///
     /// Updates an organization spend alert.
-    func updateOrganization(
-        alertId: String,
-        thresholdAmount: Int,
-        currency: CreateSpendAlertBodyCurrency,
-        interval: CreateSpendAlertBodyInterval,
-        notificationChannel: SpendAlertNotificationChannel,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationSpendAlert {
-        try await SpendAlertsMethods.updateOrganizationSpendAlert(
-            config: config,
-            alertId: alertId,
-            thresholdAmount: thresholdAmount,
-            currency: currency,
-            interval: interval,
-            notificationChannel: notificationChannel,
-            requestOptions: requestOptions
-        )
+    public func updateOrganization(alertId: String, thresholdAmount: Int, currency: CreateSpendAlertBodyCurrency, interval: CreateSpendAlertBodyInterval, notificationChannel: SpendAlertNotificationChannel, requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendAlert {
+        return try await SpendAlertsMethods.updateOrganizationSpendAlert(config: config, alertId: alertId, thresholdAmount: thresholdAmount, currency: currency, interval: interval, notificationChannel: notificationChannel, requestOptions: requestOptions)
     }
 
-    /// Deletes a spend alert configured at the organization level. Use `alert_id` to identify the alert to remove; the
-    /// response confirms whether it was deleted.
+/// Deletes a spend alert configured at the organization level. Use `alert_id` to identify the alert to remove; the response confirms whether it was deleted.
     ///
     /// Deletes an organization spend alert.
-    func deleteOrganization(
-        alertId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationSpendAlertDeletedResource {
-        try await SpendAlertsMethods.deleteOrganizationSpendAlert(
-            config: config,
-            alertId: alertId,
-            requestOptions: requestOptions
-        )
+    public func deleteOrganization(alertId: String, requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendAlertDeletedResource {
+        return try await SpendAlertsMethods.deleteOrganizationSpendAlert(config: config, alertId: alertId, requestOptions: requestOptions)
     }
 }

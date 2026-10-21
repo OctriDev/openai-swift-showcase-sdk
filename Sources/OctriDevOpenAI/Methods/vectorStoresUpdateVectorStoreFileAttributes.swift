@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension VectorStoresMethods {
-    /// Updates the attributes attached to a file in a vector store. Supply `attributes` to replace the file's attribute
-    /// set, or use `null` to clear it.
+extension VectorStoresMethods {
+    /// Updates the attributes attached to a file in a vector store. Supply `attributes` to replace the file's attribute set, or use `null` to clear it.
     ///
     /// Update attributes on a vector store file.
     ///
@@ -20,71 +19,20 @@ public extension VectorStoresMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters, booleans, or numbers.
-    static func updateVectorStoreFileAttributes(
-        config: ClientConfig,
-        vectorStoreId: String,
-        fileId: String,
-        attributes: VectorStoreFileAttributes?,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VectorStoreFileObject {
+    public static func updateVectorStoreFileAttributes(config: ClientConfig, vectorStoreId: String, fileId: String, attributes: VectorStoreFileAttributes?, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileObject {
         let requestBody = UpdateVectorStoreFileAttributesRequestBody(attributes: attributes)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/vector_stores/",
-                sdkEncodePathSegment(sdkWireString(vectorStoreId)),
-                "/files/",
-                sdkEncodePathSegment(sdkWireString(fileId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateVectorStoreFileAttributes",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "409": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/files/", sdkEncodePathSegment(sdkWireString(fileId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateVectorStoreFileAttributes", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "409": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 
-    /// Retrieves parsed content from a file attached to a vector store. Use `vector_store_id` and `file_id` to identify
-    /// the file, then follow `next_page` when `has_more` indicates that additional content pages are available.
+    /// Retrieves parsed content from a file attached to a vector store. Use `vector_store_id` and `file_id` to identify the file, then follow `next_page` when `has_more` indicates that additional content pages are available.
     ///
     /// Retrieve the parsed contents of a vector store file.
     ///
     /// - Parameters:
     /// - vectorStoreId: The ID of the vector store.
     /// - fileId: The ID of the file within the vector store.
-    static func retrieveVectorStoreFileContent(
-        config: ClientConfig,
-        vectorStoreId: String,
-        fileId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VectorStoreFileContentResponse {
-        try await (sdkRequest(
-            "GET",
-            [
-                "/vector_stores/",
-                sdkEncodePathSegment(sdkWireString(vectorStoreId)),
-                "/files/",
-                sdkEncodePathSegment(sdkWireString(fileId)),
-                "/content",
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveVectorStoreFileContent",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+    public static func retrieveVectorStoreFileContent(config: ClientConfig, vectorStoreId: String, fileId: String, requestOptions: RequestOptions? = nil) async throws -> VectorStoreFileContentResponse {
+        return try (await sdkRequest("GET", ["/vector_stores/", sdkEncodePathSegment(sdkWireString(vectorStoreId)), "/files/", sdkEncodePathSegment(sdkWireString(fileId)), "/content"].joined(), config: config, decoder: .json, operationId: "retrieveVectorStoreFileContent", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

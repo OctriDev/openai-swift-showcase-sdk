@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// WebhookAgentSessionActionRequired domain models
+// WebhookAgentSessionActionRequired domain models
 public struct WebhookAgentSessionActionRequiredVariant1: Codable {
     /// The event type. Always `agent.session.action_required`.
     public var type: WebhookAgentSessionActionRequiredVariant1Type
@@ -14,35 +14,25 @@ public struct WebhookAgentSessionActionRequiredVariant1: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookAgentSessionActionRequiredVariant1 {
-    init(from decoder: Decoder) throws {
+extension WebhookAgentSessionActionRequiredVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        data = try container.sdkDecodeRequired(.data)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.data = try container.sdkDecodeRequired(.data)
     }
 }
 
-public extension WebhookAgentSessionActionRequiredVariant1 {
-    init(type: WebhookAgentSessionActionRequiredVariant1Type, data: AgentSessionActionRequiredPayloadResource) {
+extension WebhookAgentSessionActionRequiredVariant1 {
+    public init(type: WebhookAgentSessionActionRequiredVariant1Type, data: AgentSessionActionRequiredPayloadResource) {
         (self.type, self.data) = (type, data)
     }
 }
@@ -67,65 +57,37 @@ public struct WebhookAgentSessionActionRequired: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookAgentSessionActionRequired {
-    init(from decoder: Decoder) throws {
+extension WebhookAgentSessionActionRequired {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        type = try container.sdkDecodeRequired(.type)
-        data = try container.sdkDecodeRequired(.data)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.data = try container.sdkDecodeRequired(.data)
     }
 }
 
-public extension WebhookAgentSessionActionRequired {
-    init(
-        id: String,
-        object: WebhookAgentSessionEnvelopeObject,
-        createdAt: Int,
-        type: WebhookAgentSessionActionRequiredVariant1Type,
-        data: AgentSessionActionRequiredPayloadResource
-    ) {
+extension WebhookAgentSessionActionRequired {
+    public init(id: String, object: WebhookAgentSessionEnvelopeObject, createdAt: Int, type: WebhookAgentSessionActionRequiredVariant1Type, data: AgentSessionActionRequiredPayloadResource) {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.type) = (createdAt, type)
         self.data = data
@@ -133,20 +95,15 @@ public extension WebhookAgentSessionActionRequired {
 }
 
 /// The event type. Always `agent.session.action_required`.
-public struct WebhookAgentSessionActionRequiredVariant1Type: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct WebhookAgentSessionActionRequiredVariant1Type: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let agentSessionActionRequired =
-        WebhookAgentSessionActionRequiredVariant1Type(rawValue: "agent.session.action_required")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let agentSessionActionRequired = WebhookAgentSessionActionRequiredVariant1Type(rawValue: "agent.session.action_required")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedWeb domain models
+// SharedWeb domain models
 public indirect enum WebSearchToolCallAction {
     case webSearchActionSearch(WebSearchActionSearch)
     case webSearchActionOpenPage(WebSearchActionOpenPage)
@@ -13,6 +13,7 @@ public indirect enum WebSearchToolCallAction {
 }
 
 extension WebSearchToolCallAction: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension WebSearchToolCallAction: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,10 +37,10 @@ extension WebSearchToolCallAction: Codable {
 extension WebSearchToolCallAction {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "search": try .webSearchActionSearch(WebSearchActionSearch(from: decoder))
-        case "open_page": try .webSearchActionOpenPage(WebSearchActionOpenPage(from: decoder))
-        case "find_in_page": try .webSearchActionFind(WebSearchActionFind(from: decoder))
-        default: nil
+        case "search": return .webSearchActionSearch(try WebSearchActionSearch(from: decoder))
+        case "open_page": return .webSearchActionOpenPage(try WebSearchActionOpenPage(from: decoder))
+        case "find_in_page": return .webSearchActionFind(try WebSearchActionFind(from: decoder))
+        default: return nil
         }
     }
 }
@@ -79,39 +76,28 @@ public struct WebSearchPreviewTool: Codable {
         case searchContentTypes = "search_content_types"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebSearchPreviewTool {
-    init(from decoder: Decoder) throws {
+extension WebSearchPreviewTool {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        userLocation = try container.sdkDecodeIfPresent(.userLocation)
-        searchContextSize = try container.sdkDecodeIfPresent(.searchContextSize)
-        searchContentTypes = try container.sdkDecodeIfPresent(.searchContentTypes)
-        try sdkValidateRawEnum("type", type, WebSearchPreviewToolType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.userLocation = try container.sdkDecodeIfPresent(.userLocation)
+        self.searchContextSize = try container.sdkDecodeIfPresent(.searchContextSize)
+        self.searchContentTypes = try container.sdkDecodeIfPresent(.searchContentTypes)
+            try sdkValidateRawEnum("type", self.type, WebSearchPreviewToolType.allCases.map(\.rawValue))
     }
 }
 
-public extension WebSearchPreviewTool {
-    init(
-        type: WebSearchPreviewToolType,
-        userLocation: ApproximateLocation? = nil,
-        searchContextSize: SearchContextSize? = nil,
-        searchContentTypes: [SearchContentType]? = nil
-    ) throws {
+extension WebSearchPreviewTool {
+    public init(type: WebSearchPreviewToolType, userLocation: ApproximateLocation? = nil, searchContextSize: SearchContextSize? = nil, searchContentTypes: [SearchContentType]? = nil) throws {
         (self.type, self.userLocation) = (type, userLocation)
         (self.searchContextSize, self.searchContentTypes) = (searchContextSize, searchContentTypes)
-        try sdkValidateRawEnum("type", self.type, WebSearchPreviewToolType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, WebSearchPreviewToolType.allCases.map(\.rawValue))
     }
 }
 
@@ -140,42 +126,30 @@ public struct WebSearchTool: Codable {
         case searchContextSize = "search_context_size"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebSearchTool {
-    init(from decoder: Decoder) throws {
+extension WebSearchTool {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        externalWebAccess = try container.sdkDecodeIfPresent(.externalWebAccess)
-        filters = try container.sdkDecodeIfPresent(.filters)
-        userLocation = try container.sdkDecodeIfPresent(.userLocation)
-        searchContextSize = try container.sdkDecodeIfPresent(.searchContextSize)
-        try sdkValidateRawEnum("type", type, WebSearchToolType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.externalWebAccess = try container.sdkDecodeIfPresent(.externalWebAccess)
+        self.filters = try container.sdkDecodeIfPresent(.filters)
+        self.userLocation = try container.sdkDecodeIfPresent(.userLocation)
+        self.searchContextSize = try container.sdkDecodeIfPresent(.searchContextSize)
+            try sdkValidateRawEnum("type", self.type, WebSearchToolType.allCases.map(\.rawValue))
     }
 }
 
-public extension WebSearchTool {
-    init(
-        type: WebSearchToolType,
-        externalWebAccess: Bool? = nil,
-        filters: WebSearchToolFilters? = nil,
-        userLocation: WebSearchApproximateLocation? = nil,
-        searchContextSize: WebSearchToolSearchContextSize? = nil
-    ) throws {
+extension WebSearchTool {
+    public init(type: WebSearchToolType, externalWebAccess: Bool? = nil, filters: WebSearchToolFilters? = nil, userLocation: WebSearchApproximateLocation? = nil, searchContextSize: WebSearchToolSearchContextSize? = nil) throws {
         (self.type, self.externalWebAccess) = (type, externalWebAccess)
         (self.filters, self.userLocation) = (filters, userLocation)
         self.searchContextSize = searchContextSize
-        try sdkValidateRawEnum("type", self.type, WebSearchToolType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, WebSearchToolType.allCases.map(\.rawValue))
     }
 }
 
@@ -201,29 +175,23 @@ public struct WebSearchApproximateLocation: Codable {
     }
 
     init() {
-        (type, country, region, city, timezone) = (nil, nil, nil, nil, nil)
+        (self.type, self.country, self.region, self.city, self.timezone) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension WebSearchApproximateLocation {
-    init(from decoder: Decoder) throws {
+extension WebSearchApproximateLocation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        country = try container.sdkDecodeIfPresent(.country)
-        region = try container.sdkDecodeIfPresent(.region)
-        city = try container.sdkDecodeIfPresent(.city)
-        timezone = try container.sdkDecodeIfPresent(.timezone)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.country = try container.sdkDecodeIfPresent(.country)
+        self.region = try container.sdkDecodeIfPresent(.region)
+        self.city = try container.sdkDecodeIfPresent(.city)
+        self.timezone = try container.sdkDecodeIfPresent(.timezone)
     }
 }
 
-public extension WebSearchApproximateLocation {
-    init(
-        type: WebSearchApproximateLocationType? = nil,
-        country: String? = nil,
-        region: String? = nil,
-        city: String? = nil,
-        timezone: String? = nil
-    ) {
+extension WebSearchApproximateLocation {
+    public init(type: WebSearchApproximateLocationType? = nil, country: String? = nil, region: String? = nil, city: String? = nil, timezone: String? = nil) {
         self.init()
         (self.type, self.country) = (type, country)
         (self.region, self.city) = (region, city)
@@ -243,38 +211,28 @@ public struct WebSearchActionSearchSourcesItem: Codable {
         case url
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebSearchActionSearchSourcesItem {
-    init(from decoder: Decoder) throws {
+extension WebSearchActionSearchSourcesItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.url) else {
-            throw SdkValidationError(
-                field: "url",
-                code: "required",
-                message: "Validation failed for 'url': value is required"
-            )
+            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        url = try container.sdkDecodeRequired(.url)
-        try sdkValidateUri("url", url)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.url = try container.sdkDecodeRequired(.url)
+            try sdkValidateUri("url", self.url)
     }
 }
 
-public extension WebSearchActionSearchSourcesItem {
-    init(type: WebSearchActionSearchSourcesItemType, url: String) throws {
+extension WebSearchActionSearchSourcesItem {
+    public init(type: WebSearchActionSearchSourcesItemType, url: String) throws {
         (self.type, self.url) = (type, url)
-        try sdkValidateUri("url", self.url)
+            try sdkValidateUri("url", self.url)
     }
 }
 
@@ -290,31 +248,25 @@ public struct WebSearchActionOpenPage: Codable {
         case url
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebSearchActionOpenPage {
-    init(from decoder: Decoder) throws {
+extension WebSearchActionOpenPage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        url = try container.sdkDecodeIfPresent(.url)
-        try sdkValidateRawEnum("type", type, WebSearchActionOpenPageType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.url = try container.sdkDecodeIfPresent(.url)
+            try sdkValidateRawEnum("type", self.type, WebSearchActionOpenPageType.allCases.map(\.rawValue))
     }
 }
 
-public extension WebSearchActionOpenPage {
-    init(type: WebSearchActionOpenPageType, url: String? = nil) throws {
+extension WebSearchActionOpenPage {
+    public init(type: WebSearchActionOpenPageType, url: String? = nil) throws {
         (self.type, self.url) = (type, url)
-        try sdkValidateRawEnum("type", self.type, WebSearchActionOpenPageType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, WebSearchActionOpenPageType.allCases.map(\.rawValue))
     }
 }
 
@@ -336,39 +288,28 @@ public struct WebSearchActionSearch: Codable {
         case sources
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebSearchActionSearch {
-    init(from decoder: Decoder) throws {
+extension WebSearchActionSearch {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        query = try container.sdkDecodeIfPresent(.query)
-        queries = try container.sdkDecodeIfPresent(.queries)
-        sources = try container.sdkDecodeIfPresent(.sources)
-        try sdkValidateRawEnum("type", type, WebSearchActionSearchType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.query = try container.sdkDecodeIfPresent(.query)
+        self.queries = try container.sdkDecodeIfPresent(.queries)
+        self.sources = try container.sdkDecodeIfPresent(.sources)
+            try sdkValidateRawEnum("type", self.type, WebSearchActionSearchType.allCases.map(\.rawValue))
     }
 }
 
-public extension WebSearchActionSearch {
-    init(
-        type: WebSearchActionSearchType,
-        query: String? = nil,
-        queries: [String]? = nil,
-        sources: [WebSearchActionSearchSourcesItem]? = nil
-    ) throws {
+extension WebSearchActionSearch {
+    public init(type: WebSearchActionSearchType, query: String? = nil, queries: [String]? = nil, sources: [WebSearchActionSearchSourcesItem]? = nil) throws {
         (self.type, self.query) = (type, query)
         (self.queries, self.sources) = (queries, sources)
-        try sdkValidateRawEnum("type", self.type, WebSearchActionSearchType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, WebSearchActionSearchType.allCases.map(\.rawValue))
     }
 }
 
@@ -391,53 +332,34 @@ public struct WebSearchToolCall: Codable {
         case action
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebSearchToolCall {
-    init(from decoder: Decoder) throws {
+extension WebSearchToolCall {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        type = try container.sdkDecodeRequired(.type)
-        status = try container.sdkDecodeRequired(.status)
-        action = try container.sdkDecodeIfPresent(.action)
-        try sdkValidateRawEnum("type", type, WebSearchToolCallType.allCases.map(\.rawValue))
+        self.id = try container.sdkDecodeRequired(.id)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.action = try container.sdkDecodeIfPresent(.action)
+            try sdkValidateRawEnum("type", self.type, WebSearchToolCallType.allCases.map(\.rawValue))
     }
 }
 
-public extension WebSearchToolCall {
-    init(
-        id: String,
-        type: WebSearchToolCallType,
-        status: WebSearchCallStatus,
-        action: WebSearchToolCallAction? = nil
-    ) throws {
+extension WebSearchToolCall {
+    public init(id: String, type: WebSearchToolCallType, status: WebSearchCallStatus, action: WebSearchToolCallAction? = nil) throws {
         (self.id, self.type) = (id, type)
         (self.status, self.action) = (status, action)
-        try sdkValidateRawEnum("type", self.type, WebSearchToolCallType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, WebSearchToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -452,19 +374,19 @@ public struct WebSearchToolFilters: Codable {
     }
 
     init() {
-        allowedDomains = nil
+        self.allowedDomains = nil
     }
 }
 
-public extension WebSearchToolFilters {
-    init(from decoder: Decoder) throws {
+extension WebSearchToolFilters {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        allowedDomains = try container.sdkDecodeIfPresent(.allowedDomains)
+        self.allowedDomains = try container.sdkDecodeIfPresent(.allowedDomains)
     }
 }
 
-public extension WebSearchToolFilters {
-    init(allowedDomains: [String]? = nil) {
+extension WebSearchToolFilters {
+    public init(allowedDomains: [String]? = nil) {
         self.init()
         self.allowedDomains = allowedDomains
     }
@@ -485,40 +407,30 @@ public struct WebSearchActionFind: Codable {
         case url
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebSearchActionFind {
-    init(from decoder: Decoder) throws {
+extension WebSearchActionFind {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.pattern) else {
-            throw SdkValidationError(
-                field: "pattern",
-                code: "required",
-                message: "Validation failed for 'pattern': value is required"
-            )
+            throw SdkValidationError(field: "pattern", code: "required", message: "Validation failed for 'pattern': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        pattern = try container.sdkDecodeRequired(.pattern)
-        url = try container.sdkDecodeIfPresent(.url)
-        try sdkValidateRawEnum("type", type, WebSearchActionFindType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.pattern = try container.sdkDecodeRequired(.pattern)
+        self.url = try container.sdkDecodeIfPresent(.url)
+            try sdkValidateRawEnum("type", self.type, WebSearchActionFindType.allCases.map(\.rawValue))
     }
 }
 
-public extension WebSearchActionFind {
-    init(type: WebSearchActionFindType, pattern: String, url: String? = nil) throws {
+extension WebSearchActionFind {
+    public init(type: WebSearchActionFindType, pattern: String, url: String? = nil) throws {
         (self.type, self.pattern) = (type, pattern)
         self.url = url
-        try sdkValidateRawEnum("type", self.type, WebSearchActionFindType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, WebSearchActionFindType.allCases.map(\.rawValue))
     }
 }
 
@@ -562,10 +474,7 @@ public enum WebSearchToolCallType: String, CaseIterable, Codable {
 public struct WebSearchCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = WebSearchCallStatus(rawValue: "in_progress")
     public static let searching = WebSearchCallStatus(rawValue: "searching")
     public static let completed = WebSearchCallStatus(rawValue: "completed")
@@ -574,7 +483,7 @@ public struct WebSearchCallStatus: RawRepresentable, Hashable, Codable, Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -588,17 +497,14 @@ public struct WebSearchCallStatus: RawRepresentable, Hashable, Codable, Sendable
 public struct WebSearchToolSearchContextSize: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = WebSearchToolSearchContextSize(rawValue: "low")
     public static let medium = WebSearchToolSearchContextSize(rawValue: "medium")
     public static let high = WebSearchToolSearchContextSize(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -611,15 +517,12 @@ public struct WebSearchToolSearchContextSize: RawRepresentable, Hashable, Codabl
 public struct WebSearchApproximateLocationType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let approximate = WebSearchApproximateLocationType(rawValue: "approximate")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -632,15 +535,12 @@ public struct WebSearchApproximateLocationType: RawRepresentable, Hashable, Coda
 public struct WebSearchActionSearchSourcesItemType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let url = WebSearchActionSearchSourcesItemType(rawValue: "url")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,30 +6,11 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ExternalStorageMethods {
-    /// Validates a customer-managed external storage configuration. Use `external_storage_id` to select the
-    /// configuration whose provider setup you want to validate. The response returns the configuration and its status.
+extension ExternalStorageMethods {
+    /// Validates a customer-managed external storage configuration. Use `external_storage_id` to select the configuration whose provider setup you want to validate. The response returns the configuration and its status.
     ///
     /// Validate one customer-managed external storage configuration.
-    static func validateExternalStorage(
-        config: ClientConfig,
-        externalStorageId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ExternalStorageResponse {
-        try await (sdkRequest(
-            "POST",
-            ["/organization/external_storage/", sdkEncodePathSegment(sdkWireString(externalStorageId)), "/validate"]
-                .joined(),
-            config: config,
-            decoder: .json,
-            operationId: "validateExternalStorage",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "503": ErrorResponse.self,
-            ]
-        )).data
+    public static func validateExternalStorage(config: ClientConfig, externalStorageId: String, requestOptions: RequestOptions? = nil) async throws -> ExternalStorageResponse {
+        return try (await sdkRequest("POST", ["/organization/external_storage/", sdkEncodePathSegment(sdkWireString(externalStorageId)), "/validate"].joined(), config: config, decoder: .json, operationId: "validateExternalStorage", options: requestOptions, errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "404": ErrorResponse.self, "503": ErrorResponse.self])).data
     }
 }

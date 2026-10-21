@@ -3,21 +3,17 @@
 
 import Foundation
 
-/// ChatCreate domain models
+// ChatCreate domain models
 /// The object type, which is always `chat.completion.chunk`.
-public struct CreateChatCompletionStreamResponseObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct CreateChatCompletionStreamResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let chatCompletionChunk = CreateChatCompletionStreamResponseObject(rawValue: "chat.completion.chunk")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -28,20 +24,16 @@ public struct CreateChatCompletionStreamResponseObject: RawRepresentable, Hashab
 
 /// `none` means the model will not call a function and instead generates a message. `auto` means the model can
 /// pick between generating a message or calling a function.
-public struct CreateChatCompletionRequestVariant1FunctionCallVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct CreateChatCompletionRequestVariant1FunctionCallVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let none = CreateChatCompletionRequestVariant1FunctionCallVariant0(rawValue: "none")
     public static let auto = CreateChatCompletionRequestVariant1FunctionCallVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -51,14 +43,10 @@ public struct CreateChatCompletionRequestVariant1FunctionCallVariant0: RawRepres
 }
 
 /// Specifies the output audio format. Must be one of `wav`, `mp3`, `flac`, `opus`, or `pcm16`.
-public struct CreateChatCompletionRequestVariant1AudioFormat: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct CreateChatCompletionRequestVariant1AudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let wav = CreateChatCompletionRequestVariant1AudioFormat(rawValue: "wav")
     public static let aac = CreateChatCompletionRequestVariant1AudioFormat(rawValue: "aac")
     public static let mp3 = CreateChatCompletionRequestVariant1AudioFormat(rawValue: "mp3")
@@ -68,7 +56,7 @@ public struct CreateChatCompletionRequestVariant1AudioFormat: RawRepresentable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

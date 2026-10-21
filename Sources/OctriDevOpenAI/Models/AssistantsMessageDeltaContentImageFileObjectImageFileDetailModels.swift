@@ -3,24 +3,20 @@
 
 import Foundation
 
-/// AssistantsMessage domain models
+// AssistantsMessage domain models
 /// Specifies the detail level of the image if specified by the user. `low` uses fewer tokens, you can opt in to
 /// high resolution using `high`.
-public struct MessageDeltaContentImageFileObjectImageFileDetail: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct MessageDeltaContentImageFileObjectImageFileDetail: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = MessageDeltaContentImageFileObjectImageFileDetail(rawValue: "auto")
     public static let low = MessageDeltaContentImageFileObjectImageFileDetail(rawValue: "low")
     public static let high = MessageDeltaContentImageFileObjectImageFileDetail(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -49,21 +45,17 @@ public enum MessageContentTextAnnotationsFilePathObjectType: String, CaseIterabl
 
 /// Specifies the detail level of the image if specified by the user. `low` uses fewer tokens, you can opt in to
 /// high resolution using `high`.
-public struct MessageContentImageFileObjectImageFileDetail: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct MessageContentImageFileObjectImageFileDetail: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = MessageContentImageFileObjectImageFileDetail(rawValue: "auto")
     public static let low = MessageContentImageFileObjectImageFileDetail(rawValue: "low")
     public static let high = MessageContentImageFileObjectImageFileDetail(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -145,21 +137,17 @@ public enum MessageDeltaContentTextAnnotationsFileCitationObjectType: String, Ca
 
 /// Specifies the detail level of the image. `low` uses fewer tokens, you can opt in to high resolution using
 /// `high`.
-public struct MessageDeltaContentImageUrlObjectImageUrlDetail: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct MessageDeltaContentImageUrlObjectImageUrlDetail: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = MessageDeltaContentImageUrlObjectImageUrlDetail(rawValue: "auto")
     public static let low = MessageDeltaContentImageUrlObjectImageUrlDetail(rawValue: "low")
     public static let high = MessageDeltaContentImageUrlObjectImageUrlDetail(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -242,16 +230,13 @@ public enum MessageDeltaContentRefusalObjectType: String, CaseIterable, Codable 
 public struct MessageDeltaObjectDeltaRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let user = MessageDeltaObjectDeltaRole(rawValue: "user")
     public static let assistant = MessageDeltaObjectDeltaRole(rawValue: "assistant")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -264,15 +249,12 @@ public struct MessageDeltaObjectDeltaRole: RawRepresentable, Hashable, Codable, 
 public struct MessageObjectObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let threadMessage = MessageObjectObject(rawValue: "thread.message")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

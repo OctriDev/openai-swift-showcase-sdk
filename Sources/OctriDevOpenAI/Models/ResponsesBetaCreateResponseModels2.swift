@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaCreate domain models
+// ResponsesBetaCreate domain models
 /// Typed representation of the `BetaCreateResponse` API schema.
 public struct BetaCreateResponse: Codable {
     /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional
@@ -126,111 +126,63 @@ public struct BetaCreateResponse: Codable {
     }
 
     init() {
-        (metadata, topLogprobs, temperature, topP, user) = (nil, nil, nil, nil, nil)
-        (safetyIdentifier, promptCacheKey, promptCacheRetention, promptCacheOptions, previousResponseId) = (
-            nil,
-            nil,
-            nil,
-            nil,
-            nil
-        )
-        (model, background, maxToolCalls, text, tools) = (nil, nil, nil, nil, nil)
-        (toolChoice, prompt, accessPrograms, serviceTier, truncation) = (nil, nil, nil, nil, nil)
-        (reasoning, input, include, parallelToolCalls, store) = (nil, nil, nil, nil, nil)
-        (instructions, moderation, stream, streamOptions, conversation) = (nil, nil, nil, nil, nil)
-        (contextManagement, maxOutputTokens, multiAgent) = (nil, nil, nil)
+        (self.metadata, self.topLogprobs, self.temperature, self.topP, self.user) = (nil, nil, nil, nil, nil)
+        (self.safetyIdentifier, self.promptCacheKey, self.promptCacheRetention, self.promptCacheOptions, self.previousResponseId) = (nil, nil, nil, nil, nil)
+        (self.model, self.background, self.maxToolCalls, self.text, self.tools) = (nil, nil, nil, nil, nil)
+        (self.toolChoice, self.prompt, self.accessPrograms, self.serviceTier, self.truncation) = (nil, nil, nil, nil, nil)
+        (self.reasoning, self.input, self.include, self.parallelToolCalls, self.store) = (nil, nil, nil, nil, nil)
+        (self.instructions, self.moderation, self.stream, self.streamOptions, self.conversation) = (nil, nil, nil, nil, nil)
+        (self.contextManagement, self.maxOutputTokens, self.multiAgent) = (nil, nil, nil)
     }
 }
 
-public extension BetaCreateResponse {
-    init(from decoder: Decoder) throws {
+extension BetaCreateResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        topP = try container.sdkDecodeIfPresent(.topP)
-        user = try container.sdkDecodeIfPresent(.user)
-        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
-        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
-        model = try container.sdkDecodeIfPresent(.model)
-        background = try container.sdkDecodeIfPresent(.background)
-        maxToolCalls = try container.sdkDecodeIfPresent(.maxToolCalls)
-        text = try container.sdkDecodeIfPresent(.text)
-        tools = try container.sdkDecodeIfPresent(.tools)
-        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        prompt = try container.sdkDecodeIfPresent(.prompt)
-        accessPrograms = try container.sdkDecodeIfPresent(.accessPrograms)
-        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        truncation = try container.sdkDecodeIfPresent(.truncation)
-        reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        input = try container.sdkDecodeIfPresent(.input)
-        include = try container.sdkDecodeIfPresent(.include)
-        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        store = try container.sdkDecodeIfPresent(.store)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        moderation = try container.sdkDecodeIfPresent(.moderation)
-        stream = try container.sdkDecodeIfPresent(.stream)
-        streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
-        conversation = try container.sdkDecodeIfPresent(.conversation)
-        contextManagement = try container.sdkDecodeIfPresent(.contextManagement)
-        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
-        if let value = topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        self.temperature = try container.sdkDecodeIfPresent(.temperature)
+        self.topP = try container.sdkDecodeIfPresent(.topP)
+        self.user = try container.sdkDecodeIfPresent(.user)
+        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        self.previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
+        self.model = try container.sdkDecodeIfPresent(.model)
+        self.background = try container.sdkDecodeIfPresent(.background)
+        self.maxToolCalls = try container.sdkDecodeIfPresent(.maxToolCalls)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.tools = try container.sdkDecodeIfPresent(.tools)
+        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        self.prompt = try container.sdkDecodeIfPresent(.prompt)
+        self.accessPrograms = try container.sdkDecodeIfPresent(.accessPrograms)
+        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        self.truncation = try container.sdkDecodeIfPresent(.truncation)
+        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        self.input = try container.sdkDecodeIfPresent(.input)
+        self.include = try container.sdkDecodeIfPresent(.include)
+        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        self.store = try container.sdkDecodeIfPresent(.store)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.moderation = try container.sdkDecodeIfPresent(.moderation)
+        self.stream = try container.sdkDecodeIfPresent(.stream)
+        self.streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
+        self.conversation = try container.sdkDecodeIfPresent(.conversation)
+        self.contextManagement = try container.sdkDecodeIfPresent(.contextManagement)
+        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        self.multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
+        if let value = self.topLogprobs {
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = contextManagement {
+        if let value = self.contextManagement {
             try validateItems("context_management", value, min: 1, max: nil)
         }
     }
 }
 
-public extension BetaCreateResponse {
-    init(
-        metadata: BetaMetadata? = nil,
-        topLogprobs: Int? = nil,
-        temperature: Double? = nil,
-        topP: Double? = nil,
-        user: String? = nil,
-        safetyIdentifier: String? = nil,
-        promptCacheKey: String? = nil,
-        promptCacheRetention: BetaModelResponsePropertiesPromptCacheRetentionVariant0? = nil,
-        promptCacheOptions: BetaResponsePromptCacheOptionsParam? = nil,
-        previousResponseId: String? = nil,
-        model: BetaModelIdsResponses? = nil,
-        background: Bool? = nil,
-        maxToolCalls: Int? = nil,
-        text: BetaResponseTextParam? = nil,
-        tools: BetaToolsArray? = nil,
-        toolChoice: BetaToolChoiceParam? = nil,
-        prompt: BetaPrompt? = nil,
-        accessPrograms: BetaAccessProgramsParam? = nil,
-        serviceTier: BetaServiceTierResponsesVariant0? = nil,
-        truncation: BetaCreateResponseVariant2TruncationVariant0? = nil,
-        reasoning: BetaReasoning? = nil,
-        input: BetaInputParam? = nil,
-        include: [BetaIncludeEnum]? = nil,
-        parallelToolCalls: Bool? = nil,
-        store: Bool? = nil,
-        instructions: String? = nil,
-        moderation: BetaModerationParam? = nil,
-        stream: Bool? = nil,
-        streamOptions: BetaResponseStreamOptions? = nil,
-        conversation: BetaConversationParam? = nil,
-        contextManagement: [BetaContextManagementParam]? = nil,
-        maxOutputTokens: Int? = nil,
-        multiAgent: BetaMultiAgentParam? = nil
-    ) throws {
+extension BetaCreateResponse {
+    public init(metadata: BetaMetadata? = nil, topLogprobs: Int? = nil, temperature: Double? = nil, topP: Double? = nil, user: String? = nil, safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: BetaModelResponsePropertiesPromptCacheRetentionVariant0? = nil, promptCacheOptions: BetaResponsePromptCacheOptionsParam? = nil, previousResponseId: String? = nil, model: BetaModelIdsResponses? = nil, background: Bool? = nil, maxToolCalls: Int? = nil, text: BetaResponseTextParam? = nil, tools: BetaToolsArray? = nil, toolChoice: BetaToolChoiceParam? = nil, prompt: BetaPrompt? = nil, accessPrograms: BetaAccessProgramsParam? = nil, serviceTier: BetaServiceTierResponsesVariant0? = nil, truncation: BetaCreateResponseVariant2TruncationVariant0? = nil, reasoning: BetaReasoning? = nil, input: BetaInputParam? = nil, include: [BetaIncludeEnum]? = nil, parallelToolCalls: Bool? = nil, store: Bool? = nil, instructions: String? = nil, moderation: BetaModerationParam? = nil, stream: Bool? = nil, streamOptions: BetaResponseStreamOptions? = nil, conversation: BetaConversationParam? = nil, contextManagement: [BetaContextManagementParam]? = nil, maxOutputTokens: Int? = nil, multiAgent: BetaMultiAgentParam? = nil) throws {
         self.init()
         (self.metadata, self.topLogprobs) = (metadata, topLogprobs)
         (self.temperature, self.topP) = (temperature, topP)
@@ -250,15 +202,7 @@ public extension BetaCreateResponse {
         (self.contextManagement, self.maxOutputTokens) = (contextManagement, maxOutputTokens)
         self.multiAgent = multiAgent
         if let value = self.topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.contextManagement {
             try validateItems("context_management", value, min: 1, max: nil)
@@ -284,43 +228,27 @@ public struct BetaCreateModelResponsePropertiesVariant1: Codable {
     }
 
     init() {
-        (promptCacheOptions, topLogprobs) = (nil, nil)
+        (self.promptCacheOptions, self.topLogprobs) = (nil, nil)
     }
 }
 
-public extension BetaCreateModelResponsePropertiesVariant1 {
-    init(from decoder: Decoder) throws {
+extension BetaCreateModelResponsePropertiesVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        if let value = topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        if let value = self.topLogprobs {
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension BetaCreateModelResponsePropertiesVariant1 {
-    init(promptCacheOptions: BetaPromptCacheOptionsParam? = nil, topLogprobs: Int? = nil) throws {
+extension BetaCreateModelResponsePropertiesVariant1 {
+    public init(promptCacheOptions: BetaPromptCacheOptionsParam? = nil, topLogprobs: Int? = nil) throws {
         self.init()
         (self.promptCacheOptions, self.topLogprobs) = (promptCacheOptions, topLogprobs)
         if let value = self.topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -381,59 +309,41 @@ public struct BetaCreateResponseVariant2: Codable {
     }
 
     init() {
-        (accessPrograms, promptCacheOptions, serviceTier, truncation, reasoning) = (nil, nil, nil, nil, nil)
-        (input, include, parallelToolCalls, store, instructions) = (nil, nil, nil, nil, nil)
-        (moderation, stream, streamOptions, conversation, contextManagement) = (nil, nil, nil, nil, nil)
-        (maxOutputTokens, multiAgent) = (nil, nil)
+        (self.accessPrograms, self.promptCacheOptions, self.serviceTier, self.truncation, self.reasoning) = (nil, nil, nil, nil, nil)
+        (self.input, self.include, self.parallelToolCalls, self.store, self.instructions) = (nil, nil, nil, nil, nil)
+        (self.moderation, self.stream, self.streamOptions, self.conversation, self.contextManagement) = (nil, nil, nil, nil, nil)
+        (self.maxOutputTokens, self.multiAgent) = (nil, nil)
     }
 }
 
-public extension BetaCreateResponseVariant2 {
-    init(from decoder: Decoder) throws {
+extension BetaCreateResponseVariant2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        accessPrograms = try container.sdkDecodeIfPresent(.accessPrograms)
-        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        truncation = try container.sdkDecodeIfPresent(.truncation)
-        reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        input = try container.sdkDecodeIfPresent(.input)
-        include = try container.sdkDecodeIfPresent(.include)
-        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        store = try container.sdkDecodeIfPresent(.store)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        moderation = try container.sdkDecodeIfPresent(.moderation)
-        stream = try container.sdkDecodeIfPresent(.stream)
-        streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
-        conversation = try container.sdkDecodeIfPresent(.conversation)
-        contextManagement = try container.sdkDecodeIfPresent(.contextManagement)
-        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
-        if let value = contextManagement {
+        self.accessPrograms = try container.sdkDecodeIfPresent(.accessPrograms)
+        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        self.truncation = try container.sdkDecodeIfPresent(.truncation)
+        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        self.input = try container.sdkDecodeIfPresent(.input)
+        self.include = try container.sdkDecodeIfPresent(.include)
+        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        self.store = try container.sdkDecodeIfPresent(.store)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.moderation = try container.sdkDecodeIfPresent(.moderation)
+        self.stream = try container.sdkDecodeIfPresent(.stream)
+        self.streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
+        self.conversation = try container.sdkDecodeIfPresent(.conversation)
+        self.contextManagement = try container.sdkDecodeIfPresent(.contextManagement)
+        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        self.multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
+        if let value = self.contextManagement {
             try validateItems("context_management", value, min: 1, max: nil)
         }
     }
 }
 
-public extension BetaCreateResponseVariant2 {
-    init(
-        accessPrograms: BetaAccessProgramsParam? = nil,
-        promptCacheOptions: BetaResponsePromptCacheOptionsParam? = nil,
-        serviceTier: BetaServiceTierResponsesVariant0? = nil,
-        truncation: BetaCreateResponseVariant2TruncationVariant0? = nil,
-        reasoning: BetaReasoning? = nil,
-        input: BetaInputParam? = nil,
-        include: [BetaIncludeEnum]? = nil,
-        parallelToolCalls: Bool? = nil,
-        store: Bool? = nil,
-        instructions: String? = nil,
-        moderation: BetaModerationParam? = nil,
-        stream: Bool? = nil,
-        streamOptions: BetaResponseStreamOptions? = nil,
-        conversation: BetaConversationParam? = nil,
-        contextManagement: [BetaContextManagementParam]? = nil,
-        maxOutputTokens: Int? = nil,
-        multiAgent: BetaMultiAgentParam? = nil
-    ) throws {
+extension BetaCreateResponseVariant2 {
+    public init(accessPrograms: BetaAccessProgramsParam? = nil, promptCacheOptions: BetaResponsePromptCacheOptionsParam? = nil, serviceTier: BetaServiceTierResponsesVariant0? = nil, truncation: BetaCreateResponseVariant2TruncationVariant0? = nil, reasoning: BetaReasoning? = nil, input: BetaInputParam? = nil, include: [BetaIncludeEnum]? = nil, parallelToolCalls: Bool? = nil, store: Bool? = nil, instructions: String? = nil, moderation: BetaModerationParam? = nil, stream: Bool? = nil, streamOptions: BetaResponseStreamOptions? = nil, conversation: BetaConversationParam? = nil, contextManagement: [BetaContextManagementParam]? = nil, maxOutputTokens: Int? = nil, multiAgent: BetaMultiAgentParam? = nil) throws {
         self.init()
         (self.accessPrograms, self.promptCacheOptions) = (accessPrograms, promptCacheOptions)
         (self.serviceTier, self.truncation) = (serviceTier, truncation)
@@ -496,49 +406,31 @@ public struct BetaCreateModelResponseProperties: Codable {
     }
 
     init() {
-        (metadata, topLogprobs, temperature, topP, user) = (nil, nil, nil, nil, nil)
-        (safetyIdentifier, promptCacheKey, promptCacheRetention, promptCacheOptions) = (nil, nil, nil, nil)
+        (self.metadata, self.topLogprobs, self.temperature, self.topP, self.user) = (nil, nil, nil, nil, nil)
+        (self.safetyIdentifier, self.promptCacheKey, self.promptCacheRetention, self.promptCacheOptions) = (nil, nil, nil, nil)
     }
 }
 
-public extension BetaCreateModelResponseProperties {
-    init(from decoder: Decoder) throws {
+extension BetaCreateModelResponseProperties {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        topP = try container.sdkDecodeIfPresent(.topP)
-        user = try container.sdkDecodeIfPresent(.user)
-        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
-        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        if let value = topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        self.temperature = try container.sdkDecodeIfPresent(.temperature)
+        self.topP = try container.sdkDecodeIfPresent(.topP)
+        self.user = try container.sdkDecodeIfPresent(.user)
+        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        if let value = self.topLogprobs {
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension BetaCreateModelResponseProperties {
-    init(
-        metadata: BetaMetadata? = nil,
-        topLogprobs: Int? = nil,
-        temperature: Double? = nil,
-        topP: Double? = nil,
-        user: String? = nil,
-        safetyIdentifier: String? = nil,
-        promptCacheKey: String? = nil,
-        promptCacheRetention: BetaModelResponsePropertiesPromptCacheRetentionVariant0? = nil,
-        promptCacheOptions: BetaPromptCacheOptionsParam? = nil
-    ) throws {
+extension BetaCreateModelResponseProperties {
+    public init(metadata: BetaMetadata? = nil, topLogprobs: Int? = nil, temperature: Double? = nil, topP: Double? = nil, user: String? = nil, safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: BetaModelResponsePropertiesPromptCacheRetentionVariant0? = nil, promptCacheOptions: BetaPromptCacheOptionsParam? = nil) throws {
         self.init()
         (self.metadata, self.topLogprobs) = (metadata, topLogprobs)
         (self.temperature, self.topP) = (temperature, topP)
@@ -546,15 +438,7 @@ public extension BetaCreateModelResponseProperties {
         (self.promptCacheKey, self.promptCacheRetention) = (promptCacheKey, promptCacheRetention)
         self.promptCacheOptions = promptCacheOptions
         if let value = self.topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }

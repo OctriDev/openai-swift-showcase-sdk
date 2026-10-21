@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsEnvironment domain models
+// AgentsEnvironment domain models
 public indirect enum EnvironmentParam {
     case environmentParamNone(EnvironmentParamNone)
     case environmentParamOpenaiHosted(EnvironmentParamOpenaiHosted)
@@ -13,6 +13,7 @@ public indirect enum EnvironmentParam {
 }
 
 extension EnvironmentParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension EnvironmentParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,10 +37,10 @@ extension EnvironmentParam: Codable {
 extension EnvironmentParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "none": try .environmentParamNone(EnvironmentParamNone(from: decoder))
-        case "openai_hosted": try .environmentParamOpenaiHosted(EnvironmentParamOpenaiHosted(from: decoder))
-        case "self_hosted": try .environmentParamSelfHosted(EnvironmentParamSelfHosted(from: decoder))
-        default: nil
+        case "none": return .environmentParamNone(try EnvironmentParamNone(from: decoder))
+        case "openai_hosted": return .environmentParamOpenaiHosted(try EnvironmentParamOpenaiHosted(from: decoder))
+        case "self_hosted": return .environmentParamSelfHosted(try EnvironmentParamSelfHosted(from: decoder))
+        default: return nil
         }
     }
 }
@@ -69,30 +66,24 @@ public struct EnvironmentParamNone: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EnvironmentParamNone {
-    init(from decoder: Decoder) throws {
+extension EnvironmentParamNone {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, EnvironmentParamNoneType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, EnvironmentParamNoneType.allCases.map(\.rawValue))
     }
 }
 
-public extension EnvironmentParamNone {
-    init(type: EnvironmentParamNoneType) throws {
+extension EnvironmentParamNone {
+    public init(type: EnvironmentParamNoneType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, EnvironmentParamNoneType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, EnvironmentParamNoneType.allCases.map(\.rawValue))
     }
 }
 
@@ -143,54 +134,34 @@ public struct EnvironmentParamOpenaiHosted: Codable {
         case containerSize = "container_size"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EnvironmentParamOpenaiHosted {
-    init(from decoder: Decoder) throws {
+extension EnvironmentParamOpenaiHosted {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        packages = try container.sdkDecodeIfPresent(.packages)
-        setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
-        network = try container.sdkDecodeIfPresent(.network)
-        desktop = try container.sdkDecodeIfPresent(.desktop)
-        env = try container.sdkDecodeIfPresent(.env)
-        capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
-        skills = try container.sdkDecodeIfPresent(.skills)
-        plugins = try container.sdkDecodeIfPresent(.plugins)
-        files = try container.sdkDecodeIfPresent(.files)
-        environmentId = try container.sdkDecodeIfPresent(.environmentId)
-        environmentTemplateId = try container.sdkDecodeIfPresent(.environmentTemplateId)
-        containerSize = try container.sdkDecodeIfPresent(.containerSize)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.packages = try container.sdkDecodeIfPresent(.packages)
+        self.setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
+        self.network = try container.sdkDecodeIfPresent(.network)
+        self.desktop = try container.sdkDecodeIfPresent(.desktop)
+        self.env = try container.sdkDecodeIfPresent(.env)
+        self.capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
+        self.skills = try container.sdkDecodeIfPresent(.skills)
+        self.plugins = try container.sdkDecodeIfPresent(.plugins)
+        self.files = try container.sdkDecodeIfPresent(.files)
+        self.environmentId = try container.sdkDecodeIfPresent(.environmentId)
+        self.environmentTemplateId = try container.sdkDecodeIfPresent(.environmentTemplateId)
+        self.containerSize = try container.sdkDecodeIfPresent(.containerSize)
         try sdkValidateConstraints()
     }
 }
 
-public extension EnvironmentParamOpenaiHosted {
-    init(
-        type: EnvironmentParamOpenaiHostedType,
-        packages: EnvironmentPackagesParam? = nil,
-        setupCommands: [SetupCommandParam]? = nil,
-        network: NetworkPolicyParam? = nil,
-        desktop: DesktopParam? = nil,
-        env: [String: String]? = nil,
-        capabilityDirectories: [String]? = nil,
-        skills: [HostedSkillParam]? = nil,
-        plugins: [HostedPluginParam]? = nil,
-        files: [HostedEnvironmentFileParam]? = nil,
-        environmentId: String? = nil,
-        environmentTemplateId: String? = nil,
-        containerSize: ContainerSizeParam? = nil
-    ) throws {
+extension EnvironmentParamOpenaiHosted {
+    public init(type: EnvironmentParamOpenaiHostedType, packages: EnvironmentPackagesParam? = nil, setupCommands: [SetupCommandParam]? = nil, network: NetworkPolicyParam? = nil, desktop: DesktopParam? = nil, env: [String: String]? = nil, capabilityDirectories: [String]? = nil, skills: [HostedSkillParam]? = nil, plugins: [HostedPluginParam]? = nil, files: [HostedEnvironmentFileParam]? = nil, environmentId: String? = nil, environmentTemplateId: String? = nil, containerSize: ContainerSizeParam? = nil) throws {
         (self.type, self.packages) = (type, packages)
         (self.setupCommands, self.network) = (setupCommands, network)
         (self.desktop, self.env) = (desktop, env)
@@ -204,26 +175,26 @@ public extension EnvironmentParamOpenaiHosted {
 
 extension EnvironmentParamOpenaiHosted {
     func sdkValidateConstraints() throws {
-        try sdkValidateRawEnum("type", type, EnvironmentParamOpenaiHostedType.allCases.map(\.rawValue))
-        if let value = setupCommands {
+            try sdkValidateRawEnum("type", self.type, EnvironmentParamOpenaiHostedType.allCases.map(\.rawValue))
+        if let value = self.setupCommands {
             try validateItems("setup_commands", value, min: 0, max: 16)
         }
-        if let value = capabilityDirectories {
+        if let value = self.capabilityDirectories {
             try validateItems("capability_directories", value, min: 0, max: 16384)
         }
-        if let value = skills {
+        if let value = self.skills {
             try validateItems("skills", value, min: 0, max: 200)
         }
-        if let value = plugins {
+        if let value = self.plugins {
             try validateItems("plugins", value, min: 0, max: 32)
         }
-        if let value = files {
+        if let value = self.files {
             try validateItems("files", value, min: 0, max: 50)
         }
-        if let value = environmentId {
+        if let value = self.environmentId {
             try validateLength("environment_id", value, min: 9, max: 256)
         }
-        if let value = environmentTemplateId {
+        if let value = self.environmentTemplateId {
             try validateLength("environment_template_id", value, min: 0, max: 64)
         }
     }
@@ -244,59 +215,31 @@ public indirect enum EnvironmentParamOpenaiHostedXf83f4ee2 {
 }
 
 extension EnvironmentParamOpenaiHostedXf83f4ee2: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for EnvironmentParamOpenaiHostedXf83f4ee2"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for EnvironmentParamOpenaiHostedXf83f4ee2")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension EnvironmentParamOpenaiHostedXf83f4ee2 {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue1(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue2(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue3(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue4(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue5(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue6(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue7(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue8(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue9(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue10(value)
-        }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue1(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue2(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue3(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue4(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue5(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue6(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue7(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue8(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue9(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue10(value) }
         return nil
     }
 }
@@ -335,49 +278,35 @@ public struct EnvironmentParamSelfHosted: Codable {
         case capabilityDirectories = "capability_directories"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EnvironmentParamSelfHosted {
-    init(from decoder: Decoder) throws {
+extension EnvironmentParamSelfHosted {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.workspaceDirectory) else {
-            throw SdkValidationError(
-                field: "workspace_directory",
-                code: "required",
-                message: "Validation failed for 'workspace_directory': value is required"
-            )
+            throw SdkValidationError(field: "workspace_directory", code: "required", message: "Validation failed for 'workspace_directory': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        workspaceDirectory = try container.sdkDecodeRequired(.workspaceDirectory)
-        capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
-        try sdkValidateRawEnum("type", type, EnvironmentParamSelfHostedType.allCases.map(\.rawValue))
-        try validateLength("workspace_directory", workspaceDirectory, min: 0, max: 1_048_576)
-        if let value = capabilityDirectories {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.workspaceDirectory = try container.sdkDecodeRequired(.workspaceDirectory)
+        self.capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
+            try sdkValidateRawEnum("type", self.type, EnvironmentParamSelfHostedType.allCases.map(\.rawValue))
+            try validateLength("workspace_directory", self.workspaceDirectory, min: 0, max: 1048576)
+        if let value = self.capabilityDirectories {
             try validateItems("capability_directories", value, min: 0, max: 16384)
         }
     }
 }
 
-public extension EnvironmentParamSelfHosted {
-    init(
-        type: EnvironmentParamSelfHostedType,
-        workspaceDirectory: String,
-        capabilityDirectories: [String]? = nil
-    ) throws {
+extension EnvironmentParamSelfHosted {
+    public init(type: EnvironmentParamSelfHostedType, workspaceDirectory: String, capabilityDirectories: [String]? = nil) throws {
         (self.type, self.workspaceDirectory) = (type, workspaceDirectory)
         self.capabilityDirectories = capabilityDirectories
-        try sdkValidateRawEnum("type", self.type, EnvironmentParamSelfHostedType.allCases.map(\.rawValue))
-        try validateLength("workspace_directory", self.workspaceDirectory, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, EnvironmentParamSelfHostedType.allCases.map(\.rawValue))
+            try validateLength("workspace_directory", self.workspaceDirectory, min: 0, max: 1048576)
         if let value = self.capabilityDirectories {
             try validateItems("capability_directories", value, min: 0, max: 16384)
         }

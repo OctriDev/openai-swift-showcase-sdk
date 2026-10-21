@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Certificates domain models
+// Certificates domain models
 /// Typed representation of the `UploadCertificateRequest` API schema.
 public struct UploadCertificateRequest: Codable {
     /// The certificate content in PEM format
@@ -16,28 +16,22 @@ public struct UploadCertificateRequest: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UploadCertificateRequest {
-    init(from decoder: Decoder) throws {
+extension UploadCertificateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.certificate) else {
-            throw SdkValidationError(
-                field: "certificate",
-                code: "required",
-                message: "Validation failed for 'certificate': value is required"
-            )
+            throw SdkValidationError(field: "certificate", code: "required", message: "Validation failed for 'certificate': value is required")
         }
-        certificate = try container.sdkDecodeRequired(.certificate)
-        name = try container.sdkDecodeIfPresent(.name)
+        self.certificate = try container.sdkDecodeRequired(.certificate)
+        self.name = try container.sdkDecodeIfPresent(.name)
     }
 }
 
-public extension UploadCertificateRequest {
-    init(certificate: String, name: String? = nil) {
+extension UploadCertificateRequest {
+    public init(certificate: String, name: String? = nil) {
         (self.certificate, self.name) = (certificate, name)
     }
 }

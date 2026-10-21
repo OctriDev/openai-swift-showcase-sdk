@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesResponse domain models
+// ResponsesResponse domain models
 /// Options for prompt caching. Supported for `gpt-5.6` and later models. By default, OpenAI automatically chooses
 /// one implicit cache breakpoint. You can add explicit breakpoints to content blocks with
 /// `prompt_cache_breakpoint`. Each request can write up to four breakpoints. For cache matching, OpenAI considers
@@ -33,27 +33,22 @@ public struct ResponsePromptCacheOptionsParam: Codable {
     }
 
     init() {
-        (ttl, mode, prewarm, comparisonResponseId) = (nil, nil, nil, nil)
+        (self.ttl, self.mode, self.prewarm, self.comparisonResponseId) = (nil, nil, nil, nil)
     }
 }
 
-public extension ResponsePromptCacheOptionsParam {
-    init(from decoder: Decoder) throws {
+extension ResponsePromptCacheOptionsParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        ttl = try container.sdkDecodeIfPresent(.ttl)
-        mode = try container.sdkDecodeIfPresent(.mode)
-        prewarm = try container.sdkDecodeIfPresent(.prewarm)
-        comparisonResponseId = try container.sdkDecodeIfPresent(.comparisonResponseId)
+        self.ttl = try container.sdkDecodeIfPresent(.ttl)
+        self.mode = try container.sdkDecodeIfPresent(.mode)
+        self.prewarm = try container.sdkDecodeIfPresent(.prewarm)
+        self.comparisonResponseId = try container.sdkDecodeIfPresent(.comparisonResponseId)
     }
 }
 
-public extension ResponsePromptCacheOptionsParam {
-    init(
-        ttl: PromptCacheTTLEnum? = nil,
-        mode: PromptCacheModeEnum? = nil,
-        prewarm: Bool? = nil,
-        comparisonResponseId: String? = nil
-    ) {
+extension ResponsePromptCacheOptionsParam {
+    public init(ttl: PromptCacheTTLEnum? = nil, mode: PromptCacheModeEnum? = nil, prewarm: Bool? = nil, comparisonResponseId: String? = nil) {
         self.init()
         (self.ttl, self.mode) = (ttl, mode)
         (self.prewarm, self.comparisonResponseId) = (prewarm, comparisonResponseId)

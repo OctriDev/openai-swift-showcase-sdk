@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Projects domain models
+// Projects domain models
 /// Parameters for updating a project service account.
 public struct UpdateProjectServiceAccountBody: Codable {
     /// The updated service account name.
@@ -17,20 +17,20 @@ public struct UpdateProjectServiceAccountBody: Codable {
     }
 
     init() {
-        (name, role) = (nil, nil)
+        (self.name, self.role) = (nil, nil)
     }
 }
 
-public extension UpdateProjectServiceAccountBody {
-    init(from decoder: Decoder) throws {
+extension UpdateProjectServiceAccountBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        name = try container.sdkDecodeIfPresent(.name)
-        role = try container.sdkDecodeIfPresent(.role)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.role = try container.sdkDecodeIfPresent(.role)
     }
 }
 
-public extension UpdateProjectServiceAccountBody {
-    init(name: String? = nil, role: UpdateProjectServiceAccountBodyRole? = nil) {
+extension UpdateProjectServiceAccountBody {
+    public init(name: String? = nil, role: UpdateProjectServiceAccountBodyRole? = nil) {
         self.init()
         (self.name, self.role) = (name, role)
     }
@@ -40,16 +40,13 @@ public extension UpdateProjectServiceAccountBody {
 public struct UpdateProjectServiceAccountBodyRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let member = UpdateProjectServiceAccountBodyRole(rawValue: "member")
     public static let owner = UpdateProjectServiceAccountBodyRole(rawValue: "owner")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

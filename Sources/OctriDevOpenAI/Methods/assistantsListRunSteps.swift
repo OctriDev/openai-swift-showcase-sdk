@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    /// Lists the steps belonging to a run on a thread. Use cursor parameters to page through the steps, and set `order`
-    /// to control their order by creation time.
+extension AssistantsMethods {
+    /// Lists the steps belonging to a run on a thread. Use cursor parameters to page through the steps, and set `order` to control their order by creation time.
     ///
     /// Returns a list of run steps belonging to a run.
     ///
@@ -33,35 +32,17 @@ public extension AssistantsMethods {
     ///   file search result content. See the [file search tool
     ///   documentation](https://developers.openai.com/api/docs/guides/tools-file-sear
     ///   ch#retrieval-customization) for more information.
-    static func listRunSteps(
-        config: ClientConfig,
-        threadId: String,
-        runId: String,
-        limit: Int? = nil,
-        order: ListRunStepsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        include: [ListRunStepsParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListRunStepsResponse {
-        try await (sdkRequest("GET", [
-            "/threads/",
-            sdkEncodePathSegment(sdkWireString(threadId)),
-            "/runs/",
-            sdkEncodePathSegment(sdkWireString(runId)),
-            "/steps",
-        ].joined(), config: config, query: [
+    public static func listRunSteps(config: ClientConfig, threadId: String, runId: String, limit: Int? = nil, order: ListRunStepsParameter? = nil, after: String? = nil, before: String? = nil, include: [ListRunStepsParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> ListRunStepsResponse {
+        return try (await sdkRequest("GET", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/runs/", sdkEncodePathSegment(sdkWireString(runId)), "/steps"].joined(), config: config, query: [
             SdkQueryParameter("limit", value: limit),
             SdkQueryParameter("order", value: order),
             SdkQueryParameter("after", value: after),
             SdkQueryParameter("before", value: before),
             SdkQueryParameter("include[]", values: include, style: "form", explode: true),
-        ], decoder: .json, operationId: "listRunSteps", options: requestOptions, errors: ["429": ErrorResponse.self]))
-            .data
+        ], decoder: .json, operationId: "listRunSteps", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 
-    /// Lists the steps belonging to a run on a thread. Use cursor parameters to page through the steps, and set `order`
-    /// to control their order by creation time.
+    /// Lists the steps belonging to a run on a thread. Use cursor parameters to page through the steps, and set `order` to control their order by creation time.
     ///
     /// Returns a list of run steps belonging to a run.
     ///
@@ -86,46 +67,17 @@ public extension AssistantsMethods {
     ///   file search result content. See the [file search tool
     ///   documentation](https://developers.openai.com/api/docs/guides/tools-file-sear
     ///   ch#retrieval-customization) for more information.
-    static func listRunStepsPaginated(
-        config: ClientConfig,
-        threadId: String,
-        runId: String,
-        limit: Int? = nil,
-        order: ListRunStepsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        include: [ListRunStepsParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<RunStepObject, Swift.Error> {
-        AsyncThrowingStream<RunStepObject, Swift.Error> { (continuation: AsyncThrowingStream<
-            RunStepObject,
-            Swift.Error
-        >.Continuation) in
+    public static func listRunStepsPaginated(config: ClientConfig, threadId: String, runId: String, limit: Int? = nil, order: ListRunStepsParameter? = nil, after: String? = nil, before: String? = nil, include: [ListRunStepsParameterItem]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<RunStepObject, Swift.Error> {
+        return AsyncThrowingStream<RunStepObject, Swift.Error> { (continuation: AsyncThrowingStream<RunStepObject, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listRunSteps(
-                            config: config,
-                            threadId: threadId,
-                            runId: runId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            include: include,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listRunSteps(config: config, threadId: threadId, runId: runId, limit: limit, order: order, after: pageCursor, before: before, include: include, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -138,51 +90,24 @@ public extension AssistantsMethods {
         }
     }
 
-    struct ListRunStepsPage {
+    public struct ListRunStepsPage {
         public let data: ListRunStepsResponse
         public let items: [RunStepObject]
         public let hasMore: Bool
     }
 
-    static func listRunStepsPages(
-        config: ClientConfig,
-        threadId: String,
-        runId: String,
-        limit: Int? = nil,
-        order: ListRunStepsParameter? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        include: [ListRunStepsParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListRunStepsPage, Swift.Error> {
-        AsyncThrowingStream<ListRunStepsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListRunStepsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listRunStepsPages(config: ClientConfig, threadId: String, runId: String, limit: Int? = nil, order: ListRunStepsParameter? = nil, after: String? = nil, before: String? = nil, include: [ListRunStepsParameterItem]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListRunStepsPage, Swift.Error> {
+        return AsyncThrowingStream<ListRunStepsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListRunStepsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listRunSteps(
-                            config: config,
-                            threadId: threadId,
-                            runId: runId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            include: include,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listRunSteps(config: config, threadId: threadId, runId: runId, limit: limit, order: order, after: pageCursor, before: before, include: include, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && true
                         pageContinuation.yield(ListRunStepsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore {
-                            break
-                        }
+                        if !hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

@@ -3,21 +3,18 @@
 
 import Foundation
 
-/// ResponsesBetaPrompt domain models
+// ResponsesBetaPrompt domain models
 /// Typed representation of the `BetaPromptCacheRetentionEnum` API schema.
 public struct BetaPromptCacheRetentionEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inMemory = BetaPromptCacheRetentionEnum(rawValue: "in_memory")
     public static let value24h = BetaPromptCacheRetentionEnum(rawValue: "24h")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

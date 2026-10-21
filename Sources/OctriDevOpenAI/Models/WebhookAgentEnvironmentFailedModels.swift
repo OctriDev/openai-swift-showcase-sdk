@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// WebhookAgentEnvironmentFailed domain models
+// WebhookAgentEnvironmentFailed domain models
 public struct WebhookAgentEnvironmentFailedVariant1: Codable {
     /// The event type. Always `agent.environment.failed`.
     public var type: WebhookAgentEnvironmentFailedVariant1Type
@@ -15,35 +15,25 @@ public struct WebhookAgentEnvironmentFailedVariant1: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookAgentEnvironmentFailedVariant1 {
-    init(from decoder: Decoder) throws {
+extension WebhookAgentEnvironmentFailedVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        data = try container.sdkDecodeRequired(.data)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.data = try container.sdkDecodeRequired(.data)
     }
 }
 
-public extension WebhookAgentEnvironmentFailedVariant1 {
-    init(type: WebhookAgentEnvironmentFailedVariant1Type, data: AgentEnvironmentEvent) {
+extension WebhookAgentEnvironmentFailedVariant1 {
+    public init(type: WebhookAgentEnvironmentFailedVariant1Type, data: AgentEnvironmentEvent) {
         (self.type, self.data) = (type, data)
     }
 }
@@ -69,65 +59,37 @@ public struct WebhookAgentEnvironmentFailed: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension WebhookAgentEnvironmentFailed {
-    init(from decoder: Decoder) throws {
+extension WebhookAgentEnvironmentFailed {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        type = try container.sdkDecodeRequired(.type)
-        data = try container.sdkDecodeRequired(.data)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.data = try container.sdkDecodeRequired(.data)
     }
 }
 
-public extension WebhookAgentEnvironmentFailed {
-    init(
-        id: String,
-        object: WebhookAgentSessionEnvelopeObject,
-        createdAt: Int,
-        type: WebhookAgentEnvironmentFailedVariant1Type,
-        data: AgentEnvironmentEvent
-    ) {
+extension WebhookAgentEnvironmentFailed {
+    public init(id: String, object: WebhookAgentSessionEnvelopeObject, createdAt: Int, type: WebhookAgentEnvironmentFailedVariant1Type, data: AgentEnvironmentEvent) {
         (self.id, self.object) = (id, object)
         (self.createdAt, self.type) = (createdAt, type)
         self.data = data
@@ -135,20 +97,15 @@ public extension WebhookAgentEnvironmentFailed {
 }
 
 /// The event type. Always `agent.environment.failed`.
-public struct WebhookAgentEnvironmentFailedVariant1Type: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct WebhookAgentEnvironmentFailedVariant1Type: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let agentEnvironmentFailed =
-        WebhookAgentEnvironmentFailedVariant1Type(rawValue: "agent.environment.failed")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let agentEnvironmentFailed = WebhookAgentEnvironmentFailedVariant1Type(rawValue: "agent.environment.failed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

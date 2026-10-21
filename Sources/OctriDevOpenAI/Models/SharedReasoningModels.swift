@@ -3,39 +3,29 @@
 
 import Foundation
 
-/// SharedReasoning domain models
+// SharedReasoning domain models
 public indirect enum ReasoningEffort {
     case stringValue(String)
     case jsonValue(JSONValue)
 }
 
 extension ReasoningEffort: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ReasoningEffort"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ReasoningEffort")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension ReasoningEffort {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
         return nil
     }
 }
@@ -77,58 +67,37 @@ public struct ReasoningItem: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ReasoningItem {
-    init(from decoder: Decoder) throws {
+extension ReasoningItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.summary) else {
-            throw SdkValidationError(
-                field: "summary",
-                code: "required",
-                message: "Validation failed for 'summary': value is required"
-            )
+            throw SdkValidationError(field: "summary", code: "required", message: "Validation failed for 'summary': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        summary = try container.sdkDecodeRequired(.summary)
-        encryptedContent = try container.sdkDecodeIfPresent(.encryptedContent)
-        content = try container.sdkDecodeIfPresent(.content)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("type", type, ReasoningItemType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.summary = try container.sdkDecodeRequired(.summary)
+        self.encryptedContent = try container.sdkDecodeIfPresent(.encryptedContent)
+        self.content = try container.sdkDecodeIfPresent(.content)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("type", self.type, ReasoningItemType.allCases.map(\.rawValue))
     }
 }
 
-public extension ReasoningItem {
-    init(
-        type: ReasoningItemType,
-        id: String,
-        summary: [SummaryTextContent],
-        encryptedContent: String? = nil,
-        content: [ReasoningTextContent]? = nil,
-        status: ReasoningItemStatus? = nil
-    ) throws {
+extension ReasoningItem {
+    public init(type: ReasoningItemType, id: String, summary: [SummaryTextContent], encryptedContent: String? = nil, content: [ReasoningTextContent]? = nil, status: ReasoningItemStatus? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.summary, self.encryptedContent) = (summary, encryptedContent)
         (self.content, self.status) = (content, status)
-        try sdkValidateRawEnum("type", self.type, ReasoningItemType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ReasoningItemType.allCases.map(\.rawValue))
     }
 }
 
@@ -144,38 +113,28 @@ public struct ReasoningTextContent: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ReasoningTextContent {
-    init(from decoder: Decoder) throws {
+extension ReasoningTextContent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        try sdkValidateRawEnum("type", type, ReasoningTextContentType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+            try sdkValidateRawEnum("type", self.type, ReasoningTextContentType.allCases.map(\.rawValue))
     }
 }
 
-public extension ReasoningTextContent {
-    init(type: ReasoningTextContentType, text: String) throws {
+extension ReasoningTextContent {
+    public init(type: ReasoningTextContentType, text: String) throws {
         (self.type, self.text) = (type, text)
-        try sdkValidateRawEnum("type", self.type, ReasoningTextContentType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ReasoningTextContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -220,17 +179,14 @@ public enum ReasoningTextContentType: String, CaseIterable, Codable {
 public struct ReasoningItemStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = ReasoningItemStatus(rawValue: "in_progress")
     public static let completed = ReasoningItemStatus(rawValue: "completed")
     public static let incomplete = ReasoningItemStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -246,10 +202,7 @@ public struct ReasoningItemStatus: RawRepresentable, Hashable, Codable, Sendable
 public struct ReasoningEffortVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let none = ReasoningEffortVariant0(rawValue: "none")
     public static let minimal = ReasoningEffortVariant0(rawValue: "minimal")
     public static let low = ReasoningEffortVariant0(rawValue: "low")
@@ -260,7 +213,7 @@ public struct ReasoningEffortVariant0: RawRepresentable, Hashable, Codable, Send
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

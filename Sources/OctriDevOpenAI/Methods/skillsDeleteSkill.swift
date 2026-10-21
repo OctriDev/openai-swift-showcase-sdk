@@ -6,28 +6,15 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension SkillsMethods {
-    /// Deletes a skill by its identifier. Use `skill_id` to select the skill to remove. The response confirms whether
-    /// the skill was deleted and includes its identifier.
+extension SkillsMethods {
+    /// Deletes a skill by its identifier. Use `skill_id` to select the skill to remove. The response confirms whether the skill was deleted and includes its identifier.
     ///
     /// Delete a skill by its ID.
     ///
     /// - Parameters:
     /// - skillId: The identifier of the skill to delete.
-    static func deleteSkill(
-        config: ClientConfig,
-        skillId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedSkillResource {
-        try await (sdkRequest(
-            "DELETE",
-            ["/skills/", sdkEncodePathSegment(sdkWireString(skillId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "DeleteSkill",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func deleteSkill(config: ClientConfig, skillId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedSkillResource {
+        return try (await sdkRequest("DELETE", ["/skills/", sdkEncodePathSegment(sdkWireString(skillId))].joined(), config: config, decoder: .json, operationId: "DeleteSkill", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
     /// Retrieves a skill by its identifier. Use `skill_id` to select the skill whose details you need.
@@ -36,47 +23,20 @@ public extension SkillsMethods {
     ///
     /// - Parameters:
     /// - skillId: The identifier of the skill to retrieve.
-    static func getSkill(
-        config: ClientConfig,
-        skillId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SkillResource {
-        try await (sdkRequest(
-            "GET",
-            ["/skills/", sdkEncodePathSegment(sdkWireString(skillId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "GetSkill",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func getSkill(config: ClientConfig, skillId: String, requestOptions: RequestOptions? = nil) async throws -> SkillResource {
+        return try (await sdkRequest("GET", ["/skills/", sdkEncodePathSegment(sdkWireString(skillId))].joined(), config: config, decoder: .json, operationId: "GetSkill", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Updates the default version pointer for a skill. Provide `default_version` to select the version that should be
-    /// the skill's default. The response contains the updated skill details.
+    /// Updates the default version pointer for a skill. Provide `default_version` to select the version that should be the skill's default. The response contains the updated skill details.
     ///
     /// Update the default version pointer for a skill.
     ///
     /// - Parameters:
     /// - skillId: The identifier of the skill.
     /// - defaultVersion: The skill version number to set as default.
-    static func updateSkillDefaultVersion(
-        config: ClientConfig,
-        skillId: String,
-        defaultVersion: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SkillResource {
+    public static func updateSkillDefaultVersion(config: ClientConfig, skillId: String, defaultVersion: String, requestOptions: RequestOptions? = nil) async throws -> SkillResource {
         let requestBody = UpdateSkillDefaultVersionRequestBody(defaultVersion: defaultVersion)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/skills/", sdkEncodePathSegment(sdkWireString(skillId))].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "UpdateSkillDefaultVersion",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/skills/", sdkEncodePathSegment(sdkWireString(skillId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "UpdateSkillDefaultVersion", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

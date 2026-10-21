@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaMisalignment domain models
+// ResponsesBetaMisalignment domain models
 public typealias BetaMisalignmentErrorType = String
 
 /// Typed representation of the `Beta_MisalignmentSteer` API schema.
@@ -15,27 +15,21 @@ public struct BetaMisalignmentSteer: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaMisalignmentSteer {
-    init(from decoder: Decoder) throws {
+extension BetaMisalignmentSteer {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
-        message = try container.sdkDecodeRequired(.message)
+        self.message = try container.sdkDecodeRequired(.message)
     }
 }
 
-public extension BetaMisalignmentSteer {
-    init(message: String) {
+extension BetaMisalignmentSteer {
+    public init(message: String) {
         self.message = message
     }
 }
@@ -59,27 +53,22 @@ public struct BetaMisalignmentErrorDetailsResource: Codable {
     }
 
     init() {
-        (reviewTarget, errorType, detailedExplanation, steer) = (nil, nil, nil, nil)
+        (self.reviewTarget, self.errorType, self.detailedExplanation, self.steer) = (nil, nil, nil, nil)
     }
 }
 
-public extension BetaMisalignmentErrorDetailsResource {
-    init(from decoder: Decoder) throws {
+extension BetaMisalignmentErrorDetailsResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        reviewTarget = try container.sdkDecodeIfPresent(.reviewTarget)
-        errorType = try container.sdkDecodeIfPresent(.errorType)
-        detailedExplanation = try container.sdkDecodeIfPresent(.detailedExplanation)
-        steer = try container.sdkDecodeIfPresent(.steer)
+        self.reviewTarget = try container.sdkDecodeIfPresent(.reviewTarget)
+        self.errorType = try container.sdkDecodeIfPresent(.errorType)
+        self.detailedExplanation = try container.sdkDecodeIfPresent(.detailedExplanation)
+        self.steer = try container.sdkDecodeIfPresent(.steer)
     }
 }
 
-public extension BetaMisalignmentErrorDetailsResource {
-    init(
-        reviewTarget: String? = nil,
-        errorType: BetaMisalignmentErrorType? = nil,
-        detailedExplanation: String? = nil,
-        steer: BetaMisalignmentSteer? = nil
-    ) {
+extension BetaMisalignmentErrorDetailsResource {
+    public init(reviewTarget: String? = nil, errorType: BetaMisalignmentErrorType? = nil, detailedExplanation: String? = nil, steer: BetaMisalignmentSteer? = nil) {
         self.init()
         (self.reviewTarget, self.errorType) = (reviewTarget, errorType)
         (self.detailedExplanation, self.steer) = (detailedExplanation, steer)

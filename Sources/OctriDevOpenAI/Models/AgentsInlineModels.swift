@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsInline domain models
+// AgentsInline domain models
 public indirect enum InlineCapabilitySourceParam {
     case inlineCapabilitySourceParamBase64(InlineCapabilitySourceParamBase64)
     /// A member whose `type` names no branch this SDK knows, kept as received.
@@ -11,6 +11,7 @@ public indirect enum InlineCapabilitySourceParam {
 }
 
 extension InlineCapabilitySourceParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -18,16 +19,12 @@ extension InlineCapabilitySourceParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -38,8 +35,8 @@ extension InlineCapabilitySourceParam: Codable {
 extension InlineCapabilitySourceParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "base64": try .inlineCapabilitySourceParamBase64(InlineCapabilitySourceParamBase64(from: decoder))
-        default: nil
+        case "base64": return .inlineCapabilitySourceParamBase64(try InlineCapabilitySourceParamBase64(from: decoder))
+        default: return nil
         }
     }
 }
@@ -69,53 +66,35 @@ public struct InlineCapabilitySourceParamBase64: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InlineCapabilitySourceParamBase64 {
-    init(from decoder: Decoder) throws {
+extension InlineCapabilitySourceParamBase64 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.mediaType) else {
-            throw SdkValidationError(
-                field: "media_type",
-                code: "required",
-                message: "Validation failed for 'media_type': value is required"
-            )
+            throw SdkValidationError(field: "media_type", code: "required", message: "Validation failed for 'media_type': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        mediaType = try container.sdkDecodeRequired(.mediaType)
-        data = try container.sdkDecodeRequired(.data)
-        try sdkValidateRawEnum("type", type, InlineCapabilitySourceParamBase64Type.allCases.map(\.rawValue))
-        try validateLength("data", data, min: 1, max: 70_254_592)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.mediaType = try container.sdkDecodeRequired(.mediaType)
+        self.data = try container.sdkDecodeRequired(.data)
+            try sdkValidateRawEnum("type", self.type, InlineCapabilitySourceParamBase64Type.allCases.map(\.rawValue))
+            try validateLength("data", self.data, min: 1, max: 70254592)
     }
 }
 
-public extension InlineCapabilitySourceParamBase64 {
-    init(
-        type: InlineCapabilitySourceParamBase64Type,
-        mediaType: InlineCapabilitySourceParamBase64MediaType,
-        data: String
-    ) throws {
+extension InlineCapabilitySourceParamBase64 {
+    public init(type: InlineCapabilitySourceParamBase64Type, mediaType: InlineCapabilitySourceParamBase64MediaType, data: String) throws {
         (self.type, self.mediaType) = (type, mediaType)
         self.data = data
-        try sdkValidateRawEnum("type", self.type, InlineCapabilitySourceParamBase64Type.allCases.map(\.rawValue))
-        try validateLength("data", self.data, min: 1, max: 70_254_592)
+            try sdkValidateRawEnum("type", self.type, InlineCapabilitySourceParamBase64Type.allCases.map(\.rawValue))
+            try validateLength("data", self.data, min: 1, max: 70254592)
     }
 }
 
@@ -138,19 +117,15 @@ public enum InlineCapabilitySourceParamBase64Type: String, CaseIterable, Codable
 }
 
 /// The archive media type, always `application/zip`.
-public struct InlineCapabilitySourceParamBase64MediaType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct InlineCapabilitySourceParamBase64MediaType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let applicationZip = InlineCapabilitySourceParamBase64MediaType(rawValue: "application/zip")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

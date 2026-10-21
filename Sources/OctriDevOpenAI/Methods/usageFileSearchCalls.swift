@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension UsageMethods {
-    struct UsageFileSearchCallsOptions: Codable {
+extension UsageMethods {
+    public struct UsageFileSearchCallsOptions: Codable {
         public var startTime: Int
         public var endTime: Int?
         public var bucketWidth: UsageFileSearchCallsParameter?
@@ -43,32 +43,19 @@ public extension UsageMethods {
     ///   `bucket_width=1m`: default: 60, max: 1440
     /// - page: A cursor for use in pagination. Corresponding to the `next_page`
     ///   field from the previous response.
-    static func usageFileSearchCalls(
-        config: ClientConfig,
-        options: UsageFileSearchCallsOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> UsageResponse {
-        try await (sdkRequest(
-            "GET",
-            "/organization/usage/file_search_calls",
-            config: config,
-            query: [
-                SdkQueryParameter("start_time", value: options.startTime),
-                SdkQueryParameter("end_time", value: options.endTime),
-                SdkQueryParameter("bucket_width", value: options.bucketWidth),
-                SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
-                SdkQueryParameter("user_ids", values: options.userIds, style: "form", explode: true),
-                SdkQueryParameter("api_key_ids", values: options.apiKeyIds, style: "form", explode: true),
-                SdkQueryParameter("vector_store_ids", values: options.vectorStoreIds, style: "form", explode: true),
-                SdkQueryParameter("group_by", values: options.groupBy, style: "form", explode: true),
-                SdkQueryParameter("limit", value: options.limit),
-                SdkQueryParameter("page", value: options.page),
-            ],
-            decoder: .json,
-            operationId: "usageFileSearchCalls",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func usageFileSearchCalls(config: ClientConfig, options: UsageFileSearchCallsOptions, requestOptions: RequestOptions? = nil) async throws -> UsageResponse {
+        return try (await sdkRequest("GET", "/organization/usage/file_search_calls", config: config, query: [
+            SdkQueryParameter("start_time", value: options.startTime),
+            SdkQueryParameter("end_time", value: options.endTime),
+            SdkQueryParameter("bucket_width", value: options.bucketWidth),
+            SdkQueryParameter("project_ids", values: options.projectIds, style: "form", explode: true),
+            SdkQueryParameter("user_ids", values: options.userIds, style: "form", explode: true),
+            SdkQueryParameter("api_key_ids", values: options.apiKeyIds, style: "form", explode: true),
+            SdkQueryParameter("vector_store_ids", values: options.vectorStoreIds, style: "form", explode: true),
+            SdkQueryParameter("group_by", values: options.groupBy, style: "form", explode: true),
+            SdkQueryParameter("limit", value: options.limit),
+            SdkQueryParameter("page", value: options.page),
+        ], decoder: .json, operationId: "usageFileSearchCalls", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
     /// Get file search calls usage details for the organization.
@@ -90,40 +77,21 @@ public extension UsageMethods {
     ///   `bucket_width=1m`: default: 60, max: 1440
     /// - page: A cursor for use in pagination. Corresponding to the `next_page`
     ///   field from the previous response.
-    static func usageFileSearchCallsPaginated(
-        config: ClientConfig,
-        options: UsageFileSearchCallsOptions,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
+    public static func usageFileSearchCallsPaginated(config: ClientConfig, options: UsageFileSearchCallsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageTimeBucket, Swift.Error> {
         let page = options.page
-        return AsyncThrowingStream<UsageTimeBucket, Swift.Error> { (continuation: AsyncThrowingStream<
-            UsageTimeBucket,
-            Swift.Error
-        >.Continuation) in
+        return AsyncThrowingStream<UsageTimeBucket, Swift.Error> { (continuation: AsyncThrowingStream<UsageTimeBucket, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = page
                     while true {
                         var nextOptions = options
                         nextOptions.page = pageCursor
-                        let pageResponse = try await usageFileSearchCalls(
-                            config: config,
-                            options: nextOptions,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await usageFileSearchCalls(config: config, options: nextOptions, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.nextPage else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.nextPage else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -136,49 +104,28 @@ public extension UsageMethods {
         }
     }
 
-    struct UsageFileSearchCallsPage {
+    public struct UsageFileSearchCallsPage {
         public let data: UsageResponse
         public let items: [UsageTimeBucket]
         public let hasMore: Bool
     }
 
-    static func usageFileSearchCallsPages(
-        config: ClientConfig,
-        options: UsageFileSearchCallsOptions,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<UsageFileSearchCallsPage, Swift.Error> {
+    public static func usageFileSearchCallsPages(config: ClientConfig, options: UsageFileSearchCallsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<UsageFileSearchCallsPage, Swift.Error> {
         let page = options.page
-        return AsyncThrowingStream<UsageFileSearchCallsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            UsageFileSearchCallsPage,
-            Swift.Error
-        >.Continuation) in
+        return AsyncThrowingStream<UsageFileSearchCallsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<UsageFileSearchCallsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = page
                     while true {
                         var nextOptions = options
                         nextOptions.page = pageCursor
-                        let pageResponse = try await usageFileSearchCalls(
-                            config: config,
-                            options: nextOptions,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await usageFileSearchCalls(config: config, options: nextOptions, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.nextPage != nil
-                        pageContinuation.yield(UsageFileSearchCallsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.nextPage else {
-                            break
-                        }
+                        pageContinuation.yield(UsageFileSearchCallsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.nextPage else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

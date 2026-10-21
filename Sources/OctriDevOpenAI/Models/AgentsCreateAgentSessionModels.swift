@@ -3,39 +3,29 @@
 
 import Foundation
 
-/// AgentsCreate domain models
+// AgentsCreate domain models
 public indirect enum CreateSessionInputParam {
     case stringValue(String)
     case inputMessageParamList([InputMessageParam])
 }
 
 extension CreateSessionInputParam: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateSessionInputParam"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateSessionInputParam")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateSessionInputParam {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode([InputMessageParam].self) {
-            return .inputMessageParamList(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode([InputMessageParam].self) { return .inputMessageParamList(value) }
         return nil
     }
 }
@@ -84,49 +74,34 @@ public struct CreateAgentSessionParams: Codable {
         case stream
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateAgentSessionParams {
-    init(from decoder: Decoder) throws {
+extension CreateAgentSessionParams {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.environment) else {
-            throw SdkValidationError(
-                field: "environment",
-                code: "required",
-                message: "Validation failed for 'environment': value is required"
-            )
+            throw SdkValidationError(field: "environment", code: "required", message: "Validation failed for 'environment': value is required")
         }
-        environment = try container.sdkDecodeRequired(.environment)
-        spendControl = try container.sdkDecodeIfPresent(.spendControl)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        agentId = try container.sdkDecodeIfPresent(.agentId)
-        vaultIds = try container.sdkDecodeIfPresent(.vaultIds)
-        input = try container.sdkDecodeIfPresent(.input)
-        stream = try container.sdkDecodeIfPresent(.stream)
-        if let value = agentId {
+        self.environment = try container.sdkDecodeRequired(.environment)
+        self.spendControl = try container.sdkDecodeIfPresent(.spendControl)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.agentId = try container.sdkDecodeIfPresent(.agentId)
+        self.vaultIds = try container.sdkDecodeIfPresent(.vaultIds)
+        self.input = try container.sdkDecodeIfPresent(.input)
+        self.stream = try container.sdkDecodeIfPresent(.stream)
+        if let value = self.agentId {
             try validateLength("agent_id", value, min: 0, max: 64)
         }
-        if let value = vaultIds {
+        if let value = self.vaultIds {
             try validateItems("vault_ids", value, min: 0, max: 16384)
         }
     }
 }
 
-public extension CreateAgentSessionParams {
-    init(
-        environment: EnvironmentParam,
-        spendControl: SessionSpendControlParam? = nil,
-        metadata: [String: String]? = nil,
-        agent: SessionAgentConfigParam? = nil,
-        agentId: String? = nil,
-        vaultIds: [String]? = nil,
-        input: CreateSessionInputParam? = nil,
-        stream: Bool? = nil
-    ) throws {
+extension CreateAgentSessionParams {
+    public init(environment: EnvironmentParam, spendControl: SessionSpendControlParam? = nil, metadata: [String: String]? = nil, agent: SessionAgentConfigParam? = nil, agentId: String? = nil, vaultIds: [String]? = nil, input: CreateSessionInputParam? = nil, stream: Bool? = nil) throws {
         (self.environment, self.spendControl) = (environment, spendControl)
         (self.metadata, self.agent) = (metadata, agent)
         (self.agentId, self.vaultIds) = (agentId, vaultIds)

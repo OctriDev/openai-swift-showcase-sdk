@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// VectorStores domain models
+// VectorStores domain models
 /// Typed representation of the `UpdateVectorStoreFileAttributesRequest` API schema.
 public struct UpdateVectorStoreFileAttributesRequest: Codable {
     /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional
@@ -16,27 +16,21 @@ public struct UpdateVectorStoreFileAttributesRequest: Codable {
         case attributes
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateVectorStoreFileAttributesRequest {
-    init(from decoder: Decoder) throws {
+extension UpdateVectorStoreFileAttributesRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.attributes) else {
-            throw SdkValidationError(
-                field: "attributes",
-                code: "required",
-                message: "Validation failed for 'attributes': value is required"
-            )
+            throw SdkValidationError(field: "attributes", code: "required", message: "Validation failed for 'attributes': value is required")
         }
-        attributes = try container.sdkDecodeNullable(.attributes)
+        self.attributes = try container.sdkDecodeNullable(.attributes)
     }
 }
 
-public extension UpdateVectorStoreFileAttributesRequest {
-    init(attributes: VectorStoreFileAttributes?) {
+extension UpdateVectorStoreFileAttributesRequest {
+    public init(attributes: VectorStoreFileAttributes?) {
         self.attributes = attributes
     }
 }

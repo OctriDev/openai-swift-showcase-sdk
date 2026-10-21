@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsAgent domain models
+// AgentsAgent domain models
 public indirect enum AgentToolConfigParam {
     case agentToolConfigParamFunction(AgentToolConfigParamFunction)
     case agentToolConfigParamToolSearch(AgentToolConfigParamToolSearch)
@@ -16,6 +16,7 @@ public indirect enum AgentToolConfigParam {
 }
 
 extension AgentToolConfigParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -23,16 +24,12 @@ extension AgentToolConfigParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -43,14 +40,14 @@ extension AgentToolConfigParam: Codable {
 extension AgentToolConfigParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": try .agentToolConfigParamFunction(AgentToolConfigParamFunction(from: decoder))
-        case "tool_search": try .agentToolConfigParamToolSearch(AgentToolConfigParamToolSearch(from: decoder))
+        case "function": return .agentToolConfigParamFunction(try AgentToolConfigParamFunction(from: decoder))
+        case "tool_search": return .agentToolConfigParamToolSearch(try AgentToolConfigParamToolSearch(from: decoder))
         case "programmatic_tool_calling":
-            try .agentToolConfigParamProgrammaticToolCalling(AgentToolConfigParamProgrammaticToolCalling(from: decoder))
-        case "mcp": try .agentToolConfigParamMcp(AgentToolConfigParamMcp(from: decoder))
-        case "web_search": try .agentToolConfigParamWebSearch(AgentToolConfigParamWebSearch(from: decoder))
-        case "computer_use": try .agentToolConfigParamComputerUse(AgentToolConfigParamComputerUse(from: decoder))
-        default: nil
+        return .agentToolConfigParamProgrammaticToolCalling(try AgentToolConfigParamProgrammaticToolCalling(from: decoder))
+        case "mcp": return .agentToolConfigParamMcp(try AgentToolConfigParamMcp(from: decoder))
+        case "web_search": return .agentToolConfigParamWebSearch(try AgentToolConfigParamWebSearch(from: decoder))
+        case "computer_use": return .agentToolConfigParamComputerUse(try AgentToolConfigParamComputerUse(from: decoder))
+        default: return nil
         }
     }
 }
@@ -79,30 +76,24 @@ public struct AgentToolConfigParamToolSearch: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AgentToolConfigParamToolSearch {
-    init(from decoder: Decoder) throws {
+extension AgentToolConfigParamToolSearch {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, AgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
     }
 }
 
-public extension AgentToolConfigParamToolSearch {
-    init(type: AgentToolConfigParamToolSearchType) throws {
+extension AgentToolConfigParamToolSearch {
+    public init(type: AgentToolConfigParamToolSearchType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, AgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamToolSearchType.allCases.map(\.rawValue))
     }
 }
 
@@ -118,35 +109,25 @@ public struct AgentToolConfigParamProgrammaticToolCalling: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AgentToolConfigParamProgrammaticToolCalling {
-    init(from decoder: Decoder) throws {
+extension AgentToolConfigParamProgrammaticToolCalling {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        enabled = try container.sdkDecodeIfPresent(.enabled)
-        try sdkValidateRawEnum("type", type, AgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.enabled = try container.sdkDecodeIfPresent(.enabled)
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue))
     }
 }
 
-public extension AgentToolConfigParamProgrammaticToolCalling {
-    init(type: AgentToolConfigParamProgrammaticToolCallingType, enabled: Bool? = nil) throws {
+extension AgentToolConfigParamProgrammaticToolCalling {
+    public init(type: AgentToolConfigParamProgrammaticToolCallingType, enabled: Bool? = nil) throws {
         (self.type, self.enabled) = (type, enabled)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            AgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue))
     }
 }
 
@@ -182,73 +163,50 @@ public struct AgentToolConfigParamMcp: Codable {
         case connectionOrigin = "connection_origin"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AgentToolConfigParamMcp {
-    init(from decoder: Decoder) throws {
+extension AgentToolConfigParamMcp {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.serverLabel) else {
-            throw SdkValidationError(
-                field: "server_label",
-                code: "required",
-                message: "Validation failed for 'server_label': value is required"
-            )
+            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
         }
         guard container.contains(.transport) else {
-            throw SdkValidationError(
-                field: "transport",
-                code: "required",
-                message: "Validation failed for 'transport': value is required"
-            )
+            throw SdkValidationError(field: "transport", code: "required", message: "Validation failed for 'transport': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        transport = try container.sdkDecodeRequired(.transport)
-        credentialId = try container.sdkDecodeIfPresent(.credentialId)
-        requestMetadata = try container.sdkDecodeIfPresent(.requestMetadata)
-        allowedTools = try container.sdkDecodeIfPresent(.allowedTools)
-        required = try container.sdkDecodeIfPresent(.required)
-        connectionOrigin = try container.sdkDecodeIfPresent(.connectionOrigin)
-        try sdkValidateRawEnum("type", type, AgentToolConfigParamMcpType.allCases.map(\.rawValue))
-        try validateLength("server_label", serverLabel, min: 0, max: 1_048_576)
-        if let value = credentialId {
-            try validateLength("credential_id", value, min: 0, max: 1_048_576)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        self.transport = try container.sdkDecodeRequired(.transport)
+        self.credentialId = try container.sdkDecodeIfPresent(.credentialId)
+        self.requestMetadata = try container.sdkDecodeIfPresent(.requestMetadata)
+        self.allowedTools = try container.sdkDecodeIfPresent(.allowedTools)
+        self.required = try container.sdkDecodeIfPresent(.required)
+        self.connectionOrigin = try container.sdkDecodeIfPresent(.connectionOrigin)
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamMcpType.allCases.map(\.rawValue))
+            try validateLength("server_label", self.serverLabel, min: 0, max: 1048576)
+        if let value = self.credentialId {
+            try validateLength("credential_id", value, min: 0, max: 1048576)
         }
-        if let value = allowedTools {
+        if let value = self.allowedTools {
             try validateItems("allowed_tools", value, min: 0, max: 16384)
         }
     }
 }
 
-public extension AgentToolConfigParamMcp {
-    init(
-        type: AgentToolConfigParamMcpType,
-        serverLabel: String,
-        transport: McpTransportConfigParam,
-        credentialId: String? = nil,
-        requestMetadata: [String: JSONValue]? = nil,
-        allowedTools: [String]? = nil,
-        required: Bool? = nil,
-        connectionOrigin: McpConnectionOriginParam? = nil
-    ) throws {
+extension AgentToolConfigParamMcp {
+    public init(type: AgentToolConfigParamMcpType, serverLabel: String, transport: McpTransportConfigParam, credentialId: String? = nil, requestMetadata: [String: JSONValue]? = nil, allowedTools: [String]? = nil, required: Bool? = nil, connectionOrigin: McpConnectionOriginParam? = nil) throws {
         (self.type, self.serverLabel) = (type, serverLabel)
         (self.transport, self.credentialId) = (transport, credentialId)
         (self.requestMetadata, self.allowedTools) = (requestMetadata, allowedTools)
         (self.required, self.connectionOrigin) = (required, connectionOrigin)
-        try sdkValidateRawEnum("type", self.type, AgentToolConfigParamMcpType.allCases.map(\.rawValue))
-        try validateLength("server_label", self.serverLabel, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamMcpType.allCases.map(\.rawValue))
+            try validateLength("server_label", self.serverLabel, min: 0, max: 1048576)
         if let value = self.credentialId {
-            try validateLength("credential_id", value, min: 0, max: 1_048_576)
+            try validateLength("credential_id", value, min: 0, max: 1048576)
         }
         if let value = self.allowedTools {
             try validateItems("allowed_tools", value, min: 0, max: 16384)
@@ -277,45 +235,33 @@ public struct AgentToolConfigParamWebSearch: Codable {
         case location
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AgentToolConfigParamWebSearch {
-    init(from decoder: Decoder) throws {
+extension AgentToolConfigParamWebSearch {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        mode = try container.sdkDecodeIfPresent(.mode)
-        contextSize = try container.sdkDecodeIfPresent(.contextSize)
-        allowedDomains = try container.sdkDecodeIfPresent(.allowedDomains)
-        location = try container.sdkDecodeIfPresent(.location)
-        try sdkValidateRawEnum("type", type, AgentToolConfigParamWebSearchType.allCases.map(\.rawValue))
-        if let value = allowedDomains {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.mode = try container.sdkDecodeIfPresent(.mode)
+        self.contextSize = try container.sdkDecodeIfPresent(.contextSize)
+        self.allowedDomains = try container.sdkDecodeIfPresent(.allowedDomains)
+        self.location = try container.sdkDecodeIfPresent(.location)
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamWebSearchType.allCases.map(\.rawValue))
+        if let value = self.allowedDomains {
             try validateItems("allowed_domains", value, min: 0, max: 16384)
         }
     }
 }
 
-public extension AgentToolConfigParamWebSearch {
-    init(
-        type: AgentToolConfigParamWebSearchType,
-        mode: WebSearchModeParam? = nil,
-        contextSize: WebSearchContextSizeParam? = nil,
-        allowedDomains: [String]? = nil,
-        location: WebSearchLocationParam? = nil
-    ) throws {
+extension AgentToolConfigParamWebSearch {
+    public init(type: AgentToolConfigParamWebSearchType, mode: WebSearchModeParam? = nil, contextSize: WebSearchContextSizeParam? = nil, allowedDomains: [String]? = nil, location: WebSearchLocationParam? = nil) throws {
         (self.type, self.mode) = (type, mode)
         (self.contextSize, self.allowedDomains) = (contextSize, allowedDomains)
         self.location = location
-        try sdkValidateRawEnum("type", self.type, AgentToolConfigParamWebSearchType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamWebSearchType.allCases.map(\.rawValue))
         if let value = self.allowedDomains {
             try validateItems("allowed_domains", value, min: 0, max: 16384)
         }
@@ -343,67 +289,43 @@ public struct AgentToolConfigParamFunction: Codable {
         case deferLoading = "defer_loading"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AgentToolConfigParamFunction {
-    init(from decoder: Decoder) throws {
+extension AgentToolConfigParamFunction {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.description) else {
-            throw SdkValidationError(
-                field: "description",
-                code: "required",
-                message: "Validation failed for 'description': value is required"
-            )
+            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
         }
         guard container.contains(.parameters) else {
-            throw SdkValidationError(
-                field: "parameters",
-                code: "required",
-                message: "Validation failed for 'parameters': value is required"
-            )
+            throw SdkValidationError(field: "parameters", code: "required", message: "Validation failed for 'parameters': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeRequired(.name)
-        description = try container.sdkDecodeRequired(.description)
-        parameters = try container.sdkDecodeRequired(.parameters)
-        deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
-        try sdkValidateRawEnum("type", type, AgentToolConfigParamFunctionType.allCases.map(\.rawValue))
-        try validateLength("name", name, min: 0, max: 1_048_576)
-        try validateLength("description", description, min: 0, max: 1_048_576)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.description = try container.sdkDecodeRequired(.description)
+        self.parameters = try container.sdkDecodeRequired(.parameters)
+        self.deferLoading = try container.sdkDecodeIfPresent(.deferLoading)
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamFunctionType.allCases.map(\.rawValue))
+            try validateLength("name", self.name, min: 0, max: 1048576)
+            try validateLength("description", self.description, min: 0, max: 1048576)
     }
 }
 
-public extension AgentToolConfigParamFunction {
-    init(
-        type: AgentToolConfigParamFunctionType,
-        name: String,
-        description: String,
-        parameters: [String: JSONValue],
-        deferLoading: Bool? = nil
-    ) throws {
+extension AgentToolConfigParamFunction {
+    public init(type: AgentToolConfigParamFunctionType, name: String, description: String, parameters: [String: JSONValue], deferLoading: Bool? = nil) throws {
         (self.type, self.name) = (type, name)
         (self.description, self.parameters) = (description, parameters)
         self.deferLoading = deferLoading
-        try sdkValidateRawEnum("type", self.type, AgentToolConfigParamFunctionType.allCases.map(\.rawValue))
-        try validateLength("name", self.name, min: 0, max: 1_048_576)
-        try validateLength("description", self.description, min: 0, max: 1_048_576)
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamFunctionType.allCases.map(\.rawValue))
+            try validateLength("name", self.name, min: 0, max: 1048576)
+            try validateLength("description", self.description, min: 0, max: 1048576)
     }
 }
 
@@ -419,31 +341,25 @@ public struct AgentToolConfigParamComputerUse: Codable {
         case includeScreenshots = "include_screenshots"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AgentToolConfigParamComputerUse {
-    init(from decoder: Decoder) throws {
+extension AgentToolConfigParamComputerUse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        includeScreenshots = try container.sdkDecodeIfPresent(.includeScreenshots)
-        try sdkValidateRawEnum("type", type, AgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.includeScreenshots = try container.sdkDecodeIfPresent(.includeScreenshots)
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
     }
 }
 
-public extension AgentToolConfigParamComputerUse {
-    init(type: AgentToolConfigParamComputerUseType, includeScreenshots: Bool? = nil) throws {
+extension AgentToolConfigParamComputerUse {
+    public init(type: AgentToolConfigParamComputerUseType, includeScreenshots: Bool? = nil) throws {
         (self.type, self.includeScreenshots) = (type, includeScreenshots)
-        try sdkValidateRawEnum("type", self.type, AgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, AgentToolConfigParamComputerUseType.allCases.map(\.rawValue))
     }
 }
 

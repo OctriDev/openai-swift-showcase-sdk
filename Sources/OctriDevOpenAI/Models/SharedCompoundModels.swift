@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedCompound domain models
+// SharedCompound domain models
 public indirect enum CompoundFilterFiltersItem {
     case comparisonFilter(ComparisonFilter)
     case compoundFilter(CompoundFilter)
@@ -12,6 +12,7 @@ public indirect enum CompoundFilterFiltersItem {
 }
 
 extension CompoundFilterFiltersItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension CompoundFilterFiltersItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension CompoundFilterFiltersItem: Codable {
 extension CompoundFilterFiltersItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "eq", "ne", "gt", "gte", "lt", "lte", "in", "nin": try .comparisonFilter(ComparisonFilter(from: decoder))
-        case "and", "or": try .compoundFilter(CompoundFilter(from: decoder))
-        default: nil
+        case "eq", "ne", "gt", "gte", "lt", "lte", "in", "nin": return .comparisonFilter(try ComparisonFilter(from: decoder))
+        case "and", "or": return .compoundFilter(try CompoundFilter(from: decoder))
+        default: return nil
         }
     }
 }
@@ -69,38 +66,28 @@ public struct CompoundFilter: Codable {
         case filters
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CompoundFilter {
-    init(from decoder: Decoder) throws {
+extension CompoundFilter {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.filters) else {
-            throw SdkValidationError(
-                field: "filters",
-                code: "required",
-                message: "Validation failed for 'filters': value is required"
-            )
+            throw SdkValidationError(field: "filters", code: "required", message: "Validation failed for 'filters': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        filters = try container.sdkDecodeRequired(.filters)
-        try sdkValidateRawEnum("type", type, CompoundFilterType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.filters = try container.sdkDecodeRequired(.filters)
+            try sdkValidateRawEnum("type", self.type, CompoundFilterType.allCases.map(\.rawValue))
     }
 }
 
-public extension CompoundFilter {
-    init(type: CompoundFilterType, filters: [CompoundFilterFiltersItem]) throws {
+extension CompoundFilter {
+    public init(type: CompoundFilterType, filters: [CompoundFilterFiltersItem]) throws {
         (self.type, self.filters) = (type, filters)
-        try sdkValidateRawEnum("type", self.type, CompoundFilterType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, CompoundFilterType.allCases.map(\.rawValue))
     }
 }
 

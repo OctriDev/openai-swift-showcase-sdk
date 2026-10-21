@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedChatkit domain models
+// SharedChatkit domain models
 /// Controls diagnostic tracing during the session.
 public struct ChatkitWorkflowTracing: Codable {
     /// Indicates whether tracing is enabled.
@@ -13,27 +13,21 @@ public struct ChatkitWorkflowTracing: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatkitWorkflowTracing {
-    init(from decoder: Decoder) throws {
+extension ChatkitWorkflowTracing {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(
-                field: "enabled",
-                code: "required",
-                message: "Validation failed for 'enabled': value is required"
-            )
+            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
         }
-        enabled = try container.sdkDecodeRequired(.enabled)
+        self.enabled = try container.sdkDecodeRequired(.enabled)
     }
 }
 
-public extension ChatkitWorkflowTracing {
-    init(enabled: Bool) {
+extension ChatkitWorkflowTracing {
+    public init(enabled: Bool) {
         self.enabled = enabled
     }
 }
@@ -57,56 +51,33 @@ public struct ChatkitWorkflow: Codable {
         case tracing
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatkitWorkflow {
-    init(from decoder: Decoder) throws {
+extension ChatkitWorkflow {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.version) else {
-            throw SdkValidationError(
-                field: "version",
-                code: "required",
-                message: "Validation failed for 'version': value is required"
-            )
+            throw SdkValidationError(field: "version", code: "required", message: "Validation failed for 'version': value is required")
         }
         guard container.contains(.stateVariables) else {
-            throw SdkValidationError(
-                field: "state_variables",
-                code: "required",
-                message: "Validation failed for 'state_variables': value is required"
-            )
+            throw SdkValidationError(field: "state_variables", code: "required", message: "Validation failed for 'state_variables': value is required")
         }
         guard container.contains(.tracing) else {
-            throw SdkValidationError(
-                field: "tracing",
-                code: "required",
-                message: "Validation failed for 'tracing': value is required"
-            )
+            throw SdkValidationError(field: "tracing", code: "required", message: "Validation failed for 'tracing': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        version = try container.sdkDecodeNullable(.version)
-        stateVariables = try container.sdkDecodeNullable(.stateVariables)
-        tracing = try container.sdkDecodeRequired(.tracing)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.version = try container.sdkDecodeNullable(.version)
+        self.stateVariables = try container.sdkDecodeNullable(.stateVariables)
+        self.tracing = try container.sdkDecodeRequired(.tracing)
     }
 }
 
-public extension ChatkitWorkflow {
-    init(
-        id: String,
-        version: String?,
-        stateVariables: [String: ChatkitWorkflowStateVariablesValue?]?,
-        tracing: ChatkitWorkflowTracing
-    ) {
+extension ChatkitWorkflow {
+    public init(id: String, version: String?, stateVariables: [String: ChatkitWorkflowStateVariablesValue?]?, tracing: ChatkitWorkflowTracing) {
         (self.id, self.version) = (id, version)
         (self.stateVariables, self.tracing) = (stateVariables, tracing)
     }
@@ -121,41 +92,25 @@ public indirect enum ChatkitWorkflowStateVariablesValue {
 }
 
 extension ChatkitWorkflowStateVariablesValue: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ChatkitWorkflowStateVariablesValue"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ChatkitWorkflowStateVariablesValue")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension ChatkitWorkflowStateVariablesValue {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
-        if let value = try? container.decode(Bool.self) {
-            return .boolValue(value)
-        }
-        if let value = try? container.decode(Double.self) {
-            return .doubleValue(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) { return .intValue(value) }
+        if let value = try? container.decode(Bool.self) { return .boolValue(value) }
+        if let value = try? container.decode(Double.self) { return .doubleValue(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
         return nil
     }
 }

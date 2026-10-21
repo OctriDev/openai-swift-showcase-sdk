@@ -18,25 +18,25 @@ struct CreateAgentSessionStreamStreamRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(environment, forKey: SdkCodingKey("environment"))
-        try keyedContainer.encode(stream, forKey: SdkCodingKey("stream"))
-        try keyedContainer.encodeIfPresent(spendControl, forKey: SdkCodingKey("spend_control"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
-        try keyedContainer.encodeIfPresent(agent, forKey: SdkCodingKey("agent"))
-        try keyedContainer.encodeIfPresent(agentId, forKey: SdkCodingKey("agent_id"))
-        try keyedContainer.encodeIfPresent(vaultIds, forKey: SdkCodingKey("vault_ids"))
-        try keyedContainer.encodeIfPresent(input, forKey: SdkCodingKey("input"))
+        try keyedContainer.encode(self.environment, forKey: SdkCodingKey("environment"))
+        try keyedContainer.encode(self.stream, forKey: SdkCodingKey("stream"))
+        try keyedContainer.encodeIfPresent(self.spendControl, forKey: SdkCodingKey("spend_control"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.agent, forKey: SdkCodingKey("agent"))
+        try keyedContainer.encodeIfPresent(self.agentId, forKey: SdkCodingKey("agent_id"))
+        try keyedContainer.encodeIfPresent(self.vaultIds, forKey: SdkCodingKey("vault_ids"))
+        try keyedContainer.encodeIfPresent(self.input, forKey: SdkCodingKey("input"))
     }
 
     init(options: AgentsMethods.CreateAgentSessionStreamOptions) {
-        environment = options.environment
-        stream = options.stream
-        spendControl = options.spendControl
-        metadata = options.metadata
-        agent = options.agent
-        agentId = options.agentId
-        vaultIds = options.vaultIds
-        input = options.input
+        self.environment = options.environment
+        self.stream = options.stream
+        self.spendControl = options.spendControl
+        self.metadata = options.metadata
+        self.agent = options.agent
+        self.agentId = options.agentId
+        self.vaultIds = options.vaultIds
+        self.input = options.input
     }
 }
 
@@ -47,9 +47,9 @@ struct UpdateAgentSessionRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(spendControl, forKey: SdkCodingKey("spend_control"))
-        try keyedContainer.encodeIfPresent(agent, forKey: SdkCodingKey("agent"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.spendControl, forKey: SdkCodingKey("spend_control"))
+        try keyedContainer.encodeIfPresent(self.agent, forKey: SdkCodingKey("agent"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -58,7 +58,7 @@ struct CreateAgentSessionEventsRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(events, forKey: SdkCodingKey("events"))
+        try keyedContainer.encode(self.events, forKey: SdkCodingKey("events"))
     }
 }
 
@@ -68,8 +68,8 @@ struct CreateVaultRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -79,8 +79,8 @@ struct UpdateVaultRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
-        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
     }
 }
 
@@ -91,9 +91,9 @@ struct CreateVaultCredentialRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encode(auth, forKey: SdkCodingKey("auth"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encode(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encode(self.auth, forKey: SdkCodingKey("auth"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -103,8 +103,8 @@ struct RotateVaultCredentialRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(auth, forKey: SdkCodingKey("auth"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.auth, forKey: SdkCodingKey("auth"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -115,9 +115,9 @@ struct CreateWebhookEndpointRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encode(url, forKey: SdkCodingKey("url"))
-        try keyedContainer.encode(eventTypes, forKey: SdkCodingKey("event_types"))
+        try keyedContainer.encode(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encode(self.url, forKey: SdkCodingKey("url"))
+        try keyedContainer.encode(self.eventTypes, forKey: SdkCodingKey("event_types"))
     }
 }
 
@@ -128,9 +128,9 @@ struct UpdateWebhookEndpointRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(url, forKey: SdkCodingKey("url"))
-        try keyedContainer.encodeIfPresent(eventTypes, forKey: SdkCodingKey("event_types"))
+        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(self.url, forKey: SdkCodingKey("url"))
+        try keyedContainer.encodeIfPresent(self.eventTypes, forKey: SdkCodingKey("event_types"))
     }
 }
 
@@ -139,10 +139,7 @@ struct RotateWebhookEndpointSigningSecretRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(
-            keepOldSecretActiveFor24Hours,
-            forKey: SdkCodingKey("keep_old_secret_active_for_24_hours")
-        )
+        try keyedContainer.encodeIfPresent(self.keepOldSecretActiveFor24Hours, forKey: SdkCodingKey("keep_old_secret_active_for_24_hours"))
     }
 }
 
@@ -151,6 +148,6 @@ struct TestWebhookEndpointRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(eventType, forKey: SdkCodingKey("event_type"))
+        try keyedContainer.encode(self.eventType, forKey: SdkCodingKey("event_type"))
     }
 }

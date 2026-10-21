@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AuditLogs domain models
+// AuditLogs domain models
 /// The details for events with this `type`.
 public struct AuditLogGroupUpdated: Codable {
     /// The ID of the group.
@@ -17,20 +17,20 @@ public struct AuditLogGroupUpdated: Codable {
     }
 
     init() {
-        (id, changesRequested) = (nil, nil)
+        (self.id, self.changesRequested) = (nil, nil)
     }
 }
 
-public extension AuditLogGroupUpdated {
-    init(from decoder: Decoder) throws {
+extension AuditLogGroupUpdated {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        changesRequested = try container.sdkDecodeIfPresent(.changesRequested)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.changesRequested = try container.sdkDecodeIfPresent(.changesRequested)
     }
 }
 
-public extension AuditLogGroupUpdated {
-    init(id: String? = nil, changesRequested: AuditLogGroupUpdatedChangesRequested? = nil) {
+extension AuditLogGroupUpdated {
+    public init(id: String? = nil, changesRequested: AuditLogGroupUpdatedChangesRequested? = nil) {
         self.init()
         (self.id, self.changesRequested) = (id, changesRequested)
     }
@@ -49,20 +49,20 @@ public struct AuditLogActorUser: Codable {
     }
 
     init() {
-        (id, email) = (nil, nil)
+        (self.id, self.email) = (nil, nil)
     }
 }
 
-public extension AuditLogActorUser {
-    init(from decoder: Decoder) throws {
+extension AuditLogActorUser {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        email = try container.sdkDecodeIfPresent(.email)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.email = try container.sdkDecodeIfPresent(.email)
     }
 }
 
-public extension AuditLogActorUser {
-    init(id: String? = nil, email: String? = nil) {
+extension AuditLogActorUser {
+    public init(id: String? = nil, email: String? = nil) {
         self.init()
         (self.id, self.email) = (id, email)
     }
@@ -78,19 +78,19 @@ public struct AuditLogRateLimitDeleted: Codable {
     }
 
     init() {
-        id = nil
+        self.id = nil
     }
 }
 
-public extension AuditLogRateLimitDeleted {
-    init(from decoder: Decoder) throws {
+extension AuditLogRateLimitDeleted {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
+        self.id = try container.sdkDecodeIfPresent(.id)
     }
 }
 
-public extension AuditLogRateLimitDeleted {
-    init(id: String? = nil) {
+extension AuditLogRateLimitDeleted {
+    public init(id: String? = nil) {
         self.init()
         self.id = id
     }
@@ -106,19 +106,19 @@ public struct AuditLogApiKeyUpdatedChangesRequested: Codable {
     }
 
     init() {
-        scopes = nil
+        self.scopes = nil
     }
 }
 
-public extension AuditLogApiKeyUpdatedChangesRequested {
-    init(from decoder: Decoder) throws {
+extension AuditLogApiKeyUpdatedChangesRequested {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        scopes = try container.sdkDecodeIfPresent(.scopes)
+        self.scopes = try container.sdkDecodeIfPresent(.scopes)
     }
 }
 
-public extension AuditLogApiKeyUpdatedChangesRequested {
-    init(scopes: [String]? = nil) {
+extension AuditLogApiKeyUpdatedChangesRequested {
+    public init(scopes: [String]? = nil) {
         self.init()
         self.scopes = scopes
     }
@@ -134,19 +134,19 @@ public struct AuditLogServiceAccountDeleted: Codable {
     }
 
     init() {
-        id = nil
+        self.id = nil
     }
 }
 
-public extension AuditLogServiceAccountDeleted {
-    init(from decoder: Decoder) throws {
+extension AuditLogServiceAccountDeleted {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
+        self.id = try container.sdkDecodeIfPresent(.id)
     }
 }
 
-public extension AuditLogServiceAccountDeleted {
-    init(id: String? = nil) {
+extension AuditLogServiceAccountDeleted {
+    public init(id: String? = nil) {
         self.init()
         self.id = id
     }
@@ -168,21 +168,21 @@ public struct AuditLogWorkloadIdentityProviderMappingCreated: Codable {
     }
 
     init() {
-        (id, identityProviderId, data) = (nil, nil, nil)
+        (self.id, self.identityProviderId, self.data) = (nil, nil, nil)
     }
 }
 
-public extension AuditLogWorkloadIdentityProviderMappingCreated {
-    init(from decoder: Decoder) throws {
+extension AuditLogWorkloadIdentityProviderMappingCreated {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        identityProviderId = try container.sdkDecodeIfPresent(.identityProviderId)
-        data = try container.sdkDecodeIfPresent(.data)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.identityProviderId = try container.sdkDecodeIfPresent(.identityProviderId)
+        self.data = try container.sdkDecodeIfPresent(.data)
     }
 }
 
-public extension AuditLogWorkloadIdentityProviderMappingCreated {
-    init(id: String? = nil, identityProviderId: String? = nil, data: [String: JSONValue]? = nil) {
+extension AuditLogWorkloadIdentityProviderMappingCreated {
+    public init(id: String? = nil, identityProviderId: String? = nil, data: [String: JSONValue]? = nil) {
         self.init()
         (self.id, self.identityProviderId) = (id, identityProviderId)
         self.data = data
@@ -199,19 +199,19 @@ public struct AuditLogGroupUpdatedChangesRequested: Codable {
     }
 
     init() {
-        groupName = nil
+        self.groupName = nil
     }
 }
 
-public extension AuditLogGroupUpdatedChangesRequested {
-    init(from decoder: Decoder) throws {
+extension AuditLogGroupUpdatedChangesRequested {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        groupName = try container.sdkDecodeIfPresent(.groupName)
+        self.groupName = try container.sdkDecodeIfPresent(.groupName)
     }
 }
 
-public extension AuditLogGroupUpdatedChangesRequested {
-    init(groupName: String? = nil) {
+extension AuditLogGroupUpdatedChangesRequested {
+    public init(groupName: String? = nil) {
         self.init()
         self.groupName = groupName
     }
@@ -230,20 +230,20 @@ public struct AuditLogRoleUpdated: Codable {
     }
 
     init() {
-        (id, changesRequested) = (nil, nil)
+        (self.id, self.changesRequested) = (nil, nil)
     }
 }
 
-public extension AuditLogRoleUpdated {
-    init(from decoder: Decoder) throws {
+extension AuditLogRoleUpdated {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        changesRequested = try container.sdkDecodeIfPresent(.changesRequested)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.changesRequested = try container.sdkDecodeIfPresent(.changesRequested)
     }
 }
 
-public extension AuditLogRoleUpdated {
-    init(id: String? = nil, changesRequested: AuditLogRoleUpdatedChangesRequested? = nil) {
+extension AuditLogRoleUpdated {
+    public init(id: String? = nil, changesRequested: AuditLogRoleUpdatedChangesRequested? = nil) {
         self.init()
         (self.id, self.changesRequested) = (id, changesRequested)
     }
@@ -262,20 +262,20 @@ public struct AuditLogApiKeyCreated: Codable {
     }
 
     init() {
-        (id, data) = (nil, nil)
+        (self.id, self.data) = (nil, nil)
     }
 }
 
-public extension AuditLogApiKeyCreated {
-    init(from decoder: Decoder) throws {
+extension AuditLogApiKeyCreated {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        data = try container.sdkDecodeIfPresent(.data)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.data = try container.sdkDecodeIfPresent(.data)
     }
 }
 
-public extension AuditLogApiKeyCreated {
-    init(id: String? = nil, data: AuditLogApiKeyCreatedData? = nil) {
+extension AuditLogApiKeyCreated {
+    public init(id: String? = nil, data: AuditLogApiKeyCreatedData? = nil) {
         self.init()
         (self.id, self.data) = (id, data)
     }
@@ -291,19 +291,19 @@ public struct AuditLogServiceAccountCreatedData: Codable {
     }
 
     init() {
-        role = nil
+        self.role = nil
     }
 }
 
-public extension AuditLogServiceAccountCreatedData {
-    init(from decoder: Decoder) throws {
+extension AuditLogServiceAccountCreatedData {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        role = try container.sdkDecodeIfPresent(.role)
+        self.role = try container.sdkDecodeIfPresent(.role)
     }
 }
 
-public extension AuditLogServiceAccountCreatedData {
-    init(role: String? = nil) {
+extension AuditLogServiceAccountCreatedData {
+    public init(role: String? = nil) {
         self.init()
         self.role = role
     }
@@ -325,21 +325,21 @@ public struct AuditLogIpAllowlistCreated: Codable {
     }
 
     init() {
-        (id, name, allowedIps) = (nil, nil, nil)
+        (self.id, self.name, self.allowedIps) = (nil, nil, nil)
     }
 }
 
-public extension AuditLogIpAllowlistCreated {
-    init(from decoder: Decoder) throws {
+extension AuditLogIpAllowlistCreated {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        name = try container.sdkDecodeIfPresent(.name)
-        allowedIps = try container.sdkDecodeIfPresent(.allowedIps)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.allowedIps = try container.sdkDecodeIfPresent(.allowedIps)
     }
 }
 
-public extension AuditLogIpAllowlistCreated {
-    init(id: String? = nil, name: String? = nil, allowedIps: [String]? = nil) {
+extension AuditLogIpAllowlistCreated {
+    public init(id: String? = nil, name: String? = nil, allowedIps: [String]? = nil) {
         self.init()
         (self.id, self.name) = (id, name)
         self.allowedIps = allowedIps
@@ -359,20 +359,20 @@ public struct AuditLogUserAdded: Codable {
     }
 
     init() {
-        (id, data) = (nil, nil)
+        (self.id, self.data) = (nil, nil)
     }
 }
 
-public extension AuditLogUserAdded {
-    init(from decoder: Decoder) throws {
+extension AuditLogUserAdded {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        data = try container.sdkDecodeIfPresent(.data)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.data = try container.sdkDecodeIfPresent(.data)
     }
 }
 
-public extension AuditLogUserAdded {
-    init(id: String? = nil, data: AuditLogUserAddedData? = nil) {
+extension AuditLogUserAdded {
+    public init(id: String? = nil, data: AuditLogUserAddedData? = nil) {
         self.init()
         (self.id, self.data) = (id, data)
     }
@@ -397,27 +397,22 @@ public struct AuditLogActorApiKey: Codable {
     }
 
     init() {
-        (id, type, user, serviceAccount) = (nil, nil, nil, nil)
+        (self.id, self.type, self.user, self.serviceAccount) = (nil, nil, nil, nil)
     }
 }
 
-public extension AuditLogActorApiKey {
-    init(from decoder: Decoder) throws {
+extension AuditLogActorApiKey {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        type = try container.sdkDecodeIfPresent(.type)
-        user = try container.sdkDecodeIfPresent(.user)
-        serviceAccount = try container.sdkDecodeIfPresent(.serviceAccount)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.user = try container.sdkDecodeIfPresent(.user)
+        self.serviceAccount = try container.sdkDecodeIfPresent(.serviceAccount)
     }
 }
 
-public extension AuditLogActorApiKey {
-    init(
-        id: String? = nil,
-        type: AuditLogActorApiKeyType? = nil,
-        user: AuditLogActorUser? = nil,
-        serviceAccount: AuditLogActorServiceAccount? = nil
-    ) {
+extension AuditLogActorApiKey {
+    public init(id: String? = nil, type: AuditLogActorApiKeyType? = nil, user: AuditLogActorUser? = nil, serviceAccount: AuditLogActorServiceAccount? = nil) {
         self.init()
         (self.id, self.type) = (id, type)
         (self.user, self.serviceAccount) = (user, serviceAccount)
@@ -437,20 +432,20 @@ public struct AuditLogCertificatesDeactivatedCertificatesItem: Codable {
     }
 
     init() {
-        (id, name) = (nil, nil)
+        (self.id, self.name) = (nil, nil)
     }
 }
 
-public extension AuditLogCertificatesDeactivatedCertificatesItem {
-    init(from decoder: Decoder) throws {
+extension AuditLogCertificatesDeactivatedCertificatesItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        name = try container.sdkDecodeIfPresent(.name)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.name = try container.sdkDecodeIfPresent(.name)
     }
 }
 
-public extension AuditLogCertificatesDeactivatedCertificatesItem {
-    init(id: String? = nil, name: String? = nil) {
+extension AuditLogCertificatesDeactivatedCertificatesItem {
+    public init(id: String? = nil, name: String? = nil) {
         self.init()
         (self.id, self.name) = (id, name)
     }
@@ -466,19 +461,19 @@ public struct AuditLogUserAddedData: Codable {
     }
 
     init() {
-        role = nil
+        self.role = nil
     }
 }
 
-public extension AuditLogUserAddedData {
-    init(from decoder: Decoder) throws {
+extension AuditLogUserAddedData {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        role = try container.sdkDecodeIfPresent(.role)
+        self.role = try container.sdkDecodeIfPresent(.role)
     }
 }
 
-public extension AuditLogUserAddedData {
-    init(role: String? = nil) {
+extension AuditLogUserAddedData {
+    public init(role: String? = nil) {
         self.init()
         self.role = role
     }
@@ -497,20 +492,20 @@ public struct AuditLogProjectCreated: Codable {
     }
 
     init() {
-        (id, data) = (nil, nil)
+        (self.id, self.data) = (nil, nil)
     }
 }
 
-public extension AuditLogProjectCreated {
-    init(from decoder: Decoder) throws {
+extension AuditLogProjectCreated {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        data = try container.sdkDecodeIfPresent(.data)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.data = try container.sdkDecodeIfPresent(.data)
     }
 }
 
-public extension AuditLogProjectCreated {
-    init(id: String? = nil, data: AuditLogProjectCreatedData? = nil) {
+extension AuditLogProjectCreated {
+    public init(id: String? = nil, data: AuditLogProjectCreatedData? = nil) {
         self.init()
         (self.id, self.data) = (id, data)
     }
@@ -538,29 +533,23 @@ public struct AuditLogRoleCreated: Codable {
     }
 
     init() {
-        (id, roleName, permissions, resourceType, resourceId) = (nil, nil, nil, nil, nil)
+        (self.id, self.roleName, self.permissions, self.resourceType, self.resourceId) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension AuditLogRoleCreated {
-    init(from decoder: Decoder) throws {
+extension AuditLogRoleCreated {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        roleName = try container.sdkDecodeIfPresent(.roleName)
-        permissions = try container.sdkDecodeIfPresent(.permissions)
-        resourceType = try container.sdkDecodeIfPresent(.resourceType)
-        resourceId = try container.sdkDecodeIfPresent(.resourceId)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.roleName = try container.sdkDecodeIfPresent(.roleName)
+        self.permissions = try container.sdkDecodeIfPresent(.permissions)
+        self.resourceType = try container.sdkDecodeIfPresent(.resourceType)
+        self.resourceId = try container.sdkDecodeIfPresent(.resourceId)
     }
 }
 
-public extension AuditLogRoleCreated {
-    init(
-        id: String? = nil,
-        roleName: String? = nil,
-        permissions: [String]? = nil,
-        resourceType: String? = nil,
-        resourceId: String? = nil
-    ) {
+extension AuditLogRoleCreated {
+    public init(id: String? = nil, roleName: String? = nil, permissions: [String]? = nil, resourceType: String? = nil, resourceId: String? = nil) {
         self.init()
         (self.id, self.roleName) = (id, roleName)
         (self.permissions, self.resourceType) = (permissions, resourceType)
@@ -581,20 +570,20 @@ public struct AuditLogExternalStorageRegistered: Codable {
     }
 
     init() {
-        (id, data) = (nil, nil)
+        (self.id, self.data) = (nil, nil)
     }
 }
 
-public extension AuditLogExternalStorageRegistered {
-    init(from decoder: Decoder) throws {
+extension AuditLogExternalStorageRegistered {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        data = try container.sdkDecodeIfPresent(.data)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.data = try container.sdkDecodeIfPresent(.data)
     }
 }
 
-public extension AuditLogExternalStorageRegistered {
-    init(id: String? = nil, data: AuditLogExternalStorageRegisteredData? = nil) {
+extension AuditLogExternalStorageRegistered {
+    public init(id: String? = nil, data: AuditLogExternalStorageRegisteredData? = nil) {
         self.init()
         (self.id, self.data) = (id, data)
     }

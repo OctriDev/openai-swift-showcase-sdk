@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaMcptool domain models
+// ResponsesBetaMcptool domain models
 /// Required enumerated value serialized in the `type` wire field.
 public enum BetaMCPToolExecutionErrorType: String, CaseIterable, Codable {
     case mcpToolExecutionError = "mcp_tool_execution_error"

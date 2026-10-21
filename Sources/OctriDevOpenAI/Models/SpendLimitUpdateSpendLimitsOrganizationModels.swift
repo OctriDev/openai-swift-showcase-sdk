@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SpendLimit domain models
+// SpendLimit domain models
 /// Parameters for the hard spend limit you want to create or replace.
 public struct UpdateOrganizationSpendLimitBody: Codable {
     /// The hard spend limit amount, in cents.
@@ -19,84 +19,46 @@ public struct UpdateOrganizationSpendLimitBody: Codable {
         case interval
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension UpdateOrganizationSpendLimitBody {
-    init(from decoder: Decoder) throws {
+extension UpdateOrganizationSpendLimitBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(
-                field: "threshold_amount",
-                code: "required",
-                message: "Validation failed for 'threshold_amount': value is required"
-            )
+            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
         }
         guard container.contains(.currency) else {
-            throw SdkValidationError(
-                field: "currency",
-                code: "required",
-                message: "Validation failed for 'currency': value is required"
-            )
+            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
         }
         guard container.contains(.interval) else {
-            throw SdkValidationError(
-                field: "interval",
-                code: "required",
-                message: "Validation failed for 'interval': value is required"
-            )
+            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
         }
-        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        currency = try container.sdkDecodeRequired(.currency)
-        interval = try container.sdkDecodeRequired(.interval)
-        try validateRange(
-            "threshold_amount",
-            Double(thresholdAmount),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        self.currency = try container.sdkDecodeRequired(.currency)
+        self.interval = try container.sdkDecodeRequired(.interval)
+            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension UpdateOrganizationSpendLimitBody {
-    init(
-        thresholdAmount: Int,
-        currency: UpdateOrganizationSpendLimitBodyCurrency,
-        interval: UpdateOrganizationSpendLimitBodyInterval
-    ) throws {
+extension UpdateOrganizationSpendLimitBody {
+    public init(thresholdAmount: Int, currency: UpdateOrganizationSpendLimitBodyCurrency, interval: UpdateOrganizationSpendLimitBodyInterval) throws {
         (self.thresholdAmount, self.currency) = (thresholdAmount, currency)
         self.interval = interval
-        try validateRange(
-            "threshold_amount",
-            Double(self.thresholdAmount),
-            min: 1,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
 /// The currency for the threshold amount. Currently, only `USD` is supported.
-public struct UpdateOrganizationSpendLimitBodyCurrency: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct UpdateOrganizationSpendLimitBodyCurrency: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let usd = UpdateOrganizationSpendLimitBodyCurrency(rawValue: "USD")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -106,19 +68,15 @@ public struct UpdateOrganizationSpendLimitBodyCurrency: RawRepresentable, Hashab
 }
 
 /// The time interval for evaluating spend against the threshold. Currently, only `month` is supported.
-public struct UpdateOrganizationSpendLimitBodyInterval: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct UpdateOrganizationSpendLimitBodyInterval: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let month = UpdateOrganizationSpendLimitBodyInterval(rawValue: "month")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

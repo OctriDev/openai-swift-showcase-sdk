@@ -3,36 +3,29 @@
 
 import Foundation
 
-/// Images domain models
+// Images domain models
 public indirect enum PartialImages {
     case intValue(Int)
     case jsonValue(JSONValue)
 }
 
 extension PartialImages: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for PartialImages")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension PartialImages {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue(value)
-        }
+        if let value = try? container.decode(Int.self) { return .intValue(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
         return nil
     }
 }
@@ -88,43 +81,28 @@ public struct ImagesResponse: Codable {
         case usage
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ImagesResponse {
-    init(from decoder: Decoder) throws {
+extension ImagesResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.created) else {
-            throw SdkValidationError(
-                field: "created",
-                code: "required",
-                message: "Validation failed for 'created': value is required"
-            )
+            throw SdkValidationError(field: "created", code: "required", message: "Validation failed for 'created': value is required")
         }
-        created = try container.sdkDecodeRequired(.created)
-        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        data = try container.sdkDecodeIfPresent(.data)
-        background = try container.sdkDecodeIfPresent(.background)
-        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-        size = try container.sdkDecodeIfPresent(.size)
-        quality = try container.sdkDecodeIfPresent(.quality)
-        usage = try container.sdkDecodeIfPresent(.usage)
+        self.created = try container.sdkDecodeRequired(.created)
+        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        self.data = try container.sdkDecodeIfPresent(.data)
+        self.background = try container.sdkDecodeIfPresent(.background)
+        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+        self.size = try container.sdkDecodeIfPresent(.size)
+        self.quality = try container.sdkDecodeIfPresent(.quality)
+        self.usage = try container.sdkDecodeIfPresent(.usage)
     }
 }
 
-public extension ImagesResponse {
-    init(
-        created: Int,
-        safetyIdentifier: String? = nil,
-        data: [Image]? = nil,
-        background: ImagesResponseBackground? = nil,
-        outputFormat: ImagesResponseOutputFormat? = nil,
-        size: String? = nil,
-        quality: ImagesResponseQuality? = nil,
-        usage: ImageGenUsage? = nil
-    ) {
+extension ImagesResponse {
+    public init(created: Int, safetyIdentifier: String? = nil, data: [Image]? = nil, background: ImagesResponseBackground? = nil, outputFormat: ImagesResponseOutputFormat? = nil, size: String? = nil, quality: ImagesResponseQuality? = nil, usage: ImageGenUsage? = nil) {
         (self.created, self.safetyIdentifier) = (created, safetyIdentifier)
         (self.data, self.background) = (data, background)
         (self.outputFormat, self.size) = (outputFormat, size)
@@ -144,35 +122,25 @@ public struct ImageGenOutputTokensDetails: Codable {
         case textTokens = "text_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ImageGenOutputTokensDetails {
-    init(from decoder: Decoder) throws {
+extension ImageGenOutputTokensDetails {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.imageTokens) else {
-            throw SdkValidationError(
-                field: "image_tokens",
-                code: "required",
-                message: "Validation failed for 'image_tokens': value is required"
-            )
+            throw SdkValidationError(field: "image_tokens", code: "required", message: "Validation failed for 'image_tokens': value is required")
         }
         guard container.contains(.textTokens) else {
-            throw SdkValidationError(
-                field: "text_tokens",
-                code: "required",
-                message: "Validation failed for 'text_tokens': value is required"
-            )
+            throw SdkValidationError(field: "text_tokens", code: "required", message: "Validation failed for 'text_tokens': value is required")
         }
-        imageTokens = try container.sdkDecodeRequired(.imageTokens)
-        textTokens = try container.sdkDecodeRequired(.textTokens)
+        self.imageTokens = try container.sdkDecodeRequired(.imageTokens)
+        self.textTokens = try container.sdkDecodeRequired(.textTokens)
     }
 }
 
-public extension ImageGenOutputTokensDetails {
-    init(imageTokens: Int, textTokens: Int) {
+extension ImageGenOutputTokensDetails {
+    public init(imageTokens: Int, textTokens: Int) {
         (self.imageTokens, self.textTokens) = (imageTokens, textTokens)
     }
 }
@@ -196,24 +164,24 @@ public struct Image: Codable {
     }
 
     init() {
-        (b64Json, url, revisedPrompt) = (nil, nil, nil)
+        (self.b64Json, self.url, self.revisedPrompt) = (nil, nil, nil)
     }
 }
 
-public extension Image {
-    init(from decoder: Decoder) throws {
+extension Image {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        b64Json = try container.sdkDecodeIfPresent(.b64Json)
-        url = try container.sdkDecodeIfPresent(.url)
-        revisedPrompt = try container.sdkDecodeIfPresent(.revisedPrompt)
-        if let value = url {
+        self.b64Json = try container.sdkDecodeIfPresent(.b64Json)
+        self.url = try container.sdkDecodeIfPresent(.url)
+        self.revisedPrompt = try container.sdkDecodeIfPresent(.revisedPrompt)
+        if let value = self.url {
             try sdkValidateUri("url", value)
         }
     }
 }
 
-public extension Image {
-    init(b64Json: String? = nil, url: String? = nil, revisedPrompt: String? = nil) throws {
+extension Image {
+    public init(b64Json: String? = nil, url: String? = nil, revisedPrompt: String? = nil) throws {
         self.init()
         (self.b64Json, self.url) = (b64Json, url)
         self.revisedPrompt = revisedPrompt
@@ -235,35 +203,25 @@ public struct ImagesUsageInputTokensDetails: Codable {
         case imageTokens = "image_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ImagesUsageInputTokensDetails {
-    init(from decoder: Decoder) throws {
+extension ImagesUsageInputTokensDetails {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.textTokens) else {
-            throw SdkValidationError(
-                field: "text_tokens",
-                code: "required",
-                message: "Validation failed for 'text_tokens': value is required"
-            )
+            throw SdkValidationError(field: "text_tokens", code: "required", message: "Validation failed for 'text_tokens': value is required")
         }
         guard container.contains(.imageTokens) else {
-            throw SdkValidationError(
-                field: "image_tokens",
-                code: "required",
-                message: "Validation failed for 'image_tokens': value is required"
-            )
+            throw SdkValidationError(field: "image_tokens", code: "required", message: "Validation failed for 'image_tokens': value is required")
         }
-        textTokens = try container.sdkDecodeRequired(.textTokens)
-        imageTokens = try container.sdkDecodeRequired(.imageTokens)
+        self.textTokens = try container.sdkDecodeRequired(.textTokens)
+        self.imageTokens = try container.sdkDecodeRequired(.imageTokens)
     }
 }
 
-public extension ImagesUsageInputTokensDetails {
-    init(textTokens: Int, imageTokens: Int) {
+extension ImagesUsageInputTokensDetails {
+    public init(textTokens: Int, imageTokens: Int) {
         (self.textTokens, self.imageTokens) = (textTokens, imageTokens)
     }
 }
@@ -286,51 +244,33 @@ public struct ImagesUsage: Codable {
         case inputTokensDetails = "input_tokens_details"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ImagesUsage {
-    init(from decoder: Decoder) throws {
+extension ImagesUsage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.totalTokens) else {
-            throw SdkValidationError(
-                field: "total_tokens",
-                code: "required",
-                message: "Validation failed for 'total_tokens': value is required"
-            )
+            throw SdkValidationError(field: "total_tokens", code: "required", message: "Validation failed for 'total_tokens': value is required")
         }
         guard container.contains(.inputTokens) else {
-            throw SdkValidationError(
-                field: "input_tokens",
-                code: "required",
-                message: "Validation failed for 'input_tokens': value is required"
-            )
+            throw SdkValidationError(field: "input_tokens", code: "required", message: "Validation failed for 'input_tokens': value is required")
         }
         guard container.contains(.outputTokens) else {
-            throw SdkValidationError(
-                field: "output_tokens",
-                code: "required",
-                message: "Validation failed for 'output_tokens': value is required"
-            )
+            throw SdkValidationError(field: "output_tokens", code: "required", message: "Validation failed for 'output_tokens': value is required")
         }
         guard container.contains(.inputTokensDetails) else {
-            throw SdkValidationError(
-                field: "input_tokens_details",
-                code: "required",
-                message: "Validation failed for 'input_tokens_details': value is required"
-            )
+            throw SdkValidationError(field: "input_tokens_details", code: "required", message: "Validation failed for 'input_tokens_details': value is required")
         }
-        totalTokens = try container.sdkDecodeRequired(.totalTokens)
-        inputTokens = try container.sdkDecodeRequired(.inputTokens)
-        outputTokens = try container.sdkDecodeRequired(.outputTokens)
-        inputTokensDetails = try container.sdkDecodeRequired(.inputTokensDetails)
+        self.totalTokens = try container.sdkDecodeRequired(.totalTokens)
+        self.inputTokens = try container.sdkDecodeRequired(.inputTokens)
+        self.outputTokens = try container.sdkDecodeRequired(.outputTokens)
+        self.inputTokensDetails = try container.sdkDecodeRequired(.inputTokensDetails)
     }
 }
 
-public extension ImagesUsage {
-    init(totalTokens: Int, inputTokens: Int, outputTokens: Int, inputTokensDetails: ImagesUsageInputTokensDetails) {
+extension ImagesUsage {
+    public init(totalTokens: Int, inputTokens: Int, outputTokens: Int, inputTokensDetails: ImagesUsageInputTokensDetails) {
         (self.totalTokens, self.inputTokens) = (totalTokens, inputTokens)
         (self.outputTokens, self.inputTokensDetails) = (outputTokens, inputTokensDetails)
     }
@@ -348,35 +288,25 @@ public struct ImageGenInputUsageDetails: Codable {
         case imageTokens = "image_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ImageGenInputUsageDetails {
-    init(from decoder: Decoder) throws {
+extension ImageGenInputUsageDetails {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.textTokens) else {
-            throw SdkValidationError(
-                field: "text_tokens",
-                code: "required",
-                message: "Validation failed for 'text_tokens': value is required"
-            )
+            throw SdkValidationError(field: "text_tokens", code: "required", message: "Validation failed for 'text_tokens': value is required")
         }
         guard container.contains(.imageTokens) else {
-            throw SdkValidationError(
-                field: "image_tokens",
-                code: "required",
-                message: "Validation failed for 'image_tokens': value is required"
-            )
+            throw SdkValidationError(field: "image_tokens", code: "required", message: "Validation failed for 'image_tokens': value is required")
         }
-        textTokens = try container.sdkDecodeRequired(.textTokens)
-        imageTokens = try container.sdkDecodeRequired(.imageTokens)
+        self.textTokens = try container.sdkDecodeRequired(.textTokens)
+        self.imageTokens = try container.sdkDecodeRequired(.imageTokens)
     }
 }
 
-public extension ImageGenInputUsageDetails {
-    init(textTokens: Int, imageTokens: Int) {
+extension ImageGenInputUsageDetails {
+    public init(textTokens: Int, imageTokens: Int) {
         (self.textTokens, self.imageTokens) = (textTokens, imageTokens)
     }
 }
@@ -402,58 +332,34 @@ public struct ImageGenUsage: Codable {
         case outputTokensDetails = "output_tokens_details"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ImageGenUsage {
-    init(from decoder: Decoder) throws {
+extension ImageGenUsage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.inputTokens) else {
-            throw SdkValidationError(
-                field: "input_tokens",
-                code: "required",
-                message: "Validation failed for 'input_tokens': value is required"
-            )
+            throw SdkValidationError(field: "input_tokens", code: "required", message: "Validation failed for 'input_tokens': value is required")
         }
         guard container.contains(.totalTokens) else {
-            throw SdkValidationError(
-                field: "total_tokens",
-                code: "required",
-                message: "Validation failed for 'total_tokens': value is required"
-            )
+            throw SdkValidationError(field: "total_tokens", code: "required", message: "Validation failed for 'total_tokens': value is required")
         }
         guard container.contains(.outputTokens) else {
-            throw SdkValidationError(
-                field: "output_tokens",
-                code: "required",
-                message: "Validation failed for 'output_tokens': value is required"
-            )
+            throw SdkValidationError(field: "output_tokens", code: "required", message: "Validation failed for 'output_tokens': value is required")
         }
         guard container.contains(.inputTokensDetails) else {
-            throw SdkValidationError(
-                field: "input_tokens_details",
-                code: "required",
-                message: "Validation failed for 'input_tokens_details': value is required"
-            )
+            throw SdkValidationError(field: "input_tokens_details", code: "required", message: "Validation failed for 'input_tokens_details': value is required")
         }
-        inputTokens = try container.sdkDecodeRequired(.inputTokens)
-        totalTokens = try container.sdkDecodeRequired(.totalTokens)
-        outputTokens = try container.sdkDecodeRequired(.outputTokens)
-        inputTokensDetails = try container.sdkDecodeRequired(.inputTokensDetails)
-        outputTokensDetails = try container.sdkDecodeIfPresent(.outputTokensDetails)
+        self.inputTokens = try container.sdkDecodeRequired(.inputTokens)
+        self.totalTokens = try container.sdkDecodeRequired(.totalTokens)
+        self.outputTokens = try container.sdkDecodeRequired(.outputTokens)
+        self.inputTokensDetails = try container.sdkDecodeRequired(.inputTokensDetails)
+        self.outputTokensDetails = try container.sdkDecodeIfPresent(.outputTokensDetails)
     }
 }
 
-public extension ImageGenUsage {
-    init(
-        inputTokens: Int,
-        totalTokens: Int,
-        outputTokens: Int,
-        inputTokensDetails: ImageGenInputUsageDetails,
-        outputTokensDetails: ImageGenOutputTokensDetails? = nil
-    ) {
+extension ImageGenUsage {
+    public init(inputTokens: Int, totalTokens: Int, outputTokens: Int, inputTokensDetails: ImageGenInputUsageDetails, outputTokensDetails: ImageGenOutputTokensDetails? = nil) {
         (self.inputTokens, self.totalTokens) = (inputTokens, totalTokens)
         (self.outputTokens, self.inputTokensDetails) = (outputTokens, inputTokensDetails)
         self.outputTokensDetails = outputTokensDetails
@@ -464,10 +370,7 @@ public extension ImageGenUsage {
 public struct ImagesResponseQuality: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = ImagesResponseQuality(rawValue: "low")
     public static let medium = ImagesResponseQuality(rawValue: "medium")
     public static let high = ImagesResponseQuality(rawValue: "high")
@@ -476,7 +379,7 @@ public struct ImagesResponseQuality: RawRepresentable, Hashable, Codable, Sendab
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -489,16 +392,13 @@ public struct ImagesResponseQuality: RawRepresentable, Hashable, Codable, Sendab
 public struct ImagesResponseBackground: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let transparent = ImagesResponseBackground(rawValue: "transparent")
     public static let opaque = ImagesResponseBackground(rawValue: "opaque")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -511,17 +411,14 @@ public struct ImagesResponseBackground: RawRepresentable, Hashable, Codable, Sen
 public struct ImagesResponseOutputFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let png = ImagesResponseOutputFormat(rawValue: "png")
     public static let webp = ImagesResponseOutputFormat(rawValue: "webp")
     public static let jpeg = ImagesResponseOutputFormat(rawValue: "jpeg")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

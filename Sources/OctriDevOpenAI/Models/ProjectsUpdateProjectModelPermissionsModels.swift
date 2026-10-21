@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Projects domain models
+// Projects domain models
 /// Typed representation of the `ProjectModelPermissionsUpdateRequest` API schema.
 public struct ProjectModelPermissionsUpdateRequest: Codable {
     /// The model permissions mode to apply.
@@ -16,54 +16,40 @@ public struct ProjectModelPermissionsUpdateRequest: Codable {
         case modelIds = "model_ids"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectModelPermissionsUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension ProjectModelPermissionsUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.mode) else {
-            throw SdkValidationError(
-                field: "mode",
-                code: "required",
-                message: "Validation failed for 'mode': value is required"
-            )
+            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
         }
         guard container.contains(.modelIds) else {
-            throw SdkValidationError(
-                field: "model_ids",
-                code: "required",
-                message: "Validation failed for 'model_ids': value is required"
-            )
+            throw SdkValidationError(field: "model_ids", code: "required", message: "Validation failed for 'model_ids': value is required")
         }
-        mode = try container.sdkDecodeRequired(.mode)
-        modelIds = try container.sdkDecodeRequired(.modelIds)
+        self.mode = try container.sdkDecodeRequired(.mode)
+        self.modelIds = try container.sdkDecodeRequired(.modelIds)
     }
 }
 
-public extension ProjectModelPermissionsUpdateRequest {
-    init(mode: ProjectModelPermissionsUpdateRequestMode, modelIds: [String]) {
+extension ProjectModelPermissionsUpdateRequest {
+    public init(mode: ProjectModelPermissionsUpdateRequestMode, modelIds: [String]) {
         (self.mode, self.modelIds) = (mode, modelIds)
     }
 }
 
 /// The model permissions mode to apply.
-public struct ProjectModelPermissionsUpdateRequestMode: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ProjectModelPermissionsUpdateRequestMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let allowList = ProjectModelPermissionsUpdateRequestMode(rawValue: "allow_list")
     public static let denyList = ProjectModelPermissionsUpdateRequestMode(rawValue: "deny_list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ChatChatCompletion domain models
+// ChatChatCompletion domain models
 public indirect enum ChatCompletionToolChoiceOption {
     case stringValue(String)
     case chatCompletionAllowedToolsChoice(ChatCompletionAllowedToolsChoice)
@@ -14,6 +14,7 @@ public indirect enum ChatCompletionToolChoiceOption {
 }
 
 extension ChatCompletionToolChoiceOption: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,29 +22,20 @@ extension ChatCompletionToolChoiceOption: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-                self = value; return
-            }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) {
-            self = value; return
-        }
+        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ChatCompletionToolChoiceOption"
-        )
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ChatCompletionToolChoiceOption")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -54,31 +46,23 @@ extension ChatCompletionToolChoiceOption: Codable {
 extension ChatCompletionToolChoiceOption {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "allowed_tools": try .chatCompletionAllowedToolsChoice(ChatCompletionAllowedToolsChoice(from: decoder))
-        case "function": try .chatCompletionNamedToolChoice(ChatCompletionNamedToolChoice(from: decoder))
-        case "custom": try .chatCompletionNamedToolChoiceCustom(ChatCompletionNamedToolChoiceCustom(from: decoder))
-        default: nil
+        case "allowed_tools": return .chatCompletionAllowedToolsChoice(try ChatCompletionAllowedToolsChoice(from: decoder))
+        case "function": return .chatCompletionNamedToolChoice(try ChatCompletionNamedToolChoice(from: decoder))
+        case "custom": return .chatCompletionNamedToolChoiceCustom(try ChatCompletionNamedToolChoiceCustom(from: decoder))
+        default: return nil
         }
     }
 }
 
 extension ChatCompletionToolChoiceOption {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container
-            .decode(ChatCompletionAllowedToolsChoice.self) {
-            return .chatCompletionAllowedToolsChoice(value)
-        }
-        if let value = try? container
-            .decode(ChatCompletionNamedToolChoice.self) {
-            return .chatCompletionNamedToolChoice(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(ChatCompletionAllowedToolsChoice.self) { return .chatCompletionAllowedToolsChoice(value) }
+        if let value = try? container.decode(ChatCompletionNamedToolChoice.self) { return .chatCompletionNamedToolChoice(value) }
         if let value = try? container.decode(
             ChatCompletionNamedToolChoiceCustom.self
         ) {
-            return .chatCompletionNamedToolChoiceCustom(value)
+            return             .chatCompletionNamedToolChoiceCustom(value)
         }
         return nil
     }
@@ -115,29 +99,23 @@ public struct ChatCompletionFunctions: Codable {
         case parameters
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatCompletionFunctions {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionFunctions {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        description = try container.sdkDecodeIfPresent(.description)
-        parameters = try container.sdkDecodeIfPresent(.parameters)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.description = try container.sdkDecodeIfPresent(.description)
+        self.parameters = try container.sdkDecodeIfPresent(.parameters)
     }
 }
 
-public extension ChatCompletionFunctions {
-    init(name: String, description: String? = nil, parameters: FunctionParameters? = nil) {
+extension ChatCompletionFunctions {
+    public init(name: String, description: String? = nil, parameters: FunctionParameters? = nil) {
         (self.name, self.description) = (name, description)
         self.parameters = parameters
     }
@@ -152,27 +130,21 @@ public struct ChatCompletionFunctionCallOption: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ChatCompletionFunctionCallOption {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionFunctionCallOption {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
+        self.name = try container.sdkDecodeRequired(.name)
     }
 }
 
-public extension ChatCompletionFunctionCallOption {
-    init(name: String) {
+extension ChatCompletionFunctionCallOption {
+    public init(name: String) {
         self.name = name
     }
 }
@@ -193,20 +165,20 @@ public struct ChatCompletionStreamResponseDeltaFunctionCall: Codable {
     }
 
     init() {
-        (arguments, name) = (nil, nil)
+        (self.arguments, self.name) = (nil, nil)
     }
 }
 
-public extension ChatCompletionStreamResponseDeltaFunctionCall {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionStreamResponseDeltaFunctionCall {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        arguments = try container.sdkDecodeIfPresent(.arguments)
-        name = try container.sdkDecodeIfPresent(.name)
+        self.arguments = try container.sdkDecodeIfPresent(.arguments)
+        self.name = try container.sdkDecodeIfPresent(.name)
     }
 }
 
-public extension ChatCompletionStreamResponseDeltaFunctionCall {
-    init(arguments: String? = nil, name: String? = nil) {
+extension ChatCompletionStreamResponseDeltaFunctionCall {
+    public init(arguments: String? = nil, name: String? = nil) {
         self.init()
         (self.arguments, self.name) = (arguments, name)
     }
@@ -240,32 +212,25 @@ public struct ChatCompletionStreamResponseDelta: Codable {
     }
 
     init() {
-        (audio, content, functionCall, toolCalls, role) = (nil, nil, nil, nil, nil)
-        refusal = nil
+        (self.audio, self.content, self.functionCall, self.toolCalls, self.role) = (nil, nil, nil, nil, nil)
+        self.refusal = nil
     }
 }
 
-public extension ChatCompletionStreamResponseDelta {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionStreamResponseDelta {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        audio = try container.sdkDecodeIfPresent(.audio)
-        content = try container.sdkDecodeIfPresent(.content)
-        functionCall = try container.sdkDecodeIfPresent(.functionCall)
-        toolCalls = try container.sdkDecodeIfPresent(.toolCalls)
-        role = try container.sdkDecodeIfPresent(.role)
-        refusal = try container.sdkDecodeIfPresent(.refusal)
+        self.audio = try container.sdkDecodeIfPresent(.audio)
+        self.content = try container.sdkDecodeIfPresent(.content)
+        self.functionCall = try container.sdkDecodeIfPresent(.functionCall)
+        self.toolCalls = try container.sdkDecodeIfPresent(.toolCalls)
+        self.role = try container.sdkDecodeIfPresent(.role)
+        self.refusal = try container.sdkDecodeIfPresent(.refusal)
     }
 }
 
-public extension ChatCompletionStreamResponseDelta {
-    init(
-        audio: ChatCompletionStreamResponseDeltaAudio? = nil,
-        content: String? = nil,
-        functionCall: ChatCompletionStreamResponseDeltaFunctionCall? = nil,
-        toolCalls: [ChatCompletionMessageToolCallChunk]? = nil,
-        role: ChatCompletionStreamResponseDeltaRole? = nil,
-        refusal: String? = nil
-    ) {
+extension ChatCompletionStreamResponseDelta {
+    public init(audio: ChatCompletionStreamResponseDeltaAudio? = nil, content: String? = nil, functionCall: ChatCompletionStreamResponseDeltaFunctionCall? = nil, toolCalls: [ChatCompletionMessageToolCallChunk]? = nil, role: ChatCompletionStreamResponseDeltaRole? = nil, refusal: String? = nil) {
         self.init()
         (self.audio, self.content) = (audio, content)
         (self.functionCall, self.toolCalls) = (functionCall, toolCalls)
@@ -294,22 +259,22 @@ public struct ChatCompletionStreamResponseDeltaAudio: Codable {
     }
 
     init() {
-        (id, expiresAt, data, transcript) = (nil, nil, nil, nil)
+        (self.id, self.expiresAt, self.data, self.transcript) = (nil, nil, nil, nil)
     }
 }
 
-public extension ChatCompletionStreamResponseDeltaAudio {
-    init(from decoder: Decoder) throws {
+extension ChatCompletionStreamResponseDeltaAudio {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        data = try container.sdkDecodeIfPresent(.data)
-        transcript = try container.sdkDecodeIfPresent(.transcript)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        self.data = try container.sdkDecodeIfPresent(.data)
+        self.transcript = try container.sdkDecodeIfPresent(.transcript)
     }
 }
 
-public extension ChatCompletionStreamResponseDeltaAudio {
-    init(id: String? = nil, expiresAt: Int? = nil, data: String? = nil, transcript: String? = nil) {
+extension ChatCompletionStreamResponseDeltaAudio {
+    public init(id: String? = nil, expiresAt: Int? = nil, data: String? = nil, transcript: String? = nil) {
         self.init()
         (self.id, self.expiresAt) = (id, expiresAt)
         (self.data, self.transcript) = (data, transcript)
@@ -320,10 +285,7 @@ public extension ChatCompletionStreamResponseDeltaAudio {
 public struct ChatCompletionStreamResponseDeltaRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let developer = ChatCompletionStreamResponseDeltaRole(rawValue: "developer")
     public static let system = ChatCompletionStreamResponseDeltaRole(rawValue: "system")
     public static let user = ChatCompletionStreamResponseDeltaRole(rawValue: "user")
@@ -332,7 +294,7 @@ public struct ChatCompletionStreamResponseDeltaRole: RawRepresentable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -344,21 +306,17 @@ public struct ChatCompletionStreamResponseDeltaRole: RawRepresentable, Hashable,
 /// `none` means the model will not call any tool and instead generates a message. `auto` means the model can
 /// pick between generating a message or calling one or more tools. `required` means the model must call one or
 /// more tools.
-public struct ChatCompletionToolChoiceOptionVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ChatCompletionToolChoiceOptionVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let none = ChatCompletionToolChoiceOptionVariant0(rawValue: "none")
     public static let auto = ChatCompletionToolChoiceOptionVariant0(rawValue: "auto")
     public static let required = ChatCompletionToolChoiceOptionVariant0(rawValue: "required")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

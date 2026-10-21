@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// VectorStores domain models
+// VectorStores domain models
 public indirect enum VectorStoreSearchRequestFilters {
     case comparisonFilter(ComparisonFilter)
     case compoundFilter(CompoundFilter)
@@ -12,6 +12,7 @@ public indirect enum VectorStoreSearchRequestFilters {
 }
 
 extension VectorStoreSearchRequestFilters: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension VectorStoreSearchRequestFilters: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension VectorStoreSearchRequestFilters: Codable {
 extension VectorStoreSearchRequestFilters {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "eq", "ne", "gt", "gte", "lt", "lte", "in", "nin": try .comparisonFilter(ComparisonFilter(from: decoder))
-        case "and", "or": try .compoundFilter(CompoundFilter(from: decoder))
-        default: nil
+        case "eq", "ne", "gt", "gte", "lt", "lte", "in", "nin": return .comparisonFilter(try ComparisonFilter(from: decoder))
+        case "and", "or": return .compoundFilter(try CompoundFilter(from: decoder))
+        default: return nil
         }
     }
 }
@@ -63,32 +60,22 @@ public indirect enum VectorStoreSearchRequestQuery {
 }
 
 extension VectorStoreSearchRequestQuery: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for VectorStoreSearchRequestQuery"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for VectorStoreSearchRequestQuery")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension VectorStoreSearchRequestQuery {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode([String].self) {
-            return .stringList(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode([String].self) { return .stringList(value) }
         return nil
     }
 }
@@ -124,65 +111,37 @@ public struct VectorStoreSearchResultsPage: Codable {
         case nextPage = "next_page"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VectorStoreSearchResultsPage {
-    init(from decoder: Decoder) throws {
+extension VectorStoreSearchResultsPage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.searchQuery) else {
-            throw SdkValidationError(
-                field: "search_query",
-                code: "required",
-                message: "Validation failed for 'search_query': value is required"
-            )
+            throw SdkValidationError(field: "search_query", code: "required", message: "Validation failed for 'search_query': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
         guard container.contains(.nextPage) else {
-            throw SdkValidationError(
-                field: "next_page",
-                code: "required",
-                message: "Validation failed for 'next_page': value is required"
-            )
+            throw SdkValidationError(field: "next_page", code: "required", message: "Validation failed for 'next_page': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        searchQuery = try container.sdkDecodeRequired(.searchQuery)
-        data = try container.sdkDecodeRequired(.data)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        nextPage = try container.sdkDecodeNullable(.nextPage)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.searchQuery = try container.sdkDecodeRequired(.searchQuery)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.nextPage = try container.sdkDecodeNullable(.nextPage)
     }
 }
 
-public extension VectorStoreSearchResultsPage {
-    init(
-        object: VectorStoreSearchResultsPageObject,
-        searchQuery: [String],
-        data: [VectorStoreSearchResultItem],
-        hasMore: Bool,
-        nextPage: String?
-    ) {
+extension VectorStoreSearchResultsPage {
+    public init(object: VectorStoreSearchResultsPageObject, searchQuery: [String], data: [VectorStoreSearchResultItem], hasMore: Bool, nextPage: String?) {
         (self.object, self.searchQuery) = (object, searchQuery)
         (self.data, self.hasMore) = (data, hasMore)
         self.nextPage = nextPage
@@ -202,43 +161,27 @@ public struct VectorStoreSearchRequestRankingOptions: Codable {
     }
 
     init() {
-        (ranker, scoreThreshold) = (nil, nil)
+        (self.ranker, self.scoreThreshold) = (nil, nil)
     }
 }
 
-public extension VectorStoreSearchRequestRankingOptions {
-    init(from decoder: Decoder) throws {
+extension VectorStoreSearchRequestRankingOptions {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        ranker = try container.sdkDecodeIfPresent(.ranker)
-        scoreThreshold = try container.sdkDecodeIfPresent(.scoreThreshold)
-        if let value = scoreThreshold {
-            try validateRange(
-                "score_threshold",
-                Double(value),
-                min: 0,
-                max: 1,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.ranker = try container.sdkDecodeIfPresent(.ranker)
+        self.scoreThreshold = try container.sdkDecodeIfPresent(.scoreThreshold)
+        if let value = self.scoreThreshold {
+            try validateRange("score_threshold", Double(value), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension VectorStoreSearchRequestRankingOptions {
-    init(ranker: VectorStoreSearchRequestRankingOptionsRanker? = nil, scoreThreshold: Double? = nil) throws {
+extension VectorStoreSearchRequestRankingOptions {
+    public init(ranker: VectorStoreSearchRequestRankingOptionsRanker? = nil, scoreThreshold: Double? = nil) throws {
         self.init()
         (self.ranker, self.scoreThreshold) = (ranker, scoreThreshold)
         if let value = self.scoreThreshold {
-            try validateRange(
-                "score_threshold",
-                Double(value),
-                min: 0,
-                max: 1,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("score_threshold", Double(value), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -264,61 +207,33 @@ public struct VectorStoreSearchRequest: Codable {
         case rankingOptions = "ranking_options"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VectorStoreSearchRequest {
-    init(from decoder: Decoder) throws {
+extension VectorStoreSearchRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.query) else {
-            throw SdkValidationError(
-                field: "query",
-                code: "required",
-                message: "Validation failed for 'query': value is required"
-            )
+            throw SdkValidationError(field: "query", code: "required", message: "Validation failed for 'query': value is required")
         }
-        query = try container.sdkDecodeRequired(.query)
-        rewriteQuery = try container.sdkDecodeIfPresent(.rewriteQuery)
-        maxNumResults = try container.sdkDecodeIfPresent(.maxNumResults)
-        filters = try container.sdkDecodeIfPresent(.filters)
-        rankingOptions = try container.sdkDecodeIfPresent(.rankingOptions)
-        if let value = maxNumResults {
-            try validateRange(
-                "max_num_results",
-                Double(value),
-                min: 1,
-                max: 50,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.query = try container.sdkDecodeRequired(.query)
+        self.rewriteQuery = try container.sdkDecodeIfPresent(.rewriteQuery)
+        self.maxNumResults = try container.sdkDecodeIfPresent(.maxNumResults)
+        self.filters = try container.sdkDecodeIfPresent(.filters)
+        self.rankingOptions = try container.sdkDecodeIfPresent(.rankingOptions)
+        if let value = self.maxNumResults {
+            try validateRange("max_num_results", Double(value), min: 1, max: 50, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension VectorStoreSearchRequest {
-    init(
-        query: VectorStoreSearchRequestQuery,
-        rewriteQuery: Bool? = nil,
-        maxNumResults: Int? = nil,
-        filters: VectorStoreSearchRequestFilters? = nil,
-        rankingOptions: VectorStoreSearchRequestRankingOptions? = nil
-    ) throws {
+extension VectorStoreSearchRequest {
+    public init(query: VectorStoreSearchRequestQuery, rewriteQuery: Bool? = nil, maxNumResults: Int? = nil, filters: VectorStoreSearchRequestFilters? = nil, rankingOptions: VectorStoreSearchRequestRankingOptions? = nil) throws {
         (self.query, self.rewriteQuery) = (query, rewriteQuery)
         (self.maxNumResults, self.filters) = (maxNumResults, filters)
         self.rankingOptions = rankingOptions
         if let value = self.maxNumResults {
-            try validateRange(
-                "max_num_results",
-                Double(value),
-                min: 1,
-                max: 50,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("max_num_results", Double(value), min: 1, max: 50, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -335,35 +250,25 @@ public struct VectorStoreSearchResultContentObject: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VectorStoreSearchResultContentObject {
-    init(from decoder: Decoder) throws {
+extension VectorStoreSearchResultContentObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
     }
 }
 
-public extension VectorStoreSearchResultContentObject {
-    init(type: VectorStoreSearchResultContentObjectType, text: String) {
+extension VectorStoreSearchResultContentObject {
+    public init(type: VectorStoreSearchResultContentObjectType, text: String) {
         (self.type, self.text) = (type, text)
     }
 }
@@ -392,95 +297,55 @@ public struct VectorStoreSearchResultItem: Codable {
         case content
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VectorStoreSearchResultItem {
-    init(from decoder: Decoder) throws {
+extension VectorStoreSearchResultItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.fileId) else {
-            throw SdkValidationError(
-                field: "file_id",
-                code: "required",
-                message: "Validation failed for 'file_id': value is required"
-            )
+            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
         }
         guard container.contains(.filename) else {
-            throw SdkValidationError(
-                field: "filename",
-                code: "required",
-                message: "Validation failed for 'filename': value is required"
-            )
+            throw SdkValidationError(field: "filename", code: "required", message: "Validation failed for 'filename': value is required")
         }
         guard container.contains(.score) else {
-            throw SdkValidationError(
-                field: "score",
-                code: "required",
-                message: "Validation failed for 'score': value is required"
-            )
+            throw SdkValidationError(field: "score", code: "required", message: "Validation failed for 'score': value is required")
         }
         guard container.contains(.attributes) else {
-            throw SdkValidationError(
-                field: "attributes",
-                code: "required",
-                message: "Validation failed for 'attributes': value is required"
-            )
+            throw SdkValidationError(field: "attributes", code: "required", message: "Validation failed for 'attributes': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        fileId = try container.sdkDecodeRequired(.fileId)
-        filename = try container.sdkDecodeRequired(.filename)
-        score = try container.sdkDecodeRequired(.score)
-        attributes = try container.sdkDecodeNullable(.attributes)
-        content = try container.sdkDecodeRequired(.content)
-        try validateRange("score", Double(score), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        self.fileId = try container.sdkDecodeRequired(.fileId)
+        self.filename = try container.sdkDecodeRequired(.filename)
+        self.score = try container.sdkDecodeRequired(.score)
+        self.attributes = try container.sdkDecodeNullable(.attributes)
+        self.content = try container.sdkDecodeRequired(.content)
+            try validateRange("score", Double(self.score), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension VectorStoreSearchResultItem {
-    init(
-        fileId: String,
-        filename: String,
-        score: Double,
-        attributes: VectorStoreFileAttributes?,
-        content: [VectorStoreSearchResultContentObject]
-    ) throws {
+extension VectorStoreSearchResultItem {
+    public init(fileId: String, filename: String, score: Double, attributes: VectorStoreFileAttributes?, content: [VectorStoreSearchResultContentObject]) throws {
         (self.fileId, self.filename) = (fileId, filename)
         (self.score, self.attributes) = (score, attributes)
         self.content = content
-        try validateRange(
-            "score",
-            Double(self.score),
-            min: 0,
-            max: 1,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("score", Double(self.score), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
 /// The type of content.
-public struct VectorStoreSearchResultContentObjectType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct VectorStoreSearchResultContentObjectType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = VectorStoreSearchResultContentObjectType(rawValue: "text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -493,16 +358,12 @@ public struct VectorStoreSearchResultContentObjectType: RawRepresentable, Hashab
 public struct VectorStoreSearchResultsPageObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let vectorStoreSearchResultsPage =
-        VectorStoreSearchResultsPageObject(rawValue: "vector_store.search_results.page")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let vectorStoreSearchResultsPage = VectorStoreSearchResultsPageObject(rawValue: "vector_store.search_results.page")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -512,21 +373,17 @@ public struct VectorStoreSearchResultsPageObject: RawRepresentable, Hashable, Co
 }
 
 /// Enable re-ranking; set to `none` to disable, which can help reduce latency.
-public struct VectorStoreSearchRequestRankingOptionsRanker: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct VectorStoreSearchRequestRankingOptionsRanker: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let none = VectorStoreSearchRequestRankingOptionsRanker(rawValue: "none")
     public static let auto = VectorStoreSearchRequestRankingOptionsRanker(rawValue: "auto")
     public static let default20241115 = VectorStoreSearchRequestRankingOptionsRanker(rawValue: "default-2024-11-15")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,20 +3,17 @@
 
 import Foundation
 
-/// AgentsEnvironment domain models
+// AgentsEnvironment domain models
 /// The object type. Always `agent.environment.file`.
 public struct EnvironmentFileResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let agentEnvironmentFile = EnvironmentFileResourceObject(rawValue: "agent.environment.file")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -47,16 +44,12 @@ public enum EnvironmentResourceNoneType: String, CaseIterable, Codable {
 public struct EnvironmentTemplateResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let agentEnvironmentTemplate =
-        EnvironmentTemplateResourceObject(rawValue: "agent.environment.template")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let agentEnvironmentTemplate = EnvironmentTemplateResourceObject(rawValue: "agent.environment.template")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -69,10 +62,7 @@ public struct EnvironmentTemplateResourceObject: RawRepresentable, Hashable, Cod
 public struct EnvironmentStatusResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let pending = EnvironmentStatusResource(rawValue: "pending")
     public static let ready = EnvironmentStatusResource(rawValue: "ready")
     public static let connected = EnvironmentStatusResource(rawValue: "connected")
@@ -83,7 +73,7 @@ public struct EnvironmentStatusResource: RawRepresentable, Hashable, Codable, Se
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

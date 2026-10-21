@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Files domain models
+// Files domain models
 /// Typed representation of the `CreateContainerFileBody` API schema.
 public struct CreateContainerFileBody: Codable {
     /// Name of the file to create.
@@ -17,20 +17,20 @@ public struct CreateContainerFileBody: Codable {
     }
 
     init() {
-        (fileId, file) = (nil, nil)
+        (self.fileId, self.file) = (nil, nil)
     }
 }
 
-public extension CreateContainerFileBody {
-    init(from decoder: Decoder) throws {
+extension CreateContainerFileBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        file = try container.sdkDecodeIfPresent(.file)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        self.file = try container.sdkDecodeIfPresent(.file)
     }
 }
 
-public extension CreateContainerFileBody {
-    init(fileId: String? = nil, file: Data? = nil) {
+extension CreateContainerFileBody {
+    public init(fileId: String? = nil, file: Data? = nil) {
         self.init()
         (self.fileId, self.file) = (fileId, file)
     }
@@ -54,36 +54,26 @@ public struct CreateFileRequest: Codable {
         case expiresAfter = "expires_after"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateFileRequest {
-    init(from decoder: Decoder) throws {
+extension CreateFileRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.file) else {
-            throw SdkValidationError(
-                field: "file",
-                code: "required",
-                message: "Validation failed for 'file': value is required"
-            )
+            throw SdkValidationError(field: "file", code: "required", message: "Validation failed for 'file': value is required")
         }
         guard container.contains(.purpose) else {
-            throw SdkValidationError(
-                field: "purpose",
-                code: "required",
-                message: "Validation failed for 'purpose': value is required"
-            )
+            throw SdkValidationError(field: "purpose", code: "required", message: "Validation failed for 'purpose': value is required")
         }
-        file = try container.sdkDecodeRequired(.file)
-        purpose = try container.sdkDecodeRequired(.purpose)
-        expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
+        self.file = try container.sdkDecodeRequired(.file)
+        self.purpose = try container.sdkDecodeRequired(.purpose)
+        self.expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
     }
 }
 
-public extension CreateFileRequest {
-    init(file: Data, purpose: CreateFileRequestPurpose, expiresAfter: FileExpirationAfter? = nil) {
+extension CreateFileRequest {
+    public init(file: Data, purpose: CreateFileRequestPurpose, expiresAfter: FileExpirationAfter? = nil) {
         (self.file, self.purpose) = (file, purpose)
         self.expiresAfter = expiresAfter
     }
@@ -116,75 +106,45 @@ public struct ContainerFileResource: Codable {
         case source
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ContainerFileResource {
-    init(from decoder: Decoder) throws {
+extension ContainerFileResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.containerId) else {
-            throw SdkValidationError(
-                field: "container_id",
-                code: "required",
-                message: "Validation failed for 'container_id': value is required"
-            )
+            throw SdkValidationError(field: "container_id", code: "required", message: "Validation failed for 'container_id': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.bytes) else {
-            throw SdkValidationError(
-                field: "bytes",
-                code: "required",
-                message: "Validation failed for 'bytes': value is required"
-            )
+            throw SdkValidationError(field: "bytes", code: "required", message: "Validation failed for 'bytes': value is required")
         }
         guard container.contains(.path) else {
-            throw SdkValidationError(
-                field: "path",
-                code: "required",
-                message: "Validation failed for 'path': value is required"
-            )
+            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
         }
         guard container.contains(.source) else {
-            throw SdkValidationError(
-                field: "source",
-                code: "required",
-                message: "Validation failed for 'source': value is required"
-            )
+            throw SdkValidationError(field: "source", code: "required", message: "Validation failed for 'source': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        containerId = try container.sdkDecodeRequired(.containerId)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        bytes = try container.sdkDecodeRequired(.bytes)
-        path = try container.sdkDecodeRequired(.path)
-        source = try container.sdkDecodeRequired(.source)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.containerId = try container.sdkDecodeRequired(.containerId)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.bytes = try container.sdkDecodeRequired(.bytes)
+        self.path = try container.sdkDecodeRequired(.path)
+        self.source = try container.sdkDecodeRequired(.source)
     }
 }
 
-public extension ContainerFileResource {
-    init(id: String, object: String, containerId: String, createdAt: Int, bytes: Int, path: String, source: String) {
+extension ContainerFileResource {
+    public init(id: String, object: String, containerId: String, createdAt: Int, bytes: Int, path: String, source: String) {
         (self.id, self.object) = (id, object)
         (self.containerId, self.createdAt) = (containerId, createdAt)
         (self.bytes, self.path) = (bytes, path)
@@ -216,59 +176,37 @@ public struct ListFilesResponse: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ListFilesResponse {
-    init(from decoder: Decoder) throws {
+extension ListFilesResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(
-                field: "first_id",
-                code: "required",
-                message: "Validation failed for 'first_id': value is required"
-            )
+            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(
-                field: "last_id",
-                code: "required",
-                message: "Validation failed for 'last_id': value is required"
-            )
+            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        firstId = try container.sdkDecodeRequired(.firstId)
-        lastId = try container.sdkDecodeRequired(.lastId)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.firstId = try container.sdkDecodeRequired(.firstId)
+        self.lastId = try container.sdkDecodeRequired(.lastId)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
     }
 }
 
-public extension ListFilesResponse {
-    init(object: String, data: [OpenAIFile], firstId: String, lastId: String, hasMore: Bool) {
+extension ListFilesResponse {
+    public init(object: String, data: [OpenAIFile], firstId: String, lastId: String, hasMore: Bool) {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
@@ -290,43 +228,29 @@ public struct DeleteFileResponse: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DeleteFileResponse {
-    init(from decoder: Decoder) throws {
+extension DeleteFileResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension DeleteFileResponse {
-    init(id: String, object: DeleteFileResponseObject, deleted: Bool) {
+extension DeleteFileResponse {
+    public init(id: String, object: DeleteFileResponseObject, deleted: Bool) {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
     }
@@ -353,65 +277,37 @@ public struct ContainerFileListResource: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ContainerFileListResource {
-    init(from decoder: Decoder) throws {
+extension ContainerFileListResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.firstId) else {
-            throw SdkValidationError(
-                field: "first_id",
-                code: "required",
-                message: "Validation failed for 'first_id': value is required"
-            )
+            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
         }
         guard container.contains(.lastId) else {
-            throw SdkValidationError(
-                field: "last_id",
-                code: "required",
-                message: "Validation failed for 'last_id': value is required"
-            )
+            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        firstId = try container.sdkDecodeRequired(.firstId)
-        lastId = try container.sdkDecodeRequired(.lastId)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.firstId = try container.sdkDecodeRequired(.firstId)
+        self.lastId = try container.sdkDecodeRequired(.lastId)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
     }
 }
 
-public extension ContainerFileListResource {
-    init(
-        object: ContainerFileListResourceObject,
-        data: [ContainerFileResource],
-        firstId: String,
-        lastId: String,
-        hasMore: Bool
-    ) {
+extension ContainerFileListResource {
+    public init(object: ContainerFileListResourceObject, data: [ContainerFileResource], firstId: String, lastId: String, hasMore: Bool) {
         (self.object, self.data) = (object, data)
         (self.firstId, self.lastId) = (firstId, lastId)
         self.hasMore = hasMore
@@ -422,15 +318,12 @@ public extension ContainerFileListResource {
 public struct ContainerFileListResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = ContainerFileListResourceObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -443,15 +336,12 @@ public struct ContainerFileListResourceObject: RawRepresentable, Hashable, Codab
 public struct DeleteFileResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let file = DeleteFileResponseObject(rawValue: "file")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -466,10 +356,7 @@ public struct DeleteFileResponseObject: RawRepresentable, Hashable, Codable, Sen
 public struct CreateFileRequestPurpose: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let assistants = CreateFileRequestPurpose(rawValue: "assistants")
     public static let batch = CreateFileRequestPurpose(rawValue: "batch")
     public static let fineTune = CreateFileRequestPurpose(rawValue: "fine-tune")
@@ -479,7 +366,7 @@ public struct CreateFileRequestPurpose: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

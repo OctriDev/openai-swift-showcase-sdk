@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaMcpapproval domain models
+// ResponsesBetaMcpapproval domain models
 /// A response to an MCP approval request.
 public struct BetaMCPApprovalResponseResource: Codable {
     /// The type of the item. Always `mcp_approval_response`.
@@ -28,65 +28,40 @@ public struct BetaMCPApprovalResponseResource: Codable {
         case reason
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaMCPApprovalResponseResource {
-    init(from decoder: Decoder) throws {
+extension BetaMCPApprovalResponseResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.approvalRequestId) else {
-            throw SdkValidationError(
-                field: "approval_request_id",
-                code: "required",
-                message: "Validation failed for 'approval_request_id': value is required"
-            )
+            throw SdkValidationError(field: "approval_request_id", code: "required", message: "Validation failed for 'approval_request_id': value is required")
         }
         guard container.contains(.approve) else {
-            throw SdkValidationError(
-                field: "approve",
-                code: "required",
-                message: "Validation failed for 'approve': value is required"
-            )
+            throw SdkValidationError(field: "approve", code: "required", message: "Validation failed for 'approve': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        approvalRequestId = try container.sdkDecodeRequired(.approvalRequestId)
-        approve = try container.sdkDecodeRequired(.approve)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        reason = try container.sdkDecodeIfPresent(.reason)
-        try sdkValidateRawEnum("type", type, BetaMCPApprovalResponseResourceType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.approvalRequestId = try container.sdkDecodeRequired(.approvalRequestId)
+        self.approve = try container.sdkDecodeRequired(.approve)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.reason = try container.sdkDecodeIfPresent(.reason)
+            try sdkValidateRawEnum("type", self.type, BetaMCPApprovalResponseResourceType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaMCPApprovalResponseResource {
-    init(
-        type: BetaMCPApprovalResponseResourceType,
-        id: String,
-        approvalRequestId: String,
-        approve: Bool,
-        agent: BetaAgentTag? = nil,
-        reason: String? = nil
-    ) throws {
+extension BetaMCPApprovalResponseResource {
+    public init(type: BetaMCPApprovalResponseResourceType, id: String, approvalRequestId: String, approve: Bool, agent: BetaAgentTag? = nil, reason: String? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.approvalRequestId, self.approve) = (approvalRequestId, approve)
         (self.agent, self.reason) = (agent, reason)
-        try sdkValidateRawEnum("type", self.type, BetaMCPApprovalResponseResourceType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaMCPApprovalResponseResourceType.allCases.map(\.rawValue))
     }
 }
 
@@ -114,58 +89,37 @@ public struct BetaMCPApprovalResponse: Codable {
         case reason
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaMCPApprovalResponse {
-    init(from decoder: Decoder) throws {
+extension BetaMCPApprovalResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.approvalRequestId) else {
-            throw SdkValidationError(
-                field: "approval_request_id",
-                code: "required",
-                message: "Validation failed for 'approval_request_id': value is required"
-            )
+            throw SdkValidationError(field: "approval_request_id", code: "required", message: "Validation failed for 'approval_request_id': value is required")
         }
         guard container.contains(.approve) else {
-            throw SdkValidationError(
-                field: "approve",
-                code: "required",
-                message: "Validation failed for 'approve': value is required"
-            )
+            throw SdkValidationError(field: "approve", code: "required", message: "Validation failed for 'approve': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        approvalRequestId = try container.sdkDecodeRequired(.approvalRequestId)
-        approve = try container.sdkDecodeRequired(.approve)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        id = try container.sdkDecodeIfPresent(.id)
-        reason = try container.sdkDecodeIfPresent(.reason)
-        try sdkValidateRawEnum("type", type, BetaMCPApprovalResponseType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.approvalRequestId = try container.sdkDecodeRequired(.approvalRequestId)
+        self.approve = try container.sdkDecodeRequired(.approve)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.id = try container.sdkDecodeIfPresent(.id)
+        self.reason = try container.sdkDecodeIfPresent(.reason)
+            try sdkValidateRawEnum("type", self.type, BetaMCPApprovalResponseType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaMCPApprovalResponse {
-    init(
-        type: BetaMCPApprovalResponseType,
-        approvalRequestId: String,
-        approve: Bool,
-        agent: BetaAgentTag? = nil,
-        id: String? = nil,
-        reason: String? = nil
-    ) throws {
+extension BetaMCPApprovalResponse {
+    public init(type: BetaMCPApprovalResponseType, approvalRequestId: String, approve: Bool, agent: BetaAgentTag? = nil, id: String? = nil, reason: String? = nil) throws {
         (self.type, self.approvalRequestId) = (type, approvalRequestId)
         (self.approve, self.agent) = (approve, agent)
         (self.id, self.reason) = (id, reason)
-        try sdkValidateRawEnum("type", self.type, BetaMCPApprovalResponseType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaMCPApprovalResponseType.allCases.map(\.rawValue))
     }
 }
 
@@ -193,72 +147,43 @@ public struct BetaMCPApprovalRequest: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaMCPApprovalRequest {
-    init(from decoder: Decoder) throws {
+extension BetaMCPApprovalRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.serverLabel) else {
-            throw SdkValidationError(
-                field: "server_label",
-                code: "required",
-                message: "Validation failed for 'server_label': value is required"
-            )
+            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.arguments) else {
-            throw SdkValidationError(
-                field: "arguments",
-                code: "required",
-                message: "Validation failed for 'arguments': value is required"
-            )
+            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        name = try container.sdkDecodeRequired(.name)
-        arguments = try container.sdkDecodeRequired(.arguments)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaMCPApprovalRequestType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.arguments = try container.sdkDecodeRequired(.arguments)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaMCPApprovalRequestType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaMCPApprovalRequest {
-    init(
-        type: BetaMCPApprovalRequestType,
-        id: String,
-        serverLabel: String,
-        name: String,
-        arguments: String,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaMCPApprovalRequest {
+    public init(type: BetaMCPApprovalRequestType, id: String, serverLabel: String, name: String, arguments: String, agent: BetaAgentTag? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.serverLabel, self.name) = (serverLabel, name)
         (self.arguments, self.agent) = (arguments, agent)
-        try sdkValidateRawEnum("type", self.type, BetaMCPApprovalRequestType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaMCPApprovalRequestType.allCases.map(\.rawValue))
     }
 }
 

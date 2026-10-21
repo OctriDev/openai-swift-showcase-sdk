@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveContainer domain models
+// LiveLiveContainer domain models
 /// Typed representation of the `LiveContainerNetworkPolicyDisabledParam` API schema.
 public struct LiveContainerNetworkPolicyDisabledParam: Codable {
     /// Disable outbound network access. Always `disabled`.
@@ -13,30 +13,24 @@ public struct LiveContainerNetworkPolicyDisabledParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveContainerNetworkPolicyDisabledParam {
-    init(from decoder: Decoder) throws {
+extension LiveContainerNetworkPolicyDisabledParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum("type", type, LiveContainerNetworkPolicyDisabledParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, LiveContainerNetworkPolicyDisabledParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveContainerNetworkPolicyDisabledParam {
-    init(type: LiveContainerNetworkPolicyDisabledParamType) throws {
+extension LiveContainerNetworkPolicyDisabledParam {
+    public init(type: LiveContainerNetworkPolicyDisabledParamType) throws {
         self.type = type
-        try sdkValidateRawEnum("type", self.type, LiveContainerNetworkPolicyDisabledParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveContainerNetworkPolicyDisabledParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -52,38 +46,28 @@ public struct LiveContainerReferenceParam: Codable {
         case containerId = "container_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveContainerReferenceParam {
-    init(from decoder: Decoder) throws {
+extension LiveContainerReferenceParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.containerId) else {
-            throw SdkValidationError(
-                field: "container_id",
-                code: "required",
-                message: "Validation failed for 'container_id': value is required"
-            )
+            throw SdkValidationError(field: "container_id", code: "required", message: "Validation failed for 'container_id': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        containerId = try container.sdkDecodeRequired(.containerId)
-        try sdkValidateRawEnum("type", type, LiveContainerReferenceParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.containerId = try container.sdkDecodeRequired(.containerId)
+            try sdkValidateRawEnum("type", self.type, LiveContainerReferenceParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveContainerReferenceParam {
-    init(type: LiveContainerReferenceParamType, containerId: String) throws {
+extension LiveContainerReferenceParam {
+    public init(type: LiveContainerReferenceParamType, containerId: String) throws {
         (self.type, self.containerId) = (type, containerId)
-        try sdkValidateRawEnum("type", self.type, LiveContainerReferenceParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveContainerReferenceParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -91,10 +75,7 @@ public extension LiveContainerReferenceParam {
 public struct LiveContainerMemoryLimit: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let value1g = LiveContainerMemoryLimit(rawValue: "1g")
     public static let value4g = LiveContainerMemoryLimit(rawValue: "4g")
     public static let value16g = LiveContainerMemoryLimit(rawValue: "16g")
@@ -102,7 +83,7 @@ public struct LiveContainerMemoryLimit: RawRepresentable, Hashable, Codable, Sen
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

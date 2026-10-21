@@ -3,22 +3,18 @@
 
 import Foundation
 
-/// Images domain models
+// Images domain models
 /// Optional enumerated value serialized in the `input_fidelity` wire field.
-public struct EditImageBodyJsonParamInputFidelityVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct EditImageBodyJsonParamInputFidelityVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let high = EditImageBodyJsonParamInputFidelityVariant0(rawValue: "high")
     public static let low = EditImageBodyJsonParamInputFidelityVariant0(rawValue: "low")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -28,21 +24,17 @@ public struct EditImageBodyJsonParamInputFidelityVariant0: RawRepresentable, Has
 }
 
 /// The output format for the requested edited image.
-public struct ImageEditPartialImageEventOutputFormat: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ImageEditPartialImageEventOutputFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let png = ImageEditPartialImageEventOutputFormat(rawValue: "png")
     public static let webp = ImageEditPartialImageEventOutputFormat(rawValue: "webp")
     public static let jpeg = ImageEditPartialImageEventOutputFormat(rawValue: "jpeg")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -52,21 +44,17 @@ public struct ImageEditPartialImageEventOutputFormat: RawRepresentable, Hashable
 }
 
 /// Optional enumerated value serialized in the `background` wire field.
-public struct CreateImageEditRequestBackgroundVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct CreateImageEditRequestBackgroundVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let transparent = CreateImageEditRequestBackgroundVariant0(rawValue: "transparent")
     public static let opaque = CreateImageEditRequestBackgroundVariant0(rawValue: "opaque")
     public static let auto = CreateImageEditRequestBackgroundVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -79,10 +67,7 @@ public struct CreateImageEditRequestBackgroundVariant0: RawRepresentable, Hashab
 public struct ImageEditCompletedEventQuality: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = ImageEditCompletedEventQuality(rawValue: "low")
     public static let medium = ImageEditCompletedEventQuality(rawValue: "medium")
     public static let high = ImageEditCompletedEventQuality(rawValue: "high")
@@ -92,7 +77,7 @@ public struct ImageEditCompletedEventQuality: RawRepresentable, Hashable, Codabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -120,21 +105,17 @@ public enum ImageEditPartialImageEventType: String, CaseIterable, Codable {
 }
 
 /// Optional enumerated value serialized in the `output_format` wire field.
-public struct EditImageBodyJsonParamOutputFormatVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct EditImageBodyJsonParamOutputFormatVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let png = EditImageBodyJsonParamOutputFormatVariant0(rawValue: "png")
     public static let jpeg = EditImageBodyJsonParamOutputFormatVariant0(rawValue: "jpeg")
     public static let webp = EditImageBodyJsonParamOutputFormatVariant0(rawValue: "webp")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -162,21 +143,17 @@ public enum ImageEditCompletedEventType: String, CaseIterable, Codable {
 }
 
 /// Optional enumerated value serialized in the `background` wire field.
-public struct EditImageBodyJsonParamBackgroundVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct EditImageBodyJsonParamBackgroundVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let transparent = EditImageBodyJsonParamBackgroundVariant0(rawValue: "transparent")
     public static let opaque = EditImageBodyJsonParamBackgroundVariant0(rawValue: "opaque")
     public static let auto = EditImageBodyJsonParamBackgroundVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -189,17 +166,14 @@ public struct EditImageBodyJsonParamBackgroundVariant0: RawRepresentable, Hashab
 public struct ImageEditCompletedEventBackground: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let transparent = ImageEditCompletedEventBackground(rawValue: "transparent")
     public static let opaque = ImageEditCompletedEventBackground(rawValue: "opaque")
     public static let auto = ImageEditCompletedEventBackground(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -212,17 +186,14 @@ public struct ImageEditCompletedEventBackground: RawRepresentable, Hashable, Cod
 public struct ImageEditCompletedEventOutputFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let png = ImageEditCompletedEventOutputFormat(rawValue: "png")
     public static let webp = ImageEditCompletedEventOutputFormat(rawValue: "webp")
     public static let jpeg = ImageEditCompletedEventOutputFormat(rawValue: "jpeg")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -235,17 +206,14 @@ public struct ImageEditCompletedEventOutputFormat: RawRepresentable, Hashable, C
 public struct ImageEditPartialImageEventBackground: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let transparent = ImageEditPartialImageEventBackground(rawValue: "transparent")
     public static let opaque = ImageEditPartialImageEventBackground(rawValue: "opaque")
     public static let auto = ImageEditPartialImageEventBackground(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -259,16 +227,13 @@ public struct ImageEditPartialImageEventBackground: RawRepresentable, Hashable, 
 public struct CreateImageEditRequestResponseFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let url = CreateImageEditRequestResponseFormat(rawValue: "url")
     public static let b64Json = CreateImageEditRequestResponseFormat(rawValue: "b64_json")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -281,10 +246,7 @@ public struct CreateImageEditRequestResponseFormat: RawRepresentable, Hashable, 
 public struct ImageEditPartialImageEventQuality: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = ImageEditPartialImageEventQuality(rawValue: "low")
     public static let medium = ImageEditPartialImageEventQuality(rawValue: "medium")
     public static let high = ImageEditPartialImageEventQuality(rawValue: "high")
@@ -294,7 +256,7 @@ public struct ImageEditPartialImageEventQuality: RawRepresentable, Hashable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -304,21 +266,17 @@ public struct ImageEditPartialImageEventQuality: RawRepresentable, Hashable, Cod
 }
 
 /// Optional enumerated value serialized in the `output_format` wire field.
-public struct CreateImageEditRequestOutputFormatVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct CreateImageEditRequestOutputFormatVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let png = CreateImageEditRequestOutputFormatVariant0(rawValue: "png")
     public static let jpeg = CreateImageEditRequestOutputFormatVariant0(rawValue: "jpeg")
     public static let webp = CreateImageEditRequestOutputFormatVariant0(rawValue: "webp")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -331,10 +289,7 @@ public struct CreateImageEditRequestOutputFormatVariant0: RawRepresentable, Hash
 public struct EditImageBodyJsonParamQualityVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = EditImageBodyJsonParamQualityVariant0(rawValue: "low")
     public static let medium = EditImageBodyJsonParamQualityVariant0(rawValue: "medium")
     public static let high = EditImageBodyJsonParamQualityVariant0(rawValue: "high")
@@ -344,7 +299,7 @@ public struct EditImageBodyJsonParamQualityVariant0: RawRepresentable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -354,20 +309,16 @@ public struct EditImageBodyJsonParamQualityVariant0: RawRepresentable, Hashable,
 }
 
 /// Optional enumerated value serialized in the `moderation` wire field.
-public struct EditImageBodyJsonParamModerationVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct EditImageBodyJsonParamModerationVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = EditImageBodyJsonParamModerationVariant0(rawValue: "low")
     public static let auto = EditImageBodyJsonParamModerationVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -380,10 +331,7 @@ public struct EditImageBodyJsonParamModerationVariant0: RawRepresentable, Hashab
 public struct CreateImageEditRequestQualityVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = CreateImageEditRequestQualityVariant0(rawValue: "low")
     public static let medium = CreateImageEditRequestQualityVariant0(rawValue: "medium")
     public static let high = CreateImageEditRequestQualityVariant0(rawValue: "high")
@@ -394,7 +342,7 @@ public struct CreateImageEditRequestQualityVariant0: RawRepresentable, Hashable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

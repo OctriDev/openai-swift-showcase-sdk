@@ -3,22 +3,19 @@
 
 import Foundation
 
-/// Videos domain models
+// Videos domain models
 /// Typed representation of the `VideoContentVariant` API schema.
 public struct VideoContentVariant: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let video = VideoContentVariant(rawValue: "video")
     public static let thumbnail = VideoContentVariant(rawValue: "thumbnail")
     public static let spritesheet = VideoContentVariant(rawValue: "spritesheet")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

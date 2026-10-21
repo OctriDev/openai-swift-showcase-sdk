@@ -8,35 +8,21 @@ import Foundation
 #endif
 public enum WebhookEndpointsMethods {}
 
-public extension WebhookEndpointsMethods {
+extension WebhookEndpointsMethods {
     /// Returns webhook endpoints for the authenticated project in newest-first order.
     ///
     /// - Parameters:
     /// - limit: Maximum number of webhook endpoints to return. Defaults to 20.
     /// - after: ID of the last webhook endpoint from the previous page.
-    static func listWebhookEndpoints(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> WebhookEndpointListResource {
-        if let limit {
+    public static func listWebhookEndpoints(config: ClientConfig, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointListResource {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 1, max: 100)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            "/webhook_endpoints",
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("after", value: after),
-            ],
-            decoder: .json,
-            operationId: "ListWebhookEndpoints",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("GET", "/webhook_endpoints", config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("after", value: after),
+        ], decoder: .json, operationId: "ListWebhookEndpoints", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
     }
 
     /// Returns webhook endpoints for the authenticated project in newest-first order.
@@ -44,39 +30,18 @@ public extension WebhookEndpointsMethods {
     /// - Parameters:
     /// - limit: Maximum number of webhook endpoints to return. Defaults to 20.
     /// - after: ID of the last webhook endpoint from the previous page.
-    static func listWebhookEndpointsPaginated(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<WebhookEndpointBody, Swift.Error> {
-        AsyncThrowingStream<WebhookEndpointBody, Swift.Error> { (continuation: AsyncThrowingStream<
-            WebhookEndpointBody,
-            Swift.Error
-        >.Continuation) in
+    public static func listWebhookEndpointsPaginated(config: ClientConfig, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<WebhookEndpointBody, Swift.Error> {
+        return AsyncThrowingStream<WebhookEndpointBody, Swift.Error> { (continuation: AsyncThrowingStream<WebhookEndpointBody, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listWebhookEndpoints(
-                            config: config,
-                            limit: limit,
-                            after: pageCursor,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listWebhookEndpoints(config: config, limit: limit, after: pageCursor, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -89,48 +54,25 @@ public extension WebhookEndpointsMethods {
         }
     }
 
-    struct ListWebhookEndpointsPage {
+    public struct ListWebhookEndpointsPage {
         public let data: WebhookEndpointListResource
         public let items: [WebhookEndpointBody]
         public let hasMore: Bool
     }
 
-    static func listWebhookEndpointsPages(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListWebhookEndpointsPage, Swift.Error> {
-        AsyncThrowingStream<ListWebhookEndpointsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListWebhookEndpointsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listWebhookEndpointsPages(config: ClientConfig, limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListWebhookEndpointsPage, Swift.Error> {
+        return AsyncThrowingStream<ListWebhookEndpointsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListWebhookEndpointsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listWebhookEndpoints(
-                            config: config,
-                            limit: limit,
-                            after: pageCursor,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listWebhookEndpoints(config: config, limit: limit, after: pageCursor, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListWebhookEndpointsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        pageContinuation.yield(ListWebhookEndpointsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

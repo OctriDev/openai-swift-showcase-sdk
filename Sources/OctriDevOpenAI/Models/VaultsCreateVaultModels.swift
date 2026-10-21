@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// VaultsCreate domain models
+// VaultsCreate domain models
 /// Parameters for creating a vault to store credentials used by agent tools.
 public struct CreateVaultParams: Codable {
     /// The name is trimmed before storage. It must contain 1 to 256 UTF-8 bytes after trimming.
@@ -17,27 +17,27 @@ public struct CreateVaultParams: Codable {
     }
 
     init() {
-        (name, metadata) = (nil, nil)
+        (self.name, self.metadata) = (nil, nil)
     }
 }
 
-public extension CreateVaultParams {
-    init(from decoder: Decoder) throws {
+extension CreateVaultParams {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        name = try container.sdkDecodeIfPresent(.name)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        if let value = name {
-            try validateLength("name", value, min: 1, max: 1_048_576)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        if let value = self.name {
+            try validateLength("name", value, min: 1, max: 1048576)
         }
     }
 }
 
-public extension CreateVaultParams {
-    init(name: String? = nil, metadata: [String: String]? = nil) throws {
+extension CreateVaultParams {
+    public init(name: String? = nil, metadata: [String: String]? = nil) throws {
         self.init()
         (self.name, self.metadata) = (name, metadata)
         if let value = self.name {
-            try validateLength("name", value, min: 1, max: 1_048_576)
+            try validateLength("name", value, min: 1, max: 1048576)
         }
     }
 }

@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ConversationsMethods {
-    /// Lists the items in a conversation. Use `after` to continue from an item ID, `limit` to control the number of
-    /// results, and `order` to choose the direction of the results.
+extension ConversationsMethods {
+    /// Lists the items in a conversation. Use `after` to continue from an item ID, `limit` to control the number of results, and `order` to choose the direction of the results.
     ///
     /// List all items for a conversation with the given ID.
     ///
@@ -34,34 +33,16 @@ public extension ConversationsMethods {
     ///   using the Responses API statelessly (like when the `store` parameter is set
     ///   to `false`, or when an organization is enrolled in the zero data retention
     ///   program).
-    static func listConversationItems(
-        config: ClientConfig,
-        conversationId: String,
-        limit: Int? = nil,
-        order: ListConversationItemsParameter? = nil,
-        after: String? = nil,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ConversationItemList {
-        try await (sdkRequest(
-            "GET",
-            ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId)), "/items"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("include", values: include, style: "form", explode: true),
-            ],
-            decoder: .json,
-            operationId: "listConversationItems",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func listConversationItems(config: ClientConfig, conversationId: String, limit: Int? = nil, order: ListConversationItemsParameter? = nil, after: String? = nil, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) async throws -> ConversationItemList {
+        return try (await sdkRequest("GET", ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId)), "/items"].joined(), config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("include", values: include, style: "form", explode: true),
+        ], decoder: .json, operationId: "listConversationItems", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists the items in a conversation. Use `after` to continue from an item ID, `limit` to control the number of
-    /// results, and `order` to choose the direction of the results.
+    /// Lists the items in a conversation. Use `after` to continue from an item ID, `limit` to control the number of results, and `order` to choose the direction of the results.
     ///
     /// List all items for a conversation with the given ID.
     ///
@@ -87,42 +68,17 @@ public extension ConversationsMethods {
     ///   using the Responses API statelessly (like when the `store` parameter is set
     ///   to `false`, or when an organization is enrolled in the zero data retention
     ///   program).
-    static func listConversationItemsPaginated(
-        config: ClientConfig,
-        conversationId: String,
-        limit: Int? = nil,
-        order: ListConversationItemsParameter? = nil,
-        after: String? = nil,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ConversationItem, Swift.Error> {
-        AsyncThrowingStream<ConversationItem, Swift.Error> { (continuation: AsyncThrowingStream<
-            ConversationItem,
-            Swift.Error
-        >.Continuation) in
+    public static func listConversationItemsPaginated(config: ClientConfig, conversationId: String, limit: Int? = nil, order: ListConversationItemsParameter? = nil, after: String? = nil, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ConversationItem, Swift.Error> {
+        return AsyncThrowingStream<ConversationItem, Swift.Error> { (continuation: AsyncThrowingStream<ConversationItem, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listConversationItems(
-                            config: config,
-                            conversationId: conversationId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            include: include,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listConversationItems(config: config, conversationId: conversationId, limit: limit, order: order, after: pageCursor, include: include, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -135,51 +91,24 @@ public extension ConversationsMethods {
         }
     }
 
-    struct ListConversationItemsPage {
+    public struct ListConversationItemsPage {
         public let data: ConversationItemList
         public let items: [ConversationItem]
         public let hasMore: Bool
     }
 
-    static func listConversationItemsPages(
-        config: ClientConfig,
-        conversationId: String,
-        limit: Int? = nil,
-        order: ListConversationItemsParameter? = nil,
-        after: String? = nil,
-        include: [IncludeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListConversationItemsPage, Swift.Error> {
-        AsyncThrowingStream<ListConversationItemsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListConversationItemsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listConversationItemsPages(config: ClientConfig, conversationId: String, limit: Int? = nil, order: ListConversationItemsParameter? = nil, after: String? = nil, include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListConversationItemsPage, Swift.Error> {
+        return AsyncThrowingStream<ListConversationItemsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListConversationItemsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listConversationItems(
-                            config: config,
-                            conversationId: conversationId,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            include: include,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listConversationItems(config: config, conversationId: conversationId, limit: limit, order: order, after: pageCursor, include: include, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && true
-                        pageContinuation.yield(ListConversationItemsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
+                        pageContinuation.yield(ListConversationItemsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

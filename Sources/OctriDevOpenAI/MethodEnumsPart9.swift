@@ -26,41 +26,41 @@ struct CreateThreadAndRunRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(assistantId, forKey: SdkCodingKey("assistant_id"))
-        try keyedContainer.encodeIfPresent(thread, forKey: SdkCodingKey("thread"))
-        try keyedContainer.encodeIfPresent(model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(tools, forKey: SdkCodingKey("tools"))
-        try keyedContainer.encodeIfPresent(toolResources, forKey: SdkCodingKey("tool_resources"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
-        try keyedContainer.encodeIfPresent(temperature, forKey: SdkCodingKey("temperature"))
-        try keyedContainer.encodeIfPresent(topP, forKey: SdkCodingKey("top_p"))
-        try keyedContainer.encodeIfPresent(stream, forKey: SdkCodingKey("stream"))
-        try keyedContainer.encodeIfPresent(maxPromptTokens, forKey: SdkCodingKey("max_prompt_tokens"))
-        try keyedContainer.encodeIfPresent(maxCompletionTokens, forKey: SdkCodingKey("max_completion_tokens"))
-        try keyedContainer.encodeIfPresent(truncationStrategy, forKey: SdkCodingKey("truncation_strategy"))
-        try keyedContainer.encodeIfPresent(toolChoice, forKey: SdkCodingKey("tool_choice"))
-        try keyedContainer.encodeIfPresent(parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
-        try keyedContainer.encodeIfPresent(responseFormat, forKey: SdkCodingKey("response_format"))
+        try keyedContainer.encode(self.assistantId, forKey: SdkCodingKey("assistant_id"))
+        try keyedContainer.encodeIfPresent(self.thread, forKey: SdkCodingKey("thread"))
+        try keyedContainer.encodeIfPresent(self.model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(self.tools, forKey: SdkCodingKey("tools"))
+        try keyedContainer.encodeIfPresent(self.toolResources, forKey: SdkCodingKey("tool_resources"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.temperature, forKey: SdkCodingKey("temperature"))
+        try keyedContainer.encodeIfPresent(self.topP, forKey: SdkCodingKey("top_p"))
+        try keyedContainer.encodeIfPresent(self.stream, forKey: SdkCodingKey("stream"))
+        try keyedContainer.encodeIfPresent(self.maxPromptTokens, forKey: SdkCodingKey("max_prompt_tokens"))
+        try keyedContainer.encodeIfPresent(self.maxCompletionTokens, forKey: SdkCodingKey("max_completion_tokens"))
+        try keyedContainer.encodeIfPresent(self.truncationStrategy, forKey: SdkCodingKey("truncation_strategy"))
+        try keyedContainer.encodeIfPresent(self.toolChoice, forKey: SdkCodingKey("tool_choice"))
+        try keyedContainer.encodeIfPresent(self.parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
+        try keyedContainer.encodeIfPresent(self.responseFormat, forKey: SdkCodingKey("response_format"))
     }
 
     init(options: AssistantsMethods.CreateThreadAndRunOptions) {
-        assistantId = options.assistantId
-        thread = options.thread
-        model = options.model
-        instructions = options.instructions
-        tools = options.tools
-        toolResources = options.toolResources
-        metadata = options.metadata
-        temperature = options.temperature
-        topP = options.topP
-        stream = options.stream
-        maxPromptTokens = options.maxPromptTokens
-        maxCompletionTokens = options.maxCompletionTokens
-        truncationStrategy = options.truncationStrategy
-        toolChoice = options.toolChoice
-        parallelToolCalls = options.parallelToolCalls
-        responseFormat = options.responseFormat
+        self.assistantId = options.assistantId
+        self.thread = options.thread
+        self.model = options.model
+        self.instructions = options.instructions
+        self.tools = options.tools
+        self.toolResources = options.toolResources
+        self.metadata = options.metadata
+        self.temperature = options.temperature
+        self.topP = options.topP
+        self.stream = options.stream
+        self.maxPromptTokens = options.maxPromptTokens
+        self.maxCompletionTokens = options.maxCompletionTokens
+        self.truncationStrategy = options.truncationStrategy
+        self.toolChoice = options.toolChoice
+        self.parallelToolCalls = options.parallelToolCalls
+        self.responseFormat = options.responseFormat
     }
 }
 
@@ -84,41 +84,41 @@ struct CreateThreadAndRunStreamStreamRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(assistantId, forKey: SdkCodingKey("assistant_id"))
-        try keyedContainer.encode(stream, forKey: SdkCodingKey("stream"))
-        try keyedContainer.encodeIfPresent(thread, forKey: SdkCodingKey("thread"))
-        try keyedContainer.encodeIfPresent(model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(tools, forKey: SdkCodingKey("tools"))
-        try keyedContainer.encodeIfPresent(toolResources, forKey: SdkCodingKey("tool_resources"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
-        try keyedContainer.encodeIfPresent(temperature, forKey: SdkCodingKey("temperature"))
-        try keyedContainer.encodeIfPresent(topP, forKey: SdkCodingKey("top_p"))
-        try keyedContainer.encodeIfPresent(maxPromptTokens, forKey: SdkCodingKey("max_prompt_tokens"))
-        try keyedContainer.encodeIfPresent(maxCompletionTokens, forKey: SdkCodingKey("max_completion_tokens"))
-        try keyedContainer.encodeIfPresent(truncationStrategy, forKey: SdkCodingKey("truncation_strategy"))
-        try keyedContainer.encodeIfPresent(toolChoice, forKey: SdkCodingKey("tool_choice"))
-        try keyedContainer.encodeIfPresent(parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
-        try keyedContainer.encodeIfPresent(responseFormat, forKey: SdkCodingKey("response_format"))
+        try keyedContainer.encode(self.assistantId, forKey: SdkCodingKey("assistant_id"))
+        try keyedContainer.encode(self.stream, forKey: SdkCodingKey("stream"))
+        try keyedContainer.encodeIfPresent(self.thread, forKey: SdkCodingKey("thread"))
+        try keyedContainer.encodeIfPresent(self.model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(self.tools, forKey: SdkCodingKey("tools"))
+        try keyedContainer.encodeIfPresent(self.toolResources, forKey: SdkCodingKey("tool_resources"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.temperature, forKey: SdkCodingKey("temperature"))
+        try keyedContainer.encodeIfPresent(self.topP, forKey: SdkCodingKey("top_p"))
+        try keyedContainer.encodeIfPresent(self.maxPromptTokens, forKey: SdkCodingKey("max_prompt_tokens"))
+        try keyedContainer.encodeIfPresent(self.maxCompletionTokens, forKey: SdkCodingKey("max_completion_tokens"))
+        try keyedContainer.encodeIfPresent(self.truncationStrategy, forKey: SdkCodingKey("truncation_strategy"))
+        try keyedContainer.encodeIfPresent(self.toolChoice, forKey: SdkCodingKey("tool_choice"))
+        try keyedContainer.encodeIfPresent(self.parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
+        try keyedContainer.encodeIfPresent(self.responseFormat, forKey: SdkCodingKey("response_format"))
     }
 
     init(options: AssistantsMethods.CreateThreadAndRunStreamOptions) {
-        assistantId = options.assistantId
-        stream = options.stream
-        thread = options.thread
-        model = options.model
-        instructions = options.instructions
-        tools = options.tools
-        toolResources = options.toolResources
-        metadata = options.metadata
-        temperature = options.temperature
-        topP = options.topP
-        maxPromptTokens = options.maxPromptTokens
-        maxCompletionTokens = options.maxCompletionTokens
-        truncationStrategy = options.truncationStrategy
-        toolChoice = options.toolChoice
-        parallelToolCalls = options.parallelToolCalls
-        responseFormat = options.responseFormat
+        self.assistantId = options.assistantId
+        self.stream = options.stream
+        self.thread = options.thread
+        self.model = options.model
+        self.instructions = options.instructions
+        self.tools = options.tools
+        self.toolResources = options.toolResources
+        self.metadata = options.metadata
+        self.temperature = options.temperature
+        self.topP = options.topP
+        self.maxPromptTokens = options.maxPromptTokens
+        self.maxCompletionTokens = options.maxCompletionTokens
+        self.truncationStrategy = options.truncationStrategy
+        self.toolChoice = options.toolChoice
+        self.parallelToolCalls = options.parallelToolCalls
+        self.responseFormat = options.responseFormat
     }
 }
 
@@ -128,8 +128,8 @@ struct ModifyThreadRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(toolResources, forKey: SdkCodingKey("tool_resources"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.toolResources, forKey: SdkCodingKey("tool_resources"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -141,10 +141,10 @@ struct CreateMessageRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(role, forKey: SdkCodingKey("role"))
-        try keyedContainer.encode(content, forKey: SdkCodingKey("content"))
-        try keyedContainer.encodeIfPresent(attachments, forKey: SdkCodingKey("attachments"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encode(self.role, forKey: SdkCodingKey("role"))
+        try keyedContainer.encode(self.content, forKey: SdkCodingKey("content"))
+        try keyedContainer.encodeIfPresent(self.attachments, forKey: SdkCodingKey("attachments"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -153,7 +153,7 @@ struct ModifyMessageRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
     }
 }
 
@@ -178,42 +178,42 @@ struct CreateRunRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(assistantId, forKey: SdkCodingKey("assistant_id"))
-        try keyedContainer.encodeIfPresent(model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(reasoningEffort, forKey: SdkCodingKey("reasoning_effort"))
-        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(additionalInstructions, forKey: SdkCodingKey("additional_instructions"))
-        try keyedContainer.encodeIfPresent(additionalMessages, forKey: SdkCodingKey("additional_messages"))
-        try keyedContainer.encodeIfPresent(tools, forKey: SdkCodingKey("tools"))
-        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
-        try keyedContainer.encodeIfPresent(temperature, forKey: SdkCodingKey("temperature"))
-        try keyedContainer.encodeIfPresent(topP, forKey: SdkCodingKey("top_p"))
-        try keyedContainer.encodeIfPresent(stream, forKey: SdkCodingKey("stream"))
-        try keyedContainer.encodeIfPresent(maxPromptTokens, forKey: SdkCodingKey("max_prompt_tokens"))
-        try keyedContainer.encodeIfPresent(maxCompletionTokens, forKey: SdkCodingKey("max_completion_tokens"))
-        try keyedContainer.encodeIfPresent(truncationStrategy, forKey: SdkCodingKey("truncation_strategy"))
-        try keyedContainer.encodeIfPresent(toolChoice, forKey: SdkCodingKey("tool_choice"))
-        try keyedContainer.encodeIfPresent(parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
-        try keyedContainer.encodeIfPresent(responseFormat, forKey: SdkCodingKey("response_format"))
+        try keyedContainer.encode(self.assistantId, forKey: SdkCodingKey("assistant_id"))
+        try keyedContainer.encodeIfPresent(self.model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(self.reasoningEffort, forKey: SdkCodingKey("reasoning_effort"))
+        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(self.additionalInstructions, forKey: SdkCodingKey("additional_instructions"))
+        try keyedContainer.encodeIfPresent(self.additionalMessages, forKey: SdkCodingKey("additional_messages"))
+        try keyedContainer.encodeIfPresent(self.tools, forKey: SdkCodingKey("tools"))
+        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(self.temperature, forKey: SdkCodingKey("temperature"))
+        try keyedContainer.encodeIfPresent(self.topP, forKey: SdkCodingKey("top_p"))
+        try keyedContainer.encodeIfPresent(self.stream, forKey: SdkCodingKey("stream"))
+        try keyedContainer.encodeIfPresent(self.maxPromptTokens, forKey: SdkCodingKey("max_prompt_tokens"))
+        try keyedContainer.encodeIfPresent(self.maxCompletionTokens, forKey: SdkCodingKey("max_completion_tokens"))
+        try keyedContainer.encodeIfPresent(self.truncationStrategy, forKey: SdkCodingKey("truncation_strategy"))
+        try keyedContainer.encodeIfPresent(self.toolChoice, forKey: SdkCodingKey("tool_choice"))
+        try keyedContainer.encodeIfPresent(self.parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
+        try keyedContainer.encodeIfPresent(self.responseFormat, forKey: SdkCodingKey("response_format"))
     }
 
     init(options: AssistantsMethods.CreateRunOptions) {
-        assistantId = options.assistantId
-        model = options.model
-        reasoningEffort = options.reasoningEffort
-        instructions = options.instructions
-        additionalInstructions = options.additionalInstructions
-        additionalMessages = options.additionalMessages
-        tools = options.tools
-        metadata = options.metadata
-        temperature = options.temperature
-        topP = options.topP
-        stream = options.stream
-        maxPromptTokens = options.maxPromptTokens
-        maxCompletionTokens = options.maxCompletionTokens
-        truncationStrategy = options.truncationStrategy
-        toolChoice = options.toolChoice
-        parallelToolCalls = options.parallelToolCalls
-        responseFormat = options.responseFormat
+        self.assistantId = options.assistantId
+        self.model = options.model
+        self.reasoningEffort = options.reasoningEffort
+        self.instructions = options.instructions
+        self.additionalInstructions = options.additionalInstructions
+        self.additionalMessages = options.additionalMessages
+        self.tools = options.tools
+        self.metadata = options.metadata
+        self.temperature = options.temperature
+        self.topP = options.topP
+        self.stream = options.stream
+        self.maxPromptTokens = options.maxPromptTokens
+        self.maxCompletionTokens = options.maxCompletionTokens
+        self.truncationStrategy = options.truncationStrategy
+        self.toolChoice = options.toolChoice
+        self.parallelToolCalls = options.parallelToolCalls
+        self.responseFormat = options.responseFormat
     }
 }

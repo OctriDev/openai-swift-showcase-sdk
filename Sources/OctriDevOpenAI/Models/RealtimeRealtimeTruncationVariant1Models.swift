@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// RealtimeRealtime domain models
+// RealtimeRealtime domain models
 /// Retain a fraction of the conversation tokens when the conversation exceeds the input token limit. This allows
 /// you to amortize truncations across multiple turns, which can help improve cached token usage.
 public struct RealtimeTruncationVariant1: Codable {
@@ -23,60 +23,30 @@ public struct RealtimeTruncationVariant1: Codable {
         case tokenLimits = "token_limits"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeTruncationVariant1 {
-    init(from decoder: Decoder) throws {
+extension RealtimeTruncationVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.retentionRatio) else {
-            throw SdkValidationError(
-                field: "retention_ratio",
-                code: "required",
-                message: "Validation failed for 'retention_ratio': value is required"
-            )
+            throw SdkValidationError(field: "retention_ratio", code: "required", message: "Validation failed for 'retention_ratio': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        retentionRatio = try container.sdkDecodeRequired(.retentionRatio)
-        tokenLimits = try container.sdkDecodeIfPresent(.tokenLimits)
-        try validateRange(
-            "retention_ratio",
-            Double(retentionRatio),
-            min: 0,
-            max: 1,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.retentionRatio = try container.sdkDecodeRequired(.retentionRatio)
+        self.tokenLimits = try container.sdkDecodeIfPresent(.tokenLimits)
+            try validateRange("retention_ratio", Double(self.retentionRatio), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension RealtimeTruncationVariant1 {
-    init(
-        type: RealtimeTruncationVariant1Type,
-        retentionRatio: Double,
-        tokenLimits: RealtimeTruncationVariant1TokenLimits? = nil
-    ) throws {
+extension RealtimeTruncationVariant1 {
+    public init(type: RealtimeTruncationVariant1Type, retentionRatio: Double, tokenLimits: RealtimeTruncationVariant1TokenLimits? = nil) throws {
         (self.type, self.retentionRatio) = (type, retentionRatio)
         self.tokenLimits = tokenLimits
-        try validateRange(
-            "retention_ratio",
-            Double(self.retentionRatio),
-            min: 0,
-            max: 1,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("retention_ratio", Double(self.retentionRatio), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -95,47 +65,33 @@ public struct RealtimeMCPProtocolError: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeMCPProtocolError {
-    init(from decoder: Decoder) throws {
+extension RealtimeMCPProtocolError {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        try sdkValidateRawEnum("type", type, RealtimeMCPProtocolErrorType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+            try sdkValidateRawEnum("type", self.type, RealtimeMCPProtocolErrorType.allCases.map(\.rawValue))
     }
 }
 
-public extension RealtimeMCPProtocolError {
-    init(type: RealtimeMCPProtocolErrorType, code: Int, message: String) throws {
+extension RealtimeMCPProtocolError {
+    public init(type: RealtimeMCPProtocolErrorType, code: Int, message: String) throws {
         (self.type, self.code) = (type, code)
         self.message = message
-        try sdkValidateRawEnum("type", self.type, RealtimeMCPProtocolErrorType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, RealtimeMCPProtocolErrorType.allCases.map(\.rawValue))
     }
 }
 
@@ -157,48 +113,34 @@ public struct RealtimeMCPListTools: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension RealtimeMCPListTools {
-    init(from decoder: Decoder) throws {
+extension RealtimeMCPListTools {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.serverLabel) else {
-            throw SdkValidationError(
-                field: "server_label",
-                code: "required",
-                message: "Validation failed for 'server_label': value is required"
-            )
+            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
         }
         guard container.contains(.tools) else {
-            throw SdkValidationError(
-                field: "tools",
-                code: "required",
-                message: "Validation failed for 'tools': value is required"
-            )
+            throw SdkValidationError(field: "tools", code: "required", message: "Validation failed for 'tools': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        tools = try container.sdkDecodeRequired(.tools)
-        id = try container.sdkDecodeIfPresent(.id)
-        try sdkValidateRawEnum("type", type, RealtimeMCPListToolsType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        self.tools = try container.sdkDecodeRequired(.tools)
+        self.id = try container.sdkDecodeIfPresent(.id)
+            try sdkValidateRawEnum("type", self.type, RealtimeMCPListToolsType.allCases.map(\.rawValue))
     }
 }
 
-public extension RealtimeMCPListTools {
-    init(type: RealtimeMCPListToolsType, serverLabel: String, tools: [MCPListToolsTool], id: String? = nil) throws {
+extension RealtimeMCPListTools {
+    public init(type: RealtimeMCPListToolsType, serverLabel: String, tools: [MCPListToolsTool], id: String? = nil) throws {
         (self.type, self.serverLabel) = (type, serverLabel)
         (self.tools, self.id) = (tools, id)
-        try sdkValidateRawEnum("type", self.type, RealtimeMCPListToolsType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, RealtimeMCPListToolsType.allCases.map(\.rawValue))
     }
 }
 
@@ -277,14 +219,10 @@ public enum RealtimeTurnDetectionVariant0Type: String, CaseIterable, Codable {
 /// Used only for `semantic_vad` mode. The eagerness of the model to respond. `low` will wait longer for the
 /// user to continue speaking, `high` will respond more quickly. `auto` is the default and is equivalent to
 /// `medium`. `low`, `medium`, and `high` have max timeouts of 8s, 4s, and 2s respectively.
-public struct RealtimeTurnDetectionVariant1Eagerness: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeTurnDetectionVariant1Eagerness: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = RealtimeTurnDetectionVariant1Eagerness(rawValue: "low")
     public static let medium = RealtimeTurnDetectionVariant1Eagerness(rawValue: "medium")
     public static let high = RealtimeTurnDetectionVariant1Eagerness(rawValue: "high")
@@ -292,7 +230,7 @@ public struct RealtimeTurnDetectionVariant1Eagerness: RawRepresentable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -324,16 +262,13 @@ public enum RealtimeFunctionToolType: String, CaseIterable, Codable {
 public struct RealtimeTruncationVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = RealtimeTruncationVariant0(rawValue: "auto")
     public static let disabled = RealtimeTruncationVariant0(rawValue: "disabled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -364,15 +299,12 @@ public enum RealtimeMCPProtocolErrorType: String, CaseIterable, Codable {
 public struct RealtimeTruncationVariant1Type: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let retentionRatio = RealtimeTruncationVariant1Type(rawValue: "retention_ratio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

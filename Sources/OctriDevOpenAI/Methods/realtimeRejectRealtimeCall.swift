@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension RealtimeMethods {
+extension RealtimeMethods {
     /// Decline an incoming SIP call by returning a SIP status code to the caller.
     ///
     /// - Parameters:
@@ -15,23 +15,9 @@ public extension RealtimeMethods {
     ///   rces/webhooks#realtime.call.incoming) webhook.
     /// - statusCode: SIP response code to send back to the caller. Defaults to
     ///   `603` (Decline) when omitted.
-    static func rejectRealtimeCall(
-        config: ClientConfig,
-        callId: String,
-        statusCode: Int? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func rejectRealtimeCall(config: ClientConfig, callId: String, statusCode: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         let requestBody = RejectRealtimeCallRequestBody(statusCode: statusCode)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/realtime/calls/", sdkEncodePathSegment(sdkWireString(callId)), "/reject"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .empty,
-            operationId: "rejectRealtimeCall",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "409": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/realtime/calls/", sdkEncodePathSegment(sdkWireString(callId)), "/reject"].joined(), config: config, body: requestBody, decoder: .empty, operationId: "rejectRealtimeCall", options: requestOptions, errors: ["404": ErrorResponse.self, "409": ErrorResponse.self])).data
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Batch domain models
+// Batch domain models
 /// Typed representation of the `ListBatchesResponse` API schema.
 public struct ListBatchesResponse: Codable {
     /// Required array value serialized in the `data` wire field.
@@ -27,51 +27,31 @@ public struct ListBatchesResponse: Codable {
         case lastId = "last_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ListBatchesResponse {
-    init(from decoder: Decoder) throws {
+extension ListBatchesResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
-        data = try container.sdkDecodeRequired(.data)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        object = try container.sdkDecodeRequired(.object)
-        firstId = try container.sdkDecodeIfPresent(.firstId)
-        lastId = try container.sdkDecodeIfPresent(.lastId)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.firstId = try container.sdkDecodeIfPresent(.firstId)
+        self.lastId = try container.sdkDecodeIfPresent(.lastId)
     }
 }
 
-public extension ListBatchesResponse {
-    init(
-        data: [Batch],
-        hasMore: Bool,
-        object: ListBatchesResponseObject,
-        firstId: String? = nil,
-        lastId: String? = nil
-    ) {
+extension ListBatchesResponse {
+    public init(data: [Batch], hasMore: Bool, object: ListBatchesResponseObject, firstId: String? = nil, lastId: String? = nil) {
         (self.data, self.hasMore) = (data, hasMore)
         (self.object, self.firstId) = (object, firstId)
         self.lastId = lastId
@@ -82,15 +62,12 @@ public extension ListBatchesResponse {
 public struct ListBatchesResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let list = ListBatchesResponseObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

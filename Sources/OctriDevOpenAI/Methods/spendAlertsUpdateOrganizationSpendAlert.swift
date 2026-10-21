@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension SpendAlertsMethods {
-    /// Updates a spend alert configured at the organization level. Provide the threshold, currency, evaluation
-    /// interval, and email notification settings for the alert. The response contains the updated alert configuration.
+extension SpendAlertsMethods {
+    /// Updates a spend alert configured at the organization level. Provide the threshold, currency, evaluation interval, and email notification settings for the alert. The response contains the updated alert configuration.
     ///
     /// Updates an organization spend alert.
     ///
@@ -18,56 +17,21 @@ public extension SpendAlertsMethods {
     /// - currency: The currency for the threshold amount.
     /// - interval: The time interval for evaluating spend against the threshold.
     /// - notificationChannel: Email notification settings for a spend alert.
-    static func updateOrganizationSpendAlert(
-        config: ClientConfig,
-        alertId: String,
-        thresholdAmount: Int,
-        currency: CreateSpendAlertBodyCurrency,
-        interval: CreateSpendAlertBodyInterval,
-        notificationChannel: SpendAlertNotificationChannel,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationSpendAlert {
+    public static func updateOrganizationSpendAlert(config: ClientConfig, alertId: String, thresholdAmount: Int, currency: CreateSpendAlertBodyCurrency, interval: CreateSpendAlertBodyInterval, notificationChannel: SpendAlertNotificationChannel, requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendAlert {
         try validateRange("threshold_amount", Double(thresholdAmount), min: 0)
 
-        let requestBody = UpdateOrganizationSpendAlertRequestBody(
-            thresholdAmount: thresholdAmount,
-            currency: currency,
-            interval: interval,
-            notificationChannel: notificationChannel
-        )
+        let requestBody = UpdateOrganizationSpendAlertRequestBody(thresholdAmount: thresholdAmount, currency: currency, interval: interval, notificationChannel: notificationChannel)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organization/spend_alerts/", sdkEncodePathSegment(sdkWireString(alertId))].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateOrganizationSpendAlert",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/spend_alerts/", sdkEncodePathSegment(sdkWireString(alertId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateOrganizationSpendAlert", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
     }
 
-    /// Deletes a spend alert configured at the organization level. Use `alert_id` to identify the alert to remove; the
-    /// response confirms whether it was deleted.
+    /// Deletes a spend alert configured at the organization level. Use `alert_id` to identify the alert to remove; the response confirms whether it was deleted.
     ///
     /// Deletes an organization spend alert.
     ///
     /// - Parameters:
     /// - alertId: The ID of the spend alert to delete.
-    static func deleteOrganizationSpendAlert(
-        config: ClientConfig,
-        alertId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> OrganizationSpendAlertDeletedResource {
-        try await (sdkRequest(
-            "DELETE",
-            ["/organization/spend_alerts/", sdkEncodePathSegment(sdkWireString(alertId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteOrganizationSpendAlert",
-            options: requestOptions,
-            errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+    public static func deleteOrganizationSpendAlert(config: ClientConfig, alertId: String, requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendAlertDeletedResource {
+        return try (await sdkRequest("DELETE", ["/organization/spend_alerts/", sdkEncodePathSegment(sdkWireString(alertId))].joined(), config: config, decoder: .json, operationId: "deleteOrganizationSpendAlert", options: requestOptions, errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
     }
 }

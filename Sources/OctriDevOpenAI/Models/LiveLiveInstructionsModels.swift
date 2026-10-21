@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveInstructions domain models
+// LiveLiveInstructions domain models
 /// Append developer instructions to the Live conversation while it is running, optionally associating them with an
 /// existing client delegation. Rejected while an audio fixture is active. These instructions remain in conversation
 /// history through compaction and are included in future backend delegations. For external audio, describe content
@@ -25,48 +25,34 @@ public struct LiveInstructionsAppendParam: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInstructionsAppendParam {
-    init(from decoder: Decoder) throws {
+extension LiveInstructionsAppendParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.delegationId) else {
-            throw SdkValidationError(
-                field: "delegation_id",
-                code: "required",
-                message: "Validation failed for 'delegation_id': value is required"
-            )
+            throw SdkValidationError(field: "delegation_id", code: "required", message: "Validation failed for 'delegation_id': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        delegationId = try container.sdkDecodeNullable(.delegationId)
-        content = try container.sdkDecodeRequired(.content)
-        eventId = try container.sdkDecodeIfPresent(.eventId)
-        try sdkValidateRawEnum("type", type, LiveInstructionsAppendParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.delegationId = try container.sdkDecodeNullable(.delegationId)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.eventId = try container.sdkDecodeIfPresent(.eventId)
+            try sdkValidateRawEnum("type", self.type, LiveInstructionsAppendParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveInstructionsAppendParam {
-    init(type: LiveInstructionsAppendParamType, delegationId: String?, content: String, eventId: String? = nil) throws {
+extension LiveInstructionsAppendParam {
+    public init(type: LiveInstructionsAppendParamType, delegationId: String?, content: String, eventId: String? = nil) throws {
         (self.type, self.delegationId) = (type, delegationId)
         (self.content, self.eventId) = (content, eventId)
-        try sdkValidateRawEnum("type", self.type, LiveInstructionsAppendParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveInstructionsAppendParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -93,63 +79,39 @@ public struct LiveInstructionsAppended: Codable {
         case clientEventId = "client_event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInstructionsAppended {
-    init(from decoder: Decoder) throws {
+extension LiveInstructionsAppended {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.startMs) else {
-            throw SdkValidationError(
-                field: "start_ms",
-                code: "required",
-                message: "Validation failed for 'start_ms': value is required"
-            )
+            throw SdkValidationError(field: "start_ms", code: "required", message: "Validation failed for 'start_ms': value is required")
         }
         guard container.contains(.endMs) else {
-            throw SdkValidationError(
-                field: "end_ms",
-                code: "required",
-                message: "Validation failed for 'end_ms': value is required"
-            )
+            throw SdkValidationError(field: "end_ms", code: "required", message: "Validation failed for 'end_ms': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        eventId = try container.sdkDecodeRequired(.eventId)
-        startMs = try container.sdkDecodeRequired(.startMs)
-        endMs = try container.sdkDecodeRequired(.endMs)
-        type = try container.sdkDecodeRequired(.type)
-        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
-        try sdkValidateRawEnum("type", type, LiveInstructionsAppendedType.allCases.map(\.rawValue))
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.startMs = try container.sdkDecodeRequired(.startMs)
+        self.endMs = try container.sdkDecodeRequired(.endMs)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+            try sdkValidateRawEnum("type", self.type, LiveInstructionsAppendedType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveInstructionsAppended {
-    init(
-        eventId: String,
-        startMs: Int,
-        endMs: Int,
-        type: LiveInstructionsAppendedType,
-        clientEventId: String? = nil
-    ) throws {
+extension LiveInstructionsAppended {
+    public init(eventId: String, startMs: Int, endMs: Int, type: LiveInstructionsAppendedType, clientEventId: String? = nil) throws {
         (self.eventId, self.startMs) = (eventId, startMs)
         (self.endMs, self.type) = (endMs, type)
         self.clientEventId = clientEventId
-        try sdkValidateRawEnum("type", self.type, LiveInstructionsAppendedType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveInstructionsAppendedType.allCases.map(\.rawValue))
     }
 }
 

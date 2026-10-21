@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaResponseReasoning domain models
+// ResponsesBetaResponseReasoning domain models
 /// Emitted when a reasoning text is completed.
 public struct BetaResponseReasoningTextDoneEvent: Codable {
     /// The type of the event. Always `response.reasoning_text.done`.
@@ -31,82 +31,48 @@ public struct BetaResponseReasoningTextDoneEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseReasoningTextDoneEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseReasoningTextDoneEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.contentIndex) else {
-            throw SdkValidationError(
-                field: "content_index",
-                code: "required",
-                message: "Validation failed for 'content_index': value is required"
-            )
+            throw SdkValidationError(field: "content_index", code: "required", message: "Validation failed for 'content_index': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        contentIndex = try container.sdkDecodeRequired(.contentIndex)
-        text = try container.sdkDecodeRequired(.text)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseReasoningTextDoneEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.contentIndex = try container.sdkDecodeRequired(.contentIndex)
+        self.text = try container.sdkDecodeRequired(.text)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningTextDoneEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseReasoningTextDoneEvent {
-    init(
-        type: BetaResponseReasoningTextDoneEventType,
-        itemId: String,
-        outputIndex: Int,
-        contentIndex: Int,
-        text: String,
-        sequenceNumber: Int,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseReasoningTextDoneEvent {
+    public init(type: BetaResponseReasoningTextDoneEventType, itemId: String, outputIndex: Int, contentIndex: Int, text: String, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.contentIndex) = (outputIndex, contentIndex)
         (self.text, self.sequenceNumber) = (text, sequenceNumber)
         self.agent = agent
-        try sdkValidateRawEnum("type", self.type, BetaResponseReasoningTextDoneEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningTextDoneEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -137,86 +103,48 @@ public struct BetaResponseReasoningSummaryTextDoneEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseReasoningSummaryTextDoneEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseReasoningSummaryTextDoneEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.summaryIndex) else {
-            throw SdkValidationError(
-                field: "summary_index",
-                code: "required",
-                message: "Validation failed for 'summary_index': value is required"
-            )
+            throw SdkValidationError(field: "summary_index", code: "required", message: "Validation failed for 'summary_index': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        summaryIndex = try container.sdkDecodeRequired(.summaryIndex)
-        text = try container.sdkDecodeRequired(.text)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseReasoningSummaryTextDoneEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.summaryIndex = try container.sdkDecodeRequired(.summaryIndex)
+        self.text = try container.sdkDecodeRequired(.text)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningSummaryTextDoneEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseReasoningSummaryTextDoneEvent {
-    init(
-        type: BetaResponseReasoningSummaryTextDoneEventType,
-        itemId: String,
-        outputIndex: Int,
-        summaryIndex: Int,
-        text: String,
-        sequenceNumber: Int,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseReasoningSummaryTextDoneEvent {
+    public init(type: BetaResponseReasoningSummaryTextDoneEventType, itemId: String, outputIndex: Int, summaryIndex: Int, text: String, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.summaryIndex) = (outputIndex, summaryIndex)
         (self.text, self.sequenceNumber) = (text, sequenceNumber)
         self.agent = agent
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            BetaResponseReasoningSummaryTextDoneEventType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningSummaryTextDoneEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -247,86 +175,48 @@ public struct BetaResponseReasoningSummaryPartAddedEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseReasoningSummaryPartAddedEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseReasoningSummaryPartAddedEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.summaryIndex) else {
-            throw SdkValidationError(
-                field: "summary_index",
-                code: "required",
-                message: "Validation failed for 'summary_index': value is required"
-            )
+            throw SdkValidationError(field: "summary_index", code: "required", message: "Validation failed for 'summary_index': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.part) else {
-            throw SdkValidationError(
-                field: "part",
-                code: "required",
-                message: "Validation failed for 'part': value is required"
-            )
+            throw SdkValidationError(field: "part", code: "required", message: "Validation failed for 'part': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        summaryIndex = try container.sdkDecodeRequired(.summaryIndex)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        part = try container.sdkDecodeRequired(.part)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseReasoningSummaryPartAddedEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.summaryIndex = try container.sdkDecodeRequired(.summaryIndex)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.part = try container.sdkDecodeRequired(.part)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningSummaryPartAddedEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseReasoningSummaryPartAddedEvent {
-    init(
-        type: BetaResponseReasoningSummaryPartAddedEventType,
-        itemId: String,
-        outputIndex: Int,
-        summaryIndex: Int,
-        sequenceNumber: Int,
-        part: BetaResponseReasoningSummaryPartAddedEventPart,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseReasoningSummaryPartAddedEvent {
+    public init(type: BetaResponseReasoningSummaryPartAddedEventType, itemId: String, outputIndex: Int, summaryIndex: Int, sequenceNumber: Int, part: BetaResponseReasoningSummaryPartAddedEventPart, agent: BetaAgentTag? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.summaryIndex) = (outputIndex, summaryIndex)
         (self.sequenceNumber, self.part) = (sequenceNumber, part)
         self.agent = agent
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            BetaResponseReasoningSummaryPartAddedEventType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningSummaryPartAddedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -342,35 +232,25 @@ public struct BetaResponseReasoningSummaryPartDoneEventPart: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseReasoningSummaryPartDoneEventPart {
-    init(from decoder: Decoder) throws {
+extension BetaResponseReasoningSummaryPartDoneEventPart {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
     }
 }
 
-public extension BetaResponseReasoningSummaryPartDoneEventPart {
-    init(type: BetaResponseReasoningSummaryPartDoneEventPartType, text: String) {
+extension BetaResponseReasoningSummaryPartDoneEventPart {
+    public init(type: BetaResponseReasoningSummaryPartDoneEventPartType, text: String) {
         (self.type, self.text) = (type, text)
     }
 }
@@ -402,82 +282,48 @@ public struct BetaResponseReasoningTextDeltaEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseReasoningTextDeltaEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseReasoningTextDeltaEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.contentIndex) else {
-            throw SdkValidationError(
-                field: "content_index",
-                code: "required",
-                message: "Validation failed for 'content_index': value is required"
-            )
+            throw SdkValidationError(field: "content_index", code: "required", message: "Validation failed for 'content_index': value is required")
         }
         guard container.contains(.delta) else {
-            throw SdkValidationError(
-                field: "delta",
-                code: "required",
-                message: "Validation failed for 'delta': value is required"
-            )
+            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        contentIndex = try container.sdkDecodeRequired(.contentIndex)
-        delta = try container.sdkDecodeRequired(.delta)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        try sdkValidateRawEnum("type", type, BetaResponseReasoningTextDeltaEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.contentIndex = try container.sdkDecodeRequired(.contentIndex)
+        self.delta = try container.sdkDecodeRequired(.delta)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningTextDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseReasoningTextDeltaEvent {
-    init(
-        type: BetaResponseReasoningTextDeltaEventType,
-        itemId: String,
-        outputIndex: Int,
-        contentIndex: Int,
-        delta: String,
-        sequenceNumber: Int,
-        agent: BetaAgentTag? = nil
-    ) throws {
+extension BetaResponseReasoningTextDeltaEvent {
+    public init(type: BetaResponseReasoningTextDeltaEventType, itemId: String, outputIndex: Int, contentIndex: Int, delta: String, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.contentIndex) = (outputIndex, contentIndex)
         (self.delta, self.sequenceNumber) = (delta, sequenceNumber)
         self.agent = agent
-        try sdkValidateRawEnum("type", self.type, BetaResponseReasoningTextDeltaEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningTextDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -512,87 +358,48 @@ public struct BetaResponseReasoningSummaryPartDoneEvent: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponseReasoningSummaryPartDoneEvent {
-    init(from decoder: Decoder) throws {
+extension BetaResponseReasoningSummaryPartDoneEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.summaryIndex) else {
-            throw SdkValidationError(
-                field: "summary_index",
-                code: "required",
-                message: "Validation failed for 'summary_index': value is required"
-            )
+            throw SdkValidationError(field: "summary_index", code: "required", message: "Validation failed for 'summary_index': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.part) else {
-            throw SdkValidationError(
-                field: "part",
-                code: "required",
-                message: "Validation failed for 'part': value is required"
-            )
+            throw SdkValidationError(field: "part", code: "required", message: "Validation failed for 'part': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        summaryIndex = try container.sdkDecodeRequired(.summaryIndex)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        part = try container.sdkDecodeRequired(.part)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("type", type, BetaResponseReasoningSummaryPartDoneEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.summaryIndex = try container.sdkDecodeRequired(.summaryIndex)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.part = try container.sdkDecodeRequired(.part)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningSummaryPartDoneEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponseReasoningSummaryPartDoneEvent {
-    init(
-        type: BetaResponseReasoningSummaryPartDoneEventType,
-        itemId: String,
-        outputIndex: Int,
-        summaryIndex: Int,
-        sequenceNumber: Int,
-        part: BetaResponseReasoningSummaryPartDoneEventPart,
-        agent: BetaAgentTag? = nil,
-        status: BetaResponseReasoningSummaryPartDoneEventStatus? = nil
-    ) throws {
+extension BetaResponseReasoningSummaryPartDoneEvent {
+    public init(type: BetaResponseReasoningSummaryPartDoneEventType, itemId: String, outputIndex: Int, summaryIndex: Int, sequenceNumber: Int, part: BetaResponseReasoningSummaryPartDoneEventPart, agent: BetaAgentTag? = nil, status: BetaResponseReasoningSummaryPartDoneEventStatus? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.summaryIndex) = (outputIndex, summaryIndex)
         (self.sequenceNumber, self.part) = (sequenceNumber, part)
         (self.agent, self.status) = (agent, status)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            BetaResponseReasoningSummaryPartDoneEventType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, BetaResponseReasoningSummaryPartDoneEventType.allCases.map(\.rawValue))
     }
 }

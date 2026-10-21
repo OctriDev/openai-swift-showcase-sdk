@@ -8,10 +8,8 @@ import Foundation
 #endif
 public enum RolesMethods {}
 
-public extension RolesMethods {
-    /// Lists roles configured for the organization. Use `limit` to control the number of roles returned and `order` to
-    /// choose the sort direction. Continue through the results with the `after` cursor from the previous response's
-    /// `next` field.
+extension RolesMethods {
+    /// Lists roles configured for the organization. Use `limit` to control the number of roles returned and `order` to choose the sort direction. Continue through the results with the `after` cursor from the previous response's `next` field.
     ///
     /// Lists the roles configured for the organization.
     ///
@@ -20,41 +18,19 @@ public extension RolesMethods {
     /// - after: Cursor for pagination. Provide the value from the previous
     ///   response's `next` field to continue listing roles.
     /// - order: Sort order for the returned roles.
-    static func listRoles(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListRolesParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> PublicRoleListResource {
-        if let limit {
+    public static func listRoles(config: ClientConfig, limit: Int? = nil, after: String? = nil, order: ListRolesParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> PublicRoleListResource {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 0, max: 1000)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            "/organization/roles",
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("order", value: order),
-            ],
-            decoder: .json,
-            operationId: "listRoles",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("GET", "/organization/roles", config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("order", value: order),
+        ], decoder: .json, operationId: "listRoles", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists roles configured for the organization. Use `limit` to control the number of roles returned and `order` to
-    /// choose the sort direction. Continue through the results with the `after` cursor from the previous response's
-    /// `next` field.
+    /// Lists roles configured for the organization. Use `limit` to control the number of roles returned and `order` to choose the sort direction. Continue through the results with the `after` cursor from the previous response's `next` field.
     ///
     /// Lists the roles configured for the organization.
     ///
@@ -63,38 +39,18 @@ public extension RolesMethods {
     /// - after: Cursor for pagination. Provide the value from the previous
     ///   response's `next` field to continue listing roles.
     /// - order: Sort order for the returned roles.
-    static func listRolesPaginated(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListRolesParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<Role, Swift.Error> {
-        AsyncThrowingStream<Role, Swift.Error> { (continuation: AsyncThrowingStream<Role, Swift.Error>.Continuation) in
+    public static func listRolesPaginated(config: ClientConfig, limit: Int? = nil, after: String? = nil, order: ListRolesParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<Role, Swift.Error> {
+        return AsyncThrowingStream<Role, Swift.Error> { (continuation: AsyncThrowingStream<Role, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listRoles(
-                            config: config,
-                            limit: limit,
-                            after: pageCursor,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listRoles(config: config, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.next else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.next else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -107,46 +63,25 @@ public extension RolesMethods {
         }
     }
 
-    struct ListRolesPage {
+    public struct ListRolesPage {
         public let data: PublicRoleListResource
         public let items: [Role]
         public let hasMore: Bool
     }
 
-    static func listRolesPages(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListRolesParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListRolesPage, Swift.Error> {
-        AsyncThrowingStream<ListRolesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListRolesPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listRolesPages(config: ClientConfig, limit: Int? = nil, after: String? = nil, order: ListRolesParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListRolesPage, Swift.Error> {
+        return AsyncThrowingStream<ListRolesPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListRolesPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listRoles(
-                            config: config,
-                            limit: limit,
-                            after: pageCursor,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listRoles(config: config, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.next != nil
                         pageContinuation.yield(ListRolesPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.next else {
-                            break
-                        }
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.next else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

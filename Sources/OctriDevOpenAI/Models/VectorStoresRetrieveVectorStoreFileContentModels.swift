@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// VectorStores domain models
+// VectorStores domain models
 /// Represents the parsed content of a vector store file.
 public struct VectorStoreFileContentResponse: Codable {
     /// The object type, which is always `vector_store.file_content.page`
@@ -22,56 +22,33 @@ public struct VectorStoreFileContentResponse: Codable {
         case nextPage = "next_page"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VectorStoreFileContentResponse {
-    init(from decoder: Decoder) throws {
+extension VectorStoreFileContentResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
         guard container.contains(.hasMore) else {
-            throw SdkValidationError(
-                field: "has_more",
-                code: "required",
-                message: "Validation failed for 'has_more': value is required"
-            )
+            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
         }
         guard container.contains(.nextPage) else {
-            throw SdkValidationError(
-                field: "next_page",
-                code: "required",
-                message: "Validation failed for 'next_page': value is required"
-            )
+            throw SdkValidationError(field: "next_page", code: "required", message: "Validation failed for 'next_page': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
-        hasMore = try container.sdkDecodeRequired(.hasMore)
-        nextPage = try container.sdkDecodeNullable(.nextPage)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
+        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+        self.nextPage = try container.sdkDecodeNullable(.nextPage)
     }
 }
 
-public extension VectorStoreFileContentResponse {
-    init(
-        object: VectorStoreFileContentResponseObject,
-        data: [VectorStoreFileContentResponseDataItem],
-        hasMore: Bool,
-        nextPage: String?
-    ) {
+extension VectorStoreFileContentResponse {
+    public init(object: VectorStoreFileContentResponseObject, data: [VectorStoreFileContentResponseDataItem], hasMore: Bool, nextPage: String?) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.nextPage) = (hasMore, nextPage)
     }
@@ -90,20 +67,20 @@ public struct VectorStoreFileContentResponseDataItem: Codable {
     }
 
     init() {
-        (type, text) = (nil, nil)
+        (self.type, self.text) = (nil, nil)
     }
 }
 
-public extension VectorStoreFileContentResponseDataItem {
-    init(from decoder: Decoder) throws {
+extension VectorStoreFileContentResponseDataItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        text = try container.sdkDecodeIfPresent(.text)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.text = try container.sdkDecodeIfPresent(.text)
     }
 }
 
-public extension VectorStoreFileContentResponseDataItem {
-    init(type: String? = nil, text: String? = nil) {
+extension VectorStoreFileContentResponseDataItem {
+    public init(type: String? = nil, text: String? = nil) {
         self.init()
         (self.type, self.text) = (type, text)
     }
@@ -113,16 +90,12 @@ public extension VectorStoreFileContentResponseDataItem {
 public struct VectorStoreFileContentResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let vectorStoreFileContentPage =
-        VectorStoreFileContentResponseObject(rawValue: "vector_store.file_content.page")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let vectorStoreFileContentPage = VectorStoreFileContentResponseObject(rawValue: "vector_store.file_content.page")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

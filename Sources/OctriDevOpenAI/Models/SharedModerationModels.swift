@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedModeration domain models
+// SharedModeration domain models
 /// Configuration for running moderation on the input and output of this response.
 public struct ModerationParam: Codable {
     /// The moderation model to use for moderated completions, e.g. 'omni-moderation-latest'.
@@ -16,28 +16,22 @@ public struct ModerationParam: Codable {
         case policy
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ModerationParam {
-    init(from decoder: Decoder) throws {
+extension ModerationParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
-        model = try container.sdkDecodeRequired(.model)
-        policy = try container.sdkDecodeIfPresent(.policy)
+        self.model = try container.sdkDecodeRequired(.model)
+        self.policy = try container.sdkDecodeIfPresent(.policy)
     }
 }
 
-public extension ModerationParam {
-    init(model: String, policy: ModerationPolicyParam? = nil) {
+extension ModerationParam {
+    public init(model: String, policy: ModerationPolicyParam? = nil) {
         (self.model, self.policy) = (model, policy)
     }
 }
@@ -66,79 +60,46 @@ public struct ModerationResultBody: Codable {
         case categoryAppliedInputTypes = "category_applied_input_types"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ModerationResultBody {
-    init(from decoder: Decoder) throws {
+extension ModerationResultBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
         guard container.contains(.flagged) else {
-            throw SdkValidationError(
-                field: "flagged",
-                code: "required",
-                message: "Validation failed for 'flagged': value is required"
-            )
+            throw SdkValidationError(field: "flagged", code: "required", message: "Validation failed for 'flagged': value is required")
         }
         guard container.contains(.categories) else {
-            throw SdkValidationError(
-                field: "categories",
-                code: "required",
-                message: "Validation failed for 'categories': value is required"
-            )
+            throw SdkValidationError(field: "categories", code: "required", message: "Validation failed for 'categories': value is required")
         }
         guard container.contains(.categoryScores) else {
-            throw SdkValidationError(
-                field: "category_scores",
-                code: "required",
-                message: "Validation failed for 'category_scores': value is required"
-            )
+            throw SdkValidationError(field: "category_scores", code: "required", message: "Validation failed for 'category_scores': value is required")
         }
         guard container.contains(.categoryAppliedInputTypes) else {
-            throw SdkValidationError(
-                field: "category_applied_input_types",
-                code: "required",
-                message: "Validation failed for 'category_applied_input_types': value is required"
-            )
+            throw SdkValidationError(field: "category_applied_input_types", code: "required", message: "Validation failed for 'category_applied_input_types': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        model = try container.sdkDecodeRequired(.model)
-        flagged = try container.sdkDecodeRequired(.flagged)
-        categories = try container.sdkDecodeRequired(.categories)
-        categoryScores = try container.sdkDecodeRequired(.categoryScores)
-        categoryAppliedInputTypes = try container.sdkDecodeRequired(.categoryAppliedInputTypes)
-        try sdkValidateRawEnum("type", type, ModerationResultBodyType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.model = try container.sdkDecodeRequired(.model)
+        self.flagged = try container.sdkDecodeRequired(.flagged)
+        self.categories = try container.sdkDecodeRequired(.categories)
+        self.categoryScores = try container.sdkDecodeRequired(.categoryScores)
+        self.categoryAppliedInputTypes = try container.sdkDecodeRequired(.categoryAppliedInputTypes)
+            try sdkValidateRawEnum("type", self.type, ModerationResultBodyType.allCases.map(\.rawValue))
     }
 }
 
-public extension ModerationResultBody {
-    init(
-        type: ModerationResultBodyType,
-        model: String,
-        flagged: Bool,
-        categories: [String: Bool],
-        categoryScores: [String: Double],
-        categoryAppliedInputTypes: [String: [ModerationInputType]]
-    ) throws {
+extension ModerationResultBody {
+    public init(type: ModerationResultBodyType, model: String, flagged: Bool, categories: [String: Bool], categoryScores: [String: Double], categoryAppliedInputTypes: [String: [ModerationInputType]]) throws {
         (self.type, self.model) = (type, model)
         (self.flagged, self.categories) = (flagged, categories)
         (self.categoryScores, self.categoryAppliedInputTypes) = (categoryScores, categoryAppliedInputTypes)
-        try sdkValidateRawEnum("type", self.type, ModerationResultBodyType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ModerationResultBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -155,20 +116,20 @@ public struct ModerationPolicyParam: Codable {
     }
 
     init() {
-        (input, output) = (nil, nil)
+        (self.input, self.output) = (nil, nil)
     }
 }
 
-public extension ModerationPolicyParam {
-    init(from decoder: Decoder) throws {
+extension ModerationPolicyParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        input = try container.sdkDecodeIfPresent(.input)
-        output = try container.sdkDecodeIfPresent(.output)
+        self.input = try container.sdkDecodeIfPresent(.input)
+        self.output = try container.sdkDecodeIfPresent(.output)
     }
 }
 
-public extension ModerationPolicyParam {
-    init(input: ModerationConfigParam? = nil, output: ModerationConfigParam? = nil) {
+extension ModerationPolicyParam {
+    public init(input: ModerationConfigParam? = nil, output: ModerationConfigParam? = nil) {
         self.init()
         (self.input, self.output) = (input, output)
     }
@@ -183,27 +144,21 @@ public struct ModerationConfigParam: Codable {
         case mode
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ModerationConfigParam {
-    init(from decoder: Decoder) throws {
+extension ModerationConfigParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.mode) else {
-            throw SdkValidationError(
-                field: "mode",
-                code: "required",
-                message: "Validation failed for 'mode': value is required"
-            )
+            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
         }
-        mode = try container.sdkDecodeRequired(.mode)
+        self.mode = try container.sdkDecodeRequired(.mode)
     }
 }
 
-public extension ModerationConfigParam {
-    init(mode: ModerationMode) {
+extension ModerationConfigParam {
+    public init(mode: ModerationMode) {
         self.mode = mode
     }
 }
@@ -212,16 +167,13 @@ public extension ModerationConfigParam {
 public struct ModerationMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let score = ModerationMode(rawValue: "score")
     public static let block = ModerationMode(rawValue: "block")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -234,16 +186,13 @@ public struct ModerationMode: RawRepresentable, Hashable, Codable, Sendable, Sdk
 public struct ModerationInputType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let text = ModerationInputType(rawValue: "text")
     public static let image = ModerationInputType(rawValue: "image")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

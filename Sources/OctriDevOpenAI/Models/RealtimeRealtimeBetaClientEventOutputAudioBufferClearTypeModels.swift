@@ -3,22 +3,17 @@
 
 import Foundation
 
-/// RealtimeRealtimeBetaClient domain models
+// RealtimeRealtimeBetaClient domain models
 /// The event type, must be `output_audio_buffer.clear`.
-public struct RealtimeBetaClientEventOutputAudioBufferClearType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventOutputAudioBufferClearType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let outputAudioBufferClear =
-        RealtimeBetaClientEventOutputAudioBufferClearType(rawValue: "output_audio_buffer.clear")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let outputAudioBufferClear = RealtimeBetaClientEventOutputAudioBufferClearType(rawValue: "output_audio_buffer.clear")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -28,20 +23,15 @@ public struct RealtimeBetaClientEventOutputAudioBufferClearType: RawRepresentabl
 }
 
 /// The event type, must be `conversation.item.delete`.
-public struct RealtimeBetaClientEventConversationItemDeleteType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventConversationItemDeleteType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let conversationItemDelete =
-        RealtimeBetaClientEventConversationItemDeleteType(rawValue: "conversation.item.delete")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let conversationItemDelete = RealtimeBetaClientEventConversationItemDeleteType(rawValue: "conversation.item.delete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -51,19 +41,15 @@ public struct RealtimeBetaClientEventConversationItemDeleteType: RawRepresentabl
 }
 
 /// The event type, must be `response.cancel`.
-public struct RealtimeBetaClientEventResponseCancelType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventResponseCancelType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let responseCancel = RealtimeBetaClientEventResponseCancelType(rawValue: "response.cancel")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -73,20 +59,15 @@ public struct RealtimeBetaClientEventResponseCancelType: RawRepresentable, Hasha
 }
 
 /// The event type, must be `input_audio_buffer.clear`.
-public struct RealtimeBetaClientEventInputAudioBufferClearType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventInputAudioBufferClearType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let inputAudioBufferClear =
-        RealtimeBetaClientEventInputAudioBufferClearType(rawValue: "input_audio_buffer.clear")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let inputAudioBufferClear = RealtimeBetaClientEventInputAudioBufferClearType(rawValue: "input_audio_buffer.clear")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -96,19 +77,15 @@ public struct RealtimeBetaClientEventInputAudioBufferClearType: RawRepresentable
 }
 
 /// The event type, must be `session.update`.
-public struct RealtimeBetaClientEventSessionUpdateType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventSessionUpdateType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let sessionUpdate = RealtimeBetaClientEventSessionUpdateType(rawValue: "session.update")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -118,20 +95,15 @@ public struct RealtimeBetaClientEventSessionUpdateType: RawRepresentable, Hashab
 }
 
 /// The event type, must be `conversation.item.create`.
-public struct RealtimeBetaClientEventConversationItemCreateType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventConversationItemCreateType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let conversationItemCreate =
-        RealtimeBetaClientEventConversationItemCreateType(rawValue: "conversation.item.create")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let conversationItemCreate = RealtimeBetaClientEventConversationItemCreateType(rawValue: "conversation.item.create")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -141,20 +113,15 @@ public struct RealtimeBetaClientEventConversationItemCreateType: RawRepresentabl
 }
 
 /// The event type, must be `transcription_session.update`.
-public struct RealtimeBetaClientEventTranscriptionSessionUpdateType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventTranscriptionSessionUpdateType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let transcriptionSessionUpdate =
-        RealtimeBetaClientEventTranscriptionSessionUpdateType(rawValue: "transcription_session.update")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let transcriptionSessionUpdate = RealtimeBetaClientEventTranscriptionSessionUpdateType(rawValue: "transcription_session.update")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -164,20 +131,15 @@ public struct RealtimeBetaClientEventTranscriptionSessionUpdateType: RawRepresen
 }
 
 /// The event type, must be `conversation.item.retrieve`.
-public struct RealtimeBetaClientEventConversationItemRetrieveType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventConversationItemRetrieveType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let conversationItemRetrieve =
-        RealtimeBetaClientEventConversationItemRetrieveType(rawValue: "conversation.item.retrieve")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let conversationItemRetrieve = RealtimeBetaClientEventConversationItemRetrieveType(rawValue: "conversation.item.retrieve")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -187,20 +149,15 @@ public struct RealtimeBetaClientEventConversationItemRetrieveType: RawRepresenta
 }
 
 /// The event type, must be `input_audio_buffer.commit`.
-public struct RealtimeBetaClientEventInputAudioBufferCommitType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventInputAudioBufferCommitType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let inputAudioBufferCommit =
-        RealtimeBetaClientEventInputAudioBufferCommitType(rawValue: "input_audio_buffer.commit")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let inputAudioBufferCommit = RealtimeBetaClientEventInputAudioBufferCommitType(rawValue: "input_audio_buffer.commit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -210,20 +167,15 @@ public struct RealtimeBetaClientEventInputAudioBufferCommitType: RawRepresentabl
 }
 
 /// The event type, must be `input_audio_buffer.append`.
-public struct RealtimeBetaClientEventInputAudioBufferAppendType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventInputAudioBufferAppendType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let inputAudioBufferAppend =
-        RealtimeBetaClientEventInputAudioBufferAppendType(rawValue: "input_audio_buffer.append")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let inputAudioBufferAppend = RealtimeBetaClientEventInputAudioBufferAppendType(rawValue: "input_audio_buffer.append")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -233,20 +185,15 @@ public struct RealtimeBetaClientEventInputAudioBufferAppendType: RawRepresentabl
 }
 
 /// The event type, must be `conversation.item.truncate`.
-public struct RealtimeBetaClientEventConversationItemTruncateType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventConversationItemTruncateType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let conversationItemTruncate =
-        RealtimeBetaClientEventConversationItemTruncateType(rawValue: "conversation.item.truncate")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let conversationItemTruncate = RealtimeBetaClientEventConversationItemTruncateType(rawValue: "conversation.item.truncate")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -256,19 +203,15 @@ public struct RealtimeBetaClientEventConversationItemTruncateType: RawRepresenta
 }
 
 /// The event type, must be `response.create`.
-public struct RealtimeBetaClientEventResponseCreateType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct RealtimeBetaClientEventResponseCreateType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let responseCreate = RealtimeBetaClientEventResponseCreateType(rawValue: "response.create")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

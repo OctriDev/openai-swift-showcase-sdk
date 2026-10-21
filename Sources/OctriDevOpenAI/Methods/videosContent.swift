@@ -6,32 +6,17 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension VideosMethods {
-    /// Download the generated video bytes or a derived preview asset. Streams the rendered video content for the
-    /// specified video job.
+extension VideosMethods {
+    /// Download the generated video bytes or a derived preview asset. Streams the rendered video content for the specified video job.
     ///
     /// - Parameters:
     /// - videoId: The identifier of the video whose media to download.
     /// - variant: Which downloadable asset to return. Defaults to the MP4 video.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func retrieveVideoContent(
-        config: ClientConfig,
-        videoId: String,
-        variant: VideoContentVariant? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Data {
-        try await (sdkRequest(
-            "GET",
-            ["/videos/", sdkEncodePathSegment(sdkWireString(videoId)), "/content"].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("variant", value: variant),
-            ],
-            decoder: .bytes,
-            operationId: "RetrieveVideoContent",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self]
-        )).data
+    public static func retrieveVideoContent(config: ClientConfig, videoId: String, variant: VideoContentVariant? = nil, requestOptions: RequestOptions? = nil) async throws -> Data {
+        return try (await sdkRequest("GET", ["/videos/", sdkEncodePathSegment(sdkWireString(videoId)), "/content"].joined(), config: config, query: [
+            SdkQueryParameter("variant", value: variant),
+        ], decoder: .bytes, operationId: "RetrieveVideoContent", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

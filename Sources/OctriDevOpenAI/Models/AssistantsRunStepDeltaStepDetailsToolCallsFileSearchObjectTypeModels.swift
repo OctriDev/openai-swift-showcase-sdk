@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AssistantsRun domain models
+// AssistantsRun domain models
 /// The type of tool call. This is always going to be `file_search` for this type of tool call.
 public enum RunStepDeltaStepDetailsToolCallsFileSearchObjectType: String, CaseIterable, Codable {
     case fileSearch = "file_search"
@@ -43,16 +43,13 @@ public enum RunStepStreamEventVariant4Event: String, CaseIterable, Codable {
 public struct RunStepObjectLastErrorCode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let serverError = RunStepObjectLastErrorCode(rawValue: "server_error")
     public static let rateLimitExceeded = RunStepObjectLastErrorCode(rawValue: "rate_limit_exceeded")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -82,15 +79,12 @@ public enum RunStepStreamEventVariant2Event: String, CaseIterable, Codable {
 public struct RunObjectRequiredActionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let submitToolOutputs = RunObjectRequiredActionType(rawValue: "submit_tool_outputs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

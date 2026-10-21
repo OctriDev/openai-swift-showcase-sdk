@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Audio domain models
+// Audio domain models
 public indirect enum CreateSpeechRequestVoice {
     case voiceIdsShared(VoiceIdsShared)
     case stringValue(String)
@@ -11,26 +11,18 @@ public indirect enum CreateSpeechRequestVoice {
 }
 
 extension CreateSpeechRequestVoice: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateSpeechRequestVoice"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateSpeechRequestVoice")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
@@ -48,16 +40,9 @@ extension CreateSpeechRequestVoice {
 
 extension CreateSpeechRequestVoice {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(VoiceIdsShared.self) {
-            return .voiceIdsShared(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container
-            .decode(CreateSpeechRequestVoiceVariant2.self) {
-            return .createSpeechRequestVoiceVariant2(value)
-        }
+        if let value = try? container.decode(VoiceIdsShared.self) { return .voiceIdsShared(value) }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(CreateSpeechRequestVoiceVariant2.self) { return .createSpeechRequestVoiceVariant2(value) }
         return nil
     }
 }
@@ -81,6 +66,7 @@ public indirect enum CreateSpeechResponseStreamEvent {
 }
 
 extension CreateSpeechResponseStreamEvent: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -88,16 +74,12 @@ extension CreateSpeechResponseStreamEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -108,9 +90,9 @@ extension CreateSpeechResponseStreamEvent: Codable {
 extension CreateSpeechResponseStreamEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "speech.audio.delta": try .speechAudioDeltaEvent(SpeechAudioDeltaEvent(from: decoder))
-        case "speech.audio.done": try .speechAudioDoneEvent(SpeechAudioDoneEvent(from: decoder))
-        default: nil
+        case "speech.audio.delta": return .speechAudioDeltaEvent(try SpeechAudioDeltaEvent(from: decoder))
+        case "speech.audio.done": return .speechAudioDoneEvent(try SpeechAudioDoneEvent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -138,38 +120,28 @@ public struct SpeechAudioDeltaEvent: Codable {
         case audio
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SpeechAudioDeltaEvent {
-    init(from decoder: Decoder) throws {
+extension SpeechAudioDeltaEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.audio) else {
-            throw SdkValidationError(
-                field: "audio",
-                code: "required",
-                message: "Validation failed for 'audio': value is required"
-            )
+            throw SdkValidationError(field: "audio", code: "required", message: "Validation failed for 'audio': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        audio = try container.sdkDecodeRequired(.audio)
-        try sdkValidateRawEnum("type", type, SpeechAudioDeltaEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.audio = try container.sdkDecodeRequired(.audio)
+            try sdkValidateRawEnum("type", self.type, SpeechAudioDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension SpeechAudioDeltaEvent {
-    init(type: SpeechAudioDeltaEventType, audio: String) throws {
+extension SpeechAudioDeltaEvent {
+    public init(type: SpeechAudioDeltaEventType, audio: String) throws {
         (self.type, self.audio) = (type, audio)
-        try sdkValidateRawEnum("type", self.type, SpeechAudioDeltaEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, SpeechAudioDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -188,43 +160,29 @@ public struct SpeechAudioDoneEventUsage: Codable {
         case totalTokens = "total_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SpeechAudioDoneEventUsage {
-    init(from decoder: Decoder) throws {
+extension SpeechAudioDoneEventUsage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.inputTokens) else {
-            throw SdkValidationError(
-                field: "input_tokens",
-                code: "required",
-                message: "Validation failed for 'input_tokens': value is required"
-            )
+            throw SdkValidationError(field: "input_tokens", code: "required", message: "Validation failed for 'input_tokens': value is required")
         }
         guard container.contains(.outputTokens) else {
-            throw SdkValidationError(
-                field: "output_tokens",
-                code: "required",
-                message: "Validation failed for 'output_tokens': value is required"
-            )
+            throw SdkValidationError(field: "output_tokens", code: "required", message: "Validation failed for 'output_tokens': value is required")
         }
         guard container.contains(.totalTokens) else {
-            throw SdkValidationError(
-                field: "total_tokens",
-                code: "required",
-                message: "Validation failed for 'total_tokens': value is required"
-            )
+            throw SdkValidationError(field: "total_tokens", code: "required", message: "Validation failed for 'total_tokens': value is required")
         }
-        inputTokens = try container.sdkDecodeRequired(.inputTokens)
-        outputTokens = try container.sdkDecodeRequired(.outputTokens)
-        totalTokens = try container.sdkDecodeRequired(.totalTokens)
+        self.inputTokens = try container.sdkDecodeRequired(.inputTokens)
+        self.outputTokens = try container.sdkDecodeRequired(.outputTokens)
+        self.totalTokens = try container.sdkDecodeRequired(.totalTokens)
     }
 }
 
-public extension SpeechAudioDoneEventUsage {
-    init(inputTokens: Int, outputTokens: Int, totalTokens: Int) {
+extension SpeechAudioDoneEventUsage {
+    public init(inputTokens: Int, outputTokens: Int, totalTokens: Int) {
         (self.inputTokens, self.outputTokens) = (inputTokens, outputTokens)
         self.totalTokens = totalTokens
     }
@@ -240,27 +198,21 @@ public struct CreateSpeechRequestVoiceVariant2: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateSpeechRequestVoiceVariant2 {
-    init(from decoder: Decoder) throws {
+extension CreateSpeechRequestVoiceVariant2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension CreateSpeechRequestVoiceVariant2 {
-    init(id: String) {
+extension CreateSpeechRequestVoiceVariant2 {
+    public init(id: String) {
         self.id = id
     }
 }
@@ -277,38 +229,28 @@ public struct SpeechAudioDoneEvent: Codable {
         case usage
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SpeechAudioDoneEvent {
-    init(from decoder: Decoder) throws {
+extension SpeechAudioDoneEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.usage) else {
-            throw SdkValidationError(
-                field: "usage",
-                code: "required",
-                message: "Validation failed for 'usage': value is required"
-            )
+            throw SdkValidationError(field: "usage", code: "required", message: "Validation failed for 'usage': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        usage = try container.sdkDecodeRequired(.usage)
-        try sdkValidateRawEnum("type", type, SpeechAudioDoneEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.usage = try container.sdkDecodeRequired(.usage)
+            try sdkValidateRawEnum("type", self.type, SpeechAudioDoneEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension SpeechAudioDoneEvent {
-    init(type: SpeechAudioDoneEventType, usage: SpeechAudioDoneEventUsage) throws {
+extension SpeechAudioDoneEvent {
+    public init(type: SpeechAudioDoneEventType, usage: SpeechAudioDoneEventUsage) throws {
         (self.type, self.usage) = (type, usage)
-        try sdkValidateRawEnum("type", self.type, SpeechAudioDoneEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, SpeechAudioDoneEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -344,88 +286,50 @@ public struct CreateSpeechRequest: Codable {
         case streamFormat = "stream_format"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateSpeechRequest {
-    init(from decoder: Decoder) throws {
+extension CreateSpeechRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
         guard container.contains(.input) else {
-            throw SdkValidationError(
-                field: "input",
-                code: "required",
-                message: "Validation failed for 'input': value is required"
-            )
+            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
         }
         guard container.contains(.voice) else {
-            throw SdkValidationError(
-                field: "voice",
-                code: "required",
-                message: "Validation failed for 'voice': value is required"
-            )
+            throw SdkValidationError(field: "voice", code: "required", message: "Validation failed for 'voice': value is required")
         }
-        model = try container.sdkDecodeRequired(.model)
-        input = try container.sdkDecodeRequired(.input)
-        voice = try container.sdkDecodeRequired(.voice)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        speed = try container.sdkDecodeIfPresent(.speed)
-        streamFormat = try container.sdkDecodeIfPresent(.streamFormat)
-        try validateLength("input", input, min: nil, max: 4096)
-        if let value = instructions {
-            try validateLength("instructions", value, min: nil, max: 4096)
-        }
-        if let value = speed {
-            try validateRange(
-                "speed",
-                Double(value),
-                min: 0.25,
-                max: 4,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
-        }
-    }
-}
-
-public extension CreateSpeechRequest {
-    init(
-        model: String,
-        input: String,
-        voice: CreateSpeechRequestVoice,
-        instructions: String? = nil,
-        responseFormat: CreateSpeechRequestResponseFormat? = nil,
-        speed: Double? = nil,
-        streamFormat: CreateSpeechRequestStreamFormat? = nil
-    ) throws {
-        (self.model, self.input) = (model, input)
-        (self.voice, self.instructions) = (voice, instructions)
-        (self.responseFormat, self.speed) = (responseFormat, speed)
-        self.streamFormat = streamFormat
-        try validateLength("input", self.input, min: nil, max: 4096)
+        self.model = try container.sdkDecodeRequired(.model)
+        self.input = try container.sdkDecodeRequired(.input)
+        self.voice = try container.sdkDecodeRequired(.voice)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        self.speed = try container.sdkDecodeIfPresent(.speed)
+        self.streamFormat = try container.sdkDecodeIfPresent(.streamFormat)
+            try validateLength("input", self.input, min: nil, max: 4096)
         if let value = self.instructions {
             try validateLength("instructions", value, min: nil, max: 4096)
         }
         if let value = self.speed {
-            try validateRange(
-                "speed",
-                Double(value),
-                min: 0.25,
-                max: 4,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("speed", Double(value), min: 0.25, max: 4, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        }
+    }
+}
+
+extension CreateSpeechRequest {
+    public init(model: String, input: String, voice: CreateSpeechRequestVoice, instructions: String? = nil, responseFormat: CreateSpeechRequestResponseFormat? = nil, speed: Double? = nil, streamFormat: CreateSpeechRequestStreamFormat? = nil) throws {
+        (self.model, self.input) = (model, input)
+        (self.voice, self.instructions) = (voice, instructions)
+        (self.responseFormat, self.speed) = (responseFormat, speed)
+        self.streamFormat = streamFormat
+            try validateLength("input", self.input, min: nil, max: 4096)
+        if let value = self.instructions {
+            try validateLength("instructions", value, min: nil, max: 4096)
+        }
+        if let value = self.speed {
+            try validateRange("speed", Double(value), min: 0.25, max: 4, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -452,17 +356,14 @@ public enum SpeechAudioDoneEventType: String, CaseIterable, Codable {
 public struct CreateSpeechRequestVoiceVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let fable = CreateSpeechRequestVoiceVariant1(rawValue: "fable")
     public static let onyx = CreateSpeechRequestVoiceVariant1(rawValue: "onyx")
     public static let nova = CreateSpeechRequestVoiceVariant1(rawValue: "nova")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -476,16 +377,13 @@ public struct CreateSpeechRequestVoiceVariant1: RawRepresentable, Hashable, Coda
 public struct CreateSpeechRequestStreamFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let sse = CreateSpeechRequestStreamFormat(rawValue: "sse")
     public static let audio = CreateSpeechRequestStreamFormat(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -516,10 +414,7 @@ public enum SpeechAudioDeltaEventType: String, CaseIterable, Codable {
 public struct CreateSpeechRequestResponseFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let mp3 = CreateSpeechRequestResponseFormat(rawValue: "mp3")
     public static let opus = CreateSpeechRequestResponseFormat(rawValue: "opus")
     public static let aac = CreateSpeechRequestResponseFormat(rawValue: "aac")
@@ -529,7 +424,7 @@ public struct CreateSpeechRequestResponseFormat: RawRepresentable, Hashable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

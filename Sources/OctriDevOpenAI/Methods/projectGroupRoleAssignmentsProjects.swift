@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectGroupRoleAssignmentsMethods {
+extension ProjectGroupRoleAssignmentsMethods {
     /// Lists the project roles assigned to a group within a project.
     ///
     /// - Parameters:
@@ -16,44 +16,16 @@ public extension ProjectGroupRoleAssignmentsMethods {
     /// - after: Cursor for pagination. Provide the value from the previous
     ///   response's `next` field to continue listing project roles.
     /// - order: Sort order for the returned project roles.
-    static func listProjectGroupRoleAssignments(
-        config: ClientConfig,
-        projectId: String,
-        groupId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListProjectGroupRoleAssignmentsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RoleListResource {
-        if let limit {
+    public static func listProjectGroupRoleAssignments(config: ClientConfig, projectId: String, groupId: String, limit: Int? = nil, after: String? = nil, order: ListProjectGroupRoleAssignmentsParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> RoleListResource {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 0, max: 1000)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            [
-                "/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/groups/",
-                sdkEncodePathSegment(sdkWireString(groupId)),
-                "/roles",
-            ].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("order", value: order),
-            ],
-            decoder: .json,
-            operationId: "listProjectGroupRoleAssignments",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("GET", ["/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/groups/", sdkEncodePathSegment(sdkWireString(groupId)), "/roles"].joined(), config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("order", value: order),
+        ], decoder: .json, operationId: "listProjectGroupRoleAssignments", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
     /// Lists the project roles assigned to a group within a project.
@@ -65,45 +37,18 @@ public extension ProjectGroupRoleAssignmentsMethods {
     /// - after: Cursor for pagination. Provide the value from the previous
     ///   response's `next` field to continue listing project roles.
     /// - order: Sort order for the returned project roles.
-    static func listProjectGroupRoleAssignmentsPaginated(
-        config: ClientConfig,
-        projectId: String,
-        groupId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListProjectGroupRoleAssignmentsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<AssignedRoleDetails, Swift.Error> {
-        AsyncThrowingStream<AssignedRoleDetails, Swift.Error> { (continuation: AsyncThrowingStream<
-            AssignedRoleDetails,
-            Swift.Error
-        >.Continuation) in
+    public static func listProjectGroupRoleAssignmentsPaginated(config: ClientConfig, projectId: String, groupId: String, limit: Int? = nil, after: String? = nil, order: ListProjectGroupRoleAssignmentsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<AssignedRoleDetails, Swift.Error> {
+        return AsyncThrowingStream<AssignedRoleDetails, Swift.Error> { (continuation: AsyncThrowingStream<AssignedRoleDetails, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectGroupRoleAssignments(
-                            config: config,
-                            projectId: projectId,
-                            groupId: groupId,
-                            limit: limit,
-                            after: pageCursor,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listProjectGroupRoleAssignments(config: config, projectId: projectId, groupId: groupId, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.next else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.next else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -116,54 +61,25 @@ public extension ProjectGroupRoleAssignmentsMethods {
         }
     }
 
-    struct ListProjectGroupRoleAssignmentsPage {
+    public struct ListProjectGroupRoleAssignmentsPage {
         public let data: RoleListResource
         public let items: [AssignedRoleDetails]
         public let hasMore: Bool
     }
 
-    static func listProjectGroupRoleAssignmentsPages(
-        config: ClientConfig,
-        projectId: String,
-        groupId: String,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListProjectGroupRoleAssignmentsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListProjectGroupRoleAssignmentsPage, Swift.Error> {
-        AsyncThrowingStream<ListProjectGroupRoleAssignmentsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListProjectGroupRoleAssignmentsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listProjectGroupRoleAssignmentsPages(config: ClientConfig, projectId: String, groupId: String, limit: Int? = nil, after: String? = nil, order: ListProjectGroupRoleAssignmentsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListProjectGroupRoleAssignmentsPage, Swift.Error> {
+        return AsyncThrowingStream<ListProjectGroupRoleAssignmentsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListProjectGroupRoleAssignmentsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listProjectGroupRoleAssignments(
-                            config: config,
-                            projectId: projectId,
-                            groupId: groupId,
-                            limit: limit,
-                            after: pageCursor,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listProjectGroupRoleAssignments(config: config, projectId: projectId, groupId: groupId, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.next != nil
-                        pageContinuation.yield(ListProjectGroupRoleAssignmentsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.next else {
-                            break
-                        }
+                        pageContinuation.yield(ListProjectGroupRoleAssignmentsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.next else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

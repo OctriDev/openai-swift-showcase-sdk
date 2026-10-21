@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Projects domain models
+// Projects domain models
 /// Typed representation of the `UpdateProjectApiKeyBody` API schema.
 public struct UpdateProjectApiKeyBody: Codable {
     /// Number of seconds from this request until the API key expires. Must comply with the organization and project
@@ -21,43 +21,27 @@ public struct UpdateProjectApiKeyBody: Codable {
     }
 
     init() {
-        (expiresInSeconds, scopes) = (nil, nil)
+        (self.expiresInSeconds, self.scopes) = (nil, nil)
     }
 }
 
-public extension UpdateProjectApiKeyBody {
-    init(from decoder: Decoder) throws {
+extension UpdateProjectApiKeyBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        expiresInSeconds = try container.sdkDecodeIfPresent(.expiresInSeconds)
-        scopes = try container.sdkDecodeIfPresent(.scopes)
-        if let value = expiresInSeconds {
-            try validateRange(
-                "expires_in_seconds",
-                Double(value),
-                min: 1,
-                max: 31_536_000,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.expiresInSeconds = try container.sdkDecodeIfPresent(.expiresInSeconds)
+        self.scopes = try container.sdkDecodeIfPresent(.scopes)
+        if let value = self.expiresInSeconds {
+            try validateRange("expires_in_seconds", Double(value), min: 1, max: 31536000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension UpdateProjectApiKeyBody {
-    init(expiresInSeconds: Int? = nil, scopes: [String]? = nil) throws {
+extension UpdateProjectApiKeyBody {
+    public init(expiresInSeconds: Int? = nil, scopes: [String]? = nil) throws {
         self.init()
         (self.expiresInSeconds, self.scopes) = (expiresInSeconds, scopes)
         if let value = self.expiresInSeconds {
-            try validateRange(
-                "expires_in_seconds",
-                Double(value),
-                min: 1,
-                max: 31_536_000,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("expires_in_seconds", Double(value), min: 1, max: 31536000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }

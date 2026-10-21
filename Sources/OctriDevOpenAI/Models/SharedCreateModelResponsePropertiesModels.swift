@@ -3,45 +3,27 @@
 
 import Foundation
 
-/// Shared domain models
-public extension CreateModelResponseProperties {
-    init(from decoder: Decoder) throws {
+// Shared domain models
+extension CreateModelResponseProperties {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        topP = try container.sdkDecodeIfPresent(.topP)
-        user = try container.sdkDecodeIfPresent(.user)
-        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
-        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        if let value = topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        self.temperature = try container.sdkDecodeIfPresent(.temperature)
+        self.topP = try container.sdkDecodeIfPresent(.topP)
+        self.user = try container.sdkDecodeIfPresent(.user)
+        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        if let value = self.topLogprobs {
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension CreateModelResponseProperties {
-    init(
-        metadata: Metadata? = nil,
-        topLogprobs: Int? = nil,
-        temperature: Double? = nil,
-        topP: Double? = nil,
-        user: String? = nil,
-        safetyIdentifier: String? = nil,
-        promptCacheKey: String? = nil,
-        promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0? = nil,
-        promptCacheOptions: PromptCacheOptionsParam? = nil
-    ) throws {
+extension CreateModelResponseProperties {
+    public init(metadata: Metadata? = nil, topLogprobs: Int? = nil, temperature: Double? = nil, topP: Double? = nil, user: String? = nil, safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0? = nil, promptCacheOptions: PromptCacheOptionsParam? = nil) throws {
         self.init()
         (self.metadata, self.topLogprobs) = (metadata, topLogprobs)
         (self.temperature, self.topP) = (temperature, topP)
@@ -49,15 +31,7 @@ public extension CreateModelResponseProperties {
         (self.promptCacheKey, self.promptCacheRetention) = (promptCacheKey, promptCacheRetention)
         self.promptCacheOptions = promptCacheOptions
         if let value = self.topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -83,37 +57,25 @@ public struct ApproximateLocation: Codable {
         case timezone
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ApproximateLocation {
-    init(from decoder: Decoder) throws {
+extension ApproximateLocation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        country = try container.sdkDecodeIfPresent(.country)
-        region = try container.sdkDecodeIfPresent(.region)
-        city = try container.sdkDecodeIfPresent(.city)
-        timezone = try container.sdkDecodeIfPresent(.timezone)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.country = try container.sdkDecodeIfPresent(.country)
+        self.region = try container.sdkDecodeIfPresent(.region)
+        self.city = try container.sdkDecodeIfPresent(.city)
+        self.timezone = try container.sdkDecodeIfPresent(.timezone)
     }
 }
 
-public extension ApproximateLocation {
-    init(
-        type: ApproximateLocationType,
-        country: String? = nil,
-        region: String? = nil,
-        city: String? = nil,
-        timezone: String? = nil
-    ) {
+extension ApproximateLocation {
+    public init(type: ApproximateLocationType, country: String? = nil, region: String? = nil, city: String? = nil, timezone: String? = nil) {
         (self.type, self.country) = (type, country)
         (self.region, self.city) = (region, city)
         self.timezone = timezone
@@ -135,47 +97,33 @@ public struct MCPProtocolError: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MCPProtocolError {
-    init(from decoder: Decoder) throws {
+extension MCPProtocolError {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        try sdkValidateRawEnum("type", type, MCPProtocolErrorType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+            try sdkValidateRawEnum("type", self.type, MCPProtocolErrorType.allCases.map(\.rawValue))
     }
 }
 
-public extension MCPProtocolError {
-    init(type: MCPProtocolErrorType, code: Int, message: String) throws {
+extension MCPProtocolError {
+    public init(type: MCPProtocolErrorType, code: Int, message: String) throws {
         (self.type, self.code) = (type, code)
         self.message = message
-        try sdkValidateRawEnum("type", self.type, MCPProtocolErrorType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, MCPProtocolErrorType.allCases.map(\.rawValue))
     }
 }
 
@@ -200,58 +148,34 @@ public struct Error3: Codable {
         case misalignment
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Error3 {
-    init(from decoder: Decoder) throws {
+extension Error3 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
         guard container.contains(.param) else {
-            throw SdkValidationError(
-                field: "param",
-                code: "required",
-                message: "Validation failed for 'param': value is required"
-            )
+            throw SdkValidationError(field: "param", code: "required", message: "Validation failed for 'param': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        code = try container.sdkDecodeNullable(.code)
-        message = try container.sdkDecodeRequired(.message)
-        param = try container.sdkDecodeNullable(.param)
-        type = try container.sdkDecodeRequired(.type)
-        misalignment = try container.sdkDecodeIfPresent(.misalignment)
+        self.code = try container.sdkDecodeNullable(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+        self.param = try container.sdkDecodeNullable(.param)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.misalignment = try container.sdkDecodeIfPresent(.misalignment)
     }
 }
 
-public extension Error3 {
-    init(
-        code: String?,
-        message: String,
-        param: String?,
-        type: String,
-        misalignment: MisalignmentErrorDetailsResource? = nil
-    ) {
+extension Error3 {
+    public init(code: String?, message: String, param: String?, type: String, misalignment: MisalignmentErrorDetailsResource? = nil) {
         (self.code, self.message) = (code, message)
         (self.param, self.type) = (param, type)
         self.misalignment = misalignment
@@ -282,35 +206,23 @@ public struct CompletionUsageCompletionTokensDetails: Codable {
     }
 
     init() {
-        (acceptedPredictionTokens, audioTokens, reasoningTokens, textTokens, rejectedPredictionTokens) = (
-            nil,
-            nil,
-            nil,
-            nil,
-            nil
-        )
+        (self.acceptedPredictionTokens, self.audioTokens, self.reasoningTokens, self.textTokens, self.rejectedPredictionTokens) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension CompletionUsageCompletionTokensDetails {
-    init(from decoder: Decoder) throws {
+extension CompletionUsageCompletionTokensDetails {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        acceptedPredictionTokens = try container.sdkDecodeIfPresent(.acceptedPredictionTokens)
-        audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
-        reasoningTokens = try container.sdkDecodeIfPresent(.reasoningTokens)
-        textTokens = try container.sdkDecodeIfPresent(.textTokens)
-        rejectedPredictionTokens = try container.sdkDecodeIfPresent(.rejectedPredictionTokens)
+        self.acceptedPredictionTokens = try container.sdkDecodeIfPresent(.acceptedPredictionTokens)
+        self.audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
+        self.reasoningTokens = try container.sdkDecodeIfPresent(.reasoningTokens)
+        self.textTokens = try container.sdkDecodeIfPresent(.textTokens)
+        self.rejectedPredictionTokens = try container.sdkDecodeIfPresent(.rejectedPredictionTokens)
     }
 }
 
-public extension CompletionUsageCompletionTokensDetails {
-    init(
-        acceptedPredictionTokens: Int? = nil,
-        audioTokens: Int? = nil,
-        reasoningTokens: Int? = nil,
-        textTokens: Int? = nil,
-        rejectedPredictionTokens: Int? = nil
-    ) {
+extension CompletionUsageCompletionTokensDetails {
+    public init(acceptedPredictionTokens: Int? = nil, audioTokens: Int? = nil, reasoningTokens: Int? = nil, textTokens: Int? = nil, rejectedPredictionTokens: Int? = nil) {
         self.init()
         (self.acceptedPredictionTokens, self.audioTokens) = (acceptedPredictionTokens, audioTokens)
         (self.reasoningTokens, self.textTokens) = (reasoningTokens, textTokens)
@@ -334,40 +246,30 @@ public struct DragParam: Codable {
         case keys
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DragParam {
-    init(from decoder: Decoder) throws {
+extension DragParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.path) else {
-            throw SdkValidationError(
-                field: "path",
-                code: "required",
-                message: "Validation failed for 'path': value is required"
-            )
+            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        path = try container.sdkDecodeRequired(.path)
-        keys = try container.sdkDecodeIfPresent(.keys)
-        try sdkValidateRawEnum("type", type, DragParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.path = try container.sdkDecodeRequired(.path)
+        self.keys = try container.sdkDecodeIfPresent(.keys)
+            try sdkValidateRawEnum("type", self.type, DragParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension DragParam {
-    init(type: DragParamType, path: [CoordParam], keys: [String]? = nil) throws {
+extension DragParam {
+    public init(type: DragParamType, path: [CoordParam], keys: [String]? = nil) throws {
         (self.type, self.path) = (type, path)
         self.keys = keys
-        try sdkValidateRawEnum("type", self.type, DragParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, DragParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -395,79 +297,46 @@ public struct AwsExternalStorageProviderResponse: Codable {
         case externalId = "external_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension AwsExternalStorageProviderResponse {
-    init(from decoder: Decoder) throws {
+extension AwsExternalStorageProviderResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.accountId) else {
-            throw SdkValidationError(
-                field: "account_id",
-                code: "required",
-                message: "Validation failed for 'account_id': value is required"
-            )
+            throw SdkValidationError(field: "account_id", code: "required", message: "Validation failed for 'account_id': value is required")
         }
         guard container.contains(.region) else {
-            throw SdkValidationError(
-                field: "region",
-                code: "required",
-                message: "Validation failed for 'region': value is required"
-            )
+            throw SdkValidationError(field: "region", code: "required", message: "Validation failed for 'region': value is required")
         }
         guard container.contains(.bucket) else {
-            throw SdkValidationError(
-                field: "bucket",
-                code: "required",
-                message: "Validation failed for 'bucket': value is required"
-            )
+            throw SdkValidationError(field: "bucket", code: "required", message: "Validation failed for 'bucket': value is required")
         }
         guard container.contains(.roleArn) else {
-            throw SdkValidationError(
-                field: "role_arn",
-                code: "required",
-                message: "Validation failed for 'role_arn': value is required"
-            )
+            throw SdkValidationError(field: "role_arn", code: "required", message: "Validation failed for 'role_arn': value is required")
         }
         guard container.contains(.externalId) else {
-            throw SdkValidationError(
-                field: "external_id",
-                code: "required",
-                message: "Validation failed for 'external_id': value is required"
-            )
+            throw SdkValidationError(field: "external_id", code: "required", message: "Validation failed for 'external_id': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        accountId = try container.sdkDecodeRequired(.accountId)
-        region = try container.sdkDecodeRequired(.region)
-        bucket = try container.sdkDecodeRequired(.bucket)
-        roleArn = try container.sdkDecodeRequired(.roleArn)
-        externalId = try container.sdkDecodeRequired(.externalId)
-        try sdkValidateRawEnum("type", type, AwsExternalStorageProviderResponseType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.accountId = try container.sdkDecodeRequired(.accountId)
+        self.region = try container.sdkDecodeRequired(.region)
+        self.bucket = try container.sdkDecodeRequired(.bucket)
+        self.roleArn = try container.sdkDecodeRequired(.roleArn)
+        self.externalId = try container.sdkDecodeRequired(.externalId)
+            try sdkValidateRawEnum("type", self.type, AwsExternalStorageProviderResponseType.allCases.map(\.rawValue))
     }
 }
 
-public extension AwsExternalStorageProviderResponse {
-    init(
-        type: AwsExternalStorageProviderResponseType,
-        accountId: String,
-        region: String,
-        bucket: String,
-        roleArn: String,
-        externalId: String
-    ) throws {
+extension AwsExternalStorageProviderResponse {
+    public init(type: AwsExternalStorageProviderResponseType, accountId: String, region: String, bucket: String, roleArn: String, externalId: String) throws {
         (self.type, self.accountId) = (type, accountId)
         (self.region, self.bucket) = (region, bucket)
         (self.roleArn, self.externalId) = (roleArn, externalId)
-        try sdkValidateRawEnum("type", self.type, AwsExternalStorageProviderResponseType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, AwsExternalStorageProviderResponseType.allCases.map(\.rawValue))
     }
 }
 
@@ -484,38 +353,28 @@ public struct KeyPressAction: Codable {
         case keys
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension KeyPressAction {
-    init(from decoder: Decoder) throws {
+extension KeyPressAction {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.keys) else {
-            throw SdkValidationError(
-                field: "keys",
-                code: "required",
-                message: "Validation failed for 'keys': value is required"
-            )
+            throw SdkValidationError(field: "keys", code: "required", message: "Validation failed for 'keys': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        keys = try container.sdkDecodeRequired(.keys)
-        try sdkValidateRawEnum("type", type, KeyPressActionType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.keys = try container.sdkDecodeRequired(.keys)
+            try sdkValidateRawEnum("type", self.type, KeyPressActionType.allCases.map(\.rawValue))
     }
 }
 
-public extension KeyPressAction {
-    init(type: KeyPressActionType, keys: [String]) throws {
+extension KeyPressAction {
+    public init(type: KeyPressActionType, keys: [String]) throws {
         (self.type, self.keys) = (type, keys)
-        try sdkValidateRawEnum("type", self.type, KeyPressActionType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, KeyPressActionType.allCases.map(\.rawValue))
     }
 }
 
@@ -540,45 +399,30 @@ public struct EasyInputMessage: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension EasyInputMessage {
-    init(from decoder: Decoder) throws {
+extension EasyInputMessage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        phase = try container.sdkDecodeIfPresent(.phase)
-        type = try container.sdkDecodeIfPresent(.type)
-        if let value = type {
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.phase = try container.sdkDecodeIfPresent(.phase)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        if let value = self.type {
             try sdkValidateRawEnum("type", value, EasyInputMessageType.allCases.map(\.rawValue))
         }
     }
 }
 
-public extension EasyInputMessage {
-    init(
-        role: EasyInputMessageRole,
-        content: EasyInputMessageContent,
-        phase: MessagePhase? = nil,
-        type: EasyInputMessageType? = nil
-    ) throws {
+extension EasyInputMessage {
+    public init(role: EasyInputMessageRole, content: EasyInputMessageContent, phase: MessagePhase? = nil, type: EasyInputMessageType? = nil) throws {
         (self.role, self.content) = (role, content)
         (self.phase, self.type) = (phase, type)
         if let value = self.type {
@@ -605,7 +449,5 @@ public struct DoubleClickAction: Codable {
         case keys
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

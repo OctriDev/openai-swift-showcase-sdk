@@ -15,11 +15,11 @@ struct SearchVectorStoreRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(query, forKey: SdkCodingKey("query"))
-        try keyedContainer.encodeIfPresent(rewriteQuery, forKey: SdkCodingKey("rewrite_query"))
-        try keyedContainer.encodeIfPresent(maxNumResults, forKey: SdkCodingKey("max_num_results"))
-        try keyedContainer.encodeIfPresent(filters, forKey: SdkCodingKey("filters"))
-        try keyedContainer.encodeIfPresent(rankingOptions, forKey: SdkCodingKey("ranking_options"))
+        try keyedContainer.encode(self.query, forKey: SdkCodingKey("query"))
+        try keyedContainer.encodeIfPresent(self.rewriteQuery, forKey: SdkCodingKey("rewrite_query"))
+        try keyedContainer.encodeIfPresent(self.maxNumResults, forKey: SdkCodingKey("max_num_results"))
+        try keyedContainer.encodeIfPresent(self.filters, forKey: SdkCodingKey("filters"))
+        try keyedContainer.encodeIfPresent(self.rankingOptions, forKey: SdkCodingKey("ranking_options"))
     }
 }
 
@@ -29,8 +29,8 @@ struct CreateExternalStorageRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(projectId, forKey: SdkCodingKey("project_id"))
-        try keyedContainer.encode(provider, forKey: SdkCodingKey("provider"))
+        try keyedContainer.encode(self.projectId, forKey: SdkCodingKey("project_id"))
+        try keyedContainer.encode(self.provider, forKey: SdkCodingKey("provider"))
     }
 }
 
@@ -41,9 +41,9 @@ struct UpdateSpendLimitsOrganizationRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
-        try keyedContainer.encode(currency, forKey: SdkCodingKey("currency"))
-        try keyedContainer.encode(interval, forKey: SdkCodingKey("interval"))
+        try keyedContainer.encode(self.thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
+        try keyedContainer.encode(self.currency, forKey: SdkCodingKey("currency"))
+        try keyedContainer.encode(self.interval, forKey: SdkCodingKey("interval"))
     }
 }
 
@@ -54,9 +54,9 @@ struct UpdateProjectSpendLimitRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
-        try keyedContainer.encode(currency, forKey: SdkCodingKey("currency"))
-        try keyedContainer.encode(interval, forKey: SdkCodingKey("interval"))
+        try keyedContainer.encode(self.thresholdAmount, forKey: SdkCodingKey("threshold_amount"))
+        try keyedContainer.encode(self.currency, forKey: SdkCodingKey("currency"))
+        try keyedContainer.encode(self.interval, forKey: SdkCodingKey("interval"))
     }
 }
 
@@ -71,9 +71,9 @@ public enum CreateVideoBody {
     func encoded(contentType: String?) throws -> (data: Data, contentType: String) {
         switch self {
         case let .createVideoJsonBody(value):
-            try sdkEncodeStructuredBody(value, contentType: contentType ?? "application/json")
+            return try sdkEncodeStructuredBody(value, contentType: contentType ?? "application/json")
         case let .createVideoMultipartBody(value):
-            try sdkEncodeStructuredBody(value, contentType: contentType ?? "multipart/form-data")
+            return try sdkEncodeStructuredBody(value, contentType: contentType ?? "multipart/form-data")
         }
     }
 }
@@ -89,9 +89,9 @@ public enum CreateVideoEditBody {
     func encoded(contentType: String?) throws -> (data: Data, contentType: String) {
         switch self {
         case let .createVideoEditJsonBody(value):
-            try sdkEncodeStructuredBody(value, contentType: contentType ?? "application/json")
+            return try sdkEncodeStructuredBody(value, contentType: contentType ?? "application/json")
         case let .createVideoEditMultipartBody(value):
-            try sdkEncodeStructuredBody(value, contentType: contentType ?? "multipart/form-data")
+            return try sdkEncodeStructuredBody(value, contentType: contentType ?? "multipart/form-data")
         }
     }
 }
@@ -107,9 +107,9 @@ public enum CreateVideoExtendBody {
     func encoded(contentType: String?) throws -> (data: Data, contentType: String) {
         switch self {
         case let .createVideoExtendJsonBody(value):
-            try sdkEncodeStructuredBody(value, contentType: contentType ?? "application/json")
+            return try sdkEncodeStructuredBody(value, contentType: contentType ?? "application/json")
         case let .createVideoExtendMultipartBody(value):
-            try sdkEncodeStructuredBody(value, contentType: contentType ?? "multipart/form-data")
+            return try sdkEncodeStructuredBody(value, contentType: contentType ?? "multipart/form-data")
         }
     }
 }
@@ -119,7 +119,7 @@ struct CreateVideoRemixRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(prompt, forKey: SdkCodingKey("prompt"))
+        try keyedContainer.encode(self.prompt, forKey: SdkCodingKey("prompt"))
     }
 }
 
@@ -128,7 +128,7 @@ struct CreateSkillRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(files, forKey: SdkCodingKey("files"))
+        try keyedContainer.encode(self.files, forKey: SdkCodingKey("files"))
     }
 }
 
@@ -137,7 +137,7 @@ struct UpdateSkillDefaultVersionRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(defaultVersion, forKey: SdkCodingKey("default_version"))
+        try keyedContainer.encode(self.defaultVersion, forKey: SdkCodingKey("default_version"))
     }
 }
 
@@ -147,8 +147,8 @@ struct CreateSkillVersionRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(files, forKey: SdkCodingKey("files"))
-        try keyedContainer.encodeIfPresent(self.default, forKey: SdkCodingKey("default"))
+        try keyedContainer.encode(self.files, forKey: SdkCodingKey("files"))
+        try keyedContainer.encodeIfPresent(self.`default`, forKey: SdkCodingKey("default"))
     }
 }
 
@@ -161,11 +161,11 @@ struct CreateChatkitSessionRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(workflow, forKey: SdkCodingKey("workflow"))
-        try keyedContainer.encode(user, forKey: SdkCodingKey("user"))
-        try keyedContainer.encodeIfPresent(expiresAfter, forKey: SdkCodingKey("expires_after"))
-        try keyedContainer.encodeIfPresent(rateLimits, forKey: SdkCodingKey("rate_limits"))
-        try keyedContainer.encodeIfPresent(chatkitConfiguration, forKey: SdkCodingKey("chatkit_configuration"))
+        try keyedContainer.encode(self.workflow, forKey: SdkCodingKey("workflow"))
+        try keyedContainer.encode(self.user, forKey: SdkCodingKey("user"))
+        try keyedContainer.encodeIfPresent(self.expiresAfter, forKey: SdkCodingKey("expires_after"))
+        try keyedContainer.encodeIfPresent(self.rateLimits, forKey: SdkCodingKey("rate_limits"))
+        try keyedContainer.encodeIfPresent(self.chatkitConfiguration, forKey: SdkCodingKey("chatkit_configuration"))
     }
 }
 
@@ -179,12 +179,12 @@ struct CreateDecisionRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encode(input, forKey: SdkCodingKey("input"))
-        try keyedContainer.encode(questions, forKey: SdkCodingKey("questions"))
-        try keyedContainer.encodeIfPresent(safetyIdentifier, forKey: SdkCodingKey("safety_identifier"))
-        try keyedContainer.encodeIfPresent(promptCacheKey, forKey: SdkCodingKey("prompt_cache_key"))
-        try keyedContainer.encodeIfPresent(promptCacheOptions, forKey: SdkCodingKey("prompt_cache_options"))
+        try keyedContainer.encode(self.model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encode(self.input, forKey: SdkCodingKey("input"))
+        try keyedContainer.encode(self.questions, forKey: SdkCodingKey("questions"))
+        try keyedContainer.encodeIfPresent(self.safetyIdentifier, forKey: SdkCodingKey("safety_identifier"))
+        try keyedContainer.encodeIfPresent(self.promptCacheKey, forKey: SdkCodingKey("prompt_cache_key"))
+        try keyedContainer.encodeIfPresent(self.promptCacheOptions, forKey: SdkCodingKey("prompt_cache_options"))
     }
 }
 
@@ -194,7 +194,7 @@ struct CreateAgentEnvironmentRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(environment, forKey: SdkCodingKey("environment"))
-        try keyedContainer.encodeIfPresent(vaultIds, forKey: SdkCodingKey("vault_ids"))
+        try keyedContainer.encode(self.environment, forKey: SdkCodingKey("environment"))
+        try keyedContainer.encodeIfPresent(self.vaultIds, forKey: SdkCodingKey("vault_ids"))
     }
 }

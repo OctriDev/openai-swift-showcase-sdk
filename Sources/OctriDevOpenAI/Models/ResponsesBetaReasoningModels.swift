@@ -3,39 +3,29 @@
 
 import Foundation
 
-/// ResponsesBetaReasoning domain models
+// ResponsesBetaReasoning domain models
 public indirect enum BetaReasoningEffort {
     case stringValue(String)
     case jsonValue(JSONValue)
 }
 
 extension BetaReasoningEffort: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for BetaReasoningEffort"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for BetaReasoningEffort")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension BetaReasoningEffort {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
         return nil
     }
 }
@@ -64,38 +54,28 @@ public struct BetaReasoningTextContent: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaReasoningTextContent {
-    init(from decoder: Decoder) throws {
+extension BetaReasoningTextContent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        try sdkValidateRawEnum("type", type, BetaReasoningTextContentType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+            try sdkValidateRawEnum("type", self.type, BetaReasoningTextContentType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaReasoningTextContent {
-    init(type: BetaReasoningTextContentType, text: String) throws {
+extension BetaReasoningTextContent {
+    public init(type: BetaReasoningTextContentType, text: String) throws {
         (self.type, self.text) = (type, text)
-        try sdkValidateRawEnum("type", self.type, BetaReasoningTextContentType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaReasoningTextContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -129,61 +109,39 @@ public struct BetaReasoningItem: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaReasoningItem {
-    init(from decoder: Decoder) throws {
+extension BetaReasoningItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.summary) else {
-            throw SdkValidationError(
-                field: "summary",
-                code: "required",
-                message: "Validation failed for 'summary': value is required"
-            )
+            throw SdkValidationError(field: "summary", code: "required", message: "Validation failed for 'summary': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        summary = try container.sdkDecodeRequired(.summary)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        encryptedContent = try container.sdkDecodeIfPresent(.encryptedContent)
-        content = try container.sdkDecodeIfPresent(.content)
-        status = try container.sdkDecodeIfPresent(.status)
-        try sdkValidateRawEnum("type", type, BetaReasoningItemType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.summary = try container.sdkDecodeRequired(.summary)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.encryptedContent = try container.sdkDecodeIfPresent(.encryptedContent)
+        self.content = try container.sdkDecodeIfPresent(.content)
+        self.status = try container.sdkDecodeIfPresent(.status)
+            try sdkValidateRawEnum("type", self.type, BetaReasoningItemType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaReasoningItem {
-    init(
-        type: BetaReasoningItemType,
-        id: String,
-        summary: [BetaSummaryTextContent],
-        agent: BetaAgentTag? = nil,
-        encryptedContent: String? = nil,
-        content: [BetaReasoningTextContent]? = nil,
-        status: BetaReasoningItemStatus? = nil
-    ) throws {
+extension BetaReasoningItem {
+    public init(type: BetaReasoningItemType, id: String, summary: [BetaSummaryTextContent], agent: BetaAgentTag? = nil, encryptedContent: String? = nil, content: [BetaReasoningTextContent]? = nil, status: BetaReasoningItemStatus? = nil) throws {
         (self.type, self.id) = (type, id)
         (self.summary, self.agent) = (summary, agent)
         (self.encryptedContent, self.content) = (encryptedContent, content)
         self.status = status
-        try sdkValidateRawEnum("type", self.type, BetaReasoningItemType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaReasoningItemType.allCases.map(\.rawValue))
     }
 }
 
@@ -210,29 +168,23 @@ public struct BetaReasoning: Codable {
     }
 
     init() {
-        (mode, effort, summary, context, generateSummary) = (nil, nil, nil, nil, nil)
+        (self.mode, self.effort, self.summary, self.context, self.generateSummary) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension BetaReasoning {
-    init(from decoder: Decoder) throws {
+extension BetaReasoning {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        mode = try container.sdkDecodeIfPresent(.mode)
-        effort = try container.sdkDecodeIfPresent(.effort)
-        summary = try container.sdkDecodeIfPresent(.summary)
-        context = try container.sdkDecodeIfPresent(.context)
-        generateSummary = try container.sdkDecodeIfPresent(.generateSummary)
+        self.mode = try container.sdkDecodeIfPresent(.mode)
+        self.effort = try container.sdkDecodeIfPresent(.effort)
+        self.summary = try container.sdkDecodeIfPresent(.summary)
+        self.context = try container.sdkDecodeIfPresent(.context)
+        self.generateSummary = try container.sdkDecodeIfPresent(.generateSummary)
     }
 }
 
-public extension BetaReasoning {
-    init(
-        mode: BetaReasoningModeEnum? = nil,
-        effort: BetaReasoningEffortVariant0? = nil,
-        summary: BetaReasoningSummaryVariant0? = nil,
-        context: BetaReasoningContextVariant0? = nil,
-        generateSummary: BetaReasoningGenerateSummaryVariant0? = nil
-    ) {
+extension BetaReasoning {
+    public init(mode: BetaReasoningModeEnum? = nil, effort: BetaReasoningEffortVariant0? = nil, summary: BetaReasoningSummaryVariant0? = nil, context: BetaReasoningContextVariant0? = nil, generateSummary: BetaReasoningGenerateSummaryVariant0? = nil) {
         self.init()
         (self.mode, self.effort) = (mode, effort)
         (self.summary, self.context) = (summary, context)
@@ -245,17 +197,14 @@ public extension BetaReasoning {
 public struct BetaReasoningItemStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaReasoningItemStatus(rawValue: "in_progress")
     public static let completed = BetaReasoningItemStatus(rawValue: "completed")
     public static let incomplete = BetaReasoningItemStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -271,17 +220,14 @@ public struct BetaReasoningItemStatus: RawRepresentable, Hashable, Codable, Send
 public struct BetaReasoningContextVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = BetaReasoningContextVariant0(rawValue: "auto")
     public static let currentTurn = BetaReasoningContextVariant0(rawValue: "current_turn")
     public static let allTurns = BetaReasoningContextVariant0(rawValue: "all_turns")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -297,10 +243,7 @@ public struct BetaReasoningContextVariant0: RawRepresentable, Hashable, Codable,
 public struct BetaReasoningEffortVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let none = BetaReasoningEffortVariant0(rawValue: "none")
     public static let minimal = BetaReasoningEffortVariant0(rawValue: "minimal")
     public static let low = BetaReasoningEffortVariant0(rawValue: "low")
@@ -311,7 +254,7 @@ public struct BetaReasoningEffortVariant0: RawRepresentable, Hashable, Codable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -361,17 +304,14 @@ public enum BetaReasoningItemType: String, CaseIterable, Codable {
 public struct BetaReasoningGenerateSummaryVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = BetaReasoningGenerateSummaryVariant0(rawValue: "auto")
     public static let concise = BetaReasoningGenerateSummaryVariant0(rawValue: "concise")
     public static let detailed = BetaReasoningGenerateSummaryVariant0(rawValue: "detailed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -386,17 +326,14 @@ public struct BetaReasoningGenerateSummaryVariant0: RawRepresentable, Hashable, 
 public struct BetaReasoningSummaryVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = BetaReasoningSummaryVariant0(rawValue: "auto")
     public static let concise = BetaReasoningSummaryVariant0(rawValue: "concise")
     public static let detailed = BetaReasoningSummaryVariant0(rawValue: "detailed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

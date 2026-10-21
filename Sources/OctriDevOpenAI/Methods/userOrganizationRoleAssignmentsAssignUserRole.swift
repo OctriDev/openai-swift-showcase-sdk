@@ -6,35 +6,16 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension UserOrganizationRoleAssignmentsMethods {
+extension UserOrganizationRoleAssignmentsMethods {
     /// Assigns an organization role to a user within the organization.
     ///
     /// - Parameters:
     /// - userId: The ID of the user that should receive the organization role.
     /// - roleId: Identifier of the role to assign.
-    static func assignUserRole(
-        config: ClientConfig,
-        userId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> UserRoleAssignment {
+    public static func assignUserRole(config: ClientConfig, userId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> UserRoleAssignment {
         let requestBody = AssignUserRoleRequestBody(roleId: roleId)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organization/users/", sdkEncodePathSegment(sdkWireString(userId)), "/roles"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "assignUserRole",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/users/", sdkEncodePathSegment(sdkWireString(userId)), "/roles"].joined(), config: config, body: requestBody, decoder: .json, operationId: "assignUserRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
     /// Retrieves an organization role assigned to a user.
@@ -42,31 +23,8 @@ public extension UserOrganizationRoleAssignmentsMethods {
     /// - Parameters:
     /// - userId: The ID of the user to inspect.
     /// - roleId: The ID of the organization role to retrieve for the user.
-    static func retrieveUserRole(
-        config: ClientConfig,
-        userId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AssignedRoleDetails {
-        try await (sdkRequest(
-            "GET",
-            [
-                "/organization/users/",
-                sdkEncodePathSegment(sdkWireString(userId)),
-                "/roles/",
-                sdkEncodePathSegment(sdkWireString(roleId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveUserRole",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func retrieveUserRole(config: ClientConfig, userId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> AssignedRoleDetails {
+        return try (await sdkRequest("GET", ["/organization/users/", sdkEncodePathSegment(sdkWireString(userId)), "/roles/", sdkEncodePathSegment(sdkWireString(roleId))].joined(), config: config, decoder: .json, operationId: "retrieveUserRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
     /// Unassigns an organization role from a user within the organization.
@@ -74,30 +32,7 @@ public extension UserOrganizationRoleAssignmentsMethods {
     /// - Parameters:
     /// - userId: The ID of the user to modify.
     /// - roleId: The ID of the organization role to remove from the user.
-    static func unassignUserRole(
-        config: ClientConfig,
-        userId: String,
-        roleId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedRoleAssignmentResource {
-        try await (sdkRequest(
-            "DELETE",
-            [
-                "/organization/users/",
-                sdkEncodePathSegment(sdkWireString(userId)),
-                "/roles/",
-                sdkEncodePathSegment(sdkWireString(roleId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "unassignUserRole",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func unassignUserRole(config: ClientConfig, userId: String, roleId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedRoleAssignmentResource {
+        return try (await sdkRequest("DELETE", ["/organization/users/", sdkEncodePathSegment(sdkWireString(userId)), "/roles/", sdkEncodePathSegment(sdkWireString(roleId))].joined(), config: config, decoder: .json, operationId: "unassignUserRole", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

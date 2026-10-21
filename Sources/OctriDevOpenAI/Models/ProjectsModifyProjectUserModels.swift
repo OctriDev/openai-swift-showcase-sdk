@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Projects domain models
+// Projects domain models
 /// Typed representation of the `ProjectUserUpdateRequest` API schema.
 public struct ProjectUserUpdateRequest: Codable {
     /// `owner` or `member`
@@ -14,19 +14,19 @@ public struct ProjectUserUpdateRequest: Codable {
     }
 
     init() {
-        role = nil
+        self.role = nil
     }
 }
 
-public extension ProjectUserUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension ProjectUserUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        role = try container.sdkDecodeIfPresent(.role)
+        self.role = try container.sdkDecodeIfPresent(.role)
     }
 }
 
-public extension ProjectUserUpdateRequest {
-    init(role: String? = nil) {
+extension ProjectUserUpdateRequest {
+    public init(role: String? = nil) {
         self.init()
         self.role = role
     }

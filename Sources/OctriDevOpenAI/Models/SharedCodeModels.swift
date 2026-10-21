@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedCode domain models
+// SharedCode domain models
 public indirect enum CodeInterpreterToolCallOutputsItem {
     case codeInterpreterOutputLogs(CodeInterpreterOutputLogs)
     case codeInterpreterOutputImage(CodeInterpreterOutputImage)
@@ -12,6 +12,7 @@ public indirect enum CodeInterpreterToolCallOutputsItem {
 }
 
 extension CodeInterpreterToolCallOutputsItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension CodeInterpreterToolCallOutputsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension CodeInterpreterToolCallOutputsItem: Codable {
 extension CodeInterpreterToolCallOutputsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "logs": try .codeInterpreterOutputLogs(CodeInterpreterOutputLogs(from: decoder))
-        case "image": try .codeInterpreterOutputImage(CodeInterpreterOutputImage(from: decoder))
-        default: nil
+        case "logs": return .codeInterpreterOutputLogs(try CodeInterpreterOutputLogs(from: decoder))
+        case "image": return .codeInterpreterOutputImage(try CodeInterpreterOutputImage(from: decoder))
+        default: return nil
         }
     }
 }
@@ -63,33 +60,22 @@ public indirect enum CodeInterpreterToolContainer {
 }
 
 extension CodeInterpreterToolContainer: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CodeInterpreterToolContainer"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CodeInterpreterToolContainer")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CodeInterpreterToolContainer {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container
-            .decode(AutoCodeInterpreterToolParam.self) {
-            return .autoCodeInterpreterToolParam(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(AutoCodeInterpreterToolParam.self) { return .autoCodeInterpreterToolParam(value) }
         return nil
     }
 }
@@ -116,38 +102,28 @@ public struct CodeInterpreterOutputLogs: Codable {
         case logs
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CodeInterpreterOutputLogs {
-    init(from decoder: Decoder) throws {
+extension CodeInterpreterOutputLogs {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.logs) else {
-            throw SdkValidationError(
-                field: "logs",
-                code: "required",
-                message: "Validation failed for 'logs': value is required"
-            )
+            throw SdkValidationError(field: "logs", code: "required", message: "Validation failed for 'logs': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        logs = try container.sdkDecodeRequired(.logs)
-        try sdkValidateRawEnum("type", type, CodeInterpreterOutputLogsType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.logs = try container.sdkDecodeRequired(.logs)
+            try sdkValidateRawEnum("type", self.type, CodeInterpreterOutputLogsType.allCases.map(\.rawValue))
     }
 }
 
-public extension CodeInterpreterOutputLogs {
-    init(type: CodeInterpreterOutputLogsType, logs: String) throws {
+extension CodeInterpreterOutputLogs {
+    public init(type: CodeInterpreterOutputLogsType, logs: String) throws {
         (self.type, self.logs) = (type, logs)
-        try sdkValidateRawEnum("type", self.type, CodeInterpreterOutputLogsType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, CodeInterpreterOutputLogsType.allCases.map(\.rawValue))
     }
 }
 
@@ -177,79 +153,46 @@ public struct CodeInterpreterToolCall: Codable {
         case outputs
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CodeInterpreterToolCall {
-    init(from decoder: Decoder) throws {
+extension CodeInterpreterToolCall {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
         guard container.contains(.containerId) else {
-            throw SdkValidationError(
-                field: "container_id",
-                code: "required",
-                message: "Validation failed for 'container_id': value is required"
-            )
+            throw SdkValidationError(field: "container_id", code: "required", message: "Validation failed for 'container_id': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.outputs) else {
-            throw SdkValidationError(
-                field: "outputs",
-                code: "required",
-                message: "Validation failed for 'outputs': value is required"
-            )
+            throw SdkValidationError(field: "outputs", code: "required", message: "Validation failed for 'outputs': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        status = try container.sdkDecodeRequired(.status)
-        containerId = try container.sdkDecodeRequired(.containerId)
-        code = try container.sdkDecodeNullable(.code)
-        outputs = try container.sdkDecodeNullable(.outputs)
-        try sdkValidateRawEnum("type", type, CodeInterpreterToolCallType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.containerId = try container.sdkDecodeRequired(.containerId)
+        self.code = try container.sdkDecodeNullable(.code)
+        self.outputs = try container.sdkDecodeNullable(.outputs)
+            try sdkValidateRawEnum("type", self.type, CodeInterpreterToolCallType.allCases.map(\.rawValue))
     }
 }
 
-public extension CodeInterpreterToolCall {
-    init(
-        type: CodeInterpreterToolCallType,
-        id: String,
-        status: CodeInterpreterToolCallStatus,
-        containerId: String,
-        code: String?,
-        outputs: [CodeInterpreterToolCallOutputsItem]?
-    ) throws {
+extension CodeInterpreterToolCall {
+    public init(type: CodeInterpreterToolCallType, id: String, status: CodeInterpreterToolCallStatus, containerId: String, code: String?, outputs: [CodeInterpreterToolCallOutputsItem]?) throws {
         (self.type, self.id) = (type, id)
         (self.status, self.containerId) = (status, containerId)
         (self.code, self.outputs) = (code, outputs)
-        try sdkValidateRawEnum("type", self.type, CodeInterpreterToolCallType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, CodeInterpreterToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -269,47 +212,33 @@ public struct CodeInterpreterTool: Codable {
         case allowedCallers = "allowed_callers"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CodeInterpreterTool {
-    init(from decoder: Decoder) throws {
+extension CodeInterpreterTool {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.container) else {
-            throw SdkValidationError(
-                field: "container",
-                code: "required",
-                message: "Validation failed for 'container': value is required"
-            )
+            throw SdkValidationError(field: "container", code: "required", message: "Validation failed for 'container': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
+        self.type = try container.sdkDecodeRequired(.type)
         self.container = try container.sdkDecodeRequired(.container)
-        allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
-        try sdkValidateRawEnum("type", type, CodeInterpreterToolType.allCases.map(\.rawValue))
-        if let value = allowedCallers {
+        self.allowedCallers = try container.sdkDecodeIfPresent(.allowedCallers)
+            try sdkValidateRawEnum("type", self.type, CodeInterpreterToolType.allCases.map(\.rawValue))
+        if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
     }
 }
 
-public extension CodeInterpreterTool {
-    init(
-        type: CodeInterpreterToolType,
-        container containerValue: CodeInterpreterToolContainer,
-        allowedCallers: [CallableToolAllowedCaller]? = nil
-    ) throws {
-        (self.type, container) = (type, containerValue)
+extension CodeInterpreterTool {
+    public init(type: CodeInterpreterToolType, container containerValue: CodeInterpreterToolContainer, allowedCallers: [CallableToolAllowedCaller]? = nil) throws {
+        (self.type, self.container) = (type, containerValue)
         self.allowedCallers = allowedCallers
-        try sdkValidateRawEnum("type", self.type, CodeInterpreterToolType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, CodeInterpreterToolType.allCases.map(\.rawValue))
         if let value = self.allowedCallers {
             try validateItems("allowed_callers", value, min: 1, max: nil)
         }
@@ -328,40 +257,30 @@ public struct CodeInterpreterOutputImage: Codable {
         case url
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CodeInterpreterOutputImage {
-    init(from decoder: Decoder) throws {
+extension CodeInterpreterOutputImage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.url) else {
-            throw SdkValidationError(
-                field: "url",
-                code: "required",
-                message: "Validation failed for 'url': value is required"
-            )
+            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        url = try container.sdkDecodeRequired(.url)
-        try sdkValidateRawEnum("type", type, CodeInterpreterOutputImageType.allCases.map(\.rawValue))
-        try sdkValidateUri("url", url)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.url = try container.sdkDecodeRequired(.url)
+            try sdkValidateRawEnum("type", self.type, CodeInterpreterOutputImageType.allCases.map(\.rawValue))
+            try sdkValidateUri("url", self.url)
     }
 }
 
-public extension CodeInterpreterOutputImage {
-    init(type: CodeInterpreterOutputImageType, url: String) throws {
+extension CodeInterpreterOutputImage {
+    public init(type: CodeInterpreterOutputImageType, url: String) throws {
         (self.type, self.url) = (type, url)
-        try sdkValidateRawEnum("type", self.type, CodeInterpreterOutputImageType.allCases.map(\.rawValue))
-        try sdkValidateUri("url", self.url)
+            try sdkValidateRawEnum("type", self.type, CodeInterpreterOutputImageType.allCases.map(\.rawValue))
+            try sdkValidateUri("url", self.url)
     }
 }
 
@@ -370,10 +289,7 @@ public extension CodeInterpreterOutputImage {
 public struct CodeInterpreterToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = CodeInterpreterToolCallStatus(rawValue: "in_progress")
     public static let completed = CodeInterpreterToolCallStatus(rawValue: "completed")
     public static let incomplete = CodeInterpreterToolCallStatus(rawValue: "incomplete")
@@ -382,7 +298,7 @@ public struct CodeInterpreterToolCallStatus: RawRepresentable, Hashable, Codable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

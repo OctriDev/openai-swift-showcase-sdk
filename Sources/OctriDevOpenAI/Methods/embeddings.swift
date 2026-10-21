@@ -8,10 +8,8 @@ import Foundation
 #endif
 public enum EmbeddingsMethods {}
 
-public extension EmbeddingsMethods {
-    /// Creates embedding vectors for the supplied text or token input. Provide `model` and `input`, and use
-    /// `encoding_format` or `dimensions` to control the returned vectors when the selected model supports those
-    /// options.
+extension EmbeddingsMethods {
+    /// Creates embedding vectors for the supplied text or token input. Provide `model` and `input`, and use `encoding_format` or `dimensions` to control the returned vectors when the selected model supports those options.
     ///
     /// Creates an embedding vector representing the input text.
     ///
@@ -38,42 +36,13 @@ public extension EmbeddingsMethods {
     ///   OpenAI to monitor and detect abuse. [Learn
     ///   more](https://developers.openai.com/api/docs/guides/safety-best-practices#im
     ///   plement-safety-identifiers).
-    static func createEmbedding(
-        config: ClientConfig,
-        input: CreateEmbeddingRequestInput,
-        model: String,
-        encodingFormat: CreateEmbeddingRequestEncodingFormat? = nil,
-        dimensions: Int? = nil,
-        user: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateEmbeddingResponse {
-        if let dimensions {
+    public static func createEmbedding(config: ClientConfig, input: CreateEmbeddingRequestInput, model: String, encodingFormat: CreateEmbeddingRequestEncodingFormat? = nil, dimensions: Int? = nil, user: String? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateEmbeddingResponse {
+        if let dimensions = dimensions {
             try validateRange("dimensions", Double(dimensions), min: 1)
         }
 
-        let requestBody = CreateEmbeddingRequestBody(
-            input: input,
-            model: model,
-            encodingFormat: encodingFormat,
-            dimensions: dimensions,
-            user: user
-        )
+        let requestBody = CreateEmbeddingRequestBody(input: input, model: model, encodingFormat: encodingFormat, dimensions: dimensions, user: user)
 
-        return try await (sdkRequest(
-            "POST",
-            "/embeddings",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createEmbedding",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "401": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-                "503": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/embeddings", config: config, body: requestBody, decoder: .json, operationId: "createEmbedding", options: requestOptions, errors: ["400": ErrorResponse.self, "401": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self])).data
     }
 }

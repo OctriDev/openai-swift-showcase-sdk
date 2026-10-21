@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesResponseFile domain models
+// ResponsesResponseFile domain models
 /// Emitted when a file search call is completed (results found).
 public struct ResponseFileSearchCallCompletedEvent: Codable {
     /// The type of the event. Always `response.file_search_call.completed`.
@@ -22,55 +22,37 @@ public struct ResponseFileSearchCallCompletedEvent: Codable {
         case sequenceNumber = "sequence_number"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseFileSearchCallCompletedEvent {
-    init(from decoder: Decoder) throws {
+extension ResponseFileSearchCallCompletedEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        try sdkValidateRawEnum("type", type, ResponseFileSearchCallCompletedEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+            try sdkValidateRawEnum("type", self.type, ResponseFileSearchCallCompletedEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseFileSearchCallCompletedEvent {
-    init(type: ResponseFileSearchCallCompletedEventType, outputIndex: Int, itemId: String, sequenceNumber: Int) throws {
+extension ResponseFileSearchCallCompletedEvent {
+    public init(type: ResponseFileSearchCallCompletedEventType, outputIndex: Int, itemId: String, sequenceNumber: Int) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.sequenceNumber) = (itemId, sequenceNumber)
-        try sdkValidateRawEnum("type", self.type, ResponseFileSearchCallCompletedEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseFileSearchCallCompletedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -92,60 +74,37 @@ public struct ResponseFileSearchCallInProgressEvent: Codable {
         case sequenceNumber = "sequence_number"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseFileSearchCallInProgressEvent {
-    init(from decoder: Decoder) throws {
+extension ResponseFileSearchCallInProgressEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        try sdkValidateRawEnum("type", type, ResponseFileSearchCallInProgressEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+            try sdkValidateRawEnum("type", self.type, ResponseFileSearchCallInProgressEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseFileSearchCallInProgressEvent {
-    init(
-        type: ResponseFileSearchCallInProgressEventType,
-        outputIndex: Int,
-        itemId: String,
-        sequenceNumber: Int
-    ) throws {
+extension ResponseFileSearchCallInProgressEvent {
+    public init(type: ResponseFileSearchCallInProgressEventType, outputIndex: Int, itemId: String, sequenceNumber: Int) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.sequenceNumber) = (itemId, sequenceNumber)
-        try sdkValidateRawEnum("type", self.type, ResponseFileSearchCallInProgressEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseFileSearchCallInProgressEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -167,55 +126,37 @@ public struct ResponseFileSearchCallSearchingEvent: Codable {
         case sequenceNumber = "sequence_number"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseFileSearchCallSearchingEvent {
-    init(from decoder: Decoder) throws {
+extension ResponseFileSearchCallSearchingEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        try sdkValidateRawEnum("type", type, ResponseFileSearchCallSearchingEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+            try sdkValidateRawEnum("type", self.type, ResponseFileSearchCallSearchingEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseFileSearchCallSearchingEvent {
-    init(type: ResponseFileSearchCallSearchingEventType, outputIndex: Int, itemId: String, sequenceNumber: Int) throws {
+extension ResponseFileSearchCallSearchingEvent {
+    public init(type: ResponseFileSearchCallSearchingEventType, outputIndex: Int, itemId: String, sequenceNumber: Int) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.sequenceNumber) = (itemId, sequenceNumber)
-        try sdkValidateRawEnum("type", self.type, ResponseFileSearchCallSearchingEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseFileSearchCallSearchingEventType.allCases.map(\.rawValue))
     }
 }
 

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Completions domain models
+// Completions domain models
 public indirect enum CreateCompletionRequestPrompt {
     case stringValue(String)
     case stringList([String])
@@ -13,41 +13,25 @@ public indirect enum CreateCompletionRequestPrompt {
 }
 
 extension CreateCompletionRequestPrompt: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateCompletionRequestPrompt"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateCompletionRequestPrompt")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateCompletionRequestPrompt {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode([String].self) {
-            return .stringList(value)
-        }
-        if let value = try? container.decode([Int].self) {
-            return .intList(value)
-        }
-        if let value = try? container.decode([[Int]].self) {
-            return .intList1(value)
-        }
-        if let value = try? container.decode(JSONValue.self) {
-            return .jsonValue(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode([String].self) { return .stringList(value) }
+        if let value = try? container.decode([Int].self) { return .intList(value) }
+        if let value = try? container.decode([[Int]].self) { return .intList1(value) }
+        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
         return nil
     }
 }
@@ -86,56 +70,33 @@ public struct CreateCompletionResponseChoicesItem: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateCompletionResponseChoicesItem {
-    init(from decoder: Decoder) throws {
+extension CreateCompletionResponseChoicesItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.finishReason) else {
-            throw SdkValidationError(
-                field: "finish_reason",
-                code: "required",
-                message: "Validation failed for 'finish_reason': value is required"
-            )
+            throw SdkValidationError(field: "finish_reason", code: "required", message: "Validation failed for 'finish_reason': value is required")
         }
         guard container.contains(.index) else {
-            throw SdkValidationError(
-                field: "index",
-                code: "required",
-                message: "Validation failed for 'index': value is required"
-            )
+            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
         }
         guard container.contains(.logprobs) else {
-            throw SdkValidationError(
-                field: "logprobs",
-                code: "required",
-                message: "Validation failed for 'logprobs': value is required"
-            )
+            throw SdkValidationError(field: "logprobs", code: "required", message: "Validation failed for 'logprobs': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        finishReason = try container.sdkDecodeNullable(.finishReason)
-        index = try container.sdkDecodeRequired(.index)
-        logprobs = try container.sdkDecodeNullable(.logprobs)
-        text = try container.sdkDecodeRequired(.text)
+        self.finishReason = try container.sdkDecodeNullable(.finishReason)
+        self.index = try container.sdkDecodeRequired(.index)
+        self.logprobs = try container.sdkDecodeNullable(.logprobs)
+        self.text = try container.sdkDecodeRequired(.text)
     }
 }
 
-public extension CreateCompletionResponseChoicesItem {
-    init(
-        finishReason: CreateCompletionResponseChoicesItemFinishReasonVariant0?,
-        index: Int,
-        logprobs: CreateCompletionResponseChoicesItemLogprobs?,
-        text: String
-    ) {
+extension CreateCompletionResponseChoicesItem {
+    public init(finishReason: CreateCompletionResponseChoicesItemFinishReasonVariant0?, index: Int, logprobs: CreateCompletionResponseChoicesItemLogprobs?, text: String) {
         (self.finishReason, self.index) = (finishReason, index)
         (self.logprobs, self.text) = (logprobs, text)
     }
@@ -160,27 +121,22 @@ public struct CreateCompletionResponseChoicesItemLogprobs: Codable {
     }
 
     init() {
-        (textOffset, tokenLogprobs, tokens, topLogprobs) = (nil, nil, nil, nil)
+        (self.textOffset, self.tokenLogprobs, self.tokens, self.topLogprobs) = (nil, nil, nil, nil)
     }
 }
 
-public extension CreateCompletionResponseChoicesItemLogprobs {
-    init(from decoder: Decoder) throws {
+extension CreateCompletionResponseChoicesItemLogprobs {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        textOffset = try container.sdkDecodeIfPresent(.textOffset)
-        tokenLogprobs = try container.sdkDecodeIfPresent(.tokenLogprobs)
-        tokens = try container.sdkDecodeIfPresent(.tokens)
-        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        self.textOffset = try container.sdkDecodeIfPresent(.textOffset)
+        self.tokenLogprobs = try container.sdkDecodeIfPresent(.tokenLogprobs)
+        self.tokens = try container.sdkDecodeIfPresent(.tokens)
+        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
     }
 }
 
-public extension CreateCompletionResponseChoicesItemLogprobs {
-    init(
-        textOffset: [Int]? = nil,
-        tokenLogprobs: [Double]? = nil,
-        tokens: [String]? = nil,
-        topLogprobs: [[String: Double]]? = nil
-    ) {
+extension CreateCompletionResponseChoicesItemLogprobs {
+    public init(textOffset: [Int]? = nil, tokenLogprobs: [Double]? = nil, tokens: [String]? = nil, topLogprobs: [[String: Double]]? = nil) {
         self.init()
         (self.textOffset, self.tokenLogprobs) = (textOffset, tokenLogprobs)
         (self.tokens, self.topLogprobs) = (tokens, topLogprobs)
@@ -284,71 +240,42 @@ public struct CreateCompletionRequest: Codable {
         case user
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateCompletionRequest {
-    init(from decoder: Decoder) throws {
+extension CreateCompletionRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
         guard container.contains(.prompt) else {
-            throw SdkValidationError(
-                field: "prompt",
-                code: "required",
-                message: "Validation failed for 'prompt': value is required"
-            )
+            throw SdkValidationError(field: "prompt", code: "required", message: "Validation failed for 'prompt': value is required")
         }
-        model = try container.sdkDecodeRequired(.model)
-        prompt = try container.sdkDecodeNullable(.prompt)
-        bestOf = try container.sdkDecodeIfPresent(.bestOf)
-        echo = try container.sdkDecodeIfPresent(.echo)
-        frequencyPenalty = try container.sdkDecodeIfPresent(.frequencyPenalty)
-        logitBias = try container.sdkDecodeIfPresent(.logitBias)
-        logprobs = try container.sdkDecodeIfPresent(.logprobs)
-        maxTokens = try container.sdkDecodeIfPresent(.maxTokens)
-        n = try container.sdkDecodeIfPresent(.n)
-        presencePenalty = try container.sdkDecodeIfPresent(.presencePenalty)
-        seed = try container.sdkDecodeIfPresent(.seed)
-        stop = try container.sdkDecodeIfPresent(.stop)
-        stream = try container.sdkDecodeIfPresent(.stream)
-        streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
-        suffix = try container.sdkDecodeIfPresent(.suffix)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        topP = try container.sdkDecodeIfPresent(.topP)
-        user = try container.sdkDecodeIfPresent(.user)
+        self.model = try container.sdkDecodeRequired(.model)
+        self.prompt = try container.sdkDecodeNullable(.prompt)
+        self.bestOf = try container.sdkDecodeIfPresent(.bestOf)
+        self.echo = try container.sdkDecodeIfPresent(.echo)
+        self.frequencyPenalty = try container.sdkDecodeIfPresent(.frequencyPenalty)
+        self.logitBias = try container.sdkDecodeIfPresent(.logitBias)
+        self.logprobs = try container.sdkDecodeIfPresent(.logprobs)
+        self.maxTokens = try container.sdkDecodeIfPresent(.maxTokens)
+        self.n = try container.sdkDecodeIfPresent(.n)
+        self.presencePenalty = try container.sdkDecodeIfPresent(.presencePenalty)
+        self.seed = try container.sdkDecodeIfPresent(.seed)
+        self.stop = try container.sdkDecodeIfPresent(.stop)
+        self.stream = try container.sdkDecodeIfPresent(.stream)
+        self.streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
+        self.suffix = try container.sdkDecodeIfPresent(.suffix)
+        self.temperature = try container.sdkDecodeIfPresent(.temperature)
+        self.topP = try container.sdkDecodeIfPresent(.topP)
+        self.user = try container.sdkDecodeIfPresent(.user)
         try sdkValidateConstraints()
     }
 }
 
-public extension CreateCompletionRequest {
-    init(
-        model: String,
-        prompt: CreateCompletionRequestPrompt?,
-        bestOf: Int? = nil,
-        echo: Bool? = nil,
-        frequencyPenalty: Double? = nil,
-        logitBias: [String: Int]? = nil,
-        logprobs: Int? = nil,
-        maxTokens: Int? = nil,
-        n: Int? = nil,
-        presencePenalty: Double? = nil,
-        seed: Int? = nil,
-        stop: StopConfiguration? = nil,
-        stream: Bool? = nil,
-        streamOptions: ChatCompletionStreamOptions? = nil,
-        suffix: String? = nil,
-        temperature: Double? = nil,
-        topP: Double? = nil,
-        user: String? = nil
-    ) throws {
+extension CreateCompletionRequest {
+    public init(model: String, prompt: CreateCompletionRequestPrompt?, bestOf: Int? = nil, echo: Bool? = nil, frequencyPenalty: Double? = nil, logitBias: [String: Int]? = nil, logprobs: Int? = nil, maxTokens: Int? = nil, n: Int? = nil, presencePenalty: Double? = nil, seed: Int? = nil, stop: StopConfiguration? = nil, stream: Bool? = nil, streamOptions: ChatCompletionStreamOptions? = nil, suffix: String? = nil, temperature: Double? = nil, topP: Double? = nil, user: String? = nil) throws {
         (self.model, self.prompt) = (model, prompt)
         (self.bestOf, self.echo) = (bestOf, echo)
         (self.frequencyPenalty, self.logitBias) = (frequencyPenalty, logitBias)
@@ -364,93 +291,29 @@ public extension CreateCompletionRequest {
 
 extension CreateCompletionRequest {
     func sdkValidateConstraints() throws {
-        if let value = bestOf {
-            try validateRange(
-                "best_of",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.bestOf {
+            try validateRange("best_of", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = frequencyPenalty {
-            try validateRange(
-                "frequency_penalty",
-                Double(value),
-                min: -2,
-                max: 2,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.frequencyPenalty {
+            try validateRange("frequency_penalty", Double(value), min: -2, max: 2, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = logprobs {
-            try validateRange(
-                "logprobs",
-                Double(value),
-                min: 0,
-                max: 5,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.logprobs {
+            try validateRange("logprobs", Double(value), min: 0, max: 5, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = maxTokens {
-            try validateRange(
-                "max_tokens",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.maxTokens {
+            try validateRange("max_tokens", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = n {
-            try validateRange(
-                "n",
-                Double(value),
-                min: 1,
-                max: 128,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.n {
+            try validateRange("n", Double(value), min: 1, max: 128, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = presencePenalty {
-            try validateRange(
-                "presence_penalty",
-                Double(value),
-                min: -2,
-                max: 2,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.presencePenalty {
+            try validateRange("presence_penalty", Double(value), min: -2, max: 2, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = temperature {
-            try validateRange(
-                "temperature",
-                Double(value),
-                min: 0,
-                max: 2,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.temperature {
+            try validateRange("temperature", Double(value), min: 0, max: 2, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = topP {
-            try validateRange(
-                "top_p",
-                Double(value),
-                min: 0,
-                max: 1,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.topP {
+            try validateRange("top_p", Double(value), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -485,69 +348,39 @@ public struct CreateCompletionResponse: Codable {
         case usage
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateCompletionResponse {
-    init(from decoder: Decoder) throws {
+extension CreateCompletionResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.choices) else {
-            throw SdkValidationError(
-                field: "choices",
-                code: "required",
-                message: "Validation failed for 'choices': value is required"
-            )
+            throw SdkValidationError(field: "choices", code: "required", message: "Validation failed for 'choices': value is required")
         }
         guard container.contains(.created) else {
-            throw SdkValidationError(
-                field: "created",
-                code: "required",
-                message: "Validation failed for 'created': value is required"
-            )
+            throw SdkValidationError(field: "created", code: "required", message: "Validation failed for 'created': value is required")
         }
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        choices = try container.sdkDecodeRequired(.choices)
-        created = try container.sdkDecodeRequired(.created)
-        model = try container.sdkDecodeRequired(.model)
-        object = try container.sdkDecodeRequired(.object)
-        systemFingerprint = try container.sdkDecodeIfPresent(.systemFingerprint)
-        usage = try container.sdkDecodeIfPresent(.usage)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.choices = try container.sdkDecodeRequired(.choices)
+        self.created = try container.sdkDecodeRequired(.created)
+        self.model = try container.sdkDecodeRequired(.model)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.systemFingerprint = try container.sdkDecodeIfPresent(.systemFingerprint)
+        self.usage = try container.sdkDecodeIfPresent(.usage)
     }
 }
 
-public extension CreateCompletionResponse {
-    init(
-        id: String,
-        choices: [CreateCompletionResponseChoicesItem],
-        created: Int,
-        model: String,
-        object: CreateCompletionResponseObject,
-        systemFingerprint: String? = nil,
-        usage: CompletionUsage? = nil
-    ) {
+extension CreateCompletionResponse {
+    public init(id: String, choices: [CreateCompletionResponseChoicesItem], created: Int, model: String, object: CreateCompletionResponseObject, systemFingerprint: String? = nil, usage: CompletionUsage? = nil) {
         (self.id, self.choices) = (id, choices)
         (self.created, self.model) = (created, model)
         (self.object, self.systemFingerprint) = (object, systemFingerprint)
@@ -556,22 +389,17 @@ public extension CreateCompletionResponse {
 }
 
 /// Required enumerated value serialized in the `finish_reason` wire field.
-public struct CreateCompletionResponseChoicesItemFinishReasonVariant0: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct CreateCompletionResponseChoicesItemFinishReasonVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let stop = CreateCompletionResponseChoicesItemFinishReasonVariant0(rawValue: "stop")
     public static let length = CreateCompletionResponseChoicesItemFinishReasonVariant0(rawValue: "length")
-    public static let contentFilter =
-        CreateCompletionResponseChoicesItemFinishReasonVariant0(rawValue: "content_filter")
+    public static let contentFilter = CreateCompletionResponseChoicesItemFinishReasonVariant0(rawValue: "content_filter")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -584,15 +412,12 @@ public struct CreateCompletionResponseChoicesItemFinishReasonVariant0: RawRepres
 public struct CreateCompletionResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let textCompletion = CreateCompletionResponseObject(rawValue: "text_completion")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,29 +6,15 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension WebhookEndpointsMethods {
+extension WebhookEndpointsMethods {
     /// Sends a sample event to a webhook endpoint for the authenticated project.
     ///
     /// - Parameters:
     /// - webhookEndpointId: The ID of the webhook endpoint to test.
     /// - eventType: The event type to send as a sample delivery.
-    static func testWebhookEndpoint(
-        config: ClientConfig,
-        webhookEndpointId: String,
-        eventType: ProjectEventTypeEnum,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> WebhookEndpointTestResultResource {
+    public static func testWebhookEndpoint(config: ClientConfig, webhookEndpointId: String, eventType: ProjectEventTypeEnum, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointTestResultResource {
         let requestBody = TestWebhookEndpointRequestBody(eventType: eventType)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId)), "/test"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "TestWebhookEndpoint",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId)), "/test"].joined(), config: config, body: requestBody, decoder: .json, operationId: "TestWebhookEndpoint", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

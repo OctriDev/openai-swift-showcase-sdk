@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// FineTuning domain models
+// FineTuning domain models
 /// Typed representation of the `DeleteFineTuningCheckpointPermissionResponse` API schema.
 public struct DeleteFineTuningCheckpointPermissionResponse: Codable {
     /// The ID of the fine-tuned model checkpoint permission that was deleted.
@@ -19,63 +19,44 @@ public struct DeleteFineTuningCheckpointPermissionResponse: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DeleteFineTuningCheckpointPermissionResponse {
-    init(from decoder: Decoder) throws {
+extension DeleteFineTuningCheckpointPermissionResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension DeleteFineTuningCheckpointPermissionResponse {
-    init(id: String, object: DeleteFineTuningCheckpointPermissionResponseObject, deleted: Bool) {
+extension DeleteFineTuningCheckpointPermissionResponse {
+    public init(id: String, object: DeleteFineTuningCheckpointPermissionResponseObject, deleted: Bool) {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
     }
 }
 
 /// The object type, which is always "checkpoint.permission".
-public struct DeleteFineTuningCheckpointPermissionResponseObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct DeleteFineTuningCheckpointPermissionResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let checkpointPermission =
-        DeleteFineTuningCheckpointPermissionResponseObject(rawValue: "checkpoint.permission")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let checkpointPermission = DeleteFineTuningCheckpointPermissionResponseObject(rawValue: "checkpoint.permission")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

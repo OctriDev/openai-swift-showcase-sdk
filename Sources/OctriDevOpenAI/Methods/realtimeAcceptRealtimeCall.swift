@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension RealtimeMethods {
-    struct AcceptRealtimeCallOptions: Codable {
+extension RealtimeMethods {
+    public struct AcceptRealtimeCallOptions: Codable {
         public var callId: String
         public var type: RealtimeSessionCreateRequestGAType
         public var outputModalities: [RealtimeSessionCreateRequestGAOutputModalitiesItem]?
@@ -30,9 +30,7 @@ public extension RealtimeMethods {
         }
     }
 
-    /// Accepts an incoming SIP call and configures the Realtime session that handles it. Set `type` to `realtime` and
-    /// configure session behavior through fields such as `model`, `audio`, and `tools`; `output_modalities` supports
-    /// text or audio, but not both. The caller is bridged to the model after the session configuration is applied.
+    /// Accepts an incoming SIP call and configures the Realtime session that handles it. Set `type` to `realtime` and configure session behavior through fields such as `model`, `audio`, and `tools`; `output_modalities` supports text or audio, but not both. The caller is bridged to the model after the session configuration is applied.
     ///
     /// Accept an incoming SIP call and configure the realtime session that will handle it.
     ///
@@ -95,22 +93,9 @@ public extension RealtimeMethods {
     /// - prompt: Reference to a prompt template and its variables. [Learn
     ///   more](https://developers.openai.com/api/docs/guides/text?api-mode=responses#
     ///   version-prompts-in-code).
-    static func acceptRealtimeCall(
-        config: ClientConfig,
-        options: AcceptRealtimeCallOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
+    public static func acceptRealtimeCall(config: ClientConfig, options: AcceptRealtimeCallOptions, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
         let requestBody = AcceptRealtimeCallRequestBody(options: options)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/realtime/calls/", sdkEncodePathSegment(sdkWireString(options.callId)), "/accept"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .empty,
-            operationId: "acceptRealtimeCall",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "409": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/realtime/calls/", sdkEncodePathSegment(sdkWireString(options.callId)), "/accept"].joined(), config: config, body: requestBody, decoder: .empty, operationId: "acceptRealtimeCall", options: requestOptions, errors: ["404": ErrorResponse.self, "409": ErrorResponse.self])).data
     }
 }

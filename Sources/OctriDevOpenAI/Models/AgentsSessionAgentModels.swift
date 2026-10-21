@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsSessionAgent domain models
+// AgentsSessionAgent domain models
 /// Agent configuration for a session. Omitted fields inherit from `agent_id` when supplied. Supplied objects and
 /// arrays replace the whole field; null resets nullable fields.
 public struct SessionAgentConfigParam: Codable {
@@ -35,53 +35,45 @@ public struct SessionAgentConfigParam: Codable {
     }
 
     init() {
-        (model, reasoning, text, serviceTier, instructions) = (nil, nil, nil, nil, nil)
-        (multiAgent, tools) = (nil, nil)
+        (self.model, self.reasoning, self.text, self.serviceTier, self.instructions) = (nil, nil, nil, nil, nil)
+        (self.multiAgent, self.tools) = (nil, nil)
     }
 }
 
-public extension SessionAgentConfigParam {
-    init(from decoder: Decoder) throws {
+extension SessionAgentConfigParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        model = try container.sdkDecodeIfPresent(.model)
-        reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        text = try container.sdkDecodeIfPresent(.text)
-        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
-        tools = try container.sdkDecodeIfPresent(.tools)
-        if let value = model {
-            try validateLength("model", value, min: 0, max: 1_048_576)
+        self.model = try container.sdkDecodeIfPresent(.model)
+        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
+        self.tools = try container.sdkDecodeIfPresent(.tools)
+        if let value = self.model {
+            try validateLength("model", value, min: 0, max: 1048576)
         }
-        if let value = instructions {
-            try validateLength("instructions", value, min: 0, max: 1_048_576)
+        if let value = self.instructions {
+            try validateLength("instructions", value, min: 0, max: 1048576)
         }
-        if let value = tools {
+        if let value = self.tools {
             try validateItems("tools", value, min: 0, max: 16384)
         }
     }
 }
 
-public extension SessionAgentConfigParam {
-    init(
-        model: String? = nil,
-        reasoning: ReasoningParam? = nil,
-        text: TextParam? = nil,
-        serviceTier: ServiceTierParam? = nil,
-        instructions: String? = nil,
-        multiAgent: MultiAgentConfigCurrentParam? = nil,
-        tools: [AgentToolConfigParam]? = nil
-    ) throws {
+extension SessionAgentConfigParam {
+    public init(model: String? = nil, reasoning: ReasoningParam? = nil, text: TextParam? = nil, serviceTier: ServiceTierParam? = nil, instructions: String? = nil, multiAgent: MultiAgentConfigCurrentParam? = nil, tools: [AgentToolConfigParam]? = nil) throws {
         self.init()
         (self.model, self.reasoning) = (model, reasoning)
         (self.text, self.serviceTier) = (text, serviceTier)
         (self.instructions, self.multiAgent) = (instructions, multiAgent)
         self.tools = tools
         if let value = self.model {
-            try validateLength("model", value, min: 0, max: 1_048_576)
+            try validateLength("model", value, min: 0, max: 1048576)
         }
         if let value = self.instructions {
-            try validateLength("instructions", value, min: 0, max: 1_048_576)
+            try validateLength("instructions", value, min: 0, max: 1048576)
         }
         if let value = self.tools {
             try validateItems("tools", value, min: 0, max: 16384)
@@ -123,60 +115,48 @@ public struct SessionAgentResource: Codable {
         case multiAgent = "multi_agent"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SessionAgentResource {
-    init(from decoder: Decoder) throws {
+extension SessionAgentResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeRequired(.id)
-        name = try container.sdkDecodeNullable(.name)
-        model = try container.sdkDecodeRequired(.model)
-        reasoning = try container.sdkDecodeRequired(.reasoning)
-        text = try container.sdkDecodeRequired(.text)
-        serviceTier = try container.sdkDecodeRequired(.serviceTier)
-        instructions = try container.sdkDecodeNullable(.instructions)
-        tools = try container.sdkDecodeRequired(.tools)
-        multiAgent = try container.sdkDecodeRequired(.multiAgent)
-        try validateLength("id", id, min: 0, max: nil)
-        if let value = name {
+        self.id = try container.sdkDecodeRequired(.id)
+        self.name = try container.sdkDecodeNullable(.name)
+        self.model = try container.sdkDecodeRequired(.model)
+        self.reasoning = try container.sdkDecodeRequired(.reasoning)
+        self.text = try container.sdkDecodeRequired(.text)
+        self.serviceTier = try container.sdkDecodeRequired(.serviceTier)
+        self.instructions = try container.sdkDecodeNullable(.instructions)
+        self.tools = try container.sdkDecodeRequired(.tools)
+        self.multiAgent = try container.sdkDecodeRequired(.multiAgent)
+            try validateLength("id", self.id, min: 0, max: nil)
+        if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }
-        try validateLength("model", model, min: 0, max: nil)
-        if let value = instructions {
+            try validateLength("model", self.model, min: 0, max: nil)
+        if let value = self.instructions {
             try validateLength("instructions", value, min: 0, max: nil)
         }
-        try validateItems("tools", tools, min: 0, max: 2000)
+            try validateItems("tools", self.tools, min: 0, max: 2000)
     }
 }
 
-public extension SessionAgentResource {
-    init(
-        id: String,
-        name: String?,
-        model: String,
-        reasoning: ReasoningResource,
-        text: TextResource,
-        serviceTier: ServiceTierResource,
-        instructions: String?,
-        tools: [AgentToolResource],
-        multiAgent: MultiAgentConfigResource
-    ) throws {
+extension SessionAgentResource {
+    public init(id: String, name: String?, model: String, reasoning: ReasoningResource, text: TextResource, serviceTier: ServiceTierResource, instructions: String?, tools: [AgentToolResource], multiAgent: MultiAgentConfigResource) throws {
         (self.id, self.name) = (id, name)
         (self.model, self.reasoning) = (model, reasoning)
         (self.text, self.serviceTier) = (text, serviceTier)
         (self.instructions, self.tools) = (instructions, tools)
         self.multiAgent = multiAgent
-        try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("id", self.id, min: 0, max: nil)
         if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }
-        try validateLength("model", self.model, min: 0, max: nil)
+            try validateLength("model", self.model, min: 0, max: nil)
         if let value = self.instructions {
             try validateLength("instructions", value, min: 0, max: nil)
         }
-        try validateItems("tools", self.tools, min: 0, max: 2000)
+            try validateItems("tools", self.tools, min: 0, max: 2000)
     }
 }

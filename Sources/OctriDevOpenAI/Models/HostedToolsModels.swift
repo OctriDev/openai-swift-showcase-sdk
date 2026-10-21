@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// HostedTools domain models
+// HostedTools domain models
 /// Typed representation of the `ProjectHostedToolPermissionsUpdateRequest` API schema.
 public struct ProjectHostedToolPermissionsUpdateRequest: Codable {
     /// The file search permission update.
@@ -26,29 +26,23 @@ public struct ProjectHostedToolPermissionsUpdateRequest: Codable {
     }
 
     init() {
-        (fileSearch, webSearch, imageGeneration, mcp, codeInterpreter) = (nil, nil, nil, nil, nil)
+        (self.fileSearch, self.webSearch, self.imageGeneration, self.mcp, self.codeInterpreter) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension ProjectHostedToolPermissionsUpdateRequest {
-    init(from decoder: Decoder) throws {
+extension ProjectHostedToolPermissionsUpdateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
-        webSearch = try container.sdkDecodeIfPresent(.webSearch)
-        imageGeneration = try container.sdkDecodeIfPresent(.imageGeneration)
-        mcp = try container.sdkDecodeIfPresent(.mcp)
-        codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
+        self.fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
+        self.webSearch = try container.sdkDecodeIfPresent(.webSearch)
+        self.imageGeneration = try container.sdkDecodeIfPresent(.imageGeneration)
+        self.mcp = try container.sdkDecodeIfPresent(.mcp)
+        self.codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
     }
 }
 
-public extension ProjectHostedToolPermissionsUpdateRequest {
-    init(
-        fileSearch: HostedToolPermissionUpdate? = nil,
-        webSearch: HostedToolPermissionUpdate? = nil,
-        imageGeneration: HostedToolPermissionUpdate? = nil,
-        mcp: HostedToolPermissionUpdate? = nil,
-        codeInterpreter: HostedToolPermissionUpdate? = nil
-    ) {
+extension ProjectHostedToolPermissionsUpdateRequest {
+    public init(fileSearch: HostedToolPermissionUpdate? = nil, webSearch: HostedToolPermissionUpdate? = nil, imageGeneration: HostedToolPermissionUpdate? = nil, mcp: HostedToolPermissionUpdate? = nil, codeInterpreter: HostedToolPermissionUpdate? = nil) {
         self.init()
         (self.fileSearch, self.webSearch) = (fileSearch, webSearch)
         (self.imageGeneration, self.mcp) = (imageGeneration, mcp)
@@ -65,27 +59,21 @@ public struct HostedToolPermissionUpdate: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension HostedToolPermissionUpdate {
-    init(from decoder: Decoder) throws {
+extension HostedToolPermissionUpdate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(
-                field: "enabled",
-                code: "required",
-                message: "Validation failed for 'enabled': value is required"
-            )
+            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
         }
-        enabled = try container.sdkDecodeRequired(.enabled)
+        self.enabled = try container.sdkDecodeRequired(.enabled)
     }
 }
 
-public extension HostedToolPermissionUpdate {
-    init(enabled: Bool) {
+extension HostedToolPermissionUpdate {
+    public init(enabled: Bool) {
         self.enabled = enabled
     }
 }
@@ -111,65 +99,37 @@ public struct ProjectHostedToolPermissions: Codable {
         case codeInterpreter = "code_interpreter"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectHostedToolPermissions {
-    init(from decoder: Decoder) throws {
+extension ProjectHostedToolPermissions {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.fileSearch) else {
-            throw SdkValidationError(
-                field: "file_search",
-                code: "required",
-                message: "Validation failed for 'file_search': value is required"
-            )
+            throw SdkValidationError(field: "file_search", code: "required", message: "Validation failed for 'file_search': value is required")
         }
         guard container.contains(.webSearch) else {
-            throw SdkValidationError(
-                field: "web_search",
-                code: "required",
-                message: "Validation failed for 'web_search': value is required"
-            )
+            throw SdkValidationError(field: "web_search", code: "required", message: "Validation failed for 'web_search': value is required")
         }
         guard container.contains(.imageGeneration) else {
-            throw SdkValidationError(
-                field: "image_generation",
-                code: "required",
-                message: "Validation failed for 'image_generation': value is required"
-            )
+            throw SdkValidationError(field: "image_generation", code: "required", message: "Validation failed for 'image_generation': value is required")
         }
         guard container.contains(.mcp) else {
-            throw SdkValidationError(
-                field: "mcp",
-                code: "required",
-                message: "Validation failed for 'mcp': value is required"
-            )
+            throw SdkValidationError(field: "mcp", code: "required", message: "Validation failed for 'mcp': value is required")
         }
         guard container.contains(.codeInterpreter) else {
-            throw SdkValidationError(
-                field: "code_interpreter",
-                code: "required",
-                message: "Validation failed for 'code_interpreter': value is required"
-            )
+            throw SdkValidationError(field: "code_interpreter", code: "required", message: "Validation failed for 'code_interpreter': value is required")
         }
-        fileSearch = try container.sdkDecodeRequired(.fileSearch)
-        webSearch = try container.sdkDecodeRequired(.webSearch)
-        imageGeneration = try container.sdkDecodeRequired(.imageGeneration)
-        mcp = try container.sdkDecodeRequired(.mcp)
-        codeInterpreter = try container.sdkDecodeRequired(.codeInterpreter)
+        self.fileSearch = try container.sdkDecodeRequired(.fileSearch)
+        self.webSearch = try container.sdkDecodeRequired(.webSearch)
+        self.imageGeneration = try container.sdkDecodeRequired(.imageGeneration)
+        self.mcp = try container.sdkDecodeRequired(.mcp)
+        self.codeInterpreter = try container.sdkDecodeRequired(.codeInterpreter)
     }
 }
 
-public extension ProjectHostedToolPermissions {
-    init(
-        fileSearch: HostedToolPermission,
-        webSearch: HostedToolPermission,
-        imageGeneration: HostedToolPermission,
-        mcp: HostedToolPermission,
-        codeInterpreter: HostedToolPermission
-    ) {
+extension ProjectHostedToolPermissions {
+    public init(fileSearch: HostedToolPermission, webSearch: HostedToolPermission, imageGeneration: HostedToolPermission, mcp: HostedToolPermission, codeInterpreter: HostedToolPermission) {
         (self.fileSearch, self.webSearch) = (fileSearch, webSearch)
         (self.imageGeneration, self.mcp) = (imageGeneration, mcp)
         self.codeInterpreter = codeInterpreter
@@ -185,27 +145,21 @@ public struct HostedToolPermission: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension HostedToolPermission {
-    init(from decoder: Decoder) throws {
+extension HostedToolPermission {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.enabled) else {
-            throw SdkValidationError(
-                field: "enabled",
-                code: "required",
-                message: "Validation failed for 'enabled': value is required"
-            )
+            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
         }
-        enabled = try container.sdkDecodeRequired(.enabled)
+        self.enabled = try container.sdkDecodeRequired(.enabled)
     }
 }
 
-public extension HostedToolPermission {
-    init(enabled: Bool) {
+extension HostedToolPermission {
+    public init(enabled: Bool) {
         self.enabled = enabled
     }
 }

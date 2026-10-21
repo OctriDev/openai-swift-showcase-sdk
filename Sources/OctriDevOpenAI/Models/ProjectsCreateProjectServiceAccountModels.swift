@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Projects domain models
+// Projects domain models
 /// Typed representation of the `ProjectServiceAccountCreateResponse` API schema.
 public struct ProjectServiceAccountCreateResponse: Codable {
     /// Required enumerated value serialized in the `object` wire field.
@@ -29,74 +29,41 @@ public struct ProjectServiceAccountCreateResponse: Codable {
         case apiKey = "api_key"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectServiceAccountCreateResponse {
-    init(from decoder: Decoder) throws {
+extension ProjectServiceAccountCreateResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.apiKey) else {
-            throw SdkValidationError(
-                field: "api_key",
-                code: "required",
-                message: "Validation failed for 'api_key': value is required"
-            )
+            throw SdkValidationError(field: "api_key", code: "required", message: "Validation failed for 'api_key': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        id = try container.sdkDecodeRequired(.id)
-        name = try container.sdkDecodeRequired(.name)
-        role = try container.sdkDecodeRequired(.role)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        apiKey = try container.sdkDecodeNullable(.apiKey)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.apiKey = try container.sdkDecodeNullable(.apiKey)
     }
 }
 
-public extension ProjectServiceAccountCreateResponse {
-    init(
-        object: ProjectServiceAccountCreateResponseObject,
-        id: String,
-        name: String,
-        role: ProjectServiceAccountCreateResponseRole,
-        createdAt: Int,
-        apiKey: ProjectServiceAccountApiKey?
-    ) {
+extension ProjectServiceAccountCreateResponse {
+    public init(object: ProjectServiceAccountCreateResponseObject, id: String, name: String, role: ProjectServiceAccountCreateResponseRole, createdAt: Int, apiKey: ProjectServiceAccountApiKey?) {
         (self.object, self.id) = (object, id)
         (self.name, self.role) = (name, role)
         (self.createdAt, self.apiKey) = (createdAt, apiKey)
@@ -121,29 +88,23 @@ public struct ProjectServiceAccountCreateRequest: Codable {
         case expiresInSeconds = "expires_in_seconds"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectServiceAccountCreateRequest {
-    init(from decoder: Decoder) throws {
+extension ProjectServiceAccountCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        createServiceAccountOnly = try container.sdkDecodeIfPresent(.createServiceAccountOnly)
-        expiresInSeconds = try container.sdkDecodeIfPresent(.expiresInSeconds)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.createServiceAccountOnly = try container.sdkDecodeIfPresent(.createServiceAccountOnly)
+        self.expiresInSeconds = try container.sdkDecodeIfPresent(.expiresInSeconds)
     }
 }
 
-public extension ProjectServiceAccountCreateRequest {
-    init(name: String, createServiceAccountOnly: Bool? = nil, expiresInSeconds: Int? = nil) {
+extension ProjectServiceAccountCreateRequest {
+    public init(name: String, createServiceAccountOnly: Bool? = nil, expiresInSeconds: Int? = nil) {
         (self.name, self.createServiceAccountOnly) = (name, createServiceAccountOnly)
         self.expiresInSeconds = expiresInSeconds
     }
@@ -173,67 +134,38 @@ public struct ProjectServiceAccountApiKey: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectServiceAccountApiKey {
-    init(from decoder: Decoder) throws {
+extension ProjectServiceAccountApiKey {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.value) else {
-            throw SdkValidationError(
-                field: "value",
-                code: "required",
-                message: "Validation failed for 'value': value is required"
-            )
+            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        value = try container.sdkDecodeRequired(.value)
-        name = try container.sdkDecodeRequired(.name)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        id = try container.sdkDecodeRequired(.id)
-        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.value = try container.sdkDecodeRequired(.value)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
     }
 }
 
-public extension ProjectServiceAccountApiKey {
-    init(
-        object: ProjectServiceAccountApiKeyObject,
-        value: String,
-        name: String,
-        createdAt: Int,
-        id: String,
-        expiresAt: Int? = nil
-    ) {
+extension ProjectServiceAccountApiKey {
+    public init(object: ProjectServiceAccountApiKeyObject, value: String, name: String, createdAt: Int, id: String, expiresAt: Int? = nil) {
         (self.object, self.value) = (object, value)
         (self.name, self.createdAt) = (name, createdAt)
         (self.id, self.expiresAt) = (id, expiresAt)
@@ -244,16 +176,12 @@ public extension ProjectServiceAccountApiKey {
 public struct ProjectServiceAccountApiKeyObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let organizationProjectServiceAccountApiKey =
-        ProjectServiceAccountApiKeyObject(rawValue: "organization.project.service_account.api_key")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let organizationProjectServiceAccountApiKey = ProjectServiceAccountApiKeyObject(rawValue: "organization.project.service_account.api_key")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -264,20 +192,16 @@ public struct ProjectServiceAccountApiKeyObject: RawRepresentable, Hashable, Cod
 
 /// Service accounts created with default project membership have role `member`. Accounts created with
 /// `create_service_account_only` have role `none`.
-public struct ProjectServiceAccountCreateResponseRole: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ProjectServiceAccountCreateResponseRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let member = ProjectServiceAccountCreateResponseRole(rawValue: "member")
     public static let none = ProjectServiceAccountCreateResponseRole(rawValue: "none")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -287,20 +211,15 @@ public struct ProjectServiceAccountCreateResponseRole: RawRepresentable, Hashabl
 }
 
 /// Required enumerated value serialized in the `object` wire field.
-public struct ProjectServiceAccountCreateResponseObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ProjectServiceAccountCreateResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let organizationProjectServiceAccount =
-        ProjectServiceAccountCreateResponseObject(rawValue: "organization.project.service_account")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let organizationProjectServiceAccount = ProjectServiceAccountCreateResponseObject(rawValue: "organization.project.service_account")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

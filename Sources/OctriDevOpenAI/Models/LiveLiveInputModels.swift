@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveInput domain models
+// LiveLiveInput domain models
 /// Resume audio input to a Live model after muting it. The server acknowledges with `session.input_audio.unmuted`.
 /// An active audio fixture still pauses inference until playback finishes.
 public struct LiveInputAudioUnmuteParam: Codable {
@@ -17,31 +17,25 @@ public struct LiveInputAudioUnmuteParam: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInputAudioUnmuteParam {
-    init(from decoder: Decoder) throws {
+extension LiveInputAudioUnmuteParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        eventId = try container.sdkDecodeIfPresent(.eventId)
-        try sdkValidateRawEnum("type", type, LiveInputAudioUnmuteParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.eventId = try container.sdkDecodeIfPresent(.eventId)
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioUnmuteParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveInputAudioUnmuteParam {
-    init(type: LiveInputAudioUnmuteParamType, eventId: String? = nil) throws {
+extension LiveInputAudioUnmuteParam {
+    public init(type: LiveInputAudioUnmuteParamType, eventId: String? = nil) throws {
         (self.type, self.eventId) = (type, eventId)
-        try sdkValidateRawEnum("type", self.type, LiveInputAudioUnmuteParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioUnmuteParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -64,42 +58,32 @@ public struct LiveInputAudioAppendEvent: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInputAudioAppendEvent {
-    init(from decoder: Decoder) throws {
+extension LiveInputAudioAppendEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.audio) else {
-            throw SdkValidationError(
-                field: "audio",
-                code: "required",
-                message: "Validation failed for 'audio': value is required"
-            )
+            throw SdkValidationError(field: "audio", code: "required", message: "Validation failed for 'audio': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        audio = try container.sdkDecodeRequired(.audio)
-        eventId = try container.sdkDecodeIfPresent(.eventId)
-        try sdkValidateRawEnum("type", type, LiveInputAudioAppendEventType.allCases.map(\.rawValue))
-        try validateLength("audio", audio, min: 1, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.audio = try container.sdkDecodeRequired(.audio)
+        self.eventId = try container.sdkDecodeIfPresent(.eventId)
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioAppendEventType.allCases.map(\.rawValue))
+            try validateLength("audio", self.audio, min: 1, max: nil)
     }
 }
 
-public extension LiveInputAudioAppendEvent {
-    init(type: LiveInputAudioAppendEventType, audio: String, eventId: String? = nil) throws {
+extension LiveInputAudioAppendEvent {
+    public init(type: LiveInputAudioAppendEventType, audio: String, eventId: String? = nil) throws {
         (self.type, self.audio) = (type, audio)
         self.eventId = eventId
-        try sdkValidateRawEnum("type", self.type, LiveInputAudioAppendEventType.allCases.map(\.rawValue))
-        try validateLength("audio", self.audio, min: 1, max: nil)
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioAppendEventType.allCases.map(\.rawValue))
+            try validateLength("audio", self.audio, min: 1, max: nil)
     }
 }
 
@@ -116,31 +100,25 @@ public struct LiveInputAudioMuteParam: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInputAudioMuteParam {
-    init(from decoder: Decoder) throws {
+extension LiveInputAudioMuteParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        eventId = try container.sdkDecodeIfPresent(.eventId)
-        try sdkValidateRawEnum("type", type, LiveInputAudioMuteParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.eventId = try container.sdkDecodeIfPresent(.eventId)
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioMuteParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveInputAudioMuteParam {
-    init(type: LiveInputAudioMuteParamType, eventId: String? = nil) throws {
+extension LiveInputAudioMuteParam {
+    public init(type: LiveInputAudioMuteParamType, eventId: String? = nil) throws {
         (self.type, self.eventId) = (type, eventId)
-        try sdkValidateRawEnum("type", self.type, LiveInputAudioMuteParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioMuteParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -160,40 +138,30 @@ public struct LiveInputAudioUnmuted: Codable {
         case clientEventId = "client_event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInputAudioUnmuted {
-    init(from decoder: Decoder) throws {
+extension LiveInputAudioUnmuted {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        eventId = try container.sdkDecodeRequired(.eventId)
-        type = try container.sdkDecodeRequired(.type)
-        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
-        try sdkValidateRawEnum("type", type, LiveInputAudioUnmutedType.allCases.map(\.rawValue))
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioUnmutedType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveInputAudioUnmuted {
-    init(eventId: String, type: LiveInputAudioUnmutedType, clientEventId: String? = nil) throws {
+extension LiveInputAudioUnmuted {
+    public init(eventId: String, type: LiveInputAudioUnmutedType, clientEventId: String? = nil) throws {
         (self.eventId, self.type) = (eventId, type)
         self.clientEventId = clientEventId
-        try sdkValidateRawEnum("type", self.type, LiveInputAudioUnmutedType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioUnmutedType.allCases.map(\.rawValue))
     }
 }
 
@@ -213,40 +181,30 @@ public struct LiveInputAudioMuted: Codable {
         case clientEventId = "client_event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInputAudioMuted {
-    init(from decoder: Decoder) throws {
+extension LiveInputAudioMuted {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        eventId = try container.sdkDecodeRequired(.eventId)
-        type = try container.sdkDecodeRequired(.type)
-        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
-        try sdkValidateRawEnum("type", type, LiveInputAudioMutedType.allCases.map(\.rawValue))
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioMutedType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveInputAudioMuted {
-    init(eventId: String, type: LiveInputAudioMutedType, clientEventId: String? = nil) throws {
+extension LiveInputAudioMuted {
+    public init(eventId: String, type: LiveInputAudioMutedType, clientEventId: String? = nil) throws {
         (self.eventId, self.type) = (eventId, type)
         self.clientEventId = clientEventId
-        try sdkValidateRawEnum("type", self.type, LiveInputAudioMutedType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioMutedType.allCases.map(\.rawValue))
     }
 }
 
@@ -277,72 +235,43 @@ public struct LiveInputTranscriptDelta: Codable {
         case clientEventId = "client_event_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInputTranscriptDelta {
-    init(from decoder: Decoder) throws {
+extension LiveInputTranscriptDelta {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(
-                field: "event_id",
-                code: "required",
-                message: "Validation failed for 'event_id': value is required"
-            )
+            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
         }
         guard container.contains(.startMs) else {
-            throw SdkValidationError(
-                field: "start_ms",
-                code: "required",
-                message: "Validation failed for 'start_ms': value is required"
-            )
+            throw SdkValidationError(field: "start_ms", code: "required", message: "Validation failed for 'start_ms': value is required")
         }
         guard container.contains(.endMs) else {
-            throw SdkValidationError(
-                field: "end_ms",
-                code: "required",
-                message: "Validation failed for 'end_ms': value is required"
-            )
+            throw SdkValidationError(field: "end_ms", code: "required", message: "Validation failed for 'end_ms': value is required")
         }
         guard container.contains(.delta) else {
-            throw SdkValidationError(
-                field: "delta",
-                code: "required",
-                message: "Validation failed for 'delta': value is required"
-            )
+            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        eventId = try container.sdkDecodeRequired(.eventId)
-        startMs = try container.sdkDecodeRequired(.startMs)
-        endMs = try container.sdkDecodeRequired(.endMs)
-        delta = try container.sdkDecodeRequired(.delta)
-        type = try container.sdkDecodeRequired(.type)
-        clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
-        try sdkValidateRawEnum("type", type, LiveInputTranscriptDeltaType.allCases.map(\.rawValue))
+        self.eventId = try container.sdkDecodeRequired(.eventId)
+        self.startMs = try container.sdkDecodeRequired(.startMs)
+        self.endMs = try container.sdkDecodeRequired(.endMs)
+        self.delta = try container.sdkDecodeRequired(.delta)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.clientEventId = try container.sdkDecodeIfPresent(.clientEventId)
+            try sdkValidateRawEnum("type", self.type, LiveInputTranscriptDeltaType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveInputTranscriptDelta {
-    init(
-        eventId: String,
-        startMs: Int,
-        endMs: Int,
-        delta: String,
-        type: LiveInputTranscriptDeltaType,
-        clientEventId: String? = nil
-    ) throws {
+extension LiveInputTranscriptDelta {
+    public init(eventId: String, startMs: Int, endMs: Int, delta: String, type: LiveInputTranscriptDeltaType, clientEventId: String? = nil) throws {
         (self.eventId, self.startMs) = (eventId, startMs)
         (self.endMs, self.delta) = (endMs, delta)
         (self.type, self.clientEventId) = (type, clientEventId)
-        try sdkValidateRawEnum("type", self.type, LiveInputTranscriptDeltaType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveInputTranscriptDeltaType.allCases.map(\.rawValue))
     }
 }
 
@@ -361,38 +290,28 @@ public struct LiveInputAudioAppend: Codable {
         case audio
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveInputAudioAppend {
-    init(from decoder: Decoder) throws {
+extension LiveInputAudioAppend {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.audio) else {
-            throw SdkValidationError(
-                field: "audio",
-                code: "required",
-                message: "Validation failed for 'audio': value is required"
-            )
+            throw SdkValidationError(field: "audio", code: "required", message: "Validation failed for 'audio': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        audio = try container.sdkDecodeRequired(.audio)
-        try sdkValidateRawEnum("type", type, LiveInputAudioAppendType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.audio = try container.sdkDecodeRequired(.audio)
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioAppendType.allCases.map(\.rawValue))
     }
 }
 
-public extension LiveInputAudioAppend {
-    init(type: LiveInputAudioAppendType, audio: String) throws {
+extension LiveInputAudioAppend {
+    public init(type: LiveInputAudioAppendType, audio: String) throws {
         (self.type, self.audio) = (type, audio)
-        try sdkValidateRawEnum("type", self.type, LiveInputAudioAppendType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, LiveInputAudioAppendType.allCases.map(\.rawValue))
     }
 }
 

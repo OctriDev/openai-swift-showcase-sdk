@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaNamespace domain models
+// ResponsesBetaNamespace domain models
 public indirect enum BetaNamespaceToolParamToolsItem {
     case betaFunctionToolParam(BetaFunctionToolParam)
     case betaCustomToolParam(BetaCustomToolParam)
@@ -12,6 +12,7 @@ public indirect enum BetaNamespaceToolParamToolsItem {
 }
 
 extension BetaNamespaceToolParamToolsItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension BetaNamespaceToolParamToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension BetaNamespaceToolParamToolsItem: Codable {
 extension BetaNamespaceToolParamToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": try .betaFunctionToolParam(BetaFunctionToolParam(from: decoder))
-        case "custom": try .betaCustomToolParam(BetaCustomToolParam(from: decoder))
-        default: nil
+        case "function": return .betaFunctionToolParam(try BetaFunctionToolParam(from: decoder))
+        case "custom": return .betaCustomToolParam(try BetaCustomToolParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -75,64 +72,41 @@ public struct BetaNamespaceToolParam: Codable {
         case tools
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaNamespaceToolParam {
-    init(from decoder: Decoder) throws {
+extension BetaNamespaceToolParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.description) else {
-            throw SdkValidationError(
-                field: "description",
-                code: "required",
-                message: "Validation failed for 'description': value is required"
-            )
+            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
         }
         guard container.contains(.tools) else {
-            throw SdkValidationError(
-                field: "tools",
-                code: "required",
-                message: "Validation failed for 'tools': value is required"
-            )
+            throw SdkValidationError(field: "tools", code: "required", message: "Validation failed for 'tools': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeRequired(.name)
-        description = try container.sdkDecodeRequired(.description)
-        tools = try container.sdkDecodeRequired(.tools)
-        try sdkValidateRawEnum("type", type, BetaNamespaceToolParamType.allCases.map(\.rawValue))
-        try validateLength("name", name, min: 1, max: nil)
-        try validateItems("tools", tools, min: 1, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.description = try container.sdkDecodeRequired(.description)
+        self.tools = try container.sdkDecodeRequired(.tools)
+            try sdkValidateRawEnum("type", self.type, BetaNamespaceToolParamType.allCases.map(\.rawValue))
+            try validateLength("name", self.name, min: 1, max: nil)
+            try validateItems("tools", self.tools, min: 1, max: nil)
     }
 }
 
-public extension BetaNamespaceToolParam {
-    init(
-        type: BetaNamespaceToolParamType,
-        name: String,
-        description: String,
-        tools: [BetaNamespaceToolParamToolsItem]
-    ) throws {
+extension BetaNamespaceToolParam {
+    public init(type: BetaNamespaceToolParamType, name: String, description: String, tools: [BetaNamespaceToolParamToolsItem]) throws {
         (self.type, self.name) = (type, name)
         (self.description, self.tools) = (description, tools)
-        try sdkValidateRawEnum("type", self.type, BetaNamespaceToolParamType.allCases.map(\.rawValue))
-        try validateLength("name", self.name, min: 1, max: nil)
-        try validateItems("tools", self.tools, min: 1, max: nil)
+            try sdkValidateRawEnum("type", self.type, BetaNamespaceToolParamType.allCases.map(\.rawValue))
+            try validateLength("name", self.name, min: 1, max: nil)
+            try validateItems("tools", self.tools, min: 1, max: nil)
     }
 }
 

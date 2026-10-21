@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Videos domain models
+// Videos domain models
 public typealias VideoModel = String
 
 /// Reference to the completed video.
@@ -16,27 +16,21 @@ public struct VideoReferenceInputParam: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VideoReferenceInputParam {
-    init(from decoder: Decoder) throws {
+extension VideoReferenceInputParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension VideoReferenceInputParam {
-    init(id: String) {
+extension VideoReferenceInputParam {
+    public init(id: String) {
         self.id = id
     }
 }
@@ -56,43 +50,29 @@ public struct VideoCharacterResource: Codable {
         case createdAt = "created_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VideoCharacterResource {
-    init(from decoder: Decoder) throws {
+extension VideoCharacterResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(
-                field: "created_at",
-                code: "required",
-                message: "Validation failed for 'created_at': value is required"
-            )
+            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
         }
-        id = try container.sdkDecodeNullable(.id)
-        name = try container.sdkDecodeNullable(.name)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.id = try container.sdkDecodeNullable(.id)
+        self.name = try container.sdkDecodeNullable(.name)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
     }
 }
 
-public extension VideoCharacterResource {
-    init(id: String?, name: String?, createdAt: Int) {
+extension VideoCharacterResource {
+    public init(id: String?, name: String?, createdAt: Int) {
         (self.id, self.name) = (id, name)
         self.createdAt = createdAt
     }
@@ -122,46 +102,29 @@ public struct Error2: Codable {
         case misalignment
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension Error2 {
-    init(from decoder: Decoder) throws {
+extension Error2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.message) else {
-            throw SdkValidationError(
-                field: "message",
-                code: "required",
-                message: "Validation failed for 'message': value is required"
-            )
+            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
         }
-        code = try container.sdkDecodeRequired(.code)
-        message = try container.sdkDecodeRequired(.message)
-        type = try container.sdkDecodeIfPresent(.type)
-        param = try container.sdkDecodeIfPresent(.param)
-        headers = try container.sdkDecodeIfPresent(.headers)
-        misalignment = try container.sdkDecodeIfPresent(.misalignment)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.message = try container.sdkDecodeRequired(.message)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.param = try container.sdkDecodeIfPresent(.param)
+        self.headers = try container.sdkDecodeIfPresent(.headers)
+        self.misalignment = try container.sdkDecodeIfPresent(.misalignment)
     }
 }
 
-public extension Error2 {
-    init(
-        code: String,
-        message: String,
-        type: String? = nil,
-        param: String? = nil,
-        headers: [String: String]? = nil,
-        misalignment: MisalignmentErrorDetailsResource? = nil
-    ) {
+extension Error2 {
+    public init(code: String, message: String, type: String? = nil, param: String? = nil, headers: [String: String]? = nil, misalignment: MisalignmentErrorDetailsResource? = nil) {
         (self.code, self.message) = (code, message)
         (self.type, self.param) = (type, param)
         (self.headers, self.misalignment) = (headers, misalignment)
@@ -213,46 +176,30 @@ public struct VideoResource: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension VideoResource {
-    init(from decoder: Decoder) throws {
+extension VideoResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        model = try container.sdkDecodeRequired(.model)
-        status = try container.sdkDecodeRequired(.status)
-        progress = try container.sdkDecodeRequired(.progress)
-        createdAt = try container.sdkDecodeRequired(.createdAt)
-        completedAt = try container.sdkDecodeNullable(.completedAt)
-        expiresAt = try container.sdkDecodeNullable(.expiresAt)
-        prompt = try container.sdkDecodeNullable(.prompt)
-        size = try container.sdkDecodeRequired(.size)
-        seconds = try container.sdkDecodeRequired(.seconds)
-        remixedFromVideoId = try container.sdkDecodeNullable(.remixedFromVideoId)
-        error = try container.sdkDecodeNullable(.error)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.model = try container.sdkDecodeRequired(.model)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.progress = try container.sdkDecodeRequired(.progress)
+        self.createdAt = try container.sdkDecodeRequired(.createdAt)
+        self.completedAt = try container.sdkDecodeNullable(.completedAt)
+        self.expiresAt = try container.sdkDecodeNullable(.expiresAt)
+        self.prompt = try container.sdkDecodeNullable(.prompt)
+        self.size = try container.sdkDecodeRequired(.size)
+        self.seconds = try container.sdkDecodeRequired(.seconds)
+        self.remixedFromVideoId = try container.sdkDecodeNullable(.remixedFromVideoId)
+        self.error = try container.sdkDecodeNullable(.error)
     }
 }
 
-public extension VideoResource {
-    init(
-        id: String,
-        object: VideoResourceObject,
-        model: VideoModel,
-        status: VideoStatus,
-        progress: Int,
-        createdAt: Int,
-        completedAt: Int?,
-        expiresAt: Int?,
-        prompt: String?,
-        size: VideoSize,
-        seconds: String,
-        remixedFromVideoId: String?,
-        error: Error2?
-    ) {
+extension VideoResource {
+    public init(id: String, object: VideoResourceObject, model: VideoModel, status: VideoStatus, progress: Int, createdAt: Int, completedAt: Int?, expiresAt: Int?, prompt: String?, size: VideoSize, seconds: String, remixedFromVideoId: String?, error: Error2?) {
         (self.id, self.object) = (id, object)
         (self.model, self.status) = (model, status)
         (self.progress, self.createdAt) = (progress, createdAt)
@@ -267,10 +214,7 @@ public extension VideoResource {
 public struct VideoStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let queued = VideoStatus(rawValue: "queued")
     public static let inProgress = VideoStatus(rawValue: "in_progress")
     public static let completed = VideoStatus(rawValue: "completed")
@@ -278,7 +222,7 @@ public struct VideoStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWir
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -291,17 +235,14 @@ public struct VideoStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWir
 public struct VideoSeconds: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let value4 = VideoSeconds(rawValue: "4")
     public static let value8 = VideoSeconds(rawValue: "8")
     public static let value12 = VideoSeconds(rawValue: "12")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -314,10 +255,7 @@ public struct VideoSeconds: RawRepresentable, Hashable, Codable, Sendable, SdkWi
 public struct VideoSize: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let value720x1280 = VideoSize(rawValue: "720x1280")
     public static let value1280x720 = VideoSize(rawValue: "1280x720")
     public static let value1024x1792 = VideoSize(rawValue: "1024x1792")
@@ -325,7 +263,7 @@ public struct VideoSize: RawRepresentable, Hashable, Codable, Sendable, SdkWireC
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -338,15 +276,12 @@ public struct VideoSize: RawRepresentable, Hashable, Codable, Sendable, SdkWireC
 public struct VideoResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let video = VideoResourceObject(rawValue: "video")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AssistantsCreate domain models
+// AssistantsCreate domain models
 /// Required object value serialized in the `static` wire field.
 public struct CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9d5f3948ce: Codable {
     /// The maximum number of tokens in each chunk. The default value is `800`. The minimum value is `100` and the
@@ -18,54 +18,28 @@ public struct CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9d5f
         case chunkOverlapTokens = "chunk_overlap_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9d5f3948ce {
-    init(from decoder: Decoder) throws {
+extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9d5f3948ce {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.maxChunkSizeTokens) else {
-            throw SdkValidationError(
-                field: "max_chunk_size_tokens",
-                code: "required",
-                message: "Validation failed for 'max_chunk_size_tokens': value is required"
-            )
+            throw SdkValidationError(field: "max_chunk_size_tokens", code: "required", message: "Validation failed for 'max_chunk_size_tokens': value is required")
         }
         guard container.contains(.chunkOverlapTokens) else {
-            throw SdkValidationError(
-                field: "chunk_overlap_tokens",
-                code: "required",
-                message: "Validation failed for 'chunk_overlap_tokens': value is required"
-            )
+            throw SdkValidationError(field: "chunk_overlap_tokens", code: "required", message: "Validation failed for 'chunk_overlap_tokens': value is required")
         }
-        maxChunkSizeTokens = try container.sdkDecodeRequired(.maxChunkSizeTokens)
-        chunkOverlapTokens = try container.sdkDecodeRequired(.chunkOverlapTokens)
-        try validateRange(
-            "max_chunk_size_tokens",
-            Double(maxChunkSizeTokens),
-            min: 100,
-            max: 4096,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.maxChunkSizeTokens = try container.sdkDecodeRequired(.maxChunkSizeTokens)
+        self.chunkOverlapTokens = try container.sdkDecodeRequired(.chunkOverlapTokens)
+            try validateRange("max_chunk_size_tokens", Double(self.maxChunkSizeTokens), min: 100, max: 4096, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9d5f3948ce {
-    init(maxChunkSizeTokens: Int, chunkOverlapTokens: Int) throws {
+extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9d5f3948ce {
+    public init(maxChunkSizeTokens: Int, chunkOverlapTokens: Int) throws {
         (self.maxChunkSizeTokens, self.chunkOverlapTokens) = (maxChunkSizeTokens, chunkOverlapTokens)
-        try validateRange(
-            "max_chunk_size_tokens",
-            Double(self.maxChunkSizeTokens),
-            min: 100,
-            max: 4096,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try validateRange("max_chunk_size_tokens", Double(self.maxChunkSizeTokens), min: 100, max: 4096, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -90,33 +64,29 @@ public struct CreateThreadRequestToolResourcesFileSearchVectorStoresItem: Codabl
     }
 
     init() {
-        (fileIds, chunkingStrategy, metadata) = (nil, nil, nil)
+        (self.fileIds, self.chunkingStrategy, self.metadata) = (nil, nil, nil)
     }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearchVectorStoresItem {
-    init(from decoder: Decoder) throws {
+extension CreateThreadRequestToolResourcesFileSearchVectorStoresItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        chunkingStrategy = try container.sdkDecodeIfPresent(.chunkingStrategy)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        if let value = fileIds {
-            try validateItems("file_ids", value, min: nil, max: 100_000_000)
+        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        self.chunkingStrategy = try container.sdkDecodeIfPresent(.chunkingStrategy)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        if let value = self.fileIds {
+            try validateItems("file_ids", value, min: nil, max: 100000000)
         }
     }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearchVectorStoresItem {
-    init(
-        fileIds: [String]? = nil,
-        chunkingStrategy: CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179? = nil,
-        metadata: Metadata? = nil
-    ) throws {
+extension CreateThreadRequestToolResourcesFileSearchVectorStoresItem {
+    public init(fileIds: [String]? = nil, chunkingStrategy: CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179? = nil, metadata: Metadata? = nil) throws {
         self.init()
         (self.fileIds, self.chunkingStrategy) = (fileIds, chunkingStrategy)
         self.metadata = metadata
         if let value = self.fileIds {
-            try validateItems("file_ids", value, min: nil, max: 100_000_000)
+            try validateItems("file_ids", value, min: nil, max: 100000000)
         }
     }
 }
@@ -141,7 +111,7 @@ public enum CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22
 
 /// Always `static`.
 public enum CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd87c065bdf: String, CaseIterable, Codable {
-    case `static`
+    case `static` = "static"
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         let rawValue = try container.decode(String.self)
@@ -164,16 +134,13 @@ public enum CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd87c06
 public struct CreateMessageRequestRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let user = CreateMessageRequestRole(rawValue: "user")
     public static let assistant = CreateMessageRequestRole(rawValue: "assistant")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Skills domain models
+// Skills domain models
 /// Typed representation of the `DeletedSkillVersionResource` API schema.
 public struct DeletedSkillVersionResource: Codable {
     /// Required enumerated value serialized in the `object` wire field.
@@ -22,51 +22,33 @@ public struct DeletedSkillVersionResource: Codable {
         case version
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DeletedSkillVersionResource {
-    init(from decoder: Decoder) throws {
+extension DeletedSkillVersionResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.version) else {
-            throw SdkValidationError(
-                field: "version",
-                code: "required",
-                message: "Validation failed for 'version': value is required"
-            )
+            throw SdkValidationError(field: "version", code: "required", message: "Validation failed for 'version': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
-        id = try container.sdkDecodeRequired(.id)
-        version = try container.sdkDecodeRequired(.version)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.version = try container.sdkDecodeRequired(.version)
     }
 }
 
-public extension DeletedSkillVersionResource {
-    init(object: DeletedSkillVersionResourceObject, deleted: Bool, id: String, version: String) {
+extension DeletedSkillVersionResource {
+    public init(object: DeletedSkillVersionResourceObject, deleted: Bool, id: String, version: String) {
         (self.object, self.deleted) = (object, deleted)
         (self.id, self.version) = (id, version)
     }
@@ -76,15 +58,12 @@ public extension DeletedSkillVersionResource {
 public struct DeletedSkillVersionResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let skillVersionDeleted = DeletedSkillVersionResourceObject(rawValue: "skill.version.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

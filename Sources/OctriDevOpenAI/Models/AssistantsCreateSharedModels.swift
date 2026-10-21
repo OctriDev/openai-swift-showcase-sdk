@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AssistantsCreate domain models
+// AssistantsCreate domain models
 public indirect enum CreateMessageRequestAttachmentsItemToolsItem {
     case assistantToolsCode(AssistantToolsCode)
     case assistantToolsFileSearchTypeOnly(AssistantToolsFileSearchTypeOnly)
@@ -12,6 +12,7 @@ public indirect enum CreateMessageRequestAttachmentsItemToolsItem {
 }
 
 extension CreateMessageRequestAttachmentsItemToolsItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension CreateMessageRequestAttachmentsItemToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension CreateMessageRequestAttachmentsItemToolsItem: Codable {
 extension CreateMessageRequestAttachmentsItemToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "code_interpreter": try .assistantToolsCode(AssistantToolsCode(from: decoder))
-        case "file_search": try .assistantToolsFileSearchTypeOnly(AssistantToolsFileSearchTypeOnly(from: decoder))
-        default: nil
+        case "code_interpreter": return .assistantToolsCode(try AssistantToolsCode(from: decoder))
+        case "file_search": return .assistantToolsFileSearchTypeOnly(try AssistantToolsFileSearchTypeOnly(from: decoder))
+        default: return nil
         }
     }
 }
@@ -66,6 +63,7 @@ public indirect enum CreateMessageRequestContentItem {
 }
 
 extension CreateMessageRequestContentItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -73,16 +71,12 @@ extension CreateMessageRequestContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -93,10 +87,10 @@ extension CreateMessageRequestContentItem: Codable {
 extension CreateMessageRequestContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "image_file": try .messageContentImageFileObject(MessageContentImageFileObject(from: decoder))
-        case "image_url": try .messageContentImageUrlObject(MessageContentImageUrlObject(from: decoder))
-        case "text": try .messageRequestContentTextObject(MessageRequestContentTextObject(from: decoder))
-        default: nil
+        case "image_file": return .messageContentImageFileObject(try MessageContentImageFileObject(from: decoder))
+        case "image_url": return .messageContentImageUrlObject(try MessageContentImageUrlObject(from: decoder))
+        case "text": return .messageRequestContentTextObject(try MessageRequestContentTextObject(from: decoder))
+        default: return nil
         }
     }
 }
@@ -123,39 +117,29 @@ public indirect enum CreateThreadRequestToolResourcesFileSearchVectorStoresItemC
 }
 
 extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff179 {
     static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
-        if let value = try? container
-            .decode(CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51.self),
-            sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51.self),
+           sdkKeepsEveryKey(value, of: raw) {
             return .createThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51(value)
         }
-        if let value = try? container
-            .decode(CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4.self),
-            sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4.self),
+           sdkKeepsEveryKey(value, of: raw) {
             return .createThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4(value)
         }
         return nil
@@ -167,12 +151,12 @@ extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff1
         if let value = try? container.decode(
             CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51.self
         ) {
-            return .createThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51(value)
+            return             .createThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51(value)
         }
         if let value = try? container.decode(
             CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4.self
         ) {
-            return .createThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4(value)
+            return             .createThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4(value)
         }
         return nil
     }
@@ -182,10 +166,8 @@ extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7aa7dff1
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .createThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51(value): try container
-            .encode(value); return true
-        case let .createThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4(value): try container
-            .encode(value); return true
+        case let .createThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51(value): try container.encode(value); return true
+        case let .createThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4(value): try container.encode(value); return true
         }
     }
 }
@@ -200,38 +182,24 @@ public struct CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9
         case type
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51 {
-    init(from decoder: Decoder) throws {
+extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b.allCases.map(\.rawValue)
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+            try sdkValidateRawEnum("type", self.type, CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b.allCases.map(\.rawValue))
     }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51 {
-    init(type: CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b) throws {
+extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX7cd9c16c51 {
+    public init(type: CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b) throws {
         self.type = type
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9ddb22a38b.allCases.map(\.rawValue))
     }
 }
 
@@ -257,25 +225,21 @@ public struct CreateThreadRequest: Codable {
     }
 
     init() {
-        (messages, toolResources, metadata) = (nil, nil, nil)
+        (self.messages, self.toolResources, self.metadata) = (nil, nil, nil)
     }
 }
 
-public extension CreateThreadRequest {
-    init(from decoder: Decoder) throws {
+extension CreateThreadRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        messages = try container.sdkDecodeIfPresent(.messages)
-        toolResources = try container.sdkDecodeIfPresent(.toolResources)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.messages = try container.sdkDecodeIfPresent(.messages)
+        self.toolResources = try container.sdkDecodeIfPresent(.toolResources)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
     }
 }
 
-public extension CreateThreadRequest {
-    init(
-        messages: [CreateMessageRequest]? = nil,
-        toolResources: CreateThreadRequestToolResources? = nil,
-        metadata: Metadata? = nil
-    ) {
+extension CreateThreadRequest {
+    public init(messages: [CreateMessageRequest]? = nil, toolResources: CreateThreadRequestToolResources? = nil, metadata: Metadata? = nil) {
         self.init()
         (self.messages, self.toolResources) = (messages, toolResources)
         self.metadata = metadata
@@ -288,33 +252,22 @@ public indirect enum CreateMessageRequestContent {
 }
 
 extension CreateMessageRequestContent: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateMessageRequestContent"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateMessageRequestContent")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateMessageRequestContent {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container
-            .decode([CreateMessageRequestContentItem].self) {
-            return .createMessageRequestContentItemList(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode([CreateMessageRequestContentItem].self) { return .createMessageRequestContentItemList(value) }
         return nil
     }
 }
@@ -353,42 +306,27 @@ public struct CreateMessageRequest: Codable {
         case metadata
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateMessageRequest {
-    init(from decoder: Decoder) throws {
+extension CreateMessageRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        attachments = try container.sdkDecodeIfPresent(.attachments)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.attachments = try container.sdkDecodeIfPresent(.attachments)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
     }
 }
 
-public extension CreateMessageRequest {
-    init(
-        role: CreateMessageRequestRole,
-        content: CreateMessageRequestContent,
-        attachments: [CreateMessageRequestAttachmentsItem]? = nil,
-        metadata: Metadata? = nil
-    ) {
+extension CreateMessageRequest {
+    public init(role: CreateMessageRequestRole, content: CreateMessageRequestContent, attachments: [CreateMessageRequestAttachmentsItem]? = nil, metadata: Metadata? = nil) {
         (self.role, self.content) = (role, content)
         (self.attachments, self.metadata) = (attachments, metadata)
     }
@@ -408,29 +346,26 @@ public struct CreateThreadRequestToolResourcesFileSearch: Codable {
     }
 
     init() {
-        (vectorStoreIds, vectorStores) = (nil, nil)
+        (self.vectorStoreIds, self.vectorStores) = (nil, nil)
     }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearch {
-    init(from decoder: Decoder) throws {
+extension CreateThreadRequestToolResourcesFileSearch {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
-        vectorStores = try container.sdkDecodeIfPresent(.vectorStores)
-        if let value = vectorStoreIds {
+        self.vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
+        self.vectorStores = try container.sdkDecodeIfPresent(.vectorStores)
+        if let value = self.vectorStoreIds {
             try validateItems("vector_store_ids", value, min: nil, max: 1)
         }
-        if let value = vectorStores {
+        if let value = self.vectorStores {
             try validateItems("vector_stores", value, min: nil, max: 1)
         }
     }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearch {
-    init(
-        vectorStoreIds: [String]? = nil,
-        vectorStores: [CreateThreadRequestToolResourcesFileSearchVectorStoresItem]? = nil
-    ) throws {
+extension CreateThreadRequestToolResourcesFileSearch {
+    public init(vectorStoreIds: [String]? = nil, vectorStores: [CreateThreadRequestToolResourcesFileSearchVectorStoresItem]? = nil) throws {
         self.init()
         (self.vectorStoreIds, self.vectorStores) = (vectorStoreIds, vectorStores)
         if let value = self.vectorStoreIds {
@@ -454,49 +389,28 @@ public struct CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd015
         case `static`
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4 {
-    init(from decoder: Decoder) throws {
+extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        guard container.contains(.static) else {
-            throw SdkValidationError(
-                field: "static",
-                code: "required",
-                message: "Validation failed for 'static': value is required"
-            )
+        guard container.contains(.`static`) else {
+            throw SdkValidationError(field: "static", code: "required", message: "Validation failed for 'static': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        self.static = try container.sdkDecodeRequired(.static)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd87c065bdf.allCases.map(\.rawValue)
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.`static` = try container.sdkDecodeRequired(.`static`)
+            try sdkValidateRawEnum("type", self.type, CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd87c065bdf.allCases.map(\.rawValue))
     }
 }
 
-public extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4 {
-    init(
-        type: CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd87c065bdf,
-        static: CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9d5f3948ce
-    ) throws {
-        (self.type, self.static) = (type, `static`)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd87c065bdf.allCases.map(\.rawValue)
-        )
+extension CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd0152ee8f4 {
+    public init(type: CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd87c065bdf, `static`: CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuX9d5f3948ce) throws {
+        (self.type, self.`static`) = (type, `static`)
+            try sdkValidateRawEnum("type", self.type, CreateThreadRequestToolResourcesFileSearchVectorStoresItemChuXd87c065bdf.allCases.map(\.rawValue))
     }
 }
 
@@ -513,20 +427,20 @@ public struct CreateMessageRequestAttachmentsItem: Codable {
     }
 
     init() {
-        (fileId, tools) = (nil, nil)
+        (self.fileId, self.tools) = (nil, nil)
     }
 }
 
-public extension CreateMessageRequestAttachmentsItem {
-    init(from decoder: Decoder) throws {
+extension CreateMessageRequestAttachmentsItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        tools = try container.sdkDecodeIfPresent(.tools)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        self.tools = try container.sdkDecodeIfPresent(.tools)
     }
 }
 
-public extension CreateMessageRequestAttachmentsItem {
-    init(fileId: String? = nil, tools: [CreateMessageRequestAttachmentsItemToolsItem]? = nil) {
+extension CreateMessageRequestAttachmentsItem {
+    public init(fileId: String? = nil, tools: [CreateMessageRequestAttachmentsItemToolsItem]? = nil) {
         self.init()
         (self.fileId, self.tools) = (fileId, tools)
     }
@@ -547,23 +461,20 @@ public struct CreateThreadRequestToolResources: Codable {
     }
 
     init() {
-        (codeInterpreter, fileSearch) = (nil, nil)
+        (self.codeInterpreter, self.fileSearch) = (nil, nil)
     }
 }
 
-public extension CreateThreadRequestToolResources {
-    init(from decoder: Decoder) throws {
+extension CreateThreadRequestToolResources {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
-        fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
+        self.codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
+        self.fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
     }
 }
 
-public extension CreateThreadRequestToolResources {
-    init(
-        codeInterpreter: CreateThreadRequestToolResourcesCodeInterpreter? = nil,
-        fileSearch: CreateThreadRequestToolResourcesFileSearch? = nil
-    ) {
+extension CreateThreadRequestToolResources {
+    public init(codeInterpreter: CreateThreadRequestToolResourcesCodeInterpreter? = nil, fileSearch: CreateThreadRequestToolResourcesFileSearch? = nil) {
         self.init()
         (self.codeInterpreter, self.fileSearch) = (codeInterpreter, fileSearch)
     }
@@ -580,22 +491,22 @@ public struct CreateThreadRequestToolResourcesCodeInterpreter: Codable {
     }
 
     init() {
-        fileIds = nil
+        self.fileIds = nil
     }
 }
 
-public extension CreateThreadRequestToolResourcesCodeInterpreter {
-    init(from decoder: Decoder) throws {
+extension CreateThreadRequestToolResourcesCodeInterpreter {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        if let value = fileIds {
+        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        if let value = self.fileIds {
             try validateItems("file_ids", value, min: nil, max: 20)
         }
     }
 }
 
-public extension CreateThreadRequestToolResourcesCodeInterpreter {
-    init(fileIds: [String]? = nil) throws {
+extension CreateThreadRequestToolResourcesCodeInterpreter {
+    public init(fileIds: [String]? = nil) throws {
         self.init()
         self.fileIds = fileIds
         if let value = self.fileIds {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Certificates domain models
+// Certificates domain models
 /// Typed representation of the `OrganizationCertificateDeactivationResponse` API schema.
 public struct OrganizationCertificateDeactivationResponse: Codable {
     /// The organization certificate deactivation result type.
@@ -16,54 +16,39 @@ public struct OrganizationCertificateDeactivationResponse: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationCertificateDeactivationResponse {
-    init(from decoder: Decoder) throws {
+extension OrganizationCertificateDeactivationResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        data = try container.sdkDecodeRequired(.data)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.data = try container.sdkDecodeRequired(.data)
     }
 }
 
-public extension OrganizationCertificateDeactivationResponse {
-    init(object: OrganizationCertificateDeactivationResponseObject, data: [OrganizationCertificate]) {
+extension OrganizationCertificateDeactivationResponse {
+    public init(object: OrganizationCertificateDeactivationResponseObject, data: [OrganizationCertificate]) {
         (self.object, self.data) = (object, data)
     }
 }
 
 /// The organization certificate deactivation result type.
-public struct OrganizationCertificateDeactivationResponseObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct OrganizationCertificateDeactivationResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let organizationCertificateDeactivation =
-        OrganizationCertificateDeactivationResponseObject(rawValue: "organization.certificate.deactivation")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let organizationCertificateDeactivation = OrganizationCertificateDeactivationResponseObject(rawValue: "organization.certificate.deactivation")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

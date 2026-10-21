@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ChatkitMethods {
+extension ChatkitMethods {
     /// List ChatKit threads with optional pagination and user filters.
     ///
     /// - Parameters:
@@ -18,39 +18,22 @@ public extension ChatkitMethods {
     ///   for the newest results.
     /// - user: Filter threads that belong to this user identifier. Defaults to null
     ///   to return all users.
-    static func listChatkitThreads(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: OrderEnum? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        user: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ThreadListResource {
-        if let limit {
+    public static func listChatkitThreads(config: ClientConfig, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, before: String? = nil, user: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ThreadListResource {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 0, max: 100)
         }
 
-        if let user {
+        if let user = user {
             try validateLength("user", user, min: 1, max: 512)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            "/chatkit/threads",
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("order", value: order),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("before", value: before),
-                SdkQueryParameter("user", value: user),
-            ],
-            decoder: .json,
-            operationId: "listChatkitThreads",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("GET", "/chatkit/threads", config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("before", value: before),
+            SdkQueryParameter("user", value: user),
+        ], decoder: .json, operationId: "listChatkitThreads", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
     /// List ChatKit threads with optional pagination and user filters.
@@ -64,45 +47,18 @@ public extension ChatkitMethods {
     ///   for the newest results.
     /// - user: Filter threads that belong to this user identifier. Defaults to null
     ///   to return all users.
-    static func listChatkitThreadsPaginated(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: OrderEnum? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        user: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ThreadResource, Swift.Error> {
-        AsyncThrowingStream<ThreadResource, Swift.Error> { (continuation: AsyncThrowingStream<
-            ThreadResource,
-            Swift.Error
-        >.Continuation) in
+    public static func listChatkitThreadsPaginated(config: ClientConfig, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, before: String? = nil, user: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ThreadResource, Swift.Error> {
+        return AsyncThrowingStream<ThreadResource, Swift.Error> { (continuation: AsyncThrowingStream<ThreadResource, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listChatkitThreads(
-                            config: config,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            user: user,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listChatkitThreads(config: config, limit: limit, order: order, after: pageCursor, before: before, user: user, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -115,54 +71,25 @@ public extension ChatkitMethods {
         }
     }
 
-    struct ListChatkitThreadsPage {
+    public struct ListChatkitThreadsPage {
         public let data: ThreadListResource
         public let items: [ThreadResource]
         public let hasMore: Bool
     }
 
-    static func listChatkitThreadsPages(
-        config: ClientConfig,
-        limit: Int? = nil,
-        order: OrderEnum? = nil,
-        after: String? = nil,
-        before: String? = nil,
-        user: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListChatkitThreadsPage, Swift.Error> {
-        AsyncThrowingStream<ListChatkitThreadsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListChatkitThreadsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listChatkitThreadsPages(config: ClientConfig, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, before: String? = nil, user: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListChatkitThreadsPage, Swift.Error> {
+        return AsyncThrowingStream<ListChatkitThreadsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListChatkitThreadsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listChatkitThreads(
-                            config: config,
-                            limit: limit,
-                            order: order,
-                            after: pageCursor,
-                            before: before,
-                            user: user,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listChatkitThreads(config: config, limit: limit, order: order, after: pageCursor, before: before, user: user, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListChatkitThreadsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        pageContinuation.yield(ListChatkitThreadsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

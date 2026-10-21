@@ -3,15 +3,12 @@
 
 import Foundation
 
-/// LiveLiveReasoning domain models
+// LiveLiveReasoning domain models
 /// Typed representation of the `LiveReasoningEffort` API schema.
 public struct LiveReasoningEffort: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let none = LiveReasoningEffort(rawValue: "none")
     public static let minimal = LiveReasoningEffort(rawValue: "minimal")
     public static let low = LiveReasoningEffort(rawValue: "low")
@@ -21,7 +18,7 @@ public struct LiveReasoningEffort: RawRepresentable, Hashable, Codable, Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -34,17 +31,14 @@ public struct LiveReasoningEffort: RawRepresentable, Hashable, Codable, Sendable
 public struct LiveReasoningSummary: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let concise = LiveReasoningSummary(rawValue: "concise")
     public static let detailed = LiveReasoningSummary(rawValue: "detailed")
     public static let auto = LiveReasoningSummary(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

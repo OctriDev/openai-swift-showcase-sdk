@@ -8,9 +8,8 @@ import Foundation
 #endif
 public enum GroupsMethods {}
 
-public extension GroupsMethods {
-    /// Lists groups in the organization, with controls for page size, cursor position, and sort order. Use `after` with
-    /// a group ID from the previous page to continue through the results.
+extension GroupsMethods {
+    /// Lists groups in the organization, with controls for page size, cursor position, and sort order. Use `after` with a group ID from the previous page to continue through the results.
     ///
     /// Lists all groups in the organization.
     ///
@@ -22,40 +21,19 @@ public extension GroupsMethods {
     ///   100 objects, ending with group_abc, your subsequent call can include
     ///   `after=group_abc` in order to fetch the next page of the list.
     /// - order: Specifies the sort order of the returned groups.
-    static func listGroups(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListGroupsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> GroupListResource {
-        if let limit {
+    public static func listGroups(config: ClientConfig, limit: Int? = nil, after: String? = nil, order: ListGroupsParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> GroupListResource {
+        if let limit = limit {
             try validateRange("limit", Double(limit), min: 0, max: 1000)
         }
 
-        return try await (sdkRequest(
-            "GET",
-            "/organization/groups",
-            config: config,
-            query: [
-                SdkQueryParameter("limit", value: limit),
-                SdkQueryParameter("after", value: after),
-                SdkQueryParameter("order", value: order),
-            ],
-            decoder: .json,
-            operationId: "listGroups",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("GET", "/organization/groups", config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("order", value: order),
+        ], decoder: .json, operationId: "listGroups", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Lists groups in the organization, with controls for page size, cursor position, and sort order. Use `after` with
-    /// a group ID from the previous page to continue through the results.
+    /// Lists groups in the organization, with controls for page size, cursor position, and sort order. Use `after` with a group ID from the previous page to continue through the results.
     ///
     /// Lists all groups in the organization.
     ///
@@ -67,41 +45,18 @@ public extension GroupsMethods {
     ///   100 objects, ending with group_abc, your subsequent call can include
     ///   `after=group_abc` in order to fetch the next page of the list.
     /// - order: Specifies the sort order of the returned groups.
-    static func listGroupsPaginated(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListGroupsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<GroupResponse, Swift.Error> {
-        AsyncThrowingStream<GroupResponse, Swift.Error> { (continuation: AsyncThrowingStream<
-            GroupResponse,
-            Swift.Error
-        >.Continuation) in
+    public static func listGroupsPaginated(config: ClientConfig, limit: Int? = nil, after: String? = nil, order: ListGroupsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<GroupResponse, Swift.Error> {
+        return AsyncThrowingStream<GroupResponse, Swift.Error> { (continuation: AsyncThrowingStream<GroupResponse, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listGroups(
-                            config: config,
-                            limit: limit,
-                            after: pageCursor,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listGroups(config: config, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.next else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.next else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -114,46 +69,25 @@ public extension GroupsMethods {
         }
     }
 
-    struct ListGroupsPage {
+    public struct ListGroupsPage {
         public let data: GroupListResource
         public let items: [GroupResponse]
         public let hasMore: Bool
     }
 
-    static func listGroupsPages(
-        config: ClientConfig,
-        limit: Int? = nil,
-        after: String? = nil,
-        order: ListGroupsParameter? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListGroupsPage, Swift.Error> {
-        AsyncThrowingStream<ListGroupsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListGroupsPage,
-            Swift.Error
-        >.Continuation) in
+    public static func listGroupsPages(config: ClientConfig, limit: Int? = nil, after: String? = nil, order: ListGroupsParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListGroupsPage, Swift.Error> {
+        return AsyncThrowingStream<ListGroupsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListGroupsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listGroups(
-                            config: config,
-                            limit: limit,
-                            after: pageCursor,
-                            order: order,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listGroups(config: config, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.next != nil
                         pageContinuation.yield(ListGroupsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.next else {
-                            break
-                        }
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.next else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

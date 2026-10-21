@@ -3,39 +3,29 @@
 
 import Foundation
 
-/// ResponsesConversation domain models
+// ResponsesConversation domain models
 public indirect enum ConversationParam {
     case stringValue(String)
     case conversationParam2(ConversationParam2)
 }
 
 extension ConversationParam: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ConversationParam"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ConversationParam")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension ConversationParam {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container.decode(ConversationParam2.self) {
-            return .conversationParam2(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(ConversationParam2.self) { return .conversationParam2(value) }
         return nil
     }
 }
@@ -60,27 +50,21 @@ public struct ConversationParam2: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ConversationParam2 {
-    init(from decoder: Decoder) throws {
+extension ConversationParam2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension ConversationParam2 {
-    init(id: String) {
+extension ConversationParam2 {
+    public init(id: String) {
         self.id = id
     }
 }

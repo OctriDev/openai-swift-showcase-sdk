@@ -3,216 +3,62 @@
 
 import Foundation
 
-public extension AgentsNamespace {
-    /// Streams live events for an agent session. See [session
-    /// events](https://developers.openai.com/api/docs/guides/agents-api/sessions/events).
-    func listSessionEvents(
-        sessionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
-        try await AgentsMethods.listAgentSessionEvents(
-            config: config,
-            sessionId: sessionId,
-            requestOptions: requestOptions
-        )
+extension AgentsNamespace {
+/// Streams live events for an agent session. See [session events](https://developers.openai.com/api/docs/guides/agents-api/sessions/events).
+    public func listSessionEvents(sessionId: String, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
+        return try await AgentsMethods.listAgentSessionEvents(config: config, sessionId: sessionId, requestOptions: requestOptions)
     }
 
-    /// Submits message, cancellation, tool-result, or computer-use approval-response events to a managed agent session.
-    /// Cancellation can recover a still-open turn whose backend execution has ended by marking it cancelled and
-    /// abandoning unpublished outputs. Saved results, published files, and existing terminal outcomes are preserved.
-    /// HTTP 202 confirms acceptance, not durable completion. See [session
-    /// events](https://developers.openai.com/api/docs/guides/agents-api/sessions/events).
-    func createSessionEvents(
-        sessionId: String,
-        events: [SessionInputParam],
-        idempotencyKey: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SdkEmptyResponse {
-        try await AgentsMethods.createAgentSessionEvents(
-            config: config,
-            sessionId: sessionId,
-            events: events,
-            idempotencyKey: idempotencyKey,
-            requestOptions: requestOptions
-        )
+/// Submits message, cancellation, tool-result, or computer-use approval-response events to a managed agent session. Cancellation can recover a still-open turn whose backend execution has ended by marking it cancelled and abandoning unpublished outputs. Saved results, published files, and existing terminal outcomes are preserved. HTTP 202 confirms acceptance, not durable completion. See [session events](https://developers.openai.com/api/docs/guides/agents-api/sessions/events).
+    public func createSessionEvents(sessionId: String, events: [SessionInputParam], idempotencyKey: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SdkEmptyResponse {
+        return try await AgentsMethods.createAgentSessionEvents(config: config, sessionId: sessionId, events: events, idempotencyKey: idempotencyKey, requestOptions: requestOptions)
     }
 
-    /// Lists items produced by the session's root agent, including its interactions with subagents. Each subagent has
-    /// its own item history. See [inspecting agent
-    /// output](https://developers.openai.com/api/docs/guides/agents-api/observability).
-    func listSessionItems(
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SessionItemListResource {
-        try await AgentsMethods.listAgentSessionItems(
-            config: config,
-            sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists items produced by the session's root agent, including its interactions with subagents. Each subagent has its own item history. See [inspecting agent output](https://developers.openai.com/api/docs/guides/agents-api/observability).
+    public func listSessionItems(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionItemListResource {
+        return try await AgentsMethods.listAgentSessionItems(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists items produced by the session's root agent, including its interactions with subagents. Each subagent has
-    /// its own item history. See [inspecting agent
-    /// output](https://developers.openai.com/api/docs/guides/agents-api/observability).
-    func listSessionItemsPaginated(
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<SessionTurnItemResource, Swift.Error> {
-        AgentsMethods.listAgentSessionItemsPaginated(
-            config: config,
-            sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists items produced by the session's root agent, including its interactions with subagents. Each subagent has its own item history. See [inspecting agent output](https://developers.openai.com/api/docs/guides/agents-api/observability).
+    public func listSessionItemsPaginated(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SessionTurnItemResource, Swift.Error> {
+        return AgentsMethods.listAgentSessionItemsPaginated(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists published root-turn traces as OTLP JSON, ordered by turn creation time and ID. Unpublished traces are
-    /// skipped. Each page returns data available when read; it does not wait for late traces. Trace reads and the JSON
-    /// response are limited to 16 MiB per request. If the limit is exceeded, request fewer traces.
-    func listSessionTraces(
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SessionTraceListResource {
-        try await AgentsMethods.listAgentSessionTraces(
-            config: config,
-            sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists published root-turn traces as OTLP JSON, ordered by turn creation time and ID. Unpublished traces are skipped. Each page returns data available when read; it does not wait for late traces. Trace reads and the JSON response are limited to 16 MiB per request. If the limit is exceeded, request fewer traces.
+    public func listSessionTraces(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionTraceListResource {
+        return try await AgentsMethods.listAgentSessionTraces(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists published root-turn traces as OTLP JSON, ordered by turn creation time and ID. Unpublished traces are
-    /// skipped. Each page returns data available when read; it does not wait for late traces. Trace reads and the JSON
-    /// response are limited to 16 MiB per request. If the limit is exceeded, request fewer traces.
-    func listSessionTracesPaginated(
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<SessionTurnTraceResource, Swift.Error> {
-        AgentsMethods.listAgentSessionTracesPaginated(
-            config: config,
-            sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists published root-turn traces as OTLP JSON, ordered by turn creation time and ID. Unpublished traces are skipped. Each page returns data available when read; it does not wait for late traces. Trace reads and the JSON response are limited to 16 MiB per request. If the limit is exceeded, request fewer traces.
+    public func listSessionTracesPaginated(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SessionTurnTraceResource, Swift.Error> {
+        return AgentsMethods.listAgentSessionTracesPaginated(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists turns by creation time and turn ID. The after cursor is exclusive in the selected order. See [session
-    /// turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
-    func listSessionTurns(
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SessionTurnListResource {
-        try await AgentsMethods.listAgentSessionTurns(
-            config: config,
-            sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists turns by creation time and turn ID. The after cursor is exclusive in the selected order. See [session turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
+    public func listSessionTurns(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionTurnListResource {
+        return try await AgentsMethods.listAgentSessionTurns(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists turns by creation time and turn ID. The after cursor is exclusive in the selected order. See [session
-    /// turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
-    func listSessionTurnsPaginated(
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<TurnResource, Swift.Error> {
-        AgentsMethods.listAgentSessionTurnsPaginated(
-            config: config,
-            sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists turns by creation time and turn ID. The after cursor is exclusive in the selected order. See [session turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
+    public func listSessionTurnsPaginated(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<TurnResource, Swift.Error> {
+        return AgentsMethods.listAgentSessionTurnsPaginated(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 }
 
-public extension AgentsNamespace {
-    /// Retrieves a turn's current status, timestamps, usage, and error. Returns 404 if the turn does not belong to the
-    /// session. See [session
-    /// turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
-    func retrieveSessionTurn(
-        sessionId: String,
-        turnId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> TurnResource {
-        try await AgentsMethods.retrieveAgentSessionTurn(
-            config: config,
-            sessionId: sessionId,
-            turnId: turnId,
-            requestOptions: requestOptions
-        )
+extension AgentsNamespace {
+/// Retrieves a turn's current status, timestamps, usage, and error. Returns 404 if the turn does not belong to the session. See [session turns](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage#inspect-session-turns).
+    public func retrieveSessionTurn(sessionId: String, turnId: String, requestOptions: RequestOptions? = nil) async throws -> TurnResource {
+        return try await AgentsMethods.retrieveAgentSessionTurn(config: config, sessionId: sessionId, turnId: turnId, requestOptions: requestOptions)
     }
 
-    /// Lists items belonging to one root-agent turn, including its interactions with subagents. See [inspecting agent
-    /// output](https://developers.openai.com/api/docs/guides/agents-api/observability).
-    func listSessionTurnItems(
-        sessionId: String,
-        turnId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SessionItemListResource {
-        try await AgentsMethods.listAgentSessionTurnItems(
-            config: config,
-            sessionId: sessionId,
-            turnId: turnId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists items belonging to one root-agent turn, including its interactions with subagents. See [inspecting agent output](https://developers.openai.com/api/docs/guides/agents-api/observability).
+    public func listSessionTurnItems(sessionId: String, turnId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionItemListResource {
+        return try await AgentsMethods.listAgentSessionTurnItems(config: config, sessionId: sessionId, turnId: turnId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists items belonging to one root-agent turn, including its interactions with subagents. See [inspecting agent
-    /// output](https://developers.openai.com/api/docs/guides/agents-api/observability).
-    func listSessionTurnItemsPaginated(
-        sessionId: String,
-        turnId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<SessionTurnItemResource, Swift.Error> {
-        AgentsMethods.listAgentSessionTurnItemsPaginated(
-            config: config,
-            sessionId: sessionId,
-            turnId: turnId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists items belonging to one root-agent turn, including its interactions with subagents. See [inspecting agent output](https://developers.openai.com/api/docs/guides/agents-api/observability).
+    public func listSessionTurnItemsPaginated(sessionId: String, turnId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SessionTurnItemResource, Swift.Error> {
+        return AgentsMethods.listAgentSessionTurnItemsPaginated(config: config, sessionId: sessionId, turnId: turnId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 }
 
@@ -222,205 +68,66 @@ public class VaultsNamespace {
         self.config = config
     }
 
-    /// Lists vaults using ID-based pagination. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
-    public func list(
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        metadata: [String: String]? = nil,
-        status: VaultStatusFilterParam? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VaultListResource {
-        try await VaultsMethods.listVaults(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            metadata: metadata,
-            status: status,
-            requestOptions: requestOptions
-        )
+/// Lists vaults using ID-based pagination. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    public func list(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, metadata: [String: String]? = nil, status: VaultStatusFilterParam? = nil, requestOptions: RequestOptions? = nil) async throws -> VaultListResource {
+        return try await VaultsMethods.listVaults(config: config, limit: limit, order: order, after: after, metadata: metadata, status: status, requestOptions: requestOptions)
     }
 
-    /// Lists vaults using ID-based pagination. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
-    public func listPaginated(
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        metadata: [String: String]? = nil,
-        status: VaultStatusFilterParam? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<VaultResource, Swift.Error> {
-        VaultsMethods.listVaultsPaginated(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            metadata: metadata,
-            status: status,
-            requestOptions: requestOptions
-        )
+/// Lists vaults using ID-based pagination. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    public func listPaginated(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, metadata: [String: String]? = nil, status: VaultStatusFilterParam? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<VaultResource, Swift.Error> {
+        return VaultsMethods.listVaultsPaginated(config: config, limit: limit, order: order, after: after, metadata: metadata, status: status, requestOptions: requestOptions)
     }
 
-    /// Creates a vault for the current project. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
-    public func create(
-        name: String? = nil,
-        metadata: SdkOptional<[String: String]>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VaultResource {
-        try await VaultsMethods.createVault(
-            config: config,
-            name: name,
-            metadata: metadata,
-            requestOptions: requestOptions
-        )
+/// Creates a vault for the current project. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    public func create(name: String? = nil, metadata: SdkOptional<[String: String]>? = nil, requestOptions: RequestOptions? = nil) async throws -> VaultResource {
+        return try await VaultsMethods.createVault(config: config, name: name, metadata: metadata, requestOptions: requestOptions)
     }
 
-    /// Retrieves a vault by its ID. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+/// Retrieves a vault by its ID. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
     public func retrieve(vaultId: String, requestOptions: RequestOptions? = nil) async throws -> VaultResource {
-        try await VaultsMethods.retrieveVault(config: config, vaultId: vaultId, requestOptions: requestOptions)
+        return try await VaultsMethods.retrieveVault(config: config, vaultId: vaultId, requestOptions: requestOptions)
     }
 
-    /// Updates the name or metadata of an active vault. Omitted fields remain unchanged. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
-    public func update(
-        vaultId: String,
-        metadata: [String: String]? = nil,
-        name: SdkOptional<String>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VaultResource {
-        try await VaultsMethods.updateVault(
-            config: config,
-            vaultId: vaultId,
-            metadata: metadata,
-            name: name,
-            requestOptions: requestOptions
-        )
+/// Updates the name or metadata of an active vault. Omitted fields remain unchanged. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    public func update(vaultId: String, metadata: [String: String]? = nil, name: SdkOptional<String>? = nil, requestOptions: RequestOptions? = nil) async throws -> VaultResource {
+        return try await VaultsMethods.updateVault(config: config, vaultId: vaultId, metadata: metadata, name: name, requestOptions: requestOptions)
     }
 
-    /// Deletes a vault and all its credentials. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+/// Deletes a vault and all its credentials. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
     public func delete(vaultId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedVaultResource {
-        try await VaultsMethods.deleteVault(config: config, vaultId: vaultId, requestOptions: requestOptions)
+        return try await VaultsMethods.deleteVault(config: config, vaultId: vaultId, requestOptions: requestOptions)
     }
 
-    /// Lists a vault's credentials using ID-based pagination without returning secret values. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
-    public func listCredentials(
-        vaultId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        metadata: [String: String]? = nil,
-        status: VaultStatusFilterParam? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VaultCredentialListResource {
-        try await VaultsMethods.listVaultCredentials(
-            config: config,
-            vaultId: vaultId,
-            limit: limit,
-            order: order,
-            after: after,
-            metadata: metadata,
-            status: status,
-            requestOptions: requestOptions
-        )
+/// Lists a vault's credentials using ID-based pagination without returning secret values. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    public func listCredentials(vaultId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, metadata: [String: String]? = nil, status: VaultStatusFilterParam? = nil, requestOptions: RequestOptions? = nil) async throws -> VaultCredentialListResource {
+        return try await VaultsMethods.listVaultCredentials(config: config, vaultId: vaultId, limit: limit, order: order, after: after, metadata: metadata, status: status, requestOptions: requestOptions)
     }
 
-    /// Lists a vault's credentials using ID-based pagination without returning secret values. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
-    public func listCredentialsPaginated(
-        vaultId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        metadata: [String: String]? = nil,
-        status: VaultStatusFilterParam? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<VaultCredentialResource, Swift.Error> {
-        VaultsMethods.listVaultCredentialsPaginated(
-            config: config,
-            vaultId: vaultId,
-            limit: limit,
-            order: order,
-            after: after,
-            metadata: metadata,
-            status: status,
-            requestOptions: requestOptions
-        )
+/// Lists a vault's credentials using ID-based pagination without returning secret values. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    public func listCredentialsPaginated(vaultId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, metadata: [String: String]? = nil, status: VaultStatusFilterParam? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<VaultCredentialResource, Swift.Error> {
+        return VaultsMethods.listVaultCredentialsPaginated(config: config, vaultId: vaultId, limit: limit, order: order, after: after, metadata: metadata, status: status, requestOptions: requestOptions)
     }
 }
 
-public extension VaultsNamespace {
-    /// Creates a vault credential. Secret values are write-only and are never returned. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
-    func createCredential(
-        vaultId: String,
-        name: String,
-        auth: CreateVaultCredentialAuthParam,
-        metadata: [String: String]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VaultCredentialResource {
-        try await VaultsMethods.createVaultCredential(
-            config: config,
-            vaultId: vaultId,
-            name: name,
-            auth: auth,
-            metadata: metadata,
-            requestOptions: requestOptions
-        )
+extension VaultsNamespace {
+/// Creates a vault credential. Secret values are write-only and are never returned. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    public func createCredential(vaultId: String, name: String, auth: CreateVaultCredentialAuthParam, metadata: [String: String]? = nil, requestOptions: RequestOptions? = nil) async throws -> VaultCredentialResource {
+        return try await VaultsMethods.createVaultCredential(config: config, vaultId: vaultId, name: name, auth: auth, metadata: metadata, requestOptions: requestOptions)
     }
 
-    /// Retrieves vault credential metadata without returning secret values. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
-    func retrieveCredential(
-        vaultId: String,
-        credentialId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VaultCredentialResource {
-        try await VaultsMethods.retrieveVaultCredential(
-            config: config,
-            vaultId: vaultId,
-            credentialId: credentialId,
-            requestOptions: requestOptions
-        )
+/// Retrieves vault credential metadata without returning secret values. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    public func retrieveCredential(vaultId: String, credentialId: String, requestOptions: RequestOptions? = nil) async throws -> VaultCredentialResource {
+        return try await VaultsMethods.retrieveVaultCredential(config: config, vaultId: vaultId, credentialId: credentialId, requestOptions: requestOptions)
     }
 
-    /// Updates credential metadata or rotates its write-only secret. See
-    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
-    func rotateCredential(
-        vaultId: String,
-        credentialId: String,
-        auth: RotateVaultCredentialAuthParam? = nil,
-        metadata: [String: String]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VaultCredentialResource {
-        try await VaultsMethods.rotateVaultCredential(
-            config: config,
-            vaultId: vaultId,
-            credentialId: credentialId,
-            auth: auth,
-            metadata: metadata,
-            requestOptions: requestOptions
-        )
+/// Updates credential metadata or rotates its write-only secret. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    public func rotateCredential(vaultId: String, credentialId: String, auth: RotateVaultCredentialAuthParam? = nil, metadata: [String: String]? = nil, requestOptions: RequestOptions? = nil) async throws -> VaultCredentialResource {
+        return try await VaultsMethods.rotateVaultCredential(config: config, vaultId: vaultId, credentialId: credentialId, auth: auth, metadata: metadata, requestOptions: requestOptions)
     }
 
-    /// Deletes a vault credential. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
-    func deleteCredential(
-        vaultId: String,
-        credentialId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedVaultCredentialResource {
-        try await VaultsMethods.deleteVaultCredential(
-            config: config,
-            vaultId: vaultId,
-            credentialId: credentialId,
-            requestOptions: requestOptions
-        )
+/// Deletes a vault credential. See [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    public func deleteCredential(vaultId: String, credentialId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedVaultCredentialResource {
+        return try await VaultsMethods.deleteVaultCredential(config: config, vaultId: vaultId, credentialId: credentialId, requestOptions: requestOptions)
     }
 }
 
@@ -430,118 +137,44 @@ public class WebhookEndpointsNamespace {
         self.config = config
     }
 
-    /// Returns webhook endpoints for the authenticated project in newest-first order.
-    public func list(
-        limit: Int? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> WebhookEndpointListResource {
-        try await WebhookEndpointsMethods.listWebhookEndpoints(
-            config: config,
-            limit: limit,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Returns webhook endpoints for the authenticated project in newest-first order.
+    public func list(limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointListResource {
+        return try await WebhookEndpointsMethods.listWebhookEndpoints(config: config, limit: limit, after: after, requestOptions: requestOptions)
     }
 
-    /// Returns webhook endpoints for the authenticated project in newest-first order.
-    public func listPaginated(
-        limit: Int? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<WebhookEndpointBody, Swift.Error> {
-        WebhookEndpointsMethods.listWebhookEndpointsPaginated(
-            config: config,
-            limit: limit,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Returns webhook endpoints for the authenticated project in newest-first order.
+    public func listPaginated(limit: Int? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<WebhookEndpointBody, Swift.Error> {
+        return WebhookEndpointsMethods.listWebhookEndpointsPaginated(config: config, limit: limit, after: after, requestOptions: requestOptions)
     }
 
-    /// Creates a webhook endpoint for the authenticated project.
-    public func create(
-        name: String,
-        url: String,
-        eventTypes: [ProjectEventTypeEnum],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> WebhookEndpointWithSecretResource {
-        try await WebhookEndpointsMethods.createWebhookEndpoint(
-            config: config,
-            name: name,
-            url: url,
-            eventTypes: eventTypes,
-            requestOptions: requestOptions
-        )
+/// Creates a webhook endpoint for the authenticated project.
+    public func create(name: String, url: String, eventTypes: [ProjectEventTypeEnum], requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointWithSecretResource {
+        return try await WebhookEndpointsMethods.createWebhookEndpoint(config: config, name: name, url: url, eventTypes: eventTypes, requestOptions: requestOptions)
     }
 
-    /// Retrieves a webhook endpoint for the authenticated project.
-    public func retrieve(
-        webhookEndpointId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> WebhookEndpointBody {
-        try await WebhookEndpointsMethods.retrieveWebhookEndpoint(
-            config: config,
-            webhookEndpointId: webhookEndpointId,
-            requestOptions: requestOptions
-        )
+/// Retrieves a webhook endpoint for the authenticated project.
+    public func retrieve(webhookEndpointId: String, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointBody {
+        return try await WebhookEndpointsMethods.retrieveWebhookEndpoint(config: config, webhookEndpointId: webhookEndpointId, requestOptions: requestOptions)
     }
 
-    /// Updates a webhook endpoint for the authenticated project.
-    public func update(
-        webhookEndpointId: String,
-        name: String? = nil,
-        url: String? = nil,
-        eventTypes: [ProjectEventTypeEnum]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> WebhookEndpointBody {
-        try await WebhookEndpointsMethods.updateWebhookEndpoint(
-            config: config,
-            webhookEndpointId: webhookEndpointId,
-            name: name,
-            url: url,
-            eventTypes: eventTypes,
-            requestOptions: requestOptions
-        )
+/// Updates a webhook endpoint for the authenticated project.
+    public func update(webhookEndpointId: String, name: String? = nil, url: String? = nil, eventTypes: [ProjectEventTypeEnum]? = nil, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointBody {
+        return try await WebhookEndpointsMethods.updateWebhookEndpoint(config: config, webhookEndpointId: webhookEndpointId, name: name, url: url, eventTypes: eventTypes, requestOptions: requestOptions)
     }
 
-    /// Deletes a webhook endpoint for the authenticated project.
-    public func delete(
-        webhookEndpointId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedWebhookEndpointResource {
-        try await WebhookEndpointsMethods.deleteWebhookEndpoint(
-            config: config,
-            webhookEndpointId: webhookEndpointId,
-            requestOptions: requestOptions
-        )
+/// Deletes a webhook endpoint for the authenticated project.
+    public func delete(webhookEndpointId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedWebhookEndpointResource {
+        return try await WebhookEndpointsMethods.deleteWebhookEndpoint(config: config, webhookEndpointId: webhookEndpointId, requestOptions: requestOptions)
     }
 
-    /// Rotates the signing secret for a webhook endpoint in the authenticated project.
-    public func rotateSigningSecret(
-        webhookEndpointId: String,
-        keepOldSecretActiveFor24Hours: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> WebhookEndpointWithSecretResource {
-        try await WebhookEndpointsMethods.rotateWebhookEndpointSigningSecret(
-            config: config,
-            webhookEndpointId: webhookEndpointId,
-            keepOldSecretActiveFor24Hours: keepOldSecretActiveFor24Hours,
-            requestOptions: requestOptions
-        )
+/// Rotates the signing secret for a webhook endpoint in the authenticated project.
+    public func rotateSigningSecret(webhookEndpointId: String, keepOldSecretActiveFor24Hours: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointWithSecretResource {
+        return try await WebhookEndpointsMethods.rotateWebhookEndpointSigningSecret(config: config, webhookEndpointId: webhookEndpointId, keepOldSecretActiveFor24Hours: keepOldSecretActiveFor24Hours, requestOptions: requestOptions)
     }
 
-    /// Sends a sample event to a webhook endpoint for the authenticated project.
-    public func test(
-        webhookEndpointId: String,
-        eventType: ProjectEventTypeEnum,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> WebhookEndpointTestResultResource {
-        try await WebhookEndpointsMethods.testWebhookEndpoint(
-            config: config,
-            webhookEndpointId: webhookEndpointId,
-            eventType: eventType,
-            requestOptions: requestOptions
-        )
+/// Sends a sample event to a webhook endpoint for the authenticated project.
+    public func test(webhookEndpointId: String, eventType: ProjectEventTypeEnum, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointTestResultResource {
+        return try await WebhookEndpointsMethods.testWebhookEndpoint(config: config, webhookEndpointId: webhookEndpointId, eventType: eventType, requestOptions: requestOptions)
     }
 }
 
@@ -551,8 +184,8 @@ public class WebhookEventTypesNamespace {
         self.config = config
     }
 
-    /// Returns webhook event types visible to the authenticated project.
+/// Returns webhook event types visible to the authenticated project.
     public func list(requestOptions: RequestOptions? = nil) async throws -> WebhookEventTypeListResource {
-        try await WebhookEventTypesMethods.listWebhookEventTypes(config: config, requestOptions: requestOptions)
+        return try await WebhookEventTypesMethods.listWebhookEventTypes(config: config, requestOptions: requestOptions)
     }
 }

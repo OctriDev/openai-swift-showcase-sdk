@@ -3,34 +3,26 @@
 
 import Foundation
 
-/// AssistantsMessage domain models
-public extension MessageRequestContentTextObject {
-    init(from decoder: Decoder) throws {
+// AssistantsMessage domain models
+extension MessageRequestContentTextObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        try sdkValidateRawEnum("type", type, MessageRequestContentTextObjectType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+            try sdkValidateRawEnum("type", self.type, MessageRequestContentTextObjectType.allCases.map(\.rawValue))
     }
 }
 
-public extension MessageRequestContentTextObject {
-    init(type: MessageRequestContentTextObjectType, text: String) throws {
+extension MessageRequestContentTextObject {
+    public init(type: MessageRequestContentTextObjectType, text: String) throws {
         (self.type, self.text) = (type, text)
-        try sdkValidateRawEnum("type", self.type, MessageRequestContentTextObjectType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, MessageRequestContentTextObjectType.allCases.map(\.rawValue))
     }
 }
 
@@ -47,20 +39,20 @@ public struct MessageDeltaContentTextObjectText: Codable {
     }
 
     init() {
-        (value, annotations) = (nil, nil)
+        (self.value, self.annotations) = (nil, nil)
     }
 }
 
-public extension MessageDeltaContentTextObjectText {
-    init(from decoder: Decoder) throws {
+extension MessageDeltaContentTextObjectText {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        value = try container.sdkDecodeIfPresent(.value)
-        annotations = try container.sdkDecodeIfPresent(.annotations)
+        self.value = try container.sdkDecodeIfPresent(.value)
+        self.annotations = try container.sdkDecodeIfPresent(.annotations)
     }
 }
 
-public extension MessageDeltaContentTextObjectText {
-    init(value: String? = nil, annotations: [MessageDeltaContentTextObjectTextAnnotationsItem]? = nil) {
+extension MessageDeltaContentTextObjectText {
+    public init(value: String? = nil, annotations: [MessageDeltaContentTextObjectTextAnnotationsItem]? = nil) {
         self.init()
         (self.value, self.annotations) = (value, annotations)
     }
@@ -75,27 +67,21 @@ public struct MessageContentTextAnnotationsFilePathObjectFilePath: Codable {
         case fileId = "file_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageContentTextAnnotationsFilePathObjectFilePath {
-    init(from decoder: Decoder) throws {
+extension MessageContentTextAnnotationsFilePathObjectFilePath {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.fileId) else {
-            throw SdkValidationError(
-                field: "file_id",
-                code: "required",
-                message: "Validation failed for 'file_id': value is required"
-            )
+            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
         }
-        fileId = try container.sdkDecodeRequired(.fileId)
+        self.fileId = try container.sdkDecodeRequired(.fileId)
     }
 }
 
-public extension MessageContentTextAnnotationsFilePathObjectFilePath {
-    init(fileId: String) {
+extension MessageContentTextAnnotationsFilePathObjectFilePath {
+    public init(fileId: String) {
         self.fileId = fileId
     }
 }
@@ -115,43 +101,29 @@ public struct MessageDeltaObject: Codable {
         case delta
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageDeltaObject {
-    init(from decoder: Decoder) throws {
+extension MessageDeltaObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.delta) else {
-            throw SdkValidationError(
-                field: "delta",
-                code: "required",
-                message: "Validation failed for 'delta': value is required"
-            )
+            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        delta = try container.sdkDecodeRequired(.delta)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.delta = try container.sdkDecodeRequired(.delta)
     }
 }
 
-public extension MessageDeltaObject {
-    init(id: String, object: MessageDeltaObjectObject, delta: MessageDeltaObjectDelta) {
+extension MessageDeltaObject {
+    public init(id: String, object: MessageDeltaObjectObject, delta: MessageDeltaObjectDelta) {
         (self.id, self.object) = (id, object)
         self.delta = delta
     }
@@ -168,38 +140,28 @@ public struct MessageStreamEventVariant1: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageStreamEventVariant1 {
-    init(from decoder: Decoder) throws {
+extension MessageStreamEventVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.event) else {
-            throw SdkValidationError(
-                field: "event",
-                code: "required",
-                message: "Validation failed for 'event': value is required"
-            )
+            throw SdkValidationError(field: "event", code: "required", message: "Validation failed for 'event': value is required")
         }
         guard container.contains(.data) else {
-            throw SdkValidationError(
-                field: "data",
-                code: "required",
-                message: "Validation failed for 'data': value is required"
-            )
+            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
         }
-        event = try container.sdkDecodeRequired(.event)
-        data = try container.sdkDecodeRequired(.data)
-        try sdkValidateRawEnum("event", event, MessageStreamEventVariant1Event.allCases.map(\.rawValue))
+        self.event = try container.sdkDecodeRequired(.event)
+        self.data = try container.sdkDecodeRequired(.data)
+            try sdkValidateRawEnum("event", self.event, MessageStreamEventVariant1Event.allCases.map(\.rawValue))
     }
 }
 
-public extension MessageStreamEventVariant1 {
-    init(event: MessageStreamEventVariant1Event, data: MessageObject) throws {
+extension MessageStreamEventVariant1 {
+    public init(event: MessageStreamEventVariant1Event, data: MessageObject) throws {
         (self.event, self.data) = (event, data)
-        try sdkValidateRawEnum("event", self.event, MessageStreamEventVariant1Event.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("event", self.event, MessageStreamEventVariant1Event.allCases.map(\.rawValue))
     }
 }
 
@@ -212,27 +174,21 @@ public struct MessageObjectIncompleteDetails: Codable {
         case reason
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageObjectIncompleteDetails {
-    init(from decoder: Decoder) throws {
+extension MessageObjectIncompleteDetails {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.reason) else {
-            throw SdkValidationError(
-                field: "reason",
-                code: "required",
-                message: "Validation failed for 'reason': value is required"
-            )
+            throw SdkValidationError(field: "reason", code: "required", message: "Validation failed for 'reason': value is required")
         }
-        reason = try container.sdkDecodeRequired(.reason)
+        self.reason = try container.sdkDecodeRequired(.reason)
     }
 }
 
-public extension MessageObjectIncompleteDetails {
-    init(reason: MessageObjectIncompleteDetailsReason) {
+extension MessageObjectIncompleteDetails {
+    public init(reason: MessageObjectIncompleteDetailsReason) {
         self.reason = reason
     }
 }
@@ -258,110 +214,46 @@ public struct MessageContentTextAnnotationsFilePathObject: Codable {
         case endIndex = "end_index"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageContentTextAnnotationsFilePathObject {
-    init(from decoder: Decoder) throws {
+extension MessageContentTextAnnotationsFilePathObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
         guard container.contains(.filePath) else {
-            throw SdkValidationError(
-                field: "file_path",
-                code: "required",
-                message: "Validation failed for 'file_path': value is required"
-            )
+            throw SdkValidationError(field: "file_path", code: "required", message: "Validation failed for 'file_path': value is required")
         }
         guard container.contains(.startIndex) else {
-            throw SdkValidationError(
-                field: "start_index",
-                code: "required",
-                message: "Validation failed for 'start_index': value is required"
-            )
+            throw SdkValidationError(field: "start_index", code: "required", message: "Validation failed for 'start_index': value is required")
         }
         guard container.contains(.endIndex) else {
-            throw SdkValidationError(
-                field: "end_index",
-                code: "required",
-                message: "Validation failed for 'end_index': value is required"
-            )
+            throw SdkValidationError(field: "end_index", code: "required", message: "Validation failed for 'end_index': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        filePath = try container.sdkDecodeRequired(.filePath)
-        startIndex = try container.sdkDecodeRequired(.startIndex)
-        endIndex = try container.sdkDecodeRequired(.endIndex)
-        try sdkValidateRawEnum("type", type, MessageContentTextAnnotationsFilePathObjectType.allCases.map(\.rawValue))
-        try validateRange(
-            "start_index",
-            Double(startIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "end_index",
-            Double(endIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+        self.filePath = try container.sdkDecodeRequired(.filePath)
+        self.startIndex = try container.sdkDecodeRequired(.startIndex)
+        self.endIndex = try container.sdkDecodeRequired(.endIndex)
+            try sdkValidateRawEnum("type", self.type, MessageContentTextAnnotationsFilePathObjectType.allCases.map(\.rawValue))
+            try validateRange("start_index", Double(self.startIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("end_index", Double(self.endIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
-public extension MessageContentTextAnnotationsFilePathObject {
-    init(
-        type: MessageContentTextAnnotationsFilePathObjectType,
-        text: String,
-        filePath: MessageContentTextAnnotationsFilePathObjectFilePath,
-        startIndex: Int,
-        endIndex: Int
-    ) throws {
+extension MessageContentTextAnnotationsFilePathObject {
+    public init(type: MessageContentTextAnnotationsFilePathObjectType, text: String, filePath: MessageContentTextAnnotationsFilePathObjectFilePath, startIndex: Int, endIndex: Int) throws {
         (self.type, self.text) = (type, text)
         (self.filePath, self.startIndex) = (filePath, startIndex)
         self.endIndex = endIndex
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            MessageContentTextAnnotationsFilePathObjectType.allCases.map(\.rawValue)
-        )
-        try validateRange(
-            "start_index",
-            Double(self.startIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
-        try validateRange(
-            "end_index",
-            Double(self.endIndex),
-            min: 0,
-            max: nil,
-            exclusiveMin: nil,
-            exclusiveMax: nil,
-            multipleOf: nil
-        )
+            try sdkValidateRawEnum("type", self.type, MessageContentTextAnnotationsFilePathObjectType.allCases.map(\.rawValue))
+            try validateRange("start_index", Double(self.startIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange("end_index", Double(self.endIndex), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
     }
 }
 
@@ -380,40 +272,30 @@ public struct MessageDeltaContentTextObject: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageDeltaContentTextObject {
-    init(from decoder: Decoder) throws {
+extension MessageDeltaContentTextObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.index) else {
-            throw SdkValidationError(
-                field: "index",
-                code: "required",
-                message: "Validation failed for 'index': value is required"
-            )
+            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        index = try container.sdkDecodeRequired(.index)
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeIfPresent(.text)
-        try sdkValidateRawEnum("type", type, MessageDeltaContentTextObjectType.allCases.map(\.rawValue))
+        self.index = try container.sdkDecodeRequired(.index)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeIfPresent(.text)
+            try sdkValidateRawEnum("type", self.type, MessageDeltaContentTextObjectType.allCases.map(\.rawValue))
     }
 }
 
-public extension MessageDeltaContentTextObject {
-    init(index: Int, type: MessageDeltaContentTextObjectType, text: MessageDeltaContentTextObjectText? = nil) throws {
+extension MessageDeltaContentTextObject {
+    public init(index: Int, type: MessageDeltaContentTextObjectType, text: MessageDeltaContentTextObjectText? = nil) throws {
         (self.index, self.type) = (index, type)
         self.text = text
-        try sdkValidateRawEnum("type", self.type, MessageDeltaContentTextObjectType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, MessageDeltaContentTextObjectType.allCases.map(\.rawValue))
     }
 }
 
@@ -441,102 +323,45 @@ public struct MessageDeltaContentTextAnnotationsFilePathObject: Codable {
         case endIndex = "end_index"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageDeltaContentTextAnnotationsFilePathObject {
-    init(from decoder: Decoder) throws {
+extension MessageDeltaContentTextAnnotationsFilePathObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.index) else {
-            throw SdkValidationError(
-                field: "index",
-                code: "required",
-                message: "Validation failed for 'index': value is required"
-            )
+            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        index = try container.sdkDecodeRequired(.index)
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeIfPresent(.text)
-        filePath = try container.sdkDecodeIfPresent(.filePath)
-        startIndex = try container.sdkDecodeIfPresent(.startIndex)
-        endIndex = try container.sdkDecodeIfPresent(.endIndex)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            MessageDeltaContentTextAnnotationsFilePathObjectType.allCases.map(\.rawValue)
-        )
-        if let value = startIndex {
-            try validateRange(
-                "start_index",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        self.index = try container.sdkDecodeRequired(.index)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.filePath = try container.sdkDecodeIfPresent(.filePath)
+        self.startIndex = try container.sdkDecodeIfPresent(.startIndex)
+        self.endIndex = try container.sdkDecodeIfPresent(.endIndex)
+            try sdkValidateRawEnum("type", self.type, MessageDeltaContentTextAnnotationsFilePathObjectType.allCases.map(\.rawValue))
+        if let value = self.startIndex {
+            try validateRange("start_index", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = endIndex {
-            try validateRange(
-                "end_index",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.endIndex {
+            try validateRange("end_index", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
 
-public extension MessageDeltaContentTextAnnotationsFilePathObject {
-    init(
-        index: Int,
-        type: MessageDeltaContentTextAnnotationsFilePathObjectType,
-        text: String? = nil,
-        filePath: MessageDeltaContentTextAnnotationsFilePathObjectFilePath? = nil,
-        startIndex: Int? = nil,
-        endIndex: Int? = nil
-    ) throws {
+extension MessageDeltaContentTextAnnotationsFilePathObject {
+    public init(index: Int, type: MessageDeltaContentTextAnnotationsFilePathObjectType, text: String? = nil, filePath: MessageDeltaContentTextAnnotationsFilePathObjectFilePath? = nil, startIndex: Int? = nil, endIndex: Int? = nil) throws {
         (self.index, self.type) = (index, type)
         (self.text, self.filePath) = (text, filePath)
         (self.startIndex, self.endIndex) = (startIndex, endIndex)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            MessageDeltaContentTextAnnotationsFilePathObjectType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, MessageDeltaContentTextAnnotationsFilePathObjectType.allCases.map(\.rawValue))
         if let value = self.startIndex {
-            try validateRange(
-                "start_index",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("start_index", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.endIndex {
-            try validateRange(
-                "end_index",
-                Double(value),
-                min: 0,
-                max: nil,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("end_index", Double(value), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
     }
 }
@@ -556,44 +381,30 @@ public struct MessageDeltaContentImageFileObject: Codable {
         case imageFile = "image_file"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension MessageDeltaContentImageFileObject {
-    init(from decoder: Decoder) throws {
+extension MessageDeltaContentImageFileObject {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.index) else {
-            throw SdkValidationError(
-                field: "index",
-                code: "required",
-                message: "Validation failed for 'index': value is required"
-            )
+            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        index = try container.sdkDecodeRequired(.index)
-        type = try container.sdkDecodeRequired(.type)
-        imageFile = try container.sdkDecodeIfPresent(.imageFile)
-        try sdkValidateRawEnum("type", type, MessageDeltaContentImageFileObjectType.allCases.map(\.rawValue))
+        self.index = try container.sdkDecodeRequired(.index)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.imageFile = try container.sdkDecodeIfPresent(.imageFile)
+            try sdkValidateRawEnum("type", self.type, MessageDeltaContentImageFileObjectType.allCases.map(\.rawValue))
     }
 }
 
-public extension MessageDeltaContentImageFileObject {
-    init(
-        index: Int,
-        type: MessageDeltaContentImageFileObjectType,
-        imageFile: MessageDeltaContentImageFileObjectImageFile? = nil
-    ) throws {
+extension MessageDeltaContentImageFileObject {
+    public init(index: Int, type: MessageDeltaContentImageFileObjectType, imageFile: MessageDeltaContentImageFileObjectImageFile? = nil) throws {
         (self.index, self.type) = (index, type)
         self.imageFile = imageFile
-        try sdkValidateRawEnum("type", self.type, MessageDeltaContentImageFileObjectType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, MessageDeltaContentImageFileObjectType.allCases.map(\.rawValue))
     }
 }
 
@@ -608,7 +419,5 @@ public struct MessageStreamEventVariant4: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

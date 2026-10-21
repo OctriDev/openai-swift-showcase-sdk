@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Certificates domain models
+// Certificates domain models
 /// Typed representation of the `ModifyCertificateRequest` API schema.
 public struct ModifyCertificateRequest: Codable {
     /// The updated name for the certificate
@@ -14,19 +14,19 @@ public struct ModifyCertificateRequest: Codable {
     }
 
     init() {
-        name = nil
+        self.name = nil
     }
 }
 
-public extension ModifyCertificateRequest {
-    init(from decoder: Decoder) throws {
+extension ModifyCertificateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        name = try container.sdkDecodeIfPresent(.name)
+        self.name = try container.sdkDecodeIfPresent(.name)
     }
 }
 
-public extension ModifyCertificateRequest {
-    init(name: String? = nil) {
+extension ModifyCertificateRequest {
+    public init(name: String? = nil) {
         self.init()
         self.name = name
     }

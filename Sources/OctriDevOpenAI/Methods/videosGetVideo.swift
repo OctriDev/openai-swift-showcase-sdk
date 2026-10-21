@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension VideosMethods {
-    /// Retrieves the latest metadata for a generated video. Use `video_id` to identify the video job and check its
-    /// current status, progress, and other job details.
+extension VideosMethods {
+    /// Retrieves the latest metadata for a generated video. Use `video_id` to identify the video job and check its current status, progress, and other job details.
     ///
     /// Fetch the latest metadata for a generated video.
     ///
@@ -16,20 +15,8 @@ public extension VideosMethods {
     /// - videoId: The identifier of the video to retrieve.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func getVideo(
-        config: ClientConfig,
-        videoId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VideoResource {
-        try await (sdkRequest(
-            "GET",
-            ["/videos/", sdkEncodePathSegment(sdkWireString(videoId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "GetVideo",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+    public static func getVideo(config: ClientConfig, videoId: String, requestOptions: RequestOptions? = nil) async throws -> VideoResource {
+        return try (await sdkRequest("GET", ["/videos/", sdkEncodePathSegment(sdkWireString(videoId))].joined(), config: config, decoder: .json, operationId: "GetVideo", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
     }
 
     /// Permanently delete a completed or failed video and its stored assets.
@@ -38,19 +25,7 @@ public extension VideosMethods {
     /// - videoId: The identifier of the video to delete.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    static func deleteVideo(
-        config: ClientConfig,
-        videoId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedVideoResource {
-        try await (sdkRequest(
-            "DELETE",
-            ["/videos/", sdkEncodePathSegment(sdkWireString(videoId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "DeleteVideo",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self]
-        )).data
+    public static func deleteVideo(config: ClientConfig, videoId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedVideoResource {
+        return try (await sdkRequest("DELETE", ["/videos/", sdkEncodePathSegment(sdkWireString(videoId))].joined(), config: config, decoder: .json, operationId: "DeleteVideo", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

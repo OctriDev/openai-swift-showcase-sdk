@@ -8,8 +8,8 @@ import Foundation
 #endif
 public enum AuditLogsMethods {}
 
-public extension AuditLogsMethods {
-    struct ListAuditLogsOptions: Codable {
+extension AuditLogsMethods {
+    public struct ListAuditLogsOptions: Codable {
         public var effectiveAt: ListAuditLogsParameter?
         public var projectIds: [String]?
         public var eventTypes: [AuditLogEventType]?
@@ -56,32 +56,19 @@ public extension AuditLogsMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, starting with obj_foo, your subsequent call can include
     ///   before=obj_foo in order to fetch the previous page of the list.
-    static func listAuditLogs(
-        config: ClientConfig,
-        options: ListAuditLogsOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListAuditLogsResponse {
-        try await (sdkRequest(
-            "GET",
-            "/organization/audit_logs",
-            config: config,
-            query: [
-                SdkQueryParameter("effective_at", object: options.effectiveAt, style: "form", explode: true),
-                SdkQueryParameter("project_ids[]", values: options.projectIds, style: "form", explode: true),
-                SdkQueryParameter("event_types[]", values: options.eventTypes, style: "form", explode: true),
-                SdkQueryParameter("actor_ids[]", values: options.actorIds, style: "form", explode: true),
-                SdkQueryParameter("actor_emails[]", values: options.actorEmails, style: "form", explode: true),
-                SdkQueryParameter("resource_ids[]", values: options.resourceIds, style: "form", explode: true),
-                SdkQueryParameter("tenant_only", value: options.tenantOnly),
-                SdkQueryParameter("limit", value: options.limit),
-                SdkQueryParameter("after", value: options.after),
-                SdkQueryParameter("before", value: options.before),
-            ],
-            decoder: .json,
-            operationId: "listAuditLogs",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func listAuditLogs(config: ClientConfig, options: ListAuditLogsOptions, requestOptions: RequestOptions? = nil) async throws -> ListAuditLogsResponse {
+        return try (await sdkRequest("GET", "/organization/audit_logs", config: config, query: [
+            SdkQueryParameter("effective_at", object: options.effectiveAt, style: "form", explode: true),
+            SdkQueryParameter("project_ids[]", values: options.projectIds, style: "form", explode: true),
+            SdkQueryParameter("event_types[]", values: options.eventTypes, style: "form", explode: true),
+            SdkQueryParameter("actor_ids[]", values: options.actorIds, style: "form", explode: true),
+            SdkQueryParameter("actor_emails[]", values: options.actorEmails, style: "form", explode: true),
+            SdkQueryParameter("resource_ids[]", values: options.resourceIds, style: "form", explode: true),
+            SdkQueryParameter("tenant_only", value: options.tenantOnly),
+            SdkQueryParameter("limit", value: options.limit),
+            SdkQueryParameter("after", value: options.after),
+            SdkQueryParameter("before", value: options.before),
+        ], decoder: .json, operationId: "listAuditLogs", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
     /// List user actions and configuration changes within this organization.
@@ -116,40 +103,21 @@ public extension AuditLogsMethods {
     ///   defines your place in the list. For instance, if you make a list request and
     ///   receive 100 objects, starting with obj_foo, your subsequent call can include
     ///   before=obj_foo in order to fetch the previous page of the list.
-    static func listAuditLogsPaginated(
-        config: ClientConfig,
-        options: ListAuditLogsOptions,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<AuditLog, Swift.Error> {
+    public static func listAuditLogsPaginated(config: ClientConfig, options: ListAuditLogsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<AuditLog, Swift.Error> {
         let after = options.after
-        return AsyncThrowingStream<AuditLog, Swift.Error> { (continuation: AsyncThrowingStream<
-            AuditLog,
-            Swift.Error
-        >.Continuation) in
+        return AsyncThrowingStream<AuditLog, Swift.Error> { (continuation: AsyncThrowingStream<AuditLog, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
                         var nextOptions = options
                         nextOptions.after = pageCursor
-                        let pageResponse = try await listAuditLogs(
-                            config: config,
-                            options: nextOptions,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listAuditLogs(config: config, options: nextOptions, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
-                        for item in pageItems {
-                            continuation.yield(item)
-                        }
-                        if !pageResponse.hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -162,49 +130,28 @@ public extension AuditLogsMethods {
         }
     }
 
-    struct ListAuditLogsPage {
+    public struct ListAuditLogsPage {
         public let data: ListAuditLogsResponse
         public let items: [AuditLog]
         public let hasMore: Bool
     }
 
-    static func listAuditLogsPages(
-        config: ClientConfig,
-        options: ListAuditLogsOptions,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<ListAuditLogsPage, Swift.Error> {
+    public static func listAuditLogsPages(config: ClientConfig, options: ListAuditLogsOptions, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListAuditLogsPage, Swift.Error> {
         let after = options.after
-        return AsyncThrowingStream<ListAuditLogsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
-            ListAuditLogsPage,
-            Swift.Error
-        >.Continuation) in
+        return AsyncThrowingStream<ListAuditLogsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListAuditLogsPage, Swift.Error>.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
                         var nextOptions = options
                         nextOptions.after = pageCursor
-                        let pageResponse = try await listAuditLogs(
-                            config: config,
-                            options: nextOptions,
-                            requestOptions: requestOptions
-                        )
+                        let pageResponse = try await listAuditLogs(config: config, options: nextOptions, requestOptions: requestOptions)
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty {
-                            break
-                        }
+                        if pageItems.isEmpty { break }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListAuditLogsPage(
-                            data: pageResponse,
-                            items: pageItems,
-                            hasMore: hasMore
-                        ))
-                        if !hasMore {
-                            break
-                        }
-                        guard let nextCursor = pageResponse.lastId else {
-                            break
-                        }
+                        pageContinuation.yield(ListAuditLogsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
                         pageCursor = nextCursor
                     }
                 } catch {

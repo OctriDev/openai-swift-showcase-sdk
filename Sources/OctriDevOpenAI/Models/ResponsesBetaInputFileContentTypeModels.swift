@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaInput domain models
+// ResponsesBetaInput domain models
 /// The type of the input item. Always `input_file`.
 public enum BetaInputFileContentType: String, CaseIterable, Codable {
     case inputFile = "input_file"
@@ -44,17 +44,14 @@ public enum BetaInputImageContentParamAutoParamType: String, CaseIterable, Codab
 public struct BetaInputMessageRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let user = BetaInputMessageRole(rawValue: "user")
     public static let system = BetaInputMessageRole(rawValue: "system")
     public static let developer = BetaInputMessageRole(rawValue: "developer")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -87,16 +84,13 @@ public enum BetaInputTextContentParamType: String, CaseIterable, Codable {
 public struct BetaInputFidelity: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let high = BetaInputFidelity(rawValue: "high")
     public static let low = BetaInputFidelity(rawValue: "low")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -146,17 +140,14 @@ public enum BetaInputTextContentType: String, CaseIterable, Codable {
 public struct BetaInputMessageStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaInputMessageStatus(rawValue: "in_progress")
     public static let completed = BetaInputMessageStatus(rawValue: "completed")
     public static let incomplete = BetaInputMessageStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

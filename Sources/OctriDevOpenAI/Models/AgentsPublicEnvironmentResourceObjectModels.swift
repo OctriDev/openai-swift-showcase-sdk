@@ -3,20 +3,17 @@
 
 import Foundation
 
-/// Agents domain models
+// Agents domain models
 /// The object type. Always `agent.environment`.
 public struct PublicEnvironmentResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let agentEnvironment = PublicEnvironmentResourceObject(rawValue: "agent.environment")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -29,15 +26,12 @@ public struct PublicEnvironmentResourceObject: RawRepresentable, Hashable, Codab
 public struct AssistantMessageItemResourceRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let assistant = AssistantMessageItemResourceRole(rawValue: "assistant")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

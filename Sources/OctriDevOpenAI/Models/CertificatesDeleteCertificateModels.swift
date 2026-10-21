@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Certificates domain models
+// Certificates domain models
 /// Typed representation of the `DeleteCertificateResponse` API schema.
 public struct DeleteCertificateResponse: Codable {
     /// The object type, must be `certificate.deleted`.
@@ -16,35 +16,25 @@ public struct DeleteCertificateResponse: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DeleteCertificateResponse {
-    init(from decoder: Decoder) throws {
+extension DeleteCertificateResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension DeleteCertificateResponse {
-    init(object: DeleteCertificateResponseObject, id: String) {
+extension DeleteCertificateResponse {
+    public init(object: DeleteCertificateResponseObject, id: String) {
         (self.object, self.id) = (object, id)
     }
 }
@@ -53,15 +43,12 @@ public extension DeleteCertificateResponse {
 public struct DeleteCertificateResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let certificateDeleted = DeleteCertificateResponseObject(rawValue: "certificate.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

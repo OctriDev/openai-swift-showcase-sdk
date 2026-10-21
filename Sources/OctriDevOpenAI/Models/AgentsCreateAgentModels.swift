@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsCreate domain models
+// AgentsCreate domain models
 /// Parameters for creating a reusable agent.
 public struct CreateAgentParams: Codable {
     /// The model to use for the agent. The requested model name is preserved.
@@ -40,66 +40,50 @@ public struct CreateAgentParams: Codable {
         case multiAgent = "multi_agent"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateAgentParams {
-    init(from decoder: Decoder) throws {
+extension CreateAgentParams {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(
-                field: "model",
-                code: "required",
-                message: "Validation failed for 'model': value is required"
-            )
+            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
         }
-        model = try container.sdkDecodeRequired(.model)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        name = try container.sdkDecodeIfPresent(.name)
-        reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        text = try container.sdkDecodeIfPresent(.text)
-        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        tools = try container.sdkDecodeIfPresent(.tools)
-        multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
-        try validateLength("model", model, min: 0, max: 1_048_576)
-        if let value = name {
+        self.model = try container.sdkDecodeRequired(.model)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.tools = try container.sdkDecodeIfPresent(.tools)
+        self.multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
+            try validateLength("model", self.model, min: 0, max: 1048576)
+        if let value = self.name {
             try validateLength("name", value, min: 0, max: 128)
         }
-        if let value = instructions {
-            try validateLength("instructions", value, min: 0, max: 1_048_576)
+        if let value = self.instructions {
+            try validateLength("instructions", value, min: 0, max: 1048576)
         }
-        if let value = tools {
+        if let value = self.tools {
             try validateItems("tools", value, min: 0, max: 2000)
         }
     }
 }
 
-public extension CreateAgentParams {
-    init(
-        model: String,
-        metadata: [String: String]? = nil,
-        name: String? = nil,
-        reasoning: ReasoningParam? = nil,
-        text: TextParam? = nil,
-        serviceTier: ServiceTierParam? = nil,
-        instructions: String? = nil,
-        tools: [PersistedAgentToolConfigParam]? = nil,
-        multiAgent: MultiAgentConfigCurrentParam? = nil
-    ) throws {
+extension CreateAgentParams {
+    public init(model: String, metadata: [String: String]? = nil, name: String? = nil, reasoning: ReasoningParam? = nil, text: TextParam? = nil, serviceTier: ServiceTierParam? = nil, instructions: String? = nil, tools: [PersistedAgentToolConfigParam]? = nil, multiAgent: MultiAgentConfigCurrentParam? = nil) throws {
         (self.model, self.metadata) = (model, metadata)
         (self.name, self.reasoning) = (name, reasoning)
         (self.text, self.serviceTier) = (text, serviceTier)
         (self.instructions, self.tools) = (instructions, tools)
         self.multiAgent = multiAgent
-        try validateLength("model", self.model, min: 0, max: 1_048_576)
+            try validateLength("model", self.model, min: 0, max: 1048576)
         if let value = self.name {
             try validateLength("name", value, min: 0, max: 128)
         }
         if let value = self.instructions {
-            try validateLength("instructions", value, min: 0, max: 1_048_576)
+            try validateLength("instructions", value, min: 0, max: 1048576)
         }
         if let value = self.tools {
             try validateItems("tools", value, min: 0, max: 2000)

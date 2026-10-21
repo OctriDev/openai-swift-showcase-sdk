@@ -3,24 +3,13 @@
 
 import Foundation
 
-/// BetaResponses domain models
-public extension BetaResponsesServerEventVariant9 {
-    init(
-        type: BetaResponseCompactionCompactingStreamingEventType,
-        sequenceNumber: Int,
-        outputIndex: Int,
-        itemId: String,
-        agent: BetaAgentTag? = nil,
-        streamId: String? = nil
-    ) throws {
+// BetaResponses domain models
+extension BetaResponsesServerEventVariant9 {
+    public init(type: BetaResponseCompactionCompactingStreamingEventType, sequenceNumber: Int, outputIndex: Int, itemId: String, agent: BetaAgentTag? = nil, streamId: String? = nil) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.outputIndex, self.itemId) = (outputIndex, itemId)
         (self.agent, self.streamId) = (agent, streamId)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            BetaResponseCompactionCompactingStreamingEventType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, BetaResponseCompactionCompactingStreamingEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -52,79 +41,45 @@ public struct BetaResponsesServerEventVariant18: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponsesServerEventVariant18 {
-    init(from decoder: Decoder) throws {
+extension BetaResponsesServerEventVariant18 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.arguments) else {
-            throw SdkValidationError(
-                field: "arguments",
-                code: "required",
-                message: "Validation failed for 'arguments': value is required"
-            )
+            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        arguments = try container.sdkDecodeRequired(.arguments)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, BetaResponseFunctionCallArgumentsDoneEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.arguments = try container.sdkDecodeRequired(.arguments)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, BetaResponseFunctionCallArgumentsDoneEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaResponsesServerEventVariant18 {
-    init(
-        type: BetaResponseFunctionCallArgumentsDoneEventType,
-        itemId: String,
-        outputIndex: Int,
-        sequenceNumber: Int,
-        arguments: String,
-        agent: BetaAgentTag? = nil,
-        streamId: String? = nil
-    ) throws {
+extension BetaResponsesServerEventVariant18 {
+    public init(type: BetaResponseFunctionCallArgumentsDoneEventType, itemId: String, outputIndex: Int, sequenceNumber: Int, arguments: String, agent: BetaAgentTag? = nil, streamId: String? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.sequenceNumber) = (outputIndex, sequenceNumber)
         (self.arguments, self.agent) = (arguments, agent)
         self.streamId = streamId
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            BetaResponseFunctionCallArgumentsDoneEventType.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, BetaResponseFunctionCallArgumentsDoneEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -138,19 +93,19 @@ public struct BetaResponsesServerEventVariant38Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension BetaResponsesServerEventVariant38Variant1 {
-    init(from decoder: Decoder) throws {
+extension BetaResponsesServerEventVariant38Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension BetaResponsesServerEventVariant38Variant1 {
-    init(streamId: String? = nil) {
+extension BetaResponsesServerEventVariant38Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -166,19 +121,19 @@ public struct BetaResponsesServerEventVariant39Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension BetaResponsesServerEventVariant39Variant1 {
-    init(from decoder: Decoder) throws {
+extension BetaResponsesServerEventVariant39Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension BetaResponsesServerEventVariant39Variant1 {
-    init(streamId: String? = nil) {
+extension BetaResponsesServerEventVariant39Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -194,19 +149,19 @@ public struct BetaResponsesServerEventVariant44Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension BetaResponsesServerEventVariant44Variant1 {
-    init(from decoder: Decoder) throws {
+extension BetaResponsesServerEventVariant44Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension BetaResponsesServerEventVariant44Variant1 {
-    init(streamId: String? = nil) {
+extension BetaResponsesServerEventVariant44Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -344,120 +299,66 @@ public struct BetaResponsesClientEventResponseCreate: Codable {
         case multiAgent = "multi_agent"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaResponsesClientEventResponseCreate {
-    init(from decoder: Decoder) throws {
+extension BetaResponsesClientEventResponseCreate {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        topP = try container.sdkDecodeIfPresent(.topP)
-        user = try container.sdkDecodeIfPresent(.user)
-        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
-        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-        previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
-        model = try container.sdkDecodeIfPresent(.model)
-        background = try container.sdkDecodeIfPresent(.background)
-        maxToolCalls = try container.sdkDecodeIfPresent(.maxToolCalls)
-        text = try container.sdkDecodeIfPresent(.text)
-        tools = try container.sdkDecodeIfPresent(.tools)
-        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        prompt = try container.sdkDecodeIfPresent(.prompt)
-        accessPrograms = try container.sdkDecodeIfPresent(.accessPrograms)
-        serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
-        truncation = try container.sdkDecodeIfPresent(.truncation)
-        reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        input = try container.sdkDecodeIfPresent(.input)
-        include = try container.sdkDecodeIfPresent(.include)
-        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        store = try container.sdkDecodeIfPresent(.store)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        moderation = try container.sdkDecodeIfPresent(.moderation)
-        stream = try container.sdkDecodeIfPresent(.stream)
-        streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
-        conversation = try container.sdkDecodeIfPresent(.conversation)
-        contextManagement = try container.sdkDecodeIfPresent(.contextManagement)
-        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            BetaResponsesClientEventResponseCreateVariant0Type.allCases.map(\.rawValue)
-        )
-        if let value = streamId {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        self.temperature = try container.sdkDecodeIfPresent(.temperature)
+        self.topP = try container.sdkDecodeIfPresent(.topP)
+        self.user = try container.sdkDecodeIfPresent(.user)
+        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        self.previousResponseId = try container.sdkDecodeIfPresent(.previousResponseId)
+        self.model = try container.sdkDecodeIfPresent(.model)
+        self.background = try container.sdkDecodeIfPresent(.background)
+        self.maxToolCalls = try container.sdkDecodeIfPresent(.maxToolCalls)
+        self.text = try container.sdkDecodeIfPresent(.text)
+        self.tools = try container.sdkDecodeIfPresent(.tools)
+        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        self.prompt = try container.sdkDecodeIfPresent(.prompt)
+        self.accessPrograms = try container.sdkDecodeIfPresent(.accessPrograms)
+        self.serviceTier = try container.sdkDecodeIfPresent(.serviceTier)
+        self.truncation = try container.sdkDecodeIfPresent(.truncation)
+        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        self.input = try container.sdkDecodeIfPresent(.input)
+        self.include = try container.sdkDecodeIfPresent(.include)
+        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        self.store = try container.sdkDecodeIfPresent(.store)
+        self.instructions = try container.sdkDecodeIfPresent(.instructions)
+        self.moderation = try container.sdkDecodeIfPresent(.moderation)
+        self.stream = try container.sdkDecodeIfPresent(.stream)
+        self.streamOptions = try container.sdkDecodeIfPresent(.streamOptions)
+        self.conversation = try container.sdkDecodeIfPresent(.conversation)
+        self.contextManagement = try container.sdkDecodeIfPresent(.contextManagement)
+        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        self.multiAgent = try container.sdkDecodeIfPresent(.multiAgent)
+            try sdkValidateRawEnum("type", self.type, BetaResponsesClientEventResponseCreateVariant0Type.allCases.map(\.rawValue))
+        if let value = self.streamId {
             try validateLength("stream_id", value, min: 1, max: 256)
             try sdkValidatePattern("stream_id", value, sdkPattern9d6a83b704ec)
         }
-        if let value = topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+        if let value = self.topLogprobs {
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
-        if let value = contextManagement {
+        if let value = self.contextManagement {
             try validateItems("context_management", value, min: 1, max: nil)
         }
     }
 }
 
-public extension BetaResponsesClientEventResponseCreate {
-    init(
-        type: BetaResponsesClientEventResponseCreateVariant0Type,
-        streamId: String? = nil,
-        metadata: BetaMetadata? = nil,
-        topLogprobs: Int? = nil,
-        temperature: Double? = nil,
-        topP: Double? = nil,
-        user: String? = nil,
-        safetyIdentifier: String? = nil,
-        promptCacheKey: String? = nil,
-        promptCacheRetention: BetaModelResponsePropertiesPromptCacheRetentionVariant0? = nil,
-        promptCacheOptions: BetaResponsePromptCacheOptionsParam? = nil,
-        previousResponseId: String? = nil,
-        model: BetaModelIdsResponses? = nil,
-        background: Bool? = nil,
-        maxToolCalls: Int? = nil,
-        text: BetaResponseTextParam? = nil,
-        tools: BetaToolsArray? = nil,
-        toolChoice: BetaToolChoiceParam? = nil,
-        prompt: BetaPrompt? = nil,
-        accessPrograms: BetaAccessProgramsParam? = nil,
-        serviceTier: BetaServiceTierResponsesVariant0? = nil,
-        truncation: BetaCreateResponseVariant2TruncationVariant0? = nil,
-        reasoning: BetaReasoning? = nil,
-        input: BetaInputParam? = nil,
-        include: [BetaIncludeEnum]? = nil,
-        parallelToolCalls: Bool? = nil,
-        store: Bool? = nil,
-        instructions: String? = nil,
-        moderation: BetaModerationParam? = nil,
-        stream: Bool? = nil,
-        streamOptions: BetaResponseStreamOptions? = nil,
-        conversation: BetaConversationParam? = nil,
-        contextManagement: [BetaContextManagementParam]? = nil,
-        maxOutputTokens: Int? = nil,
-        multiAgent: BetaMultiAgentParam? = nil
-    ) throws {
+extension BetaResponsesClientEventResponseCreate {
+    public init(type: BetaResponsesClientEventResponseCreateVariant0Type, streamId: String? = nil, metadata: BetaMetadata? = nil, topLogprobs: Int? = nil, temperature: Double? = nil, topP: Double? = nil, user: String? = nil, safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: BetaModelResponsePropertiesPromptCacheRetentionVariant0? = nil, promptCacheOptions: BetaResponsePromptCacheOptionsParam? = nil, previousResponseId: String? = nil, model: BetaModelIdsResponses? = nil, background: Bool? = nil, maxToolCalls: Int? = nil, text: BetaResponseTextParam? = nil, tools: BetaToolsArray? = nil, toolChoice: BetaToolChoiceParam? = nil, prompt: BetaPrompt? = nil, accessPrograms: BetaAccessProgramsParam? = nil, serviceTier: BetaServiceTierResponsesVariant0? = nil, truncation: BetaCreateResponseVariant2TruncationVariant0? = nil, reasoning: BetaReasoning? = nil, input: BetaInputParam? = nil, include: [BetaIncludeEnum]? = nil, parallelToolCalls: Bool? = nil, store: Bool? = nil, instructions: String? = nil, moderation: BetaModerationParam? = nil, stream: Bool? = nil, streamOptions: BetaResponseStreamOptions? = nil, conversation: BetaConversationParam? = nil, contextManagement: [BetaContextManagementParam]? = nil, maxOutputTokens: Int? = nil, multiAgent: BetaMultiAgentParam? = nil) throws {
         (self.type, self.streamId) = (type, streamId)
         (self.metadata, self.topLogprobs) = (metadata, topLogprobs)
         (self.temperature, self.topP) = (temperature, topP)
@@ -476,25 +377,13 @@ public extension BetaResponsesClientEventResponseCreate {
         (self.streamOptions, self.conversation) = (streamOptions, conversation)
         (self.contextManagement, self.maxOutputTokens) = (contextManagement, maxOutputTokens)
         self.multiAgent = multiAgent
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            BetaResponsesClientEventResponseCreateVariant0Type.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, BetaResponsesClientEventResponseCreateVariant0Type.allCases.map(\.rawValue))
         if let value = self.streamId {
             try validateLength("stream_id", value, min: 1, max: 256)
             try sdkValidatePattern("stream_id", value, sdkPattern9d6a83b704ec)
         }
         if let value = self.topLogprobs {
-            try validateRange(
-                "top_logprobs",
-                Double(value),
-                min: 0,
-                max: 20,
-                exclusiveMin: nil,
-                exclusiveMax: nil,
-                multipleOf: nil
-            )
+            try validateRange("top_logprobs", Double(value), min: 0, max: 20, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
         }
         if let value = self.contextManagement {
             try validateItems("context_management", value, min: 1, max: nil)
@@ -512,19 +401,19 @@ public struct BetaResponsesServerEventVariant11Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension BetaResponsesServerEventVariant11Variant1 {
-    init(from decoder: Decoder) throws {
+extension BetaResponsesServerEventVariant11Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension BetaResponsesServerEventVariant11Variant1 {
-    init(streamId: String? = nil) {
+extension BetaResponsesServerEventVariant11Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -540,19 +429,19 @@ public struct BetaResponsesServerEventVariant21Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension BetaResponsesServerEventVariant21Variant1 {
-    init(from decoder: Decoder) throws {
+extension BetaResponsesServerEventVariant21Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension BetaResponsesServerEventVariant21Variant1 {
-    init(streamId: String? = nil) {
+extension BetaResponsesServerEventVariant21Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -568,19 +457,19 @@ public struct BetaResponsesServerEventVariant36Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension BetaResponsesServerEventVariant36Variant1 {
-    init(from decoder: Decoder) throws {
+extension BetaResponsesServerEventVariant36Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension BetaResponsesServerEventVariant36Variant1 {
-    init(streamId: String? = nil) {
+extension BetaResponsesServerEventVariant36Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -617,7 +506,5 @@ public struct BetaResponsesServerEventVariant12: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

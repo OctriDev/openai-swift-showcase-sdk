@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension AssistantsMethods {
-    /// Retrieves a specific step from a run on a thread. Use `include[]` to request file search result content when the
-    /// step contains file search tool calls.
+extension AssistantsMethods {
+    /// Retrieves a specific step from a run on a thread. Use `include[]` to request file search result content when the step contains file search tool calls.
     ///
     /// Retrieves a run step.
     ///
@@ -22,24 +21,9 @@ public extension AssistantsMethods {
     ///   file search result content. See the [file search tool
     ///   documentation](https://developers.openai.com/api/docs/guides/tools-file-sear
     ///   ch#retrieval-customization) for more information.
-    static func getRunStep(
-        config: ClientConfig,
-        threadId: String,
-        runId: String,
-        stepId: String,
-        include: [GetRunStepParameterItem]? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> RunStepObject {
-        try await (sdkRequest("GET", [
-            "/threads/",
-            sdkEncodePathSegment(sdkWireString(threadId)),
-            "/runs/",
-            sdkEncodePathSegment(sdkWireString(runId)),
-            "/steps/",
-            sdkEncodePathSegment(sdkWireString(stepId)),
-        ].joined(), config: config, query: [
+    public static func getRunStep(config: ClientConfig, threadId: String, runId: String, stepId: String, include: [GetRunStepParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> RunStepObject {
+        return try (await sdkRequest("GET", ["/threads/", sdkEncodePathSegment(sdkWireString(threadId)), "/runs/", sdkEncodePathSegment(sdkWireString(runId)), "/steps/", sdkEncodePathSegment(sdkWireString(stepId))].joined(), config: config, query: [
             SdkQueryParameter("include[]", values: include, style: "form", explode: true),
-        ], decoder: .json, operationId: "getRunStep", options: requestOptions, errors: ["429": ErrorResponse.self]))
-            .data
+        ], decoder: .json, operationId: "getRunStep", options: requestOptions, errors: ["429": ErrorResponse.self])).data
     }
 }

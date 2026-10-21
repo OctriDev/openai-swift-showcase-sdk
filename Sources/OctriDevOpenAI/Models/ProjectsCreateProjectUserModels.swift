@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Projects domain models
+// Projects domain models
 /// Typed representation of the `ProjectUserCreateRequest` API schema.
 public struct ProjectUserCreateRequest: Codable {
     /// `owner` or `member`
@@ -19,29 +19,23 @@ public struct ProjectUserCreateRequest: Codable {
         case email
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectUserCreateRequest {
-    init(from decoder: Decoder) throws {
+extension ProjectUserCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
-        role = try container.sdkDecodeRequired(.role)
-        userId = try container.sdkDecodeIfPresent(.userId)
-        email = try container.sdkDecodeIfPresent(.email)
+        self.role = try container.sdkDecodeRequired(.role)
+        self.userId = try container.sdkDecodeIfPresent(.userId)
+        self.email = try container.sdkDecodeIfPresent(.email)
     }
 }
 
-public extension ProjectUserCreateRequest {
-    init(role: String, userId: String? = nil, email: String? = nil) {
+extension ProjectUserCreateRequest {
+    public init(role: String, userId: String? = nil, email: String? = nil) {
         (self.role, self.userId) = (role, userId)
         self.email = email
     }

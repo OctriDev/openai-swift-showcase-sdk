@@ -5,59 +5,55 @@ import Foundation
 
 public class OpenAI {
     var config: ClientConfig
-    public internal(set) lazy var assistants: AssistantsNamespace = .init(config: config)
-    public internal(set) lazy var audio: AudioNamespace = .init(config: config)
-    public internal(set) lazy var batch: BatchNamespace = .init(config: config)
-    public internal(set) lazy var chat: ChatNamespace = .init(config: config)
-    public internal(set) lazy var completions: CompletionsNamespace = .init(config: config)
-    public internal(set) lazy var containers: ContainersNamespace = .init(config: config)
-    public internal(set) lazy var conversations: ConversationsNamespace = .init(config: config)
-    public internal(set) lazy var embeddings: EmbeddingsNamespace = .init(config: config)
-    public internal(set) lazy var evals: EvalsNamespace = .init(config: config)
-    public internal(set) lazy var files: FilesNamespace = .init(config: config)
-    public internal(set) lazy var fineTuning: FineTuningNamespace = .init(config: config)
-    public internal(set) lazy var images: ImagesNamespace = .init(config: config)
-    public internal(set) lazy var live: LiveNamespace = .init(config: config)
-    public internal(set) lazy var models: ModelsNamespace = .init(config: config)
-    public internal(set) lazy var moderations: ModerationsNamespace = .init(config: config)
-    public internal(set) lazy var adminApiKeys: AdminApiKeysNamespace = .init(config: config)
-    public internal(set) lazy var auditLogs: AuditLogsNamespace = .init(config: config)
-    public internal(set) lazy var certificates: CertificatesNamespace = .init(config: config)
-    public internal(set) lazy var usage: UsageNamespace = .init(config: config)
-    public internal(set) lazy var dataRetention: DataRetentionNamespace = .init(config: config)
-    public internal(set) lazy var groups: GroupsNamespace = .init(config: config)
-    public internal(set) lazy var groupOrganizationRoleAssignments: GroupOrganizationRoleAssignmentsNamespace =
-        .init(config: config)
-    public internal(set) lazy var groupUsers: GroupUsersNamespace = .init(config: config)
-    public internal(set) lazy var invites: InvitesNamespace = .init(config: config)
-    public internal(set) lazy var projects: ProjectsNamespace = .init(config: config)
-    public internal(set) lazy var projectGroups: ProjectGroupsNamespace = .init(config: config)
-    public internal(set) lazy var hostedTools: HostedToolsNamespace = .init(config: config)
-    public internal(set) lazy var spendAlerts: SpendAlertsNamespace = .init(config: config)
-    public internal(set) lazy var roles: RolesNamespace = .init(config: config)
-    public internal(set) lazy var users: UsersNamespace = .init(config: config)
-    public internal(set) lazy var userOrganizationRoleAssignments: UserOrganizationRoleAssignmentsNamespace =
-        .init(config: config)
-    public internal(set) lazy var projectGroupRoleAssignments: ProjectGroupRoleAssignmentsNamespace =
-        .init(config: config)
-    public internal(set) lazy var projectUserRoleAssignments: ProjectUserRoleAssignmentsNamespace =
-        .init(config: config)
-    public internal(set) lazy var realtime: RealtimeNamespace = .init(config: config)
-    public internal(set) lazy var responses: ResponsesNamespace = .init(config: config)
-    public internal(set) lazy var uploads: UploadsNamespace = .init(config: config)
-    public internal(set) lazy var vectorStores: VectorStoresNamespace = .init(config: config)
-    public internal(set) lazy var safety: SafetyNamespace = .init(config: config)
-    public internal(set) lazy var externalStorage: ExternalStorageNamespace = .init(config: config)
-    public internal(set) lazy var spendLimits: SpendLimitsNamespace = .init(config: config)
-    public internal(set) lazy var contentProvenanceChecks: ContentProvenanceChecksNamespace = .init(config: config)
-    public internal(set) lazy var videos: VideosNamespace = .init(config: config)
-    public internal(set) lazy var skills: SkillsNamespace = .init(config: config)
-    public internal(set) lazy var chatkit: ChatkitNamespace = .init(config: config)
-    public internal(set) lazy var decisions: DecisionsNamespace = .init(config: config)
-    public internal(set) lazy var agents: AgentsNamespace = .init(config: config)
-    public internal(set) lazy var vaults: VaultsNamespace = .init(config: config)
-    public internal(set) lazy var webhookEndpoints: WebhookEndpointsNamespace = .init(config: config)
-    public internal(set) lazy var webhookEventTypes: WebhookEventTypesNamespace = .init(config: config)
+    public internal(set) lazy var assistants: AssistantsNamespace = AssistantsNamespace(config: config)
+    public internal(set) lazy var audio: AudioNamespace = AudioNamespace(config: config)
+    public internal(set) lazy var batch: BatchNamespace = BatchNamespace(config: config)
+    public internal(set) lazy var chat: ChatNamespace = ChatNamespace(config: config)
+    public internal(set) lazy var completions: CompletionsNamespace = CompletionsNamespace(config: config)
+    public internal(set) lazy var containers: ContainersNamespace = ContainersNamespace(config: config)
+    public internal(set) lazy var conversations: ConversationsNamespace = ConversationsNamespace(config: config)
+    public internal(set) lazy var embeddings: EmbeddingsNamespace = EmbeddingsNamespace(config: config)
+    public internal(set) lazy var evals: EvalsNamespace = EvalsNamespace(config: config)
+    public internal(set) lazy var files: FilesNamespace = FilesNamespace(config: config)
+    public internal(set) lazy var fineTuning: FineTuningNamespace = FineTuningNamespace(config: config)
+    public internal(set) lazy var images: ImagesNamespace = ImagesNamespace(config: config)
+    public internal(set) lazy var live: LiveNamespace = LiveNamespace(config: config)
+    public internal(set) lazy var models: ModelsNamespace = ModelsNamespace(config: config)
+    public internal(set) lazy var moderations: ModerationsNamespace = ModerationsNamespace(config: config)
+    public internal(set) lazy var adminApiKeys: AdminApiKeysNamespace = AdminApiKeysNamespace(config: config)
+    public internal(set) lazy var auditLogs: AuditLogsNamespace = AuditLogsNamespace(config: config)
+    public internal(set) lazy var certificates: CertificatesNamespace = CertificatesNamespace(config: config)
+    public internal(set) lazy var usage: UsageNamespace = UsageNamespace(config: config)
+    public internal(set) lazy var dataRetention: DataRetentionNamespace = DataRetentionNamespace(config: config)
+    public internal(set) lazy var groups: GroupsNamespace = GroupsNamespace(config: config)
+    public internal(set) lazy var groupOrganizationRoleAssignments: GroupOrganizationRoleAssignmentsNamespace = GroupOrganizationRoleAssignmentsNamespace(config: config)
+    public internal(set) lazy var groupUsers: GroupUsersNamespace = GroupUsersNamespace(config: config)
+    public internal(set) lazy var invites: InvitesNamespace = InvitesNamespace(config: config)
+    public internal(set) lazy var projects: ProjectsNamespace = ProjectsNamespace(config: config)
+    public internal(set) lazy var projectGroups: ProjectGroupsNamespace = ProjectGroupsNamespace(config: config)
+    public internal(set) lazy var hostedTools: HostedToolsNamespace = HostedToolsNamespace(config: config)
+    public internal(set) lazy var spendAlerts: SpendAlertsNamespace = SpendAlertsNamespace(config: config)
+    public internal(set) lazy var roles: RolesNamespace = RolesNamespace(config: config)
+    public internal(set) lazy var users: UsersNamespace = UsersNamespace(config: config)
+    public internal(set) lazy var userOrganizationRoleAssignments: UserOrganizationRoleAssignmentsNamespace = UserOrganizationRoleAssignmentsNamespace(config: config)
+    public internal(set) lazy var projectGroupRoleAssignments: ProjectGroupRoleAssignmentsNamespace = ProjectGroupRoleAssignmentsNamespace(config: config)
+    public internal(set) lazy var projectUserRoleAssignments: ProjectUserRoleAssignmentsNamespace = ProjectUserRoleAssignmentsNamespace(config: config)
+    public internal(set) lazy var realtime: RealtimeNamespace = RealtimeNamespace(config: config)
+    public internal(set) lazy var responses: ResponsesNamespace = ResponsesNamespace(config: config)
+    public internal(set) lazy var uploads: UploadsNamespace = UploadsNamespace(config: config)
+    public internal(set) lazy var vectorStores: VectorStoresNamespace = VectorStoresNamespace(config: config)
+    public internal(set) lazy var safety: SafetyNamespace = SafetyNamespace(config: config)
+    public internal(set) lazy var externalStorage: ExternalStorageNamespace = ExternalStorageNamespace(config: config)
+    public internal(set) lazy var spendLimits: SpendLimitsNamespace = SpendLimitsNamespace(config: config)
+    public internal(set) lazy var contentProvenanceChecks: ContentProvenanceChecksNamespace = ContentProvenanceChecksNamespace(config: config)
+    public internal(set) lazy var videos: VideosNamespace = VideosNamespace(config: config)
+    public internal(set) lazy var skills: SkillsNamespace = SkillsNamespace(config: config)
+    public internal(set) lazy var chatkit: ChatkitNamespace = ChatkitNamespace(config: config)
+    public internal(set) lazy var decisions: DecisionsNamespace = DecisionsNamespace(config: config)
+    public internal(set) lazy var agents: AgentsNamespace = AgentsNamespace(config: config)
+    public internal(set) lazy var vaults: VaultsNamespace = VaultsNamespace(config: config)
+    public internal(set) lazy var webhookEndpoints: WebhookEndpointsNamespace = WebhookEndpointsNamespace(config: config)
+    public internal(set) lazy var webhookEventTypes: WebhookEventTypesNamespace = WebhookEventTypesNamespace(config: config)
     public init(config: ClientConfig) {
         self.config = config
         sdkRebuildNamespaces()
@@ -72,24 +68,12 @@ public class OpenAI {
     public func setLoggingConfig(_ logging: LoggingConfig? = nil) -> LoggingConfig {
         var current = config.logging ?? LoggingConfig()
         if let overrides = logging {
-            if let endpoint = overrides.endpoint {
-                current.endpoint = endpoint
-            }
-            if let apiKey = overrides.apiKey {
-                current.apiKey = apiKey
-            }
-            if let environment = overrides.environment {
-                current.environment = environment
-            }
-            if let release = overrides.release {
-                current.release = release
-            }
-            if let user = overrides.user {
-                current.user = user
-            }
-            if let tags = overrides.tags {
-                current.tags = tags
-            }
+            if let endpoint = overrides.endpoint { current.endpoint = endpoint }
+            if let apiKey = overrides.apiKey { current.apiKey = apiKey }
+            if let environment = overrides.environment { current.environment = environment }
+            if let release = overrides.release { current.release = release }
+            if let user = overrides.user { current.user = user }
+            if let tags = overrides.tags { current.tags = tags }
             current.filterPii = overrides.filterPii
         }
         // Opting in IS the point of this call, so enabled flips to true unless the
@@ -108,59 +92,59 @@ public class OpenAI {
 
 extension OpenAI {
     func sdkRebuildNamespacesPart1() {
-        assistants = AssistantsNamespace(config: config)
-        audio = AudioNamespace(config: config)
-        batch = BatchNamespace(config: config)
-        chat = ChatNamespace(config: config)
-        completions = CompletionsNamespace(config: config)
-        containers = ContainersNamespace(config: config)
-        conversations = ConversationsNamespace(config: config)
-        embeddings = EmbeddingsNamespace(config: config)
-        evals = EvalsNamespace(config: config)
-        files = FilesNamespace(config: config)
-        fineTuning = FineTuningNamespace(config: config)
-        images = ImagesNamespace(config: config)
-        live = LiveNamespace(config: config)
-        models = ModelsNamespace(config: config)
-        moderations = ModerationsNamespace(config: config)
-        adminApiKeys = AdminApiKeysNamespace(config: config)
-        auditLogs = AuditLogsNamespace(config: config)
-        certificates = CertificatesNamespace(config: config)
-        usage = UsageNamespace(config: config)
-        dataRetention = DataRetentionNamespace(config: config)
-        groups = GroupsNamespace(config: config)
-        groupOrganizationRoleAssignments = GroupOrganizationRoleAssignmentsNamespace(config: config)
-        groupUsers = GroupUsersNamespace(config: config)
-        invites = InvitesNamespace(config: config)
-        projects = ProjectsNamespace(config: config)
-        projectGroups = ProjectGroupsNamespace(config: config)
-        hostedTools = HostedToolsNamespace(config: config)
-        spendAlerts = SpendAlertsNamespace(config: config)
-        roles = RolesNamespace(config: config)
-        users = UsersNamespace(config: config)
-        userOrganizationRoleAssignments = UserOrganizationRoleAssignmentsNamespace(config: config)
-        projectGroupRoleAssignments = ProjectGroupRoleAssignmentsNamespace(config: config)
+        self.assistants = AssistantsNamespace(config: self.config)
+        self.audio = AudioNamespace(config: self.config)
+        self.batch = BatchNamespace(config: self.config)
+        self.chat = ChatNamespace(config: self.config)
+        self.completions = CompletionsNamespace(config: self.config)
+        self.containers = ContainersNamespace(config: self.config)
+        self.conversations = ConversationsNamespace(config: self.config)
+        self.embeddings = EmbeddingsNamespace(config: self.config)
+        self.evals = EvalsNamespace(config: self.config)
+        self.files = FilesNamespace(config: self.config)
+        self.fineTuning = FineTuningNamespace(config: self.config)
+        self.images = ImagesNamespace(config: self.config)
+        self.live = LiveNamespace(config: self.config)
+        self.models = ModelsNamespace(config: self.config)
+        self.moderations = ModerationsNamespace(config: self.config)
+        self.adminApiKeys = AdminApiKeysNamespace(config: self.config)
+        self.auditLogs = AuditLogsNamespace(config: self.config)
+        self.certificates = CertificatesNamespace(config: self.config)
+        self.usage = UsageNamespace(config: self.config)
+        self.dataRetention = DataRetentionNamespace(config: self.config)
+        self.groups = GroupsNamespace(config: self.config)
+        self.groupOrganizationRoleAssignments = GroupOrganizationRoleAssignmentsNamespace(config: self.config)
+        self.groupUsers = GroupUsersNamespace(config: self.config)
+        self.invites = InvitesNamespace(config: self.config)
+        self.projects = ProjectsNamespace(config: self.config)
+        self.projectGroups = ProjectGroupsNamespace(config: self.config)
+        self.hostedTools = HostedToolsNamespace(config: self.config)
+        self.spendAlerts = SpendAlertsNamespace(config: self.config)
+        self.roles = RolesNamespace(config: self.config)
+        self.users = UsersNamespace(config: self.config)
+        self.userOrganizationRoleAssignments = UserOrganizationRoleAssignmentsNamespace(config: self.config)
+        self.projectGroupRoleAssignments = ProjectGroupRoleAssignmentsNamespace(config: self.config)
     }
 }
 
 extension OpenAI {
     func sdkRebuildNamespacesPart2() {
-        projectUserRoleAssignments = ProjectUserRoleAssignmentsNamespace(config: config)
-        realtime = RealtimeNamespace(config: config)
-        responses = ResponsesNamespace(config: config)
-        uploads = UploadsNamespace(config: config)
-        vectorStores = VectorStoresNamespace(config: config)
-        safety = SafetyNamespace(config: config)
-        externalStorage = ExternalStorageNamespace(config: config)
-        spendLimits = SpendLimitsNamespace(config: config)
-        contentProvenanceChecks = ContentProvenanceChecksNamespace(config: config)
-        videos = VideosNamespace(config: config)
-        skills = SkillsNamespace(config: config)
-        chatkit = ChatkitNamespace(config: config)
-        decisions = DecisionsNamespace(config: config)
-        agents = AgentsNamespace(config: config)
-        vaults = VaultsNamespace(config: config)
-        webhookEndpoints = WebhookEndpointsNamespace(config: config)
-        webhookEventTypes = WebhookEventTypesNamespace(config: config)
+        self.projectUserRoleAssignments = ProjectUserRoleAssignmentsNamespace(config: self.config)
+        self.realtime = RealtimeNamespace(config: self.config)
+        self.responses = ResponsesNamespace(config: self.config)
+        self.uploads = UploadsNamespace(config: self.config)
+        self.vectorStores = VectorStoresNamespace(config: self.config)
+        self.safety = SafetyNamespace(config: self.config)
+        self.externalStorage = ExternalStorageNamespace(config: self.config)
+        self.spendLimits = SpendLimitsNamespace(config: self.config)
+        self.contentProvenanceChecks = ContentProvenanceChecksNamespace(config: self.config)
+        self.videos = VideosNamespace(config: self.config)
+        self.skills = SkillsNamespace(config: self.config)
+        self.chatkit = ChatkitNamespace(config: self.config)
+        self.decisions = DecisionsNamespace(config: self.config)
+        self.agents = AgentsNamespace(config: self.config)
+        self.vaults = VaultsNamespace(config: self.config)
+        self.webhookEndpoints = WebhookEndpointsNamespace(config: self.config)
+        self.webhookEventTypes = WebhookEventTypesNamespace(config: self.config)
     }
 }

@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension WebhookEndpointsMethods {
+extension WebhookEndpointsMethods {
     /// Rotates the signing secret for a webhook endpoint in the authenticated project.
     ///
     /// - Parameters:
@@ -15,24 +15,9 @@ public extension WebhookEndpointsMethods {
     /// - keepOldSecretActiveFor24Hours: Whether to keep the previous signing secret
     ///   valid for 24 hours after rotation. Defaults to false, which invalidates the
     ///   previous secret immediately.
-    static func rotateWebhookEndpointSigningSecret(
-        config: ClientConfig,
-        webhookEndpointId: String,
-        keepOldSecretActiveFor24Hours: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> WebhookEndpointWithSecretResource {
-        let requestBody =
-            RotateWebhookEndpointSigningSecretRequestBody(keepOldSecretActiveFor24Hours: keepOldSecretActiveFor24Hours)
+    public static func rotateWebhookEndpointSigningSecret(config: ClientConfig, webhookEndpointId: String, keepOldSecretActiveFor24Hours: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> WebhookEndpointWithSecretResource {
+        let requestBody = RotateWebhookEndpointSigningSecretRequestBody(keepOldSecretActiveFor24Hours: keepOldSecretActiveFor24Hours)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId)), "/rotate_secret"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "RotateWebhookEndpointSigningSecret",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/webhook_endpoints/", sdkEncodePathSegment(sdkWireString(webhookEndpointId)), "/rotate_secret"].joined(), config: config, body: requestBody, decoder: .json, operationId: "RotateWebhookEndpointSigningSecret", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self])).data
     }
 }

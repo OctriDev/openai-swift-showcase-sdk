@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension VectorStoresMethods {
-    /// Creates a vector store to collect processed files for use with the `file_search` tool. Supply `file_ids` to add
-    /// files at creation, and optionally set a name, description, expiration policy, chunking strategy, or metadata.
+extension VectorStoresMethods {
+    /// Creates a vector store to collect processed files for use with the `file_search` tool. Supply `file_ids` to add files at creation, and optionally set a name, description, expiration policy, chunking strategy, or metadata.
     ///
     /// Create a vector store.
     ///
@@ -29,38 +28,13 @@ public extension VectorStoresMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    static func createVectorStore(
-        config: ClientConfig,
-        fileIds: [String]? = nil,
-        name: String? = nil,
-        description: String? = nil,
-        expiresAfter: VectorStoreExpirationAfter? = nil,
-        chunkingStrategy: CreateVectorStoreRequestChunkingStrategy? = nil,
-        metadata: SdkOptional<Metadata>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> VectorStoreObject {
-        if let fileIds {
+    public static func createVectorStore(config: ClientConfig, fileIds: [String]? = nil, name: String? = nil, description: String? = nil, expiresAfter: VectorStoreExpirationAfter? = nil, chunkingStrategy: CreateVectorStoreRequestChunkingStrategy? = nil, metadata: SdkOptional<Metadata>? = nil, requestOptions: RequestOptions? = nil) async throws -> VectorStoreObject {
+        if let fileIds = fileIds {
             try validateItems("file_ids", fileIds, max: 500)
         }
 
-        let requestBody = CreateVectorStoreRequestBody(
-            fileIds: fileIds,
-            name: name,
-            description: description,
-            expiresAfter: expiresAfter,
-            chunkingStrategy: chunkingStrategy,
-            metadata: metadata
-        )
+        let requestBody = CreateVectorStoreRequestBody(fileIds: fileIds, name: name, description: description, expiresAfter: expiresAfter, chunkingStrategy: chunkingStrategy, metadata: metadata)
 
-        return try await (sdkRequest(
-            "POST",
-            "/vector_stores",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createVectorStore",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/vector_stores", config: config, body: requestBody, decoder: .json, operationId: "createVectorStore", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

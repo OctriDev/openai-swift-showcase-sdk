@@ -3,37 +3,25 @@
 
 import Foundation
 
-/// EvalsCreate domain models
+// EvalsCreate domain models
 public indirect enum CreateEvalCompletionsRunDataSourceInputMessages {
-    case createEvalCompletionsRunDataSourceInputMessagesVariant0(
-        CreateEvalCompletionsRunDataSourceInputMessagesVariant0
-    )
-    case createEvalCompletionsRunDataSourceInputMessagesVariant1(
-        CreateEvalCompletionsRunDataSourceInputMessagesVariant1
-    )
+    case createEvalCompletionsRunDataSourceInputMessagesVariant0(CreateEvalCompletionsRunDataSourceInputMessagesVariant0)
+    case createEvalCompletionsRunDataSourceInputMessagesVariant1(CreateEvalCompletionsRunDataSourceInputMessagesVariant1)
 }
 
 extension CreateEvalCompletionsRunDataSourceInputMessages: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateEvalCompletionsRunDataSourceInputMessages"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateEvalCompletionsRunDataSourceInputMessages")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
@@ -56,12 +44,12 @@ extension CreateEvalCompletionsRunDataSourceInputMessages {
         if let value = try? container.decode(
             CreateEvalCompletionsRunDataSourceInputMessagesVariant0.self
         ) {
-            return .createEvalCompletionsRunDataSourceInputMessagesVariant0(value)
+            return             .createEvalCompletionsRunDataSourceInputMessagesVariant0(value)
         }
         if let value = try? container.decode(
             CreateEvalCompletionsRunDataSourceInputMessagesVariant1.self
         ) {
-            return .createEvalCompletionsRunDataSourceInputMessagesVariant1(value)
+            return             .createEvalCompletionsRunDataSourceInputMessagesVariant1(value)
         }
         return nil
     }
@@ -71,10 +59,8 @@ extension CreateEvalCompletionsRunDataSourceInputMessages {
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .createEvalCompletionsRunDataSourceInputMessagesVariant0(value): try container
-            .encode(value); return true
-        case let .createEvalCompletionsRunDataSourceInputMessagesVariant1(value): try container
-            .encode(value); return true
+        case let .createEvalCompletionsRunDataSourceInputMessagesVariant0(value): try container.encode(value); return true
+        case let .createEvalCompletionsRunDataSourceInputMessagesVariant1(value): try container.encode(value); return true
         }
     }
 }
@@ -88,6 +74,7 @@ public indirect enum CreateEvalCompletionsRunDataSourceSamplingParamsResponseFor
 }
 
 extension CreateEvalCompletionsRunDataSourceSamplingParamsResponseFormat: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -95,16 +82,12 @@ extension CreateEvalCompletionsRunDataSourceSamplingParamsResponseFormat: Codabl
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -115,10 +98,10 @@ extension CreateEvalCompletionsRunDataSourceSamplingParamsResponseFormat: Codabl
 extension CreateEvalCompletionsRunDataSourceSamplingParamsResponseFormat {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "text": try .responseFormatText(ResponseFormatText(from: decoder))
-        case "json_schema": try .responseFormatJsonSchema(ResponseFormatJsonSchema(from: decoder))
-        case "json_object": try .responseFormatJsonObject(ResponseFormatJsonObject(from: decoder))
-        default: nil
+        case "text": return .responseFormatText(try ResponseFormatText(from: decoder))
+        case "json_schema": return .responseFormatJsonSchema(try ResponseFormatJsonSchema(from: decoder))
+        case "json_object": return .responseFormatJsonObject(try ResponseFormatJsonObject(from: decoder))
+        default: return nil
         }
     }
 }
@@ -144,6 +127,7 @@ public indirect enum CreateEvalCompletionsRunDataSourceSource {
 }
 
 extension CreateEvalCompletionsRunDataSourceSource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -151,16 +135,12 @@ extension CreateEvalCompletionsRunDataSourceSource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -171,10 +151,10 @@ extension CreateEvalCompletionsRunDataSourceSource: Codable {
 extension CreateEvalCompletionsRunDataSourceSource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file_content": try .evalJsonlFileContentSource(EvalJsonlFileContentSource(from: decoder))
-        case "file_id": try .evalJsonlFileIdSource(EvalJsonlFileIdSource(from: decoder))
-        case "stored_completions": try .evalStoredCompletionsSource(EvalStoredCompletionsSource(from: decoder))
-        default: nil
+        case "file_content": return .evalJsonlFileContentSource(try EvalJsonlFileContentSource(from: decoder))
+        case "file_id": return .evalJsonlFileIdSource(try EvalJsonlFileIdSource(from: decoder))
+        case "stored_completions": return .evalStoredCompletionsSource(try EvalStoredCompletionsSource(from: decoder))
+        default: return nil
         }
     }
 }
@@ -199,6 +179,7 @@ public indirect enum CreateEvalJsonlRunDataSourceSource {
 }
 
 extension CreateEvalJsonlRunDataSourceSource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -206,16 +187,12 @@ extension CreateEvalJsonlRunDataSourceSource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -226,9 +203,9 @@ extension CreateEvalJsonlRunDataSourceSource: Codable {
 extension CreateEvalJsonlRunDataSourceSource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file_content": try .evalJsonlFileContentSource(EvalJsonlFileContentSource(from: decoder))
-        case "file_id": try .evalJsonlFileIdSource(EvalJsonlFileIdSource(from: decoder))
-        default: nil
+        case "file_content": return .evalJsonlFileContentSource(try EvalJsonlFileContentSource(from: decoder))
+        case "file_id": return .evalJsonlFileIdSource(try EvalJsonlFileIdSource(from: decoder))
+        default: return nil
         }
     }
 }
@@ -250,43 +227,27 @@ public indirect enum CreateEvalResponsesRunDataSourceInputMessages {
 }
 
 extension CreateEvalResponsesRunDataSourceInputMessages: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateEvalResponsesRunDataSourceInputMessages"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateEvalResponsesRunDataSourceInputMessages")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateEvalResponsesRunDataSourceInputMessages {
     static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
-        if let value = try? container.decode(CreateEvalResponsesRunDataSourceInputMessagesVariant0.self),
-           sdkKeepsEveryKey(
-               value,
-               of: raw
-           ) {
+        if let value = try? container.decode(CreateEvalResponsesRunDataSourceInputMessagesVariant0.self), sdkKeepsEveryKey(value, of: raw) {
             return .createEvalResponsesRunDataSourceInputMessagesVariant0(value)
         }
-        if let value = try? container.decode(CreateEvalResponsesRunDataSourceInputMessagesVariant1.self),
-           sdkKeepsEveryKey(
-               value,
-               of: raw
-           ) {
+        if let value = try? container.decode(CreateEvalResponsesRunDataSourceInputMessagesVariant1.self), sdkKeepsEveryKey(value, of: raw) {
             return .createEvalResponsesRunDataSourceInputMessagesVariant1(value)
         }
         return nil
@@ -298,12 +259,12 @@ extension CreateEvalResponsesRunDataSourceInputMessages {
         if let value = try? container.decode(
             CreateEvalResponsesRunDataSourceInputMessagesVariant0.self
         ) {
-            return .createEvalResponsesRunDataSourceInputMessagesVariant0(value)
+            return             .createEvalResponsesRunDataSourceInputMessagesVariant0(value)
         }
         if let value = try? container.decode(
             CreateEvalResponsesRunDataSourceInputMessagesVariant1.self
         ) {
-            return .createEvalResponsesRunDataSourceInputMessagesVariant1(value)
+            return             .createEvalResponsesRunDataSourceInputMessagesVariant1(value)
         }
         return nil
     }
@@ -328,6 +289,7 @@ public indirect enum CreateEvalResponsesRunDataSourceSource {
 }
 
 extension CreateEvalResponsesRunDataSourceSource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -335,16 +297,12 @@ extension CreateEvalResponsesRunDataSourceSource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -355,10 +313,10 @@ extension CreateEvalResponsesRunDataSourceSource: Codable {
 extension CreateEvalResponsesRunDataSourceSource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file_content": try .evalJsonlFileContentSource(EvalJsonlFileContentSource(from: decoder))
-        case "file_id": try .evalJsonlFileIdSource(EvalJsonlFileIdSource(from: decoder))
-        case "responses": try .evalResponsesSource(EvalResponsesSource(from: decoder))
-        default: nil
+        case "file_content": return .evalJsonlFileContentSource(try EvalJsonlFileContentSource(from: decoder))
+        case "file_id": return .evalJsonlFileIdSource(try EvalJsonlFileIdSource(from: decoder))
+        case "responses": return .evalResponsesSource(try EvalResponsesSource(from: decoder))
+        default: return nil
         }
     }
 }
@@ -408,34 +366,26 @@ public struct CreateEvalResponsesRunDataSourceSamplingParams: Codable {
     }
 
     init() {
-        (reasoningEffort, temperature, maxCompletionTokens, topP, seed) = (nil, nil, nil, nil, nil)
-        (tools, text) = (nil, nil)
+        (self.reasoningEffort, self.temperature, self.maxCompletionTokens, self.topP, self.seed) = (nil, nil, nil, nil, nil)
+        (self.tools, self.text) = (nil, nil)
     }
 }
 
-public extension CreateEvalResponsesRunDataSourceSamplingParams {
-    init(from decoder: Decoder) throws {
+extension CreateEvalResponsesRunDataSourceSamplingParams {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        maxCompletionTokens = try container.sdkDecodeIfPresent(.maxCompletionTokens)
-        topP = try container.sdkDecodeIfPresent(.topP)
-        seed = try container.sdkDecodeIfPresent(.seed)
-        tools = try container.sdkDecodeIfPresent(.tools)
-        text = try container.sdkDecodeIfPresent(.text)
+        self.reasoningEffort = try container.sdkDecodeIfPresent(.reasoningEffort)
+        self.temperature = try container.sdkDecodeIfPresent(.temperature)
+        self.maxCompletionTokens = try container.sdkDecodeIfPresent(.maxCompletionTokens)
+        self.topP = try container.sdkDecodeIfPresent(.topP)
+        self.seed = try container.sdkDecodeIfPresent(.seed)
+        self.tools = try container.sdkDecodeIfPresent(.tools)
+        self.text = try container.sdkDecodeIfPresent(.text)
     }
 }
 
-public extension CreateEvalResponsesRunDataSourceSamplingParams {
-    init(
-        reasoningEffort: ReasoningEffortVariant0? = nil,
-        temperature: Double? = nil,
-        maxCompletionTokens: Int? = nil,
-        topP: Double? = nil,
-        seed: Int? = nil,
-        tools: [Tool]? = nil,
-        text: CreateEvalResponsesRunDataSourceSamplingParamsText? = nil
-    ) {
+extension CreateEvalResponsesRunDataSourceSamplingParams {
+    public init(reasoningEffort: ReasoningEffortVariant0? = nil, temperature: Double? = nil, maxCompletionTokens: Int? = nil, topP: Double? = nil, seed: Int? = nil, tools: [Tool]? = nil, text: CreateEvalResponsesRunDataSourceSamplingParamsText? = nil) {
         self.init()
         (self.reasoningEffort, self.temperature) = (reasoningEffort, temperature)
         (self.maxCompletionTokens, self.topP) = (maxCompletionTokens, topP)
@@ -444,8 +394,7 @@ public extension CreateEvalResponsesRunDataSourceSamplingParams {
     }
 }
 
-public typealias CreateEvalCompletionsRunDataSourceInputMessagesVariant0TemplateList =
-    [CreateEvalCompletionsRunDataSourceInputMessagesVariant0TemplateItem]
+public typealias CreateEvalCompletionsRunDataSourceInputMessagesVariant0TemplateList = [CreateEvalCompletionsRunDataSourceInputMessagesVariant0TemplateItem]
 
 /// Optional object value serialized in the `input_messages` wire field.
 public struct CreateEvalCompletionsRunDataSourceInputMessagesVariant0: Codable {
@@ -460,49 +409,28 @@ public struct CreateEvalCompletionsRunDataSourceInputMessagesVariant0: Codable {
         case template
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateEvalCompletionsRunDataSourceInputMessagesVariant0 {
-    init(from decoder: Decoder) throws {
+extension CreateEvalCompletionsRunDataSourceInputMessagesVariant0 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.template) else {
-            throw SdkValidationError(
-                field: "template",
-                code: "required",
-                message: "Validation failed for 'template': value is required"
-            )
+            throw SdkValidationError(field: "template", code: "required", message: "Validation failed for 'template': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        template = try container.sdkDecodeRequired(.template)
-        try sdkValidateRawEnum(
-            "type",
-            type,
-            CreateEvalCompletionsRunDataSourceInputMessagesVariant0Type.allCases.map(\.rawValue)
-        )
+        self.type = try container.sdkDecodeRequired(.type)
+        self.template = try container.sdkDecodeRequired(.template)
+            try sdkValidateRawEnum("type", self.type, CreateEvalCompletionsRunDataSourceInputMessagesVariant0Type.allCases.map(\.rawValue))
     }
 }
 
-public extension CreateEvalCompletionsRunDataSourceInputMessagesVariant0 {
-    init(
-        type: CreateEvalCompletionsRunDataSourceInputMessagesVariant0Type,
-        template: CreateEvalCompletionsRunDataSourceInputMessagesVariant0TemplateList
-    ) throws {
+extension CreateEvalCompletionsRunDataSourceInputMessagesVariant0 {
+    public init(type: CreateEvalCompletionsRunDataSourceInputMessagesVariant0Type, template: CreateEvalCompletionsRunDataSourceInputMessagesVariant0TemplateList) throws {
         (self.type, self.template) = (type, template)
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            CreateEvalCompletionsRunDataSourceInputMessagesVariant0Type.allCases.map(\.rawValue)
-        )
+            try sdkValidateRawEnum("type", self.type, CreateEvalCompletionsRunDataSourceInputMessagesVariant0Type.allCases.map(\.rawValue))
     }
 }
 
@@ -514,34 +442,25 @@ public indirect enum CreateEvalResponsesRunDataSourceInputMessagesVariant0Templa
 }
 
 extension CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem {
     static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
-        if let value = try? container
-            .decode(CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553.self),
-            sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553.self),
+           sdkKeepsEveryKey(value, of: raw) {
             return .createEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553(value)
         }
         if let value = try? container.decode(EvalItem.self), sdkKeepsEveryKey(value, of: raw) {
@@ -556,11 +475,9 @@ extension CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem {
         if let value = try? container.decode(
             CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553.self
         ) {
-            return .createEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553(value)
+            return             .createEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553(value)
         }
-        if let value = try? container.decode(EvalItem.self) {
-            return .evalItem(value)
-        }
+        if let value = try? container.decode(EvalItem.self) { return .evalItem(value) }
         return nil
     }
 }
@@ -569,8 +486,7 @@ extension CreateEvalResponsesRunDataSourceInputMessagesVariant0TemplateItem {
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .createEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553(value): try container
-            .encode(value); return true
+        case let .createEvalResponsesRunDataSourceInputMessagesVariant0TemplateX7a13727553(value): try container.encode(value); return true
         case let .evalItem(value): try container.encode(value); return true
         }
     }

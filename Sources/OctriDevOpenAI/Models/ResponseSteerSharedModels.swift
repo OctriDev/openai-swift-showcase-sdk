@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponseSteer domain models
+// ResponseSteer domain models
 public typealias ResponseSteerErrorCode = String
 
 public indirect enum ResponseSteerInput {
@@ -12,33 +12,22 @@ public indirect enum ResponseSteerInput {
 }
 
 extension ResponseSteerInput: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ResponseSteerInput"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ResponseSteerInput")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension ResponseSteerInput {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        if let value = try? container
-            .decode(ResponseSteerInputItemList.self) {
-            return .responseSteerInputItemList(value)
-        }
+        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(ResponseSteerInputItemList.self) { return .responseSteerInputItemList(value) }
         return nil
     }
 }
@@ -61,6 +50,7 @@ public indirect enum ResponseSteerInputItem {
 }
 
 extension ResponseSteerInputItem: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -68,16 +58,12 @@ extension ResponseSteerInputItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -88,9 +74,9 @@ extension ResponseSteerInputItem: Codable {
 extension ResponseSteerInputItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "message": try .userMessageItemParam(UserMessageItemParam(from: decoder))
-        case "function_call_output": try .functionCallOutputItemParam(FunctionCallOutputItemParam(from: decoder))
-        default: nil
+        case "message": return .userMessageItemParam(try UserMessageItemParam(from: decoder))
+        case "function_call_output": return .functionCallOutputItemParam(try FunctionCallOutputItemParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -121,57 +107,42 @@ public indirect enum ResponseSteerRequiredInput {
 }
 
 extension ResponseSteerRequiredInput: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for ResponseSteerRequiredInput"
-        )
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ResponseSteerRequiredInput")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
 extension ResponseSteerRequiredInput {
     static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
-        if let value = try? container.decode(ResponseSteerRequiredInputVariant0.self),
-           sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant0.self), sdkKeepsEveryKey(value, of: raw) {
             return .responseSteerRequiredInputVariant0(value)
         }
-        if let value = try? container.decode(ResponseSteerRequiredInputVariant1.self),
-           sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant1.self), sdkKeepsEveryKey(value, of: raw) {
             return .responseSteerRequiredInputVariant1(value)
         }
-        if let value = try? container.decode(ResponseSteerRequiredInputVariant2.self),
-           sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant2.self), sdkKeepsEveryKey(value, of: raw) {
             return .responseSteerRequiredInputVariant2(value)
         }
-        if let value = try? container.decode(ResponseSteerRequiredInputVariant3.self),
-           sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant3.self), sdkKeepsEveryKey(value, of: raw) {
             return .responseSteerRequiredInputVariant3(value)
         }
-        if let value = try? container.decode(ResponseSteerRequiredInputVariant4.self),
-           sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant4.self), sdkKeepsEveryKey(value, of: raw) {
             return .responseSteerRequiredInputVariant4(value)
         }
-        if let value = try? container.decode(ResponseSteerRequiredInputVariant5.self),
-           sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant5.self), sdkKeepsEveryKey(value, of: raw) {
             return .responseSteerRequiredInputVariant5(value)
         }
-        if let value = try? container.decode(ResponseSteerRequiredInputVariant6.self),
-           sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant6.self), sdkKeepsEveryKey(value, of: raw) {
             return .responseSteerRequiredInputVariant6(value)
         }
         return nil
@@ -180,34 +151,13 @@ extension ResponseSteerRequiredInput {
 
 extension ResponseSteerRequiredInput {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container
-            .decode(ResponseSteerRequiredInputVariant0.self) {
-            return .responseSteerRequiredInputVariant0(value)
-        }
-        if let value = try? container
-            .decode(ResponseSteerRequiredInputVariant1.self) {
-            return .responseSteerRequiredInputVariant1(value)
-        }
-        if let value = try? container
-            .decode(ResponseSteerRequiredInputVariant2.self) {
-            return .responseSteerRequiredInputVariant2(value)
-        }
-        if let value = try? container
-            .decode(ResponseSteerRequiredInputVariant3.self) {
-            return .responseSteerRequiredInputVariant3(value)
-        }
-        if let value = try? container
-            .decode(ResponseSteerRequiredInputVariant4.self) {
-            return .responseSteerRequiredInputVariant4(value)
-        }
-        if let value = try? container
-            .decode(ResponseSteerRequiredInputVariant5.self) {
-            return .responseSteerRequiredInputVariant5(value)
-        }
-        if let value = try? container
-            .decode(ResponseSteerRequiredInputVariant6.self) {
-            return .responseSteerRequiredInputVariant6(value)
-        }
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant0.self) { return .responseSteerRequiredInputVariant0(value) }
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant1.self) { return .responseSteerRequiredInputVariant1(value) }
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant2.self) { return .responseSteerRequiredInputVariant2(value) }
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant3.self) { return .responseSteerRequiredInputVariant3(value) }
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant4.self) { return .responseSteerRequiredInputVariant4(value) }
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant5.self) { return .responseSteerRequiredInputVariant5(value) }
+        if let value = try? container.decode(ResponseSteerRequiredInputVariant6.self) { return .responseSteerRequiredInputVariant6(value) }
         return nil
     }
 }
@@ -240,38 +190,28 @@ public struct ResponseSteerRequiredInputVariant3: Codable {
         case callId = "call_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseSteerRequiredInputVariant3 {
-    init(from decoder: Decoder) throws {
+extension ResponseSteerRequiredInputVariant3 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        callId = try container.sdkDecodeRequired(.callId)
-        try sdkValidateRawEnum("type", type, ResponseSteerRequiredInputVariant3Type.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.callId = try container.sdkDecodeRequired(.callId)
+            try sdkValidateRawEnum("type", self.type, ResponseSteerRequiredInputVariant3Type.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseSteerRequiredInputVariant3 {
-    init(type: ResponseSteerRequiredInputVariant3Type, callId: String) throws {
+extension ResponseSteerRequiredInputVariant3 {
+    public init(type: ResponseSteerRequiredInputVariant3Type, callId: String) throws {
         (self.type, self.callId) = (type, callId)
-        try sdkValidateRawEnum("type", self.type, ResponseSteerRequiredInputVariant3Type.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseSteerRequiredInputVariant3Type.allCases.map(\.rawValue))
     }
 }
 
@@ -288,38 +228,28 @@ public struct ResponseSteerRequiredInputVariant1: Codable {
         case callId = "call_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseSteerRequiredInputVariant1 {
-    init(from decoder: Decoder) throws {
+extension ResponseSteerRequiredInputVariant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        callId = try container.sdkDecodeRequired(.callId)
-        try sdkValidateRawEnum("type", type, ResponseSteerRequiredInputVariant1Type.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.callId = try container.sdkDecodeRequired(.callId)
+            try sdkValidateRawEnum("type", self.type, ResponseSteerRequiredInputVariant1Type.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseSteerRequiredInputVariant1 {
-    init(type: ResponseSteerRequiredInputVariant1Type, callId: String) throws {
+extension ResponseSteerRequiredInputVariant1 {
+    public init(type: ResponseSteerRequiredInputVariant1Type, callId: String) throws {
         (self.type, self.callId) = (type, callId)
-        try sdkValidateRawEnum("type", self.type, ResponseSteerRequiredInputVariant1Type.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseSteerRequiredInputVariant1Type.allCases.map(\.rawValue))
     }
 }
 
@@ -346,47 +276,33 @@ public struct ResponseSteerEvent: Codable {
         case input
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseSteerEvent {
-    init(from decoder: Decoder) throws {
+extension ResponseSteerEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.previousResponseId) else {
-            throw SdkValidationError(
-                field: "previous_response_id",
-                code: "required",
-                message: "Validation failed for 'previous_response_id': value is required"
-            )
+            throw SdkValidationError(field: "previous_response_id", code: "required", message: "Validation failed for 'previous_response_id': value is required")
         }
         guard container.contains(.input) else {
-            throw SdkValidationError(
-                field: "input",
-                code: "required",
-                message: "Validation failed for 'input': value is required"
-            )
+            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        previousResponseId = try container.sdkDecodeRequired(.previousResponseId)
-        input = try container.sdkDecodeRequired(.input)
-        try sdkValidateRawEnum("type", type, ResponseSteerEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.previousResponseId = try container.sdkDecodeRequired(.previousResponseId)
+        self.input = try container.sdkDecodeRequired(.input)
+            try sdkValidateRawEnum("type", self.type, ResponseSteerEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseSteerEvent {
-    init(type: ResponseSteerEventType, previousResponseId: String, input: ResponseSteerInput) throws {
+extension ResponseSteerEvent {
+    public init(type: ResponseSteerEventType, previousResponseId: String, input: ResponseSteerInput) throws {
         (self.type, self.previousResponseId) = (type, previousResponseId)
         self.input = input
-        try sdkValidateRawEnum("type", self.type, ResponseSteerEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseSteerEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -402,35 +318,25 @@ public struct ResponseSteerAcceptedEventSteer: Codable {
         case previousResponseId = "previous_response_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseSteerAcceptedEventSteer {
-    init(from decoder: Decoder) throws {
+extension ResponseSteerAcceptedEventSteer {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.previousResponseId) else {
-            throw SdkValidationError(
-                field: "previous_response_id",
-                code: "required",
-                message: "Validation failed for 'previous_response_id': value is required"
-            )
+            throw SdkValidationError(field: "previous_response_id", code: "required", message: "Validation failed for 'previous_response_id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        previousResponseId = try container.sdkDecodeRequired(.previousResponseId)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.previousResponseId = try container.sdkDecodeRequired(.previousResponseId)
     }
 }
 
-public extension ResponseSteerAcceptedEventSteer {
-    init(id: String, previousResponseId: String) {
+extension ResponseSteerAcceptedEventSteer {
+    public init(id: String, previousResponseId: String) {
         (self.id, self.previousResponseId) = (id, previousResponseId)
     }
 }
@@ -448,38 +354,28 @@ public struct ResponseSteerRequiredInputVariant2: Codable {
         case callId = "call_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseSteerRequiredInputVariant2 {
-    init(from decoder: Decoder) throws {
+extension ResponseSteerRequiredInputVariant2 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.callId) else {
-            throw SdkValidationError(
-                field: "call_id",
-                code: "required",
-                message: "Validation failed for 'call_id': value is required"
-            )
+            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        callId = try container.sdkDecodeRequired(.callId)
-        try sdkValidateRawEnum("type", type, ResponseSteerRequiredInputVariant2Type.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.callId = try container.sdkDecodeRequired(.callId)
+            try sdkValidateRawEnum("type", self.type, ResponseSteerRequiredInputVariant2Type.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseSteerRequiredInputVariant2 {
-    init(type: ResponseSteerRequiredInputVariant2Type, callId: String) throws {
+extension ResponseSteerRequiredInputVariant2 {
+    public init(type: ResponseSteerRequiredInputVariant2Type, callId: String) throws {
         (self.type, self.callId) = (type, callId)
-        try sdkValidateRawEnum("type", self.type, ResponseSteerRequiredInputVariant2Type.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseSteerRequiredInputVariant2Type.allCases.map(\.rawValue))
     }
 }
 
@@ -506,53 +402,34 @@ public struct ResponseSteerAcceptedEvent: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseSteerAcceptedEvent {
-    init(from decoder: Decoder) throws {
+extension ResponseSteerAcceptedEvent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.steer) else {
-            throw SdkValidationError(
-                field: "steer",
-                code: "required",
-                message: "Validation failed for 'steer': value is required"
-            )
+            throw SdkValidationError(field: "steer", code: "required", message: "Validation failed for 'steer': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        steer = try container.sdkDecodeRequired(.steer)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseSteerAcceptedEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.steer = try container.sdkDecodeRequired(.steer)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseSteerAcceptedEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponseSteerAcceptedEvent {
-    init(
-        type: ResponseSteerAcceptedEventType,
-        sequenceNumber: Int,
-        steer: ResponseSteerAcceptedEventSteer,
-        streamId: String? = nil
-    ) throws {
+extension ResponseSteerAcceptedEvent {
+    public init(type: ResponseSteerAcceptedEventType, sequenceNumber: Int, steer: ResponseSteerAcceptedEventSteer, streamId: String? = nil) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.steer, self.streamId) = (steer, streamId)
-        try sdkValidateRawEnum("type", self.type, ResponseSteerAcceptedEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseSteerAcceptedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -571,7 +448,5 @@ public struct ResponseSteerRequiredInputVariant0: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

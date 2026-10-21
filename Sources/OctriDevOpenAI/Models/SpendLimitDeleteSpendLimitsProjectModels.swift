@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SpendLimit domain models
+// SpendLimit domain models
 /// Confirmation payload returned after deleting a project hard spend limit.
 public struct ProjectSpendLimitDeletedResource: Codable {
     /// The object type, which is always `project.spend_limit.deleted`.
@@ -16,54 +16,39 @@ public struct ProjectSpendLimitDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectSpendLimitDeletedResource {
-    init(from decoder: Decoder) throws {
+extension ProjectSpendLimitDeletedResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension ProjectSpendLimitDeletedResource {
-    init(object: ProjectSpendLimitDeletedResourceObject, deleted: Bool) {
+extension ProjectSpendLimitDeletedResource {
+    public init(object: ProjectSpendLimitDeletedResourceObject, deleted: Bool) {
         (self.object, self.deleted) = (object, deleted)
     }
 }
 
 /// The object type, which is always `project.spend_limit.deleted`.
-public struct ProjectSpendLimitDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ProjectSpendLimitDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let projectSpendLimitDeleted =
-        ProjectSpendLimitDeletedResourceObject(rawValue: "project.spend_limit.deleted")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let projectSpendLimitDeleted = ProjectSpendLimitDeletedResourceObject(rawValue: "project.spend_limit.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

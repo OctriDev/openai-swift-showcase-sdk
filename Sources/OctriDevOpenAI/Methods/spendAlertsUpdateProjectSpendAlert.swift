@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension SpendAlertsMethods {
-    /// Updates a spend alert configured for a project. Provide the alert's threshold, currency, evaluation interval,
-    /// and notification channel in the request body.
+extension SpendAlertsMethods {
+    /// Updates a spend alert configured for a project. Provide the alert's threshold, currency, evaluation interval, and notification channel in the request body.
     ///
     /// Updates a project spend alert.
     ///
@@ -19,69 +18,22 @@ public extension SpendAlertsMethods {
     /// - currency: The currency for the threshold amount.
     /// - interval: The time interval for evaluating spend against the threshold.
     /// - notificationChannel: Email notification settings for a spend alert.
-    static func updateProjectSpendAlert(
-        config: ClientConfig,
-        projectId: String,
-        alertId: String,
-        thresholdAmount: Int,
-        currency: CreateSpendAlertBodyCurrency,
-        interval: CreateSpendAlertBodyInterval,
-        notificationChannel: SpendAlertNotificationChannel,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectSpendAlert {
+    public static func updateProjectSpendAlert(config: ClientConfig, projectId: String, alertId: String, thresholdAmount: Int, currency: CreateSpendAlertBodyCurrency, interval: CreateSpendAlertBodyInterval, notificationChannel: SpendAlertNotificationChannel, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendAlert {
         try validateRange("threshold_amount", Double(thresholdAmount), min: 0)
 
-        let requestBody = UpdateProjectSpendAlertRequestBody(
-            thresholdAmount: thresholdAmount,
-            currency: currency,
-            interval: interval,
-            notificationChannel: notificationChannel
-        )
+        let requestBody = UpdateProjectSpendAlertRequestBody(thresholdAmount: thresholdAmount, currency: currency, interval: interval, notificationChannel: notificationChannel)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/organization/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/spend_alerts/",
-                sdkEncodePathSegment(sdkWireString(alertId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateProjectSpendAlert",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/spend_alerts/", sdkEncodePathSegment(sdkWireString(alertId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateProjectSpendAlert", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
     }
 
-    /// Deletes a spend alert from a project. Use the project and alert identifiers to select the alert to remove, then
-    /// check the deletion confirmation in the response.
+    /// Deletes a spend alert from a project. Use the project and alert identifiers to select the alert to remove, then check the deletion confirmation in the response.
     ///
     /// Deletes a project spend alert.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project to update.
     /// - alertId: The ID of the spend alert to delete.
-    static func deleteProjectSpendAlert(
-        config: ClientConfig,
-        projectId: String,
-        alertId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectSpendAlertDeletedResource {
-        try await (sdkRequest(
-            "DELETE",
-            [
-                "/organization/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/spend_alerts/",
-                sdkEncodePathSegment(sdkWireString(alertId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteProjectSpendAlert",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
-        )).data
+    public static func deleteProjectSpendAlert(config: ClientConfig, projectId: String, alertId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendAlertDeletedResource {
+        return try (await sdkRequest("DELETE", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/spend_alerts/", sdkEncodePathSegment(sdkWireString(alertId))].joined(), config: config, decoder: .json, operationId: "deleteProjectSpendAlert", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
     }
 }

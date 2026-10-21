@@ -9,528 +9,171 @@ public class AgentsNamespace {
         self.config = config
     }
 
-    /// Lists OpenAI-hosted environments owned by the authenticated principal. Requires access to the prewarming beta.
-    public func listEnvironments(
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        type: EnvironmentTypeParam? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AgentEnvironmentListResource {
-        try await AgentsMethods.listAgentEnvironments(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            type: type,
-            requestOptions: requestOptions
-        )
+/// Lists OpenAI-hosted environments owned by the authenticated principal. Requires access to the prewarming beta.
+    public func listEnvironments(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, type: EnvironmentTypeParam? = nil, requestOptions: RequestOptions? = nil) async throws -> AgentEnvironmentListResource {
+        return try await AgentsMethods.listAgentEnvironments(config: config, limit: limit, order: order, after: after, type: type, requestOptions: requestOptions)
     }
 
-    /// Lists OpenAI-hosted environments owned by the authenticated principal. Requires access to the prewarming beta.
-    public func listEnvironmentsPaginated(
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        type: EnvironmentTypeParam? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<PublicEnvironmentResource, Swift.Error> {
-        AgentsMethods.listAgentEnvironmentsPaginated(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            type: type,
-            requestOptions: requestOptions
-        )
+/// Lists OpenAI-hosted environments owned by the authenticated principal. Requires access to the prewarming beta.
+    public func listEnvironmentsPaginated(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, type: EnvironmentTypeParam? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<PublicEnvironmentResource, Swift.Error> {
+        return AgentsMethods.listAgentEnvironmentsPaginated(config: config, limit: limit, order: order, after: after, type: type, requestOptions: requestOptions)
     }
 
-    /// Creates an OpenAI-hosted environment before creating a session. Requires access to the prewarming beta.
-    public func createEnvironment(
-        environment: CreateEnvironmentParam,
-        idempotencyKey: String? = nil,
-        vaultIds: SdkOptional<[String]>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> PublicEnvironmentResource {
-        try await AgentsMethods.createAgentEnvironment(
-            config: config,
-            environment: environment,
-            idempotencyKey: idempotencyKey,
-            vaultIds: vaultIds,
-            requestOptions: requestOptions
-        )
+/// Creates an OpenAI-hosted environment before creating a session. Requires access to the prewarming beta.
+    public func createEnvironment(environment: CreateEnvironmentParam, idempotencyKey: String? = nil, vaultIds: SdkOptional<[String]>? = nil, requestOptions: RequestOptions? = nil) async throws -> PublicEnvironmentResource {
+        return try await AgentsMethods.createAgentEnvironment(config: config, environment: environment, idempotencyKey: idempotencyKey, vaultIds: vaultIds, requestOptions: requestOptions)
     }
 
-    /// Retrieves an execution environment's connection status and safe installed metadata. See [environment
-    /// lifecycle](https://developers.openai.com/api/docs/guides/agents-api/environments/lifecycle).
-    public func retrieveEnvironment(
-        environmentId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> PublicEnvironmentResource {
-        try await AgentsMethods.retrieveAgentEnvironment(
-            config: config,
-            environmentId: environmentId,
-            requestOptions: requestOptions
-        )
+/// Retrieves an execution environment's connection status and safe installed metadata. See [environment lifecycle](https://developers.openai.com/api/docs/guides/agents-api/environments/lifecycle).
+    public func retrieveEnvironment(environmentId: String, requestOptions: RequestOptions? = nil) async throws -> PublicEnvironmentResource {
+        return try await AgentsMethods.retrieveAgentEnvironment(config: config, environmentId: environmentId, requestOptions: requestOptions)
     }
 
-    /// Lists live files on a connected execution environment with optional directory filtering and opaque cursor
-    /// pagination. See [environment
-    /// files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
-    public func listEnvironmentFiles(
-        environmentId: String,
-        path: String? = nil,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        page: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EnvironmentFileListResource {
-        try await AgentsMethods.listAgentEnvironmentFiles(
-            config: config,
-            environmentId: environmentId,
-            path: path,
-            limit: limit,
-            order: order,
-            page: page,
-            requestOptions: requestOptions
-        )
+/// Lists live files on a connected execution environment with optional directory filtering and opaque cursor pagination. See [environment files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
+    public func listEnvironmentFiles(environmentId: String, path: String? = nil, limit: Int? = nil, order: ListOrderParam? = nil, page: String? = nil, requestOptions: RequestOptions? = nil) async throws -> EnvironmentFileListResource {
+        return try await AgentsMethods.listAgentEnvironmentFiles(config: config, environmentId: environmentId, path: path, limit: limit, order: order, page: page, requestOptions: requestOptions)
     }
 
-    /// Writes a file to a connected agent execution environment, using either inline base64 data or a file uploaded
-    /// through the Files API. Choose the `inline` or `file_id` body variant and provide the absolute destination
-    /// `path`; writing to an existing regular file at that path replaces it. Upload the file between turns and wait for
-    /// success before starting the next turn.
+/// Writes a file to a connected agent execution environment, using either inline base64 data or a file uploaded through the Files API. Choose the `inline` or `file_id` body variant and provide the absolute destination `path`; writing to an existing regular file at that path replaces it. Upload the file between turns and wait for success before starting the next turn.
     ///
-    /// Copies inline bytes or a Files API file into a connected execution environment, replacing an existing regular
-    /// file at the same path. Upload between turns and wait for success before starting the next turn. See [environment
-    /// files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
-    public func createEnvironmentFile(
-        environmentId: String,
-        body: HostedEnvironmentFileParam? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EnvironmentFileResource {
-        try await AgentsMethods.createAgentEnvironmentFile(
-            config: config,
-            environmentId: environmentId,
-            body: body,
-            requestOptions: requestOptions
-        )
+    /// Copies inline bytes or a Files API file into a connected execution environment, replacing an existing regular file at the same path. Upload between turns and wait for success before starting the next turn. See [environment files](https://developers.openai.com/api/docs/guides/agents-api/environments/files).
+    public func createEnvironmentFile(environmentId: String, body: HostedEnvironmentFileParam? = nil, requestOptions: RequestOptions? = nil) async throws -> EnvironmentFileResource {
+        return try await AgentsMethods.createAgentEnvironmentFile(config: config, environmentId: environmentId, body: body, requestOptions: requestOptions)
     }
 
-    /// Lists subagents in a session, including nested and closed subagents. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    public func listSessionSubagents(
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ListAgentSessionSubagentsResponse {
-        try await AgentsMethods.listAgentSessionSubagents(
-            config: config,
-            sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists subagents in a session, including nested and closed subagents. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func listSessionSubagents(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListAgentSessionSubagentsResponse {
+        return try await AgentsMethods.listAgentSessionSubagents(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists subagents in a session, including nested and closed subagents. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    public func listSessionSubagentsPaginated(
-        sessionId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<SubagentResource, Swift.Error> {
-        AgentsMethods.listAgentSessionSubagentsPaginated(
-            config: config,
-            sessionId: sessionId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists subagents in a session, including nested and closed subagents. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func listSessionSubagentsPaginated(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SubagentResource, Swift.Error> {
+        return AgentsMethods.listAgentSessionSubagentsPaginated(config: config, sessionId: sessionId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 }
 
-public extension AgentsNamespace {
-    /// Retrieves a subagent belonging to this session. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    func retrieveSessionSubagent(
-        sessionId: String,
-        subagentId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SubagentResource {
-        try await AgentsMethods.retrieveAgentSessionSubagent(
-            config: config,
-            sessionId: sessionId,
-            subagentId: subagentId,
-            requestOptions: requestOptions
-        )
+extension AgentsNamespace {
+/// Retrieves a subagent belonging to this session. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func retrieveSessionSubagent(sessionId: String, subagentId: String, requestOptions: RequestOptions? = nil) async throws -> SubagentResource {
+        return try await AgentsMethods.retrieveAgentSessionSubagent(config: config, sessionId: sessionId, subagentId: subagentId, requestOptions: requestOptions)
     }
 
-    /// Lists this subagent's own items across all of its turns. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    func listSessionSubagentItems(
-        sessionId: String,
-        subagentId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SessionItemListResource {
-        try await AgentsMethods.listAgentSessionSubagentItems(
-            config: config,
-            sessionId: sessionId,
-            subagentId: subagentId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists this subagent's own items across all of its turns. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func listSessionSubagentItems(sessionId: String, subagentId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionItemListResource {
+        return try await AgentsMethods.listAgentSessionSubagentItems(config: config, sessionId: sessionId, subagentId: subagentId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists this subagent's own items across all of its turns. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    func listSessionSubagentItemsPaginated(
-        sessionId: String,
-        subagentId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<SessionTurnItemResource, Swift.Error> {
-        AgentsMethods.listAgentSessionSubagentItemsPaginated(
-            config: config,
-            sessionId: sessionId,
-            subagentId: subagentId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists this subagent's own items across all of its turns. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func listSessionSubagentItemsPaginated(sessionId: String, subagentId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SessionTurnItemResource, Swift.Error> {
+        return AgentsMethods.listAgentSessionSubagentItemsPaginated(config: config, sessionId: sessionId, subagentId: subagentId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists all turns of this subagent, including turns after a resume. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    func listSessionSubagentTurns(
-        sessionId: String,
-        subagentId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SessionTurnListResource {
-        try await AgentsMethods.listAgentSessionSubagentTurns(
-            config: config,
-            sessionId: sessionId,
-            subagentId: subagentId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists all turns of this subagent, including turns after a resume. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func listSessionSubagentTurns(sessionId: String, subagentId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionTurnListResource {
+        return try await AgentsMethods.listAgentSessionSubagentTurns(config: config, sessionId: sessionId, subagentId: subagentId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists all turns of this subagent, including turns after a resume. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    func listSessionSubagentTurnsPaginated(
-        sessionId: String,
-        subagentId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<TurnResource, Swift.Error> {
-        AgentsMethods.listAgentSessionSubagentTurnsPaginated(
-            config: config,
-            sessionId: sessionId,
-            subagentId: subagentId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists all turns of this subagent, including turns after a resume. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func listSessionSubagentTurnsPaginated(sessionId: String, subagentId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<TurnResource, Swift.Error> {
+        return AgentsMethods.listAgentSessionSubagentTurnsPaginated(config: config, sessionId: sessionId, subagentId: subagentId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Retrieves a turn belonging to this subagent. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    func retrieveSessionSubagentTurn(
-        sessionId: String,
-        subagentId: String,
-        turnId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> TurnResource {
-        try await AgentsMethods.retrieveAgentSessionSubagentTurn(
-            config: config,
-            sessionId: sessionId,
-            subagentId: subagentId,
-            turnId: turnId,
-            requestOptions: requestOptions
-        )
+/// Retrieves a turn belonging to this subagent. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func retrieveSessionSubagentTurn(sessionId: String, subagentId: String, turnId: String, requestOptions: RequestOptions? = nil) async throws -> TurnResource {
+        return try await AgentsMethods.retrieveAgentSessionSubagentTurn(config: config, sessionId: sessionId, subagentId: subagentId, turnId: turnId, requestOptions: requestOptions)
     }
 
-    /// Lists items belonging to one turn of this subagent. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    func listSessionSubagentTurnItems(
-        sessionId: String,
-        subagentId: String,
-        turnId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SessionItemListResource {
-        try await AgentsMethods.listAgentSessionSubagentTurnItems(
-            config: config,
-            sessionId: sessionId,
-            subagentId: subagentId,
-            turnId: turnId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists items belonging to one turn of this subagent. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func listSessionSubagentTurnItems(sessionId: String, subagentId: String, turnId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionItemListResource {
+        return try await AgentsMethods.listAgentSessionSubagentTurnItems(config: config, sessionId: sessionId, subagentId: subagentId, turnId: turnId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists items belonging to one turn of this subagent. See [subagent
-    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
-    func listSessionSubagentTurnItemsPaginated(
-        sessionId: String,
-        subagentId: String,
-        turnId: String,
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<SessionTurnItemResource, Swift.Error> {
-        AgentsMethods.listAgentSessionSubagentTurnItemsPaginated(
-            config: config,
-            sessionId: sessionId,
-            subagentId: subagentId,
-            turnId: turnId,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists items belonging to one turn of this subagent. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    public func listSessionSubagentTurnItemsPaginated(sessionId: String, subagentId: String, turnId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SessionTurnItemResource, Swift.Error> {
+        return AgentsMethods.listAgentSessionSubagentTurnItemsPaginated(config: config, sessionId: sessionId, subagentId: subagentId, turnId: turnId, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 }
 
-public extension AgentsNamespace {
-    /// Lists reusable agents in the current project. See [agent
-    /// configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
-    func list(
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AgentListResource {
-        try await AgentsMethods.listAgents(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+extension AgentsNamespace {
+/// Lists reusable agents in the current project. See [agent configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
+    public func list(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> AgentListResource {
+        return try await AgentsMethods.listAgents(config: config, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists reusable agents in the current project. See [agent
-    /// configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
-    func listPaginated(
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<AgentResource, Swift.Error> {
-        AgentsMethods.listAgentsPaginated(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists reusable agents in the current project. See [agent configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
+    public func listPaginated(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<AgentResource, Swift.Error> {
+        return AgentsMethods.listAgentsPaginated(config: config, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Creates a reusable agent without storing credentials. See [agent
-    /// configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
-    func create(
-        options: AgentsMethods.CreateAgentOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AgentResource {
-        try await AgentsMethods.createAgent(config: config, options: options, requestOptions: requestOptions)
+/// Creates a reusable agent without storing credentials. See [agent configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
+    public func create(options: AgentsMethods.CreateAgentOptions, requestOptions: RequestOptions? = nil) async throws -> AgentResource {
+        return try await AgentsMethods.createAgent(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Retrieves a reusable agent by ID. See [agent
-    /// configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
-    func retrieve(agentId: String, requestOptions: RequestOptions? = nil) async throws -> AgentResource {
-        try await AgentsMethods.retrieveAgent(config: config, agentId: agentId, requestOptions: requestOptions)
+/// Retrieves a reusable agent by ID. See [agent configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
+    public func retrieve(agentId: String, requestOptions: RequestOptions? = nil) async throws -> AgentResource {
+        return try await AgentsMethods.retrieveAgent(config: config, agentId: agentId, requestOptions: requestOptions)
     }
 
-    /// Updates a reusable agent. See [agent
-    /// configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
-    func update(
-        options: AgentsMethods.UpdateAgentOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AgentResource {
-        try await AgentsMethods.updateAgent(config: config, options: options, requestOptions: requestOptions)
+/// Updates a reusable agent. See [agent configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
+    public func update(options: AgentsMethods.UpdateAgentOptions, requestOptions: RequestOptions? = nil) async throws -> AgentResource {
+        return try await AgentsMethods.updateAgent(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Deletes a reusable agent. See [agent
-    /// configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
-    func delete(agentId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedAgentResource {
-        try await AgentsMethods.deleteAgent(config: config, agentId: agentId, requestOptions: requestOptions)
+/// Deletes a reusable agent. See [agent configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
+    public func delete(agentId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedAgentResource {
+        return try await AgentsMethods.deleteAgent(config: config, agentId: agentId, requestOptions: requestOptions)
     }
 
-    /// Lists reusable environment templates without returning confidential values. See [reusing a hosted
-    /// setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
-    func listEnvironmentTemplates(
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EnvironmentTemplateListResource {
-        try await AgentsMethods.listAgentEnvironmentTemplates(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists reusable environment templates without returning confidential values. See [reusing a hosted setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
+    public func listEnvironmentTemplates(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> EnvironmentTemplateListResource {
+        return try await AgentsMethods.listAgentEnvironmentTemplates(config: config, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 
-    /// Lists reusable environment templates without returning confidential values. See [reusing a hosted
-    /// setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
-    func listEnvironmentTemplatesPaginated(
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<EnvironmentTemplateResource, Swift.Error> {
-        AgentsMethods.listAgentEnvironmentTemplatesPaginated(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            requestOptions: requestOptions
-        )
+/// Lists reusable environment templates without returning confidential values. See [reusing a hosted setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
+    public func listEnvironmentTemplatesPaginated(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<EnvironmentTemplateResource, Swift.Error> {
+        return AgentsMethods.listAgentEnvironmentTemplatesPaginated(config: config, limit: limit, order: order, after: after, requestOptions: requestOptions)
     }
 }
 
-public extension AgentsNamespace {
-    /// Creates reusable environment configuration without returning confidential setup commands or environment values.
-    /// See [reusing a hosted
-    /// setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
-    func createEnvironmentTemplate(
-        options: AgentsMethods.CreateAgentEnvironmentTemplateOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EnvironmentTemplateResource {
-        try await AgentsMethods.createAgentEnvironmentTemplate(
-            config: config,
-            options: options,
-            requestOptions: requestOptions
-        )
+extension AgentsNamespace {
+/// Creates reusable environment configuration without returning confidential setup commands or environment values. See [reusing a hosted setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
+    public func createEnvironmentTemplate(options: AgentsMethods.CreateAgentEnvironmentTemplateOptions, requestOptions: RequestOptions? = nil) async throws -> EnvironmentTemplateResource {
+        return try await AgentsMethods.createAgentEnvironmentTemplate(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Retrieves reusable environment configuration without returning confidential values. See [reusing a hosted
-    /// setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
-    func retrieveEnvironmentTemplate(
-        environmentTemplateId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EnvironmentTemplateResource {
-        try await AgentsMethods.retrieveAgentEnvironmentTemplate(
-            config: config,
-            environmentTemplateId: environmentTemplateId,
-            requestOptions: requestOptions
-        )
+/// Retrieves reusable environment configuration without returning confidential values. See [reusing a hosted setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
+    public func retrieveEnvironmentTemplate(environmentTemplateId: String, requestOptions: RequestOptions? = nil) async throws -> EnvironmentTemplateResource {
+        return try await AgentsMethods.retrieveAgentEnvironmentTemplate(config: config, environmentTemplateId: environmentTemplateId, requestOptions: requestOptions)
     }
 
-    /// Updates reusable environment configuration without returning confidential values. See [reusing a hosted
-    /// setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
-    func updateEnvironmentTemplate(
-        options: AgentsMethods.UpdateAgentEnvironmentTemplateOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> EnvironmentTemplateResource {
-        try await AgentsMethods.updateAgentEnvironmentTemplate(
-            config: config,
-            options: options,
-            requestOptions: requestOptions
-        )
+/// Updates reusable environment configuration without returning confidential values. See [reusing a hosted setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
+    public func updateEnvironmentTemplate(options: AgentsMethods.UpdateAgentEnvironmentTemplateOptions, requestOptions: RequestOptions? = nil) async throws -> EnvironmentTemplateResource {
+        return try await AgentsMethods.updateAgentEnvironmentTemplate(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Deletes reusable environment configuration and all confidential template inputs. See [reusing a hosted
-    /// setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
-    func deleteEnvironmentTemplate(
-        environmentTemplateId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> DeletedEnvironmentTemplateResource {
-        try await AgentsMethods.deleteAgentEnvironmentTemplate(
-            config: config,
-            environmentTemplateId: environmentTemplateId,
-            requestOptions: requestOptions
-        )
+/// Deletes reusable environment configuration and all confidential template inputs. See [reusing a hosted setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
+    public func deleteEnvironmentTemplate(environmentTemplateId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedEnvironmentTemplateResource {
+        return try await AgentsMethods.deleteAgentEnvironmentTemplate(config: config, environmentTemplateId: environmentTemplateId, requestOptions: requestOptions)
     }
 
-    /// Lists managed agent sessions using ID-based pagination and the requested sort order. See [managing
-    /// sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
-    func listSessions(
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        agentId: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SessionListResource {
-        try await AgentsMethods.listAgentSessions(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            agentId: agentId,
-            requestOptions: requestOptions
-        )
+/// Lists managed agent sessions using ID-based pagination and the requested sort order. See [managing sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
+    public func listSessions(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, agentId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionListResource {
+        return try await AgentsMethods.listAgentSessions(config: config, limit: limit, order: order, after: after, agentId: agentId, requestOptions: requestOptions)
     }
 
-    /// Lists managed agent sessions using ID-based pagination and the requested sort order. See [managing
-    /// sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
-    func listSessionsPaginated(
-        limit: Int? = nil,
-        order: ListOrderParam? = nil,
-        after: String? = nil,
-        agentId: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) -> AsyncThrowingStream<SessionResource, Swift.Error> {
-        AgentsMethods.listAgentSessionsPaginated(
-            config: config,
-            limit: limit,
-            order: order,
-            after: after,
-            agentId: agentId,
-            requestOptions: requestOptions
-        )
+/// Lists managed agent sessions using ID-based pagination and the requested sort order. See [managing sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
+    public func listSessionsPaginated(limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, agentId: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SessionResource, Swift.Error> {
+        return AgentsMethods.listAgentSessionsPaginated(config: config, limit: limit, order: order, after: after, agentId: agentId, requestOptions: requestOptions)
     }
 
-    /// Creates a managed agent session, optionally submits initial input, and returns the session or streams its events
-    /// when stream is true. See [running sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions).
-    func createSession(
-        options: AgentsMethods.CreateAgentSessionOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> SessionResource {
-        try await AgentsMethods.createAgentSession(config: config, options: options, requestOptions: requestOptions)
+/// Creates a managed agent session, optionally submits initial input, and returns the session or streams its events when stream is true. See [running sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions).
+    public func createSession(options: AgentsMethods.CreateAgentSessionOptions, requestOptions: RequestOptions? = nil) async throws -> SessionResource {
+        return try await AgentsMethods.createAgentSession(config: config, options: options, requestOptions: requestOptions)
     }
 
-    /// Creates a managed agent session, optionally submits initial input, and returns the session or streams its events
-    /// when stream is true. See [running sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions).
-    func createSessionStream(
-        options: AgentsMethods.CreateAgentSessionStreamOptions,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
-        try await AgentsMethods.createAgentSessionStream(
-            config: config,
-            options: options,
-            requestOptions: requestOptions
-        )
+/// Creates a managed agent session, optionally submits initial input, and returns the session or streams its events when stream is true. See [running sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions).
+    public func createSessionStream(options: AgentsMethods.CreateAgentSessionStreamOptions, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
+        return try await AgentsMethods.createAgentSessionStream(config: config, options: options, requestOptions: requestOptions)
     }
 }

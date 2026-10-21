@@ -6,31 +6,16 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ChatkitMethods {
-    /// Cancel an active ChatKit session and return its most recent metadata. Cancelling prevents new requests from
-    /// using the issued client secret.
+extension ChatkitMethods {
+    /// Cancel an active ChatKit session and return its most recent metadata. Cancelling prevents new requests from using the issued client secret.
     ///
     /// - Parameters:
     /// - sessionId: Unique identifier for the ChatKit session to cancel.
-    static func cancelChatkitSession(
-        config: ClientConfig,
-        sessionId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ChatSessionResource {
-        try await (sdkRequest(
-            "POST",
-            ["/chatkit/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/cancel"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "cancelChatkitSession",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func cancelChatkitSession(config: ClientConfig, sessionId: String, requestOptions: RequestOptions? = nil) async throws -> ChatSessionResource {
+        return try (await sdkRequest("POST", ["/chatkit/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/cancel"].joined(), config: config, decoder: .json, operationId: "cancelChatkitSession", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Creates a ChatKit session powered by a specified workflow. Supply `workflow` with its required `id` and a
-    /// non-empty `user` identifier; optionally configure expiration, rate limits, tracing, and ChatKit features. The
-    /// response includes the session's client secret, expiration time, and resolved configuration.
+    /// Creates a ChatKit session powered by a specified workflow. Supply `workflow` with its required `id` and a non-empty `user` identifier; optionally configure expiration, rate limits, tracing, and ChatKit features. The response includes the session's client secret, expiration time, and resolved configuration.
     ///
     /// Create a ChatKit session.
     ///
@@ -44,34 +29,11 @@ public extension ChatkitMethods {
     ///   defaults to 10.
     /// - chatkitConfiguration: Optional overrides for ChatKit runtime configuration
     ///   features
-    static func createChatkitSession(
-        config: ClientConfig,
-        workflow: WorkflowParam,
-        user: String,
-        expiresAfter: ExpiresAfterParam? = nil,
-        rateLimits: RateLimitsParam? = nil,
-        chatkitConfiguration: ChatkitConfigurationParam? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ChatSessionResource {
+    public static func createChatkitSession(config: ClientConfig, workflow: WorkflowParam, user: String, expiresAfter: ExpiresAfterParam? = nil, rateLimits: RateLimitsParam? = nil, chatkitConfiguration: ChatkitConfigurationParam? = nil, requestOptions: RequestOptions? = nil) async throws -> ChatSessionResource {
         try validateLength("user", user, min: 1)
 
-        let requestBody = CreateChatkitSessionRequestBody(
-            workflow: workflow,
-            user: user,
-            expiresAfter: expiresAfter,
-            rateLimits: rateLimits,
-            chatkitConfiguration: chatkitConfiguration
-        )
+        let requestBody = CreateChatkitSessionRequestBody(workflow: workflow, user: user, expiresAfter: expiresAfter, rateLimits: rateLimits, chatkitConfiguration: chatkitConfiguration)
 
-        return try await (sdkRequest(
-            "POST",
-            "/chatkit/sessions",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createChatkitSession",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", "/chatkit/sessions", config: config, body: requestBody, decoder: .json, operationId: "createChatkitSession", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

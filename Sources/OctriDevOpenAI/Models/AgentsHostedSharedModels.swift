@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsHosted domain models
+// AgentsHosted domain models
 public indirect enum HostedEnvironmentFileParam {
     case hostedEnvironmentFileParamFileId(HostedEnvironmentFileParamFileId)
     case hostedEnvironmentFileParamInline(HostedEnvironmentFileParamInline)
@@ -12,6 +12,7 @@ public indirect enum HostedEnvironmentFileParam {
 }
 
 extension HostedEnvironmentFileParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension HostedEnvironmentFileParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension HostedEnvironmentFileParam: Codable {
 extension HostedEnvironmentFileParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file_id": try .hostedEnvironmentFileParamFileId(HostedEnvironmentFileParamFileId(from: decoder))
-        case "inline": try .hostedEnvironmentFileParamInline(HostedEnvironmentFileParamInline(from: decoder))
-        default: nil
+        case "file_id": return .hostedEnvironmentFileParamFileId(try HostedEnvironmentFileParamFileId(from: decoder))
+        case "inline": return .hostedEnvironmentFileParamInline(try HostedEnvironmentFileParamInline(from: decoder))
+        default: return nil
         }
     }
 }
@@ -65,6 +62,7 @@ public indirect enum HostedEnvironmentFileResource {
 }
 
 extension HostedEnvironmentFileResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -72,16 +70,12 @@ extension HostedEnvironmentFileResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -92,9 +86,9 @@ extension HostedEnvironmentFileResource: Codable {
 extension HostedEnvironmentFileResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file_id": try .hostedEnvironmentFileResourceFileId(HostedEnvironmentFileResourceFileId(from: decoder))
-        case "inline": try .hostedEnvironmentFileResourceInline(HostedEnvironmentFileResourceInline(from: decoder))
-        default: nil
+        case "file_id": return .hostedEnvironmentFileResourceFileId(try HostedEnvironmentFileResourceFileId(from: decoder))
+        case "inline": return .hostedEnvironmentFileResourceInline(try HostedEnvironmentFileResourceInline(from: decoder))
+        default: return nil
         }
     }
 }
@@ -117,6 +111,7 @@ public indirect enum HostedPluginParam {
 }
 
 extension HostedPluginParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -124,16 +119,12 @@ extension HostedPluginParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -144,8 +135,8 @@ extension HostedPluginParam: Codable {
 extension HostedPluginParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "inline": try .hostedPluginParamInline(HostedPluginParamInline(from: decoder))
-        default: nil
+        case "inline": return .hostedPluginParamInline(try HostedPluginParamInline(from: decoder))
+        default: return nil
         }
     }
 }
@@ -167,6 +158,7 @@ public indirect enum HostedPluginResource {
 }
 
 extension HostedPluginResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -174,16 +166,12 @@ extension HostedPluginResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -194,8 +182,8 @@ extension HostedPluginResource: Codable {
 extension HostedPluginResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "inline": try .hostedPluginResourceInline(HostedPluginResourceInline(from: decoder))
-        default: nil
+        case "inline": return .hostedPluginResourceInline(try HostedPluginResourceInline(from: decoder))
+        default: return nil
         }
     }
 }
@@ -218,6 +206,7 @@ public indirect enum HostedSkillParam {
 }
 
 extension HostedSkillParam: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -225,16 +214,12 @@ extension HostedSkillParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -245,9 +230,9 @@ extension HostedSkillParam: Codable {
 extension HostedSkillParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "skill_reference": try .hostedSkillParamSkillReference(HostedSkillParamSkillReference(from: decoder))
-        case "inline": try .hostedSkillParamInline(HostedSkillParamInline(from: decoder))
-        default: nil
+        case "skill_reference": return .hostedSkillParamSkillReference(try HostedSkillParamSkillReference(from: decoder))
+        case "inline": return .hostedSkillParamInline(try HostedSkillParamInline(from: decoder))
+        default: return nil
         }
     }
 }
@@ -271,6 +256,7 @@ public indirect enum HostedSkillResource {
 }
 
 extension HostedSkillResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -278,16 +264,12 @@ extension HostedSkillResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -298,9 +280,9 @@ extension HostedSkillResource: Codable {
 extension HostedSkillResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "skill_reference": try .hostedSkillResourceSkillReference(HostedSkillResourceSkillReference(from: decoder))
-        case "inline": try .hostedSkillResourceInline(HostedSkillResourceInline(from: decoder))
-        default: nil
+        case "skill_reference": return .hostedSkillResourceSkillReference(try HostedSkillResourceSkillReference(from: decoder))
+        case "inline": return .hostedSkillResourceInline(try HostedSkillResourceInline(from: decoder))
+        default: return nil
         }
     }
 }
@@ -324,6 +306,7 @@ public indirect enum HostedTemplateFileResource {
 }
 
 extension HostedTemplateFileResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -331,16 +314,12 @@ extension HostedTemplateFileResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -351,9 +330,9 @@ extension HostedTemplateFileResource: Codable {
 extension HostedTemplateFileResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file_id": try .hostedTemplateFileResourceFileId(HostedTemplateFileResourceFileId(from: decoder))
-        case "inline": try .hostedTemplateFileResourceInline(HostedTemplateFileResourceInline(from: decoder))
-        default: nil
+        case "file_id": return .hostedTemplateFileResourceFileId(try HostedTemplateFileResourceFileId(from: decoder))
+        case "inline": return .hostedTemplateFileResourceInline(try HostedTemplateFileResourceInline(from: decoder))
+        default: return nil
         }
     }
 }
@@ -377,6 +356,7 @@ public indirect enum HostedTemplateSkillResource {
 }
 
 extension HostedTemplateSkillResource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -384,16 +364,12 @@ extension HostedTemplateSkillResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -405,9 +381,9 @@ extension HostedTemplateSkillResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "skill_reference":
-            try .hostedTemplateSkillResourceSkillReference(HostedTemplateSkillResourceSkillReference(from: decoder))
-        case "inline": try .hostedTemplateSkillResourceInline(HostedTemplateSkillResourceInline(from: decoder))
-        default: nil
+        return .hostedTemplateSkillResourceSkillReference(try HostedTemplateSkillResourceSkillReference(from: decoder))
+        case "inline": return .hostedTemplateSkillResourceInline(try HostedTemplateSkillResourceInline(from: decoder))
+        default: return nil
         }
     }
 }
@@ -438,51 +414,37 @@ public struct HostedTemplateSkillResourceInline: Codable {
         case description
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension HostedTemplateSkillResourceInline {
-    init(from decoder: Decoder) throws {
+extension HostedTemplateSkillResourceInline {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
         guard container.contains(.description) else {
-            throw SdkValidationError(
-                field: "description",
-                code: "required",
-                message: "Validation failed for 'description': value is required"
-            )
+            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        name = try container.sdkDecodeRequired(.name)
-        description = try container.sdkDecodeRequired(.description)
-        try sdkValidateRawEnum("type", type, HostedTemplateSkillResourceInlineType.allCases.map(\.rawValue))
-        try validateLength("name", name, min: 0, max: nil)
-        try validateLength("description", description, min: 0, max: nil)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.description = try container.sdkDecodeRequired(.description)
+            try sdkValidateRawEnum("type", self.type, HostedTemplateSkillResourceInlineType.allCases.map(\.rawValue))
+            try validateLength("name", self.name, min: 0, max: nil)
+            try validateLength("description", self.description, min: 0, max: nil)
     }
 }
 
-public extension HostedTemplateSkillResourceInline {
-    init(type: HostedTemplateSkillResourceInlineType, name: String, description: String) throws {
+extension HostedTemplateSkillResourceInline {
+    public init(type: HostedTemplateSkillResourceInlineType, name: String, description: String) throws {
         (self.type, self.name) = (type, name)
         self.description = description
-        try sdkValidateRawEnum("type", self.type, HostedTemplateSkillResourceInlineType.allCases.map(\.rawValue))
-        try validateLength("name", self.name, min: 0, max: nil)
-        try validateLength("description", self.description, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, HostedTemplateSkillResourceInlineType.allCases.map(\.rawValue))
+            try validateLength("name", self.name, min: 0, max: nil)
+            try validateLength("description", self.description, min: 0, max: nil)
     }
 }
 
@@ -501,56 +463,38 @@ public struct HostedTemplateSkillResourceSkillReference: Codable {
         case version
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension HostedTemplateSkillResourceSkillReference {
-    init(from decoder: Decoder) throws {
+extension HostedTemplateSkillResourceSkillReference {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.skillId) else {
-            throw SdkValidationError(
-                field: "skill_id",
-                code: "required",
-                message: "Validation failed for 'skill_id': value is required"
-            )
+            throw SdkValidationError(field: "skill_id", code: "required", message: "Validation failed for 'skill_id': value is required")
         }
         guard container.contains(.version) else {
-            throw SdkValidationError(
-                field: "version",
-                code: "required",
-                message: "Validation failed for 'version': value is required"
-            )
+            throw SdkValidationError(field: "version", code: "required", message: "Validation failed for 'version': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        skillId = try container.sdkDecodeRequired(.skillId)
-        version = try container.sdkDecodeNullable(.version)
-        try sdkValidateRawEnum("type", type, HostedTemplateSkillResourceSkillReferenceType.allCases.map(\.rawValue))
-        try validateLength("skill_id", skillId, min: 0, max: nil)
-        if let value = version {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.skillId = try container.sdkDecodeRequired(.skillId)
+        self.version = try container.sdkDecodeNullable(.version)
+            try sdkValidateRawEnum("type", self.type, HostedTemplateSkillResourceSkillReferenceType.allCases.map(\.rawValue))
+            try validateLength("skill_id", self.skillId, min: 0, max: nil)
+        if let value = self.version {
             try validateLength("version", value, min: 0, max: nil)
         }
     }
 }
 
-public extension HostedTemplateSkillResourceSkillReference {
-    init(type: HostedTemplateSkillResourceSkillReferenceType, skillId: String, version: String?) throws {
+extension HostedTemplateSkillResourceSkillReference {
+    public init(type: HostedTemplateSkillResourceSkillReferenceType, skillId: String, version: String?) throws {
         (self.type, self.skillId) = (type, skillId)
         self.version = version
-        try sdkValidateRawEnum(
-            "type",
-            self.type,
-            HostedTemplateSkillResourceSkillReferenceType.allCases.map(\.rawValue)
-        )
-        try validateLength("skill_id", self.skillId, min: 0, max: nil)
+            try sdkValidateRawEnum("type", self.type, HostedTemplateSkillResourceSkillReferenceType.allCases.map(\.rawValue))
+            try validateLength("skill_id", self.skillId, min: 0, max: nil)
         if let value = self.version {
             try validateLength("version", value, min: 0, max: nil)
         }
@@ -578,7 +522,5 @@ public struct HostedSkillResourceSkillReference: Codable {
         case description
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectsMethods {
-    /// Updates a user's role in a project. Use `project_id` and `user_id` to identify the project membership, and set
-    /// `role` to `owner` or `member` when changing the role.
+extension ProjectsMethods {
+    /// Updates a user's role in a project. Use `project_id` and `user_id` to identify the project membership, and set `role` to `owner` or `member` when changing the role.
     ///
     /// Modifies a user's role in the project.
     ///
@@ -16,67 +15,18 @@ public extension ProjectsMethods {
     /// - projectId: The ID of the project.
     /// - userId: The ID of the user.
     /// - role: `owner` or `member`
-    static func modifyProjectUser(
-        config: ClientConfig,
-        projectId: String,
-        userId: String,
-        role: SdkOptional<String>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectUser {
+    public static func modifyProjectUser(config: ClientConfig, projectId: String, userId: String, role: SdkOptional<String>? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectUser {
         let requestBody = ModifyProjectUserRequestBody(role: role)
 
-        return try await (sdkRequest(
-            "POST",
-            [
-                "/organization/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/users/",
-                sdkEncodePathSegment(sdkWireString(userId)),
-            ].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "modifyProjectUser",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/users/", sdkEncodePathSegment(sdkWireString(userId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "modifyProjectUser", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Deletes a user from the project. Returns confirmation of project user deletion, or an error if the project is
-    /// archived (archived projects have no users).
+    /// Deletes a user from the project. Returns confirmation of project user deletion, or an error if the project is archived (archived projects have no users).
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
     /// - userId: The ID of the user.
-    static func deleteProjectUser(
-        config: ClientConfig,
-        projectId: String,
-        userId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectUserDeleteResponse {
-        try await (sdkRequest(
-            "DELETE",
-            [
-                "/organization/projects/",
-                sdkEncodePathSegment(sdkWireString(projectId)),
-                "/users/",
-                sdkEncodePathSegment(sdkWireString(userId)),
-            ].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "deleteProjectUser",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func deleteProjectUser(config: ClientConfig, projectId: String, userId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectUserDeleteResponse {
+        return try (await sdkRequest("DELETE", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/users/", sdkEncodePathSegment(sdkWireString(userId))].joined(), config: config, decoder: .json, operationId: "deleteProjectUser", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

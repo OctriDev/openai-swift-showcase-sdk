@@ -6,32 +6,14 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension FilesMethods {
-    /// Retrieves the contents of a specific uploaded file. Use `file_id` to identify the file, and note that some file
-    /// purposes or account permissions do not allow downloads.
+extension FilesMethods {
+    /// Retrieves the contents of a specific uploaded file. Use `file_id` to identify the file, and note that some file purposes or account permissions do not allow downloads.
     ///
     /// Returns a response containing the contents of the specified file.
     ///
     /// - Parameters:
     /// - fileId: The ID of the file to use for this request.
-    static func downloadFile(
-        config: ClientConfig,
-        fileId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Data {
-        try await (sdkRequest(
-            "GET",
-            ["/files/", sdkEncodePathSegment(sdkWireString(fileId)), "/content"].joined(),
-            config: config,
-            decoder: .bytes,
-            operationId: "downloadFile",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-            ]
-        )).data
+    public static func downloadFile(config: ClientConfig, fileId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
+        return try (await sdkRequest("GET", ["/files/", sdkEncodePathSegment(sdkWireString(fileId)), "/content"].joined(), config: config, decoder: .bytes, operationId: "downloadFile", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
     }
 }

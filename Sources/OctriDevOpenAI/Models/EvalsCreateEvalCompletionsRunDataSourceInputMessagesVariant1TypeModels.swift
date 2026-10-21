@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// EvalsCreate domain models
+// EvalsCreate domain models
 /// The type of input messages. Always `item_reference`.
 public enum CreateEvalCompletionsRunDataSourceInputMessagesVariant1Type: String, CaseIterable, Codable {
     case itemReference = "item_reference"

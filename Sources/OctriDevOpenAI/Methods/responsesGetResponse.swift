@@ -6,9 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ResponsesMethods {
-    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream`
-    /// to receive server-sent events. When streaming, use `starting_after` to resume from an event sequence number.
+extension ResponsesMethods {
+    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream` to receive server-sent events. When streaming, use `starting_after` to resume from an event sequence number.
     ///
     /// Retrieves a model response with the given ID.
     ///
@@ -31,29 +30,12 @@ public extension ResponsesMethods {
     ///   add a small amount of overhead to the data stream. You can set
     ///   `include_obfuscation` to false to optimize for bandwidth if you trust the
     ///   network links between your application and the OpenAI API.
-    static func getResponse(
-        config: ClientConfig,
-        responseId: String,
-        include: [IncludeEnum]? = nil,
-        stream: Bool? = nil,
-        startingAfter: Int? = nil,
-        includeObfuscation: Bool? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Response {
-        try await (sdkRequest(
-            "GET",
-            ["/responses/", sdkEncodePathSegment(sdkWireString(responseId))].joined(),
-            config: config,
-            query: [
-                SdkQueryParameter("include", values: include, style: "form", explode: true),
-                SdkQueryParameter("stream", value: stream),
-                SdkQueryParameter("starting_after", value: startingAfter),
-                SdkQueryParameter("include_obfuscation", value: includeObfuscation),
-            ],
-            decoder: .json,
-            operationId: "getResponse",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func getResponse(config: ClientConfig, responseId: String, include: [IncludeEnum]? = nil, stream: Bool? = nil, startingAfter: Int? = nil, includeObfuscation: Bool? = nil, requestOptions: RequestOptions? = nil) async throws -> Response {
+        return try (await sdkRequest("GET", ["/responses/", sdkEncodePathSegment(sdkWireString(responseId))].joined(), config: config, query: [
+            SdkQueryParameter("include", values: include, style: "form", explode: true),
+            SdkQueryParameter("stream", value: stream),
+            SdkQueryParameter("starting_after", value: startingAfter),
+            SdkQueryParameter("include_obfuscation", value: includeObfuscation),
+        ], decoder: .json, operationId: "getResponse", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

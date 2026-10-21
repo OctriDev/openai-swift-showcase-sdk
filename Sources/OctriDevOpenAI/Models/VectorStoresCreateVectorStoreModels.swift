@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// VectorStores domain models
+// VectorStores domain models
 public indirect enum CreateVectorStoreRequestChunkingStrategy {
     case autoChunkingStrategyRequestParam(AutoChunkingStrategyRequestParam)
     case staticChunkingStrategyRequestParam(StaticChunkingStrategyRequestParam)
@@ -12,6 +12,7 @@ public indirect enum CreateVectorStoreRequestChunkingStrategy {
 }
 
 extension CreateVectorStoreRequestChunkingStrategy: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -19,16 +20,12 @@ extension CreateVectorStoreRequestChunkingStrategy: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -39,9 +36,9 @@ extension CreateVectorStoreRequestChunkingStrategy: Codable {
 extension CreateVectorStoreRequestChunkingStrategy {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "auto": try .autoChunkingStrategyRequestParam(AutoChunkingStrategyRequestParam(from: decoder))
-        case "static": try .staticChunkingStrategyRequestParam(StaticChunkingStrategyRequestParam(from: decoder))
-        default: nil
+        case "auto": return .autoChunkingStrategyRequestParam(try AutoChunkingStrategyRequestParam(from: decoder))
+        case "static": return .staticChunkingStrategyRequestParam(try StaticChunkingStrategyRequestParam(from: decoder))
+        default: return nil
         }
     }
 }
@@ -87,35 +84,28 @@ public struct CreateVectorStoreRequest: Codable {
     }
 
     init() {
-        (fileIds, name, description, expiresAfter, chunkingStrategy) = (nil, nil, nil, nil, nil)
-        metadata = nil
+        (self.fileIds, self.name, self.description, self.expiresAfter, self.chunkingStrategy) = (nil, nil, nil, nil, nil)
+        self.metadata = nil
     }
 }
 
-public extension CreateVectorStoreRequest {
-    init(from decoder: Decoder) throws {
+extension CreateVectorStoreRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        name = try container.sdkDecodeIfPresent(.name)
-        description = try container.sdkDecodeIfPresent(.description)
-        expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
-        chunkingStrategy = try container.sdkDecodeIfPresent(.chunkingStrategy)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        if let value = fileIds {
+        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.description = try container.sdkDecodeIfPresent(.description)
+        self.expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
+        self.chunkingStrategy = try container.sdkDecodeIfPresent(.chunkingStrategy)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        if let value = self.fileIds {
             try validateItems("file_ids", value, min: nil, max: 500)
         }
     }
 }
 
-public extension CreateVectorStoreRequest {
-    init(
-        fileIds: [String]? = nil,
-        name: String? = nil,
-        description: String? = nil,
-        expiresAfter: VectorStoreExpirationAfter? = nil,
-        chunkingStrategy: CreateVectorStoreRequestChunkingStrategy? = nil,
-        metadata: Metadata? = nil
-    ) throws {
+extension CreateVectorStoreRequest {
+    public init(fileIds: [String]? = nil, name: String? = nil, description: String? = nil, expiresAfter: VectorStoreExpirationAfter? = nil, chunkingStrategy: CreateVectorStoreRequestChunkingStrategy? = nil, metadata: Metadata? = nil) throws {
         self.init()
         (self.fileIds, self.name) = (fileIds, name)
         (self.description, self.expiresAfter) = (description, expiresAfter)

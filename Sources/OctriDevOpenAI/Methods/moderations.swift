@@ -7,12 +7,9 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum ModerationsMethods {
-    /// Classifies text and image inputs for potentially harmful content. Supply `input` as a string, an array of
-    /// strings, or supported multimodal input; `model` defaults to `omni-moderation-latest`. Use the returned results
-    /// to review moderation flags, categories, and category scores.
+    /// Classifies text and image inputs for potentially harmful content. Supply `input` as a string, an array of strings, or supported multimodal input; `model` defaults to `omni-moderation-latest`. Use the returned results to review moderation flags, categories, and category scores.
     ///
-    /// Classifies if text and/or image inputs are potentially harmful. Learn more in the [moderation
-    /// guide](https://developers.openai.com/api/docs/guides/moderation).
+    /// Classifies if text and/or image inputs are potentially harmful. Learn more in the [moderation guide](https://developers.openai.com/api/docs/guides/moderation).
     ///
     /// - Parameters:
     /// - input: Input (or inputs) to classify. Can be a single string, an array of
@@ -22,29 +19,9 @@ public enum ModerationsMethods {
     ///   guide](https://developers.openai.com/api/docs/guides/moderation), and learn
     ///   about available models
     ///   [here](https://developers.openai.com/api/docs/guides/moderation).
-    public static func createModeration(
-        config: ClientConfig,
-        input: CreateModerationRequestInput,
-        model: String? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> CreateModerationResponse {
+    public static func createModeration(config: ClientConfig, input: CreateModerationRequestInput, model: String? = nil, requestOptions: RequestOptions? = nil) async throws -> CreateModerationResponse {
         let requestBody = CreateModerationRequestBody(input: input, model: model)
 
-        return try await (sdkRequest(
-            "POST",
-            "/moderations",
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "createModeration",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": ErrorResponse.self,
-                "429": ErrorResponse.self,
-                "500": ErrorResponse.self,
-                "503": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", "/moderations", config: config, body: requestBody, decoder: .json, operationId: "createModeration", options: requestOptions, errors: ["400": ErrorResponse.self, "403": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self])).data
     }
 }

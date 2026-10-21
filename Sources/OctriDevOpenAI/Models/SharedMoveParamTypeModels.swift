@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Shared domain models
+// Shared domain models
 /// Specifies the event type. For a move action, this property is always set to `move`.
 public enum MoveParamType: String, CaseIterable, Codable {
     case move
@@ -26,15 +26,12 @@ public enum MoveParamType: String, CaseIterable, Codable {
 public struct OpenAIFileObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let file = OpenAIFileObject(rawValue: "file")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -65,16 +62,13 @@ public enum ScreenshotParamType: String, CaseIterable, Codable {
 public struct OrderEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let asc = OrderEnum(rawValue: "asc")
     public static let desc = OrderEnum(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -105,17 +99,14 @@ public enum AwsExternalStorageProviderResponseType: String, CaseIterable, Codabl
 public struct OpenAIFileStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let uploaded = OpenAIFileStatus(rawValue: "uploaded")
     public static let processed = OpenAIFileStatus(rawValue: "processed")
     public static let error = OpenAIFileStatus(rawValue: "error")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -147,10 +138,7 @@ public enum EasyInputMessageType: String, CaseIterable, Codable {
 public struct OpenAIFilePurpose: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let assistants = OpenAIFilePurpose(rawValue: "assistants")
     public static let assistantsOutput = OpenAIFilePurpose(rawValue: "assistants_output")
     public static let batch = OpenAIFilePurpose(rawValue: "batch")
@@ -162,7 +150,7 @@ public struct OpenAIFilePurpose: RawRepresentable, Hashable, Codable, Sendable, 
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -199,7 +187,7 @@ public enum ComparisonFilterType: String, CaseIterable, Codable {
     case gte
     case lt
     case lte
-    case `in`
+    case `in` = "in"
     case nin
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
@@ -256,16 +244,13 @@ public enum DragParamType: String, CaseIterable, Codable {
 public struct CallableToolAllowedCaller: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let direct = CallableToolAllowedCaller(rawValue: "direct")
     public static let programmatic = CallableToolAllowedCaller(rawValue: "programmatic")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -350,10 +335,7 @@ public enum ScrollParamType: String, CaseIterable, Codable {
 public struct DetailEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = DetailEnum(rawValue: "low")
     public static let high = DetailEnum(rawValue: "high")
     public static let auto = DetailEnum(rawValue: "auto")
@@ -361,7 +343,7 @@ public struct DetailEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWire
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -425,19 +407,15 @@ public enum GcpExternalStorageProviderResponseType: String, CaseIterable, Codabl
 }
 
 /// The object type, which is always webhook_endpoint.
-public struct WebhookEndpointWithSecretResourceObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct WebhookEndpointWithSecretResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let webhookEndpoint = WebhookEndpointWithSecretResourceObject(rawValue: "webhook_endpoint")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -450,10 +428,7 @@ public struct WebhookEndpointWithSecretResourceObject: RawRepresentable, Hashabl
 public struct ProjectEventTypeEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let batchCompleted = ProjectEventTypeEnum(rawValue: "batch.completed")
     public static let batchFailed = ProjectEventTypeEnum(rawValue: "batch.failed")
     public static let batchExpired = ProjectEventTypeEnum(rawValue: "batch.expired")
@@ -484,7 +459,7 @@ public struct ProjectEventTypeEnum: RawRepresentable, Hashable, Codable, Sendabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -497,10 +472,7 @@ public struct ProjectEventTypeEnum: RawRepresentable, Hashable, Codable, Sendabl
 public struct EasyInputMessageRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let user = EasyInputMessageRole(rawValue: "user")
     public static let assistant = EasyInputMessageRole(rawValue: "assistant")
     public static let system = EasyInputMessageRole(rawValue: "system")
@@ -508,7 +480,7 @@ public struct EasyInputMessageRole: RawRepresentable, Hashable, Codable, Sendabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -523,17 +495,14 @@ public struct EasyInputMessageRole: RawRepresentable, Hashable, Codable, Sendabl
 public struct VerbosityVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = VerbosityVariant0(rawValue: "low")
     public static let medium = VerbosityVariant0(rawValue: "medium")
     public static let high = VerbosityVariant0(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -586,10 +555,7 @@ public enum MCPProtocolErrorType: String, CaseIterable, Codable {
 public struct IncludeEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let fileSearchCallResults = IncludeEnum(rawValue: "file_search_call.results")
     public static let webSearchCallResults = IncludeEnum(rawValue: "web_search_call.results")
     public static let webSearchCallActionSources = IncludeEnum(rawValue: "web_search_call.action.sources")
@@ -601,7 +567,7 @@ public struct IncludeEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWir
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -632,16 +598,13 @@ public enum OciExternalStorageProviderResponseType: String, CaseIterable, Codabl
 public struct GrammarSyntax1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let lark = GrammarSyntax1(rawValue: "lark")
     public static let regex = GrammarSyntax1(rawValue: "regex")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

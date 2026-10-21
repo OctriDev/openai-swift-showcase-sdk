@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesResponse domain models
+// ResponsesResponse domain models
 /// A detailed breakdown of the output tokens.
 public struct ResponseUsageOutputTokensDetails: Codable {
     /// The number of reasoning tokens.
@@ -13,27 +13,21 @@ public struct ResponseUsageOutputTokensDetails: Codable {
         case reasoningTokens = "reasoning_tokens"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseUsageOutputTokensDetails {
-    init(from decoder: Decoder) throws {
+extension ResponseUsageOutputTokensDetails {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.reasoningTokens) else {
-            throw SdkValidationError(
-                field: "reasoning_tokens",
-                code: "required",
-                message: "Validation failed for 'reasoning_tokens': value is required"
-            )
+            throw SdkValidationError(field: "reasoning_tokens", code: "required", message: "Validation failed for 'reasoning_tokens': value is required")
         }
-        reasoningTokens = try container.sdkDecodeRequired(.reasoningTokens)
+        self.reasoningTokens = try container.sdkDecodeRequired(.reasoningTokens)
     }
 }
 
-public extension ResponseUsageOutputTokensDetails {
-    init(reasoningTokens: Int) {
+extension ResponseUsageOutputTokensDetails {
+    public init(reasoningTokens: Int) {
         self.reasoningTokens = reasoningTokens
     }
 }
@@ -55,36 +49,26 @@ public struct ResponseLogProb: Codable {
         case topLogprobs = "top_logprobs"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponseLogProb {
-    init(from decoder: Decoder) throws {
+extension ResponseLogProb {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.token) else {
-            throw SdkValidationError(
-                field: "token",
-                code: "required",
-                message: "Validation failed for 'token': value is required"
-            )
+            throw SdkValidationError(field: "token", code: "required", message: "Validation failed for 'token': value is required")
         }
         guard container.contains(.logprob) else {
-            throw SdkValidationError(
-                field: "logprob",
-                code: "required",
-                message: "Validation failed for 'logprob': value is required"
-            )
+            throw SdkValidationError(field: "logprob", code: "required", message: "Validation failed for 'logprob': value is required")
         }
-        token = try container.sdkDecodeRequired(.token)
-        logprob = try container.sdkDecodeRequired(.logprob)
-        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        self.token = try container.sdkDecodeRequired(.token)
+        self.logprob = try container.sdkDecodeRequired(.logprob)
+        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
     }
 }
 
-public extension ResponseLogProb {
-    init(token: String, logprob: Double, topLogprobs: [ResponseLogProbTopLogprobsItem]? = nil) {
+extension ResponseLogProb {
+    public init(token: String, logprob: Double, topLogprobs: [ResponseLogProbTopLogprobsItem]? = nil) {
         (self.token, self.logprob) = (token, logprob)
         self.topLogprobs = topLogprobs
     }
@@ -129,14 +113,10 @@ public enum ResponseFailedEventType: String, CaseIterable, Codable {
 /// The reason why the response is incomplete. `steered` means the response stopped at a safe output boundary
 /// after a WebSocket `response.steer` event. The server can then create a successor response automatically with
 /// the queued input.
-public struct ResponseVariant2IncompleteDetailsReason: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct ResponseVariant2IncompleteDetailsReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let maxOutputTokens = ResponseVariant2IncompleteDetailsReason(rawValue: "max_output_tokens")
     public static let maxMessages = ResponseVariant2IncompleteDetailsReason(rawValue: "max_messages")
     public static let contentFilter = ResponseVariant2IncompleteDetailsReason(rawValue: "content_filter")
@@ -144,7 +124,7 @@ public struct ResponseVariant2IncompleteDetailsReason: RawRepresentable, Hashabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -157,15 +137,12 @@ public struct ResponseVariant2IncompleteDetailsReason: RawRepresentable, Hashabl
 public struct ResponseVariant2Object: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let response = ResponseVariant2Object(rawValue: "response")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -179,10 +156,7 @@ public struct ResponseVariant2Object: RawRepresentable, Hashable, Codable, Senda
 public struct ResponseVariant2Status: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let completed = ResponseVariant2Status(rawValue: "completed")
     public static let failed = ResponseVariant2Status(rawValue: "failed")
     public static let inProgress = ResponseVariant2Status(rawValue: "in_progress")
@@ -192,7 +166,7 @@ public struct ResponseVariant2Status: RawRepresentable, Hashable, Codable, Senda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -262,16 +236,13 @@ public enum ResponseCreatedEventType: String, CaseIterable, Codable {
 public struct ResponseVariant2TruncationVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = ResponseVariant2TruncationVariant0(rawValue: "auto")
     public static let disabled = ResponseVariant2TruncationVariant0(rawValue: "disabled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

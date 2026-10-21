@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Skills domain models
+// Skills domain models
 /// Updates the default version pointer for a skill.
 public struct SetDefaultSkillVersionBody: Codable {
     /// The skill version number to set as default.
@@ -13,27 +13,21 @@ public struct SetDefaultSkillVersionBody: Codable {
         case defaultVersion = "default_version"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SetDefaultSkillVersionBody {
-    init(from decoder: Decoder) throws {
+extension SetDefaultSkillVersionBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.defaultVersion) else {
-            throw SdkValidationError(
-                field: "default_version",
-                code: "required",
-                message: "Validation failed for 'default_version': value is required"
-            )
+            throw SdkValidationError(field: "default_version", code: "required", message: "Validation failed for 'default_version': value is required")
         }
-        defaultVersion = try container.sdkDecodeRequired(.defaultVersion)
+        self.defaultVersion = try container.sdkDecodeRequired(.defaultVersion)
     }
 }
 
-public extension SetDefaultSkillVersionBody {
-    init(defaultVersion: String) {
+extension SetDefaultSkillVersionBody {
+    public init(defaultVersion: String) {
         self.defaultVersion = defaultVersion
     }
 }

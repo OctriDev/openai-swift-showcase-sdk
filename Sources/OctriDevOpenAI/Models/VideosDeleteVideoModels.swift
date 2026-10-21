@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Videos domain models
+// Videos domain models
 /// Confirmation payload returned after deleting a video.
 public struct DeletedVideoResource: Codable {
     /// The object type that signals the deletion response.
@@ -19,43 +19,29 @@ public struct DeletedVideoResource: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DeletedVideoResource {
-    init(from decoder: Decoder) throws {
+extension DeletedVideoResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
-        id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension DeletedVideoResource {
-    init(object: DeletedVideoResourceObject, deleted: Bool, id: String) {
+extension DeletedVideoResource {
+    public init(object: DeletedVideoResourceObject, deleted: Bool, id: String) {
         (self.object, self.deleted) = (object, deleted)
         self.id = id
     }
@@ -65,15 +51,12 @@ public extension DeletedVideoResource {
 public struct DeletedVideoResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let videoDeleted = DeletedVideoResourceObject(rawValue: "video.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

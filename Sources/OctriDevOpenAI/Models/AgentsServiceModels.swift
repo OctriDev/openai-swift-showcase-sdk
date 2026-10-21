@@ -3,15 +3,12 @@
 
 import Foundation
 
-/// AgentsService domain models
+// AgentsService domain models
 /// The service tier used for model requests.
 public struct ServiceTierParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = ServiceTierParam(rawValue: "auto")
     public static let `default` = ServiceTierParam(rawValue: "default")
     public static let flex = ServiceTierParam(rawValue: "flex")
@@ -20,7 +17,7 @@ public struct ServiceTierParam: RawRepresentable, Hashable, Codable, Sendable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -33,10 +30,7 @@ public struct ServiceTierParam: RawRepresentable, Hashable, Codable, Sendable, S
 public struct ServiceTierResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let auto = ServiceTierResource(rawValue: "auto")
     public static let `default` = ServiceTierResource(rawValue: "default")
     public static let flex = ServiceTierResource(rawValue: "flex")
@@ -46,7 +40,7 @@ public struct ServiceTierResource: RawRepresentable, Hashable, Codable, Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

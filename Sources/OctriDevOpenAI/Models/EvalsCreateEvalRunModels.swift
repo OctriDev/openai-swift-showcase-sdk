@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// EvalsCreate domain models
+// EvalsCreate domain models
 public indirect enum CreateEvalRunRequestDataSource {
     case createEvalJsonlRunDataSource(CreateEvalJsonlRunDataSource)
     case createEvalCompletionsRunDataSource(CreateEvalCompletionsRunDataSource)
@@ -13,6 +13,7 @@ public indirect enum CreateEvalRunRequestDataSource {
 }
 
 extension CreateEvalRunRequestDataSource: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension CreateEvalRunRequestDataSource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,10 +37,10 @@ extension CreateEvalRunRequestDataSource: Codable {
 extension CreateEvalRunRequestDataSource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "jsonl": try .createEvalJsonlRunDataSource(CreateEvalJsonlRunDataSource(from: decoder))
-        case "completions": try .createEvalCompletionsRunDataSource(CreateEvalCompletionsRunDataSource(from: decoder))
-        case "responses": try .createEvalResponsesRunDataSource(CreateEvalResponsesRunDataSource(from: decoder))
-        default: nil
+        case "jsonl": return .createEvalJsonlRunDataSource(try CreateEvalJsonlRunDataSource(from: decoder))
+        case "completions": return .createEvalCompletionsRunDataSource(try CreateEvalCompletionsRunDataSource(from: decoder))
+        case "responses": return .createEvalResponsesRunDataSource(try CreateEvalResponsesRunDataSource(from: decoder))
+        default: return nil
         }
     }
 }
@@ -78,29 +75,23 @@ public struct CreateEvalRunRequest: Codable {
         case metadata
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateEvalRunRequest {
-    init(from decoder: Decoder) throws {
+extension CreateEvalRunRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.dataSource) else {
-            throw SdkValidationError(
-                field: "data_source",
-                code: "required",
-                message: "Validation failed for 'data_source': value is required"
-            )
+            throw SdkValidationError(field: "data_source", code: "required", message: "Validation failed for 'data_source': value is required")
         }
-        dataSource = try container.sdkDecodeRequired(.dataSource)
-        name = try container.sdkDecodeIfPresent(.name)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
+        self.dataSource = try container.sdkDecodeRequired(.dataSource)
+        self.name = try container.sdkDecodeIfPresent(.name)
+        self.metadata = try container.sdkDecodeIfPresent(.metadata)
     }
 }
 
-public extension CreateEvalRunRequest {
-    init(dataSource: CreateEvalRunRequestDataSource, name: String? = nil, metadata: Metadata? = nil) {
+extension CreateEvalRunRequest {
+    public init(dataSource: CreateEvalRunRequestDataSource, name: String? = nil, metadata: Metadata? = nil) {
         (self.dataSource, self.name) = (dataSource, name)
         self.metadata = metadata
     }

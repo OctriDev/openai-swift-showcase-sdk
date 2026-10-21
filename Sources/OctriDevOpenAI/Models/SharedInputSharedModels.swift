@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SharedInput domain models
+// SharedInput domain models
 public indirect enum InputContent {
     case inputTextContent(InputTextContent)
     case inputImageContent(InputImageContent)
@@ -13,6 +13,7 @@ public indirect enum InputContent {
 }
 
 extension InputContent: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension InputContent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,10 +37,10 @@ extension InputContent: Codable {
 extension InputContent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": try .inputTextContent(InputTextContent(from: decoder))
-        case "input_image": try .inputImageContent(InputImageContent(from: decoder))
-        case "input_file": try .inputFileContent(InputFileContent(from: decoder))
-        default: nil
+        case "input_text": return .inputTextContent(try InputTextContent(from: decoder))
+        case "input_image": return .inputImageContent(try InputImageContent(from: decoder))
+        case "input_file": return .inputFileContent(try InputFileContent(from: decoder))
+        default: return nil
         }
     }
 }
@@ -70,23 +67,18 @@ public indirect enum InputItem {
 }
 
 extension InputItem: Codable {
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
+            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
         }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
+        if let value = Self.decodeGroup1(from: container) { self = value; return }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for InputItem")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
     }
 }
 
@@ -116,25 +108,12 @@ extension InputItem {
 
 extension InputItem {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(EasyInputMessage.self) {
-            return .easyInputMessage(value)
-        }
-        if let value = try? container.decode(Item.self) {
-            return .item(value)
-        }
-        if let value = try? container
-            .decode(CompactionTriggerItemParam.self) {
-            return .compactionTriggerItemParam(value)
-        }
-        if let value = try? container.decode(ItemReferenceParam.self) {
-            return .itemReferenceParam(value)
-        }
-        if let value = try? container.decode(ProgramItemParam.self) {
-            return .programItemParam(value)
-        }
-        if let value = try? container.decode(ProgramOutputItemParam.self) {
-            return .programOutputItemParam(value)
-        }
+        if let value = try? container.decode(EasyInputMessage.self) { return .easyInputMessage(value) }
+        if let value = try? container.decode(Item.self) { return .item(value) }
+        if let value = try? container.decode(CompactionTriggerItemParam.self) { return .compactionTriggerItemParam(value) }
+        if let value = try? container.decode(ItemReferenceParam.self) { return .itemReferenceParam(value) }
+        if let value = try? container.decode(ProgramItemParam.self) { return .programItemParam(value) }
+        if let value = try? container.decode(ProgramOutputItemParam.self) { return .programOutputItemParam(value) }
         return nil
     }
 }
@@ -184,47 +163,33 @@ public struct InputFileContentParam: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InputFileContentParam {
-    init(from decoder: Decoder) throws {
+extension InputFileContentParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        filename = try container.sdkDecodeIfPresent(.filename)
-        fileData = try container.sdkDecodeIfPresent(.fileData)
-        fileUrl = try container.sdkDecodeIfPresent(.fileUrl)
-        detail = try container.sdkDecodeIfPresent(.detail)
-        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-        try sdkValidateRawEnum("type", type, InputFileContentParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        self.filename = try container.sdkDecodeIfPresent(.filename)
+        self.fileData = try container.sdkDecodeIfPresent(.fileData)
+        self.fileUrl = try container.sdkDecodeIfPresent(.fileUrl)
+        self.detail = try container.sdkDecodeIfPresent(.detail)
+        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+            try sdkValidateRawEnum("type", self.type, InputFileContentParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension InputFileContentParam {
-    init(
-        type: InputFileContentParamType,
-        fileId: String? = nil,
-        filename: String? = nil,
-        fileData: String? = nil,
-        fileUrl: String? = nil,
-        detail: FileDetailEnum? = nil,
-        promptCacheBreakpoint: PromptCacheBreakpointParam? = nil
-    ) throws {
+extension InputFileContentParam {
+    public init(type: InputFileContentParamType, fileId: String? = nil, filename: String? = nil, fileData: String? = nil, fileUrl: String? = nil, detail: FileDetailEnum? = nil, promptCacheBreakpoint: PromptCacheBreakpointParam? = nil) throws {
         (self.type, self.fileId) = (type, fileId)
         (self.filename, self.fileData) = (filename, fileData)
         (self.fileUrl, self.detail) = (fileUrl, detail)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-        try sdkValidateRawEnum("type", self.type, InputFileContentParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, InputFileContentParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -249,42 +214,30 @@ public struct InputImageContentParamAutoParam: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InputImageContentParamAutoParam {
-    init(from decoder: Decoder) throws {
+extension InputImageContentParamAutoParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        detail = try container.sdkDecodeIfPresent(.detail)
-        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-        try sdkValidateRawEnum("type", type, InputImageContentParamAutoParamType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        self.detail = try container.sdkDecodeIfPresent(.detail)
+        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+            try sdkValidateRawEnum("type", self.type, InputImageContentParamAutoParamType.allCases.map(\.rawValue))
     }
 }
 
-public extension InputImageContentParamAutoParam {
-    init(
-        type: InputImageContentParamAutoParamType,
-        imageUrl: String? = nil,
-        fileId: String? = nil,
-        detail: DetailEnum? = nil,
-        promptCacheBreakpoint: PromptCacheBreakpointParam? = nil
-    ) throws {
+extension InputImageContentParamAutoParam {
+    public init(type: InputImageContentParamAutoParamType, imageUrl: String? = nil, fileId: String? = nil, detail: DetailEnum? = nil, promptCacheBreakpoint: PromptCacheBreakpointParam? = nil) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
         (self.fileId, self.detail) = (fileId, detail)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-        try sdkValidateRawEnum("type", self.type, InputImageContentParamAutoParamType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, InputImageContentParamAutoParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -300,38 +253,28 @@ public struct InputAudio: Codable {
         case inputAudio = "input_audio"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InputAudio {
-    init(from decoder: Decoder) throws {
+extension InputAudio {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.inputAudio) else {
-            throw SdkValidationError(
-                field: "input_audio",
-                code: "required",
-                message: "Validation failed for 'input_audio': value is required"
-            )
+            throw SdkValidationError(field: "input_audio", code: "required", message: "Validation failed for 'input_audio': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        inputAudio = try container.sdkDecodeRequired(.inputAudio)
-        try sdkValidateRawEnum("type", type, InputAudioType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.inputAudio = try container.sdkDecodeRequired(.inputAudio)
+            try sdkValidateRawEnum("type", self.type, InputAudioType.allCases.map(\.rawValue))
     }
 }
 
-public extension InputAudio {
-    init(type: InputAudioType, inputAudio: InputAudioInputAudio) throws {
+extension InputAudio {
+    public init(type: InputAudioType, inputAudio: InputAudioInputAudio) throws {
         (self.type, self.inputAudio) = (type, inputAudio)
-        try sdkValidateRawEnum("type", self.type, InputAudioType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, InputAudioType.allCases.map(\.rawValue))
     }
 }
 
@@ -355,45 +298,30 @@ public struct InputMessage: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InputMessage {
-    init(from decoder: Decoder) throws {
+extension InputMessage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.role) else {
-            throw SdkValidationError(
-                field: "role",
-                code: "required",
-                message: "Validation failed for 'role': value is required"
-            )
+            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
         }
         guard container.contains(.content) else {
-            throw SdkValidationError(
-                field: "content",
-                code: "required",
-                message: "Validation failed for 'content': value is required"
-            )
+            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
         }
-        role = try container.sdkDecodeRequired(.role)
-        content = try container.sdkDecodeRequired(.content)
-        type = try container.sdkDecodeIfPresent(.type)
-        status = try container.sdkDecodeIfPresent(.status)
-        if let value = type {
+        self.role = try container.sdkDecodeRequired(.role)
+        self.content = try container.sdkDecodeRequired(.content)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.status = try container.sdkDecodeIfPresent(.status)
+        if let value = self.type {
             try sdkValidateRawEnum("type", value, InputMessageType.allCases.map(\.rawValue))
         }
     }
 }
 
-public extension InputMessage {
-    init(
-        role: InputMessageRole,
-        content: InputMessageContentList,
-        type: InputMessageType? = nil,
-        status: InputMessageStatus? = nil
-    ) throws {
+extension InputMessage {
+    public init(role: InputMessageRole, content: InputMessageContentList, type: InputMessageType? = nil, status: InputMessageStatus? = nil) throws {
         (self.role, self.content) = (role, content)
         (self.type, self.status) = (type, status)
         if let value = self.type {
@@ -432,50 +360,36 @@ public struct InputFileContent: Codable {
         case detail
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InputFileContent {
-    init(from decoder: Decoder) throws {
+extension InputFileContent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        filename = try container.sdkDecodeIfPresent(.filename)
-        fileData = try container.sdkDecodeIfPresent(.fileData)
-        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-        fileUrl = try container.sdkDecodeIfPresent(.fileUrl)
-        detail = try container.sdkDecodeIfPresent(.detail)
-        try sdkValidateRawEnum("type", type, InputFileContentType.allCases.map(\.rawValue))
-        if let value = fileUrl {
+        self.type = try container.sdkDecodeRequired(.type)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        self.filename = try container.sdkDecodeIfPresent(.filename)
+        self.fileData = try container.sdkDecodeIfPresent(.fileData)
+        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+        self.fileUrl = try container.sdkDecodeIfPresent(.fileUrl)
+        self.detail = try container.sdkDecodeIfPresent(.detail)
+            try sdkValidateRawEnum("type", self.type, InputFileContentType.allCases.map(\.rawValue))
+        if let value = self.fileUrl {
             try sdkValidateUri("file_url", value)
         }
     }
 }
 
-public extension InputFileContent {
-    init(
-        type: InputFileContentType,
-        fileId: String? = nil,
-        filename: String? = nil,
-        fileData: String? = nil,
-        promptCacheBreakpoint: PromptCacheBreakpointConfig? = nil,
-        fileUrl: String? = nil,
-        detail: FileInputDetail? = nil
-    ) throws {
+extension InputFileContent {
+    public init(type: InputFileContentType, fileId: String? = nil, filename: String? = nil, fileData: String? = nil, promptCacheBreakpoint: PromptCacheBreakpointConfig? = nil, fileUrl: String? = nil, detail: FileInputDetail? = nil) throws {
         (self.type, self.fileId) = (type, fileId)
         (self.filename, self.fileData) = (filename, fileData)
         (self.promptCacheBreakpoint, self.fileUrl) = (promptCacheBreakpoint, fileUrl)
         self.detail = detail
-        try sdkValidateRawEnum("type", self.type, InputFileContentType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, InputFileContentType.allCases.map(\.rawValue))
         if let value = self.fileUrl {
             try sdkValidateUri("file_url", value)
         }
@@ -498,40 +412,30 @@ public struct InputTextContent: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InputTextContent {
-    init(from decoder: Decoder) throws {
+extension InputTextContent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        text = try container.sdkDecodeRequired(.text)
-        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-        try sdkValidateRawEnum("type", type, InputTextContentType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.text = try container.sdkDecodeRequired(.text)
+        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+            try sdkValidateRawEnum("type", self.type, InputTextContentType.allCases.map(\.rawValue))
     }
 }
 
-public extension InputTextContent {
-    init(type: InputTextContentType, text: String, promptCacheBreakpoint: PromptCacheBreakpointConfig? = nil) throws {
+extension InputTextContent {
+    public init(type: InputTextContentType, text: String, promptCacheBreakpoint: PromptCacheBreakpointConfig? = nil) throws {
         (self.type, self.text) = (type, text)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-        try sdkValidateRawEnum("type", self.type, InputTextContentType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, InputTextContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -558,49 +462,33 @@ public struct InputImageContent: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension InputImageContent {
-    init(from decoder: Decoder) throws {
+extension InputImageContent {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.detail) else {
-            throw SdkValidationError(
-                field: "detail",
-                code: "required",
-                message: "Validation failed for 'detail': value is required"
-            )
+            throw SdkValidationError(field: "detail", code: "required", message: "Validation failed for 'detail': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        detail = try container.sdkDecodeRequired(.detail)
-        imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
-        fileId = try container.sdkDecodeIfPresent(.fileId)
-        promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
-        try sdkValidateRawEnum("type", type, InputImageContentType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.detail = try container.sdkDecodeRequired(.detail)
+        self.imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
+        self.fileId = try container.sdkDecodeIfPresent(.fileId)
+        self.promptCacheBreakpoint = try container.sdkDecodeIfPresent(.promptCacheBreakpoint)
+            try sdkValidateRawEnum("type", self.type, InputImageContentType.allCases.map(\.rawValue))
     }
 }
 
-public extension InputImageContent {
-    init(
-        type: InputImageContentType,
-        detail: ImageDetail,
-        imageUrl: String? = nil,
-        fileId: String? = nil,
-        promptCacheBreakpoint: PromptCacheBreakpointConfig? = nil
-    ) throws {
+extension InputImageContent {
+    public init(type: InputImageContentType, detail: ImageDetail, imageUrl: String? = nil, fileId: String? = nil, promptCacheBreakpoint: PromptCacheBreakpointConfig? = nil) throws {
         (self.type, self.detail) = (type, detail)
         (self.imageUrl, self.fileId) = (imageUrl, fileId)
         self.promptCacheBreakpoint = promptCacheBreakpoint
-        try sdkValidateRawEnum("type", self.type, InputImageContentType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, InputImageContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -619,7 +507,5 @@ public struct InputTextContentParam: Codable {
         case promptCacheBreakpoint = "prompt_cache_breakpoint"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

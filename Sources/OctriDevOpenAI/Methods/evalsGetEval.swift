@@ -6,32 +6,18 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension EvalsMethods {
-    /// Retrieves an evaluation by its identifier. Use this endpoint to inspect the evaluation's name, data source
-    /// configuration, and testing criteria before creating a run or updating the evaluation.
+extension EvalsMethods {
+    /// Retrieves an evaluation by its identifier. Use this endpoint to inspect the evaluation's name, data source configuration, and testing criteria before creating a run or updating the evaluation.
     ///
     /// Get an evaluation by ID.
     ///
     /// - Parameters:
     /// - evalId: The ID of the evaluation to retrieve.
-    static func getEval(
-        config: ClientConfig,
-        evalId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Eval {
-        try await (sdkRequest(
-            "GET",
-            ["/evals/", sdkEncodePathSegment(sdkWireString(evalId))].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "getEval",
-            options: requestOptions,
-            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+    public static func getEval(config: ClientConfig, evalId: String, requestOptions: RequestOptions? = nil) async throws -> Eval {
+        return try (await sdkRequest("GET", ["/evals/", sdkEncodePathSegment(sdkWireString(evalId))].joined(), config: config, decoder: .json, operationId: "getEval", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Updates an evaluation's name or metadata. Supply either or both fields to change the corresponding evaluation
-    /// properties; the request does not replace the data source configuration or testing criteria.
+    /// Updates an evaluation's name or metadata. Supply either or both fields to change the corresponding evaluation properties; the request does not replace the data source configuration or testing criteria.
     ///
     /// Update certain properties of an evaluation.
     ///
@@ -43,24 +29,9 @@ public extension EvalsMethods {
     ///   structured format, and querying for objects via API or the dashboard. Keys
     ///   are strings with a maximum length of 64 characters. Values are strings with
     ///   a maximum length of 512 characters.
-    static func updateEval(
-        config: ClientConfig,
-        evalId: String,
-        name: String? = nil,
-        metadata: SdkOptional<Metadata>? = nil,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> Eval {
+    public static func updateEval(config: ClientConfig, evalId: String, name: String? = nil, metadata: SdkOptional<Metadata>? = nil, requestOptions: RequestOptions? = nil) async throws -> Eval {
         let requestBody = UpdateEvalRequestBody(name: name, metadata: metadata)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/evals/", sdkEncodePathSegment(sdkWireString(evalId))].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateEval",
-            options: requestOptions,
-            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
-        )).data
+        return try (await sdkRequest("POST", ["/evals/", sdkEncodePathSegment(sdkWireString(evalId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateEval", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }

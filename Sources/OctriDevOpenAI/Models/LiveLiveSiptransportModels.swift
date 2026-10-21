@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveSiptransport domain models
+// LiveLiveSiptransport domain models
 /// Place an outbound SIP call using your provider's trunk. Outbound SIP calling must be enabled for your
 /// organization. The trunk must support TLS signaling, Opus audio, and SDES-SRTP media. See Telephony and SIP.
 public struct LiveSIPTransportRequest: Codable {
@@ -22,49 +22,35 @@ public struct LiveSIPTransportRequest: Codable {
         case trunk
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSIPTransportRequest {
-    init(from decoder: Decoder) throws {
+extension LiveSIPTransportRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.destination) else {
-            throw SdkValidationError(
-                field: "destination",
-                code: "required",
-                message: "Validation failed for 'destination': value is required"
-            )
+            throw SdkValidationError(field: "destination", code: "required", message: "Validation failed for 'destination': value is required")
         }
         guard container.contains(.trunk) else {
-            throw SdkValidationError(
-                field: "trunk",
-                code: "required",
-                message: "Validation failed for 'trunk': value is required"
-            )
+            throw SdkValidationError(field: "trunk", code: "required", message: "Validation failed for 'trunk': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        destination = try container.sdkDecodeRequired(.destination)
-        trunk = try container.sdkDecodeRequired(.trunk)
-        try sdkValidateRawEnum("type", type, LiveSIPTransportRequestType.allCases.map(\.rawValue))
-        try sdkValidatePattern("destination", destination, sdkPattern5c9c06609f56)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.destination = try container.sdkDecodeRequired(.destination)
+        self.trunk = try container.sdkDecodeRequired(.trunk)
+            try sdkValidateRawEnum("type", self.type, LiveSIPTransportRequestType.allCases.map(\.rawValue))
+            try sdkValidatePattern("destination", self.destination, sdkPattern5c9c06609f56)
     }
 }
 
-public extension LiveSIPTransportRequest {
-    init(type: LiveSIPTransportRequestType, destination: String, trunk: LiveSIPTrunkRequest) throws {
+extension LiveSIPTransportRequest {
+    public init(type: LiveSIPTransportRequestType, destination: String, trunk: LiveSIPTrunkRequest) throws {
         (self.type, self.destination) = (type, destination)
         self.trunk = trunk
-        try sdkValidateRawEnum("type", self.type, LiveSIPTransportRequestType.allCases.map(\.rawValue))
-        try sdkValidatePattern("destination", self.destination, sdkPattern5c9c06609f56)
+            try sdkValidateRawEnum("type", self.type, LiveSIPTransportRequestType.allCases.map(\.rawValue))
+            try sdkValidatePattern("destination", self.destination, sdkPattern5c9c06609f56)
     }
 }
 
@@ -86,49 +72,35 @@ public struct LiveSIPTransport: Codable {
         case trunk
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveSIPTransport {
-    init(from decoder: Decoder) throws {
+extension LiveSIPTransport {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.destination) else {
-            throw SdkValidationError(
-                field: "destination",
-                code: "required",
-                message: "Validation failed for 'destination': value is required"
-            )
+            throw SdkValidationError(field: "destination", code: "required", message: "Validation failed for 'destination': value is required")
         }
         guard container.contains(.trunk) else {
-            throw SdkValidationError(
-                field: "trunk",
-                code: "required",
-                message: "Validation failed for 'trunk': value is required"
-            )
+            throw SdkValidationError(field: "trunk", code: "required", message: "Validation failed for 'trunk': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        destination = try container.sdkDecodeRequired(.destination)
-        trunk = try container.sdkDecodeRequired(.trunk)
-        try sdkValidateRawEnum("type", type, LiveSIPTransportType.allCases.map(\.rawValue))
-        try sdkValidatePattern("destination", destination, sdkPattern5c9c06609f56)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.destination = try container.sdkDecodeRequired(.destination)
+        self.trunk = try container.sdkDecodeRequired(.trunk)
+            try sdkValidateRawEnum("type", self.type, LiveSIPTransportType.allCases.map(\.rawValue))
+            try sdkValidatePattern("destination", self.destination, sdkPattern5c9c06609f56)
     }
 }
 
-public extension LiveSIPTransport {
-    init(type: LiveSIPTransportType, destination: String, trunk: LiveSIPTrunk) throws {
+extension LiveSIPTransport {
+    public init(type: LiveSIPTransportType, destination: String, trunk: LiveSIPTrunk) throws {
         (self.type, self.destination) = (type, destination)
         self.trunk = trunk
-        try sdkValidateRawEnum("type", self.type, LiveSIPTransportType.allCases.map(\.rawValue))
-        try sdkValidatePattern("destination", self.destination, sdkPattern5c9c06609f56)
+            try sdkValidateRawEnum("type", self.type, LiveSIPTransportType.allCases.map(\.rawValue))
+            try sdkValidatePattern("destination", self.destination, sdkPattern5c9c06609f56)
     }
 }
 

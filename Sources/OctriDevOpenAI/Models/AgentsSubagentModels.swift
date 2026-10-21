@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsSubagent domain models
+// AgentsSubagent domain models
 /// A subagent created within a session.
 public struct SubagentResource: Codable {
     /// The ID of the subagent.
@@ -38,61 +38,49 @@ public struct SubagentResource: Codable {
         case closedAt = "closed_at"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension SubagentResource {
-    init(from decoder: Decoder) throws {
+extension SubagentResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        sessionId = try container.sdkDecodeRequired(.sessionId)
-        name = try container.sdkDecodeNullable(.name)
-        instructions = try container.sdkDecodeNullable(.instructions)
-        parentAgentId = try container.sdkDecodeRequired(.parentAgentId)
-        status = try container.sdkDecodeRequired(.status)
-        openedAt = try container.sdkDecodeRequired(.openedAt)
-        closedAt = try container.sdkDecodeNullable(.closedAt)
-        try validateLength("id", id, min: 0, max: nil)
-        try validateLength("session_id", sessionId, min: 0, max: nil)
-        if let value = name {
-            try validateLength("name", value, min: 0, max: nil)
-        }
-        if let value = instructions {
-            try validateItems("instructions", value, min: 0, max: 2000)
-        }
-        try validateLength("parent_agent_id", parentAgentId, min: 0, max: nil)
-    }
-}
-
-public extension SubagentResource {
-    init(
-        id: String,
-        object: SubagentObjectResource,
-        sessionId: String,
-        name: String?,
-        instructions: [AgentContentResource]?,
-        parentAgentId: String,
-        status: SubagentStatusResource,
-        openedAt: Int,
-        closedAt: Int?
-    ) throws {
-        (self.id, self.object) = (id, object)
-        (self.sessionId, self.name) = (sessionId, name)
-        (self.instructions, self.parentAgentId) = (instructions, parentAgentId)
-        (self.status, self.openedAt) = (status, openedAt)
-        self.closedAt = closedAt
-        try validateLength("id", self.id, min: 0, max: nil)
-        try validateLength("session_id", self.sessionId, min: 0, max: nil)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.sessionId = try container.sdkDecodeRequired(.sessionId)
+        self.name = try container.sdkDecodeNullable(.name)
+        self.instructions = try container.sdkDecodeNullable(.instructions)
+        self.parentAgentId = try container.sdkDecodeRequired(.parentAgentId)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.openedAt = try container.sdkDecodeRequired(.openedAt)
+        self.closedAt = try container.sdkDecodeNullable(.closedAt)
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("session_id", self.sessionId, min: 0, max: nil)
         if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }
         if let value = self.instructions {
             try validateItems("instructions", value, min: 0, max: 2000)
         }
-        try validateLength("parent_agent_id", self.parentAgentId, min: 0, max: nil)
+            try validateLength("parent_agent_id", self.parentAgentId, min: 0, max: nil)
+    }
+}
+
+extension SubagentResource {
+    public init(id: String, object: SubagentObjectResource, sessionId: String, name: String?, instructions: [AgentContentResource]?, parentAgentId: String, status: SubagentStatusResource, openedAt: Int, closedAt: Int?) throws {
+        (self.id, self.object) = (id, object)
+        (self.sessionId, self.name) = (sessionId, name)
+        (self.instructions, self.parentAgentId) = (instructions, parentAgentId)
+        (self.status, self.openedAt) = (status, openedAt)
+        self.closedAt = closedAt
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("session_id", self.sessionId, min: 0, max: nil)
+        if let value = self.name {
+            try validateLength("name", value, min: 0, max: nil)
+        }
+        if let value = self.instructions {
+            try validateItems("instructions", value, min: 0, max: 2000)
+        }
+            try validateLength("parent_agent_id", self.parentAgentId, min: 0, max: nil)
     }
 }
 
@@ -100,16 +88,13 @@ public extension SubagentResource {
 public struct SubagentStatusResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let active = SubagentStatusResource(rawValue: "active")
     public static let closed = SubagentStatusResource(rawValue: "closed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -122,15 +107,12 @@ public struct SubagentStatusResource: RawRepresentable, Hashable, Codable, Senda
 public struct SubagentObjectResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let agentSessionSubagent = SubagentObjectResource(rawValue: "agent.session.subagent")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

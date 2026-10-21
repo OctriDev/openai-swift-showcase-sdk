@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// ResponsesBetaWeb domain models
+// ResponsesBetaWeb domain models
 public indirect enum BetaWebSearchToolCallAction {
     case betaWebSearchActionSearch(BetaWebSearchActionSearch)
     case betaWebSearchActionOpenPage(BetaWebSearchActionOpenPage)
@@ -13,6 +13,7 @@ public indirect enum BetaWebSearchToolCallAction {
 }
 
 extension BetaWebSearchToolCallAction: Codable {
+
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,16 +21,12 @@ extension BetaWebSearchToolCallAction: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-            self = value; return
-        }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
+        if try encodeGroup1(to: encoder) { return }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -40,10 +37,10 @@ extension BetaWebSearchToolCallAction: Codable {
 extension BetaWebSearchToolCallAction {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "search": try .betaWebSearchActionSearch(BetaWebSearchActionSearch(from: decoder))
-        case "open_page": try .betaWebSearchActionOpenPage(BetaWebSearchActionOpenPage(from: decoder))
-        case "find_in_page": try .betaWebSearchActionFind(BetaWebSearchActionFind(from: decoder))
-        default: nil
+        case "search": return .betaWebSearchActionSearch(try BetaWebSearchActionSearch(from: decoder))
+        case "open_page": return .betaWebSearchActionOpenPage(try BetaWebSearchActionOpenPage(from: decoder))
+        case "find_in_page": return .betaWebSearchActionFind(try BetaWebSearchActionFind(from: decoder))
+        default: return nil
         }
     }
 }
@@ -85,42 +82,30 @@ public struct BetaWebSearchTool: Codable {
         case searchContextSize = "search_context_size"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaWebSearchTool {
-    init(from decoder: Decoder) throws {
+extension BetaWebSearchTool {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        externalWebAccess = try container.sdkDecodeIfPresent(.externalWebAccess)
-        filters = try container.sdkDecodeIfPresent(.filters)
-        userLocation = try container.sdkDecodeIfPresent(.userLocation)
-        searchContextSize = try container.sdkDecodeIfPresent(.searchContextSize)
-        try sdkValidateRawEnum("type", type, BetaWebSearchToolType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.externalWebAccess = try container.sdkDecodeIfPresent(.externalWebAccess)
+        self.filters = try container.sdkDecodeIfPresent(.filters)
+        self.userLocation = try container.sdkDecodeIfPresent(.userLocation)
+        self.searchContextSize = try container.sdkDecodeIfPresent(.searchContextSize)
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchToolType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaWebSearchTool {
-    init(
-        type: BetaWebSearchToolType,
-        externalWebAccess: Bool? = nil,
-        filters: BetaWebSearchToolFilters? = nil,
-        userLocation: BetaWebSearchApproximateLocation? = nil,
-        searchContextSize: BetaWebSearchToolSearchContextSize? = nil
-    ) throws {
+extension BetaWebSearchTool {
+    public init(type: BetaWebSearchToolType, externalWebAccess: Bool? = nil, filters: BetaWebSearchToolFilters? = nil, userLocation: BetaWebSearchApproximateLocation? = nil, searchContextSize: BetaWebSearchToolSearchContextSize? = nil) throws {
         (self.type, self.externalWebAccess) = (type, externalWebAccess)
         (self.filters, self.userLocation) = (filters, userLocation)
         self.searchContextSize = searchContextSize
-        try sdkValidateRawEnum("type", self.type, BetaWebSearchToolType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchToolType.allCases.map(\.rawValue))
     }
 }
 
@@ -139,40 +124,30 @@ public struct BetaWebSearchActionFind: Codable {
         case url
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaWebSearchActionFind {
-    init(from decoder: Decoder) throws {
+extension BetaWebSearchActionFind {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.pattern) else {
-            throw SdkValidationError(
-                field: "pattern",
-                code: "required",
-                message: "Validation failed for 'pattern': value is required"
-            )
+            throw SdkValidationError(field: "pattern", code: "required", message: "Validation failed for 'pattern': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        pattern = try container.sdkDecodeRequired(.pattern)
-        url = try container.sdkDecodeIfPresent(.url)
-        try sdkValidateRawEnum("type", type, BetaWebSearchActionFindType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.pattern = try container.sdkDecodeRequired(.pattern)
+        self.url = try container.sdkDecodeIfPresent(.url)
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchActionFindType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaWebSearchActionFind {
-    init(type: BetaWebSearchActionFindType, pattern: String, url: String? = nil) throws {
+extension BetaWebSearchActionFind {
+    public init(type: BetaWebSearchActionFindType, pattern: String, url: String? = nil) throws {
         (self.type, self.pattern) = (type, pattern)
         self.url = url
-        try sdkValidateRawEnum("type", self.type, BetaWebSearchActionFindType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchActionFindType.allCases.map(\.rawValue))
     }
 }
 
@@ -187,19 +162,19 @@ public struct BetaWebSearchToolFilters: Codable {
     }
 
     init() {
-        allowedDomains = nil
+        self.allowedDomains = nil
     }
 }
 
-public extension BetaWebSearchToolFilters {
-    init(from decoder: Decoder) throws {
+extension BetaWebSearchToolFilters {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        allowedDomains = try container.sdkDecodeIfPresent(.allowedDomains)
+        self.allowedDomains = try container.sdkDecodeIfPresent(.allowedDomains)
     }
 }
 
-public extension BetaWebSearchToolFilters {
-    init(allowedDomains: [String]? = nil) {
+extension BetaWebSearchToolFilters {
+    public init(allowedDomains: [String]? = nil) {
         self.init()
         self.allowedDomains = allowedDomains
     }
@@ -217,31 +192,25 @@ public struct BetaWebSearchActionOpenPage: Codable {
         case url
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaWebSearchActionOpenPage {
-    init(from decoder: Decoder) throws {
+extension BetaWebSearchActionOpenPage {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        url = try container.sdkDecodeIfPresent(.url)
-        try sdkValidateRawEnum("type", type, BetaWebSearchActionOpenPageType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.url = try container.sdkDecodeIfPresent(.url)
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchActionOpenPageType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaWebSearchActionOpenPage {
-    init(type: BetaWebSearchActionOpenPageType, url: String? = nil) throws {
+extension BetaWebSearchActionOpenPage {
+    public init(type: BetaWebSearchActionOpenPageType, url: String? = nil) throws {
         (self.type, self.url) = (type, url)
-        try sdkValidateRawEnum("type", self.type, BetaWebSearchActionOpenPageType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchActionOpenPageType.allCases.map(\.rawValue))
     }
 }
 
@@ -267,56 +236,36 @@ public struct BetaWebSearchToolCall: Codable {
         case action
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaWebSearchToolCall {
-    init(from decoder: Decoder) throws {
+extension BetaWebSearchToolCall {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        type = try container.sdkDecodeRequired(.type)
-        status = try container.sdkDecodeRequired(.status)
-        agent = try container.sdkDecodeIfPresent(.agent)
-        action = try container.sdkDecodeIfPresent(.action)
-        try sdkValidateRawEnum("type", type, BetaWebSearchToolCallType.allCases.map(\.rawValue))
+        self.id = try container.sdkDecodeRequired(.id)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.status = try container.sdkDecodeRequired(.status)
+        self.agent = try container.sdkDecodeIfPresent(.agent)
+        self.action = try container.sdkDecodeIfPresent(.action)
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchToolCallType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaWebSearchToolCall {
-    init(
-        id: String,
-        type: BetaWebSearchToolCallType,
-        status: BetaWebSearchCallStatus,
-        agent: BetaAgentTag? = nil,
-        action: BetaWebSearchToolCallAction? = nil
-    ) throws {
+extension BetaWebSearchToolCall {
+    public init(id: String, type: BetaWebSearchToolCallType, status: BetaWebSearchCallStatus, agent: BetaAgentTag? = nil, action: BetaWebSearchToolCallAction? = nil) throws {
         (self.id, self.type) = (id, type)
         (self.status, self.agent) = (status, agent)
         self.action = action
-        try sdkValidateRawEnum("type", self.type, BetaWebSearchToolCallType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -339,39 +288,28 @@ public struct BetaWebSearchPreviewTool: Codable {
         case searchContentTypes = "search_content_types"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaWebSearchPreviewTool {
-    init(from decoder: Decoder) throws {
+extension BetaWebSearchPreviewTool {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        userLocation = try container.sdkDecodeIfPresent(.userLocation)
-        searchContextSize = try container.sdkDecodeIfPresent(.searchContextSize)
-        searchContentTypes = try container.sdkDecodeIfPresent(.searchContentTypes)
-        try sdkValidateRawEnum("type", type, BetaWebSearchPreviewToolType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.userLocation = try container.sdkDecodeIfPresent(.userLocation)
+        self.searchContextSize = try container.sdkDecodeIfPresent(.searchContextSize)
+        self.searchContentTypes = try container.sdkDecodeIfPresent(.searchContentTypes)
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchPreviewToolType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaWebSearchPreviewTool {
-    init(
-        type: BetaWebSearchPreviewToolType,
-        userLocation: BetaApproximateLocation? = nil,
-        searchContextSize: BetaSearchContextSize? = nil,
-        searchContentTypes: [BetaSearchContentType]? = nil
-    ) throws {
+extension BetaWebSearchPreviewTool {
+    public init(type: BetaWebSearchPreviewToolType, userLocation: BetaApproximateLocation? = nil, searchContextSize: BetaSearchContextSize? = nil, searchContentTypes: [BetaSearchContentType]? = nil) throws {
         (self.type, self.userLocation) = (type, userLocation)
         (self.searchContextSize, self.searchContentTypes) = (searchContextSize, searchContentTypes)
-        try sdkValidateRawEnum("type", self.type, BetaWebSearchPreviewToolType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchPreviewToolType.allCases.map(\.rawValue))
     }
 }
 
@@ -397,29 +335,23 @@ public struct BetaWebSearchApproximateLocation: Codable {
     }
 
     init() {
-        (type, country, region, city, timezone) = (nil, nil, nil, nil, nil)
+        (self.type, self.country, self.region, self.city, self.timezone) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension BetaWebSearchApproximateLocation {
-    init(from decoder: Decoder) throws {
+extension BetaWebSearchApproximateLocation {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        country = try container.sdkDecodeIfPresent(.country)
-        region = try container.sdkDecodeIfPresent(.region)
-        city = try container.sdkDecodeIfPresent(.city)
-        timezone = try container.sdkDecodeIfPresent(.timezone)
+        self.type = try container.sdkDecodeIfPresent(.type)
+        self.country = try container.sdkDecodeIfPresent(.country)
+        self.region = try container.sdkDecodeIfPresent(.region)
+        self.city = try container.sdkDecodeIfPresent(.city)
+        self.timezone = try container.sdkDecodeIfPresent(.timezone)
     }
 }
 
-public extension BetaWebSearchApproximateLocation {
-    init(
-        type: BetaWebSearchApproximateLocationType? = nil,
-        country: String? = nil,
-        region: String? = nil,
-        city: String? = nil,
-        timezone: String? = nil
-    ) {
+extension BetaWebSearchApproximateLocation {
+    public init(type: BetaWebSearchApproximateLocationType? = nil, country: String? = nil, region: String? = nil, city: String? = nil, timezone: String? = nil) {
         self.init()
         (self.type, self.country) = (type, country)
         (self.region, self.city) = (region, city)
@@ -445,39 +377,28 @@ public struct BetaWebSearchActionSearch: Codable {
         case sources
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaWebSearchActionSearch {
-    init(from decoder: Decoder) throws {
+extension BetaWebSearchActionSearch {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        query = try container.sdkDecodeIfPresent(.query)
-        queries = try container.sdkDecodeIfPresent(.queries)
-        sources = try container.sdkDecodeIfPresent(.sources)
-        try sdkValidateRawEnum("type", type, BetaWebSearchActionSearchType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.query = try container.sdkDecodeIfPresent(.query)
+        self.queries = try container.sdkDecodeIfPresent(.queries)
+        self.sources = try container.sdkDecodeIfPresent(.sources)
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchActionSearchType.allCases.map(\.rawValue))
     }
 }
 
-public extension BetaWebSearchActionSearch {
-    init(
-        type: BetaWebSearchActionSearchType,
-        query: String? = nil,
-        queries: [String]? = nil,
-        sources: [BetaWebSearchActionSearchSourcesItem]? = nil
-    ) throws {
+extension BetaWebSearchActionSearch {
+    public init(type: BetaWebSearchActionSearchType, query: String? = nil, queries: [String]? = nil, sources: [BetaWebSearchActionSearchSourcesItem]? = nil) throws {
         (self.type, self.query) = (type, query)
         (self.queries, self.sources) = (queries, sources)
-        try sdkValidateRawEnum("type", self.type, BetaWebSearchActionSearchType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, BetaWebSearchActionSearchType.allCases.map(\.rawValue))
     }
 }
 
@@ -493,38 +414,28 @@ public struct BetaWebSearchActionSearchSourcesItem: Codable {
         case url
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension BetaWebSearchActionSearchSourcesItem {
-    init(from decoder: Decoder) throws {
+extension BetaWebSearchActionSearchSourcesItem {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.url) else {
-            throw SdkValidationError(
-                field: "url",
-                code: "required",
-                message: "Validation failed for 'url': value is required"
-            )
+            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        url = try container.sdkDecodeRequired(.url)
-        try sdkValidateUri("url", url)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.url = try container.sdkDecodeRequired(.url)
+            try sdkValidateUri("url", self.url)
     }
 }
 
-public extension BetaWebSearchActionSearchSourcesItem {
-    init(type: BetaWebSearchActionSearchSourcesItemType, url: String) throws {
+extension BetaWebSearchActionSearchSourcesItem {
+    public init(type: BetaWebSearchActionSearchSourcesItemType, url: String) throws {
         (self.type, self.url) = (type, url)
-        try sdkValidateUri("url", self.url)
+            try sdkValidateUri("url", self.url)
     }
 }
 
@@ -550,15 +461,12 @@ public enum BetaWebSearchActionOpenPageType: String, CaseIterable, Codable {
 public struct BetaWebSearchApproximateLocationType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let approximate = BetaWebSearchApproximateLocationType(rawValue: "approximate")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -571,10 +479,7 @@ public struct BetaWebSearchApproximateLocationType: RawRepresentable, Hashable, 
 public struct BetaWebSearchCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let inProgress = BetaWebSearchCallStatus(rawValue: "in_progress")
     public static let searching = BetaWebSearchCallStatus(rawValue: "searching")
     public static let completed = BetaWebSearchCallStatus(rawValue: "completed")
@@ -583,7 +488,7 @@ public struct BetaWebSearchCallStatus: RawRepresentable, Hashable, Codable, Send
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -597,17 +502,14 @@ public struct BetaWebSearchCallStatus: RawRepresentable, Hashable, Codable, Send
 public struct BetaWebSearchToolSearchContextSize: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let low = BetaWebSearchToolSearchContextSize(rawValue: "low")
     public static let medium = BetaWebSearchToolSearchContextSize(rawValue: "medium")
     public static let high = BetaWebSearchToolSearchContextSize(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -617,19 +519,15 @@ public struct BetaWebSearchToolSearchContextSize: RawRepresentable, Hashable, Co
 }
 
 /// The type of source. Always `url`.
-public struct BetaWebSearchActionSearchSourcesItemType: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct BetaWebSearchActionSearchSourcesItemType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let url = BetaWebSearchActionSearchSourcesItemType(rawValue: "url")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// LiveLiveCreate domain models
+// LiveLiveCreate domain models
 /// The created Live session identifier and WebRTC answer. Apply transport.sdp as the peer's remote answer and wait
 /// for session.started on the data channel before sending commands.
 public struct LiveCreateResponse: Codable {
@@ -17,35 +17,25 @@ public struct LiveCreateResponse: Codable {
         case transport
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveCreateResponse {
-    init(from decoder: Decoder) throws {
+extension LiveCreateResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.session) else {
-            throw SdkValidationError(
-                field: "session",
-                code: "required",
-                message: "Validation failed for 'session': value is required"
-            )
+            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
         }
         guard container.contains(.transport) else {
-            throw SdkValidationError(
-                field: "transport",
-                code: "required",
-                message: "Validation failed for 'transport': value is required"
-            )
+            throw SdkValidationError(field: "transport", code: "required", message: "Validation failed for 'transport': value is required")
         }
-        session = try container.sdkDecodeRequired(.session)
-        transport = try container.sdkDecodeRequired(.transport)
+        self.session = try container.sdkDecodeRequired(.session)
+        self.transport = try container.sdkDecodeRequired(.transport)
     }
 }
 
-public extension LiveCreateResponse {
-    init(session: LiveCreateResponseSession, transport: LiveWebRTCTransport) {
+extension LiveCreateResponse {
+    public init(session: LiveCreateResponseSession, transport: LiveWebRTCTransport) {
         (self.session, self.transport) = (session, transport)
     }
 }
@@ -59,27 +49,21 @@ public struct LiveCreateResponseSession: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveCreateResponseSession {
-    init(from decoder: Decoder) throws {
+extension LiveCreateResponseSession {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
+        self.id = try container.sdkDecodeRequired(.id)
     }
 }
 
-public extension LiveCreateResponseSession {
-    init(id: String) {
+extension LiveCreateResponseSession {
+    public init(id: String) {
         self.id = id
     }
 }
@@ -98,35 +82,25 @@ public struct LiveCreateRequest: Codable {
         case transport
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension LiveCreateRequest {
-    init(from decoder: Decoder) throws {
+extension LiveCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.session) else {
-            throw SdkValidationError(
-                field: "session",
-                code: "required",
-                message: "Validation failed for 'session': value is required"
-            )
+            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
         }
         guard container.contains(.transport) else {
-            throw SdkValidationError(
-                field: "transport",
-                code: "required",
-                message: "Validation failed for 'transport': value is required"
-            )
+            throw SdkValidationError(field: "transport", code: "required", message: "Validation failed for 'transport': value is required")
         }
-        session = try container.sdkDecodeRequired(.session)
-        transport = try container.sdkDecodeRequired(.transport)
+        self.session = try container.sdkDecodeRequired(.session)
+        self.transport = try container.sdkDecodeRequired(.transport)
     }
 }
 
-public extension LiveCreateRequest {
-    init(session: LiveMediaSessionCreateParams, transport: LiveWebRTCTransport) {
+extension LiveCreateRequest {
+    public init(session: LiveMediaSessionCreateParams, transport: LiveWebRTCTransport) {
         (self.session, self.transport) = (session, transport)
     }
 }

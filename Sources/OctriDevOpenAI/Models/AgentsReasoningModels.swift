@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// AgentsReasoning domain models
+// AgentsReasoning domain models
 /// A reasoning item produced by the agent.
 public struct ReasoningItemResource: Codable {
     /// The item type. Always `reasoning`.
@@ -25,76 +25,48 @@ public struct ReasoningItemResource: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ReasoningItemResource {
-    init(from decoder: Decoder) throws {
+extension ReasoningItemResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.turnId) else {
-            throw SdkValidationError(
-                field: "turn_id",
-                code: "required",
-                message: "Validation failed for 'turn_id': value is required"
-            )
+            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
         }
         guard container.contains(.summary) else {
-            throw SdkValidationError(
-                field: "summary",
-                code: "required",
-                message: "Validation failed for 'summary': value is required"
-            )
+            throw SdkValidationError(field: "summary", code: "required", message: "Validation failed for 'summary': value is required")
         }
         guard container.contains(.status) else {
-            throw SdkValidationError(
-                field: "status",
-                code: "required",
-                message: "Validation failed for 'status': value is required"
-            )
+            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        id = try container.sdkDecodeRequired(.id)
-        turnId = try container.sdkDecodeRequired(.turnId)
-        summary = try container.sdkDecodeRequired(.summary)
-        status = try container.sdkDecodeNullable(.status)
-        try sdkValidateRawEnum("type", type, ReasoningItemResourceType.allCases.map(\.rawValue))
-        try validateLength("id", id, min: 0, max: nil)
-        try validateLength("turn_id", turnId, min: 0, max: nil)
-        try validateItems("summary", summary, min: 0, max: 2000)
+        self.type = try container.sdkDecodeRequired(.type)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.turnId = try container.sdkDecodeRequired(.turnId)
+        self.summary = try container.sdkDecodeRequired(.summary)
+        self.status = try container.sdkDecodeNullable(.status)
+            try sdkValidateRawEnum("type", self.type, ReasoningItemResourceType.allCases.map(\.rawValue))
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try validateItems("summary", self.summary, min: 0, max: 2000)
     }
 }
 
-public extension ReasoningItemResource {
-    init(
-        type: ReasoningItemResourceType,
-        id: String,
-        turnId: String,
-        summary: [SummaryTextResource],
-        status: OutputItemStatusResource?
-    ) throws {
+extension ReasoningItemResource {
+    public init(type: ReasoningItemResourceType, id: String, turnId: String, summary: [SummaryTextResource], status: OutputItemStatusResource?) throws {
         (self.type, self.id) = (type, id)
         (self.turnId, self.summary) = (turnId, summary)
         self.status = status
-        try sdkValidateRawEnum("type", self.type, ReasoningItemResourceType.allCases.map(\.rawValue))
-        try validateLength("id", self.id, min: 0, max: nil)
-        try validateLength("turn_id", self.turnId, min: 0, max: nil)
-        try validateItems("summary", self.summary, min: 0, max: 2000)
+            try sdkValidateRawEnum("type", self.type, ReasoningItemResourceType.allCases.map(\.rawValue))
+            try validateLength("id", self.id, min: 0, max: nil)
+            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+            try validateItems("summary", self.summary, min: 0, max: 2000)
     }
 }
 
@@ -110,35 +82,25 @@ public struct ReasoningResource: Codable {
         case summary
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ReasoningResource {
-    init(from decoder: Decoder) throws {
+extension ReasoningResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.effort) else {
-            throw SdkValidationError(
-                field: "effort",
-                code: "required",
-                message: "Validation failed for 'effort': value is required"
-            )
+            throw SdkValidationError(field: "effort", code: "required", message: "Validation failed for 'effort': value is required")
         }
         guard container.contains(.summary) else {
-            throw SdkValidationError(
-                field: "summary",
-                code: "required",
-                message: "Validation failed for 'summary': value is required"
-            )
+            throw SdkValidationError(field: "summary", code: "required", message: "Validation failed for 'summary': value is required")
         }
-        effort = try container.sdkDecodeNullable(.effort)
-        summary = try container.sdkDecodeNullable(.summary)
+        self.effort = try container.sdkDecodeNullable(.effort)
+        self.summary = try container.sdkDecodeNullable(.summary)
     }
 }
 
-public extension ReasoningResource {
-    init(effort: ReasoningEffortResource?, summary: ReasoningSummaryResource?) {
+extension ReasoningResource {
+    public init(effort: ReasoningEffortResource?, summary: ReasoningSummaryResource?) {
         (self.effort, self.summary) = (effort, summary)
     }
 }
@@ -156,20 +118,20 @@ public struct ReasoningParam: Codable {
     }
 
     init() {
-        (effort, summary) = (nil, nil)
+        (self.effort, self.summary) = (nil, nil)
     }
 }
 
-public extension ReasoningParam {
-    init(from decoder: Decoder) throws {
+extension ReasoningParam {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        effort = try container.sdkDecodeIfPresent(.effort)
-        summary = try container.sdkDecodeIfPresent(.summary)
+        self.effort = try container.sdkDecodeIfPresent(.effort)
+        self.summary = try container.sdkDecodeIfPresent(.summary)
     }
 }
 
-public extension ReasoningParam {
-    init(effort: ReasoningEffortParam? = nil, summary: ReasoningSummaryParam? = nil) {
+extension ReasoningParam {
+    public init(effort: ReasoningEffortParam? = nil, summary: ReasoningSummaryParam? = nil) {
         self.init()
         (self.effort, self.summary) = (effort, summary)
     }
@@ -179,10 +141,7 @@ public extension ReasoningParam {
 public struct ReasoningEffortParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let none = ReasoningEffortParam(rawValue: "none")
     public static let minimal = ReasoningEffortParam(rawValue: "minimal")
     public static let low = ReasoningEffortParam(rawValue: "low")
@@ -193,7 +152,7 @@ public struct ReasoningEffortParam: RawRepresentable, Hashable, Codable, Sendabl
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -206,17 +165,14 @@ public struct ReasoningEffortParam: RawRepresentable, Hashable, Codable, Sendabl
 public struct ReasoningSummaryResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let concise = ReasoningSummaryResource(rawValue: "concise")
     public static let detailed = ReasoningSummaryResource(rawValue: "detailed")
     public static let auto = ReasoningSummaryResource(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -247,17 +203,14 @@ public enum ReasoningItemResourceType: String, CaseIterable, Codable {
 public struct ReasoningSummaryParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let concise = ReasoningSummaryParam(rawValue: "concise")
     public static let detailed = ReasoningSummaryParam(rawValue: "detailed")
     public static let auto = ReasoningSummaryParam(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -270,10 +223,7 @@ public struct ReasoningSummaryParam: RawRepresentable, Hashable, Codable, Sendab
 public struct ReasoningEffortResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let none = ReasoningEffortResource(rawValue: "none")
     public static let minimal = ReasoningEffortResource(rawValue: "minimal")
     public static let low = ReasoningEffortResource(rawValue: "low")
@@ -284,7 +234,7 @@ public struct ReasoningEffortResource: RawRepresentable, Hashable, Codable, Send
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

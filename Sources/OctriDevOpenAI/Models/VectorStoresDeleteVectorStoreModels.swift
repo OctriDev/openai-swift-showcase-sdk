@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// VectorStores domain models
+// VectorStores domain models
 /// Typed representation of the `DeleteVectorStoreResponse` API schema.
 public struct DeleteVectorStoreResponse: Codable {
     /// Required `string` value serialized in the `id` wire field.
@@ -19,43 +19,29 @@ public struct DeleteVectorStoreResponse: Codable {
         case object
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension DeleteVectorStoreResponse {
-    init(from decoder: Decoder) throws {
+extension DeleteVectorStoreResponse {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        deleted = try container.sdkDecodeRequired(.deleted)
-        object = try container.sdkDecodeRequired(.object)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
+        self.object = try container.sdkDecodeRequired(.object)
     }
 }
 
-public extension DeleteVectorStoreResponse {
-    init(id: String, deleted: Bool, object: DeleteVectorStoreResponseObject) {
+extension DeleteVectorStoreResponse {
+    public init(id: String, deleted: Bool, object: DeleteVectorStoreResponseObject) {
         (self.id, self.deleted) = (id, deleted)
         self.object = object
     }
@@ -65,15 +51,12 @@ public extension DeleteVectorStoreResponse {
 public struct DeleteVectorStoreResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
+    public init(rawValue: String) { self.rawValue = rawValue }
     public static let vectorStoreDeleted = DeleteVectorStoreResponseObject(rawValue: "vector_store.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

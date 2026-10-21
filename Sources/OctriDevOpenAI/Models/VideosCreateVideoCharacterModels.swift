@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Videos domain models
+// Videos domain models
 /// Parameters for creating a character from an uploaded video.
 public struct CreateVideoCharacterBody: Codable {
     /// Video file used to create a character.
@@ -16,37 +16,27 @@ public struct CreateVideoCharacterBody: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension CreateVideoCharacterBody {
-    init(from decoder: Decoder) throws {
+extension CreateVideoCharacterBody {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.video) else {
-            throw SdkValidationError(
-                field: "video",
-                code: "required",
-                message: "Validation failed for 'video': value is required"
-            )
+            throw SdkValidationError(field: "video", code: "required", message: "Validation failed for 'video': value is required")
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        video = try container.sdkDecodeRequired(.video)
-        name = try container.sdkDecodeRequired(.name)
-        try validateLength("name", name, min: 1, max: 80)
+        self.video = try container.sdkDecodeRequired(.video)
+        self.name = try container.sdkDecodeRequired(.name)
+            try validateLength("name", self.name, min: 1, max: 80)
     }
 }
 
-public extension CreateVideoCharacterBody {
-    init(video: Data, name: String) throws {
+extension CreateVideoCharacterBody {
+    public init(video: Data, name: String) throws {
         (self.video, self.name) = (video, name)
-        try validateLength("name", self.name, min: 1, max: 80)
+            try validateLength("name", self.name, min: 1, max: 80)
     }
 }

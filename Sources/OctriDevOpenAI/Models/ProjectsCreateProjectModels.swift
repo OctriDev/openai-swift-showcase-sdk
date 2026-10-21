@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// Projects domain models
+// Projects domain models
 /// Typed representation of the `ProjectCreateRequest` API schema.
 public struct ProjectCreateRequest: Codable {
     /// The friendly name of the project, this name appears in reports.
@@ -27,35 +27,24 @@ public struct ProjectCreateRequest: Codable {
         case externalKeyId = "external_key_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ProjectCreateRequest {
-    init(from decoder: Decoder) throws {
+extension ProjectCreateRequest {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.name) else {
-            throw SdkValidationError(
-                field: "name",
-                code: "required",
-                message: "Validation failed for 'name': value is required"
-            )
+            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
         }
-        name = try container.sdkDecodeRequired(.name)
-        geography = try container.sdkDecodeIfPresent(.geography)
-        residency = try container.sdkDecodeIfPresent(.residency)
-        externalKeyId = try container.sdkDecodeIfPresent(.externalKeyId)
+        self.name = try container.sdkDecodeRequired(.name)
+        self.geography = try container.sdkDecodeIfPresent(.geography)
+        self.residency = try container.sdkDecodeIfPresent(.residency)
+        self.externalKeyId = try container.sdkDecodeIfPresent(.externalKeyId)
     }
 }
 
-public extension ProjectCreateRequest {
-    init(
-        name: String,
-        geography: String? = nil,
-        residency: PublicProjectResidency? = nil,
-        externalKeyId: String? = nil
-    ) {
+extension ProjectCreateRequest {
+    public init(name: String, geography: String? = nil, residency: PublicProjectResidency? = nil, externalKeyId: String? = nil) {
         (self.name, self.geography) = (name, geography)
         (self.residency, self.externalKeyId) = (residency, externalKeyId)
     }

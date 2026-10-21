@@ -3,7 +3,7 @@
 
 import Foundation
 
-/// SpendAlerts domain models
+// SpendAlerts domain models
 /// Confirmation payload returned after deleting an organization spend alert.
 public struct OrganizationSpendAlertDeletedResource: Codable {
     /// The deleted spend alert ID.
@@ -19,63 +19,44 @@ public struct OrganizationSpendAlertDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension OrganizationSpendAlertDeletedResource {
-    init(from decoder: Decoder) throws {
+extension OrganizationSpendAlertDeletedResource {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(
-                field: "id",
-                code: "required",
-                message: "Validation failed for 'id': value is required"
-            )
+            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(
-                field: "object",
-                code: "required",
-                message: "Validation failed for 'object': value is required"
-            )
+            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
         }
         guard container.contains(.deleted) else {
-            throw SdkValidationError(
-                field: "deleted",
-                code: "required",
-                message: "Validation failed for 'deleted': value is required"
-            )
+            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
         }
-        id = try container.sdkDecodeRequired(.id)
-        object = try container.sdkDecodeRequired(.object)
-        deleted = try container.sdkDecodeRequired(.deleted)
+        self.id = try container.sdkDecodeRequired(.id)
+        self.object = try container.sdkDecodeRequired(.object)
+        self.deleted = try container.sdkDecodeRequired(.deleted)
     }
 }
 
-public extension OrganizationSpendAlertDeletedResource {
-    init(id: String, object: OrganizationSpendAlertDeletedResourceObject, deleted: Bool) {
+extension OrganizationSpendAlertDeletedResource {
+    public init(id: String, object: OrganizationSpendAlertDeletedResourceObject, deleted: Bool) {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
     }
 }
 
 /// Always `organization.spend_alert.deleted`.
-public struct OrganizationSpendAlertDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable,
-    SdkWireConvertible {
+public struct OrganizationSpendAlertDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) {
-        self.rawValue = rawValue
-    }
-
-    public static let organizationSpendAlertDeleted =
-        OrganizationSpendAlertDeletedResourceObject(rawValue: "organization.spend_alert.deleted")
+    public init(rawValue: String) { self.rawValue = rawValue }
+    public static let organizationSpendAlertDeleted = OrganizationSpendAlertDeletedResourceObject(rawValue: "organization.spend_alert.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        try self.init(rawValue: container.decode(String.self))
+        self.init(rawValue: try container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

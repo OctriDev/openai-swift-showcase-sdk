@@ -3,9 +3,9 @@
 
 import Foundation
 
-/// ResponsesResponses domain models
-public extension ResponsesServerEventVariant22Variant1 {
-    init(streamId: String? = nil) {
+// ResponsesResponses domain models
+extension ResponsesServerEventVariant22Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -21,19 +21,19 @@ public struct ResponsesServerEventVariant42Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant42Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant42Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant42Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant42Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -64,72 +64,43 @@ public struct ResponsesServerEventVariant57: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponsesServerEventVariant57 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant57 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.input) else {
-            throw SdkValidationError(
-                field: "input",
-                code: "required",
-                message: "Validation failed for 'input': value is required"
-            )
+            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        input = try container.sdkDecodeRequired(.input)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseCustomToolCallInputDoneEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.input = try container.sdkDecodeRequired(.input)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseCustomToolCallInputDoneEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponsesServerEventVariant57 {
-    init(
-        type: ResponseCustomToolCallInputDoneEventType,
-        sequenceNumber: Int,
-        outputIndex: Int,
-        itemId: String,
-        input: String,
-        streamId: String? = nil
-    ) throws {
+extension ResponsesServerEventVariant57 {
+    public init(type: ResponseCustomToolCallInputDoneEventType, sequenceNumber: Int, outputIndex: Int, itemId: String, input: String, streamId: String? = nil) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.outputIndex, self.itemId) = (outputIndex, itemId)
         (self.input, self.streamId) = (input, streamId)
-        try sdkValidateRawEnum("type", self.type, ResponseCustomToolCallInputDoneEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseCustomToolCallInputDoneEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -164,91 +135,52 @@ public struct ResponsesServerEventVariant38: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponsesServerEventVariant38 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant38 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.contentIndex) else {
-            throw SdkValidationError(
-                field: "content_index",
-                code: "required",
-                message: "Validation failed for 'content_index': value is required"
-            )
+            throw SdkValidationError(field: "content_index", code: "required", message: "Validation failed for 'content_index': value is required")
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(
-                field: "text",
-                code: "required",
-                message: "Validation failed for 'text': value is required"
-            )
+            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.logprobs) else {
-            throw SdkValidationError(
-                field: "logprobs",
-                code: "required",
-                message: "Validation failed for 'logprobs': value is required"
-            )
+            throw SdkValidationError(field: "logprobs", code: "required", message: "Validation failed for 'logprobs': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        contentIndex = try container.sdkDecodeRequired(.contentIndex)
-        text = try container.sdkDecodeRequired(.text)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        logprobs = try container.sdkDecodeRequired(.logprobs)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseTextDoneEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.contentIndex = try container.sdkDecodeRequired(.contentIndex)
+        self.text = try container.sdkDecodeRequired(.text)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.logprobs = try container.sdkDecodeRequired(.logprobs)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseTextDoneEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponsesServerEventVariant38 {
-    init(
-        type: ResponseTextDoneEventType,
-        itemId: String,
-        outputIndex: Int,
-        contentIndex: Int,
-        text: String,
-        sequenceNumber: Int,
-        logprobs: [ResponseLogProb],
-        streamId: String? = nil
-    ) throws {
+extension ResponsesServerEventVariant38 {
+    public init(type: ResponseTextDoneEventType, itemId: String, outputIndex: Int, contentIndex: Int, text: String, sequenceNumber: Int, logprobs: [ResponseLogProb], streamId: String? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         (self.outputIndex, self.contentIndex) = (outputIndex, contentIndex)
         (self.text, self.sequenceNumber) = (text, sequenceNumber)
         (self.logprobs, self.streamId) = (logprobs, streamId)
-        try sdkValidateRawEnum("type", self.type, ResponseTextDoneEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseTextDoneEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -262,19 +194,19 @@ public struct ResponsesServerEventVariant25Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant25Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant25Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant25Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant25Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -290,19 +222,19 @@ public struct ResponsesServerEventVariant2Variant1: Codable {
     }
 
     init() {
-        streamId = nil
+        self.streamId = nil
     }
 }
 
-public extension ResponsesServerEventVariant2Variant1 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant2Variant1 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-public extension ResponsesServerEventVariant2Variant1 {
-    init(streamId: String? = nil) {
+extension ResponsesServerEventVariant2Variant1 {
+    public init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -333,72 +265,43 @@ public struct ResponsesServerEventVariant56: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponsesServerEventVariant56 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant56 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.delta) else {
-            throw SdkValidationError(
-                field: "delta",
-                code: "required",
-                message: "Validation failed for 'delta': value is required"
-            )
+            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        delta = try container.sdkDecodeRequired(.delta)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseCustomToolCallInputDeltaEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.delta = try container.sdkDecodeRequired(.delta)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseCustomToolCallInputDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponsesServerEventVariant56 {
-    init(
-        type: ResponseCustomToolCallInputDeltaEventType,
-        sequenceNumber: Int,
-        outputIndex: Int,
-        itemId: String,
-        delta: String,
-        streamId: String? = nil
-    ) throws {
+extension ResponsesServerEventVariant56 {
+    public init(type: ResponseCustomToolCallInputDeltaEventType, sequenceNumber: Int, outputIndex: Int, itemId: String, delta: String, streamId: String? = nil) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.outputIndex, self.itemId) = (outputIndex, itemId)
         (self.delta, self.streamId) = (delta, streamId)
-        try sdkValidateRawEnum("type", self.type, ResponseCustomToolCallInputDeltaEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseCustomToolCallInputDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -424,63 +327,39 @@ public struct ResponsesServerEventVariant42: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponsesServerEventVariant42 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant42 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponsesServerEventVariant42 {
-    init(
-        type: ResponseImageGenCallCompletedEventType,
-        outputIndex: Int,
-        sequenceNumber: Int,
-        itemId: String,
-        streamId: String? = nil
-    ) throws {
+extension ResponsesServerEventVariant42 {
+    public init(type: ResponseImageGenCallCompletedEventType, outputIndex: Int, sequenceNumber: Int, itemId: String, streamId: String? = nil) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.sequenceNumber, self.itemId) = (sequenceNumber, itemId)
         self.streamId = streamId
-        try sdkValidateRawEnum("type", self.type, ResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseImageGenCallCompletedEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -509,72 +388,43 @@ public struct ResponsesServerEventVariant5: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }
 
-public extension ResponsesServerEventVariant5 {
-    init(from decoder: Decoder) throws {
+extension ResponsesServerEventVariant5 {
+    public init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(
-                field: "type",
-                code: "required",
-                message: "Validation failed for 'type': value is required"
-            )
+            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(
-                field: "output_index",
-                code: "required",
-                message: "Validation failed for 'output_index': value is required"
-            )
+            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(
-                field: "item_id",
-                code: "required",
-                message: "Validation failed for 'item_id': value is required"
-            )
+            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
         }
         guard container.contains(.code) else {
-            throw SdkValidationError(
-                field: "code",
-                code: "required",
-                message: "Validation failed for 'code': value is required"
-            )
+            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
         }
         guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(
-                field: "sequence_number",
-                code: "required",
-                message: "Validation failed for 'sequence_number': value is required"
-            )
+            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
         }
-        type = try container.sdkDecodeRequired(.type)
-        outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        itemId = try container.sdkDecodeRequired(.itemId)
-        code = try container.sdkDecodeRequired(.code)
-        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        streamId = try container.sdkDecodeIfPresent(.streamId)
-        try sdkValidateRawEnum("type", type, ResponseCodeInterpreterCallCodeDoneEventType.allCases.map(\.rawValue))
+        self.type = try container.sdkDecodeRequired(.type)
+        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        self.itemId = try container.sdkDecodeRequired(.itemId)
+        self.code = try container.sdkDecodeRequired(.code)
+        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+            try sdkValidateRawEnum("type", self.type, ResponseCodeInterpreterCallCodeDoneEventType.allCases.map(\.rawValue))
     }
 }
 
-public extension ResponsesServerEventVariant5 {
-    init(
-        type: ResponseCodeInterpreterCallCodeDoneEventType,
-        outputIndex: Int,
-        itemId: String,
-        code: String,
-        sequenceNumber: Int,
-        streamId: String? = nil
-    ) throws {
+extension ResponsesServerEventVariant5 {
+    public init(type: ResponseCodeInterpreterCallCodeDoneEventType, outputIndex: Int, itemId: String, code: String, sequenceNumber: Int, streamId: String? = nil) throws {
         (self.type, self.outputIndex) = (type, outputIndex)
         (self.itemId, self.code) = (itemId, code)
         (self.sequenceNumber, self.streamId) = (sequenceNumber, streamId)
-        try sdkValidateRawEnum("type", self.type, ResponseCodeInterpreterCallCodeDoneEventType.allCases.map(\.rawValue))
+            try sdkValidateRawEnum("type", self.type, ResponseCodeInterpreterCallCodeDoneEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -603,7 +453,5 @@ public struct ResponsesServerEventVariant21: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) {
-        self = value
-    }
+    private init(sdkCopy value: Self) { self = value }
 }

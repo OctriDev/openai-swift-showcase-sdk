@@ -6,37 +6,18 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public extension ProjectsMethods {
-    /// Retrieves the model permission policy for a project. Use `project_id` to identify the project whose model access
-    /// policy you want to inspect. The response includes the policy mode and the model IDs it applies to.
+extension ProjectsMethods {
+    /// Retrieves the model permission policy for a project. Use `project_id` to identify the project whose model access policy you want to inspect. The response includes the policy mode and the model IDs it applies to.
     ///
     /// Returns model permissions for a project.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project.
-    static func retrieveProjectModelPermissions(
-        config: ClientConfig,
-        projectId: String,
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectModelPermissions {
-        try await (sdkRequest(
-            "GET",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/model_permissions"].joined(),
-            config: config,
-            decoder: .json,
-            operationId: "retrieveProjectModelPermissions",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+    public static func retrieveProjectModelPermissions(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectModelPermissions {
+        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/model_permissions"].joined(), config: config, decoder: .json, operationId: "retrieveProjectModelPermissions", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 
-    /// Updates a project's model permission policy. Provide `mode` and `model_ids` to specify whether the listed models
-    /// are allowed or denied. The response returns the updated policy.
+    /// Updates a project's model permission policy. Provide `mode` and `model_ids` to specify whether the listed models are allowed or denied. The response returns the updated policy.
     ///
     /// Updates model permissions for a project.
     ///
@@ -44,29 +25,9 @@ public extension ProjectsMethods {
     /// - projectId: The ID of the project.
     /// - mode: The model permissions mode to apply.
     /// - modelIds: The model IDs included in this permissions policy.
-    static func updateProjectModelPermissions(
-        config: ClientConfig,
-        projectId: String,
-        mode: ProjectModelPermissionsUpdateRequestMode,
-        modelIds: [String],
-        requestOptions: RequestOptions? = nil
-    ) async throws -> ProjectModelPermissions {
+    public static func updateProjectModelPermissions(config: ClientConfig, projectId: String, mode: ProjectModelPermissionsUpdateRequestMode, modelIds: [String], requestOptions: RequestOptions? = nil) async throws -> ProjectModelPermissions {
         let requestBody = UpdateProjectModelPermissionsRequestBody(mode: mode, modelIds: modelIds)
 
-        return try await (sdkRequest(
-            "POST",
-            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/model_permissions"].joined(),
-            config: config,
-            body: requestBody,
-            decoder: .json,
-            operationId: "updateProjectModelPermissions",
-            options: requestOptions,
-            errors: [
-                "400": ErrorResponse.self,
-                "403": PermissionErrorResponse.self,
-                "404": ErrorResponse.self,
-                "429": ErrorResponse.self,
-            ]
-        )).data
+        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/model_permissions"].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateProjectModelPermissions", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
     }
 }
