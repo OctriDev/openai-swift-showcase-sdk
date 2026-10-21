@@ -213,14 +213,14 @@ public class SpendLimitsNamespace {
     /// enforcement state.
     ///
     /// Create or replace a project's hard spend limit.
-    public func updateProject(
+    public func update(
         projectId: String,
         thresholdAmount: Int,
         currency: UpdateProjectSpendLimitBodyCurrency,
         interval: UpdateProjectSpendLimitBodyInterval,
         requestOptions: RequestOptions? = nil
     ) async throws -> ProjectSpendLimitResource {
-        try await SpendLimitsMethods.updateSpendLimitsProject(
+        try await SpendLimitsMethods.updateProjectSpendLimit(
             config: config,
             projectId: projectId,
             thresholdAmount: thresholdAmount,

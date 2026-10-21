@@ -4,149 +4,39 @@
 import Foundation
 
 /// RealtimeRealtimeBetaResponse domain models
-public indirect enum RealtimeBetaResponseCreateParamsToolChoice {
-    case toolChoiceOptions(ToolChoiceOptions)
-    case toolChoiceFunction(ToolChoiceFunction)
-    case toolChoiceMcp(ToolChoiceMCP)
-    /// A member whose `type` names no branch this SDK knows, kept as received.
-    case unknown(tag: String, raw: JSONValue)
-}
-
-extension RealtimeBetaResponseCreateParamsToolChoice: Codable {
-    private enum CodingKeys: String, CodingKey {
-        case discriminator = "type"
-    }
-
-    public init(from decoder: Decoder) throws {
-        if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
-           let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-                self = value; return
-            }
-        }
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) {
-            self = value; return
-        }
-        if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
-           let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
-            return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for RealtimeBetaResponseCreateParamsToolChoice"
-        )
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-        if case let .unknown(_, raw) = self {
-            var container = encoder.singleValueContainer()
-            try container.encode(raw)
-        }
-    }
-}
-
-extension RealtimeBetaResponseCreateParamsToolChoice {
-    static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
-        switch discriminator {
-        case "function": try .toolChoiceFunction(ToolChoiceFunction(from: decoder))
-        case "mcp": try .toolChoiceMcp(ToolChoiceMCP(from: decoder))
-        default: nil
-        }
-    }
-}
-
-extension RealtimeBetaResponseCreateParamsToolChoice {
-    static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(ToolChoiceOptions.self) {
-            return .toolChoiceOptions(value)
-        }
-        if let value = try? container.decode(ToolChoiceFunction.self) {
-            return .toolChoiceFunction(value)
-        }
-        if let value = try? container.decode(ToolChoiceMCP.self) {
-            return .toolChoiceMcp(value)
-        }
-        return nil
-    }
-}
-
-extension RealtimeBetaResponseCreateParamsToolChoice {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .toolChoiceOptions(value): try container.encode(value); return true
-        case let .toolChoiceFunction(value): try container.encode(value); return true
-        case let .toolChoiceMcp(value): try container.encode(value); return true
-        default: return false
-        }
-    }
-}
-
-/// Usage statistics for the Response, this will correspond to billing. A Realtime API session will maintain a
-/// conversation context and append new Items to the Conversation, thus output from previous turns (text and audio
-/// tokens) will become the input for later turns.
-public struct RealtimeBetaResponseUsage: Codable {
-    /// The total number of tokens in the Response including input and output text and audio tokens.
-    public var totalTokens: Int?
-    /// The number of input tokens used in the Response, including text and audio tokens.
-    public var inputTokens: Int?
-    /// The number of output tokens sent in the Response, including text and audio tokens.
-    public var outputTokens: Int?
-    /// Details about the input tokens used in the Response.
-    public var inputTokenDetails: RealtimeBetaResponseUsageInputTokenDetails?
-    /// Details about the output tokens used in the Response.
-    public var outputTokenDetails: RealtimeBetaResponseUsageOutputTokenDetails?
-
-    enum CodingKeys: String, CodingKey {
-        case totalTokens = "total_tokens"
-        case inputTokens = "input_tokens"
-        case outputTokens = "output_tokens"
-        case inputTokenDetails = "input_token_details"
-        case outputTokenDetails = "output_token_details"
-    }
-
-    init() {
-        (totalTokens, inputTokens, outputTokens, inputTokenDetails, outputTokenDetails) = (nil, nil, nil, nil, nil)
-    }
-}
-
-public extension RealtimeBetaResponseUsage {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        totalTokens = try container.sdkDecodeIfPresent(.totalTokens)
-        inputTokens = try container.sdkDecodeIfPresent(.inputTokens)
-        outputTokens = try container.sdkDecodeIfPresent(.outputTokens)
-        inputTokenDetails = try container.sdkDecodeIfPresent(.inputTokenDetails)
-        outputTokenDetails = try container.sdkDecodeIfPresent(.outputTokenDetails)
-    }
-}
-
-public extension RealtimeBetaResponseUsage {
+public extension RealtimeBetaResponse {
     init(
-        totalTokens: Int? = nil,
-        inputTokens: Int? = nil,
-        outputTokens: Int? = nil,
-        inputTokenDetails: RealtimeBetaResponseUsageInputTokenDetails? = nil,
-        outputTokenDetails: RealtimeBetaResponseUsageOutputTokenDetails? = nil
+        id: String? = nil,
+        object: RealtimeBetaResponseObject? = nil,
+        status: RealtimeBetaResponseStatus? = nil,
+        statusDetails: RealtimeBetaResponseStatusDetails? = nil,
+        output: [RealtimeConversationItem]? = nil,
+        metadata: Metadata? = nil,
+        usage: RealtimeBetaResponseUsage? = nil,
+        conversationId: String? = nil,
+        voice: VoiceIdsShared? = nil,
+        modalities: [RealtimeBetaResponseModalitiesItem]? = nil,
+        outputAudioFormat: RealtimeBetaResponseOutputAudioFormat? = nil,
+        temperature: Double? = nil,
+        maxOutputTokens: RealtimeBetaResponseMaxOutputTokens? = nil
     ) {
         self.init()
-        (self.totalTokens, self.inputTokens) = (totalTokens, inputTokens)
-        (self.outputTokens, self.inputTokenDetails) = (outputTokens, inputTokenDetails)
-        self.outputTokenDetails = outputTokenDetails
+        (self.id, self.object) = (id, object)
+        (self.status, self.statusDetails) = (status, statusDetails)
+        (self.output, self.metadata) = (output, metadata)
+        (self.usage, self.conversationId) = (usage, conversationId)
+        (self.voice, self.modalities) = (voice, modalities)
+        (self.outputAudioFormat, self.temperature) = (outputAudioFormat, temperature)
+        self.maxOutputTokens = maxOutputTokens
     }
 }
 
-public indirect enum RealtimeBetaResponseCreateParamsMaxOutputTokens {
-    case intValue(Int)
+public indirect enum RealtimeBetaResponseCreateParamsConversation {
     case stringValue(String)
+    case stringValue1(String)
 }
 
-extension RealtimeBetaResponseCreateParamsMaxOutputTokens: Codable {
+extension RealtimeBetaResponseCreateParamsConversation: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let value = Self.decodeGroup1(from: container) {
@@ -154,7 +44,7 @@ extension RealtimeBetaResponseCreateParamsMaxOutputTokens: Codable {
         }
         throw DecodingError.dataCorruptedError(
             in: container,
-            debugDescription: "No variant matched for RealtimeBetaResponseCreateParamsMaxOutputTokens"
+            debugDescription: "No variant matched for RealtimeBetaResponseCreateParamsConversation"
         )
     }
 
@@ -165,434 +55,401 @@ extension RealtimeBetaResponseCreateParamsMaxOutputTokens: Codable {
     }
 }
 
-extension RealtimeBetaResponseCreateParamsMaxOutputTokens {
+extension RealtimeBetaResponseCreateParamsConversation {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
         if let value = try? container.decode(String.self) {
             return .stringValue(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue1(value)
         }
         return nil
     }
 }
 
-extension RealtimeBetaResponseCreateParamsMaxOutputTokens {
+extension RealtimeBetaResponseCreateParamsConversation {
     func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
         switch self {
-        case let .intValue(value): try container.encode(value); return true
         case let .stringValue(value): try container.encode(value); return true
+        case let .stringValue1(value): try container.encode(value); return true
         }
     }
 }
 
-extension RealtimeBetaResponseCreateParamsMaxOutputTokens: SdkNumericValueConvertible {
-    var sdkNumericValue: Double? {
-        switch self {
-        case let .intValue(value): Double(value)
-        default: nil
-        }
-    }
-}
-
-/// Required object value serialized in the `tools[]` wire field.
-public struct RealtimeBetaResponseCreateParamsToolsItem: Codable {
-    /// The type of the tool, i.e. `function`.
-    public var type: RealtimeBetaResponseCreateParamsToolsItemType?
-    /// The name of the function.
-    public var name: String?
-    /// The description of the function, including guidance on when and how to call it, and guidance about what to
-    /// tell the user when calling (if anything).
-    public var description: String?
-    /// Parameters of the function in JSON Schema.
-    public var parameters: [String: JSONValue]?
+/// Additional details about the status.
+public struct RealtimeBetaResponseStatusDetails: Codable {
+    /// The type of error that caused the response to fail, corresponding with the `status` field (`completed`,
+    /// `cancelled`, `incomplete`, `failed`).
+    public var type: RealtimeBetaResponseStatusDetailsType?
+    /// The reason the Response did not complete. For a `cancelled` Response, one of `turn_detected` (the server VAD
+    /// detected a new start of speech) or `client_cancelled` (the client sent a cancel event). For an `incomplete`
+    /// Response, one of `max_output_tokens` or `content_filter` (the server-side safety filter activated and cut
+    /// off the response).
+    public var reason: RealtimeBetaResponseStatusDetailsReason?
+    /// A description of the error that caused the response to fail, populated when the `status` is `failed`.
+    public var error: RealtimeBetaResponseStatusDetailsError?
 
     enum CodingKeys: String, CodingKey {
         case type
-        case name
-        case description
-        case parameters
+        case reason
+        case error
     }
 
     init() {
-        (type, name, description, parameters) = (nil, nil, nil, nil)
+        (type, reason, error) = (nil, nil, nil)
     }
 }
 
-public extension RealtimeBetaResponseCreateParamsToolsItem {
+public extension RealtimeBetaResponseStatusDetails {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         type = try container.sdkDecodeIfPresent(.type)
-        name = try container.sdkDecodeIfPresent(.name)
-        description = try container.sdkDecodeIfPresent(.description)
-        parameters = try container.sdkDecodeIfPresent(.parameters)
+        reason = try container.sdkDecodeIfPresent(.reason)
+        error = try container.sdkDecodeIfPresent(.error)
     }
 }
 
-public extension RealtimeBetaResponseCreateParamsToolsItem {
+public extension RealtimeBetaResponseStatusDetails {
     init(
-        type: RealtimeBetaResponseCreateParamsToolsItemType? = nil,
-        name: String? = nil,
-        description: String? = nil,
-        parameters: [String: JSONValue]? = nil
+        type: RealtimeBetaResponseStatusDetailsType? = nil,
+        reason: RealtimeBetaResponseStatusDetailsReason? = nil,
+        error: RealtimeBetaResponseStatusDetailsError? = nil
     ) {
         self.init()
-        (self.type, self.name) = (type, name)
-        (self.description, self.parameters) = (description, parameters)
+        (self.type, self.reason) = (type, reason)
+        self.error = error
     }
 }
 
-/// Details about the output tokens used in the Response.
-public struct RealtimeBetaResponseUsageOutputTokenDetails: Codable {
-    /// The number of text tokens used in the Response.
+/// Details about the input tokens used in the Response.
+public struct RealtimeBetaResponseUsageInputTokenDetails: Codable {
+    /// The number of cached tokens used as input for the Response.
+    public var cachedTokens: Int?
+    /// The number of text tokens used as input for the Response.
     public var textTokens: Int?
-    /// The number of audio tokens used in the Response.
-    public var audioTokens: Int?
-
-    enum CodingKeys: String, CodingKey {
-        case textTokens = "text_tokens"
-        case audioTokens = "audio_tokens"
-    }
-
-    init() {
-        (textTokens, audioTokens) = (nil, nil)
-    }
-}
-
-public extension RealtimeBetaResponseUsageOutputTokenDetails {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        textTokens = try container.sdkDecodeIfPresent(.textTokens)
-        audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
-    }
-}
-
-public extension RealtimeBetaResponseUsageOutputTokenDetails {
-    init(textTokens: Int? = nil, audioTokens: Int? = nil) {
-        self.init()
-        (self.textTokens, self.audioTokens) = (textTokens, audioTokens)
-    }
-}
-
-/// A description of the error that caused the response to fail, populated when the `status` is `failed`.
-public struct RealtimeBetaResponseStatusDetailsError: Codable {
-    /// The type of error.
-    public var type: String?
-    /// Error code, if any.
-    public var code: String?
-    /// A human-readable error message.
-    public var message: String?
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case code
-        case message
-    }
-
-    init() {
-        (type, code, message) = (nil, nil, nil)
-    }
-}
-
-public extension RealtimeBetaResponseStatusDetailsError {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        code = try container.sdkDecodeIfPresent(.code)
-        message = try container.sdkDecodeIfPresent(.message)
-    }
-}
-
-public extension RealtimeBetaResponseStatusDetailsError {
-    init(type: String? = nil, code: String? = nil, message: String? = nil) {
-        self.init()
-        (self.type, self.code) = (type, code)
-        self.message = message
-    }
-}
-
-/// Create a new Realtime response with these parameters
-public struct RealtimeBetaResponseCreateParams: Codable {
-    /// The set of modalities the model can respond with. To disable audio, set this to ["text"].
-    public var modalities: [RealtimeBetaResponseCreateParamsModalitiesItem]?
-    /// The default system instructions (i.e. system message) prepended to model calls. This field allows the client
-    /// to guide the model on desired responses. The model can be instructed on response content and format, (e.g.
-    /// "be extremely succinct", "act friendly", "here are examples of good responses") and on audio behavior (e.g.
-    /// "talk quickly", "inject emotion into your voice", "laugh frequently"). The instructions are not guaranteed
-    /// to be followed by the model, but they provide…
-    public var instructions: String?
-    /// The voice the model uses to respond. Supported built-in voices are `alloy`, `ash`, `ballad`, `coral`,
-    /// `echo`, `sage`, `shimmer`, `verse`, `marin`, and `cedar`. You may also provide a custom voice object with an
-    /// `id`, for example `{ "id": "voice_1234" }`. Voice cannot be changed during the session once the model has
-    /// responded with audio at least once. Custom voices must be created from audio samples.
-    public var voice: VoiceIdsOrCustomVoice?
-    /// The format of output audio. Options are `pcm16`, `g711_ulaw`, or `g711_alaw`.
-    public var outputAudioFormat: RealtimeBetaResponseCreateParamsOutputAudioFormat?
-    /// Tools (functions) available to the model.
-    public var tools: [RealtimeBetaResponseCreateParamsToolsItem]?
-    /// How the model chooses tools. Provide one of the string modes or force a specific function/MCP tool.
-    public var toolChoice: RealtimeBetaResponseCreateParamsToolChoice?
-    /// Sampling temperature for the model, limited to [0.6, 1.2]. Defaults to 0.8.
-    public var temperature: Double?
-    /// Maximum number of output tokens for a single assistant response, inclusive of tool calls. Provide an integer
-    /// between 1 and 4096 to limit output tokens, or `inf` for the maximum available tokens for a given model.
-    /// Defaults to `inf`.
-    public var maxOutputTokens: RealtimeBetaResponseCreateParamsMaxOutputTokens?
-    /// Controls which conversation the response is added to. Currently supports `auto` and `none`, with `auto` as
-    /// the default value. The `auto` value means that the contents of the response will be added to the default
-    /// conversation. Set this to `none` to create an out-of-band response which will not add items to default
-    /// conversation.
-    public var conversation: RealtimeBetaResponseCreateParamsConversation?
-    /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional
-    /// information about the object in a structured format, and querying for objects via API or the dashboard. Keys
-    /// are strings with a maximum length of 64 characters. Values are strings with a maximum length of 512
-    /// characters.
-    public var metadata: Metadata?
-    /// Reference to a prompt template and its variables. Learn more.
-    public var prompt: Prompt?
-    /// Input items to include in the prompt for the model. Using this field creates a new context for this Response
-    /// instead of using the default conversation. An empty array `[]` will clear the context for this Response.
-    /// Note that this can include references to items from the default conversation.
-    public var input: [RealtimeConversationItem]?
-
-    enum CodingKeys: String, CodingKey {
-        case modalities
-        case instructions
-        case voice
-        case outputAudioFormat = "output_audio_format"
-        case tools
-        case toolChoice = "tool_choice"
-        case temperature
-        case maxOutputTokens = "max_output_tokens"
-        case conversation
-        case metadata
-        case prompt
-        case input
-    }
-
-    init() {
-        (modalities, instructions, voice, outputAudioFormat, tools) = (nil, nil, nil, nil, nil)
-        (toolChoice, temperature, maxOutputTokens, conversation, metadata) = (nil, nil, nil, nil, nil)
-        (prompt, input) = (nil, nil)
-    }
-}
-
-public extension RealtimeBetaResponseCreateParams {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        modalities = try container.sdkDecodeIfPresent(.modalities)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        voice = try container.sdkDecodeIfPresent(.voice)
-        outputAudioFormat = try container.sdkDecodeIfPresent(.outputAudioFormat)
-        tools = try container.sdkDecodeIfPresent(.tools)
-        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        conversation = try container.sdkDecodeIfPresent(.conversation)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        prompt = try container.sdkDecodeIfPresent(.prompt)
-        input = try container.sdkDecodeIfPresent(.input)
-    }
-}
-
-public extension RealtimeBetaResponseCreateParams {
-    init(
-        modalities: [RealtimeBetaResponseCreateParamsModalitiesItem]? = nil,
-        instructions: String? = nil,
-        voice: VoiceIdsOrCustomVoice? = nil,
-        outputAudioFormat: RealtimeBetaResponseCreateParamsOutputAudioFormat? = nil,
-        tools: [RealtimeBetaResponseCreateParamsToolsItem]? = nil,
-        toolChoice: RealtimeBetaResponseCreateParamsToolChoice? = nil,
-        temperature: Double? = nil,
-        maxOutputTokens: RealtimeBetaResponseCreateParamsMaxOutputTokens? = nil,
-        conversation: RealtimeBetaResponseCreateParamsConversation? = nil,
-        metadata: Metadata? = nil,
-        prompt: Prompt? = nil,
-        input: [RealtimeConversationItem]? = nil
-    ) {
-        self.init()
-        (self.modalities, self.instructions) = (modalities, instructions)
-        (self.voice, self.outputAudioFormat) = (voice, outputAudioFormat)
-        (self.tools, self.toolChoice) = (tools, toolChoice)
-        (self.temperature, self.maxOutputTokens) = (temperature, maxOutputTokens)
-        (self.conversation, self.metadata) = (conversation, metadata)
-        (self.prompt, self.input) = (prompt, input)
-    }
-}
-
-/// Details about the cached tokens used as input for the Response.
-public struct RealtimeBetaResponseUsageInputTokenDetailsCachedTokensDetails: Codable {
-    /// The number of cached text tokens used as input for the Response.
-    public var textTokens: Int?
-    /// The number of cached image tokens used as input for the Response.
+    /// The number of image tokens used as input for the Response.
     public var imageTokens: Int?
-    /// The number of cached audio tokens used as input for the Response.
+    /// The number of audio tokens used as input for the Response.
     public var audioTokens: Int?
+    /// Details about the cached tokens used as input for the Response.
+    public var cachedTokensDetails: RealtimeBetaResponseUsageInputTokenDetailsCachedTokensDetails?
 
     enum CodingKeys: String, CodingKey {
+        case cachedTokens = "cached_tokens"
         case textTokens = "text_tokens"
         case imageTokens = "image_tokens"
         case audioTokens = "audio_tokens"
+        case cachedTokensDetails = "cached_tokens_details"
     }
 
     init() {
-        (textTokens, imageTokens, audioTokens) = (nil, nil, nil)
+        (cachedTokens, textTokens, imageTokens, audioTokens, cachedTokensDetails) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeBetaResponseUsageInputTokenDetailsCachedTokensDetails {
+public extension RealtimeBetaResponseUsageInputTokenDetails {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
+        cachedTokens = try container.sdkDecodeIfPresent(.cachedTokens)
         textTokens = try container.sdkDecodeIfPresent(.textTokens)
         imageTokens = try container.sdkDecodeIfPresent(.imageTokens)
         audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
+        cachedTokensDetails = try container.sdkDecodeIfPresent(.cachedTokensDetails)
     }
 }
 
-public extension RealtimeBetaResponseUsageInputTokenDetailsCachedTokensDetails {
-    init(textTokens: Int? = nil, imageTokens: Int? = nil, audioTokens: Int? = nil) {
+public extension RealtimeBetaResponseUsageInputTokenDetails {
+    init(
+        cachedTokens: Int? = nil,
+        textTokens: Int? = nil,
+        imageTokens: Int? = nil,
+        audioTokens: Int? = nil,
+        cachedTokensDetails: RealtimeBetaResponseUsageInputTokenDetailsCachedTokensDetails? = nil
+    ) {
         self.init()
-        (self.textTokens, self.imageTokens) = (textTokens, imageTokens)
-        self.audioTokens = audioTokens
+        (self.cachedTokens, self.textTokens) = (cachedTokens, textTokens)
+        (self.imageTokens, self.audioTokens) = (imageTokens, audioTokens)
+        self.cachedTokensDetails = cachedTokensDetails
     }
 }
 
-public indirect enum RealtimeBetaResponseMaxOutputTokens {
-    case intValue(Int)
-    case stringValue(String)
-}
+/// Optional enumerated value serialized in the `max_output_tokens` wire field.
+public struct RealtimeBetaResponseCreateParamsMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
 
-extension RealtimeBetaResponseMaxOutputTokens: Codable {
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let inf = RealtimeBetaResponseCreateParamsMaxOutputTokensVariant1(rawValue: "inf")
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for RealtimeBetaResponseMaxOutputTokens"
-        )
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-    }
-}
-
-extension RealtimeBetaResponseMaxOutputTokens {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        return nil
-    }
-}
-
-extension RealtimeBetaResponseMaxOutputTokens {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
-        switch self {
-        case let .intValue(value): try container.encode(value); return true
-        case let .stringValue(value): try container.encode(value); return true
-        }
+        try container.encode(rawValue)
     }
 }
 
-extension RealtimeBetaResponseMaxOutputTokens: SdkNumericValueConvertible {
-    var sdkNumericValue: Double? {
-        switch self {
-        case let .intValue(value): Double(value)
-        default: nil
-        }
+/// The object type, must be `realtime.response`.
+public struct RealtimeBetaResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let realtimeResponse = RealtimeBetaResponseObject(rawValue: "realtime.response")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
     }
 }
 
-/// The response resource.
-public struct RealtimeBetaResponse: Codable {
-    /// The unique ID of the response.
-    public var id: String?
-    /// The object type, must be `realtime.response`.
-    public var object: RealtimeBetaResponseObject?
-    /// The final status of the response (`completed`, `cancelled`, `failed`, or `incomplete`, `in_progress`).
-    public var status: RealtimeBetaResponseStatus?
-    /// Additional details about the status.
-    public var statusDetails: RealtimeBetaResponseStatusDetails?
-    /// The list of output items generated by the response.
-    public var output: [RealtimeConversationItem]?
-    /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional
-    /// information about the object in a structured format, and querying for objects via API or the dashboard. Keys
-    /// are strings with a maximum length of 64 characters. Values are strings with a maximum length of 512
-    /// characters.
-    public var metadata: Metadata?
-    /// Usage statistics for the Response, this will correspond to billing. A Realtime API session will maintain a
-    /// conversation context and append new Items to the Conversation, thus output from previous turns (text and
-    /// audio tokens) will become the input for later turns.
-    public var usage: RealtimeBetaResponseUsage?
-    /// Which conversation the response is added to, determined by the `conversation` field in the `response.create`
-    /// event. If `auto`, the response will be added to the default conversation and the value of `conversation_id`
-    /// will be an id like `conv_1234`. If `none`, the response will not be added to any conversation and the value
-    /// of `conversation_id` will be `null`. If responses are being triggered by server VAD, the response will be
-    /// added to the default conversation, thus the…
-    public var conversationId: String?
-    /// The voice the model used to respond. Current voice options are `alloy`, `ash`, `ballad`, `coral`, `echo`,
-    /// `sage`, `shimmer`, and `verse`.
-    /// - Example: "ash"
-    public var voice: VoiceIdsShared?
-    /// The set of modalities the model used to respond. If there are multiple modalities, the model will pick one,
-    /// for example if `modalities` is `["text", "audio"]`, the model could be responding in either text or audio.
-    public var modalities: [RealtimeBetaResponseModalitiesItem]?
-    /// The format of output audio. Options are `pcm16`, `g711_ulaw`, or `g711_alaw`.
-    public var outputAudioFormat: RealtimeBetaResponseOutputAudioFormat?
-    /// Sampling temperature for the model, limited to [0.6, 1.2]. Defaults to 0.8.
-    public var temperature: Double?
-    /// Maximum number of output tokens for a single assistant response, inclusive of tool calls, that was used in
-    /// this response.
-    public var maxOutputTokens: RealtimeBetaResponseMaxOutputTokens?
+/// The type of the tool, i.e. `function`.
+public struct RealtimeBetaResponseCreateParamsToolsItemType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case status
-        case statusDetails = "status_details"
-        case output
-        case metadata
-        case usage
-        case conversationId = "conversation_id"
-        case voice
-        case modalities
-        case outputAudioFormat = "output_audio_format"
-        case temperature
-        case maxOutputTokens = "max_output_tokens"
+    public init(rawValue: String) {
+        self.rawValue = rawValue
     }
 
-    init() {
-        (id, object, status, statusDetails, output) = (nil, nil, nil, nil, nil)
-        (metadata, usage, conversationId, voice, modalities) = (nil, nil, nil, nil, nil)
-        (outputAudioFormat, temperature, maxOutputTokens) = (nil, nil, nil)
+    public static let function = RealtimeBetaResponseCreateParamsToolsItemType(rawValue: "function")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
     }
 }
 
-public extension RealtimeBetaResponse {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.sdkDecodeIfPresent(.id)
-        object = try container.sdkDecodeIfPresent(.object)
-        status = try container.sdkDecodeIfPresent(.status)
-        statusDetails = try container.sdkDecodeIfPresent(.statusDetails)
-        output = try container.sdkDecodeIfPresent(.output)
-        metadata = try container.sdkDecodeIfPresent(.metadata)
-        usage = try container.sdkDecodeIfPresent(.usage)
-        conversationId = try container.sdkDecodeIfPresent(.conversationId)
-        voice = try container.sdkDecodeIfPresent(.voice)
-        modalities = try container.sdkDecodeIfPresent(.modalities)
-        outputAudioFormat = try container.sdkDecodeIfPresent(.outputAudioFormat)
-        temperature = try container.sdkDecodeIfPresent(.temperature)
-        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+/// The type of error that caused the response to fail, corresponding with the `status` field (`completed`,
+/// `cancelled`, `incomplete`, `failed`).
+public struct RealtimeBetaResponseStatusDetailsType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let completed = RealtimeBetaResponseStatusDetailsType(rawValue: "completed")
+    public static let cancelled = RealtimeBetaResponseStatusDetailsType(rawValue: "cancelled")
+    public static let failed = RealtimeBetaResponseStatusDetailsType(rawValue: "failed")
+    public static let incomplete = RealtimeBetaResponseStatusDetailsType(rawValue: "incomplete")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Required enumerated value serialized in the `modalities[]` wire field.
+public struct RealtimeBetaResponseCreateParamsModalitiesItem: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let text = RealtimeBetaResponseCreateParamsModalitiesItem(rawValue: "text")
+    public static let audio = RealtimeBetaResponseCreateParamsModalitiesItem(rawValue: "audio")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Optional enumerated value serialized in the `conversation` wire field.
+public struct RealtimeBetaResponseCreateParamsConversationVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let auto = RealtimeBetaResponseCreateParamsConversationVariant1(rawValue: "auto")
+    public static let none = RealtimeBetaResponseCreateParamsConversationVariant1(rawValue: "none")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// The format of output audio. Options are `pcm16`, `g711_ulaw`, or `g711_alaw`.
+public struct RealtimeBetaResponseCreateParamsOutputAudioFormat: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let pcm16 = RealtimeBetaResponseCreateParamsOutputAudioFormat(rawValue: "pcm16")
+    public static let g711Ulaw = RealtimeBetaResponseCreateParamsOutputAudioFormat(rawValue: "g711_ulaw")
+    public static let g711Alaw = RealtimeBetaResponseCreateParamsOutputAudioFormat(rawValue: "g711_alaw")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// The final status of the response (`completed`, `cancelled`, `failed`, or `incomplete`, `in_progress`).
+public struct RealtimeBetaResponseStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let completed = RealtimeBetaResponseStatus(rawValue: "completed")
+    public static let cancelled = RealtimeBetaResponseStatus(rawValue: "cancelled")
+    public static let failed = RealtimeBetaResponseStatus(rawValue: "failed")
+    public static let incomplete = RealtimeBetaResponseStatus(rawValue: "incomplete")
+    public static let inProgress = RealtimeBetaResponseStatus(rawValue: "in_progress")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// The reason the Response did not complete. For a `cancelled` Response, one of `turn_detected` (the server VAD
+/// detected a new start of speech) or `client_cancelled` (the client sent a cancel event). For an `incomplete`
+/// Response, one of `max_output_tokens` or `content_filter` (the server-side safety filter activated and cut
+/// off the response).
+public struct RealtimeBetaResponseStatusDetailsReason: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let turnDetected = RealtimeBetaResponseStatusDetailsReason(rawValue: "turn_detected")
+    public static let clientCancelled = RealtimeBetaResponseStatusDetailsReason(rawValue: "client_cancelled")
+    public static let maxOutputTokens = RealtimeBetaResponseStatusDetailsReason(rawValue: "max_output_tokens")
+    public static let contentFilter = RealtimeBetaResponseStatusDetailsReason(rawValue: "content_filter")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Required enumerated value serialized in the `modalities[]` wire field.
+public struct RealtimeBetaResponseModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let text = RealtimeBetaResponseModalitiesItem(rawValue: "text")
+    public static let audio = RealtimeBetaResponseModalitiesItem(rawValue: "audio")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// The format of output audio. Options are `pcm16`, `g711_ulaw`, or `g711_alaw`.
+public struct RealtimeBetaResponseOutputAudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let pcm16 = RealtimeBetaResponseOutputAudioFormat(rawValue: "pcm16")
+    public static let g711Ulaw = RealtimeBetaResponseOutputAudioFormat(rawValue: "g711_ulaw")
+    public static let g711Alaw = RealtimeBetaResponseOutputAudioFormat(rawValue: "g711_alaw")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Optional enumerated value serialized in the `max_output_tokens` wire field.
+public struct RealtimeBetaResponseMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let inf = RealtimeBetaResponseMaxOutputTokensVariant1(rawValue: "inf")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
     }
 }

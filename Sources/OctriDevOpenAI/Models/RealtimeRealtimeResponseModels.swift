@@ -4,300 +4,51 @@
 import Foundation
 
 /// RealtimeRealtimeResponse domain models
-public indirect enum RealtimeResponseCreateParamsToolChoice {
-    case toolChoiceOptions(ToolChoiceOptions)
-    case toolChoiceFunction(ToolChoiceFunction)
-    case toolChoiceMcp(ToolChoiceMCP)
-    /// A member whose `type` names no branch this SDK knows, kept as received.
-    case unknown(tag: String, raw: JSONValue)
-}
-
-extension RealtimeResponseCreateParamsToolChoice: Codable {
-    private enum CodingKeys: String, CodingKey {
-        case discriminator = "type"
-    }
-
-    public init(from decoder: Decoder) throws {
-        if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
-           let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
-                self = value; return
-            }
-        }
-        let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) {
-            self = value; return
-        }
-        if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
-           let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
-            return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for RealtimeResponseCreateParamsToolChoice"
-        )
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-        if case let .unknown(_, raw) = self {
-            var container = encoder.singleValueContainer()
-            try container.encode(raw)
-        }
-    }
-}
-
-extension RealtimeResponseCreateParamsToolChoice {
-    static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
-        switch discriminator {
-        case "function": try .toolChoiceFunction(ToolChoiceFunction(from: decoder))
-        case "mcp": try .toolChoiceMcp(ToolChoiceMCP(from: decoder))
-        default: nil
-        }
-    }
-}
-
-extension RealtimeResponseCreateParamsToolChoice {
-    static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(ToolChoiceOptions.self) {
-            return .toolChoiceOptions(value)
-        }
-        if let value = try? container.decode(ToolChoiceFunction.self) {
-            return .toolChoiceFunction(value)
-        }
-        if let value = try? container.decode(ToolChoiceMCP.self) {
-            return .toolChoiceMcp(value)
-        }
-        return nil
-    }
-}
-
-extension RealtimeResponseCreateParamsToolChoice {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .toolChoiceOptions(value): try container.encode(value); return true
-        case let .toolChoiceFunction(value): try container.encode(value); return true
-        case let .toolChoiceMcp(value): try container.encode(value); return true
-        default: return false
-        }
-    }
-}
-
-public indirect enum RealtimeResponseCreateParamsToolsItem {
-    case realtimeFunctionTool(RealtimeFunctionTool)
-    case mCpTool(MCPTool)
-}
-
-extension RealtimeResponseCreateParamsToolsItem: Codable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.singleValueContainer()
-        if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) {
-                self = value; return
-            }
-        }
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for RealtimeResponseCreateParamsToolsItem"
-        )
-    }
-
-    public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-    }
-}
-
-extension RealtimeResponseCreateParamsToolsItem {
-    static func decodeLossless1(from container: SingleValueDecodingContainer, _ raw: JSONValue) -> Self? {
-        if let value = try? container.decode(RealtimeFunctionTool.self), sdkKeepsEveryKey(value, of: raw) {
-            return .realtimeFunctionTool(value)
-        }
-        if let value = try? container.decode(MCPTool.self), sdkKeepsEveryKey(value, of: raw) {
-            return .mCpTool(value)
-        }
-        return nil
-    }
-}
-
-extension RealtimeResponseCreateParamsToolsItem {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(RealtimeFunctionTool.self) {
-            return .realtimeFunctionTool(value)
-        }
-        if let value = try? container.decode(MCPTool.self) {
-            return .mCpTool(value)
-        }
-        return nil
-    }
-}
-
-extension RealtimeResponseCreateParamsToolsItem {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
-        var container = encoder.singleValueContainer()
-        switch self {
-        case let .realtimeFunctionTool(value): try container.encode(value); return true
-        case let .mCpTool(value): try container.encode(value); return true
-        }
-    }
-}
-
-/// Create a new Realtime response with these parameters
-public struct RealtimeResponseCreateParams: Codable {
-    /// The set of modalities the model used to respond, currently the only possible values are `[\"audio\"]`,
-    /// `[\"text\"]`. Audio output always include a text transcript. Setting the output to mode `text` will disable
-    /// audio output from the model.
-    public var outputModalities: [RealtimeResponseCreateParamsOutputModalitiesItem]?
-    /// The default system instructions (i.e. system message) prepended to model calls. This field allows the client
-    /// to guide the model on desired responses. The model can be instructed on response content and format, (e.g.
-    /// "be extremely succinct", "act friendly", "here are examples of good responses") and on audio behavior (e.g.
-    /// "talk quickly", "inject emotion into your voice", "laugh frequently"). The instructions are not guaranteed
-    /// to be followed by the model, but they provide…
-    public var instructions: String?
-    /// Configuration for audio input and output.
-    public var audio: RealtimeResponseCreateParamsAudio?
-    /// Tools available to the model.
-    public var tools: [RealtimeResponseCreateParamsToolsItem]?
-    /// How the model chooses tools. Provide one of the string modes or force a specific function/MCP tool.
-    public var toolChoice: RealtimeResponseCreateParamsToolChoice?
-    /// Whether the model may call multiple tools in parallel. Only supported by reasoning Realtime models such as
-    /// `gpt-realtime-2`.
-    public var parallelToolCalls: Bool?
-    /// Configuration for reasoning-capable Realtime models such as `gpt-realtime-2`.
-    public var reasoning: RealtimeReasoning?
-    /// Maximum number of output tokens for a single assistant response, inclusive of tool calls. Provide an integer
-    /// between 1 and 4096 to limit output tokens, or `inf` for the maximum available tokens for a given model.
-    /// Defaults to `inf`.
-    public var maxOutputTokens: RealtimeResponseCreateParamsMaxOutputTokens?
-    /// Controls which conversation the response is added to. Currently supports `auto` and `none`, with `auto` as
-    /// the default value. The `auto` value means that the contents of the response will be added to the default
-    /// conversation. Set this to `none` to create an out-of-band response which will not add items to default
-    /// conversation.
-    public var conversation: RealtimeResponseCreateParamsConversation?
-    /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional
-    /// information about the object in a structured format, and querying for objects via API or the dashboard. Keys
-    /// are strings with a maximum length of 64 characters. Values are strings with a maximum length of 512
-    /// characters.
-    public var metadata: Metadata?
-    /// Reference to a prompt template and its variables. Learn more.
-    public var prompt: Prompt?
-    /// Input items to include in the prompt for the model. Using this field creates a new context for this Response
-    /// instead of using the default conversation. An empty array `[]` will clear the context for this Response.
-    /// Note that this can include references to items that previously appeared in the session using their id.
-    public var input: [RealtimeConversationItem]?
-
-    enum CodingKeys: String, CodingKey {
-        case outputModalities = "output_modalities"
-        case instructions
-        case audio
-        case tools
-        case toolChoice = "tool_choice"
-        case parallelToolCalls = "parallel_tool_calls"
-        case reasoning
-        case maxOutputTokens = "max_output_tokens"
-        case conversation
-        case metadata
-        case prompt
-        case input
-    }
-
-    init() {
-        (outputModalities, instructions, audio, tools, toolChoice) = (nil, nil, nil, nil, nil)
-        (parallelToolCalls, reasoning, maxOutputTokens, conversation, metadata) = (nil, nil, nil, nil, nil)
-        (prompt, input) = (nil, nil)
-    }
-}
-
-public extension RealtimeResponseCreateParams {
+public extension RealtimeResponse {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
-        instructions = try container.sdkDecodeIfPresent(.instructions)
-        audio = try container.sdkDecodeIfPresent(.audio)
-        tools = try container.sdkDecodeIfPresent(.tools)
-        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        conversation = try container.sdkDecodeIfPresent(.conversation)
+        id = try container.sdkDecodeIfPresent(.id)
+        object = try container.sdkDecodeIfPresent(.object)
+        status = try container.sdkDecodeIfPresent(.status)
+        statusDetails = try container.sdkDecodeIfPresent(.statusDetails)
+        output = try container.sdkDecodeIfPresent(.output)
         metadata = try container.sdkDecodeIfPresent(.metadata)
-        prompt = try container.sdkDecodeIfPresent(.prompt)
-        input = try container.sdkDecodeIfPresent(.input)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        usage = try container.sdkDecodeIfPresent(.usage)
+        conversationId = try container.sdkDecodeIfPresent(.conversationId)
+        outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
+        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
     }
 }
 
-public extension RealtimeResponseCreateParams {
+public extension RealtimeResponse {
     init(
-        outputModalities: [RealtimeResponseCreateParamsOutputModalitiesItem]? = nil,
-        instructions: String? = nil,
-        audio: RealtimeResponseCreateParamsAudio? = nil,
-        tools: [RealtimeResponseCreateParamsToolsItem]? = nil,
-        toolChoice: RealtimeResponseCreateParamsToolChoice? = nil,
-        parallelToolCalls: Bool? = nil,
-        reasoning: RealtimeReasoning? = nil,
-        maxOutputTokens: RealtimeResponseCreateParamsMaxOutputTokens? = nil,
-        conversation: RealtimeResponseCreateParamsConversation? = nil,
+        id: String? = nil,
+        object: RealtimeResponseObject? = nil,
+        status: RealtimeResponseStatus? = nil,
+        statusDetails: RealtimeResponseStatusDetails? = nil,
+        output: [RealtimeConversationItem]? = nil,
         metadata: Metadata? = nil,
-        prompt: Prompt? = nil,
-        input: [RealtimeConversationItem]? = nil
+        audio: RealtimeResponseAudio? = nil,
+        usage: RealtimeResponseUsage? = nil,
+        conversationId: String? = nil,
+        outputModalities: [RealtimeResponseOutputModalitiesItem]? = nil,
+        maxOutputTokens: RealtimeResponseMaxOutputTokens? = nil
     ) {
         self.init()
-        (self.outputModalities, self.instructions) = (outputModalities, instructions)
-        (self.audio, self.tools) = (audio, tools)
-        (self.toolChoice, self.parallelToolCalls) = (toolChoice, parallelToolCalls)
-        (self.reasoning, self.maxOutputTokens) = (reasoning, maxOutputTokens)
-        (self.conversation, self.metadata) = (conversation, metadata)
-        (self.prompt, self.input) = (prompt, input)
+        (self.id, self.object) = (id, object)
+        (self.status, self.statusDetails) = (status, statusDetails)
+        (self.output, self.metadata) = (output, metadata)
+        (self.audio, self.usage) = (audio, usage)
+        (self.conversationId, self.outputModalities) = (conversationId, outputModalities)
+        self.maxOutputTokens = maxOutputTokens
     }
 }
 
-/// Optional object value serialized in the `output` wire field.
-public struct RealtimeResponseAudioOutput: Codable {
-    /// The format of the output audio.
-    public var format: RealtimeAudioFormats?
-    /// The voice the model uses to respond. Voice cannot be changed during the session once the model has responded
-    /// with audio at least once. Current voice options are `alloy`, `ash`, `ballad`, `coral`, `echo`, `sage`,
-    /// `shimmer`, `verse`, `marin`, and `cedar`. We recommend `marin` and `cedar` for best quality.
-    /// - Example: "ash"
-    public var voice: VoiceIdsShared?
-
-    enum CodingKeys: String, CodingKey {
-        case format
-        case voice
-    }
-
-    init() {
-        (format, voice) = (nil, nil)
-    }
-}
-
-public extension RealtimeResponseAudioOutput {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        format = try container.sdkDecodeIfPresent(.format)
-        voice = try container.sdkDecodeIfPresent(.voice)
-    }
-}
-
-public extension RealtimeResponseAudioOutput {
-    init(format: RealtimeAudioFormats? = nil, voice: VoiceIdsShared? = nil) {
-        self.init()
-        (self.format, self.voice) = (format, voice)
-    }
-}
-
-/// Configuration for audio output.
-public struct RealtimeResponseAudio: Codable {
+/// Configuration for audio input and output.
+public struct RealtimeResponseCreateParamsAudio: Codable {
     /// Optional object value serialized in the `output` wire field.
-    public var output: RealtimeResponseAudioOutput?
+    public var output: RealtimeResponseCreateParamsAudioOutput?
 
     enum CodingKeys: String, CodingKey {
         case output
@@ -308,302 +59,451 @@ public struct RealtimeResponseAudio: Codable {
     }
 }
 
-public extension RealtimeResponseAudio {
+public extension RealtimeResponseCreateParamsAudio {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         output = try container.sdkDecodeIfPresent(.output)
     }
 }
 
-public extension RealtimeResponseAudio {
-    init(output: RealtimeResponseAudioOutput? = nil) {
+public extension RealtimeResponseCreateParamsAudio {
+    init(output: RealtimeResponseCreateParamsAudioOutput? = nil) {
         self.init()
         self.output = output
     }
 }
 
-/// Additional details about the status.
-public struct RealtimeResponseStatusDetails: Codable {
-    /// The type of error that caused the response to fail, corresponding with the `status` field (`completed`,
-    /// `cancelled`, `incomplete`, `failed`).
-    public var type: RealtimeResponseStatusDetailsType?
-    /// The reason the Response did not complete. For a `cancelled` Response, one of `turn_detected` (the server VAD
-    /// detected a new start of speech) or `client_cancelled` (the client sent a cancel event). For an `incomplete`
-    /// Response, one of `max_output_tokens` or `content_filter` (the server-side safety filter activated and cut
-    /// off the response).
-    public var reason: RealtimeResponseStatusDetailsReason?
-    /// A description of the error that caused the response to fail, populated when the `status` is `failed`.
-    public var error: RealtimeResponseStatusDetailsError?
+public indirect enum RealtimeResponseCreateParamsConversation {
+    case stringValue(String)
+    case stringValue1(String)
+}
+
+extension RealtimeResponseCreateParamsConversation: Codable {
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RealtimeResponseCreateParamsConversation"
+        )
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+    }
+}
+
+extension RealtimeResponseCreateParamsConversation {
+    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue1(value)
+        }
+        return nil
+    }
+}
+
+extension RealtimeResponseCreateParamsConversation {
+    func encodeGroup1(to encoder: Encoder) throws -> Bool {
+        var container = encoder.singleValueContainer()
+        switch self {
+        case let .stringValue(value): try container.encode(value); return true
+        case let .stringValue1(value): try container.encode(value); return true
+        }
+    }
+}
+
+/// Usage statistics for the Response, this will correspond to billing. A Realtime API session will maintain a
+/// conversation context and append new Items to the Conversation, thus output from previous turns (text and audio
+/// tokens) will become the input for later turns.
+public struct RealtimeResponseUsage: Codable {
+    /// The total number of tokens in the Response including input and output text and audio tokens.
+    public var totalTokens: Int?
+    /// The number of input tokens used in the Response, including text and audio tokens.
+    public var inputTokens: Int?
+    /// The number of output tokens sent in the Response, including text and audio tokens.
+    public var outputTokens: Int?
+    /// Details about the input tokens used in the Response. Cached tokens are tokens from previous turns in the
+    /// conversation that are included as context for the current response. Cached tokens here are counted as a
+    /// subset of input tokens, meaning input tokens will include cached and uncached tokens.
+    public var inputTokenDetails: RealtimeResponseUsageInputTokenDetails?
+    /// Details about the output tokens used in the Response.
+    public var outputTokenDetails: RealtimeResponseUsageOutputTokenDetails?
 
     enum CodingKeys: String, CodingKey {
-        case type
-        case reason
-        case error
+        case totalTokens = "total_tokens"
+        case inputTokens = "input_tokens"
+        case outputTokens = "output_tokens"
+        case inputTokenDetails = "input_token_details"
+        case outputTokenDetails = "output_token_details"
     }
 
     init() {
-        (type, reason, error) = (nil, nil, nil)
+        (totalTokens, inputTokens, outputTokens, inputTokenDetails, outputTokenDetails) = (nil, nil, nil, nil, nil)
     }
 }
 
-public extension RealtimeResponseStatusDetails {
+public extension RealtimeResponseUsage {
     init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        reason = try container.sdkDecodeIfPresent(.reason)
-        error = try container.sdkDecodeIfPresent(.error)
+        totalTokens = try container.sdkDecodeIfPresent(.totalTokens)
+        inputTokens = try container.sdkDecodeIfPresent(.inputTokens)
+        outputTokens = try container.sdkDecodeIfPresent(.outputTokens)
+        inputTokenDetails = try container.sdkDecodeIfPresent(.inputTokenDetails)
+        outputTokenDetails = try container.sdkDecodeIfPresent(.outputTokenDetails)
     }
 }
 
-public extension RealtimeResponseStatusDetails {
+public extension RealtimeResponseUsage {
     init(
-        type: RealtimeResponseStatusDetailsType? = nil,
-        reason: RealtimeResponseStatusDetailsReason? = nil,
-        error: RealtimeResponseStatusDetailsError? = nil
+        totalTokens: Int? = nil,
+        inputTokens: Int? = nil,
+        outputTokens: Int? = nil,
+        inputTokenDetails: RealtimeResponseUsageInputTokenDetails? = nil,
+        outputTokenDetails: RealtimeResponseUsageOutputTokenDetails? = nil
     ) {
         self.init()
-        (self.type, self.reason) = (type, reason)
-        self.error = error
+        (self.totalTokens, self.inputTokens) = (totalTokens, inputTokens)
+        (self.outputTokens, self.inputTokenDetails) = (outputTokens, inputTokenDetails)
+        self.outputTokenDetails = outputTokenDetails
     }
 }
 
-public indirect enum RealtimeResponseMaxOutputTokens {
-    case intValue(Int)
-    case stringValue(String)
+/// Details about the output tokens used in the Response.
+public struct RealtimeResponseUsageOutputTokenDetails: Codable {
+    /// The number of text tokens used in the Response.
+    public var textTokens: Int?
+    /// The number of audio tokens used in the Response.
+    public var audioTokens: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case textTokens = "text_tokens"
+        case audioTokens = "audio_tokens"
+    }
+
+    init() {
+        (textTokens, audioTokens) = (nil, nil)
+    }
 }
 
-extension RealtimeResponseMaxOutputTokens: Codable {
+public extension RealtimeResponseUsageOutputTokenDetails {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        textTokens = try container.sdkDecodeIfPresent(.textTokens)
+        audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
+    }
+}
+
+public extension RealtimeResponseUsageOutputTokenDetails {
+    init(textTokens: Int? = nil, audioTokens: Int? = nil) {
+        self.init()
+        (self.textTokens, self.audioTokens) = (textTokens, audioTokens)
+    }
+}
+
+/// Details about the input tokens used in the Response. Cached tokens are tokens from previous turns in the
+/// conversation that are included as context for the current response. Cached tokens here are counted as a subset
+/// of input tokens, meaning input tokens will include cached and uncached tokens.
+public struct RealtimeResponseUsageInputTokenDetails: Codable {
+    /// The number of cached tokens used as input for the Response.
+    public var cachedTokens: Int?
+    /// The number of text tokens used as input for the Response.
+    public var textTokens: Int?
+    /// The number of image tokens used as input for the Response.
+    public var imageTokens: Int?
+    /// The number of audio tokens used as input for the Response.
+    public var audioTokens: Int?
+    /// Details about the cached tokens used as input for the Response.
+    public var cachedTokensDetails: RealtimeResponseUsageInputTokenDetailsCachedTokensDetails?
+
+    enum CodingKeys: String, CodingKey {
+        case cachedTokens = "cached_tokens"
+        case textTokens = "text_tokens"
+        case imageTokens = "image_tokens"
+        case audioTokens = "audio_tokens"
+        case cachedTokensDetails = "cached_tokens_details"
+    }
+
+    init() {
+        (cachedTokens, textTokens, imageTokens, audioTokens, cachedTokensDetails) = (nil, nil, nil, nil, nil)
+    }
+}
+
+public extension RealtimeResponseUsageInputTokenDetails {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        cachedTokens = try container.sdkDecodeIfPresent(.cachedTokens)
+        textTokens = try container.sdkDecodeIfPresent(.textTokens)
+        imageTokens = try container.sdkDecodeIfPresent(.imageTokens)
+        audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
+        cachedTokensDetails = try container.sdkDecodeIfPresent(.cachedTokensDetails)
+    }
+}
+
+public extension RealtimeResponseUsageInputTokenDetails {
+    init(
+        cachedTokens: Int? = nil,
+        textTokens: Int? = nil,
+        imageTokens: Int? = nil,
+        audioTokens: Int? = nil,
+        cachedTokensDetails: RealtimeResponseUsageInputTokenDetailsCachedTokensDetails? = nil
+    ) {
+        self.init()
+        (self.cachedTokens, self.textTokens) = (cachedTokens, textTokens)
+        (self.imageTokens, self.audioTokens) = (imageTokens, audioTokens)
+        self.cachedTokensDetails = cachedTokensDetails
+    }
+}
+
+/// Details about the cached tokens used as input for the Response.
+public struct RealtimeResponseUsageInputTokenDetailsCachedTokensDetails: Codable {
+    /// The number of cached text tokens used as input for the Response.
+    public var textTokens: Int?
+    /// The number of cached image tokens used as input for the Response.
+    public var imageTokens: Int?
+    /// The number of cached audio tokens used as input for the Response.
+    public var audioTokens: Int?
+
+    enum CodingKeys: String, CodingKey {
+        case textTokens = "text_tokens"
+        case imageTokens = "image_tokens"
+        case audioTokens = "audio_tokens"
+    }
+
+    init() {
+        (textTokens, imageTokens, audioTokens) = (nil, nil, nil)
+    }
+}
+
+public extension RealtimeResponseUsageInputTokenDetailsCachedTokensDetails {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        textTokens = try container.sdkDecodeIfPresent(.textTokens)
+        imageTokens = try container.sdkDecodeIfPresent(.imageTokens)
+        audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
+    }
+}
+
+public extension RealtimeResponseUsageInputTokenDetailsCachedTokensDetails {
+    init(textTokens: Int? = nil, imageTokens: Int? = nil, audioTokens: Int? = nil) {
+        self.init()
+        (self.textTokens, self.imageTokens) = (textTokens, imageTokens)
+        self.audioTokens = audioTokens
+    }
+}
+
+/// The type of error that caused the response to fail, corresponding with the `status` field (`completed`,
+/// `cancelled`, `incomplete`, `failed`).
+public struct RealtimeResponseStatusDetailsType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let completed = RealtimeResponseStatusDetailsType(rawValue: "completed")
+    public static let cancelled = RealtimeResponseStatusDetailsType(rawValue: "cancelled")
+    public static let failed = RealtimeResponseStatusDetailsType(rawValue: "failed")
+    public static let incomplete = RealtimeResponseStatusDetailsType(rawValue: "incomplete")
+
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for RealtimeResponseMaxOutputTokens"
-        )
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-    }
-}
-
-extension RealtimeResponseMaxOutputTokens {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        return nil
-    }
-}
-
-extension RealtimeResponseMaxOutputTokens {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
-        switch self {
-        case let .intValue(value): try container.encode(value); return true
-        case let .stringValue(value): try container.encode(value); return true
-        }
+        try container.encode(rawValue)
     }
 }
 
-extension RealtimeResponseMaxOutputTokens: SdkNumericValueConvertible {
-    var sdkNumericValue: Double? {
-        switch self {
-        case let .intValue(value): Double(value)
-        default: nil
-        }
-    }
-}
+/// The object type, must be `realtime.response`.
+public struct RealtimeResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
 
-/// Optional object value serialized in the `output` wire field.
-public struct RealtimeResponseCreateParamsAudioOutput: Codable {
-    /// The format of the output audio.
-    public var format: RealtimeAudioFormats?
-    /// The voice the model uses to respond. Supported built-in voices are `alloy`, `ash`, `ballad`, `coral`,
-    /// `echo`, `sage`, `shimmer`, `verse`, `marin`, and `cedar`. You may also provide a custom voice object with an
-    /// `id`, for example `{ "id": "voice_1234" }`. Voice cannot be changed during the session once the model has
-    /// responded with audio at least once. Custom voices must be created from audio samples. We recommend `marin`
-    /// and `cedar` for best quality.
-    public var voice: VoiceIdsOrCustomVoice?
-
-    enum CodingKeys: String, CodingKey {
-        case format
-        case voice
+    public init(rawValue: String) {
+        self.rawValue = rawValue
     }
 
-    init() {
-        (format, voice) = (nil, nil)
-    }
-}
+    public static let realtimeResponse = RealtimeResponseObject(rawValue: "realtime.response")
 
-public extension RealtimeResponseCreateParamsAudioOutput {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        format = try container.sdkDecodeIfPresent(.format)
-        voice = try container.sdkDecodeIfPresent(.voice)
-    }
-}
-
-public extension RealtimeResponseCreateParamsAudioOutput {
-    init(format: RealtimeAudioFormats? = nil, voice: VoiceIdsOrCustomVoice? = nil) {
-        self.init()
-        (self.format, self.voice) = (format, voice)
-    }
-}
-
-/// A description of the error that caused the response to fail, populated when the `status` is `failed`.
-public struct RealtimeResponseStatusDetailsError: Codable {
-    /// The type of error.
-    public var type: String?
-    /// Error code, if any.
-    public var code: String?
-    /// A human-readable error message.
-    public var message: String?
-
-    enum CodingKeys: String, CodingKey {
-        case type
-        case code
-        case message
-    }
-
-    init() {
-        (type, code, message) = (nil, nil, nil)
-    }
-}
-
-public extension RealtimeResponseStatusDetailsError {
-    init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        type = try container.sdkDecodeIfPresent(.type)
-        code = try container.sdkDecodeIfPresent(.code)
-        message = try container.sdkDecodeIfPresent(.message)
-    }
-}
-
-public extension RealtimeResponseStatusDetailsError {
-    init(type: String? = nil, code: String? = nil, message: String? = nil) {
-        self.init()
-        (self.type, self.code) = (type, code)
-        self.message = message
-    }
-}
-
-public indirect enum RealtimeResponseCreateParamsMaxOutputTokens {
-    case intValue(Int)
-    case stringValue(String)
-}
-
-extension RealtimeResponseCreateParamsMaxOutputTokens: Codable {
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) {
-            self = value; return
-        }
-        throw DecodingError.dataCorruptedError(
-            in: container,
-            debugDescription: "No variant matched for RealtimeResponseCreateParamsMaxOutputTokens"
-        )
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) {
-            return
-        }
-    }
-}
-
-extension RealtimeResponseCreateParamsMaxOutputTokens {
-    static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) {
-            return .intValue(value)
-        }
-        if let value = try? container.decode(String.self) {
-            return .stringValue(value)
-        }
-        return nil
-    }
-}
-
-extension RealtimeResponseCreateParamsMaxOutputTokens {
-    func encodeGroup1(to encoder: Encoder) throws -> Bool {
         var container = encoder.singleValueContainer()
-        switch self {
-        case let .intValue(value): try container.encode(value); return true
-        case let .stringValue(value): try container.encode(value); return true
-        }
+        try container.encode(rawValue)
     }
 }
 
-extension RealtimeResponseCreateParamsMaxOutputTokens: SdkNumericValueConvertible {
-    var sdkNumericValue: Double? {
-        switch self {
-        case let .intValue(value): Double(value)
-        default: nil
-        }
+/// Required enumerated value serialized in the `output_modalities[]` wire field.
+public struct RealtimeResponseOutputModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let text = RealtimeResponseOutputModalitiesItem(rawValue: "text")
+    public static let audio = RealtimeResponseOutputModalitiesItem(rawValue: "audio")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
     }
 }
 
-/// The response resource.
-public struct RealtimeResponse: Codable {
-    /// The unique ID of the response, will look like `resp_1234`.
-    public var id: String?
-    /// The object type, must be `realtime.response`.
-    public var object: RealtimeResponseObject?
-    /// The final status of the response (`completed`, `cancelled`, `failed`, or `incomplete`, `in_progress`).
-    public var status: RealtimeResponseStatus?
-    /// Additional details about the status.
-    public var statusDetails: RealtimeResponseStatusDetails?
-    /// The list of output items generated by the response.
-    public var output: [RealtimeConversationItem]?
-    /// Set of 16 key-value pairs that can be attached to an object. This can be useful for storing additional
-    /// information about the object in a structured format, and querying for objects via API or the dashboard. Keys
-    /// are strings with a maximum length of 64 characters. Values are strings with a maximum length of 512
-    /// characters.
-    public var metadata: Metadata?
-    /// Configuration for audio output.
-    public var audio: RealtimeResponseAudio?
-    /// Usage statistics for the Response, this will correspond to billing. A Realtime API session will maintain a
-    /// conversation context and append new Items to the Conversation, thus output from previous turns (text and
-    /// audio tokens) will become the input for later turns.
-    public var usage: RealtimeResponseUsage?
-    /// Which conversation the response is added to, determined by the `conversation` field in the `response.create`
-    /// event. If `auto`, the response will be added to the default conversation and the value of `conversation_id`
-    /// will be an id like `conv_1234`. If `none`, the response will not be added to any conversation and the value
-    /// of `conversation_id` will be `null`. If responses are being triggered automatically by VAD the response will
-    /// be added to the default conversation
-    public var conversationId: String?
-    /// The set of modalities the model used to respond, currently the only possible values are `[\"audio\"]`,
-    /// `[\"text\"]`. Audio output always include a text transcript. Setting the output to mode `text` will disable
-    /// audio output from the model.
-    public var outputModalities: [RealtimeResponseOutputModalitiesItem]?
-    /// Maximum number of output tokens for a single assistant response, inclusive of tool calls, that was used in
-    /// this response.
-    public var maxOutputTokens: RealtimeResponseMaxOutputTokens?
+/// Optional enumerated value serialized in the `conversation` wire field.
+public struct RealtimeResponseCreateParamsConversationVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
 
-    enum CodingKeys: String, CodingKey {
-        case id
-        case object
-        case status
-        case statusDetails = "status_details"
-        case output
-        case metadata
-        case audio
-        case usage
-        case conversationId = "conversation_id"
-        case outputModalities = "output_modalities"
-        case maxOutputTokens = "max_output_tokens"
+    public init(rawValue: String) {
+        self.rawValue = rawValue
     }
 
-    init() {
-        (id, object, status, statusDetails, output) = (nil, nil, nil, nil, nil)
-        (metadata, audio, usage, conversationId, outputModalities) = (nil, nil, nil, nil, nil)
-        maxOutputTokens = nil
+    public static let auto = RealtimeResponseCreateParamsConversationVariant1(rawValue: "auto")
+    public static let none = RealtimeResponseCreateParamsConversationVariant1(rawValue: "none")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Optional enumerated value serialized in the `max_output_tokens` wire field.
+public struct RealtimeResponseCreateParamsMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let inf = RealtimeResponseCreateParamsMaxOutputTokensVariant1(rawValue: "inf")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Required enumerated value serialized in the `output_modalities[]` wire field.
+public struct RealtimeResponseCreateParamsOutputModalitiesItem: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let text = RealtimeResponseCreateParamsOutputModalitiesItem(rawValue: "text")
+    public static let audio = RealtimeResponseCreateParamsOutputModalitiesItem(rawValue: "audio")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// The final status of the response (`completed`, `cancelled`, `failed`, or `incomplete`, `in_progress`).
+public struct RealtimeResponseStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let completed = RealtimeResponseStatus(rawValue: "completed")
+    public static let cancelled = RealtimeResponseStatus(rawValue: "cancelled")
+    public static let failed = RealtimeResponseStatus(rawValue: "failed")
+    public static let incomplete = RealtimeResponseStatus(rawValue: "incomplete")
+    public static let inProgress = RealtimeResponseStatus(rawValue: "in_progress")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// Optional enumerated value serialized in the `max_output_tokens` wire field.
+public struct RealtimeResponseMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let inf = RealtimeResponseMaxOutputTokensVariant1(rawValue: "inf")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
+    }
+}
+
+/// The reason the Response did not complete. For a `cancelled` Response, one of `turn_detected` (the server VAD
+/// detected a new start of speech) or `client_cancelled` (the client sent a cancel event). For an `incomplete`
+/// Response, one of `max_output_tokens` or `content_filter` (the server-side safety filter activated and cut
+/// off the response).
+public struct RealtimeResponseStatusDetailsReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+    public let rawValue: String
+
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let turnDetected = RealtimeResponseStatusDetailsReason(rawValue: "turn_detected")
+    public static let clientCancelled = RealtimeResponseStatusDetailsReason(rawValue: "client_cancelled")
+    public static let maxOutputTokens = RealtimeResponseStatusDetailsReason(rawValue: "max_output_tokens")
+    public static let contentFilter = RealtimeResponseStatusDetailsReason(rawValue: "content_filter")
+
+    public init(from decoder: Decoder) throws {
+        let container = try decoder.singleValueContainer()
+        try self.init(rawValue: container.decode(String.self))
+    }
+
+    public func encode(to encoder: Encoder) throws {
+        var container = encoder.singleValueContainer()
+        try container.encode(rawValue)
     }
 }

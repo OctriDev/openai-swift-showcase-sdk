@@ -7,3 +7,183 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum VaultsMethods {}
+
+public extension VaultsMethods {
+    /// Lists vaults using ID-based pagination. See
+    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    ///
+    /// - Parameters:
+    /// - limit: The maximum number of resources to return, between 1 and 100.
+    ///   Defaults to 20.
+    /// - order: The order in which resources are returned. Defaults to `desc`.
+    /// - after: Return resources after this resource ID in the selected order.
+    /// - metadata: Exact string matches supplied as `metadata[key]=value`. All
+    ///   supplied pairs must match. Up to 16 pairs, with keys from 1 to 64 characters
+    ///   and values up to 512 characters. Filtering is eventually consistent;
+    ///   metadata changes may take time to appear.
+    /// - status: Filter by one status or a list, such as `status=active` or
+    ///   `status[]=active&status[]=archived`. Both statuses are included by default.
+    static func listVaults(
+        config: ClientConfig,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        metadata: [String: String]? = nil,
+        status: VaultStatusFilterParam? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VaultListResource {
+        if let limit {
+            try validateRange("limit", Double(limit), min: 1, max: 100)
+        }
+
+        if let after {
+            try validateLength("after", after, min: 0, max: 1_048_576)
+        }
+
+        return try await (sdkRequest(
+            "GET",
+            "/vaults",
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("metadata", object: metadata, style: "deepObject", explode: true),
+                SdkQueryParameter("status", value: status),
+            ],
+            decoder: .json,
+            operationId: "listVaults",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
+    }
+
+    /// Lists vaults using ID-based pagination. See
+    /// [vaults](https://developers.openai.com/api/docs/guides/agents-api/tools/vaults).
+    ///
+    /// - Parameters:
+    /// - limit: The maximum number of resources to return, between 1 and 100.
+    ///   Defaults to 20.
+    /// - order: The order in which resources are returned. Defaults to `desc`.
+    /// - after: Return resources after this resource ID in the selected order.
+    /// - metadata: Exact string matches supplied as `metadata[key]=value`. All
+    ///   supplied pairs must match. Up to 16 pairs, with keys from 1 to 64 characters
+    ///   and values up to 512 characters. Filtering is eventually consistent;
+    ///   metadata changes may take time to appear.
+    /// - status: Filter by one status or a list, such as `status=active` or
+    ///   `status[]=active&status[]=archived`. Both statuses are included by default.
+    static func listVaultsPaginated(
+        config: ClientConfig,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        metadata: [String: String]? = nil,
+        status: VaultStatusFilterParam? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<VaultResource, Swift.Error> {
+        AsyncThrowingStream<VaultResource, Swift.Error> { (continuation: AsyncThrowingStream<
+            VaultResource,
+            Swift.Error
+        >.Continuation) in
+            let task = _Concurrency.Task {
+                do {
+                    var pageCursor = after
+                    while true {
+                        let pageResponse = try await listVaults(
+                            config: config,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            metadata: metadata,
+                            status: status,
+                            requestOptions: requestOptions
+                        )
+                        let pageItems = pageResponse.data
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
+                        pageCursor = nextCursor
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                    return
+                }
+                continuation.finish()
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
+    }
+
+    struct ListVaultsPage {
+        public let data: VaultListResource
+        public let items: [VaultResource]
+        public let hasMore: Bool
+    }
+
+    static func listVaultsPages(
+        config: ClientConfig,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        metadata: [String: String]? = nil,
+        status: VaultStatusFilterParam? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListVaultsPage, Swift.Error> {
+        AsyncThrowingStream<ListVaultsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListVaultsPage,
+            Swift.Error
+        >.Continuation) in
+            let task = _Concurrency.Task {
+                do {
+                    var pageCursor = after
+                    while true {
+                        let pageResponse = try await listVaults(
+                            config: config,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            metadata: metadata,
+                            status: status,
+                            requestOptions: requestOptions
+                        )
+                        let pageItems = pageResponse.data
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
+                        pageContinuation.yield(ListVaultsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
+                        pageCursor = nextCursor
+                    }
+                } catch {
+                    pageContinuation.finish(throwing: error)
+                    return
+                }
+                pageContinuation.finish()
+            }
+            pageContinuation.onTermination = { _ in task.cancel() }
+        }
+    }
+}

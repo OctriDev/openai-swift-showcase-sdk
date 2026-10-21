@@ -3,8 +3,9 @@
 
 import Foundation
 
-/// LiveLiveServer domain models
-/// LiveServerEvent is an allOf type (properties unresolvable)
+// LiveLiveServer domain models
+// LiveServerEvent is an allOf type (properties unresolvable)
+
 public typealias LiveServerEvent = LiveServerEvent2
 
 public indirect enum LiveServerEvent2 {
