@@ -6,15 +6,38 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension VideosMethods {
-    /// Creates an extension of a completed video and returns a video generation job. Provide the source video, an updated `prompt`, and `seconds` set to an accepted duration. This operation is closing down and will be removed on a date not specified in the API definition.
+public extension VideosMethods {
+    /// Creates an extension of a completed video and returns a video generation job. Provide the source video, an
+    /// updated `prompt`, and `seconds` set to an accepted duration. This operation is closing down and will be removed
+    /// on a date not specified in the API definition.
     ///
     /// Create an extension of a completed video.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func createVideoExtend(config: ClientConfig, body: CreateVideoExtendBody? = nil, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> VideoResource {
+    static func createVideoExtend(
+        config: ClientConfig,
+        body: CreateVideoExtendBody? = nil,
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VideoResource {
         let encodedBody = try body?.encoded(contentType: contentType)
 
-        return try (await sdkRequest("POST", "/videos/extensions", config: config, rawBody: encodedBody?.data, contentType: encodedBody?.contentType ?? "application/json", decoder: .json, operationId: "CreateVideoExtend", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/videos/extensions",
+            config: config,
+            rawBody: encodedBody?.data,
+            contentType: encodedBody?.contentType ?? "application/json",
+            decoder: .json,
+            operationId: "CreateVideoExtend",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
+        )).data
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Videos domain models
+/// Videos domain models
 /// Multipart parameters for extending an existing generated video.
 public struct CreateVideoExtendMultipartBody: Codable {
     /// Required API value serialized in the `video` wire field.
@@ -19,33 +19,47 @@ public struct CreateVideoExtendMultipartBody: Codable {
         case seconds
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateVideoExtendMultipartBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.video) else {
-            throw SdkValidationError(field: "video", code: "required", message: "Validation failed for 'video': value is required")
-        }
-        guard container.contains(.prompt) else {
-            throw SdkValidationError(field: "prompt", code: "required", message: "Validation failed for 'prompt': value is required")
-        }
-        guard container.contains(.seconds) else {
-            throw SdkValidationError(field: "seconds", code: "required", message: "Validation failed for 'seconds': value is required")
-        }
-        self.video = try container.sdkDecodeRequired(.video)
-        self.prompt = try container.sdkDecodeRequired(.prompt)
-        self.seconds = try container.sdkDecodeRequired(.seconds)
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateVideoExtendMultipartBody {
-    public init(video: CreateVideoExtendMultipartBodyVideo, prompt: String, seconds: VideoSeconds) throws {
+public extension CreateVideoExtendMultipartBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.video) else {
+            throw SdkValidationError(
+                field: "video",
+                code: "required",
+                message: "Validation failed for 'video': value is required"
+            )
+        }
+        guard container.contains(.prompt) else {
+            throw SdkValidationError(
+                field: "prompt",
+                code: "required",
+                message: "Validation failed for 'prompt': value is required"
+            )
+        }
+        guard container.contains(.seconds) else {
+            throw SdkValidationError(
+                field: "seconds",
+                code: "required",
+                message: "Validation failed for 'seconds': value is required"
+            )
+        }
+        video = try container.sdkDecodeRequired(.video)
+        prompt = try container.sdkDecodeRequired(.prompt)
+        seconds = try container.sdkDecodeRequired(.seconds)
+        try validateLength("prompt", prompt, min: 1, max: 32000)
+    }
+}
+
+public extension CreateVideoExtendMultipartBody {
+    init(video: CreateVideoExtendMultipartBodyVideo, prompt: String, seconds: VideoSeconds) throws {
         (self.video, self.prompt) = (video, prompt)
         self.seconds = seconds
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+        try validateLength("prompt", self.prompt, min: 1, max: 32000)
     }
 }
 
@@ -64,33 +78,47 @@ public struct CreateVideoExtendJsonBody: Codable {
         case seconds
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateVideoExtendJsonBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.video) else {
-            throw SdkValidationError(field: "video", code: "required", message: "Validation failed for 'video': value is required")
-        }
-        guard container.contains(.prompt) else {
-            throw SdkValidationError(field: "prompt", code: "required", message: "Validation failed for 'prompt': value is required")
-        }
-        guard container.contains(.seconds) else {
-            throw SdkValidationError(field: "seconds", code: "required", message: "Validation failed for 'seconds': value is required")
-        }
-        self.video = try container.sdkDecodeRequired(.video)
-        self.prompt = try container.sdkDecodeRequired(.prompt)
-        self.seconds = try container.sdkDecodeRequired(.seconds)
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateVideoExtendJsonBody {
-    public init(video: VideoReferenceInputParam, prompt: String, seconds: VideoSeconds) throws {
+public extension CreateVideoExtendJsonBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.video) else {
+            throw SdkValidationError(
+                field: "video",
+                code: "required",
+                message: "Validation failed for 'video': value is required"
+            )
+        }
+        guard container.contains(.prompt) else {
+            throw SdkValidationError(
+                field: "prompt",
+                code: "required",
+                message: "Validation failed for 'prompt': value is required"
+            )
+        }
+        guard container.contains(.seconds) else {
+            throw SdkValidationError(
+                field: "seconds",
+                code: "required",
+                message: "Validation failed for 'seconds': value is required"
+            )
+        }
+        video = try container.sdkDecodeRequired(.video)
+        prompt = try container.sdkDecodeRequired(.prompt)
+        seconds = try container.sdkDecodeRequired(.seconds)
+        try validateLength("prompt", prompt, min: 1, max: 32000)
+    }
+}
+
+public extension CreateVideoExtendJsonBody {
+    init(video: VideoReferenceInputParam, prompt: String, seconds: VideoSeconds) throws {
         (self.video, self.prompt) = (video, prompt)
         self.seconds = seconds
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+        try validateLength("prompt", self.prompt, min: 1, max: 32000)
     }
 }
 
@@ -100,22 +128,32 @@ public indirect enum CreateVideoExtendMultipartBodyVideo {
 }
 
 extension CreateVideoExtendMultipartBodyVideo: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateVideoExtendMultipartBodyVideo")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateVideoExtendMultipartBodyVideo"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension CreateVideoExtendMultipartBodyVideo {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(VideoReferenceInputParam.self) { return .videoReferenceInputParam(value) }
-        if let value = try? container.decode(Data.self) { return .data(value) }
+        if let value = try? container.decode(VideoReferenceInputParam.self) {
+            return .videoReferenceInputParam(value)
+        }
+        if let value = try? container.decode(Data.self) {
+            return .data(value)
+        }
         return nil
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesItem domain models
+/// ResponsesItem domain models
 public indirect enum ItemField {
     case message(Message)
     case program(Program)
@@ -38,7 +38,6 @@ public indirect enum ItemField {
 }
 
 extension ItemField: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -46,15 +45,25 @@ extension ItemField: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
-        if let value = try Self.decodeGroup2(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
+        if let value = try Self.decodeGroup2(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
-        if try encodeGroup3(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
+        if try encodeGroup3(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -65,27 +74,27 @@ extension ItemField: Codable {
 extension ItemField {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "message": return .message(try Message(from: decoder))
-        case "program": return .program(try Program(from: decoder))
-        case "program_output": return .programOutput(try ProgramOutput(from: decoder))
-        case "function_call": return .functionToolCall(try FunctionToolCall(from: decoder))
-        case "tool_search_call": return .toolSearchCall(try ToolSearchCall(from: decoder))
-        case "tool_search_output": return .toolSearchOutput(try ToolSearchOutput(from: decoder))
-        case "additional_tools": return .additionalTools(try AdditionalTools(from: decoder))
-        case "function_call_output": return .functionToolCallOutput(try FunctionToolCallOutput(from: decoder))
-        case "file_search_call": return .fileSearchToolCall(try FileSearchToolCall(from: decoder))
-        case "web_search_call": return .webSearchToolCall(try WebSearchToolCall(from: decoder))
-        case "image_generation_call": return .imageGenToolCall(try ImageGenToolCall(from: decoder))
-        case "computer_call": return .computerToolCall(try ComputerToolCall(from: decoder))
-        case "computer_call_output": return .computerToolCallOutputResource(try ComputerToolCallOutputResource(from: decoder))
-        case "reasoning": return .reasoningItem(try ReasoningItem(from: decoder))
-        case "compaction": return .compactionBody(try CompactionBody(from: decoder))
-        case "code_interpreter_call": return .codeInterpreterToolCall(try CodeInterpreterToolCall(from: decoder))
-        case "local_shell_call": return .localShellToolCall(try LocalShellToolCall(from: decoder))
-        case "local_shell_call_output": return .localShellToolCallOutput(try LocalShellToolCallOutput(from: decoder))
-        case "shell_call": return .functionShellCall(try FunctionShellCall(from: decoder))
-        case "shell_call_output": return .functionShellCallOutput(try FunctionShellCallOutput(from: decoder))
-        default: return nil
+        case "message": try .message(Message(from: decoder))
+        case "program": try .program(Program(from: decoder))
+        case "program_output": try .programOutput(ProgramOutput(from: decoder))
+        case "function_call": try .functionToolCall(FunctionToolCall(from: decoder))
+        case "tool_search_call": try .toolSearchCall(ToolSearchCall(from: decoder))
+        case "tool_search_output": try .toolSearchOutput(ToolSearchOutput(from: decoder))
+        case "additional_tools": try .additionalTools(AdditionalTools(from: decoder))
+        case "function_call_output": try .functionToolCallOutput(FunctionToolCallOutput(from: decoder))
+        case "file_search_call": try .fileSearchToolCall(FileSearchToolCall(from: decoder))
+        case "web_search_call": try .webSearchToolCall(WebSearchToolCall(from: decoder))
+        case "image_generation_call": try .imageGenToolCall(ImageGenToolCall(from: decoder))
+        case "computer_call": try .computerToolCall(ComputerToolCall(from: decoder))
+        case "computer_call_output": try .computerToolCallOutputResource(ComputerToolCallOutputResource(from: decoder))
+        case "reasoning": try .reasoningItem(ReasoningItem(from: decoder))
+        case "compaction": try .compactionBody(CompactionBody(from: decoder))
+        case "code_interpreter_call": try .codeInterpreterToolCall(CodeInterpreterToolCall(from: decoder))
+        case "local_shell_call": try .localShellToolCall(LocalShellToolCall(from: decoder))
+        case "local_shell_call_output": try .localShellToolCallOutput(LocalShellToolCallOutput(from: decoder))
+        case "shell_call": try .functionShellCall(FunctionShellCall(from: decoder))
+        case "shell_call_output": try .functionShellCallOutput(FunctionShellCallOutput(from: decoder))
+        default: nil
         }
     }
 }
@@ -93,15 +102,15 @@ extension ItemField {
 extension ItemField {
     static func decodeGroup2(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "apply_patch_call": return .applyPatchToolCall(try ApplyPatchToolCall(from: decoder))
-        case "apply_patch_call_output": return .applyPatchToolCallOutput(try ApplyPatchToolCallOutput(from: decoder))
-        case "mcp_list_tools": return .mCpListTools(try MCPListTools(from: decoder))
-        case "mcp_approval_request": return .mCpApprovalRequest(try MCPApprovalRequest(from: decoder))
-        case "mcp_approval_response": return .mCpApprovalResponseResource(try MCPApprovalResponseResource(from: decoder))
-        case "mcp_call": return .mCpToolCall(try MCPToolCall(from: decoder))
-        case "custom_tool_call": return .customToolCall(try CustomToolCall(from: decoder))
-        case "custom_tool_call_output": return .customToolCallOutput(try CustomToolCallOutput(from: decoder))
-        default: return nil
+        case "apply_patch_call": try .applyPatchToolCall(ApplyPatchToolCall(from: decoder))
+        case "apply_patch_call_output": try .applyPatchToolCallOutput(ApplyPatchToolCallOutput(from: decoder))
+        case "mcp_list_tools": try .mCpListTools(MCPListTools(from: decoder))
+        case "mcp_approval_request": try .mCpApprovalRequest(MCPApprovalRequest(from: decoder))
+        case "mcp_approval_response": try .mCpApprovalResponseResource(MCPApprovalResponseResource(from: decoder))
+        case "mcp_call": try .mCpToolCall(MCPToolCall(from: decoder))
+        case "custom_tool_call": try .customToolCall(CustomToolCall(from: decoder))
+        case "custom_tool_call_output": try .customToolCallOutput(CustomToolCallOutput(from: decoder))
+        default: nil
         }
     }
 }
@@ -197,7 +206,6 @@ public indirect enum ItemResource {
 }
 
 extension ItemResource: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -205,11 +213,17 @@ extension ItemResource: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
-            if let value = try Self.decodeGroup2(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
+            if let value = try Self.decodeGroup2(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
@@ -219,9 +233,15 @@ extension ItemResource: Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
-        if try encodeGroup3(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
+        if try encodeGroup3(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -232,27 +252,27 @@ extension ItemResource: Codable {
 extension ItemResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file_search_call": return .fileSearchToolCall(try FileSearchToolCall(from: decoder))
-        case "computer_call": return .computerToolCall(try ComputerToolCall(from: decoder))
-        case "computer_call_output": return .computerToolCallOutputResource(try ComputerToolCallOutputResource(from: decoder))
-        case "web_search_call": return .webSearchToolCall(try WebSearchToolCall(from: decoder))
-        case "function_call": return .functionToolCallResource(try FunctionToolCallResource(from: decoder))
-        case "function_call_output": return .functionToolCallOutputResource(try FunctionToolCallOutputResource(from: decoder))
-        case "tool_search_call": return .toolSearchCall(try ToolSearchCall(from: decoder))
-        case "tool_search_output": return .toolSearchOutput(try ToolSearchOutput(from: decoder))
-        case "additional_tools": return .additionalTools(try AdditionalTools(from: decoder))
-        case "configuration_update": return .responseConfigurationUpdate(try ResponseConfigurationUpdate(from: decoder))
-        case "reasoning": return .reasoningItem(try ReasoningItem(from: decoder))
-        case "program": return .program(try Program(from: decoder))
-        case "program_output": return .programOutput(try ProgramOutput(from: decoder))
-        case "compaction": return .compactionBody(try CompactionBody(from: decoder))
-        case "image_generation_call": return .imageGenToolCall(try ImageGenToolCall(from: decoder))
-        case "code_interpreter_call": return .codeInterpreterToolCall(try CodeInterpreterToolCall(from: decoder))
-        case "local_shell_call": return .localShellToolCall(try LocalShellToolCall(from: decoder))
-        case "local_shell_call_output": return .localShellToolCallOutput(try LocalShellToolCallOutput(from: decoder))
-        case "shell_call": return .functionShellCall(try FunctionShellCall(from: decoder))
-        case "shell_call_output": return .functionShellCallOutput(try FunctionShellCallOutput(from: decoder))
-        default: return nil
+        case "file_search_call": try .fileSearchToolCall(FileSearchToolCall(from: decoder))
+        case "computer_call": try .computerToolCall(ComputerToolCall(from: decoder))
+        case "computer_call_output": try .computerToolCallOutputResource(ComputerToolCallOutputResource(from: decoder))
+        case "web_search_call": try .webSearchToolCall(WebSearchToolCall(from: decoder))
+        case "function_call": try .functionToolCallResource(FunctionToolCallResource(from: decoder))
+        case "function_call_output": try .functionToolCallOutputResource(FunctionToolCallOutputResource(from: decoder))
+        case "tool_search_call": try .toolSearchCall(ToolSearchCall(from: decoder))
+        case "tool_search_output": try .toolSearchOutput(ToolSearchOutput(from: decoder))
+        case "additional_tools": try .additionalTools(AdditionalTools(from: decoder))
+        case "configuration_update": try .responseConfigurationUpdate(ResponseConfigurationUpdate(from: decoder))
+        case "reasoning": try .reasoningItem(ReasoningItem(from: decoder))
+        case "program": try .program(Program(from: decoder))
+        case "program_output": try .programOutput(ProgramOutput(from: decoder))
+        case "compaction": try .compactionBody(CompactionBody(from: decoder))
+        case "image_generation_call": try .imageGenToolCall(ImageGenToolCall(from: decoder))
+        case "code_interpreter_call": try .codeInterpreterToolCall(CodeInterpreterToolCall(from: decoder))
+        case "local_shell_call": try .localShellToolCall(LocalShellToolCall(from: decoder))
+        case "local_shell_call_output": try .localShellToolCallOutput(LocalShellToolCallOutput(from: decoder))
+        case "shell_call": try .functionShellCall(FunctionShellCall(from: decoder))
+        case "shell_call_output": try .functionShellCallOutput(FunctionShellCallOutput(from: decoder))
+        default: nil
         }
     }
 }
@@ -260,23 +280,27 @@ extension ItemResource {
 extension ItemResource {
     static func decodeGroup2(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "apply_patch_call": return .applyPatchToolCall(try ApplyPatchToolCall(from: decoder))
-        case "apply_patch_call_output": return .applyPatchToolCallOutput(try ApplyPatchToolCallOutput(from: decoder))
-        case "mcp_list_tools": return .mCpListTools(try MCPListTools(from: decoder))
-        case "mcp_approval_request": return .mCpApprovalRequest(try MCPApprovalRequest(from: decoder))
-        case "mcp_approval_response": return .mCpApprovalResponseResource(try MCPApprovalResponseResource(from: decoder))
-        case "mcp_call": return .mCpToolCall(try MCPToolCall(from: decoder))
-        case "custom_tool_call": return .customToolCallResource(try CustomToolCallResource(from: decoder))
-        case "custom_tool_call_output": return .customToolCallOutputResource(try CustomToolCallOutputResource(from: decoder))
-        default: return nil
+        case "apply_patch_call": try .applyPatchToolCall(ApplyPatchToolCall(from: decoder))
+        case "apply_patch_call_output": try .applyPatchToolCallOutput(ApplyPatchToolCallOutput(from: decoder))
+        case "mcp_list_tools": try .mCpListTools(MCPListTools(from: decoder))
+        case "mcp_approval_request": try .mCpApprovalRequest(MCPApprovalRequest(from: decoder))
+        case "mcp_approval_response": try .mCpApprovalResponseResource(MCPApprovalResponseResource(from: decoder))
+        case "mcp_call": try .mCpToolCall(MCPToolCall(from: decoder))
+        case "custom_tool_call": try .customToolCallResource(CustomToolCallResource(from: decoder))
+        case "custom_tool_call_output": try .customToolCallOutputResource(CustomToolCallOutputResource(from: decoder))
+        default: nil
         }
     }
 }
 
 extension ItemResource {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(InputMessageResource.self) { return .inputMessageResource(value) }
-        if let value = try? container.decode(OutputMessage.self) { return .outputMessage(value) }
+        if let value = try? container.decode(InputMessageResource.self) {
+            return .inputMessageResource(value)
+        }
+        if let value = try? container.decode(OutputMessage.self) {
+            return .outputMessage(value)
+        }
         return nil
     }
 }

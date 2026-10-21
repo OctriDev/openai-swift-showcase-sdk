@@ -8,8 +8,9 @@ import Foundation
 #endif
 public enum ContainersMethods {}
 
-extension ContainersMethods {
-    /// Lists containers available to the authenticated user. Filter the results by `name` and use `after` to continue from a container ID returned in a previous page. Results are ordered by creation time, descending by default.
+public extension ContainersMethods {
+    /// Lists containers available to the authenticated user. Filter the results by `name` and use `after` to continue
+    /// from a container ID returned in a previous page. Results are ordered by creation time, descending by default.
     ///
     /// List Containers
     ///
@@ -23,16 +24,33 @@ extension ContainersMethods {
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
     /// - name: Filter results by container name.
-    public static func listContainers(config: ClientConfig, limit: Int? = nil, order: ListContainersParameter? = nil, after: String? = nil, name: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ContainerListResource {
-        return try (await sdkRequest("GET", "/containers", config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-            SdkQueryParameter("name", value: name),
-        ], decoder: .json, operationId: "ListContainers", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func listContainers(
+        config: ClientConfig,
+        limit: Int? = nil,
+        order: ListContainersParameter? = nil,
+        after: String? = nil,
+        name: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ContainerListResource {
+        try await (sdkRequest(
+            "GET",
+            "/containers",
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+                SdkQueryParameter("name", value: name),
+            ],
+            decoder: .json,
+            operationId: "ListContainers",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Lists containers available to the authenticated user. Filter the results by `name` and use `after` to continue from a container ID returned in a previous page. Results are ordered by creation time, descending by default.
+    /// Lists containers available to the authenticated user. Filter the results by `name` and use `after` to continue
+    /// from a container ID returned in a previous page. Results are ordered by creation time, descending by default.
     ///
     /// List Containers
     ///
@@ -46,17 +64,40 @@ extension ContainersMethods {
     ///   receive 100 objects, ending with obj_foo, your subsequent call can include
     ///   after=obj_foo in order to fetch the next page of the list.
     /// - name: Filter results by container name.
-    public static func listContainersPaginated(config: ClientConfig, limit: Int? = nil, order: ListContainersParameter? = nil, after: String? = nil, name: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ContainerResource, Swift.Error> {
-        return AsyncThrowingStream<ContainerResource, Swift.Error> { (continuation: AsyncThrowingStream<ContainerResource, Swift.Error>.Continuation) in
+    static func listContainersPaginated(
+        config: ClientConfig,
+        limit: Int? = nil,
+        order: ListContainersParameter? = nil,
+        after: String? = nil,
+        name: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ContainerResource, Swift.Error> {
+        AsyncThrowingStream<ContainerResource, Swift.Error> { (continuation: AsyncThrowingStream<
+            ContainerResource,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listContainers(config: config, limit: limit, order: order, after: pageCursor, name: name, requestOptions: requestOptions)
+                        let pageResponse = try await listContainers(
+                            config: config,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            name: name,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {
@@ -69,24 +110,49 @@ extension ContainersMethods {
         }
     }
 
-    public struct ListContainersPage {
+    struct ListContainersPage {
         public let data: ContainerListResource
         public let items: [ContainerResource]
         public let hasMore: Bool
     }
 
-    public static func listContainersPages(config: ClientConfig, limit: Int? = nil, order: ListContainersParameter? = nil, after: String? = nil, name: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListContainersPage, Swift.Error> {
-        return AsyncThrowingStream<ListContainersPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListContainersPage, Swift.Error>.Continuation) in
+    static func listContainersPages(
+        config: ClientConfig,
+        limit: Int? = nil,
+        order: ListContainersParameter? = nil,
+        after: String? = nil,
+        name: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListContainersPage, Swift.Error> {
+        AsyncThrowingStream<ListContainersPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListContainersPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listContainers(config: config, limit: limit, order: order, after: pageCursor, name: name, requestOptions: requestOptions)
+                        let pageResponse = try await listContainers(
+                            config: config,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            name: name,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && true
-                        pageContinuation.yield(ListContainersPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
+                        pageContinuation.yield(ListContainersPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
                         pageCursor = pageResponse.lastId
                     }
                 } catch {

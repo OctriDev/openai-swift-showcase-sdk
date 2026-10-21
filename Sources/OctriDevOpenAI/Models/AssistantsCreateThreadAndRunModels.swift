@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AssistantsCreate domain models
+/// AssistantsCreate domain models
 public indirect enum CreateThreadAndRunRequestToolsItem {
     case assistantToolsCode(AssistantToolsCode)
     case assistantToolsFileSearch(AssistantToolsFileSearch)
@@ -13,7 +13,6 @@ public indirect enum CreateThreadAndRunRequestToolsItem {
 }
 
 extension CreateThreadAndRunRequestToolsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension CreateThreadAndRunRequestToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension CreateThreadAndRunRequestToolsItem: Codable {
 extension CreateThreadAndRunRequestToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "code_interpreter": return .assistantToolsCode(try AssistantToolsCode(from: decoder))
-        case "file_search": return .assistantToolsFileSearch(try AssistantToolsFileSearch(from: decoder))
-        case "function": return .assistantToolsFunction(try AssistantToolsFunction(from: decoder))
-        default: return nil
+        case "code_interpreter": try .assistantToolsCode(AssistantToolsCode(from: decoder))
+        case "file_search": try .assistantToolsFileSearch(AssistantToolsFileSearch(from: decoder))
+        case "function": try .assistantToolsFunction(AssistantToolsFunction(from: decoder))
+        default: nil
         }
     }
 }
@@ -137,51 +140,106 @@ public struct CreateThreadAndRunRequest: Codable {
         case responseFormat = "response_format"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateThreadAndRunRequest {
-    public init(from decoder: Decoder) throws {
+public extension CreateThreadAndRunRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.assistantId) else {
-            throw SdkValidationError(field: "assistant_id", code: "required", message: "Validation failed for 'assistant_id': value is required")
+            throw SdkValidationError(
+                field: "assistant_id",
+                code: "required",
+                message: "Validation failed for 'assistant_id': value is required"
+            )
         }
-        self.assistantId = try container.sdkDecodeRequired(.assistantId)
-        self.thread = try container.sdkDecodeIfPresent(.thread)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolResources = try container.sdkDecodeIfPresent(.toolResources)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.temperature = try container.sdkDecodeIfPresent(.temperature)
-        self.topP = try container.sdkDecodeIfPresent(.topP)
-        self.stream = try container.sdkDecodeIfPresent(.stream)
-        self.maxPromptTokens = try container.sdkDecodeIfPresent(.maxPromptTokens)
-        self.maxCompletionTokens = try container.sdkDecodeIfPresent(.maxCompletionTokens)
-        self.truncationStrategy = try container.sdkDecodeIfPresent(.truncationStrategy)
-        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        if let value = self.tools {
+        assistantId = try container.sdkDecodeRequired(.assistantId)
+        thread = try container.sdkDecodeIfPresent(.thread)
+        model = try container.sdkDecodeIfPresent(.model)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolResources = try container.sdkDecodeIfPresent(.toolResources)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        temperature = try container.sdkDecodeIfPresent(.temperature)
+        topP = try container.sdkDecodeIfPresent(.topP)
+        stream = try container.sdkDecodeIfPresent(.stream)
+        maxPromptTokens = try container.sdkDecodeIfPresent(.maxPromptTokens)
+        maxCompletionTokens = try container.sdkDecodeIfPresent(.maxCompletionTokens)
+        truncationStrategy = try container.sdkDecodeIfPresent(.truncationStrategy)
+        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        if let value = tools {
             try validateItems("tools", value, min: nil, max: 20)
         }
-        if let value = self.temperature {
-            try validateRange("temperature", Double(value), min: 0, max: 2, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = temperature {
+            try validateRange(
+                "temperature",
+                Double(value),
+                min: 0,
+                max: 2,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.topP {
-            try validateRange("top_p", Double(value), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = topP {
+            try validateRange(
+                "top_p",
+                Double(value),
+                min: 0,
+                max: 1,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.maxPromptTokens {
-            try validateRange("max_prompt_tokens", Double(value), min: 256, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = maxPromptTokens {
+            try validateRange(
+                "max_prompt_tokens",
+                Double(value),
+                min: 256,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.maxCompletionTokens {
-            try validateRange("max_completion_tokens", Double(value), min: 256, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        if let value = maxCompletionTokens {
+            try validateRange(
+                "max_completion_tokens",
+                Double(value),
+                min: 256,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension CreateThreadAndRunRequest {
-    public init(assistantId: String, thread: CreateThreadRequest? = nil, model: String? = nil, instructions: String? = nil, tools: [CreateThreadAndRunRequestToolsItem]? = nil, toolResources: CreateThreadAndRunRequestToolResources? = nil, metadata: Metadata? = nil, temperature: Double? = nil, topP: Double? = nil, stream: Bool? = nil, maxPromptTokens: Int? = nil, maxCompletionTokens: Int? = nil, truncationStrategy: CreateThreadAndRunRequestTruncationStrategy? = nil, toolChoice: AssistantsApiToolChoiceOption? = nil, parallelToolCalls: ParallelToolCalls? = nil, responseFormat: AssistantsApiResponseFormatOption? = nil) throws {
+public extension CreateThreadAndRunRequest {
+    init(
+        assistantId: String,
+        thread: CreateThreadRequest? = nil,
+        model: String? = nil,
+        instructions: String? = nil,
+        tools: [CreateThreadAndRunRequestToolsItem]? = nil,
+        toolResources: CreateThreadAndRunRequestToolResources? = nil,
+        metadata: Metadata? = nil,
+        temperature: Double? = nil,
+        topP: Double? = nil,
+        stream: Bool? = nil,
+        maxPromptTokens: Int? = nil,
+        maxCompletionTokens: Int? = nil,
+        truncationStrategy: CreateThreadAndRunRequestTruncationStrategy? = nil,
+        toolChoice: AssistantsApiToolChoiceOption? = nil,
+        parallelToolCalls: ParallelToolCalls? = nil,
+        responseFormat: AssistantsApiResponseFormatOption? = nil
+    ) throws {
         (self.assistantId, self.thread) = (assistantId, thread)
         (self.model, self.instructions) = (model, instructions)
         (self.tools, self.toolResources) = (tools, toolResources)
@@ -194,16 +252,48 @@ extension CreateThreadAndRunRequest {
             try validateItems("tools", value, min: nil, max: 20)
         }
         if let value = self.temperature {
-            try validateRange("temperature", Double(value), min: 0, max: 2, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "temperature",
+                Double(value),
+                min: 0,
+                max: 2,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.topP {
-            try validateRange("top_p", Double(value), min: 0, max: 1, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "top_p",
+                Double(value),
+                min: 0,
+                max: 1,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.maxPromptTokens {
-            try validateRange("max_prompt_tokens", Double(value), min: 256, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "max_prompt_tokens",
+                Double(value),
+                min: 256,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.maxCompletionTokens {
-            try validateRange("max_completion_tokens", Double(value), min: 256, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "max_completion_tokens",
+                Double(value),
+                min: 256,
+                max: nil,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -219,22 +309,22 @@ public struct CreateThreadAndRunRequestToolResourcesFileSearch: Codable {
     }
 
     init() {
-        self.vectorStoreIds = nil
+        vectorStoreIds = nil
     }
 }
 
-extension CreateThreadAndRunRequestToolResourcesFileSearch {
-    public init(from decoder: Decoder) throws {
+public extension CreateThreadAndRunRequestToolResourcesFileSearch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
-        if let value = self.vectorStoreIds {
+        vectorStoreIds = try container.sdkDecodeIfPresent(.vectorStoreIds)
+        if let value = vectorStoreIds {
             try validateItems("vector_store_ids", value, min: nil, max: 1)
         }
     }
 }
 
-extension CreateThreadAndRunRequestToolResourcesFileSearch {
-    public init(vectorStoreIds: [String]? = nil) throws {
+public extension CreateThreadAndRunRequestToolResourcesFileSearch {
+    init(vectorStoreIds: [String]? = nil) throws {
         self.init()
         self.vectorStoreIds = vectorStoreIds
         if let value = self.vectorStoreIds {
@@ -257,22 +347,28 @@ public struct CreateThreadAndRunRequestTruncationStrategy: Codable {
         case lastMessages = "last_messages"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateThreadAndRunRequestTruncationStrategy {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.lastMessages = try container.sdkDecodeIfPresent(.lastMessages)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateThreadAndRunRequestTruncationStrategy {
-    public init(type: TruncationObjectType, lastMessages: Int? = nil) {
+public extension CreateThreadAndRunRequestTruncationStrategy {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        lastMessages = try container.sdkDecodeIfPresent(.lastMessages)
+    }
+}
+
+public extension CreateThreadAndRunRequestTruncationStrategy {
+    init(type: TruncationObjectType, lastMessages: Int? = nil) {
         (self.type, self.lastMessages) = (type, lastMessages)
     }
 }
@@ -292,20 +388,23 @@ public struct CreateThreadAndRunRequestToolResources: Codable {
     }
 
     init() {
-        (self.codeInterpreter, self.fileSearch) = (nil, nil)
+        (codeInterpreter, fileSearch) = (nil, nil)
     }
 }
 
-extension CreateThreadAndRunRequestToolResources {
-    public init(from decoder: Decoder) throws {
+public extension CreateThreadAndRunRequestToolResources {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
-        self.fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
+        codeInterpreter = try container.sdkDecodeIfPresent(.codeInterpreter)
+        fileSearch = try container.sdkDecodeIfPresent(.fileSearch)
     }
 }
 
-extension CreateThreadAndRunRequestToolResources {
-    public init(codeInterpreter: CreateThreadAndRunRequestToolResourcesCodeInterpreter? = nil, fileSearch: CreateThreadAndRunRequestToolResourcesFileSearch? = nil) {
+public extension CreateThreadAndRunRequestToolResources {
+    init(
+        codeInterpreter: CreateThreadAndRunRequestToolResourcesCodeInterpreter? = nil,
+        fileSearch: CreateThreadAndRunRequestToolResourcesFileSearch? = nil
+    ) {
         self.init()
         (self.codeInterpreter, self.fileSearch) = (codeInterpreter, fileSearch)
     }
@@ -322,22 +421,22 @@ public struct CreateThreadAndRunRequestToolResourcesCodeInterpreter: Codable {
     }
 
     init() {
-        self.fileIds = nil
+        fileIds = nil
     }
 }
 
-extension CreateThreadAndRunRequestToolResourcesCodeInterpreter {
-    public init(from decoder: Decoder) throws {
+public extension CreateThreadAndRunRequestToolResourcesCodeInterpreter {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        if let value = self.fileIds {
+        fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        if let value = fileIds {
             try validateItems("file_ids", value, min: nil, max: 20)
         }
     }
 }
 
-extension CreateThreadAndRunRequestToolResourcesCodeInterpreter {
-    public init(fileIds: [String]? = nil) throws {
+public extension CreateThreadAndRunRequestToolResourcesCodeInterpreter {
+    init(fileIds: [String]? = nil) throws {
         self.init()
         self.fileIds = fileIds
         if let value = self.fileIds {

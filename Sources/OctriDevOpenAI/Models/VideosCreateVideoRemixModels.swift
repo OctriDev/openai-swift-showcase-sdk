@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Videos domain models
+/// Videos domain models
 /// Parameters for remixing an existing generated video.
 public struct CreateVideoRemixBody: Codable {
     /// Updated text prompt that directs the remix generation.
@@ -13,23 +13,29 @@ public struct CreateVideoRemixBody: Codable {
         case prompt
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateVideoRemixBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.prompt) else {
-            throw SdkValidationError(field: "prompt", code: "required", message: "Validation failed for 'prompt': value is required")
-        }
-        self.prompt = try container.sdkDecodeRequired(.prompt)
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateVideoRemixBody {
-    public init(prompt: String) throws {
+public extension CreateVideoRemixBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.prompt) else {
+            throw SdkValidationError(
+                field: "prompt",
+                code: "required",
+                message: "Validation failed for 'prompt': value is required"
+            )
+        }
+        prompt = try container.sdkDecodeRequired(.prompt)
+        try validateLength("prompt", prompt, min: 1, max: 32000)
+    }
+}
+
+public extension CreateVideoRemixBody {
+    init(prompt: String) throws {
         self.prompt = prompt
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+        try validateLength("prompt", self.prompt, min: 1, max: 32000)
     }
 }

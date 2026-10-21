@@ -3,7 +3,7 @@
 
 import Foundation
 
-// RealtimeRealtimeReasoning domain models
+/// RealtimeRealtimeReasoning domain models
 /// Configuration for reasoning-capable Realtime models such as `gpt-realtime-2`.
 public struct RealtimeReasoning: Codable {
     /// Constrains effort on reasoning for reasoning-capable Realtime models such as `gpt-realtime-2`.
@@ -14,19 +14,19 @@ public struct RealtimeReasoning: Codable {
     }
 
     init() {
-        self.effort = nil
+        effort = nil
     }
 }
 
-extension RealtimeReasoning {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeReasoning {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.effort = try container.sdkDecodeIfPresent(.effort)
+        effort = try container.sdkDecodeIfPresent(.effort)
     }
 }
 
-extension RealtimeReasoning {
-    public init(effort: RealtimeReasoningEffort? = nil) {
+public extension RealtimeReasoning {
+    init(effort: RealtimeReasoningEffort? = nil) {
         self.init()
         self.effort = effort
     }
@@ -36,7 +36,10 @@ extension RealtimeReasoning {
 public struct RealtimeReasoningEffort: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let minimal = RealtimeReasoningEffort(rawValue: "minimal")
     public static let low = RealtimeReasoningEffort(rawValue: "low")
     public static let medium = RealtimeReasoningEffort(rawValue: "medium")
@@ -45,7 +48,7 @@ public struct RealtimeReasoningEffort: RawRepresentable, Hashable, Codable, Send
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

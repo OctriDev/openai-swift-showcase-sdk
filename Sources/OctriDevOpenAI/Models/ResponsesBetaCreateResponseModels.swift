@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBeta domain models
+/// ResponsesBeta domain models
 /// Typed representation of the `BetaContextManagementParam` API schema.
 public struct BetaContextManagementParam: Codable {
     /// The context management entry type. Currently only 'compaction' is supported.
@@ -16,22 +16,28 @@ public struct BetaContextManagementParam: Codable {
         case compactThreshold = "compact_threshold"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaContextManagementParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.compactThreshold = try container.sdkDecodeIfPresent(.compactThreshold)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaContextManagementParam {
-    public init(type: String, compactThreshold: Int? = nil) {
+public extension BetaContextManagementParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        compactThreshold = try container.sdkDecodeIfPresent(.compactThreshold)
+    }
+}
+
+public extension BetaContextManagementParam {
+    init(type: String, compactThreshold: Int? = nil) {
         (self.type, self.compactThreshold) = (type, compactThreshold)
     }
 }

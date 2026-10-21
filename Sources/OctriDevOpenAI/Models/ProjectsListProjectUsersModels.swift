@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Projects domain models
+/// Projects domain models
 /// Typed representation of the `ProjectUserListResponse` API schema.
 public struct ProjectUserListResponse: Codable {
     /// Required `string` value serialized in the `object` wire field.
@@ -25,31 +25,45 @@ public struct ProjectUserListResponse: Codable {
         case lastId = "last_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectUserListResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-        self.firstId = try container.sdkDecodeIfPresent(.firstId)
-        self.lastId = try container.sdkDecodeIfPresent(.lastId)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectUserListResponse {
-    public init(object: String, data: [ProjectUser], hasMore: Bool, firstId: String? = nil, lastId: String? = nil) {
+public extension ProjectUserListResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        data = try container.sdkDecodeRequired(.data)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        firstId = try container.sdkDecodeIfPresent(.firstId)
+        lastId = try container.sdkDecodeIfPresent(.lastId)
+    }
+}
+
+public extension ProjectUserListResponse {
+    init(object: String, data: [ProjectUser], hasMore: Bool, firstId: String? = nil, lastId: String? = nil) {
         (self.object, self.data) = (object, data)
         (self.hasMore, self.firstId) = (hasMore, firstId)
         self.lastId = lastId

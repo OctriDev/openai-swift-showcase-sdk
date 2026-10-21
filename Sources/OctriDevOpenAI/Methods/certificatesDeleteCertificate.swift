@@ -6,12 +6,30 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension CertificatesMethods {
-    /// Delete a certificate from the organization. The certificate must be inactive for the organization and all projects.
+public extension CertificatesMethods {
+    /// Delete a certificate from the organization. The certificate must be inactive for the organization and all
+    /// projects.
     ///
     /// - Parameters:
     /// - certificateId: Unique ID of the certificate to delete.
-    public static func deleteCertificate(config: ClientConfig, certificateId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteCertificateResponse {
-        return try (await sdkRequest("DELETE", ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(), config: config, decoder: .json, operationId: "deleteCertificate", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func deleteCertificate(
+        config: ClientConfig,
+        certificateId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeleteCertificateResponse {
+        try await (sdkRequest(
+            "DELETE",
+            ["/organization/certificates/", sdkEncodePathSegment(sdkWireString(certificateId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "deleteCertificate",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

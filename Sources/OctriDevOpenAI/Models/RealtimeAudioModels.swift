@@ -3,7 +3,7 @@
 
 import Foundation
 
-// RealtimeAudio domain models
+/// RealtimeAudio domain models
 /// Typed representation of the `AudioTranscriptionResponse` API schema.
 public struct AudioTranscriptionResponse: Codable {
     /// The model used for transcription. Current options are `whisper-1`, `gpt-transcribe`, `gpt-live-transcribe`,
@@ -25,25 +25,25 @@ public struct AudioTranscriptionResponse: Codable {
     }
 
     init() {
-        (self.model, self.language, self.languages, self.prompt) = (nil, nil, nil, nil)
+        (model, language, languages, prompt) = (nil, nil, nil, nil)
     }
 }
 
-extension AudioTranscriptionResponse {
-    public init(from decoder: Decoder) throws {
+public extension AudioTranscriptionResponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.language = try container.sdkDecodeIfPresent(.language)
-        self.languages = try container.sdkDecodeIfPresent(.languages)
-        self.prompt = try container.sdkDecodeIfPresent(.prompt)
-        if let value = self.languages {
+        model = try container.sdkDecodeIfPresent(.model)
+        language = try container.sdkDecodeIfPresent(.language)
+        languages = try container.sdkDecodeIfPresent(.languages)
+        prompt = try container.sdkDecodeIfPresent(.prompt)
+        if let value = languages {
             try validateItems("languages", value, min: 1, max: nil)
         }
     }
 }
 
-extension AudioTranscriptionResponse {
-    public init(model: String? = nil, language: String? = nil, languages: [String]? = nil, prompt: String? = nil) throws {
+public extension AudioTranscriptionResponse {
+    init(model: String? = nil, language: String? = nil, languages: [String]? = nil, prompt: String? = nil) throws {
         self.init()
         (self.model, self.language) = (model, language)
         (self.languages, self.prompt) = (languages, prompt)
@@ -89,28 +89,35 @@ public struct AudioTranscription: Codable {
     }
 
     init() {
-        (self.model, self.language, self.languages, self.keywords, self.prompt) = (nil, nil, nil, nil, nil)
-        self.delay = nil
+        (model, language, languages, keywords, prompt) = (nil, nil, nil, nil, nil)
+        delay = nil
     }
 }
 
-extension AudioTranscription {
-    public init(from decoder: Decoder) throws {
+public extension AudioTranscription {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.language = try container.sdkDecodeIfPresent(.language)
-        self.languages = try container.sdkDecodeIfPresent(.languages)
-        self.keywords = try container.sdkDecodeIfPresent(.keywords)
-        self.prompt = try container.sdkDecodeIfPresent(.prompt)
-        self.delay = try container.sdkDecodeIfPresent(.delay)
-        if let value = self.languages {
+        model = try container.sdkDecodeIfPresent(.model)
+        language = try container.sdkDecodeIfPresent(.language)
+        languages = try container.sdkDecodeIfPresent(.languages)
+        keywords = try container.sdkDecodeIfPresent(.keywords)
+        prompt = try container.sdkDecodeIfPresent(.prompt)
+        delay = try container.sdkDecodeIfPresent(.delay)
+        if let value = languages {
             try validateItems("languages", value, min: 1, max: nil)
         }
     }
 }
 
-extension AudioTranscription {
-    public init(model: String? = nil, language: String? = nil, languages: [String]? = nil, keywords: [String]? = nil, prompt: String? = nil, delay: AudioTranscriptionDelay? = nil) throws {
+public extension AudioTranscription {
+    init(
+        model: String? = nil,
+        language: String? = nil,
+        languages: [String]? = nil,
+        keywords: [String]? = nil,
+        prompt: String? = nil,
+        delay: AudioTranscriptionDelay? = nil
+    ) throws {
         self.init()
         (self.model, self.language) = (model, language)
         (self.languages, self.keywords) = (languages, keywords)
@@ -127,7 +134,10 @@ extension AudioTranscription {
 public struct AudioTranscriptionDelay: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let minimal = AudioTranscriptionDelay(rawValue: "minimal")
     public static let low = AudioTranscriptionDelay(rawValue: "low")
     public static let medium = AudioTranscriptionDelay(rawValue: "medium")
@@ -136,7 +146,7 @@ public struct AudioTranscriptionDelay: RawRepresentable, Hashable, Codable, Send
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

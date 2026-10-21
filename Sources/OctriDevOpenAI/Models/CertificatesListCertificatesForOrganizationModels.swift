@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Certificates domain models
+/// Certificates domain models
 /// Typed representation of the `ListCertificatesResponse` API schema.
 public struct ListCertificatesResponse: Codable {
     /// Required array value serialized in the `data` wire field.
@@ -27,37 +27,65 @@ public struct ListCertificatesResponse: Codable {
         case object
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListCertificatesResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.firstId) else {
-            throw SdkValidationError(field: "first_id", code: "required", message: "Validation failed for 'first_id': value is required")
-        }
-        guard container.contains(.lastId) else {
-            throw SdkValidationError(field: "last_id", code: "required", message: "Validation failed for 'last_id': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        self.data = try container.sdkDecodeRequired(.data)
-        self.firstId = try container.sdkDecodeNullable(.firstId)
-        self.lastId = try container.sdkDecodeNullable(.lastId)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
-        self.object = try container.sdkDecodeRequired(.object)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListCertificatesResponse {
-    public init(data: [OrganizationCertificate], firstId: String?, lastId: String?, hasMore: Bool, object: ListCertificatesResponseObject) {
+public extension ListCertificatesResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.firstId) else {
+            throw SdkValidationError(
+                field: "first_id",
+                code: "required",
+                message: "Validation failed for 'first_id': value is required"
+            )
+        }
+        guard container.contains(.lastId) else {
+            throw SdkValidationError(
+                field: "last_id",
+                code: "required",
+                message: "Validation failed for 'last_id': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        data = try container.sdkDecodeRequired(.data)
+        firstId = try container.sdkDecodeNullable(.firstId)
+        lastId = try container.sdkDecodeNullable(.lastId)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+        object = try container.sdkDecodeRequired(.object)
+    }
+}
+
+public extension ListCertificatesResponse {
+    init(
+        data: [OrganizationCertificate],
+        firstId: String?,
+        lastId: String?,
+        hasMore: Bool,
+        object: ListCertificatesResponseObject
+    ) {
         (self.data, self.firstId) = (data, firstId)
         (self.lastId, self.hasMore) = (lastId, hasMore)
         self.object = object
@@ -68,12 +96,15 @@ extension ListCertificatesResponse {
 public struct ListCertificatesResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = ListCertificatesResponseObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

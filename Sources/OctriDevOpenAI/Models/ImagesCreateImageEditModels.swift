@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Images domain models
+/// Images domain models
 public indirect enum ImageEditStreamEvent {
     case imageEditPartialImageEvent(ImageEditPartialImageEvent)
     case imageEditCompletedEvent(ImageEditCompletedEvent)
@@ -12,7 +12,6 @@ public indirect enum ImageEditStreamEvent {
 }
 
 extension ImageEditStreamEvent: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension ImageEditStreamEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,9 @@ extension ImageEditStreamEvent: Codable {
 extension ImageEditStreamEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "image_edit.partial_image": return .imageEditPartialImageEvent(try ImageEditPartialImageEvent(from: decoder))
-        case "image_edit.completed": return .imageEditCompletedEvent(try ImageEditCompletedEvent(from: decoder))
-        default: return nil
+        case "image_edit.partial_image": try .imageEditPartialImageEvent(ImageEditPartialImageEvent(from: decoder))
+        case "image_edit.completed": try .imageEditCompletedEvent(ImageEditCompletedEvent(from: decoder))
+        default: nil
         }
     }
 }
@@ -69,28 +72,28 @@ public struct ImageRefParam: Codable {
     }
 
     init() {
-        (self.imageUrl, self.fileId) = (nil, nil)
+        (imageUrl, fileId) = (nil, nil)
     }
 }
 
-extension ImageRefParam {
-    public init(from decoder: Decoder) throws {
+public extension ImageRefParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
-        self.fileId = try container.sdkDecodeIfPresent(.fileId)
-        if let value = self.imageUrl {
-            try validateLength("image_url", value, min: nil, max: 20971520)
+        imageUrl = try container.sdkDecodeIfPresent(.imageUrl)
+        fileId = try container.sdkDecodeIfPresent(.fileId)
+        if let value = imageUrl {
+            try validateLength("image_url", value, min: nil, max: 20_971_520)
             try sdkValidateUri("image_url", value)
         }
     }
 }
 
-extension ImageRefParam {
-    public init(imageUrl: String? = nil, fileId: String? = nil) throws {
+public extension ImageRefParam {
+    init(imageUrl: String? = nil, fileId: String? = nil) throws {
         self.init()
         (self.imageUrl, self.fileId) = (imageUrl, fileId)
         if let value = self.imageUrl {
-            try validateLength("image_url", value, min: nil, max: 20971520)
+            try validateLength("image_url", value, min: nil, max: 20_971_520)
             try sdkValidateUri("image_url", value)
         }
     }
@@ -180,44 +183,71 @@ public struct EditImageBodyJsonParam: Codable {
         case partialImages = "partial_images"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension EditImageBodyJsonParam {
-    public init(from decoder: Decoder) throws {
+public extension EditImageBodyJsonParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.images) else {
-            throw SdkValidationError(field: "images", code: "required", message: "Validation failed for 'images': value is required")
+            throw SdkValidationError(
+                field: "images",
+                code: "required",
+                message: "Validation failed for 'images': value is required"
+            )
         }
         guard container.contains(.prompt) else {
-            throw SdkValidationError(field: "prompt", code: "required", message: "Validation failed for 'prompt': value is required")
+            throw SdkValidationError(
+                field: "prompt",
+                code: "required",
+                message: "Validation failed for 'prompt': value is required"
+            )
         }
-        self.images = try container.sdkDecodeRequired(.images)
-        self.prompt = try container.sdkDecodeRequired(.prompt)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.mask = try container.sdkDecodeIfPresent(.mask)
-        self.n = try container.sdkDecodeIfPresent(.n)
-        self.quality = try container.sdkDecodeIfPresent(.quality)
-        self.inputFidelity = try container.sdkDecodeIfPresent(.inputFidelity)
-        self.size = try container.sdkDecodeIfPresent(.size)
-        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        self.user = try container.sdkDecodeIfPresent(.user)
-        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-        self.outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
-        self.moderation = try container.sdkDecodeIfPresent(.moderation)
-        self.background = try container.sdkDecodeIfPresent(.background)
-        self.stream = try container.sdkDecodeIfPresent(.stream)
-        self.partialImages = try container.sdkDecodeIfPresent(.partialImages)
-            try validateItems("images", self.images, min: 1, max: 16)
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
-        if let value = self.safetyIdentifier {
+        images = try container.sdkDecodeRequired(.images)
+        prompt = try container.sdkDecodeRequired(.prompt)
+        model = try container.sdkDecodeIfPresent(.model)
+        mask = try container.sdkDecodeIfPresent(.mask)
+        n = try container.sdkDecodeIfPresent(.n)
+        quality = try container.sdkDecodeIfPresent(.quality)
+        inputFidelity = try container.sdkDecodeIfPresent(.inputFidelity)
+        size = try container.sdkDecodeIfPresent(.size)
+        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        user = try container.sdkDecodeIfPresent(.user)
+        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+        outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
+        moderation = try container.sdkDecodeIfPresent(.moderation)
+        background = try container.sdkDecodeIfPresent(.background)
+        stream = try container.sdkDecodeIfPresent(.stream)
+        partialImages = try container.sdkDecodeIfPresent(.partialImages)
+        try validateItems("images", images, min: 1, max: 16)
+        try validateLength("prompt", prompt, min: 1, max: 32000)
+        if let value = safetyIdentifier {
             try validateLength("safety_identifier", value, min: nil, max: 128)
         }
     }
 }
 
-extension EditImageBodyJsonParam {
-    public init(images: [ImageRefParam], prompt: String, model: String? = nil, mask: ImageRefParam? = nil, n: Int? = nil, quality: EditImageBodyJsonParamQualityVariant0? = nil, inputFidelity: EditImageBodyJsonParamInputFidelityVariant0? = nil, size: String? = nil, safetyIdentifier: String? = nil, user: String? = nil, outputFormat: EditImageBodyJsonParamOutputFormatVariant0? = nil, outputCompression: Int? = nil, moderation: EditImageBodyJsonParamModerationVariant0? = nil, background: EditImageBodyJsonParamBackgroundVariant0? = nil, stream: Bool? = nil, partialImages: Int? = nil) throws {
+public extension EditImageBodyJsonParam {
+    init(
+        images: [ImageRefParam],
+        prompt: String,
+        model: String? = nil,
+        mask: ImageRefParam? = nil,
+        n: Int? = nil,
+        quality: EditImageBodyJsonParamQualityVariant0? = nil,
+        inputFidelity: EditImageBodyJsonParamInputFidelityVariant0? = nil,
+        size: String? = nil,
+        safetyIdentifier: String? = nil,
+        user: String? = nil,
+        outputFormat: EditImageBodyJsonParamOutputFormatVariant0? = nil,
+        outputCompression: Int? = nil,
+        moderation: EditImageBodyJsonParamModerationVariant0? = nil,
+        background: EditImageBodyJsonParamBackgroundVariant0? = nil,
+        stream: Bool? = nil,
+        partialImages: Int? = nil
+    ) throws {
         (self.images, self.prompt) = (images, prompt)
         (self.model, self.mask) = (model, mask)
         (self.n, self.quality) = (n, quality)
@@ -226,8 +256,8 @@ extension EditImageBodyJsonParam {
         (self.outputFormat, self.outputCompression) = (outputFormat, outputCompression)
         (self.moderation, self.background) = (moderation, background)
         (self.stream, self.partialImages) = (stream, partialImages)
-            try validateItems("images", self.images, min: 1, max: 16)
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+        try validateItems("images", self.images, min: 1, max: 16)
+        try validateLength("prompt", self.prompt, min: 1, max: 32000)
         if let value = self.safetyIdentifier {
             try validateLength("safety_identifier", value, min: nil, max: 128)
         }
@@ -323,49 +353,88 @@ public struct CreateImageEditRequest: Codable {
         case quality
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateImageEditRequest {
-    public init(from decoder: Decoder) throws {
+public extension CreateImageEditRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.image) else {
-            throw SdkValidationError(field: "image", code: "required", message: "Validation failed for 'image': value is required")
+            throw SdkValidationError(
+                field: "image",
+                code: "required",
+                message: "Validation failed for 'image': value is required"
+            )
         }
         guard container.contains(.prompt) else {
-            throw SdkValidationError(field: "prompt", code: "required", message: "Validation failed for 'prompt': value is required")
+            throw SdkValidationError(
+                field: "prompt",
+                code: "required",
+                message: "Validation failed for 'prompt': value is required"
+            )
         }
         guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
         }
-        self.image = try container.sdkDecodeRequired(.image)
-        self.prompt = try container.sdkDecodeRequired(.prompt)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.mask = try container.sdkDecodeIfPresent(.mask)
-        self.background = try container.sdkDecodeIfPresent(.background)
-        self.n = try container.sdkDecodeIfPresent(.n)
-        self.size = try container.sdkDecodeIfPresent(.size)
-        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        self.outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
-        self.outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
-        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        self.user = try container.sdkDecodeIfPresent(.user)
-        self.inputFidelity = try container.sdkDecodeIfPresent(.inputFidelity)
-        self.stream = try container.sdkDecodeIfPresent(.stream)
-        self.partialImages = try container.sdkDecodeIfPresent(.partialImages)
-        self.quality = try container.sdkDecodeIfPresent(.quality)
-            try validateItems("image", self.image, min: nil, max: 16)
-        if let value = self.n {
-            try validateRange("n", Double(value), min: 1, max: 10, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        image = try container.sdkDecodeRequired(.image)
+        prompt = try container.sdkDecodeRequired(.prompt)
+        model = try container.sdkDecodeRequired(.model)
+        mask = try container.sdkDecodeIfPresent(.mask)
+        background = try container.sdkDecodeIfPresent(.background)
+        n = try container.sdkDecodeIfPresent(.n)
+        size = try container.sdkDecodeIfPresent(.size)
+        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        outputFormat = try container.sdkDecodeIfPresent(.outputFormat)
+        outputCompression = try container.sdkDecodeIfPresent(.outputCompression)
+        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        user = try container.sdkDecodeIfPresent(.user)
+        inputFidelity = try container.sdkDecodeIfPresent(.inputFidelity)
+        stream = try container.sdkDecodeIfPresent(.stream)
+        partialImages = try container.sdkDecodeIfPresent(.partialImages)
+        quality = try container.sdkDecodeIfPresent(.quality)
+        try validateItems("image", image, min: nil, max: 16)
+        if let value = n {
+            try validateRange(
+                "n",
+                Double(value),
+                min: 1,
+                max: 10,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
-        if let value = self.safetyIdentifier {
+        if let value = safetyIdentifier {
             try validateLength("safety_identifier", value, min: nil, max: 128)
         }
     }
 }
 
-extension CreateImageEditRequest {
-    public init(image: [Data], prompt: String, model: String, mask: Data? = nil, background: CreateImageEditRequestBackgroundVariant0? = nil, n: Int? = nil, size: String? = nil, responseFormat: CreateImageEditRequestResponseFormat? = nil, outputFormat: CreateImageEditRequestOutputFormatVariant0? = nil, outputCompression: Int? = nil, safetyIdentifier: String? = nil, user: String? = nil, inputFidelity: InputFidelity? = nil, stream: Bool? = nil, partialImages: Int? = nil, quality: CreateImageEditRequestQualityVariant0? = nil) throws {
+public extension CreateImageEditRequest {
+    init(
+        image: [Data],
+        prompt: String,
+        model: String,
+        mask: Data? = nil,
+        background: CreateImageEditRequestBackgroundVariant0? = nil,
+        n: Int? = nil,
+        size: String? = nil,
+        responseFormat: CreateImageEditRequestResponseFormat? = nil,
+        outputFormat: CreateImageEditRequestOutputFormatVariant0? = nil,
+        outputCompression: Int? = nil,
+        safetyIdentifier: String? = nil,
+        user: String? = nil,
+        inputFidelity: InputFidelity? = nil,
+        stream: Bool? = nil,
+        partialImages: Int? = nil,
+        quality: CreateImageEditRequestQualityVariant0? = nil
+    ) throws {
         (self.image, self.prompt) = (image, prompt)
         (self.model, self.mask) = (model, mask)
         (self.background, self.n) = (background, n)
@@ -374,9 +443,17 @@ extension CreateImageEditRequest {
         (self.safetyIdentifier, self.user) = (safetyIdentifier, user)
         (self.inputFidelity, self.stream) = (inputFidelity, stream)
         (self.partialImages, self.quality) = (partialImages, quality)
-            try validateItems("image", self.image, min: nil, max: 16)
+        try validateItems("image", self.image, min: nil, max: 16)
         if let value = self.n {
-            try validateRange("n", Double(value), min: 1, max: 10, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "n",
+                Double(value),
+                min: 1,
+                max: 10,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
         if let value = self.safetyIdentifier {
             try validateLength("safety_identifier", value, min: nil, max: 128)
@@ -414,31 +491,42 @@ public struct ImageEditPartialImageEvent: Codable {
         case partialImageIndex = "partial_image_index"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ImageEditPartialImageEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.b64Json = try container.sdkDecodeRequired(.b64Json)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.size = try container.sdkDecodeRequired(.size)
-        self.quality = try container.sdkDecodeRequired(.quality)
-        self.background = try container.sdkDecodeRequired(.background)
-        self.outputFormat = try container.sdkDecodeRequired(.outputFormat)
-        self.partialImageIndex = try container.sdkDecodeRequired(.partialImageIndex)
-            try sdkValidateRawEnum("type", self.type, ImageEditPartialImageEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ImageEditPartialImageEvent {
-    public init(type: ImageEditPartialImageEventType, b64Json: String, createdAt: Int, size: String, quality: ImageEditPartialImageEventQuality, background: ImageEditPartialImageEventBackground, outputFormat: ImageEditPartialImageEventOutputFormat, partialImageIndex: Int) throws {
+public extension ImageEditPartialImageEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        type = try container.sdkDecodeRequired(.type)
+        b64Json = try container.sdkDecodeRequired(.b64Json)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        size = try container.sdkDecodeRequired(.size)
+        quality = try container.sdkDecodeRequired(.quality)
+        background = try container.sdkDecodeRequired(.background)
+        outputFormat = try container.sdkDecodeRequired(.outputFormat)
+        partialImageIndex = try container.sdkDecodeRequired(.partialImageIndex)
+        try sdkValidateRawEnum("type", type, ImageEditPartialImageEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ImageEditPartialImageEvent {
+    init(
+        type: ImageEditPartialImageEventType,
+        b64Json: String,
+        createdAt: Int,
+        size: String,
+        quality: ImageEditPartialImageEventQuality,
+        background: ImageEditPartialImageEventBackground,
+        outputFormat: ImageEditPartialImageEventOutputFormat,
+        partialImageIndex: Int
+    ) throws {
         (self.type, self.b64Json) = (type, b64Json)
         (self.createdAt, self.size) = (createdAt, size)
         (self.quality, self.background) = (quality, background)
         (self.outputFormat, self.partialImageIndex) = (outputFormat, partialImageIndex)
-            try sdkValidateRawEnum("type", self.type, ImageEditPartialImageEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ImageEditPartialImageEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -477,32 +565,44 @@ public struct ImageEditCompletedEvent: Codable {
         case safetyIdentifier = "safety_identifier"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ImageEditCompletedEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.b64Json = try container.sdkDecodeRequired(.b64Json)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.size = try container.sdkDecodeRequired(.size)
-        self.quality = try container.sdkDecodeRequired(.quality)
-        self.background = try container.sdkDecodeRequired(.background)
-        self.outputFormat = try container.sdkDecodeRequired(.outputFormat)
-        self.usage = try container.sdkDecodeRequired(.usage)
-        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-            try sdkValidateRawEnum("type", self.type, ImageEditCompletedEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ImageEditCompletedEvent {
-    public init(type: ImageEditCompletedEventType, b64Json: String, createdAt: Int, size: String, quality: ImageEditCompletedEventQuality, background: ImageEditCompletedEventBackground, outputFormat: ImageEditCompletedEventOutputFormat, usage: ImagesUsage, safetyIdentifier: String? = nil) throws {
+public extension ImageEditCompletedEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        type = try container.sdkDecodeRequired(.type)
+        b64Json = try container.sdkDecodeRequired(.b64Json)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        size = try container.sdkDecodeRequired(.size)
+        quality = try container.sdkDecodeRequired(.quality)
+        background = try container.sdkDecodeRequired(.background)
+        outputFormat = try container.sdkDecodeRequired(.outputFormat)
+        usage = try container.sdkDecodeRequired(.usage)
+        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        try sdkValidateRawEnum("type", type, ImageEditCompletedEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ImageEditCompletedEvent {
+    init(
+        type: ImageEditCompletedEventType,
+        b64Json: String,
+        createdAt: Int,
+        size: String,
+        quality: ImageEditCompletedEventQuality,
+        background: ImageEditCompletedEventBackground,
+        outputFormat: ImageEditCompletedEventOutputFormat,
+        usage: ImagesUsage,
+        safetyIdentifier: String? = nil
+    ) throws {
         (self.type, self.b64Json) = (type, b64Json)
         (self.createdAt, self.size) = (createdAt, size)
         (self.quality, self.background) = (quality, background)
         (self.outputFormat, self.usage) = (outputFormat, usage)
         self.safetyIdentifier = safetyIdentifier
-            try sdkValidateRawEnum("type", self.type, ImageEditCompletedEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ImageEditCompletedEventType.allCases.map(\.rawValue))
     }
 }

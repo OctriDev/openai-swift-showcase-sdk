@@ -6,14 +6,33 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension UploadsMethods {
-    /// Cancels a pending upload so that no more parts can be added. Use this operation when you no longer intend to complete the upload; the returned upload object has status `cancelled`.
+public extension UploadsMethods {
+    /// Cancels a pending upload so that no more parts can be added. Use this operation when you no longer intend to
+    /// complete the upload; the returned upload object has status `cancelled`.
     ///
-    /// Cancels the Upload. No Parts may be added after an Upload is cancelled. Returns the Upload object with status `cancelled`.
+    /// Cancels the Upload. No Parts may be added after an Upload is cancelled. Returns the Upload object with status
+    /// `cancelled`.
     ///
     /// - Parameters:
     /// - uploadId: The ID of the Upload.
-    public static func cancelUpload(config: ClientConfig, uploadId: String, requestOptions: RequestOptions? = nil) async throws -> Upload {
-        return try (await sdkRequest("POST", ["/uploads/", sdkEncodePathSegment(sdkWireString(uploadId)), "/cancel"].joined(), config: config, decoder: .json, operationId: "cancelUpload", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "410": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func cancelUpload(
+        config: ClientConfig,
+        uploadId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Upload {
+        try await (sdkRequest(
+            "POST",
+            ["/uploads/", sdkEncodePathSegment(sdkWireString(uploadId)), "/cancel"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "cancelUpload",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "410": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

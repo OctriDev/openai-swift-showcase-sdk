@@ -3,29 +3,36 @@
 
 import Foundation
 
-// DecisionsDecision domain models
+/// DecisionsDecision domain models
 public indirect enum DecisionInput {
     case stringValue(String)
     case decisionInputItemList([DecisionInputItem])
 }
 
 extension DecisionInput: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
         throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for DecisionInput")
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension DecisionInput {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode([DecisionInputItem].self) { return .decisionInputItemList(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode([DecisionInputItem].self) {
+            return .decisionInputItemList(value)
+        }
         return nil
     }
 }
@@ -46,22 +53,33 @@ public indirect enum DecisionInputContent {
 }
 
 extension DecisionInputContent: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for DecisionInputContent")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for DecisionInputContent"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension DecisionInputContent {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(DecisionInputContentParts.self) { return .decisionInputContentParts(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container
+            .decode(DecisionInputContentParts.self) {
+            return .decisionInputContentParts(value)
+        }
         return nil
     }
 }
@@ -88,7 +106,6 @@ public indirect enum DecisionInputContentPartsItem {
 }
 
 extension DecisionInputContentPartsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -96,12 +113,16 @@ extension DecisionInputContentPartsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -112,11 +133,11 @@ extension DecisionInputContentPartsItem: Codable {
 extension DecisionInputContentPartsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .decisionInputText(try DecisionInputText(from: decoder))
-        case "input_image": return .decisionInputImage(try DecisionInputImage(from: decoder))
-        case "output_text": return .decisionInputOutputText(try DecisionInputOutputText(from: decoder))
-        case "refusal": return .decisionInputRefusal(try DecisionInputRefusal(from: decoder))
-        default: return nil
+        case "input_text": try .decisionInputText(DecisionInputText(from: decoder))
+        case "input_image": try .decisionInputImage(DecisionInputImage(from: decoder))
+        case "output_text": try .decisionInputOutputText(DecisionInputOutputText(from: decoder))
+        case "refusal": try .decisionInputRefusal(DecisionInputRefusal(from: decoder))
+        default: nil
         }
     }
 }
@@ -145,7 +166,6 @@ public indirect enum DecisionInputItem {
 }
 
 extension DecisionInputItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -153,20 +173,29 @@ extension DecisionInputItem: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for DecisionInputItem")
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for DecisionInputItem"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -177,23 +206,41 @@ extension DecisionInputItem: Codable {
 extension DecisionInputItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "message": return .decisionInputMessage(try DecisionInputMessage(from: decoder))
-        case "function_call": return .decisionInputFunctionCall(try DecisionInputFunctionCall(from: decoder))
-        case "function_call_output": return .decisionInputFunctionCallOutput(try DecisionInputFunctionCallOutput(from: decoder))
-        case "custom_tool_call": return .decisionInputCustomToolCall(try DecisionInputCustomToolCall(from: decoder))
-        case "custom_tool_call_output": return .decisionInputCustomToolCallOutput(try DecisionInputCustomToolCallOutput(from: decoder))
-        default: return nil
+        case "message": try .decisionInputMessage(DecisionInputMessage(from: decoder))
+        case "function_call": try .decisionInputFunctionCall(DecisionInputFunctionCall(from: decoder))
+        case "function_call_output": try .decisionInputFunctionCallOutput(
+                DecisionInputFunctionCallOutput(from: decoder)
+            )
+        case "custom_tool_call": try .decisionInputCustomToolCall(DecisionInputCustomToolCall(from: decoder))
+        case "custom_tool_call_output": try .decisionInputCustomToolCallOutput(
+                DecisionInputCustomToolCallOutput(from: decoder)
+            )
+        default: nil
         }
     }
 }
 
 extension DecisionInputItem {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(DecisionInputMessage.self) { return .decisionInputMessage(value) }
-        if let value = try? container.decode(DecisionInputFunctionCall.self) { return .decisionInputFunctionCall(value) }
-        if let value = try? container.decode(DecisionInputFunctionCallOutput.self) { return .decisionInputFunctionCallOutput(value) }
-        if let value = try? container.decode(DecisionInputCustomToolCall.self) { return .decisionInputCustomToolCall(value) }
-        if let value = try? container.decode(DecisionInputCustomToolCallOutput.self) { return .decisionInputCustomToolCallOutput(value) }
+        if let value = try? container.decode(DecisionInputMessage.self) {
+            return .decisionInputMessage(value)
+        }
+        if let value = try? container
+            .decode(DecisionInputFunctionCall.self) {
+            return .decisionInputFunctionCall(value)
+        }
+        if let value = try? container
+            .decode(DecisionInputFunctionCallOutput.self) {
+            return .decisionInputFunctionCallOutput(value)
+        }
+        if let value = try? container
+            .decode(DecisionInputCustomToolCall.self) {
+            return .decisionInputCustomToolCall(value)
+        }
+        if let value = try? container
+            .decode(DecisionInputCustomToolCallOutput.self) {
+            return .decisionInputCustomToolCallOutput(value)
+        }
         return nil
     }
 }
@@ -218,25 +265,33 @@ public indirect enum DecisionInputToolOutputContent {
 }
 
 extension DecisionInputToolOutputContent: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for DecisionInputToolOutputContent")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for DecisionInputToolOutputContent"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension DecisionInputToolOutputContent {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         if let value = try? container.decode(
             DecisionInputToolOutputContentParts.self
         ) {
-            return             .decisionInputToolOutputContentParts(value)
+            return .decisionInputToolOutputContentParts(value)
         }
         return nil
     }
@@ -262,7 +317,6 @@ public indirect enum DecisionInputToolOutputContentPartsItem {
 }
 
 extension DecisionInputToolOutputContentPartsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -270,12 +324,16 @@ extension DecisionInputToolOutputContentPartsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -286,9 +344,9 @@ extension DecisionInputToolOutputContentPartsItem: Codable {
 extension DecisionInputToolOutputContentPartsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .decisionInputText(try DecisionInputText(from: decoder))
-        case "input_image": return .decisionInputImage(try DecisionInputImage(from: decoder))
-        default: return nil
+        case "input_text": try .decisionInputText(DecisionInputText(from: decoder))
+        case "input_image": try .decisionInputImage(DecisionInputImage(from: decoder))
+        default: nil
         }
     }
 }
@@ -325,43 +383,63 @@ public struct DecisionInputFunctionCallOutput: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension DecisionInputFunctionCallOutput {
-    public init(from decoder: Decoder) throws {
+public extension DecisionInputFunctionCallOutput {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.output = try container.sdkDecodeRequired(.output)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.status = try container.sdkDecodeIfPresent(.status)
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try sdkValidateRawEnum("type", self.type, DecisionInputFunctionCallOutputType.allCases.map(\.rawValue))
-        if let value = self.id {
-            try validateLength("id", value, min: 0, max: 1048576)
+        callId = try container.sdkDecodeRequired(.callId)
+        output = try container.sdkDecodeRequired(.output)
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeIfPresent(.id)
+        status = try container.sdkDecodeIfPresent(.status)
+        try validateLength("call_id", callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", type, DecisionInputFunctionCallOutputType.allCases.map(\.rawValue))
+        if let value = id {
+            try validateLength("id", value, min: 0, max: 1_048_576)
         }
     }
 }
 
-extension DecisionInputFunctionCallOutput {
-    public init(callId: String, output: DecisionInputToolOutputContent, type: DecisionInputFunctionCallOutputType, id: String? = nil, status: FunctionCallStatusParam? = nil) throws {
+public extension DecisionInputFunctionCallOutput {
+    init(
+        callId: String,
+        output: DecisionInputToolOutputContent,
+        type: DecisionInputFunctionCallOutputType,
+        id: String? = nil,
+        status: FunctionCallStatusParam? = nil
+    ) throws {
         (self.callId, self.output) = (callId, output)
         (self.type, self.id) = (type, id)
         self.status = status
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try sdkValidateRawEnum("type", self.type, DecisionInputFunctionCallOutputType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, DecisionInputFunctionCallOutputType.allCases.map(\.rawValue))
         if let value = self.id {
-            try validateLength("id", value, min: 0, max: 1048576)
+            try validateLength("id", value, min: 0, max: 1_048_576)
         }
     }
 }
@@ -387,43 +465,63 @@ public struct DecisionInputCustomToolCallOutput: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension DecisionInputCustomToolCallOutput {
-    public init(from decoder: Decoder) throws {
+public extension DecisionInputCustomToolCallOutput {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
         }
         guard container.contains(.output) else {
-            throw SdkValidationError(field: "output", code: "required", message: "Validation failed for 'output': value is required")
+            throw SdkValidationError(
+                field: "output",
+                code: "required",
+                message: "Validation failed for 'output': value is required"
+            )
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.output = try container.sdkDecodeRequired(.output)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.status = try container.sdkDecodeIfPresent(.status)
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try sdkValidateRawEnum("type", self.type, DecisionInputCustomToolCallOutputType.allCases.map(\.rawValue))
-        if let value = self.id {
-            try validateLength("id", value, min: 0, max: 1048576)
+        callId = try container.sdkDecodeRequired(.callId)
+        output = try container.sdkDecodeRequired(.output)
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeIfPresent(.id)
+        status = try container.sdkDecodeIfPresent(.status)
+        try validateLength("call_id", callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", type, DecisionInputCustomToolCallOutputType.allCases.map(\.rawValue))
+        if let value = id {
+            try validateLength("id", value, min: 0, max: 1_048_576)
         }
     }
 }
 
-extension DecisionInputCustomToolCallOutput {
-    public init(callId: String, output: DecisionInputToolOutputContent, type: DecisionInputCustomToolCallOutputType, id: String? = nil, status: FunctionCallStatusParam? = nil) throws {
+public extension DecisionInputCustomToolCallOutput {
+    init(
+        callId: String,
+        output: DecisionInputToolOutputContent,
+        type: DecisionInputCustomToolCallOutputType,
+        id: String? = nil,
+        status: FunctionCallStatusParam? = nil
+    ) throws {
         (self.callId, self.output) = (callId, output)
         (self.type, self.id) = (type, id)
         self.status = status
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try sdkValidateRawEnum("type", self.type, DecisionInputCustomToolCallOutputType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, DecisionInputCustomToolCallOutputType.allCases.map(\.rawValue))
         if let value = self.id {
-            try validateLength("id", value, min: 0, max: 1048576)
+            try validateLength("id", value, min: 0, max: 1_048_576)
         }
     }
 }
@@ -462,33 +560,47 @@ public struct DecisionRequest: Codable {
         case promptCacheOptions = "prompt_cache_options"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension DecisionRequest {
-    public init(from decoder: Decoder) throws {
+public extension DecisionRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
         }
         guard container.contains(.input) else {
-            throw SdkValidationError(field: "input", code: "required", message: "Validation failed for 'input': value is required")
+            throw SdkValidationError(
+                field: "input",
+                code: "required",
+                message: "Validation failed for 'input': value is required"
+            )
         }
         guard container.contains(.questions) else {
-            throw SdkValidationError(field: "questions", code: "required", message: "Validation failed for 'questions': value is required")
+            throw SdkValidationError(
+                field: "questions",
+                code: "required",
+                message: "Validation failed for 'questions': value is required"
+            )
         }
-        self.model = try container.sdkDecodeRequired(.model)
-        self.input = try container.sdkDecodeRequired(.input)
-        self.questions = try container.sdkDecodeRequired(.questions)
-        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        self.promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
-            try validateLength("model", self.model, min: 0, max: 1048576)
-            try validateItems("questions", self.questions, min: 1, max: 200)
-        if let value = self.safetyIdentifier {
+        model = try container.sdkDecodeRequired(.model)
+        input = try container.sdkDecodeRequired(.input)
+        questions = try container.sdkDecodeRequired(.questions)
+        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        promptCacheOptions = try container.sdkDecodeIfPresent(.promptCacheOptions)
+        try validateLength("model", model, min: 0, max: 1_048_576)
+        try validateItems("questions", questions, min: 1, max: 200)
+        if let value = safetyIdentifier {
             try validateLength("safety_identifier", value, min: 0, max: 128)
         }
-        if let value = self.promptCacheKey {
+        if let value = promptCacheKey {
             try validateLength("prompt_cache_key", value, min: 0, max: 64)
         }
     }

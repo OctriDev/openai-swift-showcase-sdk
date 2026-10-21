@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveTool domain models
+/// LiveLiveTool domain models
 /// Typed representation of the `LiveToolSearchToolInputParam` API schema.
 public struct LiveToolSearchToolInputParam: Codable {
     /// Required enumerated value serialized in the `type` wire field.
@@ -13,24 +13,30 @@ public struct LiveToolSearchToolInputParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveToolSearchToolInputParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, LiveToolSearchToolInputParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveToolSearchToolInputParam {
-    public init(type: LiveToolSearchToolInputParamType) throws {
+public extension LiveToolSearchToolInputParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, LiveToolSearchToolInputParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveToolSearchToolInputParam {
+    init(type: LiveToolSearchToolInputParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, LiveToolSearchToolInputParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveToolSearchToolInputParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -56,14 +62,17 @@ public enum LiveToolSearchToolInputParamType: String, CaseIterable, Codable {
 public struct LiveToolChoiceValueEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let none = LiveToolChoiceValueEnum(rawValue: "none")
     public static let auto = LiveToolChoiceValueEnum(rawValue: "auto")
     public static let required = LiveToolChoiceValueEnum(rawValue: "required")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -76,14 +85,17 @@ public struct LiveToolChoiceValueEnum: RawRepresentable, Hashable, Codable, Send
 public struct LiveToolChoiceEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = LiveToolChoiceEnum(rawValue: "auto")
     public static let none = LiveToolChoiceEnum(rawValue: "none")
     public static let required = LiveToolChoiceEnum(rawValue: "required")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

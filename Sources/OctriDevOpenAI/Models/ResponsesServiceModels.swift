@@ -3,29 +3,39 @@
 
 import Foundation
 
-// ResponsesService domain models
+/// ResponsesService domain models
 public indirect enum ServiceTierResponses {
     case stringValue(String)
     case jsonValue(JSONValue)
 }
 
 extension ServiceTierResponses: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ServiceTierResponses")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for ServiceTierResponses"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension ServiceTierResponses {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(JSONValue.self) { return .jsonValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(JSONValue.self) {
+            return .jsonValue(value)
+        }
         return nil
     }
 }
@@ -44,7 +54,10 @@ extension ServiceTierResponses {
 public struct ServiceTierEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = ServiceTierEnum(rawValue: "auto")
     public static let `default` = ServiceTierEnum(rawValue: "default")
     public static let fast = ServiceTierEnum(rawValue: "fast")
@@ -53,7 +66,7 @@ public struct ServiceTierEnum: RawRepresentable, Hashable, Codable, Sendable, Sd
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -70,7 +83,10 @@ public struct ServiceTierEnum: RawRepresentable, Hashable, Codable, Sendable, Sd
 public struct ServiceTierResponsesVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = ServiceTierResponsesVariant0(rawValue: "auto")
     public static let `default` = ServiceTierResponsesVariant0(rawValue: "default")
     public static let flex = ServiceTierResponsesVariant0(rawValue: "flex")
@@ -81,7 +97,7 @@ public struct ServiceTierResponsesVariant0: RawRepresentable, Hashable, Codable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

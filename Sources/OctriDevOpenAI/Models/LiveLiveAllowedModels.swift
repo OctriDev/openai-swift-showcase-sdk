@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveAllowed domain models
+/// LiveLiveAllowed domain models
 public indirect enum LiveAllowedToolsChoiceParamToolsItem {
     case liveFunctionToolChoiceParam(LiveFunctionToolChoiceParam)
     case liveMcpToolChoiceParam(LiveMCPToolChoiceParam)
@@ -22,7 +22,6 @@ public indirect enum LiveAllowedToolsChoiceParamToolsItem {
 }
 
 extension LiveAllowedToolsChoiceParamToolsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -30,12 +29,16 @@ extension LiveAllowedToolsChoiceParamToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -46,20 +49,22 @@ extension LiveAllowedToolsChoiceParamToolsItem: Codable {
 extension LiveAllowedToolsChoiceParamToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": return .liveFunctionToolChoiceParam(try LiveFunctionToolChoiceParam(from: decoder))
-        case "mcp": return .liveMcpToolChoiceParam(try LiveMCPToolChoiceParam(from: decoder))
-        case "file_search": return .liveSpecificFileSearchParam(try LiveSpecificFileSearchParam(from: decoder))
-        case "web_search": return .liveSpecificWebSearchParam(try LiveSpecificWebSearchParam(from: decoder))
-        case "web_search_preview": return .liveSpecificWebSearchPreviewParam(try LiveSpecificWebSearchPreviewParam(from: decoder))
-        case "image_generation": return .liveSpecificImageGenParam(try LiveSpecificImageGenParam(from: decoder))
-        case "computer": return .liveSpecificComputerParam(try LiveSpecificComputerParam(from: decoder))
-        case "code_interpreter": return .liveSpecificCodeInterpreterParam(try LiveSpecificCodeInterpreterParam(from: decoder))
+        case "function": try .liveFunctionToolChoiceParam(LiveFunctionToolChoiceParam(from: decoder))
+        case "mcp": try .liveMcpToolChoiceParam(LiveMCPToolChoiceParam(from: decoder))
+        case "file_search": try .liveSpecificFileSearchParam(LiveSpecificFileSearchParam(from: decoder))
+        case "web_search": try .liveSpecificWebSearchParam(LiveSpecificWebSearchParam(from: decoder))
+        case "web_search_preview": try .liveSpecificWebSearchPreviewParam(
+                LiveSpecificWebSearchPreviewParam(from: decoder)
+            )
+        case "image_generation": try .liveSpecificImageGenParam(LiveSpecificImageGenParam(from: decoder))
+        case "computer": try .liveSpecificComputerParam(LiveSpecificComputerParam(from: decoder))
+        case "code_interpreter": try .liveSpecificCodeInterpreterParam(LiveSpecificCodeInterpreterParam(from: decoder))
         case "programmatic_tool_calling":
-        return .liveSpecificProgrammaticToolCallingParam(try LiveSpecificProgrammaticToolCallingParam(from: decoder))
-        case "shell": return .liveSpecificFunctionShellParam(try LiveSpecificFunctionShellParam(from: decoder))
-        case "custom": return .liveSpecificCustomToolParam(try LiveSpecificCustomToolParam(from: decoder))
-        case "apply_patch": return .liveSpecificApplyPatchParam(try LiveSpecificApplyPatchParam(from: decoder))
-        default: return nil
+            try .liveSpecificProgrammaticToolCallingParam(LiveSpecificProgrammaticToolCallingParam(from: decoder))
+        case "shell": try .liveSpecificFunctionShellParam(LiveSpecificFunctionShellParam(from: decoder))
+        case "custom": try .liveSpecificCustomToolParam(LiveSpecificCustomToolParam(from: decoder))
+        case "apply_patch": try .liveSpecificApplyPatchParam(LiveSpecificApplyPatchParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -100,30 +105,44 @@ public struct LiveAllowedToolsChoiceParam: Codable {
         case mode
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveAllowedToolsChoiceParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.tools) else {
-            throw SdkValidationError(field: "tools", code: "required", message: "Validation failed for 'tools': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.tools = try container.sdkDecodeRequired(.tools)
-        self.mode = try container.sdkDecodeIfPresent(.mode)
-            try validateItems("tools", self.tools, min: 1, max: 128)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveAllowedToolsChoiceParam {
-    public init(type: LiveAllowedToolsChoiceParamType, tools: [LiveAllowedToolsChoiceParamToolsItem], mode: LiveToolChoiceValueEnum? = nil) throws {
+public extension LiveAllowedToolsChoiceParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.tools) else {
+            throw SdkValidationError(
+                field: "tools",
+                code: "required",
+                message: "Validation failed for 'tools': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        tools = try container.sdkDecodeRequired(.tools)
+        mode = try container.sdkDecodeIfPresent(.mode)
+        try validateItems("tools", tools, min: 1, max: 128)
+    }
+}
+
+public extension LiveAllowedToolsChoiceParam {
+    init(
+        type: LiveAllowedToolsChoiceParamType,
+        tools: [LiveAllowedToolsChoiceParamToolsItem],
+        mode: LiveToolChoiceValueEnum? = nil
+    ) throws {
         (self.type, self.tools) = (type, tools)
         self.mode = mode
-            try validateItems("tools", self.tools, min: 1, max: 128)
+        try validateItems("tools", self.tools, min: 1, max: 128)
     }
 }
 
@@ -139,28 +158,34 @@ public struct LiveAllowedServerEventParam: Codable {
         case responseEvent = "response_event"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension LiveAllowedServerEventParam {
-    public init(from decoder: Decoder) throws {
+public extension LiveAllowedServerEventParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.responseEvent = try container.sdkDecodeIfPresent(.responseEvent)
-            try validateLength("type", self.type, min: 1, max: 256)
-        if let value = self.responseEvent {
+        type = try container.sdkDecodeRequired(.type)
+        responseEvent = try container.sdkDecodeIfPresent(.responseEvent)
+        try validateLength("type", type, min: 1, max: 256)
+        if let value = responseEvent {
             try validateLength("response_event", value, min: 1, max: 256)
         }
     }
 }
 
-extension LiveAllowedServerEventParam {
-    public init(type: String, responseEvent: String? = nil) throws {
+public extension LiveAllowedServerEventParam {
+    init(type: String, responseEvent: String? = nil) throws {
         (self.type, self.responseEvent) = (type, responseEvent)
-            try validateLength("type", self.type, min: 1, max: 256)
+        try validateLength("type", self.type, min: 1, max: 256)
         if let value = self.responseEvent {
             try validateLength("response_event", value, min: 1, max: 256)
         }
@@ -171,12 +196,15 @@ extension LiveAllowedServerEventParam {
 public struct LiveAllowedToolsChoiceParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let allowedTools = LiveAllowedToolsChoiceParamType(rawValue: "allowed_tools")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

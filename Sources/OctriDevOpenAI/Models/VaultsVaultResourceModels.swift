@@ -3,43 +3,63 @@
 
 import Foundation
 
-// VaultsVault domain models
-extension VaultResource {
-    public init(from decoder: Decoder) throws {
+/// VaultsVault domain models
+public extension VaultResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
         }
         guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
         guard container.contains(.metadata) else {
-            throw SdkValidationError(field: "metadata", code: "required", message: "Validation failed for 'metadata': value is required")
+            throw SdkValidationError(
+                field: "metadata",
+                code: "required",
+                message: "Validation failed for 'metadata': value is required"
+            )
         }
         guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
         }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.name = try container.sdkDecodeNullable(.name)
-        self.metadata = try container.sdkDecodeRequired(.metadata)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-            try validateLength("id", self.id, min: 0, max: nil)
-        if let value = self.name {
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        name = try container.sdkDecodeNullable(.name)
+        metadata = try container.sdkDecodeRequired(.metadata)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        try validateLength("id", id, min: 0, max: nil)
+        if let value = name {
             try validateLength("name", value, min: 0, max: nil)
         }
     }
 }
 
-extension VaultResource {
-    public init(id: String, object: VaultResourceObject, name: String?, metadata: [String: String], createdAt: Int) throws {
+public extension VaultResource {
+    init(id: String, object: VaultResourceObject, name: String?, metadata: [String: String], createdAt: Int) throws {
         (self.id, self.object) = (id, object)
         (self.name, self.metadata) = (name, metadata)
         self.createdAt = createdAt
-            try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("id", self.id, min: 0, max: nil)
         if let value = self.name {
             try validateLength("name", value, min: 0, max: nil)
         }
@@ -68,13 +88,16 @@ public enum VaultCredentialNetworkingResourceLimitedType: String, CaseIterable, 
 public struct VaultStatusParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let active = VaultStatusParam(rawValue: "active")
     public static let archived = VaultStatusParam(rawValue: "archived")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -105,12 +128,15 @@ public enum VaultCredentialAuthResourceMcpOauthType: String, CaseIterable, Codab
 public struct VaultCredentialResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let vaultCredential = VaultCredentialResourceObject(rawValue: "vault.credential")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -141,12 +167,15 @@ public enum VaultCredentialAuthResourceEnvironmentVariableType: String, CaseIter
 public struct VaultResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let vault = VaultResourceObject(rawValue: "vault")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

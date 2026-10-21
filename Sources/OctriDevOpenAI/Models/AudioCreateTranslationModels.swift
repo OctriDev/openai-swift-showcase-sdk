@@ -3,25 +3,33 @@
 
 import Foundation
 
-// Audio domain models
+/// Audio domain models
 public indirect enum CreateTranslationResponse {
     case createTranslationResponseJson(CreateTranslationResponseJson)
     case createTranslationResponseVerboseJson(CreateTranslationResponseVerboseJson)
 }
 
 extension CreateTranslationResponse: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
         }
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateTranslationResponse")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateTranslationResponse"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
@@ -30,7 +38,10 @@ extension CreateTranslationResponse {
         if let value = try? container.decode(CreateTranslationResponseJson.self), sdkKeepsEveryKey(value, of: raw) {
             return .createTranslationResponseJson(value)
         }
-        if let value = try? container.decode(CreateTranslationResponseVerboseJson.self), sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(CreateTranslationResponseVerboseJson.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
             return .createTranslationResponseVerboseJson(value)
         }
         return nil
@@ -39,11 +50,14 @@ extension CreateTranslationResponse {
 
 extension CreateTranslationResponse {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(CreateTranslationResponseJson.self) { return .createTranslationResponseJson(value) }
+        if let value = try? container
+            .decode(CreateTranslationResponseJson.self) {
+            return .createTranslationResponseJson(value)
+        }
         if let value = try? container.decode(
             CreateTranslationResponseVerboseJson.self
         ) {
-            return             .createTranslationResponseVerboseJson(value)
+            return .createTranslationResponseVerboseJson(value)
         }
         return nil
     }
@@ -77,30 +91,44 @@ public struct CreateTranslationResponseVerboseJson: Codable {
         case segments
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateTranslationResponseVerboseJson {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.language) else {
-            throw SdkValidationError(field: "language", code: "required", message: "Validation failed for 'language': value is required")
-        }
-        guard container.contains(.duration) else {
-            throw SdkValidationError(field: "duration", code: "required", message: "Validation failed for 'duration': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.language = try container.sdkDecodeRequired(.language)
-        self.duration = try container.sdkDecodeRequired(.duration)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.segments = try container.sdkDecodeIfPresent(.segments)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateTranslationResponseVerboseJson {
-    public init(language: String, duration: Double, text: String, segments: [TranscriptionSegment]? = nil) {
+public extension CreateTranslationResponseVerboseJson {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.language) else {
+            throw SdkValidationError(
+                field: "language",
+                code: "required",
+                message: "Validation failed for 'language': value is required"
+            )
+        }
+        guard container.contains(.duration) else {
+            throw SdkValidationError(
+                field: "duration",
+                code: "required",
+                message: "Validation failed for 'duration': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        language = try container.sdkDecodeRequired(.language)
+        duration = try container.sdkDecodeRequired(.duration)
+        text = try container.sdkDecodeRequired(.text)
+        segments = try container.sdkDecodeIfPresent(.segments)
+    }
+}
+
+public extension CreateTranslationResponseVerboseJson {
+    init(language: String, duration: Double, text: String, segments: [TranscriptionSegment]? = nil) {
         (self.language, self.duration) = (language, duration)
         (self.text, self.segments) = (text, segments)
     }
@@ -115,21 +143,27 @@ public struct CreateTranslationResponseJson: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateTranslationResponseJson {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.text = try container.sdkDecodeRequired(.text)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateTranslationResponseJson {
-    public init(text: String) {
+public extension CreateTranslationResponseJson {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        text = try container.sdkDecodeRequired(.text)
+    }
+}
+
+public extension CreateTranslationResponseJson {
+    init(text: String) {
         self.text = text
     }
 }
@@ -162,28 +196,44 @@ public struct CreateTranslationRequest: Codable {
         case temperature
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateTranslationRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.file) else {
-            throw SdkValidationError(field: "file", code: "required", message: "Validation failed for 'file': value is required")
-        }
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        self.file = try container.sdkDecodeRequired(.file)
-        self.model = try container.sdkDecodeRequired(.model)
-        self.prompt = try container.sdkDecodeIfPresent(.prompt)
-        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        self.temperature = try container.sdkDecodeIfPresent(.temperature)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateTranslationRequest {
-    public init(file: Data, model: String, prompt: String? = nil, responseFormat: CreateTranslationRequestResponseFormat? = nil, temperature: Double? = nil) {
+public extension CreateTranslationRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.file) else {
+            throw SdkValidationError(
+                field: "file",
+                code: "required",
+                message: "Validation failed for 'file': value is required"
+            )
+        }
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        file = try container.sdkDecodeRequired(.file)
+        model = try container.sdkDecodeRequired(.model)
+        prompt = try container.sdkDecodeIfPresent(.prompt)
+        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        temperature = try container.sdkDecodeIfPresent(.temperature)
+    }
+}
+
+public extension CreateTranslationRequest {
+    init(
+        file: Data,
+        model: String,
+        prompt: String? = nil,
+        responseFormat: CreateTranslationRequestResponseFormat? = nil,
+        temperature: Double? = nil
+    ) {
         (self.file, self.model) = (file, model)
         (self.prompt, self.responseFormat) = (prompt, responseFormat)
         self.temperature = temperature
@@ -191,10 +241,14 @@ extension CreateTranslationRequest {
 }
 
 /// The format of the output, in one of these options: `json`, `text`, `srt`, `verbose_json`, or `vtt`.
-public struct CreateTranslationRequestResponseFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateTranslationRequestResponseFormat: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let json = CreateTranslationRequestResponseFormat(rawValue: "json")
     public static let text = CreateTranslationRequestResponseFormat(rawValue: "text")
     public static let srt = CreateTranslationRequestResponseFormat(rawValue: "srt")
@@ -203,7 +257,7 @@ public struct CreateTranslationRequestResponseFormat: RawRepresentable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

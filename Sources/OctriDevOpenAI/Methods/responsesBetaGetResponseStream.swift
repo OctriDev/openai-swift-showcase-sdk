@@ -6,8 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ResponsesMethods {
-    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream` to receive response events as server-sent events. Use `starting_after` to begin streaming after a particular event sequence number.
+public extension ResponsesMethods {
+    /// Retrieves a model response by its identifier. Use `include` to request additional response data, or set `stream`
+    /// to receive response events as server-sent events. Use `starting_after` to begin streaming after a particular
+    /// event sequence number.
     ///
     /// Retrieves a model response with the given ID.
     ///
@@ -31,8 +33,16 @@ extension ResponsesMethods {
     ///   `include_obfuscation` to false to optimize for bandwidth if you trust the
     ///   network links between your application and the OpenAI API.
     /// - openaiBeta: Optional beta features to enable for this request.
-    public static func betaGetResponseStream(config: ClientConfig, responseId: String, include: [BetaIncludeEnum]? = nil, stream: Bool? = nil, startingAfter: Int? = nil, includeObfuscation: Bool? = nil, openaiBeta: [BetaGetResponseParameterItem]? = nil, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<BetaResponseStreamEvent, Swift.Error> {
-
+    static func betaGetResponseStream(
+        config: ClientConfig,
+        responseId: String,
+        include: [BetaIncludeEnum]? = nil,
+        stream: Bool? = nil,
+        startingAfter: Int? = nil,
+        includeObfuscation: Bool? = nil,
+        openaiBeta: [BetaGetResponseParameterItem]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AsyncThrowingStream<BetaResponseStreamEvent, Swift.Error> {
         let upstream = try await sdkStream(
             "GET",
             ["/responses/", sdkEncodePathSegment(sdkWireString(responseId)), "?beta=true"].joined(),
@@ -59,8 +69,11 @@ extension ResponsesMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(BetaResponseStreamEvent.self, from: Data(event.data.utf8)) }
-                        
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
+                            BetaResponseStreamEvent.self,
+                            from: Data(event.data.utf8)
+                        ) }
+
                         continuation.yield(payload)
                     }
                     continuation.finish()

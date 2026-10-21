@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AgentsMethods {
-    public struct UpdateAgentEnvironmentTemplateOptions: Codable {
+public extension AgentsMethods {
+    struct UpdateAgentEnvironmentTemplateOptions: Codable {
         public var environmentTemplateId: String
         public var name: SdkOptional<String>?
         public var packages: SdkOptional<EnvironmentPackagesParam>?
@@ -25,7 +25,8 @@ extension AgentsMethods {
         }
     }
 
-    /// Updates reusable environment configuration without returning confidential values. See [reusing a hosted setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
+    /// Updates reusable environment configuration without returning confidential values. See [reusing a hosted
+    /// setup](https://developers.openai.com/api/docs/guides/agents-api/tools#reuse-a-hosted-plugin-setup).
     ///
     /// - Parameters:
     /// - environmentTemplateId: The ID of the reusable environment template.
@@ -43,8 +44,12 @@ extension AgentsMethods {
     /// - skills: Replacement skill configuration installed for each new session.
     /// - plugins: Replacement plugin configuration installed for each new session.
     /// - files: Replacement file configuration materialized for each new session.
-    public static func updateAgentEnvironmentTemplate(config: ClientConfig, options: UpdateAgentEnvironmentTemplateOptions, requestOptions: RequestOptions? = nil) async throws -> EnvironmentTemplateResource {
-        try validateLength("environment_template_id", options.environmentTemplateId, min: 0, max: 1048576)
+    static func updateAgentEnvironmentTemplate(
+        config: ClientConfig,
+        options: UpdateAgentEnvironmentTemplateOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> EnvironmentTemplateResource {
+        try validateLength("environment_template_id", options.environmentTemplateId, min: 0, max: 1_048_576)
 
         if let name = options.name?.valueOrNil {
             try validateLength("name", name, min: 1, max: 256)
@@ -72,6 +77,24 @@ extension AgentsMethods {
 
         let requestBody = UpdateAgentEnvironmentTemplateRequestBody(options: options)
 
-        return try (await sdkRequest("POST", ["/agents/environments/templates/", sdkEncodePathSegment(sdkWireString(options.environmentTemplateId))].joined(), config: config, body: requestBody, decoder: .json, operationId: "updateAgentEnvironmentTemplate", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/agents/environments/templates/", sdkEncodePathSegment(sdkWireString(options.environmentTemplateId))]
+                .joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "updateAgentEnvironmentTemplate",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 }

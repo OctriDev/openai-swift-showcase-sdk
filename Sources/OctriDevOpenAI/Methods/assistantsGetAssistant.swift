@@ -6,8 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AssistantsMethods {
-    /// Retrieves an assistant configuration by its identifier. Use `assistant_id` to select the assistant whose model, instructions, tools, and other settings you need to inspect. This operation is closing down and will be removed on a date not specified here.
+public extension AssistantsMethods {
+    /// Retrieves an assistant configuration by its identifier. Use `assistant_id` to select the assistant whose model,
+    /// instructions, tools, and other settings you need to inspect. This operation is closing down and will be removed
+    /// on a date not specified here.
     ///
     /// Retrieves an assistant.
     ///
@@ -15,7 +17,19 @@ extension AssistantsMethods {
     /// - assistantId: The ID of the assistant to retrieve.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public static func getAssistant(config: ClientConfig, assistantId: String, requestOptions: RequestOptions? = nil) async throws -> AssistantObject {
-        return try (await sdkRequest("GET", ["/assistants/", sdkEncodePathSegment(sdkWireString(assistantId))].joined(), config: config, decoder: .json, operationId: "getAssistant", options: requestOptions, errors: ["429": ErrorResponse.self])).data
+    static func getAssistant(
+        config: ClientConfig,
+        assistantId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AssistantObject {
+        try await (sdkRequest(
+            "GET",
+            ["/assistants/", sdkEncodePathSegment(sdkWireString(assistantId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "getAssistant",
+            options: requestOptions,
+            errors: ["429": ErrorResponse.self]
+        )).data
     }
 }

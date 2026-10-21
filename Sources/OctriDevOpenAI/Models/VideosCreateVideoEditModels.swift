@@ -3,29 +3,39 @@
 
 import Foundation
 
-// Videos domain models
+/// Videos domain models
 public indirect enum CreateVideoEditMultipartBodyVideo {
     case data(Data)
     case videoReferenceInputParam(VideoReferenceInputParam)
 }
 
 extension CreateVideoEditMultipartBodyVideo: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for CreateVideoEditMultipartBodyVideo")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for CreateVideoEditMultipartBodyVideo"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension CreateVideoEditMultipartBodyVideo {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Data.self) { return .data(value) }
-        if let value = try? container.decode(VideoReferenceInputParam.self) { return .videoReferenceInputParam(value) }
+        if let value = try? container.decode(Data.self) {
+            return .data(value)
+        }
+        if let value = try? container.decode(VideoReferenceInputParam.self) {
+            return .videoReferenceInputParam(value)
+        }
         return nil
     }
 }
@@ -52,28 +62,38 @@ public struct CreateVideoEditMultipartBody: Codable {
         case prompt
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateVideoEditMultipartBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.video) else {
-            throw SdkValidationError(field: "video", code: "required", message: "Validation failed for 'video': value is required")
-        }
-        guard container.contains(.prompt) else {
-            throw SdkValidationError(field: "prompt", code: "required", message: "Validation failed for 'prompt': value is required")
-        }
-        self.video = try container.sdkDecodeRequired(.video)
-        self.prompt = try container.sdkDecodeRequired(.prompt)
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateVideoEditMultipartBody {
-    public init(video: CreateVideoEditMultipartBodyVideo, prompt: String) throws {
+public extension CreateVideoEditMultipartBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.video) else {
+            throw SdkValidationError(
+                field: "video",
+                code: "required",
+                message: "Validation failed for 'video': value is required"
+            )
+        }
+        guard container.contains(.prompt) else {
+            throw SdkValidationError(
+                field: "prompt",
+                code: "required",
+                message: "Validation failed for 'prompt': value is required"
+            )
+        }
+        video = try container.sdkDecodeRequired(.video)
+        prompt = try container.sdkDecodeRequired(.prompt)
+        try validateLength("prompt", prompt, min: 1, max: 32000)
+    }
+}
+
+public extension CreateVideoEditMultipartBody {
+    init(video: CreateVideoEditMultipartBodyVideo, prompt: String) throws {
         (self.video, self.prompt) = (video, prompt)
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+        try validateLength("prompt", self.prompt, min: 1, max: 32000)
     }
 }
 
@@ -89,27 +109,37 @@ public struct CreateVideoEditJsonBody: Codable {
         case prompt
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateVideoEditJsonBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.video) else {
-            throw SdkValidationError(field: "video", code: "required", message: "Validation failed for 'video': value is required")
-        }
-        guard container.contains(.prompt) else {
-            throw SdkValidationError(field: "prompt", code: "required", message: "Validation failed for 'prompt': value is required")
-        }
-        self.video = try container.sdkDecodeRequired(.video)
-        self.prompt = try container.sdkDecodeRequired(.prompt)
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateVideoEditJsonBody {
-    public init(video: VideoReferenceInputParam, prompt: String) throws {
+public extension CreateVideoEditJsonBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.video) else {
+            throw SdkValidationError(
+                field: "video",
+                code: "required",
+                message: "Validation failed for 'video': value is required"
+            )
+        }
+        guard container.contains(.prompt) else {
+            throw SdkValidationError(
+                field: "prompt",
+                code: "required",
+                message: "Validation failed for 'prompt': value is required"
+            )
+        }
+        video = try container.sdkDecodeRequired(.video)
+        prompt = try container.sdkDecodeRequired(.prompt)
+        try validateLength("prompt", prompt, min: 1, max: 32000)
+    }
+}
+
+public extension CreateVideoEditJsonBody {
+    init(video: VideoReferenceInputParam, prompt: String) throws {
         (self.video, self.prompt) = (video, prompt)
-            try validateLength("prompt", self.prompt, min: 1, max: 32000)
+        try validateLength("prompt", self.prompt, min: 1, max: 32000)
     }
 }

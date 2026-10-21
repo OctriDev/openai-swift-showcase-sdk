@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ChatWeb domain models
+/// ChatWeb domain models
 /// Approximate location parameters for the search.
 public struct WebSearchLocation: Codable {
     /// The two-letter ISO country code of the user, e.g. `US`.
@@ -23,22 +23,22 @@ public struct WebSearchLocation: Codable {
     }
 
     init() {
-        (self.country, self.region, self.city, self.timezone) = (nil, nil, nil, nil)
+        (country, region, city, timezone) = (nil, nil, nil, nil)
     }
 }
 
-extension WebSearchLocation {
-    public init(from decoder: Decoder) throws {
+public extension WebSearchLocation {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.country = try container.sdkDecodeIfPresent(.country)
-        self.region = try container.sdkDecodeIfPresent(.region)
-        self.city = try container.sdkDecodeIfPresent(.city)
-        self.timezone = try container.sdkDecodeIfPresent(.timezone)
+        country = try container.sdkDecodeIfPresent(.country)
+        region = try container.sdkDecodeIfPresent(.region)
+        city = try container.sdkDecodeIfPresent(.city)
+        timezone = try container.sdkDecodeIfPresent(.timezone)
     }
 }
 
-extension WebSearchLocation {
-    public init(country: String? = nil, region: String? = nil, city: String? = nil, timezone: String? = nil) {
+public extension WebSearchLocation {
+    init(country: String? = nil, region: String? = nil, city: String? = nil, timezone: String? = nil) {
         self.init()
         (self.country, self.region) = (country, region)
         (self.city, self.timezone) = (city, timezone)
@@ -50,14 +50,17 @@ extension WebSearchLocation {
 public struct WebSearchContextSize: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = WebSearchContextSize(rawValue: "low")
     public static let medium = WebSearchContextSize(rawValue: "medium")
     public static let high = WebSearchContextSize(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

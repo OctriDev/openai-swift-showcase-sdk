@@ -3,7 +3,7 @@
 
 import Foundation
 
-// WebhookFineTuningJobCancelled domain models
+/// WebhookFineTuningJobCancelled domain models
 /// Sent when a fine-tuning job has been cancelled.
 public struct WebhookFineTuningJobCancelled: Codable {
     /// The Unix timestamp (in seconds) of when the fine-tuning job was cancelled.
@@ -25,34 +25,58 @@ public struct WebhookFineTuningJobCancelled: Codable {
         case object
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebhookFineTuningJobCancelled {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.object = try container.sdkDecodeIfPresent(.object)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebhookFineTuningJobCancelled {
-    public init(createdAt: Int, id: String, data: WebhookFineTuningJobCancelledData, type: WebhookFineTuningJobCancelledType, object: WebhookFineTuningJobCancelledObject? = nil) {
+public extension WebhookFineTuningJobCancelled {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        id = try container.sdkDecodeRequired(.id)
+        data = try container.sdkDecodeRequired(.data)
+        type = try container.sdkDecodeRequired(.type)
+        object = try container.sdkDecodeIfPresent(.object)
+    }
+}
+
+public extension WebhookFineTuningJobCancelled {
+    init(
+        createdAt: Int,
+        id: String,
+        data: WebhookFineTuningJobCancelledData,
+        type: WebhookFineTuningJobCancelledType,
+        object: WebhookFineTuningJobCancelledObject? = nil
+    ) {
         (self.createdAt, self.id) = (createdAt, id)
         (self.data, self.type) = (data, type)
         self.object = object
@@ -68,21 +92,27 @@ public struct WebhookFineTuningJobCancelledData: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebhookFineTuningJobCancelledData {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebhookFineTuningJobCancelledData {
-    public init(id: String) {
+public extension WebhookFineTuningJobCancelledData {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+    }
+}
+
+public extension WebhookFineTuningJobCancelledData {
+    init(id: String) {
         self.id = id
     }
 }
@@ -91,12 +121,15 @@ extension WebhookFineTuningJobCancelledData {
 public struct WebhookFineTuningJobCancelledType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let fineTuningJobCancelled = WebhookFineTuningJobCancelledType(rawValue: "fine_tuning.job.cancelled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -109,12 +142,15 @@ public struct WebhookFineTuningJobCancelledType: RawRepresentable, Hashable, Cod
 public struct WebhookFineTuningJobCancelledObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let event = WebhookFineTuningJobCancelledObject(rawValue: "event")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

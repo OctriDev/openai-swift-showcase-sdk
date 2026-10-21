@@ -3,26 +3,47 @@
 
 import Foundation
 
-extension VideosNamespace {
-/// Permanently delete a completed or failed video and its stored assets.
+public extension VideosNamespace {
+    /// Permanently delete a completed or failed video and its stored assets.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func delete(videoId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedVideoResource {
-        return try await VideosMethods.deleteVideo(config: config, videoId: videoId, requestOptions: requestOptions)
+    func delete(videoId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedVideoResource {
+        try await VideosMethods.deleteVideo(config: config, videoId: videoId, requestOptions: requestOptions)
     }
 
-/// Download the generated video bytes or a derived preview asset. Streams the rendered video content for the specified video job.
+    /// Download the generated video bytes or a derived preview asset. Streams the rendered video content for the
+    /// specified video job.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func retrieveContent(videoId: String, variant: VideoContentVariant? = nil, requestOptions: RequestOptions? = nil) async throws -> Data {
-        return try await VideosMethods.retrieveVideoContent(config: config, videoId: videoId, variant: variant, requestOptions: requestOptions)
+    func retrieveContent(
+        videoId: String,
+        variant: VideoContentVariant? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Data {
+        try await VideosMethods.retrieveVideoContent(
+            config: config,
+            videoId: videoId,
+            variant: variant,
+            requestOptions: requestOptions
+        )
     }
 
-/// Create a remix of a completed video using a refreshed prompt.
+    /// Create a remix of a completed video using a refreshed prompt.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func createRemix(videoId: String, prompt: String, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> VideoResource {
-        return try await VideosMethods.createVideoRemix(config: config, videoId: videoId, prompt: prompt, contentType: contentType, requestOptions: requestOptions)
+    func createRemix(
+        videoId: String,
+        prompt: String,
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VideoResource {
+        try await VideosMethods.createVideoRemix(
+            config: config,
+            videoId: videoId,
+            prompt: prompt,
+            contentType: contentType,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -32,97 +53,215 @@ public class SkillsNamespace {
         self.config = config
     }
 
-/// Creates a new skill from uploaded files or a ZIP archive. Include `files` with the skill contents, either as a directory upload or a single ZIP file. The response includes the created skill and its version identifiers.
+    /// Creates a new skill from uploaded files or a ZIP archive. Include `files` with the skill contents, either as a
+    /// directory upload or a single ZIP file. The response includes the created skill and its version identifiers.
     ///
     /// Create a new skill.
-    public func create(files: [Data], contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SkillResource {
-        return try await SkillsMethods.createSkill(config: config, files: files, contentType: contentType, requestOptions: requestOptions)
+    public func create(
+        files: [Data],
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SkillResource {
+        try await SkillsMethods.createSkill(
+            config: config,
+            files: files,
+            contentType: contentType,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists skills available in the current project. Use `limit` to control the number of results, `order` to sort them, and `after` to continue from a previous result.
+    /// Lists skills available in the current project. Use `limit` to control the number of results, `order` to sort
+    /// them, and `after` to continue from a previous result.
     ///
     /// List all skills for the current project.
-    public func list(limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SkillListResource {
-        return try await SkillsMethods.listSkills(config: config, limit: limit, order: order, after: after, requestOptions: requestOptions)
+    public func list(
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SkillListResource {
+        try await SkillsMethods.listSkills(
+            config: config,
+            limit: limit,
+            order: order,
+            after: after,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists skills available in the current project. Use `limit` to control the number of results, `order` to sort them, and `after` to continue from a previous result.
+    /// Lists skills available in the current project. Use `limit` to control the number of results, `order` to sort
+    /// them, and `after` to continue from a previous result.
     ///
     /// List all skills for the current project.
-    public func listPaginated(limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SkillResource, Swift.Error> {
-        return SkillsMethods.listSkillsPaginated(config: config, limit: limit, order: order, after: after, requestOptions: requestOptions)
+    public func listPaginated(
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<SkillResource, Swift.Error> {
+        SkillsMethods.listSkillsPaginated(
+            config: config,
+            limit: limit,
+            order: order,
+            after: after,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes a skill by its identifier. Use `skill_id` to select the skill to remove. The response confirms whether the skill was deleted and includes its identifier.
+    /// Deletes a skill by its identifier. Use `skill_id` to select the skill to remove. The response confirms whether
+    /// the skill was deleted and includes its identifier.
     ///
     /// Delete a skill by its ID.
     public func delete(skillId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedSkillResource {
-        return try await SkillsMethods.deleteSkill(config: config, skillId: skillId, requestOptions: requestOptions)
+        try await SkillsMethods.deleteSkill(config: config, skillId: skillId, requestOptions: requestOptions)
     }
 
-/// Retrieves a skill by its identifier. Use `skill_id` to select the skill whose details you need.
+    /// Retrieves a skill by its identifier. Use `skill_id` to select the skill whose details you need.
     ///
     /// Get a skill by its ID.
     public func get(skillId: String, requestOptions: RequestOptions? = nil) async throws -> SkillResource {
-        return try await SkillsMethods.getSkill(config: config, skillId: skillId, requestOptions: requestOptions)
+        try await SkillsMethods.getSkill(config: config, skillId: skillId, requestOptions: requestOptions)
     }
 
-/// Updates the default version pointer for a skill. Provide `default_version` to select the version that should be the skill's default. The response contains the updated skill details.
+    /// Updates the default version pointer for a skill. Provide `default_version` to select the version that should be
+    /// the skill's default. The response contains the updated skill details.
     ///
     /// Update the default version pointer for a skill.
-    public func updateDefaultVersion(skillId: String, defaultVersion: String, requestOptions: RequestOptions? = nil) async throws -> SkillResource {
-        return try await SkillsMethods.updateSkillDefaultVersion(config: config, skillId: skillId, defaultVersion: defaultVersion, requestOptions: requestOptions)
+    public func updateDefaultVersion(
+        skillId: String,
+        defaultVersion: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SkillResource {
+        try await SkillsMethods.updateSkillDefaultVersion(
+            config: config,
+            skillId: skillId,
+            defaultVersion: defaultVersion,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves the ZIP bundle for a skill. Use `skill_id` to select the skill whose files you want to download.
+    /// Retrieves the ZIP bundle for a skill. Use `skill_id` to select the skill whose files you want to download.
     ///
     /// Download a skill zip bundle by its ID.
     public func getContent(skillId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
-        return try await SkillsMethods.getSkillContent(config: config, skillId: skillId, requestOptions: requestOptions)
+        try await SkillsMethods.getSkillContent(config: config, skillId: skillId, requestOptions: requestOptions)
     }
 
-/// Creates a new immutable version of a skill from uploaded files or a ZIP archive. Include `files` with the version contents and optionally set `default` to make the new version the default. The response contains the created version details.
+    /// Creates a new immutable version of a skill from uploaded files or a ZIP archive. Include `files` with the
+    /// version contents and optionally set `default` to make the new version the default. The response contains the
+    /// created version details.
     ///
     /// Create a new immutable skill version.
-    public func createVersion(skillId: String, files: [Data], default: Bool? = nil, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SkillVersionResource {
-        return try await SkillsMethods.createSkillVersion(config: config, skillId: skillId, files: files, default: `default`, contentType: contentType, requestOptions: requestOptions)
+    public func createVersion(
+        skillId: String,
+        files: [Data],
+        default: Bool? = nil,
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SkillVersionResource {
+        try await SkillsMethods.createSkillVersion(
+            config: config,
+            skillId: skillId,
+            files: files,
+            default: `default`,
+            contentType: contentType,
+            requestOptions: requestOptions
+        )
     }
 }
 
-extension SkillsNamespace {
-/// Lists versions for a skill. Use `after` to continue from a skill version ID, `limit` to control the number of results, and `order` to sort by version number.
+public extension SkillsNamespace {
+    /// Lists versions for a skill. Use `after` to continue from a skill version ID, `limit` to control the number of
+    /// results, and `order` to sort by version number.
     ///
     /// List skill versions for a skill.
-    public func listVersions(skillId: String, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SkillVersionListResource {
-        return try await SkillsMethods.listSkillVersions(config: config, skillId: skillId, limit: limit, order: order, after: after, requestOptions: requestOptions)
+    func listVersions(
+        skillId: String,
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SkillVersionListResource {
+        try await SkillsMethods.listSkillVersions(
+            config: config,
+            skillId: skillId,
+            limit: limit,
+            order: order,
+            after: after,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists versions for a skill. Use `after` to continue from a skill version ID, `limit` to control the number of results, and `order` to sort by version number.
+    /// Lists versions for a skill. Use `after` to continue from a skill version ID, `limit` to control the number of
+    /// results, and `order` to sort by version number.
     ///
     /// List skill versions for a skill.
-    public func listVersionsPaginated(skillId: String, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SkillVersionResource, Swift.Error> {
-        return SkillsMethods.listSkillVersionsPaginated(config: config, skillId: skillId, limit: limit, order: order, after: after, requestOptions: requestOptions)
+    func listVersionsPaginated(
+        skillId: String,
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<SkillVersionResource, Swift.Error> {
+        SkillsMethods.listSkillVersionsPaginated(
+            config: config,
+            skillId: skillId,
+            limit: limit,
+            order: order,
+            after: after,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves a specific version of a skill. Provide `skill_id` to identify the skill and `version` to select the version to retrieve.
+    /// Retrieves a specific version of a skill. Provide `skill_id` to identify the skill and `version` to select the
+    /// version to retrieve.
     ///
     /// Get a specific skill version.
-    public func getVersion(skillId: String, version: String, requestOptions: RequestOptions? = nil) async throws -> SkillVersionResource {
-        return try await SkillsMethods.getSkillVersion(config: config, skillId: skillId, version: version, requestOptions: requestOptions)
+    func getVersion(
+        skillId: String,
+        version: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SkillVersionResource {
+        try await SkillsMethods.getSkillVersion(
+            config: config,
+            skillId: skillId,
+            version: version,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes a version of a skill. Use `skill_id` and `version` to select the version to remove. You cannot delete the default version while other versions remain.
+    /// Deletes a version of a skill. Use `skill_id` and `version` to select the version to remove. You cannot delete
+    /// the default version while other versions remain.
     ///
     /// Delete a skill version.
-    public func deleteVersion(skillId: String, version: String, requestOptions: RequestOptions? = nil) async throws -> DeletedSkillVersionResource {
-        return try await SkillsMethods.deleteSkillVersion(config: config, skillId: skillId, version: version, requestOptions: requestOptions)
+    func deleteVersion(
+        skillId: String,
+        version: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeletedSkillVersionResource {
+        try await SkillsMethods.deleteSkillVersion(
+            config: config,
+            skillId: skillId,
+            version: version,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves the ZIP bundle for a specific skill version. Use `skill_id` and `version` to identify the skill and version whose content you need. The response provides the bundle as a downloadable binary file.
+    /// Retrieves the ZIP bundle for a specific skill version. Use `skill_id` and `version` to identify the skill and
+    /// version whose content you need. The response provides the bundle as a downloadable binary file.
     ///
     /// Download a skill version zip bundle.
-    public func getVersionContent(skillId: String, version: String, requestOptions: RequestOptions? = nil) async throws -> Data {
-        return try await SkillsMethods.getSkillVersionContent(config: config, skillId: skillId, version: version, requestOptions: requestOptions)
+    func getVersionContent(
+        skillId: String,
+        version: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Data {
+        try await SkillsMethods.getSkillVersionContent(
+            config: config,
+            skillId: skillId,
+            version: version,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -132,52 +271,149 @@ public class ChatkitNamespace {
         self.config = config
     }
 
-/// Cancel an active ChatKit session and return its most recent metadata. Cancelling prevents new requests from using the issued client secret.
-    public func cancelSession(sessionId: String, requestOptions: RequestOptions? = nil) async throws -> ChatSessionResource {
-        return try await ChatkitMethods.cancelChatkitSession(config: config, sessionId: sessionId, requestOptions: requestOptions)
+    /// Cancel an active ChatKit session and return its most recent metadata. Cancelling prevents new requests from
+    /// using the issued client secret.
+    public func cancelSession(
+        sessionId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ChatSessionResource {
+        try await ChatkitMethods.cancelChatkitSession(
+            config: config,
+            sessionId: sessionId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates a ChatKit session powered by a specified workflow. Supply `workflow` with its required `id` and a non-empty `user` identifier; optionally configure expiration, rate limits, tracing, and ChatKit features. The response includes the session's client secret, expiration time, and resolved configuration.
+    /// Creates a ChatKit session powered by a specified workflow. Supply `workflow` with its required `id` and a
+    /// non-empty `user` identifier; optionally configure expiration, rate limits, tracing, and ChatKit features. The
+    /// response includes the session's client secret, expiration time, and resolved configuration.
     ///
     /// Create a ChatKit session.
-    public func createSession(workflow: WorkflowParam, user: String, expiresAfter: ExpiresAfterParam? = nil, rateLimits: RateLimitsParam? = nil, chatkitConfiguration: ChatkitConfigurationParam? = nil, requestOptions: RequestOptions? = nil) async throws -> ChatSessionResource {
-        return try await ChatkitMethods.createChatkitSession(config: config, workflow: workflow, user: user, expiresAfter: expiresAfter, rateLimits: rateLimits, chatkitConfiguration: chatkitConfiguration, requestOptions: requestOptions)
+    public func createSession(
+        workflow: WorkflowParam,
+        user: String,
+        expiresAfter: ExpiresAfterParam? = nil,
+        rateLimits: RateLimitsParam? = nil,
+        chatkitConfiguration: ChatkitConfigurationParam? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ChatSessionResource {
+        try await ChatkitMethods.createChatkitSession(
+            config: config,
+            workflow: workflow,
+            user: user,
+            expiresAfter: expiresAfter,
+            rateLimits: rateLimits,
+            chatkitConfiguration: chatkitConfiguration,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists items belonging to a ChatKit thread. Use `after` or `before` to select items relative to a thread item ID, and use `limit` and `order` to control the result set. The response includes pagination identifiers and a `has_more` flag.
+    /// Lists items belonging to a ChatKit thread. Use `after` or `before` to select items relative to a thread item ID,
+    /// and use `limit` and `order` to control the result set. The response includes pagination identifiers and a
+    /// `has_more` flag.
     ///
     /// List items that belong to a ChatKit thread.
-    public func listThreadItems(threadId: String, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ThreadItemListResource {
-        return try await ChatkitMethods.listChatkitThreadItems(config: config, threadId: threadId, limit: limit, order: order, after: after, before: before, requestOptions: requestOptions)
+    public func listThreadItems(
+        threadId: String,
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ThreadItemListResource {
+        try await ChatkitMethods.listChatkitThreadItems(
+            config: config,
+            threadId: threadId,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists items belonging to a ChatKit thread. Use `after` or `before` to select items relative to a thread item ID, and use `limit` and `order` to control the result set. The response includes pagination identifiers and a `has_more` flag.
+    /// Lists items belonging to a ChatKit thread. Use `after` or `before` to select items relative to a thread item ID,
+    /// and use `limit` and `order` to control the result set. The response includes pagination identifiers and a
+    /// `has_more` flag.
     ///
     /// List items that belong to a ChatKit thread.
-    public func listThreadItemsPaginated(threadId: String, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, before: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ThreadItem, Swift.Error> {
-        return ChatkitMethods.listChatkitThreadItemsPaginated(config: config, threadId: threadId, limit: limit, order: order, after: after, before: before, requestOptions: requestOptions)
+    public func listThreadItemsPaginated(
+        threadId: String,
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ThreadItem, Swift.Error> {
+        ChatkitMethods.listChatkitThreadItemsPaginated(
+            config: config,
+            threadId: threadId,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves a ChatKit thread by its identifier. Use `thread_id` to select the thread whose status and metadata you need.
+    /// Retrieves a ChatKit thread by its identifier. Use `thread_id` to select the thread whose status and metadata you
+    /// need.
     ///
     /// Retrieve a ChatKit thread by its identifier.
     public func retrieveThread(threadId: String, requestOptions: RequestOptions? = nil) async throws -> ThreadResource {
-        return try await ChatkitMethods.retrieveChatkitThread(config: config, threadId: threadId, requestOptions: requestOptions)
+        try await ChatkitMethods.retrieveChatkitThread(
+            config: config,
+            threadId: threadId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Delete a ChatKit thread along with its items and stored attachments.
-    public func deleteThread(threadId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedThreadResource {
-        return try await ChatkitMethods.deleteChatkitThread(config: config, threadId: threadId, requestOptions: requestOptions)
+    /// Delete a ChatKit thread along with its items and stored attachments.
+    public func deleteThread(
+        threadId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeletedThreadResource {
+        try await ChatkitMethods.deleteChatkitThread(config: config, threadId: threadId, requestOptions: requestOptions)
     }
 
-/// List ChatKit threads with optional pagination and user filters.
-    public func listThreads(limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, before: String? = nil, user: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ThreadListResource {
-        return try await ChatkitMethods.listChatkitThreads(config: config, limit: limit, order: order, after: after, before: before, user: user, requestOptions: requestOptions)
+    /// List ChatKit threads with optional pagination and user filters.
+    public func listThreads(
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        user: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ThreadListResource {
+        try await ChatkitMethods.listChatkitThreads(
+            config: config,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            user: user,
+            requestOptions: requestOptions
+        )
     }
 
-/// List ChatKit threads with optional pagination and user filters.
-    public func listThreadsPaginated(limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, before: String? = nil, user: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ThreadResource, Swift.Error> {
-        return ChatkitMethods.listChatkitThreadsPaginated(config: config, limit: limit, order: order, after: after, before: before, user: user, requestOptions: requestOptions)
+    /// List ChatKit threads with optional pagination and user filters.
+    public func listThreadsPaginated(
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        before: String? = nil,
+        user: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ThreadResource, Swift.Error> {
+        ChatkitMethods.listChatkitThreadsPaginated(
+            config: config,
+            limit: limit,
+            order: order,
+            after: after,
+            before: before,
+            user: user,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -187,8 +423,26 @@ public class DecisionsNamespace {
         self.config = config
     }
 
-/// Use this endpoint to quickly answer classification or scoring questions about some input. You can ask multiple questions in one request.
-    public func create(model: String, input: DecisionInput, questions: [QuestionParam], safetyIdentifier: SdkOptional<String>? = nil, promptCacheKey: SdkOptional<String>? = nil, promptCacheOptions: SdkOptional<DecisionRequestPromptCacheOptions>? = nil, requestOptions: RequestOptions? = nil) async throws -> DecisionResponse {
-        return try await DecisionsMethods.createDecision(config: config, model: model, input: input, questions: questions, safetyIdentifier: safetyIdentifier, promptCacheKey: promptCacheKey, promptCacheOptions: promptCacheOptions, requestOptions: requestOptions)
+    /// Use this endpoint to quickly answer classification or scoring questions about some input. You can ask multiple
+    /// questions in one request.
+    public func create(
+        model: String,
+        input: DecisionInput,
+        questions: [QuestionParam],
+        safetyIdentifier: SdkOptional<String>? = nil,
+        promptCacheKey: SdkOptional<String>? = nil,
+        promptCacheOptions: SdkOptional<DecisionRequestPromptCacheOptions>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DecisionResponse {
+        try await DecisionsMethods.createDecision(
+            config: config,
+            model: model,
+            input: input,
+            questions: questions,
+            safetyIdentifier: safetyIdentifier,
+            promptCacheKey: promptCacheKey,
+            promptCacheOptions: promptCacheOptions,
+            requestOptions: requestOptions
+        )
     }
 }

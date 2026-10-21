@@ -8,33 +8,72 @@ import Foundation
 #endif
 public enum DataRetentionMethods {}
 
-extension DataRetentionMethods {
-    /// Retrieves the organization's data retention controls. Use this endpoint to inspect the configured retention type, such as zero data retention or modified abuse monitoring.
+public extension DataRetentionMethods {
+    /// Retrieves the organization's data retention controls. Use this endpoint to inspect the configured retention
+    /// type, such as zero data retention or modified abuse monitoring.
     ///
     /// Retrieves organization data retention controls.
-    public static func retrieveOrganizationDataRetention(config: ClientConfig, requestOptions: RequestOptions? = nil) async throws -> OrganizationDataRetention {
-        return try (await sdkRequest("GET", "/organization/data_retention", config: config, decoder: .json, operationId: "retrieveOrganizationDataRetention", options: requestOptions, errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
+    static func retrieveOrganizationDataRetention(
+        config: ClientConfig,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OrganizationDataRetention {
+        try await (sdkRequest(
+            "GET",
+            "/organization/data_retention",
+            config: config,
+            decoder: .json,
+            operationId: "retrieveOrganizationDataRetention",
+            options: requestOptions,
+            errors: ["403": PermissionErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
-    /// Updates the organization's data retention controls. Set `retention_type` to one of the supported retention modes; the requested setting or transition must be valid for the organization.
+    /// Updates the organization's data retention controls. Set `retention_type` to one of the supported retention
+    /// modes; the requested setting or transition must be valid for the organization.
     ///
     /// Updates organization data retention controls.
     ///
     /// - Parameters:
     /// - retentionType: The desired organization data retention type.
-    public static func updateOrganizationDataRetention(config: ClientConfig, retentionType: UpdateOrganizationDataRetentionBodyRetentionType, requestOptions: RequestOptions? = nil) async throws -> OrganizationDataRetention {
+    static func updateOrganizationDataRetention(
+        config: ClientConfig,
+        retentionType: UpdateOrganizationDataRetentionBodyRetentionType,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OrganizationDataRetention {
         let requestBody = UpdateOrganizationDataRetentionRequestBody(retentionType: retentionType)
 
-        return try (await sdkRequest("POST", "/organization/data_retention", config: config, body: requestBody, decoder: .json, operationId: "updateOrganizationDataRetention", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/organization/data_retention",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "updateOrganizationDataRetention",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 
-    /// Retrieves the data retention controls configured for a project. Use this operation to inspect the project's current retention type before changing its settings.
+    /// Retrieves the data retention controls configured for a project. Use this operation to inspect the project's
+    /// current retention type before changing its settings.
     ///
     /// Retrieves project data retention controls.
     ///
     /// - Parameters:
     /// - projectId: The ID of the project to inspect.
-    public static func retrieveProjectDataRetention(config: ClientConfig, projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectDataRetention {
-        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/data_retention"].joined(), config: config, decoder: .json, operationId: "retrieveProjectDataRetention", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self])).data
+    static func retrieveProjectDataRetention(
+        config: ClientConfig,
+        projectId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectDataRetention {
+        try await (sdkRequest(
+            "GET",
+            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/data_retention"].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "retrieveProjectDataRetention",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self]
+        )).data
     }
 }

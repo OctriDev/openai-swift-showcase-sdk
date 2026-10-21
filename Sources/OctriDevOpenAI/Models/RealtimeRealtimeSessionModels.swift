@@ -3,38 +3,67 @@
 
 import Foundation
 
-// RealtimeRealtimeSession domain models
-extension RealtimeSession {
-    public init(from decoder: Decoder) throws {
+/// RealtimeRealtimeSession domain models
+public extension RealtimeSession {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.object = try container.sdkDecodeIfPresent(.object)
-        self.modalities = try container.sdkDecodeIfPresent(.modalities)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.voice = try container.sdkDecodeIfPresent(.voice)
-        self.inputAudioFormat = try container.sdkDecodeIfPresent(.inputAudioFormat)
-        self.outputAudioFormat = try container.sdkDecodeIfPresent(.outputAudioFormat)
-        self.inputAudioTranscription = try container.sdkDecodeIfPresent(.inputAudioTranscription)
-        self.turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
-        self.inputAudioNoiseReduction = try container.sdkDecodeIfPresent(.inputAudioNoiseReduction)
-        self.speed = try container.sdkDecodeIfPresent(.speed)
-        self.tracing = try container.sdkDecodeIfPresent(.tracing)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        self.temperature = try container.sdkDecodeIfPresent(.temperature)
-        self.maxResponseOutputTokens = try container.sdkDecodeIfPresent(.maxResponseOutputTokens)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        self.prompt = try container.sdkDecodeIfPresent(.prompt)
-        self.include = try container.sdkDecodeIfPresent(.include)
-        if let value = self.speed {
-            try validateRange("speed", Double(value), min: 0.25, max: 1.5, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        id = try container.sdkDecodeIfPresent(.id)
+        object = try container.sdkDecodeIfPresent(.object)
+        modalities = try container.sdkDecodeIfPresent(.modalities)
+        model = try container.sdkDecodeIfPresent(.model)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        voice = try container.sdkDecodeIfPresent(.voice)
+        inputAudioFormat = try container.sdkDecodeIfPresent(.inputAudioFormat)
+        outputAudioFormat = try container.sdkDecodeIfPresent(.outputAudioFormat)
+        inputAudioTranscription = try container.sdkDecodeIfPresent(.inputAudioTranscription)
+        turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
+        inputAudioNoiseReduction = try container.sdkDecodeIfPresent(.inputAudioNoiseReduction)
+        speed = try container.sdkDecodeIfPresent(.speed)
+        tracing = try container.sdkDecodeIfPresent(.tracing)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        temperature = try container.sdkDecodeIfPresent(.temperature)
+        maxResponseOutputTokens = try container.sdkDecodeIfPresent(.maxResponseOutputTokens)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        prompt = try container.sdkDecodeIfPresent(.prompt)
+        include = try container.sdkDecodeIfPresent(.include)
+        if let value = speed {
+            try validateRange(
+                "speed",
+                Double(value),
+                min: 0.25,
+                max: 1.5,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension RealtimeSession {
-    public init(id: String? = nil, object: RealtimeSessionObject? = nil, modalities: [RealtimeSessionModalitiesItem]? = nil, model: String? = nil, instructions: String? = nil, voice: VoiceIdsShared? = nil, inputAudioFormat: RealtimeSessionInputAudioFormat? = nil, outputAudioFormat: RealtimeSessionOutputAudioFormat? = nil, inputAudioTranscription: AudioTranscriptionResponse? = nil, turnDetection: RealtimeTurnDetection? = nil, inputAudioNoiseReduction: RealtimeSessionInputAudioNoiseReduction? = nil, speed: Double? = nil, tracing: RealtimeSessionTracing? = nil, tools: [RealtimeFunctionTool]? = nil, toolChoice: String? = nil, temperature: Double? = nil, maxResponseOutputTokens: RealtimeSessionMaxResponseOutputTokens? = nil, expiresAt: Int? = nil, prompt: Prompt? = nil, include: [RealtimeSessionIncludeItem]? = nil) throws {
+public extension RealtimeSession {
+    init(
+        id: String? = nil,
+        object: RealtimeSessionObject? = nil,
+        modalities: [RealtimeSessionModalitiesItem]? = nil,
+        model: String? = nil,
+        instructions: String? = nil,
+        voice: VoiceIdsShared? = nil,
+        inputAudioFormat: RealtimeSessionInputAudioFormat? = nil,
+        outputAudioFormat: RealtimeSessionOutputAudioFormat? = nil,
+        inputAudioTranscription: AudioTranscriptionResponse? = nil,
+        turnDetection: RealtimeTurnDetection? = nil,
+        inputAudioNoiseReduction: RealtimeSessionInputAudioNoiseReduction? = nil,
+        speed: Double? = nil,
+        tracing: RealtimeSessionTracing? = nil,
+        tools: [RealtimeFunctionTool]? = nil,
+        toolChoice: String? = nil,
+        temperature: Double? = nil,
+        maxResponseOutputTokens: RealtimeSessionMaxResponseOutputTokens? = nil,
+        expiresAt: Int? = nil,
+        prompt: Prompt? = nil,
+        include: [RealtimeSessionIncludeItem]? = nil
+    ) throws {
         self.init()
         (self.id, self.object) = (id, object)
         (self.modalities, self.model) = (modalities, model)
@@ -47,7 +76,15 @@ extension RealtimeSession {
         (self.maxResponseOutputTokens, self.expiresAt) = (maxResponseOutputTokens, expiresAt)
         (self.prompt, self.include) = (prompt, include)
         if let value = self.speed {
-            try validateRange("speed", Double(value), min: 0.25, max: 1.5, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "speed",
+                Double(value),
+                min: 0.25,
+                max: 1.5,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -65,20 +102,23 @@ public struct RealtimeSessionCreateRequestGAAudio: Codable {
     }
 
     init() {
-        (self.input, self.output) = (nil, nil)
+        (input, output) = (nil, nil)
     }
 }
 
-extension RealtimeSessionCreateRequestGAAudio {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeSessionCreateRequestGAAudio {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.input = try container.sdkDecodeIfPresent(.input)
-        self.output = try container.sdkDecodeIfPresent(.output)
+        input = try container.sdkDecodeIfPresent(.input)
+        output = try container.sdkDecodeIfPresent(.output)
     }
 }
 
-extension RealtimeSessionCreateRequestGAAudio {
-    public init(input: RealtimeSessionCreateRequestGAAudioInput? = nil, output: RealtimeSessionCreateRequestGAAudioOutput? = nil) {
+public extension RealtimeSessionCreateRequestGAAudio {
+    init(
+        input: RealtimeSessionCreateRequestGAAudioInput? = nil,
+        output: RealtimeSessionCreateRequestGAAudioOutput? = nil
+    ) {
         self.init()
         (self.input, self.output) = (input, output)
     }
@@ -90,22 +130,32 @@ public indirect enum RealtimeSessionCreateRequestGAMaxOutputTokens {
 }
 
 extension RealtimeSessionCreateRequestGAMaxOutputTokens: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateRequestGAMaxOutputTokens")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RealtimeSessionCreateRequestGAMaxOutputTokens"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension RealtimeSessionCreateRequestGAMaxOutputTokens {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) { return .intValue(value) }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) {
+            return .intValue(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         return nil
     }
 }
@@ -143,19 +193,19 @@ public struct RealtimeSessionInputAudioNoiseReduction: Codable {
     }
 
     init() {
-        self.type = nil
+        type = nil
     }
 }
 
-extension RealtimeSessionInputAudioNoiseReduction {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeSessionInputAudioNoiseReduction {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeIfPresent(.type)
+        type = try container.sdkDecodeIfPresent(.type)
     }
 }
 
-extension RealtimeSessionInputAudioNoiseReduction {
-    public init(type: NoiseReductionType? = nil) {
+public extension RealtimeSessionInputAudioNoiseReduction {
+    init(type: NoiseReductionType? = nil) {
         self.init()
         self.type = type
     }
@@ -225,35 +275,56 @@ public struct RealtimeSessionCreateRequestGA: Codable {
         case prompt
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeSessionCreateRequestGA {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.include = try container.sdkDecodeIfPresent(.include)
-        self.tracing = try container.sdkDecodeIfPresent(.tracing)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        self.parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
-        self.reasoning = try container.sdkDecodeIfPresent(.reasoning)
-        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
-        self.truncation = try container.sdkDecodeIfPresent(.truncation)
-        self.prompt = try container.sdkDecodeIfPresent(.prompt)
-            try sdkValidateRawEnum("type", self.type, RealtimeSessionCreateRequestGAType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeSessionCreateRequestGA {
-    public init(type: RealtimeSessionCreateRequestGAType, outputModalities: [RealtimeSessionCreateRequestGAOutputModalitiesItem]? = nil, model: String? = nil, instructions: String? = nil, audio: RealtimeSessionCreateRequestGAAudio? = nil, include: [RealtimeSessionCreateRequestGAIncludeItem]? = nil, tracing: RealtimeSessionCreateRequestGATracing? = nil, tools: [RealtimeSessionCreateRequestGAToolsItem]? = nil, toolChoice: RealtimeSessionCreateRequestGAToolChoice? = nil, parallelToolCalls: Bool? = nil, reasoning: RealtimeReasoning? = nil, maxOutputTokens: RealtimeSessionCreateRequestGAMaxOutputTokens? = nil, truncation: RealtimeTruncation? = nil, prompt: Prompt? = nil) throws {
+public extension RealtimeSessionCreateRequestGA {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
+        model = try container.sdkDecodeIfPresent(.model)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        include = try container.sdkDecodeIfPresent(.include)
+        tracing = try container.sdkDecodeIfPresent(.tracing)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        parallelToolCalls = try container.sdkDecodeIfPresent(.parallelToolCalls)
+        reasoning = try container.sdkDecodeIfPresent(.reasoning)
+        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        truncation = try container.sdkDecodeIfPresent(.truncation)
+        prompt = try container.sdkDecodeIfPresent(.prompt)
+        try sdkValidateRawEnum("type", type, RealtimeSessionCreateRequestGAType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeSessionCreateRequestGA {
+    init(
+        type: RealtimeSessionCreateRequestGAType,
+        outputModalities: [RealtimeSessionCreateRequestGAOutputModalitiesItem]? = nil,
+        model: String? = nil,
+        instructions: String? = nil,
+        audio: RealtimeSessionCreateRequestGAAudio? = nil,
+        include: [RealtimeSessionCreateRequestGAIncludeItem]? = nil,
+        tracing: RealtimeSessionCreateRequestGATracing? = nil,
+        tools: [RealtimeSessionCreateRequestGAToolsItem]? = nil,
+        toolChoice: RealtimeSessionCreateRequestGAToolChoice? = nil,
+        parallelToolCalls: Bool? = nil,
+        reasoning: RealtimeReasoning? = nil,
+        maxOutputTokens: RealtimeSessionCreateRequestGAMaxOutputTokens? = nil,
+        truncation: RealtimeTruncation? = nil,
+        prompt: Prompt? = nil
+    ) throws {
         (self.type, self.outputModalities) = (type, outputModalities)
         (self.model, self.instructions) = (model, instructions)
         (self.audio, self.include) = (audio, include)
@@ -261,7 +332,7 @@ extension RealtimeSessionCreateRequestGA {
         (self.toolChoice, self.parallelToolCalls) = (toolChoice, parallelToolCalls)
         (self.reasoning, self.maxOutputTokens) = (reasoning, maxOutputTokens)
         (self.truncation, self.prompt) = (truncation, prompt)
-            try sdkValidateRawEnum("type", self.type, RealtimeSessionCreateRequestGAType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeSessionCreateRequestGAType.allCases.map(\.rawValue))
     }
 }
 
@@ -281,21 +352,21 @@ public struct RealtimeSessionTracingVariant1: Codable {
     }
 
     init() {
-        (self.workflowName, self.groupId, self.metadata) = (nil, nil, nil)
+        (workflowName, groupId, metadata) = (nil, nil, nil)
     }
 }
 
-extension RealtimeSessionTracingVariant1 {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeSessionTracingVariant1 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.workflowName = try container.sdkDecodeIfPresent(.workflowName)
-        self.groupId = try container.sdkDecodeIfPresent(.groupId)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        workflowName = try container.sdkDecodeIfPresent(.workflowName)
+        groupId = try container.sdkDecodeIfPresent(.groupId)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
     }
 }
 
-extension RealtimeSessionTracingVariant1 {
-    public init(workflowName: String? = nil, groupId: String? = nil, metadata: [String: JSONValue]? = nil) {
+public extension RealtimeSessionTracingVariant1 {
+    init(workflowName: String? = nil, groupId: String? = nil, metadata: [String: JSONValue]? = nil) {
         self.init()
         (self.workflowName, self.groupId) = (workflowName, groupId)
         self.metadata = metadata
@@ -316,19 +387,19 @@ public struct RealtimeSessionCreateRequestGAAudioInputNoiseReduction: Codable {
     }
 
     init() {
-        self.type = nil
+        type = nil
     }
 }
 
-extension RealtimeSessionCreateRequestGAAudioInputNoiseReduction {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeSessionCreateRequestGAAudioInputNoiseReduction {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeIfPresent(.type)
+        type = try container.sdkDecodeIfPresent(.type)
     }
 }
 
-extension RealtimeSessionCreateRequestGAAudioInputNoiseReduction {
-    public init(type: NoiseReductionType? = nil) {
+public extension RealtimeSessionCreateRequestGAAudioInputNoiseReduction {
+    init(type: NoiseReductionType? = nil) {
         self.init()
         self.type = type
     }
@@ -338,12 +409,16 @@ extension RealtimeSessionCreateRequestGAAudioInputNoiseReduction {
 public struct RealtimeSessionIncludeItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let itemInputAudioTranscriptionLogprobs = RealtimeSessionIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let itemInputAudioTranscriptionLogprobs =
+        RealtimeSessionIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -353,16 +428,20 @@ public struct RealtimeSessionIncludeItem: RawRepresentable, Hashable, Codable, S
 }
 
 /// Required enumerated value serialized in the `output_modalities[]` wire field.
-public struct RealtimeSessionCreateRequestGAOutputModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeSessionCreateRequestGAOutputModalitiesItem: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let text = RealtimeSessionCreateRequestGAOutputModalitiesItem(rawValue: "text")
     public static let audio = RealtimeSessionCreateRequestGAOutputModalitiesItem(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -393,13 +472,16 @@ public enum RealtimeSessionCreateRequestGAType: String, CaseIterable, Codable {
 public struct RealtimeSessionModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let text = RealtimeSessionModalitiesItem(rawValue: "text")
     public static let audio = RealtimeSessionModalitiesItem(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -409,15 +491,20 @@ public struct RealtimeSessionModalitiesItem: RawRepresentable, Hashable, Codable
 }
 
 /// Required enumerated value serialized in the `include[]` wire field.
-public struct RealtimeSessionCreateRequestGAIncludeItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeSessionCreateRequestGAIncludeItem: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let itemInputAudioTranscriptionLogprobs = RealtimeSessionCreateRequestGAIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let itemInputAudioTranscriptionLogprobs =
+        RealtimeSessionCreateRequestGAIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -427,15 +514,19 @@ public struct RealtimeSessionCreateRequestGAIncludeItem: RawRepresentable, Hasha
 }
 
 /// Optional enumerated value serialized in the `max_output_tokens` wire field.
-public struct RealtimeSessionCreateRequestGAMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeSessionCreateRequestGAMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inf = RealtimeSessionCreateRequestGAMaxOutputTokensVariant1(rawValue: "inf")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -448,12 +539,15 @@ public struct RealtimeSessionCreateRequestGAMaxOutputTokensVariant1: RawRepresen
 public struct RealtimeSessionTracingVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = RealtimeSessionTracingVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -467,14 +561,17 @@ public struct RealtimeSessionTracingVariant0: RawRepresentable, Hashable, Codabl
 public struct RealtimeSessionOutputAudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let pcm16 = RealtimeSessionOutputAudioFormat(rawValue: "pcm16")
     public static let g711Ulaw = RealtimeSessionOutputAudioFormat(rawValue: "g711_ulaw")
     public static let g711Alaw = RealtimeSessionOutputAudioFormat(rawValue: "g711_alaw")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -484,15 +581,19 @@ public struct RealtimeSessionOutputAudioFormat: RawRepresentable, Hashable, Coda
 }
 
 /// Enables tracing and sets default values for tracing configuration options. Always `auto`.
-public struct RealtimeSessionCreateRequestGATracingVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeSessionCreateRequestGATracingVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = RealtimeSessionCreateRequestGATracingVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -505,12 +606,15 @@ public struct RealtimeSessionCreateRequestGATracingVariant0: RawRepresentable, H
 public struct RealtimeSessionObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let realtimeSession = RealtimeSessionObject(rawValue: "realtime.session")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Uploads domain models
+/// Uploads domain models
 /// Typed representation of the `CreateUploadRequest` API schema.
 public struct CreateUploadRequest: Codable {
     /// The name of the file to upload.
@@ -27,34 +27,58 @@ public struct CreateUploadRequest: Codable {
         case expiresAfter = "expires_after"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateUploadRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.filename) else {
-            throw SdkValidationError(field: "filename", code: "required", message: "Validation failed for 'filename': value is required")
-        }
-        guard container.contains(.purpose) else {
-            throw SdkValidationError(field: "purpose", code: "required", message: "Validation failed for 'purpose': value is required")
-        }
-        guard container.contains(.bytes) else {
-            throw SdkValidationError(field: "bytes", code: "required", message: "Validation failed for 'bytes': value is required")
-        }
-        guard container.contains(.mimeType) else {
-            throw SdkValidationError(field: "mime_type", code: "required", message: "Validation failed for 'mime_type': value is required")
-        }
-        self.filename = try container.sdkDecodeRequired(.filename)
-        self.purpose = try container.sdkDecodeRequired(.purpose)
-        self.bytes = try container.sdkDecodeRequired(.bytes)
-        self.mimeType = try container.sdkDecodeRequired(.mimeType)
-        self.expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateUploadRequest {
-    public init(filename: String, purpose: CreateUploadRequestPurpose, bytes: Int, mimeType: String, expiresAfter: FileExpirationAfter? = nil) {
+public extension CreateUploadRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.filename) else {
+            throw SdkValidationError(
+                field: "filename",
+                code: "required",
+                message: "Validation failed for 'filename': value is required"
+            )
+        }
+        guard container.contains(.purpose) else {
+            throw SdkValidationError(
+                field: "purpose",
+                code: "required",
+                message: "Validation failed for 'purpose': value is required"
+            )
+        }
+        guard container.contains(.bytes) else {
+            throw SdkValidationError(
+                field: "bytes",
+                code: "required",
+                message: "Validation failed for 'bytes': value is required"
+            )
+        }
+        guard container.contains(.mimeType) else {
+            throw SdkValidationError(
+                field: "mime_type",
+                code: "required",
+                message: "Validation failed for 'mime_type': value is required"
+            )
+        }
+        filename = try container.sdkDecodeRequired(.filename)
+        purpose = try container.sdkDecodeRequired(.purpose)
+        bytes = try container.sdkDecodeRequired(.bytes)
+        mimeType = try container.sdkDecodeRequired(.mimeType)
+        expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
+    }
+}
+
+public extension CreateUploadRequest {
+    init(
+        filename: String,
+        purpose: CreateUploadRequestPurpose,
+        bytes: Int,
+        mimeType: String,
+        expiresAfter: FileExpirationAfter? = nil
+    ) {
         (self.filename, self.purpose) = (filename, purpose)
         (self.bytes, self.mimeType) = (bytes, mimeType)
         self.expiresAfter = expiresAfter
@@ -94,47 +118,87 @@ public struct Upload: Codable {
         case file
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension Upload {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.filename) else {
-            throw SdkValidationError(field: "filename", code: "required", message: "Validation failed for 'filename': value is required")
-        }
-        guard container.contains(.bytes) else {
-            throw SdkValidationError(field: "bytes", code: "required", message: "Validation failed for 'bytes': value is required")
-        }
-        guard container.contains(.purpose) else {
-            throw SdkValidationError(field: "purpose", code: "required", message: "Validation failed for 'purpose': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.expiresAt) else {
-            throw SdkValidationError(field: "expires_at", code: "required", message: "Validation failed for 'expires_at': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.filename = try container.sdkDecodeRequired(.filename)
-        self.bytes = try container.sdkDecodeRequired(.bytes)
-        self.purpose = try container.sdkDecodeRequired(.purpose)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.expiresAt = try container.sdkDecodeRequired(.expiresAt)
-        self.object = try container.sdkDecodeIfPresent(.object)
-        self.file = try container.sdkDecodeIfPresent(.file)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension Upload {
-    public init(id: String, createdAt: Int, filename: String, bytes: Int, purpose: String, status: UploadStatus, expiresAt: Int, object: UploadObject? = nil, file: OpenAIFile? = nil) {
+public extension Upload {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.filename) else {
+            throw SdkValidationError(
+                field: "filename",
+                code: "required",
+                message: "Validation failed for 'filename': value is required"
+            )
+        }
+        guard container.contains(.bytes) else {
+            throw SdkValidationError(
+                field: "bytes",
+                code: "required",
+                message: "Validation failed for 'bytes': value is required"
+            )
+        }
+        guard container.contains(.purpose) else {
+            throw SdkValidationError(
+                field: "purpose",
+                code: "required",
+                message: "Validation failed for 'purpose': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        guard container.contains(.expiresAt) else {
+            throw SdkValidationError(
+                field: "expires_at",
+                code: "required",
+                message: "Validation failed for 'expires_at': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        filename = try container.sdkDecodeRequired(.filename)
+        bytes = try container.sdkDecodeRequired(.bytes)
+        purpose = try container.sdkDecodeRequired(.purpose)
+        status = try container.sdkDecodeRequired(.status)
+        expiresAt = try container.sdkDecodeRequired(.expiresAt)
+        object = try container.sdkDecodeIfPresent(.object)
+        file = try container.sdkDecodeIfPresent(.file)
+    }
+}
+
+public extension Upload {
+    init(
+        id: String,
+        createdAt: Int,
+        filename: String,
+        bytes: Int,
+        purpose: String,
+        status: UploadStatus,
+        expiresAt: Int,
+        object: UploadObject? = nil,
+        file: OpenAIFile? = nil
+    ) {
         (self.id, self.createdAt) = (id, createdAt)
         (self.filename, self.bytes) = (filename, bytes)
         (self.purpose, self.status) = (purpose, status)
@@ -155,22 +219,28 @@ public struct CompleteUploadRequest: Codable {
         case md5
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CompleteUploadRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.partIds) else {
-            throw SdkValidationError(field: "part_ids", code: "required", message: "Validation failed for 'part_ids': value is required")
-        }
-        self.partIds = try container.sdkDecodeRequired(.partIds)
-        self.md5 = try container.sdkDecodeIfPresent(.md5)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CompleteUploadRequest {
-    public init(partIds: [String], md5: String? = nil) {
+public extension CompleteUploadRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.partIds) else {
+            throw SdkValidationError(
+                field: "part_ids",
+                code: "required",
+                message: "Validation failed for 'part_ids': value is required"
+            )
+        }
+        partIds = try container.sdkDecodeRequired(.partIds)
+        md5 = try container.sdkDecodeIfPresent(.md5)
+    }
+}
+
+public extension CompleteUploadRequest {
+    init(partIds: [String], md5: String? = nil) {
         (self.partIds, self.md5) = (partIds, md5)
     }
 }
@@ -184,21 +254,27 @@ public struct AddUploadPartRequest: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AddUploadPartRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        self.data = try container.sdkDecodeRequired(.data)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AddUploadPartRequest {
-    public init(data: Data) {
+public extension AddUploadPartRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        data = try container.sdkDecodeRequired(.data)
+    }
+}
+
+public extension AddUploadPartRequest {
+    init(data: Data) {
         self.data = data
     }
 }
@@ -221,33 +297,51 @@ public struct UploadPart: Codable {
         case object
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UploadPart {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.uploadId) else {
-            throw SdkValidationError(field: "upload_id", code: "required", message: "Validation failed for 'upload_id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.uploadId = try container.sdkDecodeRequired(.uploadId)
-        self.object = try container.sdkDecodeRequired(.object)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UploadPart {
-    public init(id: String, createdAt: Int, uploadId: String, object: UploadPartObject) {
+public extension UploadPart {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.uploadId) else {
+            throw SdkValidationError(
+                field: "upload_id",
+                code: "required",
+                message: "Validation failed for 'upload_id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        uploadId = try container.sdkDecodeRequired(.uploadId)
+        object = try container.sdkDecodeRequired(.object)
+    }
+}
+
+public extension UploadPart {
+    init(id: String, createdAt: Int, uploadId: String, object: UploadPartObject) {
         (self.id, self.createdAt) = (id, createdAt)
         (self.uploadId, self.object) = (uploadId, object)
     }
@@ -257,12 +351,15 @@ extension UploadPart {
 public struct UploadPartObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let uploadPart = UploadPartObject(rawValue: "upload.part")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -275,7 +372,10 @@ public struct UploadPartObject: RawRepresentable, Hashable, Codable, Sendable, S
 public struct UploadStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let pending = UploadStatus(rawValue: "pending")
     public static let completed = UploadStatus(rawValue: "completed")
     public static let cancelled = UploadStatus(rawValue: "cancelled")
@@ -283,7 +383,7 @@ public struct UploadStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWi
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -296,12 +396,15 @@ public struct UploadStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWi
 public struct UploadObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let upload = UploadObject(rawValue: "upload")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -314,7 +417,10 @@ public struct UploadObject: RawRepresentable, Hashable, Codable, Sendable, SdkWi
 public struct CreateUploadRequestPurpose: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let assistants = CreateUploadRequestPurpose(rawValue: "assistants")
     public static let batch = CreateUploadRequestPurpose(rawValue: "batch")
     public static let fineTune = CreateUploadRequestPurpose(rawValue: "fine-tune")
@@ -322,7 +428,7 @@ public struct CreateUploadRequestPurpose: RawRepresentable, Hashable, Codable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

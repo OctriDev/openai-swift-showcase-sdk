@@ -6,14 +6,35 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AgentsMethods {
-    /// Retrieves a reusable agent by ID. See [agent configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
+public extension AgentsMethods {
+    /// Retrieves a reusable agent by ID. See [agent
+    /// configuration](https://developers.openai.com/api/docs/guides/agents-api/configuration).
     ///
     /// - Parameters:
     /// - agentId: The ID of the reusable agent.
-    public static func retrieveAgent(config: ClientConfig, agentId: String, requestOptions: RequestOptions? = nil) async throws -> AgentResource {
-        try validateLength("agent_id", agentId, min: 0, max: 1048576)
+    static func retrieveAgent(
+        config: ClientConfig,
+        agentId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AgentResource {
+        try validateLength("agent_id", agentId, min: 0, max: 1_048_576)
 
-        return try (await sdkRequest("GET", ["/agents/", sdkEncodePathSegment(sdkWireString(agentId))].joined(), config: config, decoder: .json, operationId: "retrieveAgent", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/agents/", sdkEncodePathSegment(sdkWireString(agentId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "retrieveAgent",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 }

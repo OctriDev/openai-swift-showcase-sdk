@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveSession domain models
+/// LiveLiveSession domain models
 public indirect enum LiveSessionCreateRequestTransportRequest {
     case liveWebRtcTransport(LiveWebRTCTransport)
     case liveSipTransportRequest(LiveSIPTransportRequest)
@@ -12,7 +12,6 @@ public indirect enum LiveSessionCreateRequestTransportRequest {
 }
 
 extension LiveSessionCreateRequestTransportRequest: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,20 +19,29 @@ extension LiveSessionCreateRequestTransportRequest: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
             return
         }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for LiveSessionCreateRequestTransportRequest")
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for LiveSessionCreateRequestTransportRequest"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -44,15 +52,17 @@ extension LiveSessionCreateRequestTransportRequest: Codable {
 extension LiveSessionCreateRequestTransportRequest {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "webrtc": return .liveWebRtcTransport(try LiveWebRTCTransport(from: decoder))
-        default: return nil
+        case "webrtc": try .liveWebRtcTransport(LiveWebRTCTransport(from: decoder))
+        default: nil
         }
     }
 }
 
 extension LiveSessionCreateRequestTransportRequest {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(LiveSIPTransportRequest.self) { return .liveSipTransportRequest(value) }
+        if let value = try? container.decode(LiveSIPTransportRequest.self) {
+            return .liveSipTransportRequest(value)
+        }
         return nil
     }
 }
@@ -74,18 +84,26 @@ public indirect enum LiveSessionCreateResponseTransport {
 }
 
 extension LiveSessionCreateResponseTransport: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
         if let raw = try? container.decode(JSONValue.self) {
-            if let value = Self.decodeLossless1(from: container, raw) { self = value; return }
+            if let value = Self.decodeLossless1(from: container, raw) {
+                self = value; return
+            }
         }
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for LiveSessionCreateResponseTransport")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for LiveSessionCreateResponseTransport"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
@@ -94,7 +112,10 @@ extension LiveSessionCreateResponseTransport {
         if let value = try? container.decode(LiveWebRTCTransport.self), sdkKeepsEveryKey(value, of: raw) {
             return .liveWebRtcTransport(value)
         }
-        if let value = try? container.decode(LiveSessionCreateResponseTransportVariant1.self), sdkKeepsEveryKey(value, of: raw) {
+        if let value = try? container.decode(LiveSessionCreateResponseTransportVariant1.self), sdkKeepsEveryKey(
+            value,
+            of: raw
+        ) {
             return .liveSessionCreateResponseTransportVariant1(value)
         }
         return nil
@@ -103,11 +124,13 @@ extension LiveSessionCreateResponseTransport {
 
 extension LiveSessionCreateResponseTransport {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(LiveWebRTCTransport.self) { return .liveWebRtcTransport(value) }
+        if let value = try? container.decode(LiveWebRTCTransport.self) {
+            return .liveWebRtcTransport(value)
+        }
         if let value = try? container.decode(
             LiveSessionCreateResponseTransportVariant1.self
         ) {
-            return             .liveSessionCreateResponseTransportVariant1(value)
+            return .liveSessionCreateResponseTransportVariant1(value)
         }
         return nil
     }
@@ -132,24 +155,34 @@ public struct LiveSessionCreateResponseTransportVariant1: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveSessionCreateResponseTransportVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, LiveSessionCreateResponseTransportVariant1Type.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveSessionCreateResponseTransportVariant1 {
-    public init(type: LiveSessionCreateResponseTransportVariant1Type) throws {
+public extension LiveSessionCreateResponseTransportVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, LiveSessionCreateResponseTransportVariant1Type.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveSessionCreateResponseTransportVariant1 {
+    init(type: LiveSessionCreateResponseTransportVariant1Type) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, LiveSessionCreateResponseTransportVariant1Type.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            LiveSessionCreateResponseTransportVariant1Type.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -167,25 +200,35 @@ public struct LiveSessionCreateRequestRequest: Codable {
         case transport
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveSessionCreateRequestRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        guard container.contains(.transport) else {
-            throw SdkValidationError(field: "transport", code: "required", message: "Validation failed for 'transport': value is required")
-        }
-        self.session = try container.sdkDecodeRequired(.session)
-        self.transport = try container.sdkDecodeRequired(.transport)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveSessionCreateRequestRequest {
-    public init(session: LiveMediaSessionCreateParams, transport: LiveSessionCreateRequestTransportRequest) {
+public extension LiveSessionCreateRequestRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        guard container.contains(.transport) else {
+            throw SdkValidationError(
+                field: "transport",
+                code: "required",
+                message: "Validation failed for 'transport': value is required"
+            )
+        }
+        session = try container.sdkDecodeRequired(.session)
+        transport = try container.sdkDecodeRequired(.transport)
+    }
+}
+
+public extension LiveSessionCreateRequestRequest {
+    init(session: LiveMediaSessionCreateParams, transport: LiveSessionCreateRequestTransportRequest) {
         (self.session, self.transport) = (session, transport)
     }
 }
@@ -206,25 +249,35 @@ public struct LiveSessionCreateResponse: Codable {
         case transport
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveSessionCreateResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        guard container.contains(.transport) else {
-            throw SdkValidationError(field: "transport", code: "required", message: "Validation failed for 'transport': value is required")
-        }
-        self.session = try container.sdkDecodeRequired(.session)
-        self.transport = try container.sdkDecodeRequired(.transport)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveSessionCreateResponse {
-    public init(session: Session, transport: LiveSessionCreateResponseTransport) {
+public extension LiveSessionCreateResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        guard container.contains(.transport) else {
+            throw SdkValidationError(
+                field: "transport",
+                code: "required",
+                message: "Validation failed for 'transport': value is required"
+            )
+        }
+        session = try container.sdkDecodeRequired(.session)
+        transport = try container.sdkDecodeRequired(.transport)
+    }
+}
+
+public extension LiveSessionCreateResponse {
+    init(session: Session, transport: LiveSessionCreateResponseTransport) {
         (self.session, self.transport) = (session, transport)
     }
 }

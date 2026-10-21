@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ExternalStorage domain models
+/// ExternalStorage domain models
 public indirect enum CreateExternalStorageBodyProvider {
     case awsExternalStorageProviderParams(AwsExternalStorageProviderParams)
     case azureExternalStorageProviderParams(AzureExternalStorageProviderParams)
@@ -14,7 +14,6 @@ public indirect enum CreateExternalStorageBodyProvider {
 }
 
 extension CreateExternalStorageBodyProvider: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -22,12 +21,16 @@ extension CreateExternalStorageBodyProvider: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -38,11 +41,11 @@ extension CreateExternalStorageBodyProvider: Codable {
 extension CreateExternalStorageBodyProvider {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "aws": return .awsExternalStorageProviderParams(try AwsExternalStorageProviderParams(from: decoder))
-        case "azure": return .azureExternalStorageProviderParams(try AzureExternalStorageProviderParams(from: decoder))
-        case "gcp": return .gcpExternalStorageProviderParams(try GcpExternalStorageProviderParams(from: decoder))
-        case "oci": return .ociExternalStorageProviderParams(try OciExternalStorageProviderParams(from: decoder))
-        default: return nil
+        case "aws": try .awsExternalStorageProviderParams(AwsExternalStorageProviderParams(from: decoder))
+        case "azure": try .azureExternalStorageProviderParams(AzureExternalStorageProviderParams(from: decoder))
+        case "gcp": try .gcpExternalStorageProviderParams(GcpExternalStorageProviderParams(from: decoder))
+        case "oci": try .ociExternalStorageProviderParams(OciExternalStorageProviderParams(from: decoder))
+        default: nil
         }
     }
 }
@@ -81,43 +84,71 @@ public struct GcpExternalStorageProviderParams: Codable {
         case workloadIdentityProviderId = "workload_identity_provider_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension GcpExternalStorageProviderParams {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.bucket) else {
-            throw SdkValidationError(field: "bucket", code: "required", message: "Validation failed for 'bucket': value is required")
-        }
-        guard container.contains(.workloadIdentityProjectNumber) else {
-            throw SdkValidationError(field: "workload_identity_project_number", code: "required", message: "Validation failed for 'workload_identity_project_number': value is required")
-        }
-        guard container.contains(.workloadIdentityPoolId) else {
-            throw SdkValidationError(field: "workload_identity_pool_id", code: "required", message: "Validation failed for 'workload_identity_pool_id': value is required")
-        }
-        guard container.contains(.workloadIdentityProviderId) else {
-            throw SdkValidationError(field: "workload_identity_provider_id", code: "required", message: "Validation failed for 'workload_identity_provider_id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.bucket = try container.sdkDecodeRequired(.bucket)
-        self.workloadIdentityProjectNumber = try container.sdkDecodeRequired(.workloadIdentityProjectNumber)
-        self.workloadIdentityPoolId = try container.sdkDecodeRequired(.workloadIdentityPoolId)
-        self.workloadIdentityProviderId = try container.sdkDecodeRequired(.workloadIdentityProviderId)
-            try sdkValidateRawEnum("type", self.type, GcpExternalStorageProviderParamsType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension GcpExternalStorageProviderParams {
-    public init(type: GcpExternalStorageProviderParamsType, bucket: String, workloadIdentityProjectNumber: String, workloadIdentityPoolId: String, workloadIdentityProviderId: String) throws {
+public extension GcpExternalStorageProviderParams {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.bucket) else {
+            throw SdkValidationError(
+                field: "bucket",
+                code: "required",
+                message: "Validation failed for 'bucket': value is required"
+            )
+        }
+        guard container.contains(.workloadIdentityProjectNumber) else {
+            throw SdkValidationError(
+                field: "workload_identity_project_number",
+                code: "required",
+                message: "Validation failed for 'workload_identity_project_number': value is required"
+            )
+        }
+        guard container.contains(.workloadIdentityPoolId) else {
+            throw SdkValidationError(
+                field: "workload_identity_pool_id",
+                code: "required",
+                message: "Validation failed for 'workload_identity_pool_id': value is required"
+            )
+        }
+        guard container.contains(.workloadIdentityProviderId) else {
+            throw SdkValidationError(
+                field: "workload_identity_provider_id",
+                code: "required",
+                message: "Validation failed for 'workload_identity_provider_id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        bucket = try container.sdkDecodeRequired(.bucket)
+        workloadIdentityProjectNumber = try container.sdkDecodeRequired(.workloadIdentityProjectNumber)
+        workloadIdentityPoolId = try container.sdkDecodeRequired(.workloadIdentityPoolId)
+        workloadIdentityProviderId = try container.sdkDecodeRequired(.workloadIdentityProviderId)
+        try sdkValidateRawEnum("type", type, GcpExternalStorageProviderParamsType.allCases.map(\.rawValue))
+    }
+}
+
+public extension GcpExternalStorageProviderParams {
+    init(
+        type: GcpExternalStorageProviderParamsType,
+        bucket: String,
+        workloadIdentityProjectNumber: String,
+        workloadIdentityPoolId: String,
+        workloadIdentityProviderId: String
+    ) throws {
         (self.type, self.bucket) = (type, bucket)
         self.workloadIdentityProjectNumber = workloadIdentityProjectNumber
         self.workloadIdentityPoolId = workloadIdentityPoolId
         self.workloadIdentityProviderId = workloadIdentityProviderId
-            try sdkValidateRawEnum("type", self.type, GcpExternalStorageProviderParamsType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, GcpExternalStorageProviderParamsType.allCases.map(\.rawValue))
     }
 }
 
@@ -139,37 +170,55 @@ public struct OciExternalStorageProviderParams: Codable {
         case bucket
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension OciExternalStorageProviderParams {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.tenancyOcid) else {
-            throw SdkValidationError(field: "tenancy_ocid", code: "required", message: "Validation failed for 'tenancy_ocid': value is required")
-        }
-        guard container.contains(.region) else {
-            throw SdkValidationError(field: "region", code: "required", message: "Validation failed for 'region': value is required")
-        }
-        guard container.contains(.bucket) else {
-            throw SdkValidationError(field: "bucket", code: "required", message: "Validation failed for 'bucket': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.tenancyOcid = try container.sdkDecodeRequired(.tenancyOcid)
-        self.region = try container.sdkDecodeRequired(.region)
-        self.bucket = try container.sdkDecodeRequired(.bucket)
-            try sdkValidateRawEnum("type", self.type, OciExternalStorageProviderParamsType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension OciExternalStorageProviderParams {
-    public init(type: OciExternalStorageProviderParamsType, tenancyOcid: String, region: String, bucket: String) throws {
+public extension OciExternalStorageProviderParams {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.tenancyOcid) else {
+            throw SdkValidationError(
+                field: "tenancy_ocid",
+                code: "required",
+                message: "Validation failed for 'tenancy_ocid': value is required"
+            )
+        }
+        guard container.contains(.region) else {
+            throw SdkValidationError(
+                field: "region",
+                code: "required",
+                message: "Validation failed for 'region': value is required"
+            )
+        }
+        guard container.contains(.bucket) else {
+            throw SdkValidationError(
+                field: "bucket",
+                code: "required",
+                message: "Validation failed for 'bucket': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        tenancyOcid = try container.sdkDecodeRequired(.tenancyOcid)
+        region = try container.sdkDecodeRequired(.region)
+        bucket = try container.sdkDecodeRequired(.bucket)
+        try sdkValidateRawEnum("type", type, OciExternalStorageProviderParamsType.allCases.map(\.rawValue))
+    }
+}
+
+public extension OciExternalStorageProviderParams {
+    init(type: OciExternalStorageProviderParamsType, tenancyOcid: String, region: String, bucket: String) throws {
         (self.type, self.tenancyOcid) = (type, tenancyOcid)
         (self.region, self.bucket) = (region, bucket)
-            try sdkValidateRawEnum("type", self.type, OciExternalStorageProviderParamsType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, OciExternalStorageProviderParamsType.allCases.map(\.rawValue))
     }
 }
 
@@ -186,25 +235,35 @@ public struct CreateExternalStorageBody: Codable {
         case provider
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateExternalStorageBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.projectId) else {
-            throw SdkValidationError(field: "project_id", code: "required", message: "Validation failed for 'project_id': value is required")
-        }
-        guard container.contains(.provider) else {
-            throw SdkValidationError(field: "provider", code: "required", message: "Validation failed for 'provider': value is required")
-        }
-        self.projectId = try container.sdkDecodeRequired(.projectId)
-        self.provider = try container.sdkDecodeRequired(.provider)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateExternalStorageBody {
-    public init(projectId: String, provider: CreateExternalStorageBodyProvider) {
+public extension CreateExternalStorageBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.projectId) else {
+            throw SdkValidationError(
+                field: "project_id",
+                code: "required",
+                message: "Validation failed for 'project_id': value is required"
+            )
+        }
+        guard container.contains(.provider) else {
+            throw SdkValidationError(
+                field: "provider",
+                code: "required",
+                message: "Validation failed for 'provider': value is required"
+            )
+        }
+        projectId = try container.sdkDecodeRequired(.projectId)
+        provider = try container.sdkDecodeRequired(.provider)
+    }
+}
+
+public extension CreateExternalStorageBody {
+    init(projectId: String, provider: CreateExternalStorageBodyProvider) {
         (self.projectId, self.provider) = (projectId, provider)
     }
 }
@@ -233,46 +292,79 @@ public struct AzureExternalStorageProviderParams: Codable {
         case container
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AzureExternalStorageProviderParams {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.tenantId) else {
-            throw SdkValidationError(field: "tenant_id", code: "required", message: "Validation failed for 'tenant_id': value is required")
-        }
-        guard container.contains(.subscriptionId) else {
-            throw SdkValidationError(field: "subscription_id", code: "required", message: "Validation failed for 'subscription_id': value is required")
-        }
-        guard container.contains(.resourceGroup) else {
-            throw SdkValidationError(field: "resource_group", code: "required", message: "Validation failed for 'resource_group': value is required")
-        }
-        guard container.contains(.accountName) else {
-            throw SdkValidationError(field: "account_name", code: "required", message: "Validation failed for 'account_name': value is required")
-        }
-        guard container.contains(.container) else {
-            throw SdkValidationError(field: "container", code: "required", message: "Validation failed for 'container': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.tenantId = try container.sdkDecodeRequired(.tenantId)
-        self.subscriptionId = try container.sdkDecodeRequired(.subscriptionId)
-        self.resourceGroup = try container.sdkDecodeRequired(.resourceGroup)
-        self.accountName = try container.sdkDecodeRequired(.accountName)
-        self.container = try container.sdkDecodeRequired(.container)
-            try sdkValidateRawEnum("type", self.type, AzureExternalStorageProviderParamsType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AzureExternalStorageProviderParams {
-    public init(type: AzureExternalStorageProviderParamsType, tenantId: String, subscriptionId: String, resourceGroup: String, accountName: String, container containerValue: String) throws {
+public extension AzureExternalStorageProviderParams {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.tenantId) else {
+            throw SdkValidationError(
+                field: "tenant_id",
+                code: "required",
+                message: "Validation failed for 'tenant_id': value is required"
+            )
+        }
+        guard container.contains(.subscriptionId) else {
+            throw SdkValidationError(
+                field: "subscription_id",
+                code: "required",
+                message: "Validation failed for 'subscription_id': value is required"
+            )
+        }
+        guard container.contains(.resourceGroup) else {
+            throw SdkValidationError(
+                field: "resource_group",
+                code: "required",
+                message: "Validation failed for 'resource_group': value is required"
+            )
+        }
+        guard container.contains(.accountName) else {
+            throw SdkValidationError(
+                field: "account_name",
+                code: "required",
+                message: "Validation failed for 'account_name': value is required"
+            )
+        }
+        guard container.contains(.container) else {
+            throw SdkValidationError(
+                field: "container",
+                code: "required",
+                message: "Validation failed for 'container': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        tenantId = try container.sdkDecodeRequired(.tenantId)
+        subscriptionId = try container.sdkDecodeRequired(.subscriptionId)
+        resourceGroup = try container.sdkDecodeRequired(.resourceGroup)
+        accountName = try container.sdkDecodeRequired(.accountName)
+        self.container = try container.sdkDecodeRequired(.container)
+        try sdkValidateRawEnum("type", type, AzureExternalStorageProviderParamsType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AzureExternalStorageProviderParams {
+    init(
+        type: AzureExternalStorageProviderParamsType,
+        tenantId: String,
+        subscriptionId: String,
+        resourceGroup: String,
+        accountName: String,
+        container containerValue: String
+    ) throws {
         (self.type, self.tenantId) = (type, tenantId)
         (self.subscriptionId, self.resourceGroup) = (subscriptionId, resourceGroup)
-        (self.accountName, self.container) = (accountName, containerValue)
-            try sdkValidateRawEnum("type", self.type, AzureExternalStorageProviderParamsType.allCases.map(\.rawValue))
+        (self.accountName, container) = (accountName, containerValue)
+        try sdkValidateRawEnum("type", self.type, AzureExternalStorageProviderParamsType.allCases.map(\.rawValue))
     }
 }
 
@@ -291,33 +383,47 @@ public struct AwsExternalStorageProviderParams: Codable {
         case roleArn = "role_arn"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AwsExternalStorageProviderParams {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.bucket) else {
-            throw SdkValidationError(field: "bucket", code: "required", message: "Validation failed for 'bucket': value is required")
-        }
-        guard container.contains(.roleArn) else {
-            throw SdkValidationError(field: "role_arn", code: "required", message: "Validation failed for 'role_arn': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.bucket = try container.sdkDecodeRequired(.bucket)
-        self.roleArn = try container.sdkDecodeRequired(.roleArn)
-            try sdkValidateRawEnum("type", self.type, AwsExternalStorageProviderParamsType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AwsExternalStorageProviderParams {
-    public init(type: AwsExternalStorageProviderParamsType, bucket: String, roleArn: String) throws {
+public extension AwsExternalStorageProviderParams {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.bucket) else {
+            throw SdkValidationError(
+                field: "bucket",
+                code: "required",
+                message: "Validation failed for 'bucket': value is required"
+            )
+        }
+        guard container.contains(.roleArn) else {
+            throw SdkValidationError(
+                field: "role_arn",
+                code: "required",
+                message: "Validation failed for 'role_arn': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        bucket = try container.sdkDecodeRequired(.bucket)
+        roleArn = try container.sdkDecodeRequired(.roleArn)
+        try sdkValidateRawEnum("type", type, AwsExternalStorageProviderParamsType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AwsExternalStorageProviderParams {
+    init(type: AwsExternalStorageProviderParamsType, bucket: String, roleArn: String) throws {
         (self.type, self.bucket) = (type, bucket)
         self.roleArn = roleArn
-            try sdkValidateRawEnum("type", self.type, AwsExternalStorageProviderParamsType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, AwsExternalStorageProviderParamsType.allCases.map(\.rawValue))
     }
 }
 

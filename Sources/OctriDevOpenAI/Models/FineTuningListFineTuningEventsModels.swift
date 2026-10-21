@@ -3,7 +3,7 @@
 
 import Foundation
 
-// FineTuning domain models
+/// FineTuning domain models
 /// Typed representation of the `ListFineTuningJobEventsResponse` API schema.
 public struct ListFineTuningJobEventsResponse: Codable {
     /// Required array value serialized in the `data` wire field.
@@ -19,29 +19,43 @@ public struct ListFineTuningJobEventsResponse: Codable {
         case hasMore = "has_more"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ListFineTuningJobEventsResponse {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.hasMore) else {
-            throw SdkValidationError(field: "has_more", code: "required", message: "Validation failed for 'has_more': value is required")
-        }
-        self.data = try container.sdkDecodeRequired(.data)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.hasMore = try container.sdkDecodeRequired(.hasMore)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ListFineTuningJobEventsResponse {
-    public init(data: [FineTuningJobEvent], object: ListFineTuningJobEventsResponseObject, hasMore: Bool) {
+public extension ListFineTuningJobEventsResponse {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.hasMore) else {
+            throw SdkValidationError(
+                field: "has_more",
+                code: "required",
+                message: "Validation failed for 'has_more': value is required"
+            )
+        }
+        data = try container.sdkDecodeRequired(.data)
+        object = try container.sdkDecodeRequired(.object)
+        hasMore = try container.sdkDecodeRequired(.hasMore)
+    }
+}
+
+public extension ListFineTuningJobEventsResponse {
+    init(data: [FineTuningJobEvent], object: ListFineTuningJobEventsResponseObject, hasMore: Bool) {
         (self.data, self.object) = (data, object)
         self.hasMore = hasMore
     }
@@ -74,39 +88,69 @@ public struct FineTuningJobEvent: Codable {
         case data
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension FineTuningJobEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.level) else {
-            throw SdkValidationError(field: "level", code: "required", message: "Validation failed for 'level': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.level = try container.sdkDecodeRequired(.level)
-        self.message = try container.sdkDecodeRequired(.message)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.data = try container.sdkDecodeIfPresent(.data)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension FineTuningJobEvent {
-    public init(object: FineTuningJobEventObject, id: String, createdAt: Int, level: FineTuningJobEventLevel, message: String, type: FineTuningJobEventType? = nil, data: [String: JSONValue]? = nil) {
+public extension FineTuningJobEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.level) else {
+            throw SdkValidationError(
+                field: "level",
+                code: "required",
+                message: "Validation failed for 'level': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        id = try container.sdkDecodeRequired(.id)
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        level = try container.sdkDecodeRequired(.level)
+        message = try container.sdkDecodeRequired(.message)
+        type = try container.sdkDecodeIfPresent(.type)
+        data = try container.sdkDecodeIfPresent(.data)
+    }
+}
+
+public extension FineTuningJobEvent {
+    init(
+        object: FineTuningJobEventObject,
+        id: String,
+        createdAt: Int,
+        level: FineTuningJobEventLevel,
+        message: String,
+        type: FineTuningJobEventType? = nil,
+        data: [String: JSONValue]? = nil
+    ) {
         (self.object, self.id) = (object, id)
         (self.createdAt, self.level) = (createdAt, level)
         (self.message, self.type) = (message, type)
@@ -118,12 +162,15 @@ extension FineTuningJobEvent {
 public struct ListFineTuningJobEventsResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let list = ListFineTuningJobEventsResponseObject(rawValue: "list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -136,13 +183,16 @@ public struct ListFineTuningJobEventsResponseObject: RawRepresentable, Hashable,
 public struct FineTuningJobEventType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let message = FineTuningJobEventType(rawValue: "message")
     public static let metrics = FineTuningJobEventType(rawValue: "metrics")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -155,14 +205,17 @@ public struct FineTuningJobEventType: RawRepresentable, Hashable, Codable, Senda
 public struct FineTuningJobEventLevel: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let info = FineTuningJobEventLevel(rawValue: "info")
     public static let warn = FineTuningJobEventLevel(rawValue: "warn")
     public static let error = FineTuningJobEventLevel(rawValue: "error")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -175,12 +228,15 @@ public struct FineTuningJobEventLevel: RawRepresentable, Hashable, Codable, Send
 public struct FineTuningJobEventObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let fineTuningJobEvent = FineTuningJobEventObject(rawValue: "fine_tuning.job.event")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

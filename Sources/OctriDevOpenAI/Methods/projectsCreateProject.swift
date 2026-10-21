@@ -6,7 +6,7 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectsMethods {
+public extension ProjectsMethods {
     /// Create a new project in the organization. Projects can be created and archived, but cannot be deleted.
     ///
     /// - Parameters:
@@ -25,9 +25,30 @@ extension ProjectsMethods {
     ///   ency-controls) to review the functionality and limitations of setting this
     ///   field.
     /// - externalKeyId: External key ID to associate with the project.
-    public static func createProject(config: ClientConfig, name: String, geography: SdkOptional<String>? = nil, residency: SdkOptional<PublicProjectResidency>? = nil, externalKeyId: SdkOptional<String>? = nil, requestOptions: RequestOptions? = nil) async throws -> Project {
-        let requestBody = CreateProjectRequestBody(name: name, geography: geography, residency: residency, externalKeyId: externalKeyId)
+    static func createProject(
+        config: ClientConfig,
+        name: String,
+        geography: SdkOptional<String>? = nil,
+        residency: SdkOptional<PublicProjectResidency>? = nil,
+        externalKeyId: SdkOptional<String>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Project {
+        let requestBody = CreateProjectRequestBody(
+            name: name,
+            geography: geography,
+            residency: residency,
+            externalKeyId: externalKeyId
+        )
 
-        return try (await sdkRequest("POST", "/organization/projects", config: config, body: requestBody, decoder: .json, operationId: "createProject", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/organization/projects",
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "createProject",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

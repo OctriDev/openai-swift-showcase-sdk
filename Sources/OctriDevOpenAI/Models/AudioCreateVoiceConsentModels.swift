@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Audio domain models
+/// Audio domain models
 /// Typed representation of the `CreateVoiceConsentRequest` API schema.
 public struct CreateVoiceConsentRequest: Codable {
     /// The label to use for this consent recording.
@@ -20,29 +20,43 @@ public struct CreateVoiceConsentRequest: Codable {
         case language
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateVoiceConsentRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.recording) else {
-            throw SdkValidationError(field: "recording", code: "required", message: "Validation failed for 'recording': value is required")
-        }
-        guard container.contains(.language) else {
-            throw SdkValidationError(field: "language", code: "required", message: "Validation failed for 'language': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.recording = try container.sdkDecodeRequired(.recording)
-        self.language = try container.sdkDecodeRequired(.language)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateVoiceConsentRequest {
-    public init(name: String, recording: Data, language: String) {
+public extension CreateVoiceConsentRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.recording) else {
+            throw SdkValidationError(
+                field: "recording",
+                code: "required",
+                message: "Validation failed for 'recording': value is required"
+            )
+        }
+        guard container.contains(.language) else {
+            throw SdkValidationError(
+                field: "language",
+                code: "required",
+                message: "Validation failed for 'language': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        recording = try container.sdkDecodeRequired(.recording)
+        language = try container.sdkDecodeRequired(.language)
+    }
+}
+
+public extension CreateVoiceConsentRequest {
+    init(name: String, recording: Data, language: String) {
         (self.name, self.recording) = (name, recording)
         self.language = language
     }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Audio domain models
+/// Audio domain models
 /// Typed representation of the `VoiceConsentDeletedResource` API schema.
 public struct VoiceConsentDeletedResource: Codable {
     /// The consent recording identifier.
@@ -20,29 +20,43 @@ public struct VoiceConsentDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension VoiceConsentDeletedResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension VoiceConsentDeletedResource {
-    public init(id: String, object: VoiceConsentDeletedResourceObject, deleted: Bool) {
+public extension VoiceConsentDeletedResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+    }
+}
+
+public extension VoiceConsentDeletedResource {
+    init(id: String, object: VoiceConsentDeletedResourceObject, deleted: Bool) {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
     }
@@ -52,12 +66,15 @@ extension VoiceConsentDeletedResource {
 public struct VoiceConsentDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let audioVoiceConsent = VoiceConsentDeletedResourceObject(rawValue: "audio.voice_consent")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ProjectGroupsMethods {
-    /// Grants a group access to a project with a specified project role. Supply the group ID and role identifier to create the group’s project membership.
+public extension ProjectGroupsMethods {
+    /// Grants a group access to a project with a specified project role. Supply the group ID and role identifier to
+    /// create the group’s project membership.
     ///
     /// Grants a group access to a project.
     ///
@@ -15,13 +16,35 @@ extension ProjectGroupsMethods {
     /// - projectId: The ID of the project to update.
     /// - groupId: Identifier of the group to add to the project.
     /// - role: Identifier of the project role to grant to the group.
-    public static func addProjectGroup(config: ClientConfig, projectId: String, groupId: String, role: String, requestOptions: RequestOptions? = nil) async throws -> ProjectGroup {
+    static func addProjectGroup(
+        config: ClientConfig,
+        projectId: String,
+        groupId: String,
+        role: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectGroup {
         let requestBody = AddProjectGroupRequestBody(groupId: groupId, role: role)
 
-        return try (await sdkRequest("POST", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/groups"].joined(), config: config, body: requestBody, decoder: .json, operationId: "addProjectGroup", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/groups"].joined(),
+            config: config,
+            body: requestBody,
+            decoder: .json,
+            operationId: "addProjectGroup",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+            ]
+        )).data
     }
 
-    /// Retrieves a group's membership details for a project. Use `project_id` and `group_id` to identify the project and group, and `group_type` to select a group type; it defaults to `group` when omitted.
+    /// Retrieves a group's membership details for a project. Use `project_id` and `group_id` to identify the project
+    /// and group, and `group_type` to select a group type; it defaults to `group` when omitted.
     ///
     /// Retrieves a project's group.
     ///
@@ -29,9 +52,34 @@ extension ProjectGroupsMethods {
     /// - projectId: The ID of the project to inspect.
     /// - groupId: The ID of the group to retrieve.
     /// - groupType: The type of group to retrieve.
-    public static func retrieveProjectGroup(config: ClientConfig, projectId: String, groupId: String, groupType: RetrieveProjectGroupParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> ProjectGroup {
-        return try (await sdkRequest("GET", ["/organization/projects/", sdkEncodePathSegment(sdkWireString(projectId)), "/groups/", sdkEncodePathSegment(sdkWireString(groupId))].joined(), config: config, query: [
-            SdkQueryParameter("group_type", value: groupType),
-        ], decoder: .json, operationId: "retrieveProjectGroup", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func retrieveProjectGroup(
+        config: ClientConfig,
+        projectId: String,
+        groupId: String,
+        groupType: RetrieveProjectGroupParameter? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectGroup {
+        try await (sdkRequest(
+            "GET",
+            [
+                "/organization/projects/",
+                sdkEncodePathSegment(sdkWireString(projectId)),
+                "/groups/",
+                sdkEncodePathSegment(sdkWireString(groupId)),
+            ].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("group_type", value: groupType),
+            ],
+            decoder: .json,
+            operationId: "retrieveProjectGroup",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "403": PermissionErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+            ]
+        )).data
     }
 }

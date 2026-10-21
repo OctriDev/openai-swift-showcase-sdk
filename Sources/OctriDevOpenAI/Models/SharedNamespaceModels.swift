@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedNamespace domain models
+/// SharedNamespace domain models
 public indirect enum NamespaceToolParamToolsItem {
     case functionToolParam(FunctionToolParam)
     case customToolParam(CustomToolParam)
@@ -12,7 +12,6 @@ public indirect enum NamespaceToolParamToolsItem {
 }
 
 extension NamespaceToolParamToolsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension NamespaceToolParamToolsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,9 @@ extension NamespaceToolParamToolsItem: Codable {
 extension NamespaceToolParamToolsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "function": return .functionToolParam(try FunctionToolParam(from: decoder))
-        case "custom": return .customToolParam(try CustomToolParam(from: decoder))
-        default: return nil
+        case "function": try .functionToolParam(FunctionToolParam(from: decoder))
+        case "custom": try .customToolParam(CustomToolParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -72,41 +75,59 @@ public struct NamespaceToolParam: Codable {
         case tools
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension NamespaceToolParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        guard container.contains(.tools) else {
-            throw SdkValidationError(field: "tools", code: "required", message: "Validation failed for 'tools': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeRequired(.description)
-        self.tools = try container.sdkDecodeRequired(.tools)
-            try sdkValidateRawEnum("type", self.type, NamespaceToolParamType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 1, max: nil)
-            try validateItems("tools", self.tools, min: 1, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension NamespaceToolParam {
-    public init(type: NamespaceToolParamType, name: String, description: String, tools: [NamespaceToolParamToolsItem]) throws {
+public extension NamespaceToolParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        guard container.contains(.tools) else {
+            throw SdkValidationError(
+                field: "tools",
+                code: "required",
+                message: "Validation failed for 'tools': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeRequired(.description)
+        tools = try container.sdkDecodeRequired(.tools)
+        try sdkValidateRawEnum("type", type, NamespaceToolParamType.allCases.map(\.rawValue))
+        try validateLength("name", name, min: 1, max: nil)
+        try validateItems("tools", tools, min: 1, max: nil)
+    }
+}
+
+public extension NamespaceToolParam {
+    init(type: NamespaceToolParamType, name: String, description: String, tools: [NamespaceToolParamToolsItem]) throws {
         (self.type, self.name) = (type, name)
         (self.description, self.tools) = (description, tools)
-            try sdkValidateRawEnum("type", self.type, NamespaceToolParamType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 1, max: nil)
-            try validateItems("tools", self.tools, min: 1, max: nil)
+        try sdkValidateRawEnum("type", self.type, NamespaceToolParamType.allCases.map(\.rawValue))
+        try validateLength("name", self.name, min: 1, max: nil)
+        try validateItems("tools", self.tools, min: 1, max: nil)
     }
 }
 

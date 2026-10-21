@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ConversationsMethods {
-    /// Adds items to a conversation. Supply up to 20 items in `items`; a compaction trigger, if included, must be the final item in the request.
+public extension ConversationsMethods {
+    /// Adds items to a conversation. Supply up to 20 items in `items`; a compaction trigger, if included, must be the
+    /// final item in the request.
     ///
     /// Create items in a conversation with the given ID.
     ///
@@ -21,13 +22,34 @@ extension ConversationsMethods {
     ///   ubresources/items/methods/list#%28resource%29%20conversations.items%20%3E%20
     ///   %28method%29%20list%20%3E%20%28params%29%20default%20%3E%20%28param%29%20inc
     ///   lude%20%3E%20%28schema%29) for more information.
-    public static func createConversationItems(config: ClientConfig, conversationId: String, items: [InputItem], include: [IncludeEnum]? = nil, requestOptions: RequestOptions? = nil) async throws -> ConversationItemList {
+    static func createConversationItems(
+        config: ClientConfig,
+        conversationId: String,
+        items: [InputItem],
+        include: [IncludeEnum]? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ConversationItemList {
         try validateItems("items", items, max: 20)
 
         let requestBody = CreateConversationItemsRequestBody(items: items)
 
-        return try (await sdkRequest("POST", ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId)), "/items"].joined(), config: config, query: [
-            SdkQueryParameter("include", values: include, style: "form", explode: true),
-        ], body: requestBody, decoder: .json, operationId: "createConversationItems", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            ["/conversations/", sdkEncodePathSegment(sdkWireString(conversationId)), "/items"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("include", values: include, style: "form", explode: true),
+            ],
+            body: requestBody,
+            decoder: .json,
+            operationId: "createConversationItems",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "404": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+            ]
+        )).data
     }
 }

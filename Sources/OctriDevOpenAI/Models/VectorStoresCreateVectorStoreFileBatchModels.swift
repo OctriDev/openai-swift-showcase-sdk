@@ -3,7 +3,7 @@
 
 import Foundation
 
-// VectorStores domain models
+/// VectorStores domain models
 /// Typed representation of the `CreateVectorStoreFileBatchRequest` API schema.
 public struct CreateVectorStoreFileBatchRequest: Codable {
     /// A list of File IDs that the vector store should use. Useful for tools like `file_search` that can access
@@ -33,28 +33,33 @@ public struct CreateVectorStoreFileBatchRequest: Codable {
     }
 
     init() {
-        (self.fileIds, self.files, self.chunkingStrategy, self.attributes) = (nil, nil, nil, nil)
+        (fileIds, files, chunkingStrategy, attributes) = (nil, nil, nil, nil)
     }
 }
 
-extension CreateVectorStoreFileBatchRequest {
-    public init(from decoder: Decoder) throws {
+public extension CreateVectorStoreFileBatchRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        self.files = try container.sdkDecodeIfPresent(.files)
-        self.chunkingStrategy = try container.sdkDecodeIfPresent(.chunkingStrategy)
-        self.attributes = try container.sdkDecodeIfPresent(.attributes)
-        if let value = self.fileIds {
+        fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        files = try container.sdkDecodeIfPresent(.files)
+        chunkingStrategy = try container.sdkDecodeIfPresent(.chunkingStrategy)
+        attributes = try container.sdkDecodeIfPresent(.attributes)
+        if let value = fileIds {
             try validateItems("file_ids", value, min: 1, max: 2000)
         }
-        if let value = self.files {
+        if let value = files {
             try validateItems("files", value, min: 1, max: 2000)
         }
     }
 }
 
-extension CreateVectorStoreFileBatchRequest {
-    public init(fileIds: [String]? = nil, files: [CreateVectorStoreFileRequest]? = nil, chunkingStrategy: ChunkingStrategyRequestParam? = nil, attributes: VectorStoreFileAttributes? = nil) throws {
+public extension CreateVectorStoreFileBatchRequest {
+    init(
+        fileIds: [String]? = nil,
+        files: [CreateVectorStoreFileRequest]? = nil,
+        chunkingStrategy: ChunkingStrategyRequestParam? = nil,
+        attributes: VectorStoreFileAttributes? = nil
+    ) throws {
         self.init()
         (self.fileIds, self.files) = (fileIds, files)
         (self.chunkingStrategy, self.attributes) = (chunkingStrategy, attributes)

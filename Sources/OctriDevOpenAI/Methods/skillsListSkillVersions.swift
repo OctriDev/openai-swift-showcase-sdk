@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension SkillsMethods {
-    /// Lists versions for a skill. Use `after` to continue from a skill version ID, `limit` to control the number of results, and `order` to sort by version number.
+public extension SkillsMethods {
+    /// Lists versions for a skill. Use `after` to continue from a skill version ID, `limit` to control the number of
+    /// results, and `order` to sort by version number.
     ///
     /// List skill versions for a skill.
     ///
@@ -16,19 +17,36 @@ extension SkillsMethods {
     /// - limit: Number of versions to retrieve.
     /// - order: Sort order of results by version number.
     /// - after: The skill version ID to start after.
-    public static func listSkillVersions(config: ClientConfig, skillId: String, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SkillVersionListResource {
-        if let limit = limit {
+    static func listSkillVersions(
+        config: ClientConfig,
+        skillId: String,
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SkillVersionListResource {
+        if let limit {
             try validateRange("limit", Double(limit), min: 0, max: 100)
         }
 
-        return try (await sdkRequest("GET", ["/skills/", sdkEncodePathSegment(sdkWireString(skillId)), "/versions"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-        ], decoder: .json, operationId: "ListSkillVersions", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/skills/", sdkEncodePathSegment(sdkWireString(skillId)), "/versions"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+            ],
+            decoder: .json,
+            operationId: "ListSkillVersions",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 
-    /// Lists versions for a skill. Use `after` to continue from a skill version ID, `limit` to control the number of results, and `order` to sort by version number.
+    /// Lists versions for a skill. Use `after` to continue from a skill version ID, `limit` to control the number of
+    /// results, and `order` to sort by version number.
     ///
     /// List skill versions for a skill.
     ///
@@ -37,18 +55,43 @@ extension SkillsMethods {
     /// - limit: Number of versions to retrieve.
     /// - order: Sort order of results by version number.
     /// - after: The skill version ID to start after.
-    public static func listSkillVersionsPaginated(config: ClientConfig, skillId: String, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SkillVersionResource, Swift.Error> {
-        return AsyncThrowingStream<SkillVersionResource, Swift.Error> { (continuation: AsyncThrowingStream<SkillVersionResource, Swift.Error>.Continuation) in
+    static func listSkillVersionsPaginated(
+        config: ClientConfig,
+        skillId: String,
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<SkillVersionResource, Swift.Error> {
+        AsyncThrowingStream<SkillVersionResource, Swift.Error> { (continuation: AsyncThrowingStream<
+            SkillVersionResource,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listSkillVersions(config: config, skillId: skillId, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listSkillVersions(
+                            config: config,
+                            skillId: skillId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -61,25 +104,52 @@ extension SkillsMethods {
         }
     }
 
-    public struct ListSkillVersionsPage {
+    struct ListSkillVersionsPage {
         public let data: SkillVersionListResource
         public let items: [SkillVersionResource]
         public let hasMore: Bool
     }
 
-    public static func listSkillVersionsPages(config: ClientConfig, skillId: String, limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListSkillVersionsPage, Swift.Error> {
-        return AsyncThrowingStream<ListSkillVersionsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListSkillVersionsPage, Swift.Error>.Continuation) in
+    static func listSkillVersionsPages(
+        config: ClientConfig,
+        skillId: String,
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListSkillVersionsPage, Swift.Error> {
+        AsyncThrowingStream<ListSkillVersionsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListSkillVersionsPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listSkillVersions(config: config, skillId: skillId, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listSkillVersions(
+                            config: config,
+                            skillId: skillId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListSkillVersionsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageContinuation.yield(ListSkillVersionsPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

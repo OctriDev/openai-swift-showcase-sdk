@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SpendAlerts domain models
+/// SpendAlerts domain models
 /// Confirmation payload returned after deleting a project spend alert.
 public struct ProjectSpendAlertDeletedResource: Codable {
     /// The deleted spend alert ID.
@@ -19,44 +19,63 @@ public struct ProjectSpendAlertDeletedResource: Codable {
         case deleted
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectSpendAlertDeletedResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.deleted) else {
-            throw SdkValidationError(field: "deleted", code: "required", message: "Validation failed for 'deleted': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.object = try container.sdkDecodeRequired(.object)
-        self.deleted = try container.sdkDecodeRequired(.deleted)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectSpendAlertDeletedResource {
-    public init(id: String, object: ProjectSpendAlertDeletedResourceObject, deleted: Bool) {
+public extension ProjectSpendAlertDeletedResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.deleted) else {
+            throw SdkValidationError(
+                field: "deleted",
+                code: "required",
+                message: "Validation failed for 'deleted': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        object = try container.sdkDecodeRequired(.object)
+        deleted = try container.sdkDecodeRequired(.deleted)
+    }
+}
+
+public extension ProjectSpendAlertDeletedResource {
+    init(id: String, object: ProjectSpendAlertDeletedResourceObject, deleted: Bool) {
         (self.id, self.object) = (id, object)
         self.deleted = deleted
     }
 }
 
 /// Always `project.spend_alert.deleted`.
-public struct ProjectSpendAlertDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ProjectSpendAlertDeletedResourceObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let projectSpendAlertDeleted = ProjectSpendAlertDeletedResourceObject(rawValue: "project.spend_alert.deleted")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let projectSpendAlertDeleted =
+        ProjectSpendAlertDeletedResourceObject(rawValue: "project.spend_alert.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

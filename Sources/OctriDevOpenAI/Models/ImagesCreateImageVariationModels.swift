@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Images domain models
+/// Images domain models
 /// Legacy request for the retired image variations endpoint.
 public struct CreateImageVariationRequest: Codable {
     /// The image to use as the basis for the variation(s). Must be a valid PNG file, less than 4MB, and square.
@@ -35,34 +35,63 @@ public struct CreateImageVariationRequest: Codable {
         case user
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateImageVariationRequest {
-    public init(from decoder: Decoder) throws {
+public extension CreateImageVariationRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.image) else {
-            throw SdkValidationError(field: "image", code: "required", message: "Validation failed for 'image': value is required")
+            throw SdkValidationError(
+                field: "image",
+                code: "required",
+                message: "Validation failed for 'image': value is required"
+            )
         }
-        self.image = try container.sdkDecodeRequired(.image)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.n = try container.sdkDecodeIfPresent(.n)
-        self.responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
-        self.size = try container.sdkDecodeIfPresent(.size)
-        self.user = try container.sdkDecodeIfPresent(.user)
-        if let value = self.n {
-            try validateRange("n", Double(value), min: 1, max: 10, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        image = try container.sdkDecodeRequired(.image)
+        model = try container.sdkDecodeIfPresent(.model)
+        n = try container.sdkDecodeIfPresent(.n)
+        responseFormat = try container.sdkDecodeIfPresent(.responseFormat)
+        size = try container.sdkDecodeIfPresent(.size)
+        user = try container.sdkDecodeIfPresent(.user)
+        if let value = n {
+            try validateRange(
+                "n",
+                Double(value),
+                min: 1,
+                max: 10,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension CreateImageVariationRequest {
-    public init(image: Data, model: String? = nil, n: Int? = nil, responseFormat: CreateImageVariationRequestResponseFormat? = nil, size: CreateImageVariationRequestSize? = nil, user: String? = nil) throws {
+public extension CreateImageVariationRequest {
+    init(
+        image: Data,
+        model: String? = nil,
+        n: Int? = nil,
+        responseFormat: CreateImageVariationRequestResponseFormat? = nil,
+        size: CreateImageVariationRequestSize? = nil,
+        user: String? = nil
+    ) throws {
         (self.image, self.model) = (image, model)
         (self.n, self.responseFormat) = (n, responseFormat)
         (self.size, self.user) = (size, user)
         if let value = self.n {
-            try validateRange("n", Double(value), min: 1, max: 10, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "n",
+                Double(value),
+                min: 1,
+                max: 10,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -71,14 +100,17 @@ extension CreateImageVariationRequest {
 public struct CreateImageVariationRequestSize: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let value256x256 = CreateImageVariationRequestSize(rawValue: "256x256")
     public static let value512x512 = CreateImageVariationRequestSize(rawValue: "512x512")
     public static let value1024x1024 = CreateImageVariationRequestSize(rawValue: "1024x1024")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -89,16 +121,20 @@ public struct CreateImageVariationRequestSize: RawRepresentable, Hashable, Codab
 
 /// The format in which the generated images are returned. Must be one of `url` or `b64_json`. URLs are only
 /// valid for 60 minutes after the image has been generated.
-public struct CreateImageVariationRequestResponseFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateImageVariationRequestResponseFormat: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let url = CreateImageVariationRequestResponseFormat(rawValue: "url")
     public static let b64Json = CreateImageVariationRequestResponseFormat(rawValue: "b64_json")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

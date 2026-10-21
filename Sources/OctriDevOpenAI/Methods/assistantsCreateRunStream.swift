@@ -6,27 +6,27 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AssistantsMethods {
-    public struct CreateRunStreamOptions {
+public extension AssistantsMethods {
+    struct CreateRunStreamOptions {
         public var threadId: String
         public var assistantId: String
         public var stream: Bool?
-        public var include: [CreateRunParameterItem]? = nil
-        public var model: SdkOptional<CreateRunRequestModel>? = nil
-        public var reasoningEffort: SdkOptional<ReasoningEffort>? = nil
-        public var instructions: SdkOptional<String>? = nil
-        public var additionalInstructions: SdkOptional<String>? = nil
-        public var additionalMessages: SdkOptional<[CreateMessageRequest]>? = nil
-        public var tools: SdkOptional<[CreateRunRequestToolsItem]>? = nil
-        public var metadata: SdkOptional<Metadata>? = nil
-        public var temperature: SdkOptional<Double>? = nil
-        public var topP: SdkOptional<Double>? = nil
-        public var maxPromptTokens: SdkOptional<Int>? = nil
-        public var maxCompletionTokens: SdkOptional<Int>? = nil
-        public var truncationStrategy: CreateRunRequestTruncationStrategy? = nil
-        public var toolChoice: AssistantsApiToolChoiceOption? = nil
-        public var parallelToolCalls: ParallelToolCalls? = nil
-        public var responseFormat: SdkOptional<AssistantsApiResponseFormatOption>? = nil
+        public var include: [CreateRunParameterItem]?
+        public var model: SdkOptional<CreateRunRequestModel>?
+        public var reasoningEffort: SdkOptional<ReasoningEffort>?
+        public var instructions: SdkOptional<String>?
+        public var additionalInstructions: SdkOptional<String>?
+        public var additionalMessages: SdkOptional<[CreateMessageRequest]>?
+        public var tools: SdkOptional<[CreateRunRequestToolsItem]>?
+        public var metadata: SdkOptional<Metadata>?
+        public var temperature: SdkOptional<Double>?
+        public var topP: SdkOptional<Double>?
+        public var maxPromptTokens: SdkOptional<Int>?
+        public var maxCompletionTokens: SdkOptional<Int>?
+        public var truncationStrategy: CreateRunRequestTruncationStrategy?
+        public var toolChoice: AssistantsApiToolChoiceOption?
+        public var parallelToolCalls: ParallelToolCalls?
+        public var responseFormat: SdkOptional<AssistantsApiResponseFormatOption>?
 
         public init(threadId: String, assistantId: String, stream: Bool?) {
             self.threadId = threadId
@@ -35,7 +35,9 @@ extension AssistantsMethods {
         }
     }
 
-    /// Creates a run on a thread using the specified assistant. Supply `assistant_id` and optionally override the assistant’s model, instructions, tools, or generation settings for this run. If the run requires tool outputs, submit them with POST /threads/{thread_id}/runs/{run_id}/submit_tool_outputs.
+    /// Creates a run on a thread using the specified assistant. Supply `assistant_id` and optionally override the
+    /// assistant’s model, instructions, tools, or generation settings for this run. If the run requires tool outputs,
+    /// submit them with POST /threads/{thread_id}/runs/{run_id}/submit_tool_outputs.
     ///
     /// Create a run.
     ///
@@ -118,9 +120,12 @@ extension AssistantsMethods {
     ///   content may be partially cut off if `finish_reason="length"`, which
     ///   indicates the generation exceeded `max_tokens` or the conversation exceeded
     ///   the max context length.
-    public static func createRunStream(config: ClientConfig, options: CreateRunStreamOptions, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<AssistantStreamEvent, Swift.Error> {
+    static func createRunStream(
+        config: ClientConfig,
+        options: CreateRunStreamOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AsyncThrowingStream<AssistantStreamEvent, Swift.Error> {
         let requestBody = CreateRunStreamStreamRequestBody(options: options)
-
 
         let upstream = try await sdkStream(
             "POST",
@@ -145,8 +150,11 @@ extension AssistantsMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(AssistantStreamEvent.self, from: Data(event.data.utf8)) }
-                        
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
+                            AssistantStreamEvent.self,
+                            from: Data(event.data.utf8)
+                        ) }
+
                         continuation.yield(payload)
                     }
                     continuation.finish()

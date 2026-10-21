@@ -6,14 +6,27 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension ContainersMethods {
-    /// Deletes a container by its unique identifier. Use this operation when the container is no longer needed; the response confirms whether the container was deleted.
+public extension ContainersMethods {
+    /// Deletes a container by its unique identifier. Use this operation when the container is no longer needed; the
+    /// response confirms whether the container was deleted.
     ///
     /// Delete Container
     ///
     /// - Parameters:
     /// - containerId: The ID of the container to delete.
-    public static func deleteContainer(config: ClientConfig, containerId: String, requestOptions: RequestOptions? = nil) async throws -> DeleteContainerResponse {
-        return try (await sdkRequest("DELETE", ["/containers/", sdkEncodePathSegment(sdkWireString(containerId))].joined(), config: config, decoder: .json, operationId: "DeleteContainer", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func deleteContainer(
+        config: ClientConfig,
+        containerId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeleteContainerResponse {
+        try await (sdkRequest(
+            "DELETE",
+            ["/containers/", sdkEncodePathSegment(sdkWireString(containerId))].joined(),
+            config: config,
+            decoder: .json,
+            operationId: "DeleteContainer",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }
