@@ -32,10 +32,6 @@ extension WebhookSafetyWarningIssuedData {
     }
 }
 
-
-
-
-
 /// Sent when a warning is issued for a safety identifier in your organization.
 public struct WebhookSafetyWarningIssued: Codable {
     /// The unique ID of the webhook event.

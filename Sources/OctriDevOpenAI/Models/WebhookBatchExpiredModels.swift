@@ -32,10 +32,6 @@ extension WebhookBatchExpiredData {
     }
 }
 
-
-
-
-
 /// Sent when a batch API request has expired.
 public struct WebhookBatchExpired: Codable {
     /// The Unix timestamp (in seconds) of when the batch API request expired.

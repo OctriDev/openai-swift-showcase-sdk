@@ -192,10 +192,6 @@ extension LocalEnvironmentParam {
     }
 }
 
-
-
-
-
 /// A tool call to run a command on the local shell.
 public struct LocalShellToolCall: Codable {
     /// The type of the local shell call. Always `local_shell_call`.

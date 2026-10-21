@@ -6,14 +6,6 @@ import Foundation
 // ResponsesReasoning domain models
 public typealias ReasoningModeEnum = String
 
-
-
-
-
-
-
-
-
 /// Configuration options for reasoning models.
 public struct Reasoning: Codable {
     /// Controls the reasoning execution mode for the request. When returned on a response, this is the effective

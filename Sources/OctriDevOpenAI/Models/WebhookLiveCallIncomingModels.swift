@@ -39,10 +39,6 @@ extension WebhookLiveCallIncomingDataSipHeadersItem {
     }
 }
 
-
-
-
-
 /// Deprecated: use `live.transport.incoming`. Retained for existing subscriptions during migration; new
 /// subscriptions to this event are not allowed. Sent when an incoming API SIP session is available for Live
 /// acceptance. The same pending session can also emit `realtime.call.incoming`; the first successful Realtime or

@@ -214,9 +214,9 @@ let sdkMethodFixture666Expected = String(
 
 let sdkMethodFixture667Expected = String(
     data: Data(base64Encoded: [
-    "eyJvYmplY3QiOiJyb2xlIiwiaWQiOiJpZC0xIiwibmFtZSI6IkV4YW1wbGUgTmFtZSIsImRlc2NyaXB0",
-    "aW9uIjoiZXhhbXBsZSB0ZXh0IiwicGVybWlzc2lvbnMiOlsicGVybWlzc2lvbnMiXSwicmVzb3VyY2Vf",
-    "dHlwZSI6InJlc291cmNlX3R5cGUiLCJwcmVkZWZpbmVkX3JvbGUiOmZhbHNlfQ==",
+    "eyJvYmplY3QiOiJwcm9qZWN0LnNwZW5kX2xpbWl0IiwidGhyZXNob2xkX2Ftb3VudCI6MSwiY3VycmVu",
+    "Y3kiOiJVU0QiLCJpbnRlcnZhbCI6Im1vbnRoIiwiZW5mb3JjZW1lbnQiOnsic3RhdHVzIjoiYWN0aXZl",
+    "In19",
     ].joined())!,
     encoding: .utf8
 )!
@@ -252,9 +252,9 @@ let sdkMethodFixture670Expected = String(
 
 let sdkMethodFixture671Expected = String(
     data: Data(base64Encoded: [
-    "eyJpZCI6ImlkLTEiLCJvYmplY3QiOiJza2lsbCIsIm5hbWUiOiJFeGFtcGxlIE5hbWUiLCJkZXNjcmlw",
-    "dGlvbiI6ImV4YW1wbGUgdGV4dCIsImNyZWF0ZWRfYXQiOjEsImRlZmF1bHRfdmVyc2lvbiI6ImRlZmF1",
-    "bHRfdmVyc2lvbiIsImxhdGVzdF92ZXJzaW9uIjoibGF0ZXN0X3ZlcnNpb24ifQ==",
+    "eyJvYmplY3QiOiJyb2xlIiwiaWQiOiJpZC0xIiwibmFtZSI6IkV4YW1wbGUgTmFtZSIsImRlc2NyaXB0",
+    "aW9uIjoiZXhhbXBsZSB0ZXh0IiwicGVybWlzc2lvbnMiOlsicGVybWlzc2lvbnMiXSwicmVzb3VyY2Vf",
+    "dHlwZSI6InJlc291cmNlX3R5cGUiLCJwcmVkZWZpbmVkX3JvbGUiOmZhbHNlfQ==",
     ].joined())!,
     encoding: .utf8
 )!
@@ -271,9 +271,9 @@ let sdkMethodFixture672Expected = String(
 
 let sdkMethodFixture673Expected = String(
     data: Data(base64Encoded: [
-    "eyJvYmplY3QiOiJvcmdhbml6YXRpb24uc3BlbmRfbGltaXQiLCJ0aHJlc2hvbGRfYW1vdW50IjoxLCJj",
-    "dXJyZW5jeSI6IlVTRCIsImludGVydmFsIjoibW9udGgiLCJlbmZvcmNlbWVudCI6eyJzdGF0dXMiOiJh",
-    "Y3RpdmUifX0=",
+    "eyJpZCI6ImlkLTEiLCJvYmplY3QiOiJza2lsbCIsIm5hbWUiOiJFeGFtcGxlIE5hbWUiLCJkZXNjcmlw",
+    "dGlvbiI6ImV4YW1wbGUgdGV4dCIsImNyZWF0ZWRfYXQiOjEsImRlZmF1bHRfdmVyc2lvbiI6ImRlZmF1",
+    "bHRfdmVyc2lvbiIsImxhdGVzdF92ZXJzaW9uIjoibGF0ZXN0X3ZlcnNpb24ifQ==",
     ].joined())!,
     encoding: .utf8
 )!
@@ -290,9 +290,9 @@ let sdkMethodFixture674Expected = String(
 
 let sdkMethodFixture675Expected = String(
     data: Data(base64Encoded: [
-    "eyJvYmplY3QiOiJwcm9qZWN0LnNwZW5kX2xpbWl0IiwidGhyZXNob2xkX2Ftb3VudCI6MSwiY3VycmVu",
-    "Y3kiOiJVU0QiLCJpbnRlcnZhbCI6Im1vbnRoIiwiZW5mb3JjZW1lbnQiOnsic3RhdHVzIjoiYWN0aXZl",
-    "In19",
+    "eyJvYmplY3QiOiJvcmdhbml6YXRpb24uc3BlbmRfbGltaXQiLCJ0aHJlc2hvbGRfYW1vdW50IjoxLCJj",
+    "dXJyZW5jeSI6IlVTRCIsImludGVydmFsIjoibW9udGgiLCJlbmZvcmNlbWVudCI6eyJzdGF0dXMiOiJh",
+    "Y3RpdmUifX0=",
     ].joined())!,
     encoding: .utf8
 )!

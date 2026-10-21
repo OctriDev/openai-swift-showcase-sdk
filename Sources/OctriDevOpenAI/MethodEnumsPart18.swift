@@ -47,7 +47,7 @@ struct UpdateSpendLimitsOrganizationRequestBody: Encodable {
     }
 }
 
-struct UpdateSpendLimitsProjectRequestBody: Encodable {
+struct UpdateProjectSpendLimitRequestBody: Encodable {
     let thresholdAmount: Int
     let currency: UpdateProjectSpendLimitBodyCurrency
     let interval: UpdateProjectSpendLimitBodyInterval

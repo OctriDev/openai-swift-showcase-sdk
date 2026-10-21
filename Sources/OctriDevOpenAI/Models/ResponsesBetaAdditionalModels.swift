@@ -61,10 +61,6 @@ extension BetaAdditionalTools {
     }
 }
 
-
-
-
-
 /// Typed representation of the `BetaAdditionalToolsItemParam` API schema.
 public struct BetaAdditionalToolsItemParam: Codable {
     /// The item type. Always `additional_tools`.

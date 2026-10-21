@@ -8,10 +8,6 @@ public typealias PersonalityEnum = String
 
 public typealias ToolsArray = [Tool]
 
-
-
-
-
 public struct CreateResponseVariant2: Codable {
     /// Domain-specific access programs to use for this request.
     public var accessPrograms: AccessProgramsParam?
@@ -146,12 +142,6 @@ extension ContextManagementParam {
         (self.type, self.compactThreshold) = (type, compactThreshold)
     }
 }
-
-
-
-
-
-
 
 /// Typed representation of the `CreateResponse` API schema.
 public struct CreateResponse: Codable {

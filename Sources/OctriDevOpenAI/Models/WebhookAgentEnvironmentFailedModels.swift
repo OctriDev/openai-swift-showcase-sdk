@@ -38,10 +38,6 @@ extension WebhookAgentEnvironmentFailedVariant1 {
     }
 }
 
-
-
-
-
 /// Sent when setup fails for a prewarmed OpenAI-hosted environment before it is attached to a session.
 public struct WebhookAgentEnvironmentFailed: Codable {
     /// The unique ID of the event.

@@ -107,10 +107,6 @@ extension BetaLocalEnvironmentResource {
     }
 }
 
-
-
-
-
 /// A tool call to run a command on the local shell.
 public struct BetaLocalShellToolCall: Codable {
     /// The type of the local shell call. Always `local_shell_call`.
@@ -230,10 +226,6 @@ extension BetaLocalShellExecAction {
         (self.workingDirectory, self.user) = (workingDirectory, user)
     }
 }
-
-
-
-
 
 /// The output of a local shell tool call.
 public struct BetaLocalShellToolCallOutput: Codable {

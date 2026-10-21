@@ -101,10 +101,6 @@ extension FileCitationBody {
     }
 }
 
-
-
-
-
 /// The results of a file search tool call. See the file search guide for more information.
 public struct FileSearchToolCall: Codable {
     /// The unique ID of the file search tool call.

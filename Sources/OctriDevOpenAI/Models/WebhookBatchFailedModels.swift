@@ -32,10 +32,6 @@ extension WebhookBatchFailedData {
     }
 }
 
-
-
-
-
 /// Sent when a batch API request has failed.
 public struct WebhookBatchFailed: Codable {
     /// The Unix timestamp (in seconds) of when the batch API request failed.

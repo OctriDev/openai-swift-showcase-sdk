@@ -61,10 +61,6 @@ extension CreateUploadRequest {
     }
 }
 
-
-
-
-
 /// The Upload object can accept byte chunks in the form of Parts.
 public struct Upload: Codable {
     /// The Upload unique identifier, which can be referenced in API endpoints.

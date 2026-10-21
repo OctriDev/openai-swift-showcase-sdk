@@ -7,3 +7,94 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum GroupUsersMethods {}
+
+extension GroupUsersMethods {
+    /// Lists the users assigned to a group. Use `after` to continue from the last user's identifier in a previous response, and use `limit` and `order` to control the page size and sort order. The response indicates whether more users are available and provides the cursor for the next page.
+    ///
+    /// Lists the users assigned to a group.
+    ///
+    /// - Parameters:
+    /// - groupId: The ID of the group to inspect.
+    /// - limit: A limit on the number of users to be returned. Limit can range
+    ///   between 0 and 1000, and the default is 100.
+    /// - after: A cursor for use in pagination. Provide the ID of the last user
+    ///   from the previous list response to retrieve the next page.
+    /// - order: Specifies the sort order of users in the list.
+    public static func listGroupUsers(config: ClientConfig, groupId: String, limit: Int? = nil, after: String? = nil, order: ListGroupUsersParameter? = nil, requestOptions: RequestOptions? = nil) async throws -> UserListResource {
+        if let limit = limit {
+            try validateRange("limit", Double(limit), min: 0, max: 1000)
+        }
+
+        return try (await sdkRequest("GET", ["/organization/groups/", sdkEncodePathSegment(sdkWireString(groupId)), "/users"].joined(), config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("order", value: order),
+        ], decoder: .json, operationId: "listGroupUsers", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self, "502": ErrorResponse.self])).data
+    }
+
+    /// Lists the users assigned to a group. Use `after` to continue from the last user's identifier in a previous response, and use `limit` and `order` to control the page size and sort order. The response indicates whether more users are available and provides the cursor for the next page.
+    ///
+    /// Lists the users assigned to a group.
+    ///
+    /// - Parameters:
+    /// - groupId: The ID of the group to inspect.
+    /// - limit: A limit on the number of users to be returned. Limit can range
+    ///   between 0 and 1000, and the default is 100.
+    /// - after: A cursor for use in pagination. Provide the ID of the last user
+    ///   from the previous list response to retrieve the next page.
+    /// - order: Specifies the sort order of users in the list.
+    public static func listGroupUsersPaginated(config: ClientConfig, groupId: String, limit: Int? = nil, after: String? = nil, order: ListGroupUsersParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<GroupUser, Swift.Error> {
+        return AsyncThrowingStream<GroupUser, Swift.Error> { (continuation: AsyncThrowingStream<GroupUser, Swift.Error>.Continuation) in
+            let task = _Concurrency.Task {
+                do {
+                    var pageCursor = after
+                    while true {
+                        let pageResponse = try await listGroupUsers(config: config, groupId: groupId, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
+                        let pageItems = pageResponse.data
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.next else { break }
+                        pageCursor = nextCursor
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                    return
+                }
+                continuation.finish()
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
+    }
+
+    public struct ListGroupUsersPage {
+        public let data: UserListResource
+        public let items: [GroupUser]
+        public let hasMore: Bool
+    }
+
+    public static func listGroupUsersPages(config: ClientConfig, groupId: String, limit: Int? = nil, after: String? = nil, order: ListGroupUsersParameter? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListGroupUsersPage, Swift.Error> {
+        return AsyncThrowingStream<ListGroupUsersPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListGroupUsersPage, Swift.Error>.Continuation) in
+            let task = _Concurrency.Task {
+                do {
+                    var pageCursor = after
+                    while true {
+                        let pageResponse = try await listGroupUsers(config: config, groupId: groupId, limit: limit, after: pageCursor, order: order, requestOptions: requestOptions)
+                        let pageItems = pageResponse.data
+                        if pageItems.isEmpty { break }
+                        let hasMore = pageResponse.hasMore && pageResponse.next != nil
+                        pageContinuation.yield(ListGroupUsersPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.next else { break }
+                        pageCursor = nextCursor
+                    }
+                } catch {
+                    pageContinuation.finish(throwing: error)
+                    return
+                }
+                pageContinuation.finish()
+            }
+            pageContinuation.onTermination = { _ in task.cancel() }
+        }
+    }
+}

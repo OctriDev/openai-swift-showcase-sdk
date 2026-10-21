@@ -38,10 +38,6 @@ extension WebhookAgentEnvironmentReadyVariant1 {
     }
 }
 
-
-
-
-
 /// Sent when a prewarmed OpenAI-hosted environment finishes setup before being attached to a session.
 public struct WebhookAgentEnvironmentReady: Codable {
     /// The unique ID of the event.

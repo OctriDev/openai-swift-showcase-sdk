@@ -288,10 +288,6 @@ extension InputContentParamInputText {
     }
 }
 
-
-
-
-
 /// A user message submitted to a session.
 public struct InputMessageParam: Codable {
     /// The role of the message author. Always `user`.

@@ -7,3 +7,89 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum EvalsMethods {}
+
+extension EvalsMethods {
+    /// Lists evaluations for a project. Use `after` to continue from a previous result and set `order` and `order_by` to control how evaluations are sorted.
+    ///
+    /// List evaluations for a project.
+    ///
+    /// - Parameters:
+    /// - after: Identifier for the last eval from the previous pagination request.
+    /// - limit: Number of evals to retrieve.
+    /// - order: Sort order for evals by timestamp. Use `asc` for ascending order or
+    ///   `desc` for descending order.
+    /// - orderBy: Evals can be ordered by creation time or last updated time. Use
+    ///   `created_at` for creation time or `updated_at` for last updated time.
+    public static func listEvals(config: ClientConfig, after: String? = nil, limit: Int? = nil, order: ListEvalsParameter? = nil, orderBy: ListEvalsParameterX257b1331? = nil, requestOptions: RequestOptions? = nil) async throws -> EvalList {
+        return try (await sdkRequest("GET", "/evals", config: config, query: [
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("order", value: order),
+            SdkQueryParameter("order_by", value: orderBy),
+        ], decoder: .json, operationId: "listEvals", options: requestOptions, errors: ["429": ErrorResponse.self])).data
+    }
+
+    /// Lists evaluations for a project. Use `after` to continue from a previous result and set `order` and `order_by` to control how evaluations are sorted.
+    ///
+    /// List evaluations for a project.
+    ///
+    /// - Parameters:
+    /// - after: Identifier for the last eval from the previous pagination request.
+    /// - limit: Number of evals to retrieve.
+    /// - order: Sort order for evals by timestamp. Use `asc` for ascending order or
+    ///   `desc` for descending order.
+    /// - orderBy: Evals can be ordered by creation time or last updated time. Use
+    ///   `created_at` for creation time or `updated_at` for last updated time.
+    public static func listEvalsPaginated(config: ClientConfig, after: String? = nil, limit: Int? = nil, order: ListEvalsParameter? = nil, orderBy: ListEvalsParameterX257b1331? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<Eval, Swift.Error> {
+        return AsyncThrowingStream<Eval, Swift.Error> { (continuation: AsyncThrowingStream<Eval, Swift.Error>.Continuation) in
+            let task = _Concurrency.Task {
+                do {
+                    var pageCursor = after
+                    while true {
+                        let pageResponse = try await listEvals(config: config, after: pageCursor, limit: limit, order: order, orderBy: orderBy, requestOptions: requestOptions)
+                        let pageItems = pageResponse.data
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        pageCursor = pageResponse.lastId
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                    return
+                }
+                continuation.finish()
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
+    }
+
+    public struct ListEvalsPage {
+        public let data: EvalList
+        public let items: [Eval]
+        public let hasMore: Bool
+    }
+
+    public static func listEvalsPages(config: ClientConfig, after: String? = nil, limit: Int? = nil, order: ListEvalsParameter? = nil, orderBy: ListEvalsParameterX257b1331? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListEvalsPage, Swift.Error> {
+        return AsyncThrowingStream<ListEvalsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListEvalsPage, Swift.Error>.Continuation) in
+            let task = _Concurrency.Task {
+                do {
+                    var pageCursor = after
+                    while true {
+                        let pageResponse = try await listEvals(config: config, after: pageCursor, limit: limit, order: order, orderBy: orderBy, requestOptions: requestOptions)
+                        let pageItems = pageResponse.data
+                        if pageItems.isEmpty { break }
+                        let hasMore = pageResponse.hasMore && true
+                        pageContinuation.yield(ListEvalsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        pageCursor = pageResponse.lastId
+                    }
+                } catch {
+                    pageContinuation.finish(throwing: error)
+                    return
+                }
+                pageContinuation.finish()
+            }
+            pageContinuation.onTermination = { _ in task.cancel() }
+        }
+    }
+}

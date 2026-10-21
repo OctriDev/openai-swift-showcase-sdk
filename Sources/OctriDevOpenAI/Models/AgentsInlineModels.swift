@@ -51,10 +51,6 @@ extension InlineCapabilitySourceParam {
     }
 }
 
-
-
-
-
 /// Provides ZIP bytes encoded with standard base64.
 public struct InlineCapabilitySourceParamBase64: Codable {
     /// The type of the object. Always `base64`.

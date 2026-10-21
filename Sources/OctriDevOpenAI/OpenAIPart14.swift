@@ -113,8 +113,8 @@ public class SpendLimitsNamespace {
 /// Creates or replaces a project's hard spend limit. Supply `threshold_amount`, `currency`, and `interval` to set the spending threshold and the period used to evaluate it. The response includes the resulting limit and its enforcement state.
     ///
     /// Create or replace a project's hard spend limit.
-    public func updateProject(projectId: String, thresholdAmount: Int, currency: UpdateProjectSpendLimitBodyCurrency, interval: UpdateProjectSpendLimitBodyInterval, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendLimitResource {
-        return try await SpendLimitsMethods.updateSpendLimitsProject(config: config, projectId: projectId, thresholdAmount: thresholdAmount, currency: currency, interval: interval, requestOptions: requestOptions)
+    public func update(projectId: String, thresholdAmount: Int, currency: UpdateProjectSpendLimitBodyCurrency, interval: UpdateProjectSpendLimitBodyInterval, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendLimitResource {
+        return try await SpendLimitsMethods.updateProjectSpendLimit(config: config, projectId: projectId, thresholdAmount: thresholdAmount, currency: currency, interval: interval, requestOptions: requestOptions)
     }
 }
 

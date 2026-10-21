@@ -37,10 +37,6 @@ extension WebhookAgentSessionFailedVariant1 {
     }
 }
 
-
-
-
-
 /// Sent when an agent session fails.
 public struct WebhookAgentSessionFailed: Codable {
     /// The unique ID of the event.

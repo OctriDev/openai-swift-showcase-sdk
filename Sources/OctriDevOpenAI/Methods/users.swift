@@ -7,3 +7,92 @@ import Foundation
     import FoundationNetworking
 #endif
 public enum UsersMethods {}
+
+extension UsersMethods {
+    /// Lists users in the organization. Use `emails` to filter the list by email address and `limit` and `after` to control the page of results. The response includes pagination fields to help you retrieve additional users.
+    ///
+    /// Lists all of the users in the organization.
+    ///
+    /// - Parameters:
+    /// - limit: A limit on the number of objects to be returned. Limit can range
+    ///   between 1 and 100, and the default is 20.
+    /// - after: A cursor for use in pagination. `after` is an object ID that
+    ///   defines your place in the list. For instance, if you make a list request and
+    ///   receive 100 objects, ending with obj_foo, your subsequent call can include
+    ///   after=obj_foo in order to fetch the next page of the list.
+    /// - emails: Filter by the email address of users.
+    public static func listUsers(config: ClientConfig, limit: Int? = nil, after: String? = nil, emails: [String]? = nil, requestOptions: RequestOptions? = nil) async throws -> UserListResponse {
+        return try (await sdkRequest("GET", "/organization/users", config: config, query: [
+            SdkQueryParameter("limit", value: limit),
+            SdkQueryParameter("after", value: after),
+            SdkQueryParameter("emails", values: emails, style: "form", explode: true),
+        ], decoder: .json, operationId: "listUsers", options: requestOptions, errors: ["400": ErrorResponse.self, "403": PermissionErrorResponse.self, "429": ErrorResponse.self])).data
+    }
+
+    /// Lists users in the organization. Use `emails` to filter the list by email address and `limit` and `after` to control the page of results. The response includes pagination fields to help you retrieve additional users.
+    ///
+    /// Lists all of the users in the organization.
+    ///
+    /// - Parameters:
+    /// - limit: A limit on the number of objects to be returned. Limit can range
+    ///   between 1 and 100, and the default is 20.
+    /// - after: A cursor for use in pagination. `after` is an object ID that
+    ///   defines your place in the list. For instance, if you make a list request and
+    ///   receive 100 objects, ending with obj_foo, your subsequent call can include
+    ///   after=obj_foo in order to fetch the next page of the list.
+    /// - emails: Filter by the email address of users.
+    public static func listUsersPaginated(config: ClientConfig, limit: Int? = nil, after: String? = nil, emails: [String]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<User, Swift.Error> {
+        return AsyncThrowingStream<User, Swift.Error> { (continuation: AsyncThrowingStream<User, Swift.Error>.Continuation) in
+            let task = _Concurrency.Task {
+                do {
+                    var pageCursor = after
+                    while true {
+                        let pageResponse = try await listUsers(config: config, limit: limit, after: pageCursor, emails: emails, requestOptions: requestOptions)
+                        let pageItems = pageResponse.data
+                        if pageItems.isEmpty { break }
+                        for item in pageItems { continuation.yield(item) }
+                        if !pageResponse.hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageCursor = nextCursor
+                    }
+                } catch {
+                    continuation.finish(throwing: error)
+                    return
+                }
+                continuation.finish()
+            }
+            continuation.onTermination = { _ in task.cancel() }
+        }
+    }
+
+    public struct ListUsersPage {
+        public let data: UserListResponse
+        public let items: [User]
+        public let hasMore: Bool
+    }
+
+    public static func listUsersPages(config: ClientConfig, limit: Int? = nil, after: String? = nil, emails: [String]? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListUsersPage, Swift.Error> {
+        return AsyncThrowingStream<ListUsersPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListUsersPage, Swift.Error>.Continuation) in
+            let task = _Concurrency.Task {
+                do {
+                    var pageCursor = after
+                    while true {
+                        let pageResponse = try await listUsers(config: config, limit: limit, after: pageCursor, emails: emails, requestOptions: requestOptions)
+                        let pageItems = pageResponse.data
+                        if pageItems.isEmpty { break }
+                        let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
+                        pageContinuation.yield(ListUsersPage(data: pageResponse, items: pageItems, hasMore: hasMore))
+                        if !hasMore { break }
+                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageCursor = nextCursor
+                    }
+                } catch {
+                    pageContinuation.finish(throwing: error)
+                    return
+                }
+                pageContinuation.finish()
+            }
+            pageContinuation.onTermination = { _ in task.cancel() }
+        }
+    }
+}

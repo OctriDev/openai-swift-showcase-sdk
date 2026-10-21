@@ -60,10 +60,6 @@ extension UpdateProjectDataRetentionBody {
     }
 }
 
-
-
-
-
 /// Represents a project's data retention control setting.
 public struct ProjectDataRetention: Codable {
     /// The object type, which is always `project.data_retention`.
@@ -98,10 +94,6 @@ extension ProjectDataRetention {
         (self.object, self.type) = (object, type)
     }
 }
-
-
-
-
 
 /// Represents the organization's data retention control setting.
 public struct OrganizationDataRetention: Codable {

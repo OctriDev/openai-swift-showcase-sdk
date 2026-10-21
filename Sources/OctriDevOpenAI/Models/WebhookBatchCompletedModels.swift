@@ -32,10 +32,6 @@ extension WebhookBatchCompletedData {
     }
 }
 
-
-
-
-
 /// Sent when a batch API request has been completed.
 public struct WebhookBatchCompleted: Codable {
     /// The Unix timestamp (in seconds) of when the batch API request was completed.

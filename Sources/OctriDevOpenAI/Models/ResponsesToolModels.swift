@@ -186,10 +186,6 @@ extension ToolChoiceCustom {
     }
 }
 
-
-
-
-
 /// Constrains the tools available to the model to a pre-defined set.
 public struct ToolChoiceAllowed: Codable {
     /// Allowed tool configuration type. Always `allowed_tools`.

@@ -127,10 +127,6 @@ extension CodeInterpreterOutputLogs {
     }
 }
 
-
-
-
-
 /// A tool call to run code.
 public struct CodeInterpreterToolCall: Codable {
     /// The type of the code interpreter tool call. Always `code_interpreter_call`.

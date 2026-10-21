@@ -37,10 +37,6 @@ extension WebhookAgentSessionIdleVariant1 {
     }
 }
 
-
-
-
-
 /// Sent when an agent session becomes idle.
 public struct WebhookAgentSessionIdle: Codable {
     /// The unique ID of the event.

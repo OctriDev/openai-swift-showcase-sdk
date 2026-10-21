@@ -124,10 +124,6 @@ extension InviteProjectGroupBody {
     }
 }
 
-
-
-
-
 /// Details about a group's membership in a project.
 public struct ProjectGroup: Codable {
     /// Always `project.group`.

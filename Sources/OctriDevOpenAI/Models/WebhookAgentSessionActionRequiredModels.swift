@@ -37,10 +37,6 @@ extension WebhookAgentSessionActionRequiredVariant1 {
     }
 }
 
-
-
-
-
 /// Sent when an agent session requires an action. Retrieve the session for action details.
 public struct WebhookAgentSessionActionRequired: Codable {
     /// The unique ID of the event.

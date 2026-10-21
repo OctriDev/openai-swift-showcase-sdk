@@ -54,12 +54,6 @@ extension OutputMessageContent {
     }
 }
 
-
-
-
-
-
-
 /// An output message from the model.
 public struct OutputMessage: Codable {
     /// The unique ID of the output message.

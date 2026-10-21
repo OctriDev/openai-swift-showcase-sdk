@@ -79,10 +79,6 @@ extension BetaReasoningTextContent {
     }
 }
 
-
-
-
-
 /// A description of the chain of thought used by a reasoning model while generating a response. Be sure to include
 /// these items in your `input` to the Responses API for subsequent turns of a conversation if you are manually
 /// managing context.
@@ -148,14 +144,6 @@ extension BetaReasoningItem {
             try sdkValidateRawEnum("type", self.type, BetaReasoningItemType.allCases.map(\.rawValue))
     }
 }
-
-
-
-
-
-
-
-
 
 /// Configuration options for reasoning models.
 public struct BetaReasoning: Codable {

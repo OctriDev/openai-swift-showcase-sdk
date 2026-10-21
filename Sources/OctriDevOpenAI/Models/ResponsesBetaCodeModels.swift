@@ -215,10 +215,6 @@ extension BetaCodeInterpreterOutputLogs {
     }
 }
 
-
-
-
-
 /// A tool call to run code.
 public struct BetaCodeInterpreterToolCall: Codable {
     /// The type of the code interpreter tool call. Always `code_interpreter_call`.

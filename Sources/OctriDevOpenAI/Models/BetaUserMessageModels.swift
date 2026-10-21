@@ -97,10 +97,6 @@ extension BetaUserMessageItemParamContent {
     }
 }
 
-
-
-
-
 /// Typed representation of the `BetaUserMessageItemParam` API schema.
 public struct BetaUserMessageItemParam: Codable {
     /// The item type. Always `message`.

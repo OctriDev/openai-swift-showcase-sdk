@@ -93,10 +93,6 @@ extension UserMessageItemParamContent {
     }
 }
 
-
-
-
-
 /// Typed representation of the `UserMessageItemParam` API schema.
 public struct UserMessageItemParam: Codable {
     /// The item type. Always `message`.

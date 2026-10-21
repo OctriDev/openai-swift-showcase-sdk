@@ -32,10 +32,6 @@ extension WebhookEvalRunSucceededData {
     }
 }
 
-
-
-
-
 /// Sent when an eval run has succeeded.
 public struct WebhookEvalRunSucceeded: Codable {
     /// The Unix timestamp (in seconds) of when the eval run succeeded.

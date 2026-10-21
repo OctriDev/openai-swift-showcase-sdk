@@ -32,10 +32,6 @@ extension WebhookBatchCancelledData {
     }
 }
 
-
-
-
-
 /// Sent when a batch API request has been cancelled.
 public struct WebhookBatchCancelled: Codable {
     /// The Unix timestamp (in seconds) of when the batch API request was cancelled.

@@ -56,10 +56,6 @@ extension LiveInlineSkillParam {
     }
 }
 
-
-
-
-
 /// Inline skill payload
 public struct LiveInlineSkillSourceParam: Codable {
     /// The type of the inline skill source. Must be `base64`.

@@ -124,12 +124,6 @@ extension InviteDeleteResponse {
     }
 }
 
-
-
-
-
-
-
 /// Represents an individual `invite` to the organization.
 public struct Invite: Codable {
     /// The object type, which is always `organization.invite`

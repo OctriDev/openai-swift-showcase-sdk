@@ -68,12 +68,6 @@ extension InputMessageResourceVariant1 {
     }
 }
 
-
-
-
-
-
-
 /// Typed representation of the `InputMessageResource` API schema.
 public struct InputMessageResource: Codable {
     /// The type of the message input. Always set to `message`.

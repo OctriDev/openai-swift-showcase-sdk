@@ -32,10 +32,6 @@ extension WebhookResponseCompletedData {
     }
 }
 
-
-
-
-
 /// Sent when a background response has been completed.
 public struct WebhookResponseCompleted: Codable {
     /// The Unix timestamp (in seconds) of when the model response was completed.
