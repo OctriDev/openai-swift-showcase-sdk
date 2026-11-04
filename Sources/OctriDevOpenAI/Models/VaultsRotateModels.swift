@@ -3,7 +3,7 @@
 
 import Foundation
 
-// VaultsRotate domain models
+/// VaultsRotate domain models
 public indirect enum RotateMcpOauthTokenEndpointAuthParam {
     case rotateMcpOauthTokenEndpointAuthParamClientSecretBasic(RotateMcpOauthTokenEndpointAuthParamClientSecretBasic)
     case rotateMcpOauthTokenEndpointAuthParamClientSecretPost(RotateMcpOauthTokenEndpointAuthParamClientSecretPost)
@@ -12,7 +12,6 @@ public indirect enum RotateMcpOauthTokenEndpointAuthParam {
 }
 
 extension RotateMcpOauthTokenEndpointAuthParam: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension RotateMcpOauthTokenEndpointAuthParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,14 +40,14 @@ extension RotateMcpOauthTokenEndpointAuthParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "client_secret_basic":
-        return .rotateMcpOauthTokenEndpointAuthParamClientSecretBasic(
-            try RotateMcpOauthTokenEndpointAuthParamClientSecretBasic(from: decoder)
-        )
+            try .rotateMcpOauthTokenEndpointAuthParamClientSecretBasic(
+                RotateMcpOauthTokenEndpointAuthParamClientSecretBasic(from: decoder)
+            )
         case "client_secret_post":
-        return .rotateMcpOauthTokenEndpointAuthParamClientSecretPost(
-            try RotateMcpOauthTokenEndpointAuthParamClientSecretPost(from: decoder)
-        )
-        default: return nil
+            try .rotateMcpOauthTokenEndpointAuthParamClientSecretPost(
+                RotateMcpOauthTokenEndpointAuthParamClientSecretPost(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -69,7 +72,6 @@ public indirect enum RotateVaultCredentialAuthParam {
 }
 
 extension RotateVaultCredentialAuthParam: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -77,12 +79,16 @@ extension RotateVaultCredentialAuthParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -93,12 +99,16 @@ extension RotateVaultCredentialAuthParam: Codable {
 extension RotateVaultCredentialAuthParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "mcp_oauth": return .rotateVaultCredentialAuthParamMcpOauth(try RotateVaultCredentialAuthParamMcpOauth(from: decoder))
+        case "mcp_oauth": try .rotateVaultCredentialAuthParamMcpOauth(
+                RotateVaultCredentialAuthParamMcpOauth(from: decoder)
+            )
         case "static_bearer":
-        return .rotateVaultCredentialAuthParamStaticBearer(try RotateVaultCredentialAuthParamStaticBearer(from: decoder))
+            try .rotateVaultCredentialAuthParamStaticBearer(RotateVaultCredentialAuthParamStaticBearer(from: decoder))
         case "environment_variable":
-        return .rotateVaultCredentialAuthParamEnvironmentVariable(try RotateVaultCredentialAuthParamEnvironmentVariable(from: decoder))
-        default: return nil
+            try .rotateVaultCredentialAuthParamEnvironmentVariable(
+                RotateVaultCredentialAuthParamEnvironmentVariable(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -129,30 +139,48 @@ public struct RotateVaultCredentialAuthParamEnvironmentVariable: Codable {
         case secretValue = "secret_value"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RotateVaultCredentialAuthParamEnvironmentVariable {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.secretValue) else {
-            throw SdkValidationError(field: "secret_value", code: "required", message: "Validation failed for 'secret_value': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.secretValue = try container.sdkDecodeRequired(.secretValue)
-            try sdkValidateRawEnum("type", self.type, RotateVaultCredentialAuthParamEnvironmentVariableType.allCases.map(\.rawValue))
-            try validateLength("secret_value", self.secretValue, min: 1, max: 1048576)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RotateVaultCredentialAuthParamEnvironmentVariable {
-    public init(type: RotateVaultCredentialAuthParamEnvironmentVariableType, secretValue: String) throws {
+public extension RotateVaultCredentialAuthParamEnvironmentVariable {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.secretValue) else {
+            throw SdkValidationError(
+                field: "secret_value",
+                code: "required",
+                message: "Validation failed for 'secret_value': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        secretValue = try container.sdkDecodeRequired(.secretValue)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            RotateVaultCredentialAuthParamEnvironmentVariableType.allCases.map(\.rawValue)
+        )
+        try validateLength("secret_value", secretValue, min: 1, max: 1_048_576)
+    }
+}
+
+public extension RotateVaultCredentialAuthParamEnvironmentVariable {
+    init(type: RotateVaultCredentialAuthParamEnvironmentVariableType, secretValue: String) throws {
         (self.type, self.secretValue) = (type, secretValue)
-            try sdkValidateRawEnum("type", self.type, RotateVaultCredentialAuthParamEnvironmentVariableType.allCases.map(\.rawValue))
-            try validateLength("secret_value", self.secretValue, min: 1, max: 1048576)
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RotateVaultCredentialAuthParamEnvironmentVariableType.allCases.map(\.rawValue)
+        )
+        try validateLength("secret_value", self.secretValue, min: 1, max: 1_048_576)
     }
 }
 
@@ -169,30 +197,44 @@ public struct RotateMcpOauthTokenEndpointAuthParamClientSecretPost: Codable {
         case clientSecret = "client_secret"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RotateMcpOauthTokenEndpointAuthParamClientSecretPost {
-    public init(from decoder: Decoder) throws {
+public extension RotateMcpOauthTokenEndpointAuthParamClientSecretPost {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
-            try sdkValidateRawEnum("type", self.type, RotateMcpOauthTokenEndpointAuthParamClientSecretPostType.allCases.map(\.rawValue))
-        if let value = self.clientSecret {
-            try validateLength("client_secret", value, min: 0, max: 1048576)
+        type = try container.sdkDecodeRequired(.type)
+        clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            RotateMcpOauthTokenEndpointAuthParamClientSecretPostType.allCases.map(\.rawValue)
+        )
+        if let value = clientSecret {
+            try validateLength("client_secret", value, min: 0, max: 1_048_576)
         }
     }
 }
 
-extension RotateMcpOauthTokenEndpointAuthParamClientSecretPost {
-    public init(type: RotateMcpOauthTokenEndpointAuthParamClientSecretPostType, clientSecret: String? = nil) throws {
+public extension RotateMcpOauthTokenEndpointAuthParamClientSecretPost {
+    init(type: RotateMcpOauthTokenEndpointAuthParamClientSecretPostType, clientSecret: String? = nil) throws {
         (self.type, self.clientSecret) = (type, clientSecret)
-            try sdkValidateRawEnum("type", self.type, RotateMcpOauthTokenEndpointAuthParamClientSecretPostType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RotateMcpOauthTokenEndpointAuthParamClientSecretPostType.allCases.map(\.rawValue)
+        )
         if let value = self.clientSecret {
-            try validateLength("client_secret", value, min: 0, max: 1048576)
+            try validateLength("client_secret", value, min: 0, max: 1_048_576)
         }
     }
 }
@@ -216,39 +258,50 @@ public struct RotateVaultCredentialAuthParamMcpOauth: Codable {
         case refresh
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RotateVaultCredentialAuthParamMcpOauth {
-    public init(from decoder: Decoder) throws {
+public extension RotateVaultCredentialAuthParamMcpOauth {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.accessToken = try container.sdkDecodeIfPresent(.accessToken)
-        self.expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
-        self.refresh = try container.sdkDecodeIfPresent(.refresh)
-            try sdkValidateRawEnum("type", self.type, RotateVaultCredentialAuthParamMcpOauthType.allCases.map(\.rawValue))
-        if let value = self.accessToken {
-            try validateLength("access_token", value, min: 0, max: 1048576)
+        type = try container.sdkDecodeRequired(.type)
+        accessToken = try container.sdkDecodeIfPresent(.accessToken)
+        expiresAt = try container.sdkDecodeIfPresent(.expiresAt)
+        refresh = try container.sdkDecodeIfPresent(.refresh)
+        try sdkValidateRawEnum("type", type, RotateVaultCredentialAuthParamMcpOauthType.allCases.map(\.rawValue))
+        if let value = accessToken {
+            try validateLength("access_token", value, min: 0, max: 1_048_576)
         }
-        if let value = self.expiresAt {
-            try validateLength("expires_at", value, min: 0, max: 1048576)
+        if let value = expiresAt {
+            try validateLength("expires_at", value, min: 0, max: 1_048_576)
         }
     }
 }
 
-extension RotateVaultCredentialAuthParamMcpOauth {
-    public init(type: RotateVaultCredentialAuthParamMcpOauthType, accessToken: String? = nil, expiresAt: String? = nil, refresh: RotateMcpOauthRefreshParam? = nil) throws {
+public extension RotateVaultCredentialAuthParamMcpOauth {
+    init(
+        type: RotateVaultCredentialAuthParamMcpOauthType,
+        accessToken: String? = nil,
+        expiresAt: String? = nil,
+        refresh: RotateMcpOauthRefreshParam? = nil
+    ) throws {
         (self.type, self.accessToken) = (type, accessToken)
         (self.expiresAt, self.refresh) = (expiresAt, refresh)
-            try sdkValidateRawEnum("type", self.type, RotateVaultCredentialAuthParamMcpOauthType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RotateVaultCredentialAuthParamMcpOauthType.allCases.map(\.rawValue))
         if let value = self.accessToken {
-            try validateLength("access_token", value, min: 0, max: 1048576)
+            try validateLength("access_token", value, min: 0, max: 1_048_576)
         }
         if let value = self.expiresAt {
-            try validateLength("expires_at", value, min: 0, max: 1048576)
+            try validateLength("expires_at", value, min: 0, max: 1_048_576)
         }
     }
 }
@@ -268,20 +321,20 @@ public struct RotateVaultCredentialParams: Codable {
     }
 
     init() {
-        (self.auth, self.metadata) = (nil, nil)
+        (auth, metadata) = (nil, nil)
     }
 }
 
-extension RotateVaultCredentialParams {
-    public init(from decoder: Decoder) throws {
+public extension RotateVaultCredentialParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.auth = try container.sdkDecodeIfPresent(.auth)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        auth = try container.sdkDecodeIfPresent(.auth)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
     }
 }
 
-extension RotateVaultCredentialParams {
-    public init(auth: RotateVaultCredentialAuthParam? = nil, metadata: [String: String]? = nil) {
+public extension RotateVaultCredentialParams {
+    init(auth: RotateVaultCredentialAuthParam? = nil, metadata: [String: String]? = nil) {
         self.init()
         (self.auth, self.metadata) = (auth, metadata)
     }
@@ -305,35 +358,39 @@ public struct RotateMcpOauthRefreshParam: Codable {
     }
 
     init() {
-        (self.refreshToken, self.scope, self.tokenEndpointAuth) = (nil, nil, nil)
+        (refreshToken, scope, tokenEndpointAuth) = (nil, nil, nil)
     }
 }
 
-extension RotateMcpOauthRefreshParam {
-    public init(from decoder: Decoder) throws {
+public extension RotateMcpOauthRefreshParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.refreshToken = try container.sdkDecodeIfPresent(.refreshToken)
-        self.scope = try container.sdkDecodeIfPresent(.scope)
-        self.tokenEndpointAuth = try container.sdkDecodeIfPresent(.tokenEndpointAuth)
-        if let value = self.refreshToken {
-            try validateLength("refresh_token", value, min: 0, max: 1048576)
+        refreshToken = try container.sdkDecodeIfPresent(.refreshToken)
+        scope = try container.sdkDecodeIfPresent(.scope)
+        tokenEndpointAuth = try container.sdkDecodeIfPresent(.tokenEndpointAuth)
+        if let value = refreshToken {
+            try validateLength("refresh_token", value, min: 0, max: 1_048_576)
         }
-        if let value = self.scope {
-            try validateLength("scope", value, min: 0, max: 1048576)
+        if let value = scope {
+            try validateLength("scope", value, min: 0, max: 1_048_576)
         }
     }
 }
 
-extension RotateMcpOauthRefreshParam {
-    public init(refreshToken: String? = nil, scope: String? = nil, tokenEndpointAuth: RotateMcpOauthTokenEndpointAuthParam? = nil) throws {
+public extension RotateMcpOauthRefreshParam {
+    init(
+        refreshToken: String? = nil,
+        scope: String? = nil,
+        tokenEndpointAuth: RotateMcpOauthTokenEndpointAuthParam? = nil
+    ) throws {
         self.init()
         (self.refreshToken, self.scope) = (refreshToken, scope)
         self.tokenEndpointAuth = tokenEndpointAuth
         if let value = self.refreshToken {
-            try validateLength("refresh_token", value, min: 0, max: 1048576)
+            try validateLength("refresh_token", value, min: 0, max: 1_048_576)
         }
         if let value = self.scope {
-            try validateLength("scope", value, min: 0, max: 1048576)
+            try validateLength("scope", value, min: 0, max: 1_048_576)
         }
     }
 }
@@ -351,30 +408,44 @@ public struct RotateMcpOauthTokenEndpointAuthParamClientSecretBasic: Codable {
         case clientSecret = "client_secret"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RotateMcpOauthTokenEndpointAuthParamClientSecretBasic {
-    public init(from decoder: Decoder) throws {
+public extension RotateMcpOauthTokenEndpointAuthParamClientSecretBasic {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
-            try sdkValidateRawEnum("type", self.type, RotateMcpOauthTokenEndpointAuthParamClientSecretBasicType.allCases.map(\.rawValue))
-        if let value = self.clientSecret {
-            try validateLength("client_secret", value, min: 0, max: 1048576)
+        type = try container.sdkDecodeRequired(.type)
+        clientSecret = try container.sdkDecodeIfPresent(.clientSecret)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            RotateMcpOauthTokenEndpointAuthParamClientSecretBasicType.allCases.map(\.rawValue)
+        )
+        if let value = clientSecret {
+            try validateLength("client_secret", value, min: 0, max: 1_048_576)
         }
     }
 }
 
-extension RotateMcpOauthTokenEndpointAuthParamClientSecretBasic {
-    public init(type: RotateMcpOauthTokenEndpointAuthParamClientSecretBasicType, clientSecret: String? = nil) throws {
+public extension RotateMcpOauthTokenEndpointAuthParamClientSecretBasic {
+    init(type: RotateMcpOauthTokenEndpointAuthParamClientSecretBasicType, clientSecret: String? = nil) throws {
         (self.type, self.clientSecret) = (type, clientSecret)
-            try sdkValidateRawEnum("type", self.type, RotateMcpOauthTokenEndpointAuthParamClientSecretBasicType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RotateMcpOauthTokenEndpointAuthParamClientSecretBasicType.allCases.map(\.rawValue)
+        )
         if let value = self.clientSecret {
-            try validateLength("client_secret", value, min: 0, max: 1048576)
+            try validateLength("client_secret", value, min: 0, max: 1_048_576)
         }
     }
 }
@@ -391,30 +462,44 @@ public struct RotateVaultCredentialAuthParamStaticBearer: Codable {
         case token
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RotateVaultCredentialAuthParamStaticBearer {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.token) else {
-            throw SdkValidationError(field: "token", code: "required", message: "Validation failed for 'token': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.token = try container.sdkDecodeRequired(.token)
-            try sdkValidateRawEnum("type", self.type, RotateVaultCredentialAuthParamStaticBearerType.allCases.map(\.rawValue))
-            try validateLength("token", self.token, min: 0, max: 1048576)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RotateVaultCredentialAuthParamStaticBearer {
-    public init(type: RotateVaultCredentialAuthParamStaticBearerType, token: String) throws {
+public extension RotateVaultCredentialAuthParamStaticBearer {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.token) else {
+            throw SdkValidationError(
+                field: "token",
+                code: "required",
+                message: "Validation failed for 'token': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        token = try container.sdkDecodeRequired(.token)
+        try sdkValidateRawEnum("type", type, RotateVaultCredentialAuthParamStaticBearerType.allCases.map(\.rawValue))
+        try validateLength("token", token, min: 0, max: 1_048_576)
+    }
+}
+
+public extension RotateVaultCredentialAuthParamStaticBearer {
+    init(type: RotateVaultCredentialAuthParamStaticBearerType, token: String) throws {
         (self.type, self.token) = (type, token)
-            try sdkValidateRawEnum("type", self.type, RotateVaultCredentialAuthParamStaticBearerType.allCases.map(\.rawValue))
-            try validateLength("token", self.token, min: 0, max: 1048576)
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RotateVaultCredentialAuthParamStaticBearerType.allCases.map(\.rawValue)
+        )
+        try validateLength("token", self.token, min: 0, max: 1_048_576)
     }
 }
 

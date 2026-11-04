@@ -6,14 +6,26 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension SkillsMethods {
+public extension SkillsMethods {
     /// Retrieves the ZIP bundle for a skill. Use `skill_id` to select the skill whose files you want to download.
     ///
     /// Download a skill zip bundle by its ID.
     ///
     /// - Parameters:
     /// - skillId: The identifier of the skill to download.
-    public static func getSkillContent(config: ClientConfig, skillId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
-        return try (await sdkRequest("GET", ["/skills/", sdkEncodePathSegment(sdkWireString(skillId)), "/content"].joined(), config: config, decoder: .bytes, operationId: "GetSkillContent", options: requestOptions, errors: ["404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func getSkillContent(
+        config: ClientConfig,
+        skillId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Data {
+        try await (sdkRequest(
+            "GET",
+            ["/skills/", sdkEncodePathSegment(sdkWireString(skillId)), "/content"].joined(),
+            config: config,
+            decoder: .bytes,
+            operationId: "GetSkillContent",
+            options: requestOptions,
+            errors: ["404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

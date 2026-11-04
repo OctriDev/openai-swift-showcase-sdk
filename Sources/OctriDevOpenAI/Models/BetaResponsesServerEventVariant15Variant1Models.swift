@@ -3,7 +3,7 @@
 
 import Foundation
 
-// BetaResponses domain models
+/// BetaResponses domain models
 public struct BetaResponsesServerEventVariant15Variant1: Codable {
     /// The WebSocket lane that emitted this event. This field is present when the originating `response.create`
     /// event supplied a `stream_id`.
@@ -14,19 +14,19 @@ public struct BetaResponsesServerEventVariant15Variant1: Codable {
     }
 
     init() {
-        self.streamId = nil
+        streamId = nil
     }
 }
 
-extension BetaResponsesServerEventVariant15Variant1 {
-    public init(from decoder: Decoder) throws {
+public extension BetaResponsesServerEventVariant15Variant1 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+        streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-extension BetaResponsesServerEventVariant15Variant1 {
-    public init(streamId: String? = nil) {
+public extension BetaResponsesServerEventVariant15Variant1 {
+    init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -42,19 +42,19 @@ public struct BetaResponsesServerEventVariant3Variant1: Codable {
     }
 
     init() {
-        self.streamId = nil
+        streamId = nil
     }
 }
 
-extension BetaResponsesServerEventVariant3Variant1 {
-    public init(from decoder: Decoder) throws {
+public extension BetaResponsesServerEventVariant3Variant1 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.streamId = try container.sdkDecodeIfPresent(.streamId)
+        streamId = try container.sdkDecodeIfPresent(.streamId)
     }
 }
 
-extension BetaResponsesServerEventVariant3Variant1 {
-    public init(streamId: String? = nil) {
+public extension BetaResponsesServerEventVariant3Variant1 {
+    init(streamId: String? = nil) {
         self.init()
         self.streamId = streamId
     }
@@ -82,36 +82,56 @@ public struct BetaResponsesServerEventVariant2: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponsesServerEventVariant2 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.delta) else {
-            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.delta = try container.sdkDecodeRequired(.delta)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.streamId = try container.sdkDecodeIfPresent(.streamId)
-            try sdkValidateRawEnum("type", self.type, BetaResponseAudioTranscriptDeltaEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponsesServerEventVariant2 {
-    public init(type: BetaResponseAudioTranscriptDeltaEventType, delta: String, sequenceNumber: Int, agent: BetaAgentTag? = nil, streamId: String? = nil) throws {
+public extension BetaResponsesServerEventVariant2 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.delta) else {
+            throw SdkValidationError(
+                field: "delta",
+                code: "required",
+                message: "Validation failed for 'delta': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        delta = try container.sdkDecodeRequired(.delta)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        streamId = try container.sdkDecodeIfPresent(.streamId)
+        try sdkValidateRawEnum("type", type, BetaResponseAudioTranscriptDeltaEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponsesServerEventVariant2 {
+    init(
+        type: BetaResponseAudioTranscriptDeltaEventType,
+        delta: String,
+        sequenceNumber: Int,
+        agent: BetaAgentTag? = nil,
+        streamId: String? = nil
+    ) throws {
         (self.type, self.delta) = (type, delta)
         (self.sequenceNumber, self.agent) = (sequenceNumber, agent)
         self.streamId = streamId
-            try sdkValidateRawEnum("type", self.type, BetaResponseAudioTranscriptDeltaEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseAudioTranscriptDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -150,36 +170,56 @@ public struct BetaResponsesServerEventVariant24: Codable {
         case streamId = "stream_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponsesServerEventVariant24 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.response) else {
-            throw SdkValidationError(field: "response", code: "required", message: "Validation failed for 'response': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.response = try container.sdkDecodeRequired(.response)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.streamId = try container.sdkDecodeIfPresent(.streamId)
-            try sdkValidateRawEnum("type", self.type, BetaResponseInProgressEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponsesServerEventVariant24 {
-    public init(type: BetaResponseInProgressEventType, response: BetaResponse, sequenceNumber: Int, agent: BetaAgentTag? = nil, streamId: String? = nil) throws {
+public extension BetaResponsesServerEventVariant24 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.response) else {
+            throw SdkValidationError(
+                field: "response",
+                code: "required",
+                message: "Validation failed for 'response': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        response = try container.sdkDecodeRequired(.response)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        streamId = try container.sdkDecodeIfPresent(.streamId)
+        try sdkValidateRawEnum("type", type, BetaResponseInProgressEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponsesServerEventVariant24 {
+    init(
+        type: BetaResponseInProgressEventType,
+        response: BetaResponse,
+        sequenceNumber: Int,
+        agent: BetaAgentTag? = nil,
+        streamId: String? = nil
+    ) throws {
         (self.type, self.response) = (type, response)
         (self.sequenceNumber, self.agent) = (sequenceNumber, agent)
         self.streamId = streamId
-            try sdkValidateRawEnum("type", self.type, BetaResponseInProgressEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseInProgressEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -247,7 +287,6 @@ public indirect enum BetaResponsesWebSocketStreamEventVariant0 {
 }
 
 extension BetaResponsesWebSocketStreamEventVariant0: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -255,18 +294,34 @@ extension BetaResponsesWebSocketStreamEventVariant0: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
-        if let value = try Self.decodeGroup2(discriminator, from: decoder) { self = value; return }
-        if let value = try Self.decodeGroup3(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
+        if let value = try Self.decodeGroup2(discriminator, from: decoder) {
+            self = value; return
+        }
+        if let value = try Self.decodeGroup3(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
-        if try encodeGroup3(to: encoder) { return }
-        if try encodeGroup4(to: encoder) { return }
-        if try encodeGroup5(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
+        if try encodeGroup3(to: encoder) {
+            return
+        }
+        if try encodeGroup4(to: encoder) {
+            return
+        }
+        if try encodeGroup5(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -277,41 +332,59 @@ extension BetaResponsesWebSocketStreamEventVariant0: Codable {
 extension BetaResponsesWebSocketStreamEventVariant0 {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "response.audio.delta": return .betaResponseAudioDeltaEvent(try BetaResponseAudioDeltaEvent(from: decoder))
-        case "response.audio.done": return .betaResponseAudioDoneEvent(try BetaResponseAudioDoneEvent(from: decoder))
+        case "response.audio.delta": try .betaResponseAudioDeltaEvent(BetaResponseAudioDeltaEvent(from: decoder))
+        case "response.audio.done": try .betaResponseAudioDoneEvent(BetaResponseAudioDoneEvent(from: decoder))
         case "response.audio.transcript.delta":
-        return .betaResponseAudioTranscriptDeltaEvent(try BetaResponseAudioTranscriptDeltaEvent(from: decoder))
+            try .betaResponseAudioTranscriptDeltaEvent(BetaResponseAudioTranscriptDeltaEvent(from: decoder))
         case "response.audio.transcript.done":
-        return .betaResponseAudioTranscriptDoneEvent(try BetaResponseAudioTranscriptDoneEvent(from: decoder))
+            try .betaResponseAudioTranscriptDoneEvent(BetaResponseAudioTranscriptDoneEvent(from: decoder))
         case "response.code_interpreter_call_code.delta":
-        return .betaResponseCodeInterpreterCallCodeDeltaEvent(try BetaResponseCodeInterpreterCallCodeDeltaEvent(from: decoder))
+            try .betaResponseCodeInterpreterCallCodeDeltaEvent(
+                BetaResponseCodeInterpreterCallCodeDeltaEvent(from: decoder)
+            )
         case "response.code_interpreter_call_code.done":
-        return .betaResponseCodeInterpreterCallCodeDoneEvent(try BetaResponseCodeInterpreterCallCodeDoneEvent(from: decoder))
+            try .betaResponseCodeInterpreterCallCodeDoneEvent(
+                BetaResponseCodeInterpreterCallCodeDoneEvent(from: decoder)
+            )
         case "response.code_interpreter_call.completed":
-        return .betaResponseCodeInterpreterCallCompletedEvent(try BetaResponseCodeInterpreterCallCompletedEvent(from: decoder))
+            try .betaResponseCodeInterpreterCallCompletedEvent(
+                BetaResponseCodeInterpreterCallCompletedEvent(from: decoder)
+            )
         case "response.code_interpreter_call.in_progress":
-        return .betaResponseCodeInterpreterCallInProgressEvent(try BetaResponseCodeInterpreterCallInProgressEvent(from: decoder))
+            try .betaResponseCodeInterpreterCallInProgressEvent(
+                BetaResponseCodeInterpreterCallInProgressEvent(from: decoder)
+            )
         case "response.code_interpreter_call.interpreting":
-        return .betaResponseCodeInterpreterCallInterpretingEvent(try BetaResponseCodeInterpreterCallInterpretingEvent(from: decoder))
+            try .betaResponseCodeInterpreterCallInterpretingEvent(
+                BetaResponseCodeInterpreterCallInterpretingEvent(from: decoder)
+            )
         case "response.compaction.compacting":
-        return .betaResponseCompactionCompactingStreamingEvent(try BetaResponseCompactionCompactingStreamingEvent(from: decoder))
-        case "response.completed": return .betaResponseCompletedEvent(try BetaResponseCompletedEvent(from: decoder))
-        case "response.content_part.added": return .betaResponseContentPartAddedEvent(try BetaResponseContentPartAddedEvent(from: decoder))
-        case "response.content_part.done": return .betaResponseContentPartDoneEvent(try BetaResponseContentPartDoneEvent(from: decoder))
-        case "response.created": return .betaResponseCreatedEvent(try BetaResponseCreatedEvent(from: decoder))
+            try .betaResponseCompactionCompactingStreamingEvent(
+                BetaResponseCompactionCompactingStreamingEvent(from: decoder)
+            )
+        case "response.completed": try .betaResponseCompletedEvent(BetaResponseCompletedEvent(from: decoder))
+        case "response.content_part.added": try .betaResponseContentPartAddedEvent(
+                BetaResponseContentPartAddedEvent(from: decoder)
+            )
+        case "response.content_part.done": try .betaResponseContentPartDoneEvent(
+                BetaResponseContentPartDoneEvent(from: decoder)
+            )
+        case "response.created": try .betaResponseCreatedEvent(BetaResponseCreatedEvent(from: decoder))
         case "response.file_search_call.completed":
-        return .betaResponseFileSearchCallCompletedEvent(try BetaResponseFileSearchCallCompletedEvent(from: decoder))
+            try .betaResponseFileSearchCallCompletedEvent(BetaResponseFileSearchCallCompletedEvent(from: decoder))
         case "response.file_search_call.in_progress":
-        return .betaResponseFileSearchCallInProgressEvent(try BetaResponseFileSearchCallInProgressEvent(from: decoder))
+            try .betaResponseFileSearchCallInProgressEvent(BetaResponseFileSearchCallInProgressEvent(from: decoder))
         case "response.file_search_call.searching":
-        return .betaResponseFileSearchCallSearchingEvent(try BetaResponseFileSearchCallSearchingEvent(from: decoder))
+            try .betaResponseFileSearchCallSearchingEvent(BetaResponseFileSearchCallSearchingEvent(from: decoder))
         case "response.function_call_arguments.delta":
-        return .betaResponseFunctionCallArgumentsDeltaEvent(try BetaResponseFunctionCallArgumentsDeltaEvent(from: decoder))
+            try .betaResponseFunctionCallArgumentsDeltaEvent(BetaResponseFunctionCallArgumentsDeltaEvent(from: decoder))
         case "response.function_call_arguments.done":
-        return .betaResponseFunctionCallArgumentsDoneEvent(try BetaResponseFunctionCallArgumentsDoneEvent(from: decoder))
+            try .betaResponseFunctionCallArgumentsDoneEvent(BetaResponseFunctionCallArgumentsDoneEvent(from: decoder))
         case "response.shell_call_command.added":
-        return .betaResponseShellCallCommandAddedStreamingEvent(try BetaResponseShellCallCommandAddedStreamingEvent(from: decoder))
-        default: return nil
+            try .betaResponseShellCallCommandAddedStreamingEvent(
+                BetaResponseShellCallCommandAddedStreamingEvent(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -320,41 +393,49 @@ extension BetaResponsesWebSocketStreamEventVariant0 {
     static func decodeGroup2(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "response.shell_call_command.delta":
-        return .betaResponseShellCallCommandDeltaStreamingEvent(try BetaResponseShellCallCommandDeltaStreamingEvent(from: decoder))
+            try .betaResponseShellCallCommandDeltaStreamingEvent(
+                BetaResponseShellCallCommandDeltaStreamingEvent(from: decoder)
+            )
         case "response.shell_call_command.done":
-        return .betaResponseShellCallCommandDoneStreamingEvent(try BetaResponseShellCallCommandDoneStreamingEvent(from: decoder))
+            try .betaResponseShellCallCommandDoneStreamingEvent(
+                BetaResponseShellCallCommandDoneStreamingEvent(from: decoder)
+            )
         case "response.shell_call_output_content.delta":
-        return .betaResponseShellCallOutputContentDeltaStreamingEvent(
-            try BetaResponseShellCallOutputContentDeltaStreamingEvent(from: decoder)
-        )
+            try .betaResponseShellCallOutputContentDeltaStreamingEvent(
+                BetaResponseShellCallOutputContentDeltaStreamingEvent(from: decoder)
+            )
         case "response.shell_call_output_content.done":
-        return .betaResponseShellCallOutputContentDoneStreamingEvent(
-            try BetaResponseShellCallOutputContentDoneStreamingEvent(from: decoder)
-        )
-        case "response.in_progress": return .betaResponseInProgressEvent(try BetaResponseInProgressEvent(from: decoder))
-        case "response.failed": return .betaResponseFailedEvent(try BetaResponseFailedEvent(from: decoder))
-        case "response.incomplete": return .betaResponseIncompleteEvent(try BetaResponseIncompleteEvent(from: decoder))
-        case "response.output_item.added": return .betaResponseOutputItemAddedEvent(try BetaResponseOutputItemAddedEvent(from: decoder))
-        case "response.output_item.done": return .betaResponseOutputItemDoneEvent(try BetaResponseOutputItemDoneEvent(from: decoder))
+            try .betaResponseShellCallOutputContentDoneStreamingEvent(
+                BetaResponseShellCallOutputContentDoneStreamingEvent(from: decoder)
+            )
+        case "response.in_progress": try .betaResponseInProgressEvent(BetaResponseInProgressEvent(from: decoder))
+        case "response.failed": try .betaResponseFailedEvent(BetaResponseFailedEvent(from: decoder))
+        case "response.incomplete": try .betaResponseIncompleteEvent(BetaResponseIncompleteEvent(from: decoder))
+        case "response.output_item.added": try .betaResponseOutputItemAddedEvent(
+                BetaResponseOutputItemAddedEvent(from: decoder)
+            )
+        case "response.output_item.done": try .betaResponseOutputItemDoneEvent(
+                BetaResponseOutputItemDoneEvent(from: decoder)
+            )
         case "response.reasoning_summary_part.added":
-        return .betaResponseReasoningSummaryPartAddedEvent(try BetaResponseReasoningSummaryPartAddedEvent(from: decoder))
+            try .betaResponseReasoningSummaryPartAddedEvent(BetaResponseReasoningSummaryPartAddedEvent(from: decoder))
         case "response.reasoning_summary_part.done":
-        return .betaResponseReasoningSummaryPartDoneEvent(try BetaResponseReasoningSummaryPartDoneEvent(from: decoder))
+            try .betaResponseReasoningSummaryPartDoneEvent(BetaResponseReasoningSummaryPartDoneEvent(from: decoder))
         case "response.reasoning_summary_text.delta":
-        return .betaResponseReasoningSummaryTextDeltaEvent(try BetaResponseReasoningSummaryTextDeltaEvent(from: decoder))
+            try .betaResponseReasoningSummaryTextDeltaEvent(BetaResponseReasoningSummaryTextDeltaEvent(from: decoder))
         case "response.reasoning_summary_text.done":
-        return .betaResponseReasoningSummaryTextDoneEvent(try BetaResponseReasoningSummaryTextDoneEvent(from: decoder))
+            try .betaResponseReasoningSummaryTextDoneEvent(BetaResponseReasoningSummaryTextDoneEvent(from: decoder))
         case "response.reasoning_text.delta":
-        return .betaResponseReasoningTextDeltaEvent(try BetaResponseReasoningTextDeltaEvent(from: decoder))
+            try .betaResponseReasoningTextDeltaEvent(BetaResponseReasoningTextDeltaEvent(from: decoder))
         case "response.reasoning_text.done":
-        return .betaResponseReasoningTextDoneEvent(try BetaResponseReasoningTextDoneEvent(from: decoder))
-        case "response.refusal.delta": return .betaResponseRefusalDeltaEvent(try BetaResponseRefusalDeltaEvent(from: decoder))
-        case "response.refusal.done": return .betaResponseRefusalDoneEvent(try BetaResponseRefusalDoneEvent(from: decoder))
-        case "response.output_text.delta": return .betaResponseTextDeltaEvent(try BetaResponseTextDeltaEvent(from: decoder))
-        case "response.output_text.done": return .betaResponseTextDoneEvent(try BetaResponseTextDoneEvent(from: decoder))
+            try .betaResponseReasoningTextDoneEvent(BetaResponseReasoningTextDoneEvent(from: decoder))
+        case "response.refusal.delta": try .betaResponseRefusalDeltaEvent(BetaResponseRefusalDeltaEvent(from: decoder))
+        case "response.refusal.done": try .betaResponseRefusalDoneEvent(BetaResponseRefusalDoneEvent(from: decoder))
+        case "response.output_text.delta": try .betaResponseTextDeltaEvent(BetaResponseTextDeltaEvent(from: decoder))
+        case "response.output_text.done": try .betaResponseTextDoneEvent(BetaResponseTextDoneEvent(from: decoder))
         case "response.web_search_call.completed":
-        return .betaResponseWebSearchCallCompletedEvent(try BetaResponseWebSearchCallCompletedEvent(from: decoder))
-        default: return nil
+            try .betaResponseWebSearchCallCompletedEvent(BetaResponseWebSearchCallCompletedEvent(from: decoder))
+        default: nil
         }
     }
 }
@@ -363,39 +444,43 @@ extension BetaResponsesWebSocketStreamEventVariant0 {
     static func decodeGroup3(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "response.web_search_call.in_progress":
-        return .betaResponseWebSearchCallInProgressEvent(try BetaResponseWebSearchCallInProgressEvent(from: decoder))
+            try .betaResponseWebSearchCallInProgressEvent(BetaResponseWebSearchCallInProgressEvent(from: decoder))
         case "response.web_search_call.searching":
-        return .betaResponseWebSearchCallSearchingEvent(try BetaResponseWebSearchCallSearchingEvent(from: decoder))
+            try .betaResponseWebSearchCallSearchingEvent(BetaResponseWebSearchCallSearchingEvent(from: decoder))
         case "response.image_generation_call.completed":
-        return .betaResponseImageGenCallCompletedEvent(try BetaResponseImageGenCallCompletedEvent(from: decoder))
+            try .betaResponseImageGenCallCompletedEvent(BetaResponseImageGenCallCompletedEvent(from: decoder))
         case "response.image_generation_call.generating":
-        return .betaResponseImageGenCallGeneratingEvent(try BetaResponseImageGenCallGeneratingEvent(from: decoder))
+            try .betaResponseImageGenCallGeneratingEvent(BetaResponseImageGenCallGeneratingEvent(from: decoder))
         case "response.image_generation_call.in_progress":
-        return .betaResponseImageGenCallInProgressEvent(try BetaResponseImageGenCallInProgressEvent(from: decoder))
+            try .betaResponseImageGenCallInProgressEvent(BetaResponseImageGenCallInProgressEvent(from: decoder))
         case "response.image_generation_call.partial_image":
-        return .betaResponseImageGenCallPartialImageEvent(try BetaResponseImageGenCallPartialImageEvent(from: decoder))
+            try .betaResponseImageGenCallPartialImageEvent(BetaResponseImageGenCallPartialImageEvent(from: decoder))
         case "response.mcp_call_arguments.delta":
-        return .betaResponseMcpCallArgumentsDeltaEvent(try BetaResponseMCPCallArgumentsDeltaEvent(from: decoder))
+            try .betaResponseMcpCallArgumentsDeltaEvent(BetaResponseMCPCallArgumentsDeltaEvent(from: decoder))
         case "response.mcp_call_arguments.done":
-        return .betaResponseMcpCallArgumentsDoneEvent(try BetaResponseMCPCallArgumentsDoneEvent(from: decoder))
-        case "response.mcp_call.completed": return .betaResponseMcpCallCompletedEvent(try BetaResponseMCPCallCompletedEvent(from: decoder))
-        case "response.mcp_call.failed": return .betaResponseMcpCallFailedEvent(try BetaResponseMCPCallFailedEvent(from: decoder))
+            try .betaResponseMcpCallArgumentsDoneEvent(BetaResponseMCPCallArgumentsDoneEvent(from: decoder))
+        case "response.mcp_call.completed": try .betaResponseMcpCallCompletedEvent(
+                BetaResponseMCPCallCompletedEvent(from: decoder)
+            )
+        case "response.mcp_call.failed": try .betaResponseMcpCallFailedEvent(
+                BetaResponseMCPCallFailedEvent(from: decoder)
+            )
         case "response.mcp_call.in_progress":
-        return .betaResponseMcpCallInProgressEvent(try BetaResponseMCPCallInProgressEvent(from: decoder))
+            try .betaResponseMcpCallInProgressEvent(BetaResponseMCPCallInProgressEvent(from: decoder))
         case "response.mcp_list_tools.completed":
-        return .betaResponseMcpListToolsCompletedEvent(try BetaResponseMCPListToolsCompletedEvent(from: decoder))
+            try .betaResponseMcpListToolsCompletedEvent(BetaResponseMCPListToolsCompletedEvent(from: decoder))
         case "response.mcp_list_tools.failed":
-        return .betaResponseMcpListToolsFailedEvent(try BetaResponseMCPListToolsFailedEvent(from: decoder))
+            try .betaResponseMcpListToolsFailedEvent(BetaResponseMCPListToolsFailedEvent(from: decoder))
         case "response.mcp_list_tools.in_progress":
-        return .betaResponseMcpListToolsInProgressEvent(try BetaResponseMCPListToolsInProgressEvent(from: decoder))
+            try .betaResponseMcpListToolsInProgressEvent(BetaResponseMCPListToolsInProgressEvent(from: decoder))
         case "response.output_text.annotation.added":
-        return .betaResponseOutputTextAnnotationAddedEvent(try BetaResponseOutputTextAnnotationAddedEvent(from: decoder))
-        case "response.queued": return .betaResponseQueuedEvent(try BetaResponseQueuedEvent(from: decoder))
+            try .betaResponseOutputTextAnnotationAddedEvent(BetaResponseOutputTextAnnotationAddedEvent(from: decoder))
+        case "response.queued": try .betaResponseQueuedEvent(BetaResponseQueuedEvent(from: decoder))
         case "response.custom_tool_call_input.delta":
-        return .betaResponseCustomToolCallInputDeltaEvent(try BetaResponseCustomToolCallInputDeltaEvent(from: decoder))
+            try .betaResponseCustomToolCallInputDeltaEvent(BetaResponseCustomToolCallInputDeltaEvent(from: decoder))
         case "response.custom_tool_call_input.done":
-        return .betaResponseCustomToolCallInputDoneEvent(try BetaResponseCustomToolCallInputDoneEvent(from: decoder))
-        default: return nil
+            try .betaResponseCustomToolCallInputDoneEvent(BetaResponseCustomToolCallInputDoneEvent(from: decoder))
+        default: nil
         }
     }
 }

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesSpecific domain models
+/// ResponsesSpecific domain models
 /// Typed representation of the `SpecificProgrammaticToolCallingParam` API schema.
 public struct SpecificProgrammaticToolCallingParam: Codable {
     /// The tool to call. Always `programmatic_tool_calling`.
@@ -13,24 +13,30 @@ public struct SpecificProgrammaticToolCallingParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SpecificProgrammaticToolCallingParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, SpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SpecificProgrammaticToolCallingParam {
-    public init(type: SpecificProgrammaticToolCallingParamType) throws {
+public extension SpecificProgrammaticToolCallingParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, SpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension SpecificProgrammaticToolCallingParam {
+    init(type: SpecificProgrammaticToolCallingParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, SpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, SpecificProgrammaticToolCallingParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -43,24 +49,30 @@ public struct SpecificFunctionShellParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SpecificFunctionShellParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, SpecificFunctionShellParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SpecificFunctionShellParam {
-    public init(type: SpecificFunctionShellParamType) throws {
+public extension SpecificFunctionShellParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, SpecificFunctionShellParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension SpecificFunctionShellParam {
+    init(type: SpecificFunctionShellParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, SpecificFunctionShellParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, SpecificFunctionShellParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -73,24 +85,30 @@ public struct SpecificApplyPatchParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension SpecificApplyPatchParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, SpecificApplyPatchParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension SpecificApplyPatchParam {
-    public init(type: SpecificApplyPatchParamType) throws {
+public extension SpecificApplyPatchParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, SpecificApplyPatchParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension SpecificApplyPatchParam {
+    init(type: SpecificApplyPatchParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, SpecificApplyPatchParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, SpecificApplyPatchParamType.allCases.map(\.rawValue))
     }
 }
 

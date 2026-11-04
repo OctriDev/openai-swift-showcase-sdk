@@ -3,12 +3,12 @@
 
 import Foundation
 
-// RealtimeRealtimeServerEvent domain models
-extension RealtimeServerEventMCPListToolsCompleted {
-    public init(eventId: String, type: RealtimeServerEventMCPListToolsCompletedType, itemId: String) throws {
+/// RealtimeRealtimeServerEvent domain models
+public extension RealtimeServerEventMCPListToolsCompleted {
+    init(eventId: String, type: RealtimeServerEventMCPListToolsCompletedType, itemId: String) throws {
         (self.eventId, self.type) = (eventId, type)
         self.itemId = itemId
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventMCPListToolsCompletedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeServerEventMCPListToolsCompletedType.allCases.map(\.rawValue))
     }
 }
 
@@ -43,31 +43,50 @@ public struct RealtimeServerEventResponseFunctionCallArgumentsDone: Codable {
         case arguments
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventResponseFunctionCallArgumentsDone {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.responseId = try container.sdkDecodeRequired(.responseId)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.arguments = try container.sdkDecodeRequired(.arguments)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventResponseFunctionCallArgumentsDoneType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventResponseFunctionCallArgumentsDone {
-    public init(eventId: String, type: RealtimeServerEventResponseFunctionCallArgumentsDoneType, responseId: String, itemId: String, outputIndex: Int, callId: String, name: String, arguments: String) throws {
+public extension RealtimeServerEventResponseFunctionCallArgumentsDone {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        responseId = try container.sdkDecodeRequired(.responseId)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        callId = try container.sdkDecodeRequired(.callId)
+        name = try container.sdkDecodeRequired(.name)
+        arguments = try container.sdkDecodeRequired(.arguments)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            RealtimeServerEventResponseFunctionCallArgumentsDoneType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension RealtimeServerEventResponseFunctionCallArgumentsDone {
+    init(
+        eventId: String,
+        type: RealtimeServerEventResponseFunctionCallArgumentsDoneType,
+        responseId: String,
+        itemId: String,
+        outputIndex: Int,
+        callId: String,
+        name: String,
+        arguments: String
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.responseId, self.itemId) = (responseId, itemId)
         (self.outputIndex, self.callId) = (outputIndex, callId)
         (self.name, self.arguments) = (name, arguments)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventResponseFunctionCallArgumentsDoneType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeServerEventResponseFunctionCallArgumentsDoneType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -95,37 +114,68 @@ public struct RealtimeServerEventInputAudioBufferSpeechStarted: Codable {
         case itemId = "item_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventInputAudioBufferSpeechStarted {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.audioStartMs) else {
-            throw SdkValidationError(field: "audio_start_ms", code: "required", message: "Validation failed for 'audio_start_ms': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.audioStartMs = try container.sdkDecodeRequired(.audioStartMs)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventInputAudioBufferSpeechStartedType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventInputAudioBufferSpeechStarted {
-    public init(eventId: String, type: RealtimeServerEventInputAudioBufferSpeechStartedType, audioStartMs: Int, itemId: String) throws {
+public extension RealtimeServerEventInputAudioBufferSpeechStarted {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.audioStartMs) else {
+            throw SdkValidationError(
+                field: "audio_start_ms",
+                code: "required",
+                message: "Validation failed for 'audio_start_ms': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        audioStartMs = try container.sdkDecodeRequired(.audioStartMs)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            RealtimeServerEventInputAudioBufferSpeechStartedType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension RealtimeServerEventInputAudioBufferSpeechStarted {
+    init(
+        eventId: String,
+        type: RealtimeServerEventInputAudioBufferSpeechStartedType,
+        audioStartMs: Int,
+        itemId: String
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.audioStartMs, self.itemId) = (audioStartMs, itemId)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventInputAudioBufferSpeechStartedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeServerEventInputAudioBufferSpeechStartedType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -146,33 +196,51 @@ public struct RealtimeServerEventOutputAudioBufferStopped: Codable {
         case responseId = "response_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventOutputAudioBufferStopped {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.responseId) else {
-            throw SdkValidationError(field: "response_id", code: "required", message: "Validation failed for 'response_id': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.responseId = try container.sdkDecodeRequired(.responseId)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventOutputAudioBufferStoppedType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventOutputAudioBufferStopped {
-    public init(eventId: String, type: RealtimeServerEventOutputAudioBufferStoppedType, responseId: String) throws {
+public extension RealtimeServerEventOutputAudioBufferStopped {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.responseId) else {
+            throw SdkValidationError(
+                field: "response_id",
+                code: "required",
+                message: "Validation failed for 'response_id': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        responseId = try container.sdkDecodeRequired(.responseId)
+        try sdkValidateRawEnum("type", type, RealtimeServerEventOutputAudioBufferStoppedType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeServerEventOutputAudioBufferStopped {
+    init(eventId: String, type: RealtimeServerEventOutputAudioBufferStoppedType, responseId: String) throws {
         (self.eventId, self.type) = (eventId, type)
         self.responseId = responseId
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventOutputAudioBufferStoppedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeServerEventOutputAudioBufferStoppedType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -191,33 +259,51 @@ public struct RealtimeServerEventSessionUpdated: Codable {
         case session
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventSessionUpdated {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.session = try container.sdkDecodeRequired(.session)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventSessionUpdatedType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventSessionUpdated {
-    public init(eventId: String, type: RealtimeServerEventSessionUpdatedType, session: RealtimeServerEventSessionUpdatedSession) throws {
+public extension RealtimeServerEventSessionUpdated {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        session = try container.sdkDecodeRequired(.session)
+        try sdkValidateRawEnum("type", type, RealtimeServerEventSessionUpdatedType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeServerEventSessionUpdated {
+    init(
+        eventId: String,
+        type: RealtimeServerEventSessionUpdatedType,
+        session: RealtimeServerEventSessionUpdatedSession
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         self.session = session
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventSessionUpdatedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeServerEventSessionUpdatedType.allCases.map(\.rawValue))
     }
 }
 
@@ -245,46 +331,87 @@ public struct RealtimeServerEventResponseMCPCallArgumentsDone: Codable {
         case arguments
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventResponseMCPCallArgumentsDone {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.responseId) else {
-            throw SdkValidationError(field: "response_id", code: "required", message: "Validation failed for 'response_id': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.arguments) else {
-            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.responseId = try container.sdkDecodeRequired(.responseId)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.arguments = try container.sdkDecodeRequired(.arguments)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventResponseMCPCallArgumentsDoneType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventResponseMCPCallArgumentsDone {
-    public init(eventId: String, type: RealtimeServerEventResponseMCPCallArgumentsDoneType, responseId: String, itemId: String, outputIndex: Int, arguments: String) throws {
+public extension RealtimeServerEventResponseMCPCallArgumentsDone {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.responseId) else {
+            throw SdkValidationError(
+                field: "response_id",
+                code: "required",
+                message: "Validation failed for 'response_id': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.arguments) else {
+            throw SdkValidationError(
+                field: "arguments",
+                code: "required",
+                message: "Validation failed for 'arguments': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        responseId = try container.sdkDecodeRequired(.responseId)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        arguments = try container.sdkDecodeRequired(.arguments)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            RealtimeServerEventResponseMCPCallArgumentsDoneType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension RealtimeServerEventResponseMCPCallArgumentsDone {
+    init(
+        eventId: String,
+        type: RealtimeServerEventResponseMCPCallArgumentsDoneType,
+        responseId: String,
+        itemId: String,
+        outputIndex: Int,
+        arguments: String
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.responseId, self.itemId) = (responseId, itemId)
         (self.outputIndex, self.arguments) = (outputIndex, arguments)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventResponseMCPCallArgumentsDoneType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeServerEventResponseMCPCallArgumentsDoneType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -303,33 +430,47 @@ public struct RealtimeServerEventMCPListToolsFailed: Codable {
         case itemId = "item_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventMCPListToolsFailed {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventMCPListToolsFailedType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventMCPListToolsFailed {
-    public init(eventId: String, type: RealtimeServerEventMCPListToolsFailedType, itemId: String) throws {
+public extension RealtimeServerEventMCPListToolsFailed {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        try sdkValidateRawEnum("type", type, RealtimeServerEventMCPListToolsFailedType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeServerEventMCPListToolsFailed {
+    init(eventId: String, type: RealtimeServerEventMCPListToolsFailedType, itemId: String) throws {
         (self.eventId, self.type) = (eventId, type)
         self.itemId = itemId
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventMCPListToolsFailedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeServerEventMCPListToolsFailedType.allCases.map(\.rawValue))
     }
 }
 
@@ -349,33 +490,51 @@ public struct RealtimeServerEventOutputAudioBufferStarted: Codable {
         case responseId = "response_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventOutputAudioBufferStarted {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.responseId) else {
-            throw SdkValidationError(field: "response_id", code: "required", message: "Validation failed for 'response_id': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.responseId = try container.sdkDecodeRequired(.responseId)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventOutputAudioBufferStartedType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventOutputAudioBufferStarted {
-    public init(eventId: String, type: RealtimeServerEventOutputAudioBufferStartedType, responseId: String) throws {
+public extension RealtimeServerEventOutputAudioBufferStarted {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.responseId) else {
+            throw SdkValidationError(
+                field: "response_id",
+                code: "required",
+                message: "Validation failed for 'response_id': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        responseId = try container.sdkDecodeRequired(.responseId)
+        try sdkValidateRawEnum("type", type, RealtimeServerEventOutputAudioBufferStartedType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeServerEventOutputAudioBufferStarted {
+    init(eventId: String, type: RealtimeServerEventOutputAudioBufferStartedType, responseId: String) throws {
         (self.eventId, self.type) = (eventId, type)
         self.responseId = responseId
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventOutputAudioBufferStartedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeServerEventOutputAudioBufferStartedType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -398,22 +557,27 @@ public struct RealtimeServerEventResponseContentPartDonePart: Codable {
     }
 
     init() {
-        (self.type, self.text, self.audio, self.transcript) = (nil, nil, nil, nil)
+        (type, text, audio, transcript) = (nil, nil, nil, nil)
     }
 }
 
-extension RealtimeServerEventResponseContentPartDonePart {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeServerEventResponseContentPartDonePart {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.text = try container.sdkDecodeIfPresent(.text)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.transcript = try container.sdkDecodeIfPresent(.transcript)
+        type = try container.sdkDecodeIfPresent(.type)
+        text = try container.sdkDecodeIfPresent(.text)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        transcript = try container.sdkDecodeIfPresent(.transcript)
     }
 }
 
-extension RealtimeServerEventResponseContentPartDonePart {
-    public init(type: RealtimeServerEventResponseContentPartDonePartType? = nil, text: String? = nil, audio: String? = nil, transcript: String? = nil) {
+public extension RealtimeServerEventResponseContentPartDonePart {
+    init(
+        type: RealtimeServerEventResponseContentPartDonePartType? = nil,
+        text: String? = nil,
+        audio: String? = nil,
+        transcript: String? = nil
+    ) {
         self.init()
         (self.type, self.text) = (type, text)
         (self.audio, self.transcript) = (audio, transcript)
@@ -432,5 +596,7 @@ public struct RealtimeServerEventInputAudioBufferCleared: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

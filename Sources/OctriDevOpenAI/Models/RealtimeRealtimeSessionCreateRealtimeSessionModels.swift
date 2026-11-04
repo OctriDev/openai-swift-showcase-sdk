@@ -3,32 +3,40 @@
 
 import Foundation
 
-// RealtimeRealtimeSession domain models
+/// RealtimeRealtimeSession domain models
 public indirect enum RealtimeSessionCreateRequestTracing {
     case stringValue(String)
     case realtimeSessionCreateRequestTracingVariant1(RealtimeSessionCreateRequestTracingVariant1)
 }
 
 extension RealtimeSessionCreateRequestTracing: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateRequestTracing")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RealtimeSessionCreateRequestTracing"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension RealtimeSessionCreateRequestTracing {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         if let value = try? container.decode(
             RealtimeSessionCreateRequestTracingVariant1.self
         ) {
-            return             .realtimeSessionCreateRequestTracingVariant1(value)
+            return .realtimeSessionCreateRequestTracingVariant1(value)
         }
         return nil
     }
@@ -50,25 +58,33 @@ public indirect enum RealtimeSessionCreateResponseTracing {
 }
 
 extension RealtimeSessionCreateResponseTracing: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateResponseTracing")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RealtimeSessionCreateResponseTracing"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension RealtimeSessionCreateResponseTracing {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         if let value = try? container.decode(
             RealtimeSessionCreateResponseTracingVariant1.self
         ) {
-            return             .realtimeSessionCreateResponseTracingVariant1(value)
+            return .realtimeSessionCreateResponseTracingVariant1(value)
         }
         return nil
     }
@@ -100,21 +116,21 @@ public struct RealtimeSessionCreateRequestTracingVariant1: Codable {
     }
 
     init() {
-        (self.workflowName, self.groupId, self.metadata) = (nil, nil, nil)
+        (workflowName, groupId, metadata) = (nil, nil, nil)
     }
 }
 
-extension RealtimeSessionCreateRequestTracingVariant1 {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeSessionCreateRequestTracingVariant1 {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.workflowName = try container.sdkDecodeIfPresent(.workflowName)
-        self.groupId = try container.sdkDecodeIfPresent(.groupId)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        workflowName = try container.sdkDecodeIfPresent(.workflowName)
+        groupId = try container.sdkDecodeIfPresent(.groupId)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
     }
 }
 
-extension RealtimeSessionCreateRequestTracingVariant1 {
-    public init(workflowName: String? = nil, groupId: String? = nil, metadata: [String: JSONValue]? = nil) {
+public extension RealtimeSessionCreateRequestTracingVariant1 {
+    init(workflowName: String? = nil, groupId: String? = nil, metadata: [String: JSONValue]? = nil) {
         self.init()
         (self.workflowName, self.groupId) = (workflowName, groupId)
         self.metadata = metadata
@@ -141,22 +157,27 @@ public struct RealtimeSessionCreateRequestToolsItem: Codable {
     }
 
     init() {
-        (self.type, self.name, self.description, self.parameters) = (nil, nil, nil, nil)
+        (type, name, description, parameters) = (nil, nil, nil, nil)
     }
 }
 
-extension RealtimeSessionCreateRequestToolsItem {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeSessionCreateRequestToolsItem {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.description = try container.sdkDecodeIfPresent(.description)
-        self.parameters = try container.sdkDecodeIfPresent(.parameters)
+        type = try container.sdkDecodeIfPresent(.type)
+        name = try container.sdkDecodeIfPresent(.name)
+        description = try container.sdkDecodeIfPresent(.description)
+        parameters = try container.sdkDecodeIfPresent(.parameters)
     }
 }
 
-extension RealtimeSessionCreateRequestToolsItem {
-    public init(type: RealtimeSessionCreateRequestToolsItemType? = nil, name: String? = nil, description: String? = nil, parameters: [String: JSONValue]? = nil) {
+public extension RealtimeSessionCreateRequestToolsItem {
+    init(
+        type: RealtimeSessionCreateRequestToolsItemType? = nil,
+        name: String? = nil,
+        description: String? = nil,
+        parameters: [String: JSONValue]? = nil
+    ) {
         self.init()
         (self.type, self.name) = (type, name)
         (self.description, self.parameters) = (description, parameters)
@@ -169,22 +190,32 @@ public indirect enum RealtimeSessionCreateResponseMaxOutputTokens {
 }
 
 extension RealtimeSessionCreateResponseMaxOutputTokens: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateResponseMaxOutputTokens")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RealtimeSessionCreateResponseMaxOutputTokens"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension RealtimeSessionCreateResponseMaxOutputTokens {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) { return .intValue(value) }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) {
+            return .intValue(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         return nil
     }
 }
@@ -214,22 +245,32 @@ public indirect enum RealtimeSessionCreateRequestMaxResponseOutputTokens {
 }
 
 extension RealtimeSessionCreateRequestMaxResponseOutputTokens: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeSessionCreateRequestMaxResponseOutputTokens")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RealtimeSessionCreateRequestMaxResponseOutputTokens"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension RealtimeSessionCreateRequestMaxResponseOutputTokens {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(Int.self) { return .intValue(value) }
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(Int.self) {
+            return .intValue(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         return nil
     }
 }
@@ -275,22 +316,22 @@ public struct RealtimeSessionCreateRequestTurnDetection: Codable {
     }
 
     init() {
-        (self.type, self.threshold, self.prefixPaddingMs, self.silenceDurationMs) = (nil, nil, nil, nil)
+        (type, threshold, prefixPaddingMs, silenceDurationMs) = (nil, nil, nil, nil)
     }
 }
 
-extension RealtimeSessionCreateRequestTurnDetection {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeSessionCreateRequestTurnDetection {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.threshold = try container.sdkDecodeIfPresent(.threshold)
-        self.prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
-        self.silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
+        type = try container.sdkDecodeIfPresent(.type)
+        threshold = try container.sdkDecodeIfPresent(.threshold)
+        prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
+        silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
     }
 }
 
-extension RealtimeSessionCreateRequestTurnDetection {
-    public init(type: String? = nil, threshold: Double? = nil, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil) {
+public extension RealtimeSessionCreateRequestTurnDetection {
+    init(type: String? = nil, threshold: Double? = nil, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil) {
         self.init()
         (self.type, self.threshold) = (type, threshold)
         (self.prefixPaddingMs, self.silenceDurationMs) = (prefixPaddingMs, silenceDurationMs)
@@ -316,22 +357,22 @@ public struct RealtimeSessionCreateResponseAudioInputTurnDetection: Codable {
     }
 
     init() {
-        (self.type, self.threshold, self.prefixPaddingMs, self.silenceDurationMs) = (nil, nil, nil, nil)
+        (type, threshold, prefixPaddingMs, silenceDurationMs) = (nil, nil, nil, nil)
     }
 }
 
-extension RealtimeSessionCreateResponseAudioInputTurnDetection {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeSessionCreateResponseAudioInputTurnDetection {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.threshold = try container.sdkDecodeIfPresent(.threshold)
-        self.prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
-        self.silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
+        type = try container.sdkDecodeIfPresent(.type)
+        threshold = try container.sdkDecodeIfPresent(.threshold)
+        prefixPaddingMs = try container.sdkDecodeIfPresent(.prefixPaddingMs)
+        silenceDurationMs = try container.sdkDecodeIfPresent(.silenceDurationMs)
     }
 }
 
-extension RealtimeSessionCreateResponseAudioInputTurnDetection {
-    public init(type: String? = nil, threshold: Double? = nil, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil) {
+public extension RealtimeSessionCreateResponseAudioInputTurnDetection {
+    init(type: String? = nil, threshold: Double? = nil, prefixPaddingMs: Int? = nil, silenceDurationMs: Int? = nil) {
         self.init()
         (self.type, self.threshold) = (type, threshold)
         (self.prefixPaddingMs, self.silenceDurationMs) = (prefixPaddingMs, silenceDurationMs)
@@ -351,25 +392,35 @@ public struct RealtimeSessionCreateRequestClientSecret: Codable {
         case expiresAt = "expires_at"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeSessionCreateRequestClientSecret {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.value) else {
-            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
-        }
-        guard container.contains(.expiresAt) else {
-            throw SdkValidationError(field: "expires_at", code: "required", message: "Validation failed for 'expires_at': value is required")
-        }
-        self.value = try container.sdkDecodeRequired(.value)
-        self.expiresAt = try container.sdkDecodeRequired(.expiresAt)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeSessionCreateRequestClientSecret {
-    public init(value: String, expiresAt: Int) {
+public extension RealtimeSessionCreateRequestClientSecret {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.value) else {
+            throw SdkValidationError(
+                field: "value",
+                code: "required",
+                message: "Validation failed for 'value': value is required"
+            )
+        }
+        guard container.contains(.expiresAt) else {
+            throw SdkValidationError(
+                field: "expires_at",
+                code: "required",
+                message: "Validation failed for 'expires_at': value is required"
+            )
+        }
+        value = try container.sdkDecodeRequired(.value)
+        expiresAt = try container.sdkDecodeRequired(.expiresAt)
+    }
+}
+
+public extension RealtimeSessionCreateRequestClientSecret {
+    init(value: String, expiresAt: Int) {
         (self.value, self.expiresAt) = (value, expiresAt)
     }
 }
@@ -448,39 +499,70 @@ public struct RealtimeSessionCreateRequest: Codable {
         case prompt
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RealtimeSessionCreateRequest {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeSessionCreateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.clientSecret) else {
-            throw SdkValidationError(field: "client_secret", code: "required", message: "Validation failed for 'client_secret': value is required")
+            throw SdkValidationError(
+                field: "client_secret",
+                code: "required",
+                message: "Validation failed for 'client_secret': value is required"
+            )
         }
-        self.clientSecret = try container.sdkDecodeRequired(.clientSecret)
-        self.modalities = try container.sdkDecodeIfPresent(.modalities)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.voice = try container.sdkDecodeIfPresent(.voice)
-        self.inputAudioFormat = try container.sdkDecodeIfPresent(.inputAudioFormat)
-        self.outputAudioFormat = try container.sdkDecodeIfPresent(.outputAudioFormat)
-        self.inputAudioTranscription = try container.sdkDecodeIfPresent(.inputAudioTranscription)
-        self.speed = try container.sdkDecodeIfPresent(.speed)
-        self.tracing = try container.sdkDecodeIfPresent(.tracing)
-        self.turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
-        self.tools = try container.sdkDecodeIfPresent(.tools)
-        self.toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
-        self.temperature = try container.sdkDecodeIfPresent(.temperature)
-        self.maxResponseOutputTokens = try container.sdkDecodeIfPresent(.maxResponseOutputTokens)
-        self.truncation = try container.sdkDecodeIfPresent(.truncation)
-        self.prompt = try container.sdkDecodeIfPresent(.prompt)
-        if let value = self.speed {
-            try validateRange("speed", Double(value), min: 0.25, max: 1.5, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        clientSecret = try container.sdkDecodeRequired(.clientSecret)
+        modalities = try container.sdkDecodeIfPresent(.modalities)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        voice = try container.sdkDecodeIfPresent(.voice)
+        inputAudioFormat = try container.sdkDecodeIfPresent(.inputAudioFormat)
+        outputAudioFormat = try container.sdkDecodeIfPresent(.outputAudioFormat)
+        inputAudioTranscription = try container.sdkDecodeIfPresent(.inputAudioTranscription)
+        speed = try container.sdkDecodeIfPresent(.speed)
+        tracing = try container.sdkDecodeIfPresent(.tracing)
+        turnDetection = try container.sdkDecodeIfPresent(.turnDetection)
+        tools = try container.sdkDecodeIfPresent(.tools)
+        toolChoice = try container.sdkDecodeIfPresent(.toolChoice)
+        temperature = try container.sdkDecodeIfPresent(.temperature)
+        maxResponseOutputTokens = try container.sdkDecodeIfPresent(.maxResponseOutputTokens)
+        truncation = try container.sdkDecodeIfPresent(.truncation)
+        prompt = try container.sdkDecodeIfPresent(.prompt)
+        if let value = speed {
+            try validateRange(
+                "speed",
+                Double(value),
+                min: 0.25,
+                max: 1.5,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
 
-extension RealtimeSessionCreateRequest {
-    public init(clientSecret: RealtimeSessionCreateRequestClientSecret, modalities: [RealtimeSessionCreateRequestModalitiesItem]? = nil, instructions: String? = nil, voice: VoiceIdsOrCustomVoice? = nil, inputAudioFormat: String? = nil, outputAudioFormat: String? = nil, inputAudioTranscription: RealtimeSessionCreateRequestInputAudioTranscription? = nil, speed: Double? = nil, tracing: RealtimeSessionCreateRequestTracing? = nil, turnDetection: RealtimeSessionCreateRequestTurnDetection? = nil, tools: [RealtimeSessionCreateRequestToolsItem]? = nil, toolChoice: String? = nil, temperature: Double? = nil, maxResponseOutputTokens: RealtimeSessionCreateRequestMaxResponseOutputTokens? = nil, truncation: RealtimeTruncation? = nil, prompt: Prompt? = nil) throws {
+public extension RealtimeSessionCreateRequest {
+    init(
+        clientSecret: RealtimeSessionCreateRequestClientSecret,
+        modalities: [RealtimeSessionCreateRequestModalitiesItem]? = nil,
+        instructions: String? = nil,
+        voice: VoiceIdsOrCustomVoice? = nil,
+        inputAudioFormat: String? = nil,
+        outputAudioFormat: String? = nil,
+        inputAudioTranscription: RealtimeSessionCreateRequestInputAudioTranscription? = nil,
+        speed: Double? = nil,
+        tracing: RealtimeSessionCreateRequestTracing? = nil,
+        turnDetection: RealtimeSessionCreateRequestTurnDetection? = nil,
+        tools: [RealtimeSessionCreateRequestToolsItem]? = nil,
+        toolChoice: String? = nil,
+        temperature: Double? = nil,
+        maxResponseOutputTokens: RealtimeSessionCreateRequestMaxResponseOutputTokens? = nil,
+        truncation: RealtimeTruncation? = nil,
+        prompt: Prompt? = nil
+    ) throws {
         (self.clientSecret, self.modalities) = (clientSecret, modalities)
         (self.instructions, self.voice) = (instructions, voice)
         (self.inputAudioFormat, self.outputAudioFormat) = (inputAudioFormat, outputAudioFormat)
@@ -490,7 +572,15 @@ extension RealtimeSessionCreateRequest {
         (self.temperature, self.maxResponseOutputTokens) = (temperature, maxResponseOutputTokens)
         (self.truncation, self.prompt) = (truncation, prompt)
         if let value = self.speed {
-            try validateRange("speed", Double(value), min: 0.25, max: 1.5, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+            try validateRange(
+                "speed",
+                Double(value),
+                min: 0.25,
+                max: 1.5,
+                exclusiveMin: nil,
+                exclusiveMax: nil,
+                multipleOf: nil
+            )
         }
     }
 }
@@ -507,19 +597,19 @@ public struct RealtimeSessionCreateRequestInputAudioTranscription: Codable {
     }
 
     init() {
-        self.model = nil
+        model = nil
     }
 }
 
-extension RealtimeSessionCreateRequestInputAudioTranscription {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeSessionCreateRequestInputAudioTranscription {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.sdkDecodeIfPresent(.model)
+        model = try container.sdkDecodeIfPresent(.model)
     }
 }
 
-extension RealtimeSessionCreateRequestInputAudioTranscription {
-    public init(model: String? = nil) {
+public extension RealtimeSessionCreateRequestInputAudioTranscription {
+    init(model: String? = nil) {
         self.init()
         self.model = model
     }

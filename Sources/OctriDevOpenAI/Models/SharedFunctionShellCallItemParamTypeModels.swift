@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedFunction domain models
+/// SharedFunction domain models
 /// The type of the item. Always `shell_call`.
 public enum FunctionShellCallItemParamType: String, CaseIterable, Codable {
     case shellCall = "shell_call"
@@ -62,14 +62,17 @@ public enum FunctionToolParamType: String, CaseIterable, Codable {
 public struct FunctionCallItemStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = FunctionCallItemStatus(rawValue: "in_progress")
     public static let completed = FunctionCallItemStatus(rawValue: "completed")
     public static let incomplete = FunctionCallItemStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -82,14 +85,17 @@ public struct FunctionCallItemStatus: RawRepresentable, Hashable, Codable, Senda
 public struct FunctionCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = FunctionCallStatus(rawValue: "in_progress")
     public static let completed = FunctionCallStatus(rawValue: "completed")
     public static let incomplete = FunctionCallStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -157,14 +163,17 @@ public enum FunctionShellCallOutputItemParamType: String, CaseIterable, Codable 
 public struct FunctionToolCallOutputStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = FunctionToolCallOutputStatus(rawValue: "in_progress")
     public static let completed = FunctionToolCallOutputStatus(rawValue: "completed")
     public static let incomplete = FunctionToolCallOutputStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

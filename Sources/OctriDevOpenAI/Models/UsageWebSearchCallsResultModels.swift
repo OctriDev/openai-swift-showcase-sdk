@@ -3,15 +3,25 @@
 
 import Foundation
 
-// Usage domain models
-extension UsageWebSearchCallsResult {
-    public init(object: UsageWebSearchCallsResultObject, numModelRequests: Int, numRequests: Int, apiSource: UsageWebSearchCallsResultApiSourceVariant0? = nil, projectId: String? = nil, userId: String? = nil, apiKeyId: String? = nil, model: String? = nil, contextLevel: String? = nil) throws {
+/// Usage domain models
+public extension UsageWebSearchCallsResult {
+    init(
+        object: UsageWebSearchCallsResultObject,
+        numModelRequests: Int,
+        numRequests: Int,
+        apiSource: UsageWebSearchCallsResultApiSourceVariant0? = nil,
+        projectId: String? = nil,
+        userId: String? = nil,
+        apiKeyId: String? = nil,
+        model: String? = nil,
+        contextLevel: String? = nil
+    ) throws {
         (self.object, self.numModelRequests) = (object, numModelRequests)
         (self.numRequests, self.apiSource) = (numRequests, apiSource)
         (self.projectId, self.userId) = (projectId, userId)
         (self.apiKeyId, self.model) = (apiKeyId, model)
         self.contextLevel = contextLevel
-            try sdkValidateRawEnum("object", self.object, UsageWebSearchCallsResultObject.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("object", self.object, UsageWebSearchCallsResultObject.allCases.map(\.rawValue))
     }
 }
 
@@ -34,16 +44,20 @@ public enum UsageEmbeddingsResultObject: String, CaseIterable, Codable {
 }
 
 /// Optional enumerated value serialized in the `api_source` wire field.
-public struct UsageCompletionsResultApiSourceVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct UsageCompletionsResultApiSourceVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let agentsApi = UsageCompletionsResultApiSourceVariant0(rawValue: "agents_api")
     public static let unlabeled = UsageCompletionsResultApiSourceVariant0(rawValue: "unlabeled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -56,12 +70,15 @@ public struct UsageCompletionsResultApiSourceVariant0: RawRepresentable, Hashabl
 public struct UsageResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let page = UsageResponseObject(rawValue: "page")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -71,16 +88,20 @@ public struct UsageResponseObject: RawRepresentable, Hashable, Codable, Sendable
 }
 
 /// Optional enumerated value serialized in the `api_source` wire field.
-public struct UsageWebSearchCallsResultApiSourceVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct UsageWebSearchCallsResultApiSourceVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let agentsApi = UsageWebSearchCallsResultApiSourceVariant0(rawValue: "agents_api")
     public static let unlabeled = UsageWebSearchCallsResultApiSourceVariant0(rawValue: "unlabeled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -165,12 +186,15 @@ public enum UsageCompletionsResultObject: String, CaseIterable, Codable {
 public struct UsageTimeBucketObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let bucket = UsageTimeBucketObject(rawValue: "bucket")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -183,13 +207,16 @@ public struct UsageTimeBucketObject: RawRepresentable, Hashable, Codable, Sendab
 public struct CostsResultApiSourceVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let agentsApi = CostsResultApiSourceVariant0(rawValue: "agents_api")
     public static let unlabeled = CostsResultApiSourceVariant0(rawValue: "unlabeled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

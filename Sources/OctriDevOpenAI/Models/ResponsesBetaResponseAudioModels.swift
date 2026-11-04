@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaResponseAudio domain models
+/// ResponsesBetaResponseAudio domain models
 /// Emitted when the audio response is complete.
 public struct BetaResponseAudioDoneEvent: Codable {
     /// The type of the event. Always `response.audio.done`.
@@ -19,30 +19,40 @@ public struct BetaResponseAudioDoneEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponseAudioDoneEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseAudioDoneEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponseAudioDoneEvent {
-    public init(type: BetaResponseAudioDoneEventType, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
+public extension BetaResponseAudioDoneEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaResponseAudioDoneEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseAudioDoneEvent {
+    init(type: BetaResponseAudioDoneEventType, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         self.agent = agent
-            try sdkValidateRawEnum("type", self.type, BetaResponseAudioDoneEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseAudioDoneEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -61,30 +71,40 @@ public struct BetaResponseAudioTranscriptDoneEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponseAudioTranscriptDoneEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseAudioTranscriptDoneEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponseAudioTranscriptDoneEvent {
-    public init(type: BetaResponseAudioTranscriptDoneEventType, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
+public extension BetaResponseAudioTranscriptDoneEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaResponseAudioTranscriptDoneEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseAudioTranscriptDoneEvent {
+    init(type: BetaResponseAudioTranscriptDoneEventType, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         self.agent = agent
-            try sdkValidateRawEnum("type", self.type, BetaResponseAudioTranscriptDoneEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseAudioTranscriptDoneEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -106,34 +126,53 @@ public struct BetaResponseAudioTranscriptDeltaEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponseAudioTranscriptDeltaEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.delta) else {
-            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.delta = try container.sdkDecodeRequired(.delta)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseAudioTranscriptDeltaEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponseAudioTranscriptDeltaEvent {
-    public init(type: BetaResponseAudioTranscriptDeltaEventType, delta: String, sequenceNumber: Int, agent: BetaAgentTag? = nil) throws {
+public extension BetaResponseAudioTranscriptDeltaEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.delta) else {
+            throw SdkValidationError(
+                field: "delta",
+                code: "required",
+                message: "Validation failed for 'delta': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        delta = try container.sdkDecodeRequired(.delta)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaResponseAudioTranscriptDeltaEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseAudioTranscriptDeltaEvent {
+    init(
+        type: BetaResponseAudioTranscriptDeltaEventType,
+        delta: String,
+        sequenceNumber: Int,
+        agent: BetaAgentTag? = nil
+    ) throws {
         (self.type, self.delta) = (type, delta)
         (self.sequenceNumber, self.agent) = (sequenceNumber, agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseAudioTranscriptDeltaEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseAudioTranscriptDeltaEventType.allCases.map(\.rawValue))
     }
 }
 
@@ -155,34 +194,48 @@ public struct BetaResponseAudioDeltaEvent: Codable {
         case agent
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaResponseAudioDeltaEvent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.sequenceNumber) else {
-            throw SdkValidationError(field: "sequence_number", code: "required", message: "Validation failed for 'sequence_number': value is required")
-        }
-        guard container.contains(.delta) else {
-            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
-        self.delta = try container.sdkDecodeRequired(.delta)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseAudioDeltaEventType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaResponseAudioDeltaEvent {
-    public init(type: BetaResponseAudioDeltaEventType, sequenceNumber: Int, delta: String, agent: BetaAgentTag? = nil) throws {
+public extension BetaResponseAudioDeltaEvent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.sequenceNumber) else {
+            throw SdkValidationError(
+                field: "sequence_number",
+                code: "required",
+                message: "Validation failed for 'sequence_number': value is required"
+            )
+        }
+        guard container.contains(.delta) else {
+            throw SdkValidationError(
+                field: "delta",
+                code: "required",
+                message: "Validation failed for 'delta': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        sequenceNumber = try container.sdkDecodeRequired(.sequenceNumber)
+        delta = try container.sdkDecodeRequired(.delta)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        try sdkValidateRawEnum("type", type, BetaResponseAudioDeltaEventType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaResponseAudioDeltaEvent {
+    init(type: BetaResponseAudioDeltaEventType, sequenceNumber: Int, delta: String, agent: BetaAgentTag? = nil) throws {
         (self.type, self.sequenceNumber) = (type, sequenceNumber)
         (self.delta, self.agent) = (delta, agent)
-            try sdkValidateRawEnum("type", self.type, BetaResponseAudioDeltaEventType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaResponseAudioDeltaEventType.allCases.map(\.rawValue))
     }
 }
 

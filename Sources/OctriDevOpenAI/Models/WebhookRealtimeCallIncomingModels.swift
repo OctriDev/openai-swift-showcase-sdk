@@ -3,7 +3,7 @@
 
 import Foundation
 
-// WebhookRealtimeCallIncoming domain models
+/// WebhookRealtimeCallIncoming domain models
 /// Sent when an incoming API SIP session is available for Realtime acceptance. The same pending session can also
 /// emit `live.transport.incoming`; the first successful Realtime or Live accept endpoint selects the runtime
 /// surface.
@@ -27,34 +27,58 @@ public struct WebhookRealtimeCallIncoming: Codable {
         case object
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebhookRealtimeCallIncoming {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.object = try container.sdkDecodeIfPresent(.object)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebhookRealtimeCallIncoming {
-    public init(createdAt: Int, id: String, data: WebhookRealtimeCallIncomingData, type: WebhookRealtimeCallIncomingType, object: WebhookRealtimeCallIncomingObject? = nil) {
+public extension WebhookRealtimeCallIncoming {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        id = try container.sdkDecodeRequired(.id)
+        data = try container.sdkDecodeRequired(.data)
+        type = try container.sdkDecodeRequired(.type)
+        object = try container.sdkDecodeIfPresent(.object)
+    }
+}
+
+public extension WebhookRealtimeCallIncoming {
+    init(
+        createdAt: Int,
+        id: String,
+        data: WebhookRealtimeCallIncomingData,
+        type: WebhookRealtimeCallIncomingType,
+        object: WebhookRealtimeCallIncomingObject? = nil
+    ) {
         (self.createdAt, self.id) = (createdAt, id)
         (self.data, self.type) = (data, type)
         self.object = object
@@ -73,25 +97,35 @@ public struct WebhookRealtimeCallIncomingDataSipHeadersItem: Codable {
         case value
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebhookRealtimeCallIncomingDataSipHeadersItem {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.value) else {
-            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
-        self.value = try container.sdkDecodeRequired(.value)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebhookRealtimeCallIncomingDataSipHeadersItem {
-    public init(name: String, value: String) {
+public extension WebhookRealtimeCallIncomingDataSipHeadersItem {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.value) else {
+            throw SdkValidationError(
+                field: "value",
+                code: "required",
+                message: "Validation failed for 'value': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+        value = try container.sdkDecodeRequired(.value)
+    }
+}
+
+public extension WebhookRealtimeCallIncomingDataSipHeadersItem {
+    init(name: String, value: String) {
         (self.name, self.value) = (name, value)
     }
 }
@@ -115,26 +149,36 @@ public struct WebhookRealtimeCallIncomingData: Codable {
         case sipMediaSecurity = "sip_media_security"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebhookRealtimeCallIncomingData {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.sipHeaders) else {
-            throw SdkValidationError(field: "sip_headers", code: "required", message: "Validation failed for 'sip_headers': value is required")
-        }
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.sipHeaders = try container.sdkDecodeRequired(.sipHeaders)
-        self.sipMediaSecurity = try container.sdkDecodeIfPresent(.sipMediaSecurity)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebhookRealtimeCallIncomingData {
-    public init(callId: String, sipHeaders: [WebhookRealtimeCallIncomingDataSipHeadersItem], sipMediaSecurity: String? = nil) {
+public extension WebhookRealtimeCallIncomingData {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.sipHeaders) else {
+            throw SdkValidationError(
+                field: "sip_headers",
+                code: "required",
+                message: "Validation failed for 'sip_headers': value is required"
+            )
+        }
+        callId = try container.sdkDecodeRequired(.callId)
+        sipHeaders = try container.sdkDecodeRequired(.sipHeaders)
+        sipMediaSecurity = try container.sdkDecodeIfPresent(.sipMediaSecurity)
+    }
+}
+
+public extension WebhookRealtimeCallIncomingData {
+    init(callId: String, sipHeaders: [WebhookRealtimeCallIncomingDataSipHeadersItem], sipMediaSecurity: String? = nil) {
         (self.callId, self.sipHeaders) = (callId, sipHeaders)
         self.sipMediaSecurity = sipMediaSecurity
     }
@@ -144,12 +188,15 @@ extension WebhookRealtimeCallIncomingData {
 public struct WebhookRealtimeCallIncomingObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let event = WebhookRealtimeCallIncomingObject(rawValue: "event")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -162,12 +209,15 @@ public struct WebhookRealtimeCallIncomingObject: RawRepresentable, Hashable, Cod
 public struct WebhookRealtimeCallIncomingType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let realtimeCallIncoming = WebhookRealtimeCallIncomingType(rawValue: "realtime.call.incoming")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

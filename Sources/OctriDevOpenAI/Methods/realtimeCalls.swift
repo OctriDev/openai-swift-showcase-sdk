@@ -6,15 +6,28 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension RealtimeMethods {
+public extension RealtimeMethods {
     /// Create a new Realtime API call over WebRTC and receive the SDP answer needed to complete the peer connection.
-    public static func createRealtimeCall(config: ClientConfig, body: CreateRealtimeCallBody, requestOptions: RequestOptions? = nil) async throws -> String {
+    static func createRealtimeCall(
+        config: ClientConfig,
+        body: CreateRealtimeCallBody,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> String {
         var multipartParts: [SdkMultipartField] = []
         multipartParts.append(.scalar("body", body))
         let multipart = sdkEncodeMultipart(multipartParts)
 
         let encodedBody = try body.encoded(contentType: nil)
 
-        return try (await sdkRequest("POST", "/realtime/calls", config: config, rawBody: encodedBody.data, contentType: encodedBody.contentType, decoder: .text, operationId: "createRealtimeCall", options: requestOptions)).data
+        return try await (sdkRequest(
+            "POST",
+            "/realtime/calls",
+            config: config,
+            rawBody: encodedBody.data,
+            contentType: encodedBody.contentType,
+            decoder: .text,
+            operationId: "createRealtimeCall",
+            options: requestOptions
+        )).data
     }
 }

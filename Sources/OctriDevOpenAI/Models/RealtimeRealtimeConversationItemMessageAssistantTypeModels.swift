@@ -3,7 +3,7 @@
 
 import Foundation
 
-// RealtimeRealtimeConversation domain models
+/// RealtimeRealtimeConversation domain models
 /// The type of the item. Always `message`.
 public enum RealtimeConversationItemMessageAssistantType: String, CaseIterable, Codable {
     case message
@@ -23,15 +23,19 @@ public enum RealtimeConversationItemMessageAssistantType: String, CaseIterable, 
 }
 
 /// The role of the message sender. Always `system`.
-public struct RealtimeConversationItemMessageSystemRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeConversationItemMessageSystemRole: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let system = RealtimeConversationItemMessageSystemRole(rawValue: "system")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -41,17 +45,21 @@ public struct RealtimeConversationItemMessageSystemRole: RawRepresentable, Hasha
 }
 
 /// The status of the item. Has no effect on the conversation.
-public struct RealtimeConversationItemMessageAssistantStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeConversationItemMessageAssistantStatus: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = RealtimeConversationItemMessageAssistantStatus(rawValue: "completed")
     public static let incomplete = RealtimeConversationItemMessageAssistantStatus(rawValue: "incomplete")
     public static let inProgress = RealtimeConversationItemMessageAssistantStatus(rawValue: "in_progress")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -79,15 +87,19 @@ public enum RealtimeConversationItemMessageSystemType: String, CaseIterable, Cod
 }
 
 /// Identifier for the API object being returned - always `realtime.item`. Optional when creating a new item.
-public struct RealtimeConversationItemMessageAssistantObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeConversationItemMessageAssistantObject: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let realtimeItem = RealtimeConversationItemMessageAssistantObject(rawValue: "realtime.item")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -97,17 +109,21 @@ public struct RealtimeConversationItemMessageAssistantObject: RawRepresentable, 
 }
 
 /// The status of the item. Has no effect on the conversation.
-public struct RealtimeConversationItemFunctionCallOutputStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeConversationItemFunctionCallOutputStatus: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = RealtimeConversationItemFunctionCallOutputStatus(rawValue: "completed")
     public static let incomplete = RealtimeConversationItemFunctionCallOutputStatus(rawValue: "incomplete")
     public static let inProgress = RealtimeConversationItemFunctionCallOutputStatus(rawValue: "in_progress")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -117,10 +133,14 @@ public struct RealtimeConversationItemFunctionCallOutputStatus: RawRepresentable
 }
 
 /// The content type (`input_text`, `input_audio`, `item_reference`, `text`).
-public struct RealtimeConversationItemWithReferenceContentItemType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeConversationItemWithReferenceContentItemType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inputAudio = RealtimeConversationItemWithReferenceContentItemType(rawValue: "input_audio")
     public static let inputText = RealtimeConversationItemWithReferenceContentItemType(rawValue: "input_text")
     public static let itemReference = RealtimeConversationItemWithReferenceContentItemType(rawValue: "item_reference")
@@ -128,7 +148,7 @@ public struct RealtimeConversationItemWithReferenceContentItemType: RawRepresent
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -138,17 +158,21 @@ public struct RealtimeConversationItemWithReferenceContentItemType: RawRepresent
 }
 
 /// The type of the item (`message`, `function_call`, `function_call_output`, `item_reference`).
-public struct RealtimeConversationItemWithReferenceType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeConversationItemWithReferenceType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let message = RealtimeConversationItemWithReferenceType(rawValue: "message")
     public static let functionCall = RealtimeConversationItemWithReferenceType(rawValue: "function_call")
     public static let functionCallOutput = RealtimeConversationItemWithReferenceType(rawValue: "function_call_output")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -158,15 +182,19 @@ public struct RealtimeConversationItemWithReferenceType: RawRepresentable, Hasha
 }
 
 /// The content type. Always `input_text` for system messages.
-public struct RealtimeConversationItemMessageSystemContentItemType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeConversationItemMessageSystemContentItemType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inputText = RealtimeConversationItemMessageSystemContentItemType(rawValue: "input_text")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -177,17 +205,21 @@ public struct RealtimeConversationItemMessageSystemContentItemType: RawRepresent
 
 /// The status of the item (`completed`, `incomplete`, `in_progress`). These have no effect on the conversation,
 /// but are accepted for consistency with the `conversation.item.created` event.
-public struct RealtimeConversationItemWithReferenceStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeConversationItemWithReferenceStatus: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = RealtimeConversationItemWithReferenceStatus(rawValue: "completed")
     public static let incomplete = RealtimeConversationItemWithReferenceStatus(rawValue: "incomplete")
     public static let inProgress = RealtimeConversationItemWithReferenceStatus(rawValue: "in_progress")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

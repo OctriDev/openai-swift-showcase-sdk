@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaOutput domain models
+/// ResponsesBetaOutput domain models
 public indirect enum BetaOutputContent {
     case betaOutputTextContent(BetaOutputTextContent)
     case betaRefusalContent(BetaRefusalContent)
@@ -13,7 +13,6 @@ public indirect enum BetaOutputContent {
 }
 
 extension BetaOutputContent: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension BetaOutputContent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension BetaOutputContent: Codable {
 extension BetaOutputContent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "output_text": return .betaOutputTextContent(try BetaOutputTextContent(from: decoder))
-        case "refusal": return .betaRefusalContent(try BetaRefusalContent(from: decoder))
-        case "reasoning_text": return .betaReasoningTextContent(try BetaReasoningTextContent(from: decoder))
-        default: return nil
+        case "output_text": try .betaOutputTextContent(BetaOutputTextContent(from: decoder))
+        case "refusal": try .betaRefusalContent(BetaRefusalContent(from: decoder))
+        case "reasoning_text": try .betaReasoningTextContent(BetaReasoningTextContent(from: decoder))
+        default: nil
         }
     }
 }
@@ -94,7 +97,6 @@ public indirect enum BetaOutputItem {
 }
 
 extension BetaOutputItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -102,15 +104,25 @@ extension BetaOutputItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
-        if let value = try Self.decodeGroup2(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
+        if let value = try Self.decodeGroup2(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
-        if try encodeGroup3(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
+        if try encodeGroup3(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -121,27 +133,31 @@ extension BetaOutputItem: Codable {
 extension BetaOutputItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "message": return .betaOutputMessage(try BetaOutputMessage(from: decoder))
-        case "file_search_call": return .betaFileSearchToolCall(try BetaFileSearchToolCall(from: decoder))
-        case "function_call": return .betaFunctionToolCall(try BetaFunctionToolCall(from: decoder))
-        case "function_call_output": return .betaFunctionToolCallOutputResource(try BetaFunctionToolCallOutputResource(from: decoder))
-        case "agent_message": return .betaAgentMessage(try BetaAgentMessage(from: decoder))
-        case "multi_agent_call": return .betaMultiAgentCall(try BetaMultiAgentCall(from: decoder))
-        case "multi_agent_call_output": return .betaMultiAgentCallOutput(try BetaMultiAgentCallOutput(from: decoder))
-        case "web_search_call": return .betaWebSearchToolCall(try BetaWebSearchToolCall(from: decoder))
-        case "computer_call": return .betaComputerToolCall(try BetaComputerToolCall(from: decoder))
-        case "computer_call_output": return .betaComputerToolCallOutputResource(try BetaComputerToolCallOutputResource(from: decoder))
-        case "reasoning": return .betaReasoningItem(try BetaReasoningItem(from: decoder))
-        case "program": return .betaProgram(try BetaProgram(from: decoder))
-        case "program_output": return .betaProgramOutput(try BetaProgramOutput(from: decoder))
-        case "tool_search_call": return .betaToolSearchCall(try BetaToolSearchCall(from: decoder))
-        case "tool_search_output": return .betaToolSearchOutput(try BetaToolSearchOutput(from: decoder))
-        case "additional_tools": return .betaAdditionalTools(try BetaAdditionalTools(from: decoder))
-        case "compaction": return .betaCompactionBody(try BetaCompactionBody(from: decoder))
-        case "image_generation_call": return .betaImageGenToolCall(try BetaImageGenToolCall(from: decoder))
-        case "code_interpreter_call": return .betaCodeInterpreterToolCall(try BetaCodeInterpreterToolCall(from: decoder))
-        case "local_shell_call": return .betaLocalShellToolCall(try BetaLocalShellToolCall(from: decoder))
-        default: return nil
+        case "message": try .betaOutputMessage(BetaOutputMessage(from: decoder))
+        case "file_search_call": try .betaFileSearchToolCall(BetaFileSearchToolCall(from: decoder))
+        case "function_call": try .betaFunctionToolCall(BetaFunctionToolCall(from: decoder))
+        case "function_call_output": try .betaFunctionToolCallOutputResource(
+                BetaFunctionToolCallOutputResource(from: decoder)
+            )
+        case "agent_message": try .betaAgentMessage(BetaAgentMessage(from: decoder))
+        case "multi_agent_call": try .betaMultiAgentCall(BetaMultiAgentCall(from: decoder))
+        case "multi_agent_call_output": try .betaMultiAgentCallOutput(BetaMultiAgentCallOutput(from: decoder))
+        case "web_search_call": try .betaWebSearchToolCall(BetaWebSearchToolCall(from: decoder))
+        case "computer_call": try .betaComputerToolCall(BetaComputerToolCall(from: decoder))
+        case "computer_call_output": try .betaComputerToolCallOutputResource(
+                BetaComputerToolCallOutputResource(from: decoder)
+            )
+        case "reasoning": try .betaReasoningItem(BetaReasoningItem(from: decoder))
+        case "program": try .betaProgram(BetaProgram(from: decoder))
+        case "program_output": try .betaProgramOutput(BetaProgramOutput(from: decoder))
+        case "tool_search_call": try .betaToolSearchCall(BetaToolSearchCall(from: decoder))
+        case "tool_search_output": try .betaToolSearchOutput(BetaToolSearchOutput(from: decoder))
+        case "additional_tools": try .betaAdditionalTools(BetaAdditionalTools(from: decoder))
+        case "compaction": try .betaCompactionBody(BetaCompactionBody(from: decoder))
+        case "image_generation_call": try .betaImageGenToolCall(BetaImageGenToolCall(from: decoder))
+        case "code_interpreter_call": try .betaCodeInterpreterToolCall(BetaCodeInterpreterToolCall(from: decoder))
+        case "local_shell_call": try .betaLocalShellToolCall(BetaLocalShellToolCall(from: decoder))
+        default: nil
         }
     }
 }
@@ -149,18 +165,22 @@ extension BetaOutputItem {
 extension BetaOutputItem {
     static func decodeGroup2(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "local_shell_call_output": return .betaLocalShellToolCallOutput(try BetaLocalShellToolCallOutput(from: decoder))
-        case "shell_call": return .betaFunctionShellCall(try BetaFunctionShellCall(from: decoder))
-        case "shell_call_output": return .betaFunctionShellCallOutput(try BetaFunctionShellCallOutput(from: decoder))
-        case "apply_patch_call": return .betaApplyPatchToolCall(try BetaApplyPatchToolCall(from: decoder))
-        case "apply_patch_call_output": return .betaApplyPatchToolCallOutput(try BetaApplyPatchToolCallOutput(from: decoder))
-        case "mcp_call": return .betaMcpToolCall(try BetaMCPToolCall(from: decoder))
-        case "mcp_list_tools": return .betaMcpListTools(try BetaMCPListTools(from: decoder))
-        case "mcp_approval_request": return .betaMcpApprovalRequest(try BetaMCPApprovalRequest(from: decoder))
-        case "mcp_approval_response": return .betaMcpApprovalResponseResource(try BetaMCPApprovalResponseResource(from: decoder))
-        case "custom_tool_call": return .betaCustomToolCall(try BetaCustomToolCall(from: decoder))
-        case "custom_tool_call_output": return .betaCustomToolCallOutputResource(try BetaCustomToolCallOutputResource(from: decoder))
-        default: return nil
+        case "local_shell_call_output": try .betaLocalShellToolCallOutput(BetaLocalShellToolCallOutput(from: decoder))
+        case "shell_call": try .betaFunctionShellCall(BetaFunctionShellCall(from: decoder))
+        case "shell_call_output": try .betaFunctionShellCallOutput(BetaFunctionShellCallOutput(from: decoder))
+        case "apply_patch_call": try .betaApplyPatchToolCall(BetaApplyPatchToolCall(from: decoder))
+        case "apply_patch_call_output": try .betaApplyPatchToolCallOutput(BetaApplyPatchToolCallOutput(from: decoder))
+        case "mcp_call": try .betaMcpToolCall(BetaMCPToolCall(from: decoder))
+        case "mcp_list_tools": try .betaMcpListTools(BetaMCPListTools(from: decoder))
+        case "mcp_approval_request": try .betaMcpApprovalRequest(BetaMCPApprovalRequest(from: decoder))
+        case "mcp_approval_response": try .betaMcpApprovalResponseResource(
+                BetaMCPApprovalResponseResource(from: decoder)
+            )
+        case "custom_tool_call": try .betaCustomToolCall(BetaCustomToolCall(from: decoder))
+        case "custom_tool_call_output": try .betaCustomToolCallOutputResource(
+                BetaCustomToolCallOutputResource(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -231,7 +251,6 @@ public indirect enum BetaOutputMessageContent {
 }
 
 extension BetaOutputMessageContent: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -239,12 +258,16 @@ extension BetaOutputMessageContent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -255,9 +278,9 @@ extension BetaOutputMessageContent: Codable {
 extension BetaOutputMessageContent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "output_text": return .betaOutputTextContent(try BetaOutputTextContent(from: decoder))
-        case "refusal": return .betaRefusalContent(try BetaRefusalContent(from: decoder))
-        default: return nil
+        case "output_text": try .betaOutputTextContent(BetaOutputTextContent(from: decoder))
+        case "refusal": try .betaRefusalContent(BetaRefusalContent(from: decoder))
+        default: nil
         }
     }
 }
@@ -282,7 +305,6 @@ public indirect enum BetaOutputTextContentParamAnnotationsItem {
 }
 
 extension BetaOutputTextContentParamAnnotationsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -290,12 +312,16 @@ extension BetaOutputTextContentParamAnnotationsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -306,10 +332,12 @@ extension BetaOutputTextContentParamAnnotationsItem: Codable {
 extension BetaOutputTextContentParamAnnotationsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file_citation": return .betaFileCitationParam(try BetaFileCitationParam(from: decoder))
-        case "url_citation": return .betaUrlCitationParam(try BetaUrlCitationParam(from: decoder))
-        case "container_file_citation": return .betaContainerFileCitationParam(try BetaContainerFileCitationParam(from: decoder))
-        default: return nil
+        case "file_citation": try .betaFileCitationParam(BetaFileCitationParam(from: decoder))
+        case "url_citation": try .betaUrlCitationParam(BetaUrlCitationParam(from: decoder))
+        case "container_file_citation": try .betaContainerFileCitationParam(
+                BetaContainerFileCitationParam(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -341,30 +369,44 @@ public struct BetaOutputTextContentParam: Codable {
         case annotations
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaOutputTextContentParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.annotations = try container.sdkDecodeIfPresent(.annotations)
-            try validateLength("text", self.text, min: nil, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaOutputTextContentParam {
-    public init(type: BetaOutputTextContentParamType, text: String, annotations: [BetaOutputTextContentParamAnnotationsItem]? = nil) throws {
+public extension BetaOutputTextContentParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        annotations = try container.sdkDecodeIfPresent(.annotations)
+        try validateLength("text", text, min: nil, max: 10_485_760)
+    }
+}
+
+public extension BetaOutputTextContentParam {
+    init(
+        type: BetaOutputTextContentParamType,
+        text: String,
+        annotations: [BetaOutputTextContentParamAnnotationsItem]? = nil
+    ) throws {
         (self.type, self.text) = (type, text)
         self.annotations = annotations
-            try validateLength("text", self.text, min: nil, max: 10485760)
+        try validateLength("text", self.text, min: nil, max: 10_485_760)
     }
 }
 
@@ -386,37 +428,55 @@ public struct BetaOutputTextContent: Codable {
         case logprobs
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaOutputTextContent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        guard container.contains(.annotations) else {
-            throw SdkValidationError(field: "annotations", code: "required", message: "Validation failed for 'annotations': value is required")
-        }
-        guard container.contains(.logprobs) else {
-            throw SdkValidationError(field: "logprobs", code: "required", message: "Validation failed for 'logprobs': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.annotations = try container.sdkDecodeRequired(.annotations)
-        self.logprobs = try container.sdkDecodeRequired(.logprobs)
-            try sdkValidateRawEnum("type", self.type, BetaOutputTextContentType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaOutputTextContent {
-    public init(type: BetaOutputTextContentType, text: String, annotations: [BetaAnnotation], logprobs: [BetaLogProb]) throws {
+public extension BetaOutputTextContent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        guard container.contains(.annotations) else {
+            throw SdkValidationError(
+                field: "annotations",
+                code: "required",
+                message: "Validation failed for 'annotations': value is required"
+            )
+        }
+        guard container.contains(.logprobs) else {
+            throw SdkValidationError(
+                field: "logprobs",
+                code: "required",
+                message: "Validation failed for 'logprobs': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        annotations = try container.sdkDecodeRequired(.annotations)
+        logprobs = try container.sdkDecodeRequired(.logprobs)
+        try sdkValidateRawEnum("type", type, BetaOutputTextContentType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaOutputTextContent {
+    init(type: BetaOutputTextContentType, text: String, annotations: [BetaAnnotation], logprobs: [BetaLogProb]) throws {
         (self.type, self.text) = (type, text)
         (self.annotations, self.logprobs) = (annotations, logprobs)
-            try sdkValidateRawEnum("type", self.type, BetaOutputTextContentType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaOutputTextContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -448,45 +508,75 @@ public struct BetaOutputMessage: Codable {
         case phase
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaOutputMessage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.role = try container.sdkDecodeRequired(.role)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.phase = try container.sdkDecodeIfPresent(.phase)
-            try sdkValidateRawEnum("type", self.type, BetaOutputMessageType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaOutputMessage {
-    public init(id: String, type: BetaOutputMessageType, role: BetaOutputMessageRole, content: [BetaOutputMessageContent], status: BetaOutputMessageStatus, agent: BetaAgentTag? = nil, phase: BetaMessagePhase? = nil) throws {
+public extension BetaOutputMessage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        role = try container.sdkDecodeRequired(.role)
+        content = try container.sdkDecodeRequired(.content)
+        status = try container.sdkDecodeRequired(.status)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        phase = try container.sdkDecodeIfPresent(.phase)
+        try sdkValidateRawEnum("type", type, BetaOutputMessageType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaOutputMessage {
+    init(
+        id: String,
+        type: BetaOutputMessageType,
+        role: BetaOutputMessageRole,
+        content: [BetaOutputMessageContent],
+        status: BetaOutputMessageStatus,
+        agent: BetaAgentTag? = nil,
+        phase: BetaMessagePhase? = nil
+    ) throws {
         (self.id, self.type) = (id, type)
         (self.role, self.content) = (role, content)
         (self.status, self.agent) = (status, agent)
         self.phase = phase
-            try sdkValidateRawEnum("type", self.type, BetaOutputMessageType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaOutputMessageType.allCases.map(\.rawValue))
     }
 }
 

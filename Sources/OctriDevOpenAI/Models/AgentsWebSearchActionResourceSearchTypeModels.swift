@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsWeb domain models
+/// AgentsWeb domain models
 /// The type of the object. Always `search`.
 public enum WebSearchActionResourceSearchType: String, CaseIterable, Codable {
     case search
@@ -26,14 +26,17 @@ public enum WebSearchActionResourceSearchType: String, CaseIterable, Codable {
 public struct WebSearchModeResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let disabled = WebSearchModeResource(rawValue: "disabled")
     public static let cached = WebSearchModeResource(rawValue: "cached")
     public static let live = WebSearchModeResource(rawValue: "live")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -82,14 +85,17 @@ public enum WebSearchActionResourceFindInPageType: String, CaseIterable, Codable
 public struct WebSearchContextSizeParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = WebSearchContextSizeParam(rawValue: "low")
     public static let medium = WebSearchContextSizeParam(rawValue: "medium")
     public static let high = WebSearchContextSizeParam(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

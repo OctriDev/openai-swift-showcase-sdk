@@ -3,19 +3,22 @@
 
 import Foundation
 
-// Realtime domain models
+/// Realtime domain models
 /// Type of noise reduction. `near_field` is for close-talking microphones such as headphones, `far_field` is
 /// for far-field microphones such as laptop or conference room microphones.
 public struct NoiseReductionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let nearField = NoiseReductionType(rawValue: "near_field")
     public static let farField = NoiseReductionType(rawValue: "far_field")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

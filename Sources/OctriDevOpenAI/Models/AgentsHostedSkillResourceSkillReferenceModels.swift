@@ -3,48 +3,74 @@
 
 import Foundation
 
-// AgentsHosted domain models
-extension HostedSkillResourceSkillReference {
-    public init(from decoder: Decoder) throws {
+/// AgentsHosted domain models
+public extension HostedSkillResourceSkillReference {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.skillId) else {
-            throw SdkValidationError(field: "skill_id", code: "required", message: "Validation failed for 'skill_id': value is required")
+            throw SdkValidationError(
+                field: "skill_id",
+                code: "required",
+                message: "Validation failed for 'skill_id': value is required"
+            )
         }
         guard container.contains(.version) else {
-            throw SdkValidationError(field: "version", code: "required", message: "Validation failed for 'version': value is required")
+            throw SdkValidationError(
+                field: "version",
+                code: "required",
+                message: "Validation failed for 'version': value is required"
+            )
         }
         guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
         }
         guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.skillId = try container.sdkDecodeRequired(.skillId)
-        self.version = try container.sdkDecodeRequired(.version)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeRequired(.description)
-            try sdkValidateRawEnum("type", self.type, HostedSkillResourceSkillReferenceType.allCases.map(\.rawValue))
-            try validateLength("skill_id", self.skillId, min: 0, max: nil)
-            try validateLength("version", self.version, min: 0, max: nil)
-            try validateLength("name", self.name, min: 0, max: nil)
-            try validateLength("description", self.description, min: 0, max: nil)
+        type = try container.sdkDecodeRequired(.type)
+        skillId = try container.sdkDecodeRequired(.skillId)
+        version = try container.sdkDecodeRequired(.version)
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeRequired(.description)
+        try sdkValidateRawEnum("type", type, HostedSkillResourceSkillReferenceType.allCases.map(\.rawValue))
+        try validateLength("skill_id", skillId, min: 0, max: nil)
+        try validateLength("version", version, min: 0, max: nil)
+        try validateLength("name", name, min: 0, max: nil)
+        try validateLength("description", description, min: 0, max: nil)
     }
 }
 
-extension HostedSkillResourceSkillReference {
-    public init(type: HostedSkillResourceSkillReferenceType, skillId: String, version: String, name: String, description: String) throws {
+public extension HostedSkillResourceSkillReference {
+    init(
+        type: HostedSkillResourceSkillReferenceType,
+        skillId: String,
+        version: String,
+        name: String,
+        description: String
+    ) throws {
         (self.type, self.skillId) = (type, skillId)
         (self.version, self.name) = (version, name)
         self.description = description
-            try sdkValidateRawEnum("type", self.type, HostedSkillResourceSkillReferenceType.allCases.map(\.rawValue))
-            try validateLength("skill_id", self.skillId, min: 0, max: nil)
-            try validateLength("version", self.version, min: 0, max: nil)
-            try validateLength("name", self.name, min: 0, max: nil)
-            try validateLength("description", self.description, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, HostedSkillResourceSkillReferenceType.allCases.map(\.rawValue))
+        try validateLength("skill_id", self.skillId, min: 0, max: nil)
+        try validateLength("version", self.version, min: 0, max: nil)
+        try validateLength("name", self.name, min: 0, max: nil)
+        try validateLength("description", self.description, min: 0, max: nil)
     }
 }
 
@@ -63,37 +89,51 @@ public struct HostedEnvironmentFileParamInline: Codable {
         case path
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension HostedEnvironmentFileParamInline {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.path) else {
-            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.path = try container.sdkDecodeRequired(.path)
-            try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileParamInlineType.allCases.map(\.rawValue))
-            try validateLength("data", self.data, min: 0, max: 6990508)
-            try validateLength("path", self.path, min: 1, max: 4096)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension HostedEnvironmentFileParamInline {
-    public init(type: HostedEnvironmentFileParamInlineType, data: String, path: String) throws {
+public extension HostedEnvironmentFileParamInline {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.path) else {
+            throw SdkValidationError(
+                field: "path",
+                code: "required",
+                message: "Validation failed for 'path': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        data = try container.sdkDecodeRequired(.data)
+        path = try container.sdkDecodeRequired(.path)
+        try sdkValidateRawEnum("type", type, HostedEnvironmentFileParamInlineType.allCases.map(\.rawValue))
+        try validateLength("data", data, min: 0, max: 6_990_508)
+        try validateLength("path", path, min: 1, max: 4096)
+    }
+}
+
+public extension HostedEnvironmentFileParamInline {
+    init(type: HostedEnvironmentFileParamInlineType, data: String, path: String) throws {
         (self.type, self.data) = (type, data)
         self.path = path
-            try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileParamInlineType.allCases.map(\.rawValue))
-            try validateLength("data", self.data, min: 0, max: 6990508)
-            try validateLength("path", self.path, min: 1, max: 4096)
+        try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileParamInlineType.allCases.map(\.rawValue))
+        try validateLength("data", self.data, min: 0, max: 6_990_508)
+        try validateLength("path", self.path, min: 1, max: 4096)
     }
 }
 
@@ -112,37 +152,51 @@ public struct HostedTemplateFileResourceFileId: Codable {
         case path
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension HostedTemplateFileResourceFileId {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.fileId) else {
-            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
-        }
-        guard container.contains(.path) else {
-            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.fileId = try container.sdkDecodeRequired(.fileId)
-        self.path = try container.sdkDecodeRequired(.path)
-            try sdkValidateRawEnum("type", self.type, HostedTemplateFileResourceFileIdType.allCases.map(\.rawValue))
-            try validateLength("file_id", self.fileId, min: 0, max: nil)
-            try validateLength("path", self.path, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension HostedTemplateFileResourceFileId {
-    public init(type: HostedTemplateFileResourceFileIdType, fileId: String, path: String) throws {
+public extension HostedTemplateFileResourceFileId {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.fileId) else {
+            throw SdkValidationError(
+                field: "file_id",
+                code: "required",
+                message: "Validation failed for 'file_id': value is required"
+            )
+        }
+        guard container.contains(.path) else {
+            throw SdkValidationError(
+                field: "path",
+                code: "required",
+                message: "Validation failed for 'path': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        fileId = try container.sdkDecodeRequired(.fileId)
+        path = try container.sdkDecodeRequired(.path)
+        try sdkValidateRawEnum("type", type, HostedTemplateFileResourceFileIdType.allCases.map(\.rawValue))
+        try validateLength("file_id", fileId, min: 0, max: nil)
+        try validateLength("path", path, min: 0, max: nil)
+    }
+}
+
+public extension HostedTemplateFileResourceFileId {
+    init(type: HostedTemplateFileResourceFileIdType, fileId: String, path: String) throws {
         (self.type, self.fileId) = (type, fileId)
         self.path = path
-            try sdkValidateRawEnum("type", self.type, HostedTemplateFileResourceFileIdType.allCases.map(\.rawValue))
-            try validateLength("file_id", self.fileId, min: 0, max: nil)
-            try validateLength("path", self.path, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, HostedTemplateFileResourceFileIdType.allCases.map(\.rawValue))
+        try validateLength("file_id", self.fileId, min: 0, max: nil)
+        try validateLength("path", self.path, min: 0, max: nil)
     }
 }
 
@@ -161,37 +215,51 @@ public struct HostedSkillResourceInline: Codable {
         case description
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension HostedSkillResourceInline {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeRequired(.description)
-            try sdkValidateRawEnum("type", self.type, HostedSkillResourceInlineType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 0, max: nil)
-            try validateLength("description", self.description, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension HostedSkillResourceInline {
-    public init(type: HostedSkillResourceInlineType, name: String, description: String) throws {
+public extension HostedSkillResourceInline {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeRequired(.description)
+        try sdkValidateRawEnum("type", type, HostedSkillResourceInlineType.allCases.map(\.rawValue))
+        try validateLength("name", name, min: 0, max: nil)
+        try validateLength("description", description, min: 0, max: nil)
+    }
+}
+
+public extension HostedSkillResourceInline {
+    init(type: HostedSkillResourceInlineType, name: String, description: String) throws {
         (self.type, self.name) = (type, name)
         self.description = description
-            try sdkValidateRawEnum("type", self.type, HostedSkillResourceInlineType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 0, max: nil)
-            try validateLength("description", self.description, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, HostedSkillResourceInlineType.allCases.map(\.rawValue))
+        try validateLength("name", self.name, min: 0, max: nil)
+        try validateLength("description", self.description, min: 0, max: nil)
     }
 }
 
@@ -210,37 +278,51 @@ public struct HostedPluginResourceInline: Codable {
         case description
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension HostedPluginResourceInline {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeRequired(.description)
-            try sdkValidateRawEnum("type", self.type, HostedPluginResourceInlineType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 0, max: nil)
-            try validateLength("description", self.description, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension HostedPluginResourceInline {
-    public init(type: HostedPluginResourceInlineType, name: String, description: String) throws {
+public extension HostedPluginResourceInline {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeRequired(.description)
+        try sdkValidateRawEnum("type", type, HostedPluginResourceInlineType.allCases.map(\.rawValue))
+        try validateLength("name", name, min: 0, max: nil)
+        try validateLength("description", description, min: 0, max: nil)
+    }
+}
+
+public extension HostedPluginResourceInline {
+    init(type: HostedPluginResourceInlineType, name: String, description: String) throws {
         (self.type, self.name) = (type, name)
         self.description = description
-            try sdkValidateRawEnum("type", self.type, HostedPluginResourceInlineType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 0, max: nil)
-            try validateLength("description", self.description, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, HostedPluginResourceInlineType.allCases.map(\.rawValue))
+        try validateLength("name", self.name, min: 0, max: nil)
+        try validateLength("description", self.description, min: 0, max: nil)
     }
 }
 
@@ -259,37 +341,67 @@ public struct HostedTemplateFileResourceInline: Codable {
         case sizeBytes = "size_bytes"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension HostedTemplateFileResourceInline {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.path) else {
-            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
-        }
-        guard container.contains(.sizeBytes) else {
-            throw SdkValidationError(field: "size_bytes", code: "required", message: "Validation failed for 'size_bytes': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.path = try container.sdkDecodeRequired(.path)
-        self.sizeBytes = try container.sdkDecodeRequired(.sizeBytes)
-            try sdkValidateRawEnum("type", self.type, HostedTemplateFileResourceInlineType.allCases.map(\.rawValue))
-            try validateLength("path", self.path, min: 0, max: nil)
-            try validateRange("size_bytes", Double(self.sizeBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension HostedTemplateFileResourceInline {
-    public init(type: HostedTemplateFileResourceInlineType, path: String, sizeBytes: Int) throws {
+public extension HostedTemplateFileResourceInline {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.path) else {
+            throw SdkValidationError(
+                field: "path",
+                code: "required",
+                message: "Validation failed for 'path': value is required"
+            )
+        }
+        guard container.contains(.sizeBytes) else {
+            throw SdkValidationError(
+                field: "size_bytes",
+                code: "required",
+                message: "Validation failed for 'size_bytes': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        path = try container.sdkDecodeRequired(.path)
+        sizeBytes = try container.sdkDecodeRequired(.sizeBytes)
+        try sdkValidateRawEnum("type", type, HostedTemplateFileResourceInlineType.allCases.map(\.rawValue))
+        try validateLength("path", path, min: 0, max: nil)
+        try validateRange(
+            "size_bytes",
+            Double(sizeBytes),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension HostedTemplateFileResourceInline {
+    init(type: HostedTemplateFileResourceInlineType, path: String, sizeBytes: Int) throws {
         (self.type, self.path) = (type, path)
         self.sizeBytes = sizeBytes
-            try sdkValidateRawEnum("type", self.type, HostedTemplateFileResourceInlineType.allCases.map(\.rawValue))
-            try validateLength("path", self.path, min: 0, max: nil)
-            try validateRange("size_bytes", Double(self.sizeBytes), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try sdkValidateRawEnum("type", self.type, HostedTemplateFileResourceInlineType.allCases.map(\.rawValue))
+        try validateLength("path", self.path, min: 0, max: nil)
+        try validateRange(
+            "size_bytes",
+            Double(self.sizeBytes),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -308,37 +420,51 @@ public struct HostedEnvironmentFileParamFileId: Codable {
         case path
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension HostedEnvironmentFileParamFileId {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.fileId) else {
-            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
-        }
-        guard container.contains(.path) else {
-            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.fileId = try container.sdkDecodeRequired(.fileId)
-        self.path = try container.sdkDecodeRequired(.path)
-            try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileParamFileIdType.allCases.map(\.rawValue))
-            try validateLength("file_id", self.fileId, min: 1, max: 256)
-            try validateLength("path", self.path, min: 1, max: 4096)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension HostedEnvironmentFileParamFileId {
-    public init(type: HostedEnvironmentFileParamFileIdType, fileId: String, path: String) throws {
+public extension HostedEnvironmentFileParamFileId {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.fileId) else {
+            throw SdkValidationError(
+                field: "file_id",
+                code: "required",
+                message: "Validation failed for 'file_id': value is required"
+            )
+        }
+        guard container.contains(.path) else {
+            throw SdkValidationError(
+                field: "path",
+                code: "required",
+                message: "Validation failed for 'path': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        fileId = try container.sdkDecodeRequired(.fileId)
+        path = try container.sdkDecodeRequired(.path)
+        try sdkValidateRawEnum("type", type, HostedEnvironmentFileParamFileIdType.allCases.map(\.rawValue))
+        try validateLength("file_id", fileId, min: 1, max: 256)
+        try validateLength("path", path, min: 1, max: 4096)
+    }
+}
+
+public extension HostedEnvironmentFileParamFileId {
+    init(type: HostedEnvironmentFileParamFileIdType, fileId: String, path: String) throws {
         (self.type, self.fileId) = (type, fileId)
         self.path = path
-            try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileParamFileIdType.allCases.map(\.rawValue))
-            try validateLength("file_id", self.fileId, min: 1, max: 256)
-            try validateLength("path", self.path, min: 1, max: 4096)
+        try sdkValidateRawEnum("type", self.type, HostedEnvironmentFileParamFileIdType.allCases.map(\.rawValue))
+        try validateLength("file_id", self.fileId, min: 1, max: 256)
+        try validateLength("path", self.path, min: 1, max: 4096)
     }
 }
 
@@ -360,41 +486,64 @@ public struct HostedSkillParamInline: Codable {
         case source
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension HostedSkillParamInline {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        guard container.contains(.source) else {
-            throw SdkValidationError(field: "source", code: "required", message: "Validation failed for 'source': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeRequired(.description)
-        self.source = try container.sdkDecodeRequired(.source)
-            try sdkValidateRawEnum("type", self.type, HostedSkillParamInlineType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 1, max: 64)
-            try validateLength("description", self.description, min: 0, max: 1048576)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension HostedSkillParamInline {
-    public init(type: HostedSkillParamInlineType, name: String, description: String, source: InlineCapabilitySourceParam) throws {
+public extension HostedSkillParamInline {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        guard container.contains(.source) else {
+            throw SdkValidationError(
+                field: "source",
+                code: "required",
+                message: "Validation failed for 'source': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeRequired(.description)
+        source = try container.sdkDecodeRequired(.source)
+        try sdkValidateRawEnum("type", type, HostedSkillParamInlineType.allCases.map(\.rawValue))
+        try validateLength("name", name, min: 1, max: 64)
+        try validateLength("description", description, min: 0, max: 1_048_576)
+    }
+}
+
+public extension HostedSkillParamInline {
+    init(
+        type: HostedSkillParamInlineType,
+        name: String,
+        description: String,
+        source: InlineCapabilitySourceParam
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.description, self.source) = (description, source)
-            try sdkValidateRawEnum("type", self.type, HostedSkillParamInlineType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 1, max: 64)
-            try validateLength("description", self.description, min: 0, max: 1048576)
+        try sdkValidateRawEnum("type", self.type, HostedSkillParamInlineType.allCases.map(\.rawValue))
+        try validateLength("name", self.name, min: 1, max: 64)
+        try validateLength("description", self.description, min: 0, max: 1_048_576)
     }
 }
 
@@ -416,40 +565,63 @@ public struct HostedPluginParamInline: Codable {
         case source
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension HostedPluginParamInline {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.description) else {
-            throw SdkValidationError(field: "description", code: "required", message: "Validation failed for 'description': value is required")
-        }
-        guard container.contains(.source) else {
-            throw SdkValidationError(field: "source", code: "required", message: "Validation failed for 'source': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.description = try container.sdkDecodeRequired(.description)
-        self.source = try container.sdkDecodeRequired(.source)
-            try sdkValidateRawEnum("type", self.type, HostedPluginParamInlineType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 1, max: 64)
-            try validateLength("description", self.description, min: 0, max: 1048576)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension HostedPluginParamInline {
-    public init(type: HostedPluginParamInlineType, name: String, description: String, source: InlineCapabilitySourceParam) throws {
+public extension HostedPluginParamInline {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.description) else {
+            throw SdkValidationError(
+                field: "description",
+                code: "required",
+                message: "Validation failed for 'description': value is required"
+            )
+        }
+        guard container.contains(.source) else {
+            throw SdkValidationError(
+                field: "source",
+                code: "required",
+                message: "Validation failed for 'source': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        description = try container.sdkDecodeRequired(.description)
+        source = try container.sdkDecodeRequired(.source)
+        try sdkValidateRawEnum("type", type, HostedPluginParamInlineType.allCases.map(\.rawValue))
+        try validateLength("name", name, min: 1, max: 64)
+        try validateLength("description", description, min: 0, max: 1_048_576)
+    }
+}
+
+public extension HostedPluginParamInline {
+    init(
+        type: HostedPluginParamInlineType,
+        name: String,
+        description: String,
+        source: InlineCapabilitySourceParam
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.description, self.source) = (description, source)
-            try sdkValidateRawEnum("type", self.type, HostedPluginParamInlineType.allCases.map(\.rawValue))
-            try validateLength("name", self.name, min: 1, max: 64)
-            try validateLength("description", self.description, min: 0, max: 1048576)
+        try sdkValidateRawEnum("type", self.type, HostedPluginParamInlineType.allCases.map(\.rawValue))
+        try validateLength("name", self.name, min: 1, max: 64)
+        try validateLength("description", self.description, min: 0, max: 1_048_576)
     }
 }

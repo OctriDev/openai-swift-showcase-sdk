@@ -6,8 +6,10 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AudioMethods {
-    /// Generates audio from text using a selected text-to-speech model and voice. Provide `model`, `input`, and `voice`, then choose an output format or streaming mode as needed. The response contains audio data or streamed audio events.
+public extension AudioMethods {
+    /// Generates audio from text using a selected text-to-speech model and voice. Provide `model`, `input`, and
+    /// `voice`, then choose an output format or streaming mode as needed. The response contains audio data or streamed
+    /// audio events.
     ///
     /// Generates audio from the input text. Returns the audio file content, or a stream of audio events.
     ///
@@ -32,19 +34,52 @@ extension AudioMethods {
     ///   `4.0`. `1.0` is the default.
     /// - streamFormat: The format to stream the audio in. Supported formats are
     ///   `sse` and `audio`. `sse` is not supported for `tts-1` or `tts-1-hd`.
-    public static func createSpeech(config: ClientConfig, model: String, input: String, voice: CreateSpeechRequestVoice, instructions: String? = nil, responseFormat: CreateSpeechRequestResponseFormat? = nil, speed: Double? = nil, streamFormat: CreateSpeechRequestStreamFormat? = nil, requestOptions: RequestOptions? = nil) async throws -> Data {
+    static func createSpeech(
+        config: ClientConfig,
+        model: String,
+        input: String,
+        voice: CreateSpeechRequestVoice,
+        instructions: String? = nil,
+        responseFormat: CreateSpeechRequestResponseFormat? = nil,
+        speed: Double? = nil,
+        streamFormat: CreateSpeechRequestStreamFormat? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Data {
         try validateLength("input", input, max: 4096)
 
-        if let instructions = instructions {
+        if let instructions {
             try validateLength("instructions", instructions, max: 4096)
         }
 
-        if let speed = speed {
+        if let speed {
             try validateRange("speed", Double(speed), min: 0.25, max: 4)
         }
 
-        let requestBody = CreateSpeechRequestBody(model: model, input: input, voice: voice, instructions: instructions, responseFormat: responseFormat, speed: speed, streamFormat: streamFormat)
+        let requestBody = CreateSpeechRequestBody(
+            model: model,
+            input: input,
+            voice: voice,
+            instructions: instructions,
+            responseFormat: responseFormat,
+            speed: speed,
+            streamFormat: streamFormat
+        )
 
-        return try (await sdkRequest("POST", "/audio/speech", config: config, body: requestBody, decoder: .bytes, operationId: "createSpeech", options: requestOptions, errors: ["400": ErrorResponse.self, "401": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "503": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/audio/speech",
+            config: config,
+            body: requestBody,
+            decoder: .bytes,
+            operationId: "createSpeech",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "401": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
+        )).data
     }
 }

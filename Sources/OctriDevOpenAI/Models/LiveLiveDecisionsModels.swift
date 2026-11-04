@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveDecisions domain models
+/// LiveLiveDecisions domain models
 /// Typed representation of the `LiveDecisionsSettingsUpdateParam` API schema.
 public struct LiveDecisionsSettingsUpdateParam: Codable {
     /// Optional `string` value serialized in the `model` wire field.
@@ -17,26 +17,26 @@ public struct LiveDecisionsSettingsUpdateParam: Codable {
     }
 
     init() {
-        (self.model, self.questions) = (nil, nil)
+        (model, questions) = (nil, nil)
     }
 }
 
-extension LiveDecisionsSettingsUpdateParam {
-    public init(from decoder: Decoder) throws {
+public extension LiveDecisionsSettingsUpdateParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.model = try container.sdkDecodeIfPresent(.model)
-        self.questions = try container.sdkDecodeIfPresent(.questions)
-        if let value = self.model {
+        model = try container.sdkDecodeIfPresent(.model)
+        questions = try container.sdkDecodeIfPresent(.questions)
+        if let value = model {
             try validateLength("model", value, min: 1, max: nil)
         }
-        if let value = self.questions {
+        if let value = questions {
             try validateItems("questions", value, min: 1, max: 64)
         }
     }
 }
 
-extension LiveDecisionsSettingsUpdateParam {
-    public init(model: String? = nil, questions: [QuestionParam]? = nil) throws {
+public extension LiveDecisionsSettingsUpdateParam {
+    init(model: String? = nil, questions: [QuestionParam]? = nil) throws {
         self.init()
         (self.model, self.questions) = (model, questions)
         if let value = self.model {
@@ -60,28 +60,38 @@ public struct LiveDecisionsDelegationParam2: Codable {
         case decisions
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDecisionsDelegationParam2 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.decisions) else {
-            throw SdkValidationError(field: "decisions", code: "required", message: "Validation failed for 'decisions': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.decisions = try container.sdkDecodeRequired(.decisions)
-            try sdkValidateRawEnum("type", self.type, LiveDecisionsDelegationParam2Type.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDecisionsDelegationParam2 {
-    public init(type: LiveDecisionsDelegationParam2Type, decisions: LiveDecisionsSettingsInputParam2) throws {
+public extension LiveDecisionsDelegationParam2 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.decisions) else {
+            throw SdkValidationError(
+                field: "decisions",
+                code: "required",
+                message: "Validation failed for 'decisions': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        decisions = try container.sdkDecodeRequired(.decisions)
+        try sdkValidateRawEnum("type", type, LiveDecisionsDelegationParam2Type.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveDecisionsDelegationParam2 {
+    init(type: LiveDecisionsDelegationParam2Type, decisions: LiveDecisionsSettingsInputParam2) throws {
         (self.type, self.decisions) = (type, decisions)
-            try sdkValidateRawEnum("type", self.type, LiveDecisionsDelegationParam2Type.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveDecisionsDelegationParam2Type.allCases.map(\.rawValue))
     }
 }
 
@@ -97,30 +107,40 @@ public struct LiveDecisionsSettingsInputParam: Codable {
         case model
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDecisionsSettingsInputParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.questions) else {
-            throw SdkValidationError(field: "questions", code: "required", message: "Validation failed for 'questions': value is required")
-        }
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        self.questions = try container.sdkDecodeRequired(.questions)
-        self.model = try container.sdkDecodeRequired(.model)
-            try validateItems("questions", self.questions, min: 1, max: 64)
-            try validateLength("model", self.model, min: 1, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDecisionsSettingsInputParam {
-    public init(questions: [LiveDecisionQuestion], model: String) throws {
+public extension LiveDecisionsSettingsInputParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.questions) else {
+            throw SdkValidationError(
+                field: "questions",
+                code: "required",
+                message: "Validation failed for 'questions': value is required"
+            )
+        }
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        questions = try container.sdkDecodeRequired(.questions)
+        model = try container.sdkDecodeRequired(.model)
+        try validateItems("questions", questions, min: 1, max: 64)
+        try validateLength("model", model, min: 1, max: nil)
+    }
+}
+
+public extension LiveDecisionsSettingsInputParam {
+    init(questions: [LiveDecisionQuestion], model: String) throws {
         (self.questions, self.model) = (questions, model)
-            try validateItems("questions", self.questions, min: 1, max: 64)
-            try validateLength("model", self.model, min: 1, max: nil)
+        try validateItems("questions", self.questions, min: 1, max: 64)
+        try validateLength("model", self.model, min: 1, max: nil)
     }
 }
 
@@ -136,25 +156,31 @@ public struct LiveDecisionsDelegationUpdateParam: Codable {
         case decisions
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDecisionsDelegationUpdateParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.decisions = try container.sdkDecodeIfPresent(.decisions)
-            try sdkValidateRawEnum("type", self.type, LiveDecisionsDelegationUpdateParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDecisionsDelegationUpdateParam {
-    public init(type: LiveDecisionsDelegationUpdateParamType, decisions: LiveDecisionsSettingsUpdateParam? = nil) throws {
+public extension LiveDecisionsDelegationUpdateParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        decisions = try container.sdkDecodeIfPresent(.decisions)
+        try sdkValidateRawEnum("type", type, LiveDecisionsDelegationUpdateParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveDecisionsDelegationUpdateParam {
+    init(type: LiveDecisionsDelegationUpdateParamType, decisions: LiveDecisionsSettingsUpdateParam? = nil) throws {
         (self.type, self.decisions) = (type, decisions)
-            try sdkValidateRawEnum("type", self.type, LiveDecisionsDelegationUpdateParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveDecisionsDelegationUpdateParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -170,28 +196,38 @@ public struct LiveDecisionsDelegationParam: Codable {
         case decisions
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDecisionsDelegationParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.decisions) else {
-            throw SdkValidationError(field: "decisions", code: "required", message: "Validation failed for 'decisions': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.decisions = try container.sdkDecodeRequired(.decisions)
-            try sdkValidateRawEnum("type", self.type, LiveDecisionsDelegationParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDecisionsDelegationParam {
-    public init(type: LiveDecisionsDelegationParamType, decisions: LiveDecisionsSettingsInputParam) throws {
+public extension LiveDecisionsDelegationParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.decisions) else {
+            throw SdkValidationError(
+                field: "decisions",
+                code: "required",
+                message: "Validation failed for 'decisions': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        decisions = try container.sdkDecodeRequired(.decisions)
+        try sdkValidateRawEnum("type", type, LiveDecisionsDelegationParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveDecisionsDelegationParam {
+    init(type: LiveDecisionsDelegationParamType, decisions: LiveDecisionsSettingsInputParam) throws {
         (self.type, self.decisions) = (type, decisions)
-            try sdkValidateRawEnum("type", self.type, LiveDecisionsDelegationParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveDecisionsDelegationParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -207,30 +243,40 @@ public struct LiveDecisionsSettingsInputParam2: Codable {
         case model
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDecisionsSettingsInputParam2 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.questions) else {
-            throw SdkValidationError(field: "questions", code: "required", message: "Validation failed for 'questions': value is required")
-        }
-        guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
-        }
-        self.questions = try container.sdkDecodeRequired(.questions)
-        self.model = try container.sdkDecodeRequired(.model)
-            try validateItems("questions", self.questions, min: 1, max: 64)
-            try validateLength("model", self.model, min: 1, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDecisionsSettingsInputParam2 {
-    public init(questions: [QuestionParam], model: String) throws {
+public extension LiveDecisionsSettingsInputParam2 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.questions) else {
+            throw SdkValidationError(
+                field: "questions",
+                code: "required",
+                message: "Validation failed for 'questions': value is required"
+            )
+        }
+        guard container.contains(.model) else {
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
+        }
+        questions = try container.sdkDecodeRequired(.questions)
+        model = try container.sdkDecodeRequired(.model)
+        try validateItems("questions", questions, min: 1, max: 64)
+        try validateLength("model", model, min: 1, max: nil)
+    }
+}
+
+public extension LiveDecisionsSettingsInputParam2 {
+    init(questions: [QuestionParam], model: String) throws {
         (self.questions, self.model) = (questions, model)
-            try validateItems("questions", self.questions, min: 1, max: 64)
-            try validateLength("model", self.model, min: 1, max: nil)
+        try validateItems("questions", self.questions, min: 1, max: 64)
+        try validateLength("model", self.model, min: 1, max: nil)
     }
 }
 

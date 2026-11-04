@@ -9,7 +9,10 @@ import Foundation
 public struct UsageFileSearchCallsParameterItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let projectId = UsageFileSearchCallsParameterItem(rawValue: "project_id")
     public static let userId = UsageFileSearchCallsParameterItem(rawValue: "user_id")
     public static let apiKeyId = UsageFileSearchCallsParameterItem(rawValue: "api_key_id")
@@ -17,7 +20,7 @@ public struct UsageFileSearchCallsParameterItem: RawRepresentable, Hashable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -29,12 +32,15 @@ public struct UsageFileSearchCallsParameterItem: RawRepresentable, Hashable, Cod
 public struct BetaGetResponseParameterItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let responsesMultiAgentV1 = BetaGetResponseParameterItem(rawValue: "responses_multi_agent=v1")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -47,13 +53,16 @@ public struct BetaGetResponseParameterItem: RawRepresentable, Hashable, Codable,
 public struct ListAdminApiKeysParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListAdminApiKeysParameter(rawValue: "asc")
     public static let desc = ListAdminApiKeysParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -62,10 +71,14 @@ public struct ListAdminApiKeysParameter: RawRepresentable, Hashable, Codable, Se
     }
 }
 
-public struct ListVectorStoreFilesParameterX63027327: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ListVectorStoreFilesParameterX63027327: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = ListVectorStoreFilesParameterX63027327(rawValue: "in_progress")
     public static let completed = ListVectorStoreFilesParameterX63027327(rawValue: "completed")
     public static let failed = ListVectorStoreFilesParameterX63027327(rawValue: "failed")
@@ -73,7 +86,7 @@ public struct ListVectorStoreFilesParameterX63027327: RawRepresentable, Hashable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -85,13 +98,16 @@ public struct ListVectorStoreFilesParameterX63027327: RawRepresentable, Hashable
 public struct ListCertificatesForProjectParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListCertificatesForProjectParameter(rawValue: "asc")
     public static let desc = ListCertificatesForProjectParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -115,31 +131,31 @@ struct CreateAssistantRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.description, forKey: SdkCodingKey("description"))
-        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(self.reasoningEffort, forKey: SdkCodingKey("reasoning_effort"))
-        try keyedContainer.encodeIfPresent(self.tools, forKey: SdkCodingKey("tools"))
-        try keyedContainer.encodeIfPresent(self.toolResources, forKey: SdkCodingKey("tool_resources"))
-        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
-        try keyedContainer.encodeIfPresent(self.temperature, forKey: SdkCodingKey("temperature"))
-        try keyedContainer.encodeIfPresent(self.topP, forKey: SdkCodingKey("top_p"))
-        try keyedContainer.encodeIfPresent(self.responseFormat, forKey: SdkCodingKey("response_format"))
+        try keyedContainer.encode(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(description, forKey: SdkCodingKey("description"))
+        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(reasoningEffort, forKey: SdkCodingKey("reasoning_effort"))
+        try keyedContainer.encodeIfPresent(tools, forKey: SdkCodingKey("tools"))
+        try keyedContainer.encodeIfPresent(toolResources, forKey: SdkCodingKey("tool_resources"))
+        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(temperature, forKey: SdkCodingKey("temperature"))
+        try keyedContainer.encodeIfPresent(topP, forKey: SdkCodingKey("top_p"))
+        try keyedContainer.encodeIfPresent(responseFormat, forKey: SdkCodingKey("response_format"))
     }
 
     init(options: AssistantsMethods.CreateAssistantOptions) {
-        self.model = options.model
-        self.name = options.name
-        self.description = options.description
-        self.instructions = options.instructions
-        self.reasoningEffort = options.reasoningEffort
-        self.tools = options.tools
-        self.toolResources = options.toolResources
-        self.metadata = options.metadata
-        self.temperature = options.temperature
-        self.topP = options.topP
-        self.responseFormat = options.responseFormat
+        model = options.model
+        name = options.name
+        description = options.description
+        instructions = options.instructions
+        reasoningEffort = options.reasoningEffort
+        tools = options.tools
+        toolResources = options.toolResources
+        metadata = options.metadata
+        temperature = options.temperature
+        topP = options.topP
+        responseFormat = options.responseFormat
     }
 }
 
@@ -158,31 +174,31 @@ struct ModifyAssistantRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(self.reasoningEffort, forKey: SdkCodingKey("reasoning_effort"))
-        try keyedContainer.encodeIfPresent(self.name, forKey: SdkCodingKey("name"))
-        try keyedContainer.encodeIfPresent(self.description, forKey: SdkCodingKey("description"))
-        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(self.tools, forKey: SdkCodingKey("tools"))
-        try keyedContainer.encodeIfPresent(self.toolResources, forKey: SdkCodingKey("tool_resources"))
-        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
-        try keyedContainer.encodeIfPresent(self.temperature, forKey: SdkCodingKey("temperature"))
-        try keyedContainer.encodeIfPresent(self.topP, forKey: SdkCodingKey("top_p"))
-        try keyedContainer.encodeIfPresent(self.responseFormat, forKey: SdkCodingKey("response_format"))
+        try keyedContainer.encodeIfPresent(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(reasoningEffort, forKey: SdkCodingKey("reasoning_effort"))
+        try keyedContainer.encodeIfPresent(name, forKey: SdkCodingKey("name"))
+        try keyedContainer.encodeIfPresent(description, forKey: SdkCodingKey("description"))
+        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(tools, forKey: SdkCodingKey("tools"))
+        try keyedContainer.encodeIfPresent(toolResources, forKey: SdkCodingKey("tool_resources"))
+        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(temperature, forKey: SdkCodingKey("temperature"))
+        try keyedContainer.encodeIfPresent(topP, forKey: SdkCodingKey("top_p"))
+        try keyedContainer.encodeIfPresent(responseFormat, forKey: SdkCodingKey("response_format"))
     }
 
     init(options: AssistantsMethods.ModifyAssistantOptions) {
-        self.model = options.model
-        self.reasoningEffort = options.reasoningEffort
-        self.name = options.name
-        self.description = options.description
-        self.instructions = options.instructions
-        self.tools = options.tools
-        self.toolResources = options.toolResources
-        self.metadata = options.metadata
-        self.temperature = options.temperature
-        self.topP = options.topP
-        self.responseFormat = options.responseFormat
+        model = options.model
+        reasoningEffort = options.reasoningEffort
+        name = options.name
+        description = options.description
+        instructions = options.instructions
+        tools = options.tools
+        toolResources = options.toolResources
+        metadata = options.metadata
+        temperature = options.temperature
+        topP = options.topP
+        responseFormat = options.responseFormat
     }
 }
 
@@ -193,8 +209,8 @@ struct CreateThreadRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.messages, forKey: SdkCodingKey("messages"))
-        try keyedContainer.encodeIfPresent(self.toolResources, forKey: SdkCodingKey("tool_resources"))
-        try keyedContainer.encodeIfPresent(self.metadata, forKey: SdkCodingKey("metadata"))
+        try keyedContainer.encodeIfPresent(messages, forKey: SdkCodingKey("messages"))
+        try keyedContainer.encodeIfPresent(toolResources, forKey: SdkCodingKey("tool_resources"))
+        try keyedContainer.encodeIfPresent(metadata, forKey: SdkCodingKey("metadata"))
     }
 }

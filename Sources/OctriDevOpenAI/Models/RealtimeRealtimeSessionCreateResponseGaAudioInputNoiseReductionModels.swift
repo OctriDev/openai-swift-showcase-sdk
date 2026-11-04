@@ -3,24 +3,28 @@
 
 import Foundation
 
-// RealtimeRealtimeSession domain models
-extension RealtimeSessionCreateResponseGAAudioInputNoiseReduction {
-    public init(type: NoiseReductionType? = nil) {
+/// RealtimeRealtimeSession domain models
+public extension RealtimeSessionCreateResponseGAAudioInputNoiseReduction {
+    init(type: NoiseReductionType? = nil) {
         self.init()
         self.type = type
     }
 }
 
 /// Optional enumerated value serialized in the `max_output_tokens` wire field.
-public struct RealtimeSessionCreateResponseGAMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeSessionCreateResponseGAMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inf = RealtimeSessionCreateResponseGAMaxOutputTokensVariant1(rawValue: "inf")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -33,12 +37,15 @@ public struct RealtimeSessionCreateResponseGAMaxOutputTokensVariant1: RawReprese
 public struct RealtimeSessionCreateResponseGAObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let realtimeSession = RealtimeSessionCreateResponseGAObject(rawValue: "realtime.session")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -48,15 +55,19 @@ public struct RealtimeSessionCreateResponseGAObject: RawRepresentable, Hashable,
 }
 
 /// Enables tracing and sets default values for tracing configuration options. Always `auto`.
-public struct RealtimeSessionCreateResponseGATracingVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeSessionCreateResponseGATracingVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = RealtimeSessionCreateResponseGATracingVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -84,16 +95,20 @@ public enum RealtimeSessionCreateResponseGAType: String, CaseIterable, Codable {
 }
 
 /// Required enumerated value serialized in the `output_modalities[]` wire field.
-public struct RealtimeSessionCreateResponseGAOutputModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeSessionCreateResponseGAOutputModalitiesItem: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let text = RealtimeSessionCreateResponseGAOutputModalitiesItem(rawValue: "text")
     public static let audio = RealtimeSessionCreateResponseGAOutputModalitiesItem(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -103,15 +118,20 @@ public struct RealtimeSessionCreateResponseGAOutputModalitiesItem: RawRepresenta
 }
 
 /// Required enumerated value serialized in the `include[]` wire field.
-public struct RealtimeSessionCreateResponseGAIncludeItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeSessionCreateResponseGAIncludeItem: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let itemInputAudioTranscriptionLogprobs = RealtimeSessionCreateResponseGAIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let itemInputAudioTranscriptionLogprobs =
+        RealtimeSessionCreateResponseGAIncludeItem(rawValue: "item.input_audio_transcription.logprobs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

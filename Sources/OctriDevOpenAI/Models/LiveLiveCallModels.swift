@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveCall domain models
+/// LiveLiveCall domain models
 /// Parameters used to transfer a Live SIP call to another destination.
 public struct LiveCallReferRequest: Codable {
     /// Nonblank URI for the SIP Refer-To header, such as tel:+14155550123 or sip:agent@example.com.
@@ -14,26 +14,32 @@ public struct LiveCallReferRequest: Codable {
         case targetUri = "target_uri"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveCallReferRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.targetUri) else {
-            throw SdkValidationError(field: "target_uri", code: "required", message: "Validation failed for 'target_uri': value is required")
-        }
-        self.targetUri = try container.sdkDecodeRequired(.targetUri)
-            try validateLength("target_uri", sdkWireString(self.targetUri), min: 1, max: nil)
-            try sdkValidatePattern("target_uri", sdkWireString(self.targetUri), sdkPattern130c1c9d5879)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveCallReferRequest {
-    public init(targetUri: TargetUri) throws {
+public extension LiveCallReferRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.targetUri) else {
+            throw SdkValidationError(
+                field: "target_uri",
+                code: "required",
+                message: "Validation failed for 'target_uri': value is required"
+            )
+        }
+        targetUri = try container.sdkDecodeRequired(.targetUri)
+        try validateLength("target_uri", sdkWireString(targetUri), min: 1, max: nil)
+        try sdkValidatePattern("target_uri", sdkWireString(targetUri), sdkPattern130c1c9d5879)
+    }
+}
+
+public extension LiveCallReferRequest {
+    init(targetUri: TargetUri) throws {
         self.targetUri = targetUri
-            try validateLength("target_uri", sdkWireString(self.targetUri), min: 1, max: nil)
-            try sdkValidatePattern("target_uri", sdkWireString(self.targetUri), sdkPattern130c1c9d5879)
+        try validateLength("target_uri", sdkWireString(self.targetUri), min: 1, max: nil)
+        try sdkValidatePattern("target_uri", sdkWireString(self.targetUri), sdkPattern130c1c9d5879)
     }
 }
 
@@ -46,21 +52,27 @@ public struct LiveCallAcceptRequest: Codable {
         case session
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveCallAcceptRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        self.session = try container.sdkDecodeRequired(.session)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveCallAcceptRequest {
-    public init(session: LiveCallAcceptSession) {
+public extension LiveCallAcceptRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        session = try container.sdkDecodeRequired(.session)
+    }
+}
+
+public extension LiveCallAcceptRequest {
+    init(session: LiveCallAcceptSession) {
         self.session = session
     }
 }
@@ -102,43 +114,62 @@ public struct LiveCallAcceptSession: Codable {
         case input
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension LiveCallAcceptSession {
-    public init(from decoder: Decoder) throws {
+public extension LiveCallAcceptSession {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.model) else {
-            throw SdkValidationError(field: "model", code: "required", message: "Validation failed for 'model': value is required")
+            throw SdkValidationError(
+                field: "model",
+                code: "required",
+                message: "Validation failed for 'model': value is required"
+            )
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.model = try container.sdkDecodeRequired(.model)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.instructions = try container.sdkDecodeIfPresent(.instructions)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.delegation = try container.sdkDecodeIfPresent(.delegation)
-        self.triggers = try container.sdkDecodeIfPresent(.triggers)
-        self.store = try container.sdkDecodeIfPresent(.store)
-        self.input = try container.sdkDecodeIfPresent(.input)
-            try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
-        if let value = self.triggers {
+        model = try container.sdkDecodeRequired(.model)
+        type = try container.sdkDecodeRequired(.type)
+        instructions = try container.sdkDecodeIfPresent(.instructions)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        delegation = try container.sdkDecodeIfPresent(.delegation)
+        triggers = try container.sdkDecodeIfPresent(.triggers)
+        store = try container.sdkDecodeIfPresent(.store)
+        input = try container.sdkDecodeIfPresent(.input)
+        try validateLength("model", sdkWireString(model), min: 1, max: nil)
+        if let value = triggers {
             try validateItems("triggers", value, min: nil, max: 2)
         }
-        if let value = self.input {
+        if let value = input {
             try validateItems("input", value, min: nil, max: 128)
         }
     }
 }
 
-extension LiveCallAcceptSession {
-    public init(model: ModelIdsLive, type: LiveCallAcceptSessionType, instructions: Instructions? = nil, audio: LiveMediaSessionAudioParam? = nil, delegation: Delegation? = nil, triggers: Triggers? = nil, store: Store? = nil, input: Input? = nil) throws {
+public extension LiveCallAcceptSession {
+    init(
+        model: ModelIdsLive,
+        type: LiveCallAcceptSessionType,
+        instructions: Instructions? = nil,
+        audio: LiveMediaSessionAudioParam? = nil,
+        delegation: Delegation? = nil,
+        triggers: Triggers? = nil,
+        store: Store? = nil,
+        input: Input? = nil
+    ) throws {
         (self.model, self.type) = (model, type)
         (self.instructions, self.audio) = (instructions, audio)
         (self.delegation, self.triggers) = (delegation, triggers)
         (self.store, self.input) = (store, input)
-            try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
+        try validateLength("model", sdkWireString(self.model), min: 1, max: nil)
         if let value = self.triggers {
             try validateItems("triggers", value, min: nil, max: 2)
         }
@@ -158,24 +189,46 @@ public struct LiveCallRejectRequest: Codable {
         case statusCode = "status_code"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveCallRejectRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.statusCode) else {
-            throw SdkValidationError(field: "status_code", code: "required", message: "Validation failed for 'status_code': value is required")
-        }
-        self.statusCode = try container.sdkDecodeRequired(.statusCode)
-            try validateRange("status_code", Double(self.statusCode), min: 300, max: 699, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveCallRejectRequest {
-    public init(statusCode: Int) throws {
+public extension LiveCallRejectRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.statusCode) else {
+            throw SdkValidationError(
+                field: "status_code",
+                code: "required",
+                message: "Validation failed for 'status_code': value is required"
+            )
+        }
+        statusCode = try container.sdkDecodeRequired(.statusCode)
+        try validateRange(
+            "status_code",
+            Double(statusCode),
+            min: 300,
+            max: 699,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension LiveCallRejectRequest {
+    init(statusCode: Int) throws {
         self.statusCode = statusCode
-            try validateRange("status_code", Double(self.statusCode), min: 300, max: 699, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "status_code",
+            Double(self.statusCode),
+            min: 300,
+            max: 699,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -183,12 +236,15 @@ extension LiveCallRejectRequest {
 public struct LiveCallAcceptSessionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let live = LiveCallAcceptSessionType(rawValue: "live")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

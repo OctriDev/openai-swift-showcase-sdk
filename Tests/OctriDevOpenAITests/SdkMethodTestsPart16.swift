@@ -36,9 +36,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.getFile(
-            vectorStoreId: decoded("\"vs_abc123\""),
-            fileId: decoded("\"file-abc123\"")
-        )
+                vectorStoreId: decoded("\"vs_abc123\""),
+                fileId: decoded("\"file-abc123\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -84,9 +84,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.getFileBatch(
-            vectorStoreId: decoded("\"vs_abc123\""),
-            batchId: decoded("\"vsfb_abc123\"")
-        )
+                vectorStoreId: decoded("\"vs_abc123\""),
+                batchId: decoded("\"vsfb_abc123\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -131,8 +131,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.videos.get(
-            videoId: decoded("\"video_123\"")
-        )
+                videoId: decoded("\"video_123\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -177,8 +177,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.videos.getCharacter(
-            characterId: decoded("\"char_123\"")
-        )
+                characterId: decoded("\"char_123\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -223,8 +223,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.audio.getVoiceConsent(
-            consentId: decoded("\"consent-1\"")
-        )
+                consentId: decoded("\"consent-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -262,8 +262,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.live.hangupSession(
-            sessionId: decoded("\"session-1\"")
-        )
+                sessionId: decoded("\"session-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -301,8 +301,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.realtime.hangupCall(
-            callId: decoded("\"call-1\"")
-        )
+                callId: decoded("\"call-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 404)
@@ -349,10 +349,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.adminApiKeys.list(
-            after: decoded("\"after\""),
-            order: decoded("\"asc\""),
-            limit: decoded("20")
-        )
+                after: decoded("\"after\""),
+                order: decoded("\"asc\""),
+                limit: decoded("20")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -401,12 +401,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listEnvironmentFiles(
-            environmentId: decoded("\"environment-1\""),
-            path: decoded("\"path\""),
-            limit: decoded("1"),
-            order: decoded("\"asc\""),
-            page: decoded("\"page\"")
-        )
+                environmentId: decoded("\"environment-1\""),
+                path: decoded("\"path\""),
+                limit: decoded("1"),
+                order: decoded("\"asc\""),
+                page: decoded("\"page\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -454,11 +454,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listEnvironments(
-            limit: decoded("20"),
-            order: decoded("\"desc\""),
-            after: decoded("\"after\""),
-            type: decoded("\"openai_hosted\"")
-        )
+                limit: decoded("20"),
+                order: decoded("\"desc\""),
+                after: decoded("\"after\""),
+                type: decoded("\"openai_hosted\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -505,10 +505,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.listEnvironmentTemplates(
-            limit: decoded("20"),
-            order: decoded("\"desc\""),
-            after: decoded("\"after\"")
-        )
+                limit: decoded("20"),
+                order: decoded("\"desc\""),
+                after: decoded("\"after\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -555,10 +555,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.agents.list(
-            limit: decoded("20"),
-            order: decoded("\"desc\""),
-            after: decoded("\"after\"")
-        )
+                limit: decoded("20"),
+                order: decoded("\"desc\""),
+                after: decoded("\"after\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

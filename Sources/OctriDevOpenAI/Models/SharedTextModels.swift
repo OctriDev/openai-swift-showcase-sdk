@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedText domain models
+/// SharedText domain models
 public indirect enum TextResponseFormatConfiguration {
     case responseFormatText(ResponseFormatText)
     case textResponseFormatJsonSchema(TextResponseFormatJsonSchema)
@@ -13,7 +13,6 @@ public indirect enum TextResponseFormatConfiguration {
 }
 
 extension TextResponseFormatConfiguration: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension TextResponseFormatConfiguration: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension TextResponseFormatConfiguration: Codable {
 extension TextResponseFormatConfiguration {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "text": return .responseFormatText(try ResponseFormatText(from: decoder))
-        case "json_schema": return .textResponseFormatJsonSchema(try TextResponseFormatJsonSchema(from: decoder))
-        case "json_object": return .responseFormatJsonObject(try ResponseFormatJsonObject(from: decoder))
-        default: return nil
+        case "text": try .responseFormatText(ResponseFormatText(from: decoder))
+        case "json_schema": try .textResponseFormatJsonSchema(TextResponseFormatJsonSchema(from: decoder))
+        case "json_object": try .responseFormatJsonObject(ResponseFormatJsonObject(from: decoder))
+        default: nil
         }
     }
 }
@@ -69,28 +72,38 @@ public struct TextContent: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TextContent {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, TextContentType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension TextContent {
-    public init(type: TextContentType, text: String) throws {
+public extension TextContent {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        try sdkValidateRawEnum("type", type, TextContentType.allCases.map(\.rawValue))
+    }
+}
+
+public extension TextContent {
+    init(type: TextContentType, text: String) throws {
         (self.type, self.text) = (type, text)
-            try sdkValidateRawEnum("type", self.type, TextContentType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, TextContentType.allCases.map(\.rawValue))
     }
 }
 
@@ -117,36 +130,56 @@ public struct TextResponseFormatJsonSchema: Codable {
         case strict
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension TextResponseFormatJsonSchema {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.schema) else {
-            throw SdkValidationError(field: "schema", code: "required", message: "Validation failed for 'schema': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.schema = try container.sdkDecodeRequired(.schema)
-        self.description = try container.sdkDecodeIfPresent(.description)
-        self.strict = try container.sdkDecodeIfPresent(.strict)
-            try sdkValidateRawEnum("type", self.type, TextResponseFormatJsonSchemaType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension TextResponseFormatJsonSchema {
-    public init(type: TextResponseFormatJsonSchemaType, name: String, schema: ResponseFormatJsonSchemaSchema, description: String? = nil, strict: Bool? = nil) throws {
+public extension TextResponseFormatJsonSchema {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.schema) else {
+            throw SdkValidationError(
+                field: "schema",
+                code: "required",
+                message: "Validation failed for 'schema': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        name = try container.sdkDecodeRequired(.name)
+        schema = try container.sdkDecodeRequired(.schema)
+        description = try container.sdkDecodeIfPresent(.description)
+        strict = try container.sdkDecodeIfPresent(.strict)
+        try sdkValidateRawEnum("type", type, TextResponseFormatJsonSchemaType.allCases.map(\.rawValue))
+    }
+}
+
+public extension TextResponseFormatJsonSchema {
+    init(
+        type: TextResponseFormatJsonSchemaType,
+        name: String,
+        schema: ResponseFormatJsonSchemaSchema,
+        description: String? = nil,
+        strict: Bool? = nil
+    ) throws {
         (self.type, self.name) = (type, name)
         (self.schema, self.description) = (schema, description)
         self.strict = strict
-            try sdkValidateRawEnum("type", self.type, TextResponseFormatJsonSchemaType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, TextResponseFormatJsonSchemaType.allCases.map(\.rawValue))
     }
 }
 

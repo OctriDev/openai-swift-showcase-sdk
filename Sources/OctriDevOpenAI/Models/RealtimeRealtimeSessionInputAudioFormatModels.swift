@@ -3,20 +3,23 @@
 
 import Foundation
 
-// RealtimeRealtimeSession domain models
+/// RealtimeRealtimeSession domain models
 /// The format of input audio. Options are `pcm16`, `g711_ulaw`, or `g711_alaw`. For `pcm16`, input audio must
 /// be 16-bit PCM at a 24kHz sample rate, single channel (mono), and little-endian byte order.
 public struct RealtimeSessionInputAudioFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let pcm16 = RealtimeSessionInputAudioFormat(rawValue: "pcm16")
     public static let g711Ulaw = RealtimeSessionInputAudioFormat(rawValue: "g711_ulaw")
     public static let g711Alaw = RealtimeSessionInputAudioFormat(rawValue: "g711_alaw")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -26,15 +29,19 @@ public struct RealtimeSessionInputAudioFormat: RawRepresentable, Hashable, Codab
 }
 
 /// Optional enumerated value serialized in the `max_response_output_tokens` wire field.
-public struct RealtimeSessionMaxResponseOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeSessionMaxResponseOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inf = RealtimeSessionMaxResponseOutputTokensVariant1(rawValue: "inf")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

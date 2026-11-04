@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveClient domain models
+/// LiveLiveClient domain models
 public indirect enum LiveClientEvent {
     case liveSessionStartEvent(LiveSessionStartEvent)
     case liveSessionUpdateParam(LiveSessionUpdateParam)
@@ -25,7 +25,6 @@ public indirect enum LiveClientEvent {
 }
 
 extension LiveClientEvent: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -33,13 +32,19 @@ extension LiveClientEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -50,23 +55,23 @@ extension LiveClientEvent: Codable {
 extension LiveClientEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "session.start": return .liveSessionStartEvent(try LiveSessionStartEvent(from: decoder))
-        case "session.update": return .liveSessionUpdateParam(try LiveSessionUpdateParam(from: decoder))
-        case "session.input_audio.append": return .liveInputAudioAppendEvent(try LiveInputAudioAppendEvent(from: decoder))
-        case "session.input_audio.mute": return .liveInputAudioMuteParam(try LiveInputAudioMuteParam(from: decoder))
-        case "session.input_audio.unmute": return .liveInputAudioUnmuteParam(try LiveInputAudioUnmuteParam(from: decoder))
+        case "session.start": try .liveSessionStartEvent(LiveSessionStartEvent(from: decoder))
+        case "session.update": try .liveSessionUpdateParam(LiveSessionUpdateParam(from: decoder))
+        case "session.input_audio.append": try .liveInputAudioAppendEvent(LiveInputAudioAppendEvent(from: decoder))
+        case "session.input_audio.mute": try .liveInputAudioMuteParam(LiveInputAudioMuteParam(from: decoder))
+        case "session.input_audio.unmute": try .liveInputAudioUnmuteParam(LiveInputAudioUnmuteParam(from: decoder))
         case "session.output_audio.fixture.play":
-        return .liveOutputAudioFixturePlayParam(try LiveOutputAudioFixturePlayParam(from: decoder))
-        case "session.instructions.append": return .liveInstructionsAppendParam(try LiveInstructionsAppendParam(from: decoder))
-        case "session.thinking.append": return .liveThinkingAppendParam(try LiveThinkingAppendParam(from: decoder))
-        case "session.commentary.append": return .liveCommentaryAppendParam(try LiveCommentaryAppendParam(from: decoder))
-        case "decision.create": return .liveDecisionCreateParam(try LiveDecisionCreateParam(from: decoder))
-        case "decision.item.create": return .liveDecisionItemCreateParam(try LiveDecisionItemCreateParam(from: decoder))
-        case "decision.item.delete": return .liveDecisionItemDeleteParam(try LiveDecisionItemDeleteParam(from: decoder))
-        case "response.item.create": return .liveResponseItemCreateParam(try LiveResponseItemCreateParam(from: decoder))
-        case "response.create": return .liveResponseCreateParam(try LiveResponseCreateParam(from: decoder))
-        case "session.close": return .liveSessionCloseParam(try LiveSessionCloseParam(from: decoder))
-        default: return nil
+            try .liveOutputAudioFixturePlayParam(LiveOutputAudioFixturePlayParam(from: decoder))
+        case "session.instructions.append": try .liveInstructionsAppendParam(LiveInstructionsAppendParam(from: decoder))
+        case "session.thinking.append": try .liveThinkingAppendParam(LiveThinkingAppendParam(from: decoder))
+        case "session.commentary.append": try .liveCommentaryAppendParam(LiveCommentaryAppendParam(from: decoder))
+        case "decision.create": try .liveDecisionCreateParam(LiveDecisionCreateParam(from: decoder))
+        case "decision.item.create": try .liveDecisionItemCreateParam(LiveDecisionItemCreateParam(from: decoder))
+        case "decision.item.delete": try .liveDecisionItemDeleteParam(LiveDecisionItemDeleteParam(from: decoder))
+        case "response.item.create": try .liveResponseItemCreateParam(LiveResponseItemCreateParam(from: decoder))
+        case "response.create": try .liveResponseCreateParam(LiveResponseCreateParam(from: decoder))
+        case "session.close": try .liveSessionCloseParam(LiveSessionCloseParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -114,21 +119,27 @@ public struct LiveClientConfigParam: Codable {
         case dataChannel = "data_channel"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveClientConfigParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.dataChannel) else {
-            throw SdkValidationError(field: "data_channel", code: "required", message: "Validation failed for 'data_channel': value is required")
-        }
-        self.dataChannel = try container.sdkDecodeRequired(.dataChannel)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveClientConfigParam {
-    public init(dataChannel: LiveDataChannelConfigParam) {
+public extension LiveClientConfigParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.dataChannel) else {
+            throw SdkValidationError(
+                field: "data_channel",
+                code: "required",
+                message: "Validation failed for 'data_channel': value is required"
+            )
+        }
+        dataChannel = try container.sdkDecodeRequired(.dataChannel)
+    }
+}
+
+public extension LiveClientConfigParam {
+    init(dataChannel: LiveDataChannelConfigParam) {
         self.dataChannel = dataChannel
     }
 }
@@ -142,24 +153,30 @@ public struct LiveClientDelegationParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveClientDelegationParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, LiveClientDelegationParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveClientDelegationParam {
-    public init(type: LiveClientDelegationParamType) throws {
+public extension LiveClientDelegationParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, LiveClientDelegationParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveClientDelegationParam {
+    init(type: LiveClientDelegationParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, LiveClientDelegationParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveClientDelegationParamType.allCases.map(\.rawValue))
     }
 }
 

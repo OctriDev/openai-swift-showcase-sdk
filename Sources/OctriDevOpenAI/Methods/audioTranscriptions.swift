@@ -6,8 +6,8 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AudioMethods {
-    public struct CreateTranscriptionOptions {
+public extension AudioMethods {
+    struct CreateTranscriptionOptions {
         public var file: SdkUploadFile
         public var model: String
         public var language: String?
@@ -29,9 +29,14 @@ extension AudioMethods {
         }
     }
 
-    /// Transcribes an audio file and returns the transcript in a selected format or as a stream of transcript events. Provide the audio `file` and `model`, then use options such as `language`, `prompt`, or `timestamp_granularities` to guide or shape the output. Use multipart form data and include enough file metadata for the audio format to be identified.
+    /// Transcribes an audio file and returns the transcript in a selected format or as a stream of transcript events.
+    /// Provide the audio `file` and `model`, then use options such as `language`, `prompt`, or
+    /// `timestamp_granularities` to guide or shape the output. Use multipart form data and include enough file metadata
+    /// for the audio format to be identified.
     ///
-    /// Transcribes audio into the input language. Returns a transcription object in `json`, `diarized_json`, or `verbose_json` format, plain text in `text`, `srt`, or `vtt` format, or a stream of transcript events. Supported formats depend on the model.
+    /// Transcribes audio into the input language. Returns a transcription object in `json`, `diarized_json`, or
+    /// `verbose_json` format, plain text in `text`, `srt`, or `vtt` format, or a stream of transcript events. Supported
+    /// formats depend on the model.
     ///
     /// - Parameters:
     /// - file: The audio file object (not file name) to transcribe, in one of these
@@ -95,7 +100,11 @@ extension AudioMethods {
     ///   URLs)) that contain known speaker references matching
     ///   `known_speaker_names[]`. Each sample must be between 2 and 10 seconds, and
     ///   can use any of the same input audio formats supported by `file`.
-    public static func createTranscription(config: ClientConfig, options: CreateTranscriptionOptions, requestOptions: RequestOptions? = nil) async throws -> CreateTranscriptionResponse {
+    static func createTranscription(
+        config: ClientConfig,
+        options: CreateTranscriptionOptions,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> CreateTranscriptionResponse {
         if let languages = options.languages {
             try validateItems("languages", languages, min: 1)
         }
@@ -147,7 +156,7 @@ extension AudioMethods {
             multipartParts.append(.scalar("stream", stream))
         }
         if let chunkingStrategy = options.chunkingStrategy {
-            multipartParts.append(try .json("chunking_strategy", chunkingStrategy, contentType: "application/json"))
+            try multipartParts.append(.json("chunking_strategy", chunkingStrategy, contentType: "application/json"))
         }
         if let knownSpeakerNames = options.knownSpeakerNames {
             for item in knownSpeakerNames {
@@ -162,6 +171,24 @@ extension AudioMethods {
         sdkSelectStreamPart(&multipartParts, operationId: "createTranscription")
         let multipart = sdkEncodeMultipart(multipartParts)
 
-        return try (await sdkRequest("POST", "/audio/transcriptions", config: config, rawBody: multipart.data, contentType: multipart.contentType, decoder: .json, operationId: "createTranscription", options: requestOptions, errors: ["400": ErrorResponse.self, "401": ErrorResponse.self, "413": ErrorResponse.self, "429": ErrorResponse.self, "500": ErrorResponse.self, "502": ErrorResponse.self, "503": ErrorResponse.self])).data
+        return try await (sdkRequest(
+            "POST",
+            "/audio/transcriptions",
+            config: config,
+            rawBody: multipart.data,
+            contentType: multipart.contentType,
+            decoder: .json,
+            operationId: "createTranscription",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse.self,
+                "401": ErrorResponse.self,
+                "413": ErrorResponse.self,
+                "429": ErrorResponse.self,
+                "500": ErrorResponse.self,
+                "502": ErrorResponse.self,
+                "503": ErrorResponse.self,
+            ]
+        )).data
     }
 }

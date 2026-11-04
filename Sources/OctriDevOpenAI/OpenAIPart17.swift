@@ -3,44 +3,133 @@
 
 import Foundation
 
-extension AgentsNamespace {
-/// Retrieves the current state of a managed agent session. See [managing sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
-    public func retrieveSession(sessionId: String, requestOptions: RequestOptions? = nil) async throws -> SessionResource {
-        return try await AgentsMethods.retrieveAgentSession(config: config, sessionId: sessionId, requestOptions: requestOptions)
+public extension AgentsNamespace {
+    /// Retrieves the current state of a managed agent session. See [managing
+    /// sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
+    func retrieveSession(sessionId: String, requestOptions: RequestOptions? = nil) async throws -> SessionResource {
+        try await AgentsMethods.retrieveAgentSession(
+            config: config,
+            sessionId: sessionId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Updates session metadata, model, reasoning effort, or service tier. Model settings apply to subsequent turns. Omitted fields are unchanged. See [managing sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
-    public func updateSession(sessionId: String, spendControl: SdkOptional<SessionSpendControlParam>? = nil, agent: UpdateSessionAgentParam? = nil, metadata: SdkOptional<[String: String]>? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionResource {
-        return try await AgentsMethods.updateAgentSession(config: config, sessionId: sessionId, spendControl: spendControl, agent: agent, metadata: metadata, requestOptions: requestOptions)
+    /// Updates session metadata, model, reasoning effort, or service tier. Model settings apply to subsequent turns.
+    /// Omitted fields are unchanged. See [managing
+    /// sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
+    func updateSession(
+        sessionId: String,
+        spendControl: SdkOptional<SessionSpendControlParam>? = nil,
+        agent: UpdateSessionAgentParam? = nil,
+        metadata: SdkOptional<[String: String]>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SessionResource {
+        try await AgentsMethods.updateAgentSession(
+            config: config,
+            sessionId: sessionId,
+            spendControl: spendControl,
+            agent: agent,
+            metadata: metadata,
+            requestOptions: requestOptions
+        )
     }
 
-/// Removes a managed agent session from the public API and returns a deletion confirmation. If backend execution has ended, deletion can cancel a still-open public turn and abandon unpublished outputs. Running execution must be cancelled first. Physical cleanup may continue asynchronously. See [managing sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
-    public func deleteSession(sessionId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedSessionResource {
-        return try await AgentsMethods.deleteAgentSession(config: config, sessionId: sessionId, requestOptions: requestOptions)
+    /// Removes a managed agent session from the public API and returns a deletion confirmation. If backend execution
+    /// has ended, deletion can cancel a still-open public turn and abandon unpublished outputs. Running execution must
+    /// be cancelled first. Physical cleanup may continue asynchronously. See [managing
+    /// sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions/manage).
+    func deleteSession(
+        sessionId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeletedSessionResource {
+        try await AgentsMethods.deleteAgentSession(config: config, sessionId: sessionId, requestOptions: requestOptions)
     }
 
-/// Lists immutable artifacts published by completed hosted session turns. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
-    public func listSessionArtifacts(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, environmentId: String? = nil, requestOptions: RequestOptions? = nil) async throws -> SessionArtifactListResource {
-        return try await AgentsMethods.listAgentSessionArtifacts(config: config, sessionId: sessionId, limit: limit, order: order, after: after, environmentId: environmentId, requestOptions: requestOptions)
+    /// Lists immutable artifacts published by completed hosted session turns. See [session
+    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+    func listSessionArtifacts(
+        sessionId: String,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        environmentId: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SessionArtifactListResource {
+        try await AgentsMethods.listAgentSessionArtifacts(
+            config: config,
+            sessionId: sessionId,
+            limit: limit,
+            order: order,
+            after: after,
+            environmentId: environmentId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists immutable artifacts published by completed hosted session turns. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
-    public func listSessionArtifactsPaginated(sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, environmentId: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SessionArtifactResource, Swift.Error> {
-        return AgentsMethods.listAgentSessionArtifactsPaginated(config: config, sessionId: sessionId, limit: limit, order: order, after: after, environmentId: environmentId, requestOptions: requestOptions)
+    /// Lists immutable artifacts published by completed hosted session turns. See [session
+    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+    func listSessionArtifactsPaginated(
+        sessionId: String,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        environmentId: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<SessionArtifactResource, Swift.Error> {
+        AgentsMethods.listAgentSessionArtifactsPaginated(
+            config: config,
+            sessionId: sessionId,
+            limit: limit,
+            order: order,
+            after: after,
+            environmentId: environmentId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves immutable metadata for one durable session artifact. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
-    public func retrieveSessionArtifact(sessionId: String, artifactId: String, requestOptions: RequestOptions? = nil) async throws -> SessionArtifactResource {
-        return try await AgentsMethods.retrieveAgentSessionArtifact(config: config, sessionId: sessionId, artifactId: artifactId, requestOptions: requestOptions)
+    /// Retrieves immutable metadata for one durable session artifact. See [session
+    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+    func retrieveSessionArtifact(
+        sessionId: String,
+        artifactId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> SessionArtifactResource {
+        try await AgentsMethods.retrieveAgentSessionArtifact(
+            config: config,
+            sessionId: sessionId,
+            artifactId: artifactId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes an immutable session artifact without deleting its live environment file or original Files API object. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
-    public func deleteSessionArtifact(sessionId: String, artifactId: String, requestOptions: RequestOptions? = nil) async throws -> DeletedSessionArtifactResource {
-        return try await AgentsMethods.deleteAgentSessionArtifact(config: config, sessionId: sessionId, artifactId: artifactId, requestOptions: requestOptions)
+    /// Deletes an immutable session artifact without deleting its live environment file or original Files API object.
+    /// See [session
+    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+    func deleteSessionArtifact(
+        sessionId: String,
+        artifactId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> DeletedSessionArtifactResource {
+        try await AgentsMethods.deleteAgentSessionArtifact(
+            config: config,
+            sessionId: sessionId,
+            artifactId: artifactId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Downloads immutable session artifact bytes after the execution environment expires. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
-    public func retrieveSessionArtifactContent(sessionId: String, artifactId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
-        return try await AgentsMethods.retrieveAgentSessionArtifactContent(config: config, sessionId: sessionId, artifactId: artifactId, requestOptions: requestOptions)
+    /// Downloads immutable session artifact bytes after the execution environment expires. See [session
+    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+    func retrieveSessionArtifactContent(
+        sessionId: String,
+        artifactId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Data {
+        try await AgentsMethods.retrieveAgentSessionArtifactContent(
+            config: config,
+            sessionId: sessionId,
+            artifactId: artifactId,
+            requestOptions: requestOptions
+        )
     }
 }

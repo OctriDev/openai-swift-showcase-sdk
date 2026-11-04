@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedProgram domain models
+/// SharedProgram domain models
 /// Typed representation of the `ProgramToolCallCallerParam` API schema.
 public struct ProgramToolCallCallerParam: Codable {
     /// The caller type. Always `program`.
@@ -16,30 +16,40 @@ public struct ProgramToolCallCallerParam: Codable {
         case callerId = "caller_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProgramToolCallCallerParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callerId) else {
-            throw SdkValidationError(field: "caller_id", code: "required", message: "Validation failed for 'caller_id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callerId = try container.sdkDecodeRequired(.callerId)
-            try sdkValidateRawEnum("type", self.type, ProgramToolCallCallerParamType.allCases.map(\.rawValue))
-            try validateLength("caller_id", self.callerId, min: 1, max: 64)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProgramToolCallCallerParam {
-    public init(type: ProgramToolCallCallerParamType, callerId: String) throws {
+public extension ProgramToolCallCallerParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callerId) else {
+            throw SdkValidationError(
+                field: "caller_id",
+                code: "required",
+                message: "Validation failed for 'caller_id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        callerId = try container.sdkDecodeRequired(.callerId)
+        try sdkValidateRawEnum("type", type, ProgramToolCallCallerParamType.allCases.map(\.rawValue))
+        try validateLength("caller_id", callerId, min: 1, max: 64)
+    }
+}
+
+public extension ProgramToolCallCallerParam {
+    init(type: ProgramToolCallCallerParamType, callerId: String) throws {
         (self.type, self.callerId) = (type, callerId)
-            try sdkValidateRawEnum("type", self.type, ProgramToolCallCallerParamType.allCases.map(\.rawValue))
-            try validateLength("caller_id", self.callerId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, ProgramToolCallCallerParamType.allCases.map(\.rawValue))
+        try validateLength("caller_id", self.callerId, min: 1, max: 64)
     }
 }
 
@@ -55,28 +65,38 @@ public struct ProgramToolCallCaller: Codable {
         case callerId = "caller_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProgramToolCallCaller {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callerId) else {
-            throw SdkValidationError(field: "caller_id", code: "required", message: "Validation failed for 'caller_id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callerId = try container.sdkDecodeRequired(.callerId)
-            try sdkValidateRawEnum("type", self.type, ProgramToolCallCallerType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProgramToolCallCaller {
-    public init(type: ProgramToolCallCallerType, callerId: String) throws {
+public extension ProgramToolCallCaller {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callerId) else {
+            throw SdkValidationError(
+                field: "caller_id",
+                code: "required",
+                message: "Validation failed for 'caller_id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        callerId = try container.sdkDecodeRequired(.callerId)
+        try sdkValidateRawEnum("type", type, ProgramToolCallCallerType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ProgramToolCallCaller {
+    init(type: ProgramToolCallCallerType, callerId: String) throws {
         (self.type, self.callerId) = (type, callerId)
-            try sdkValidateRawEnum("type", self.type, ProgramToolCallCallerType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ProgramToolCallCallerType.allCases.map(\.rawValue))
     }
 }
 
@@ -101,42 +121,64 @@ public struct ProgramOutput: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProgramOutput {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.result) else {
-            throw SdkValidationError(field: "result", code: "required", message: "Validation failed for 'result': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.result = try container.sdkDecodeRequired(.result)
-        self.status = try container.sdkDecodeRequired(.status)
-            try sdkValidateRawEnum("type", self.type, ProgramOutputType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProgramOutput {
-    public init(type: ProgramOutputType, id: String, callId: String, result: String, status: ProgramOutputStatus) throws {
+public extension ProgramOutput {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.result) else {
+            throw SdkValidationError(
+                field: "result",
+                code: "required",
+                message: "Validation failed for 'result': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        callId = try container.sdkDecodeRequired(.callId)
+        result = try container.sdkDecodeRequired(.result)
+        status = try container.sdkDecodeRequired(.status)
+        try sdkValidateRawEnum("type", type, ProgramOutputType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ProgramOutput {
+    init(type: ProgramOutputType, id: String, callId: String, result: String, status: ProgramOutputStatus) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.result) = (callId, result)
         self.status = status
-            try sdkValidateRawEnum("type", self.type, ProgramOutputType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ProgramOutputType.allCases.map(\.rawValue))
     }
 }
 
@@ -161,42 +203,64 @@ public struct Program: Codable {
         case fingerprint
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension Program {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.fingerprint) else {
-            throw SdkValidationError(field: "fingerprint", code: "required", message: "Validation failed for 'fingerprint': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.code = try container.sdkDecodeRequired(.code)
-        self.fingerprint = try container.sdkDecodeRequired(.fingerprint)
-            try sdkValidateRawEnum("type", self.type, ProgramType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension Program {
-    public init(type: ProgramType, id: String, callId: String, code: String, fingerprint: String) throws {
+public extension Program {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.fingerprint) else {
+            throw SdkValidationError(
+                field: "fingerprint",
+                code: "required",
+                message: "Validation failed for 'fingerprint': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        callId = try container.sdkDecodeRequired(.callId)
+        code = try container.sdkDecodeRequired(.code)
+        fingerprint = try container.sdkDecodeRequired(.fingerprint)
+        try sdkValidateRawEnum("type", type, ProgramType.allCases.map(\.rawValue))
+    }
+}
+
+public extension Program {
+    init(type: ProgramType, id: String, callId: String, code: String, fingerprint: String) throws {
         (self.type, self.id) = (type, id)
         (self.callId, self.code) = (callId, code)
         self.fingerprint = fingerprint
-            try sdkValidateRawEnum("type", self.type, ProgramType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ProgramType.allCases.map(\.rawValue))
     }
 }
 
@@ -222,46 +286,74 @@ public struct ProgramOutputItemParam: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProgramOutputItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.result) else {
-            throw SdkValidationError(field: "result", code: "required", message: "Validation failed for 'result': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.result = try container.sdkDecodeRequired(.result)
-        self.status = try container.sdkDecodeRequired(.status)
-            try sdkValidateRawEnum("type", self.type, ProgramOutputItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("result", self.result, min: nil, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProgramOutputItemParam {
-    public init(id: String, type: ProgramOutputItemParamType, callId: String, result: String, status: ProgramOutputItemStatus) throws {
+public extension ProgramOutputItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.result) else {
+            throw SdkValidationError(
+                field: "result",
+                code: "required",
+                message: "Validation failed for 'result': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        result = try container.sdkDecodeRequired(.result)
+        status = try container.sdkDecodeRequired(.status)
+        try sdkValidateRawEnum("type", type, ProgramOutputItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", callId, min: 1, max: 64)
+        try validateLength("result", result, min: nil, max: 10_485_760)
+    }
+}
+
+public extension ProgramOutputItemParam {
+    init(
+        id: String,
+        type: ProgramOutputItemParamType,
+        callId: String,
+        result: String,
+        status: ProgramOutputItemStatus
+    ) throws {
         (self.id, self.type) = (id, type)
         (self.callId, self.result) = (callId, result)
         self.status = status
-            try sdkValidateRawEnum("type", self.type, ProgramOutputItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("result", self.result, min: nil, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, ProgramOutputItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try validateLength("result", self.result, min: nil, max: 10_485_760)
     }
 }
 
@@ -287,48 +379,70 @@ public struct ProgramItemParam: Codable {
         case fingerprint
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProgramItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.code) else {
-            throw SdkValidationError(field: "code", code: "required", message: "Validation failed for 'code': value is required")
-        }
-        guard container.contains(.fingerprint) else {
-            throw SdkValidationError(field: "fingerprint", code: "required", message: "Validation failed for 'fingerprint': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.code = try container.sdkDecodeRequired(.code)
-        self.fingerprint = try container.sdkDecodeRequired(.fingerprint)
-            try sdkValidateRawEnum("type", self.type, ProgramItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("code", self.code, min: nil, max: 10485760)
-            try validateLength("fingerprint", self.fingerprint, min: nil, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProgramItemParam {
-    public init(id: String, type: ProgramItemParamType, callId: String, code: String, fingerprint: String) throws {
+public extension ProgramItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.code) else {
+            throw SdkValidationError(
+                field: "code",
+                code: "required",
+                message: "Validation failed for 'code': value is required"
+            )
+        }
+        guard container.contains(.fingerprint) else {
+            throw SdkValidationError(
+                field: "fingerprint",
+                code: "required",
+                message: "Validation failed for 'fingerprint': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        code = try container.sdkDecodeRequired(.code)
+        fingerprint = try container.sdkDecodeRequired(.fingerprint)
+        try sdkValidateRawEnum("type", type, ProgramItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", callId, min: 1, max: 64)
+        try validateLength("code", code, min: nil, max: 10_485_760)
+        try validateLength("fingerprint", fingerprint, min: nil, max: 10_485_760)
+    }
+}
+
+public extension ProgramItemParam {
+    init(id: String, type: ProgramItemParamType, callId: String, code: String, fingerprint: String) throws {
         (self.id, self.type) = (id, type)
         (self.callId, self.code) = (callId, code)
         self.fingerprint = fingerprint
-            try sdkValidateRawEnum("type", self.type, ProgramItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
-            try validateLength("code", self.code, min: nil, max: 10485760)
-            try validateLength("fingerprint", self.fingerprint, min: nil, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, ProgramItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
+        try validateLength("code", self.code, min: nil, max: 10_485_760)
+        try validateLength("fingerprint", self.fingerprint, min: nil, max: 10_485_760)
     }
 }
 
@@ -408,13 +522,16 @@ public enum ProgramToolCallCallerType: String, CaseIterable, Codable {
 public struct ProgramOutputItemStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = ProgramOutputItemStatus(rawValue: "completed")
     public static let incomplete = ProgramOutputItemStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -445,13 +562,16 @@ public enum ProgramItemParamType: String, CaseIterable, Codable {
 public struct ProgramOutputStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = ProgramOutputStatus(rawValue: "completed")
     public static let incomplete = ProgramOutputStatus(rawValue: "incomplete")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SpendLimit domain models
+/// SpendLimit domain models
 /// Parameters for the hard spend limit you want to create or replace.
 public struct UpdateProjectSpendLimitBody: Codable {
     /// The hard spend limit amount, in cents.
@@ -19,33 +19,67 @@ public struct UpdateProjectSpendLimitBody: Codable {
         case interval
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UpdateProjectSpendLimitBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.thresholdAmount) else {
-            throw SdkValidationError(field: "threshold_amount", code: "required", message: "Validation failed for 'threshold_amount': value is required")
-        }
-        guard container.contains(.currency) else {
-            throw SdkValidationError(field: "currency", code: "required", message: "Validation failed for 'currency': value is required")
-        }
-        guard container.contains(.interval) else {
-            throw SdkValidationError(field: "interval", code: "required", message: "Validation failed for 'interval': value is required")
-        }
-        self.thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
-        self.currency = try container.sdkDecodeRequired(.currency)
-        self.interval = try container.sdkDecodeRequired(.interval)
-            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UpdateProjectSpendLimitBody {
-    public init(thresholdAmount: Int, currency: UpdateProjectSpendLimitBodyCurrency, interval: UpdateProjectSpendLimitBodyInterval) throws {
+public extension UpdateProjectSpendLimitBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.thresholdAmount) else {
+            throw SdkValidationError(
+                field: "threshold_amount",
+                code: "required",
+                message: "Validation failed for 'threshold_amount': value is required"
+            )
+        }
+        guard container.contains(.currency) else {
+            throw SdkValidationError(
+                field: "currency",
+                code: "required",
+                message: "Validation failed for 'currency': value is required"
+            )
+        }
+        guard container.contains(.interval) else {
+            throw SdkValidationError(
+                field: "interval",
+                code: "required",
+                message: "Validation failed for 'interval': value is required"
+            )
+        }
+        thresholdAmount = try container.sdkDecodeRequired(.thresholdAmount)
+        currency = try container.sdkDecodeRequired(.currency)
+        interval = try container.sdkDecodeRequired(.interval)
+        try validateRange(
+            "threshold_amount",
+            Double(thresholdAmount),
+            min: 1,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension UpdateProjectSpendLimitBody {
+    init(
+        thresholdAmount: Int,
+        currency: UpdateProjectSpendLimitBodyCurrency,
+        interval: UpdateProjectSpendLimitBodyInterval
+    ) throws {
         (self.thresholdAmount, self.currency) = (thresholdAmount, currency)
         self.interval = interval
-            try validateRange("threshold_amount", Double(self.thresholdAmount), min: 1, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "threshold_amount",
+            Double(self.thresholdAmount),
+            min: 1,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -53,12 +87,15 @@ extension UpdateProjectSpendLimitBody {
 public struct UpdateProjectSpendLimitBodyInterval: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let month = UpdateProjectSpendLimitBodyInterval(rawValue: "month")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -71,12 +108,15 @@ public struct UpdateProjectSpendLimitBodyInterval: RawRepresentable, Hashable, C
 public struct UpdateProjectSpendLimitBodyCurrency: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let usd = UpdateProjectSpendLimitBodyCurrency(rawValue: "USD")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

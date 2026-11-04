@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedContainer domain models
+/// SharedContainer domain models
 public indirect enum ContainerAutoParamNetworkPolicy {
     case containerNetworkPolicyDisabledParam(ContainerNetworkPolicyDisabledParam)
     case containerNetworkPolicyAllowlistParam(ContainerNetworkPolicyAllowlistParam)
@@ -12,7 +12,6 @@ public indirect enum ContainerAutoParamNetworkPolicy {
 }
 
 extension ContainerAutoParamNetworkPolicy: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension ContainerAutoParamNetworkPolicy: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,9 @@ extension ContainerAutoParamNetworkPolicy: Codable {
 extension ContainerAutoParamNetworkPolicy {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "disabled": return .containerNetworkPolicyDisabledParam(try ContainerNetworkPolicyDisabledParam(from: decoder))
-        case "allowlist": return .containerNetworkPolicyAllowlistParam(try ContainerNetworkPolicyAllowlistParam(from: decoder))
-        default: return nil
+        case "disabled": try .containerNetworkPolicyDisabledParam(ContainerNetworkPolicyDisabledParam(from: decoder))
+        case "allowlist": try .containerNetworkPolicyAllowlistParam(ContainerNetworkPolicyAllowlistParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -62,7 +65,6 @@ public indirect enum ContainerAutoParamSkillsItem {
 }
 
 extension ContainerAutoParamSkillsItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -70,12 +72,16 @@ extension ContainerAutoParamSkillsItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -86,9 +92,9 @@ extension ContainerAutoParamSkillsItem: Codable {
 extension ContainerAutoParamSkillsItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "skill_reference": return .skillReferenceParam(try SkillReferenceParam(from: decoder))
-        case "inline": return .inlineSkillParam(try InlineSkillParam(from: decoder))
-        default: return nil
+        case "skill_reference": try .skillReferenceParam(SkillReferenceParam(from: decoder))
+        case "inline": try .inlineSkillParam(InlineSkillParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -116,28 +122,38 @@ public struct ContainerReferenceResource: Codable {
         case containerId = "container_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ContainerReferenceResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.containerId) else {
-            throw SdkValidationError(field: "container_id", code: "required", message: "Validation failed for 'container_id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.containerId = try container.sdkDecodeRequired(.containerId)
-            try sdkValidateRawEnum("type", self.type, ContainerReferenceResourceType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ContainerReferenceResource {
-    public init(type: ContainerReferenceResourceType, containerId: String) throws {
+public extension ContainerReferenceResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.containerId) else {
+            throw SdkValidationError(
+                field: "container_id",
+                code: "required",
+                message: "Validation failed for 'container_id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        containerId = try container.sdkDecodeRequired(.containerId)
+        try sdkValidateRawEnum("type", type, ContainerReferenceResourceType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ContainerReferenceResource {
+    init(type: ContainerReferenceResourceType, containerId: String) throws {
         (self.type, self.containerId) = (type, containerId)
-            try sdkValidateRawEnum("type", self.type, ContainerReferenceResourceType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ContainerReferenceResourceType.allCases.map(\.rawValue))
     }
 }
 
@@ -154,28 +170,38 @@ public struct ContainerReferenceParam: Codable {
         case containerId = "container_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ContainerReferenceParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.containerId) else {
-            throw SdkValidationError(field: "container_id", code: "required", message: "Validation failed for 'container_id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.containerId = try container.sdkDecodeRequired(.containerId)
-            try sdkValidateRawEnum("type", self.type, ContainerReferenceParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ContainerReferenceParam {
-    public init(type: ContainerReferenceParamType, containerId: String) throws {
+public extension ContainerReferenceParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.containerId) else {
+            throw SdkValidationError(
+                field: "container_id",
+                code: "required",
+                message: "Validation failed for 'container_id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        containerId = try container.sdkDecodeRequired(.containerId)
+        try sdkValidateRawEnum("type", type, ContainerReferenceParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ContainerReferenceParam {
+    init(type: ContainerReferenceParamType, containerId: String) throws {
         (self.type, self.containerId) = (type, containerId)
-            try sdkValidateRawEnum("type", self.type, ContainerReferenceParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ContainerReferenceParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -194,35 +220,49 @@ public struct ContainerNetworkPolicyAllowlistParam: Codable {
         case domainSecrets = "domain_secrets"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension ContainerNetworkPolicyAllowlistParam {
-    public init(from decoder: Decoder) throws {
+public extension ContainerNetworkPolicyAllowlistParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.allowedDomains) else {
-            throw SdkValidationError(field: "allowed_domains", code: "required", message: "Validation failed for 'allowed_domains': value is required")
+            throw SdkValidationError(
+                field: "allowed_domains",
+                code: "required",
+                message: "Validation failed for 'allowed_domains': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.allowedDomains = try container.sdkDecodeRequired(.allowedDomains)
-        self.domainSecrets = try container.sdkDecodeIfPresent(.domainSecrets)
-            try sdkValidateRawEnum("type", self.type, ContainerNetworkPolicyAllowlistParamType.allCases.map(\.rawValue))
-            try validateItems("allowed_domains", self.allowedDomains, min: 1, max: nil)
-        if let value = self.domainSecrets {
+        type = try container.sdkDecodeRequired(.type)
+        allowedDomains = try container.sdkDecodeRequired(.allowedDomains)
+        domainSecrets = try container.sdkDecodeIfPresent(.domainSecrets)
+        try sdkValidateRawEnum("type", type, ContainerNetworkPolicyAllowlistParamType.allCases.map(\.rawValue))
+        try validateItems("allowed_domains", allowedDomains, min: 1, max: nil)
+        if let value = domainSecrets {
             try validateItems("domain_secrets", value, min: 1, max: nil)
         }
     }
 }
 
-extension ContainerNetworkPolicyAllowlistParam {
-    public init(type: ContainerNetworkPolicyAllowlistParamType, allowedDomains: [String], domainSecrets: [ContainerNetworkPolicyDomainSecretParam]? = nil) throws {
+public extension ContainerNetworkPolicyAllowlistParam {
+    init(
+        type: ContainerNetworkPolicyAllowlistParamType,
+        allowedDomains: [String],
+        domainSecrets: [ContainerNetworkPolicyDomainSecretParam]? = nil
+    ) throws {
         (self.type, self.allowedDomains) = (type, allowedDomains)
         self.domainSecrets = domainSecrets
-            try sdkValidateRawEnum("type", self.type, ContainerNetworkPolicyAllowlistParamType.allCases.map(\.rawValue))
-            try validateItems("allowed_domains", self.allowedDomains, min: 1, max: nil)
+        try sdkValidateRawEnum("type", self.type, ContainerNetworkPolicyAllowlistParamType.allCases.map(\.rawValue))
+        try validateItems("allowed_domains", self.allowedDomains, min: 1, max: nil)
         if let value = self.domainSecrets {
             try validateItems("domain_secrets", value, min: 1, max: nil)
         }
@@ -253,46 +293,79 @@ public struct ContainerFileCitationBody: Codable {
         case filename
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ContainerFileCitationBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.containerId) else {
-            throw SdkValidationError(field: "container_id", code: "required", message: "Validation failed for 'container_id': value is required")
-        }
-        guard container.contains(.fileId) else {
-            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
-        }
-        guard container.contains(.startIndex) else {
-            throw SdkValidationError(field: "start_index", code: "required", message: "Validation failed for 'start_index': value is required")
-        }
-        guard container.contains(.endIndex) else {
-            throw SdkValidationError(field: "end_index", code: "required", message: "Validation failed for 'end_index': value is required")
-        }
-        guard container.contains(.filename) else {
-            throw SdkValidationError(field: "filename", code: "required", message: "Validation failed for 'filename': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.containerId = try container.sdkDecodeRequired(.containerId)
-        self.fileId = try container.sdkDecodeRequired(.fileId)
-        self.startIndex = try container.sdkDecodeRequired(.startIndex)
-        self.endIndex = try container.sdkDecodeRequired(.endIndex)
-        self.filename = try container.sdkDecodeRequired(.filename)
-            try sdkValidateRawEnum("type", self.type, ContainerFileCitationBodyType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ContainerFileCitationBody {
-    public init(type: ContainerFileCitationBodyType, containerId: String, fileId: String, startIndex: Int, endIndex: Int, filename: String) throws {
+public extension ContainerFileCitationBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.containerId) else {
+            throw SdkValidationError(
+                field: "container_id",
+                code: "required",
+                message: "Validation failed for 'container_id': value is required"
+            )
+        }
+        guard container.contains(.fileId) else {
+            throw SdkValidationError(
+                field: "file_id",
+                code: "required",
+                message: "Validation failed for 'file_id': value is required"
+            )
+        }
+        guard container.contains(.startIndex) else {
+            throw SdkValidationError(
+                field: "start_index",
+                code: "required",
+                message: "Validation failed for 'start_index': value is required"
+            )
+        }
+        guard container.contains(.endIndex) else {
+            throw SdkValidationError(
+                field: "end_index",
+                code: "required",
+                message: "Validation failed for 'end_index': value is required"
+            )
+        }
+        guard container.contains(.filename) else {
+            throw SdkValidationError(
+                field: "filename",
+                code: "required",
+                message: "Validation failed for 'filename': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        containerId = try container.sdkDecodeRequired(.containerId)
+        fileId = try container.sdkDecodeRequired(.fileId)
+        startIndex = try container.sdkDecodeRequired(.startIndex)
+        endIndex = try container.sdkDecodeRequired(.endIndex)
+        filename = try container.sdkDecodeRequired(.filename)
+        try sdkValidateRawEnum("type", type, ContainerFileCitationBodyType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ContainerFileCitationBody {
+    init(
+        type: ContainerFileCitationBodyType,
+        containerId: String,
+        fileId: String,
+        startIndex: Int,
+        endIndex: Int,
+        filename: String
+    ) throws {
         (self.type, self.containerId) = (type, containerId)
         (self.fileId, self.startIndex) = (fileId, startIndex)
         (self.endIndex, self.filename) = (endIndex, filename)
-            try sdkValidateRawEnum("type", self.type, ContainerFileCitationBodyType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ContainerFileCitationBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -317,36 +390,48 @@ public struct ContainerAutoParam: Codable {
         case skills
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension ContainerAutoParam {
-    public init(from decoder: Decoder) throws {
+public extension ContainerAutoParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.fileIds = try container.sdkDecodeIfPresent(.fileIds)
-        self.memoryLimit = try container.sdkDecodeIfPresent(.memoryLimit)
-        self.networkPolicy = try container.sdkDecodeIfPresent(.networkPolicy)
-        self.skills = try container.sdkDecodeIfPresent(.skills)
-            try sdkValidateRawEnum("type", self.type, ContainerAutoParamType.allCases.map(\.rawValue))
-        if let value = self.fileIds {
+        type = try container.sdkDecodeRequired(.type)
+        fileIds = try container.sdkDecodeIfPresent(.fileIds)
+        memoryLimit = try container.sdkDecodeIfPresent(.memoryLimit)
+        networkPolicy = try container.sdkDecodeIfPresent(.networkPolicy)
+        skills = try container.sdkDecodeIfPresent(.skills)
+        try sdkValidateRawEnum("type", type, ContainerAutoParamType.allCases.map(\.rawValue))
+        if let value = fileIds {
             try validateItems("file_ids", value, min: nil, max: 50)
         }
-        if let value = self.skills {
+        if let value = skills {
             try validateItems("skills", value, min: nil, max: 200)
         }
     }
 }
 
-extension ContainerAutoParam {
-    public init(type: ContainerAutoParamType, fileIds: [String]? = nil, memoryLimit: ContainerMemoryLimit? = nil, networkPolicy: ContainerAutoParamNetworkPolicy? = nil, skills: [ContainerAutoParamSkillsItem]? = nil) throws {
+public extension ContainerAutoParam {
+    init(
+        type: ContainerAutoParamType,
+        fileIds: [String]? = nil,
+        memoryLimit: ContainerMemoryLimit? = nil,
+        networkPolicy: ContainerAutoParamNetworkPolicy? = nil,
+        skills: [ContainerAutoParamSkillsItem]? = nil
+    ) throws {
         (self.type, self.fileIds) = (type, fileIds)
         (self.memoryLimit, self.networkPolicy) = (memoryLimit, networkPolicy)
         self.skills = skills
-            try sdkValidateRawEnum("type", self.type, ContainerAutoParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ContainerAutoParamType.allCases.map(\.rawValue))
         if let value = self.fileIds {
             try validateItems("file_ids", value, min: nil, max: 50)
         }
@@ -365,24 +450,30 @@ public struct ContainerNetworkPolicyDisabledParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ContainerNetworkPolicyDisabledParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, ContainerNetworkPolicyDisabledParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ContainerNetworkPolicyDisabledParam {
-    public init(type: ContainerNetworkPolicyDisabledParamType) throws {
+public extension ContainerNetworkPolicyDisabledParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, ContainerNetworkPolicyDisabledParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ContainerNetworkPolicyDisabledParam {
+    init(type: ContainerNetworkPolicyDisabledParamType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, ContainerNetworkPolicyDisabledParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ContainerNetworkPolicyDisabledParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -401,37 +492,51 @@ public struct ContainerNetworkPolicyDomainSecretParam: Codable {
         case value
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ContainerNetworkPolicyDomainSecretParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.domain) else {
-            throw SdkValidationError(field: "domain", code: "required", message: "Validation failed for 'domain': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.value) else {
-            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
-        }
-        self.domain = try container.sdkDecodeRequired(.domain)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.value = try container.sdkDecodeRequired(.value)
-            try validateLength("domain", self.domain, min: 1, max: nil)
-            try validateLength("name", self.name, min: 1, max: nil)
-            try validateLength("value", self.value, min: 1, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ContainerNetworkPolicyDomainSecretParam {
-    public init(domain: String, name: String, value: String) throws {
+public extension ContainerNetworkPolicyDomainSecretParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.domain) else {
+            throw SdkValidationError(
+                field: "domain",
+                code: "required",
+                message: "Validation failed for 'domain': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.value) else {
+            throw SdkValidationError(
+                field: "value",
+                code: "required",
+                message: "Validation failed for 'value': value is required"
+            )
+        }
+        domain = try container.sdkDecodeRequired(.domain)
+        name = try container.sdkDecodeRequired(.name)
+        value = try container.sdkDecodeRequired(.value)
+        try validateLength("domain", domain, min: 1, max: nil)
+        try validateLength("name", name, min: 1, max: nil)
+        try validateLength("value", value, min: 1, max: 10_485_760)
+    }
+}
+
+public extension ContainerNetworkPolicyDomainSecretParam {
+    init(domain: String, name: String, value: String) throws {
         (self.domain, self.name) = (domain, name)
         self.value = value
-            try validateLength("domain", self.domain, min: 1, max: nil)
-            try validateLength("name", self.name, min: 1, max: nil)
-            try validateLength("value", self.value, min: 1, max: 10485760)
+        try validateLength("domain", self.domain, min: 1, max: nil)
+        try validateLength("name", self.name, min: 1, max: nil)
+        try validateLength("value", self.value, min: 1, max: 10_485_760)
     }
 }
 

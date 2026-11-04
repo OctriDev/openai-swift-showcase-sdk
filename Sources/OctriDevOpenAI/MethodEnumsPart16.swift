@@ -24,37 +24,37 @@ struct AcceptRealtimeCallRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.type, forKey: SdkCodingKey("type"))
-        try keyedContainer.encodeIfPresent(self.outputModalities, forKey: SdkCodingKey("output_modalities"))
-        try keyedContainer.encodeIfPresent(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(self.audio, forKey: SdkCodingKey("audio"))
-        try keyedContainer.encodeIfPresent(self.include, forKey: SdkCodingKey("include"))
-        try keyedContainer.encodeIfPresent(self.tracing, forKey: SdkCodingKey("tracing"))
-        try keyedContainer.encodeIfPresent(self.tools, forKey: SdkCodingKey("tools"))
-        try keyedContainer.encodeIfPresent(self.toolChoice, forKey: SdkCodingKey("tool_choice"))
-        try keyedContainer.encodeIfPresent(self.parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
-        try keyedContainer.encodeIfPresent(self.reasoning, forKey: SdkCodingKey("reasoning"))
-        try keyedContainer.encodeIfPresent(self.maxOutputTokens, forKey: SdkCodingKey("max_output_tokens"))
-        try keyedContainer.encodeIfPresent(self.truncation, forKey: SdkCodingKey("truncation"))
-        try keyedContainer.encodeIfPresent(self.prompt, forKey: SdkCodingKey("prompt"))
+        try keyedContainer.encode(type, forKey: SdkCodingKey("type"))
+        try keyedContainer.encodeIfPresent(outputModalities, forKey: SdkCodingKey("output_modalities"))
+        try keyedContainer.encodeIfPresent(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(audio, forKey: SdkCodingKey("audio"))
+        try keyedContainer.encodeIfPresent(include, forKey: SdkCodingKey("include"))
+        try keyedContainer.encodeIfPresent(tracing, forKey: SdkCodingKey("tracing"))
+        try keyedContainer.encodeIfPresent(tools, forKey: SdkCodingKey("tools"))
+        try keyedContainer.encodeIfPresent(toolChoice, forKey: SdkCodingKey("tool_choice"))
+        try keyedContainer.encodeIfPresent(parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
+        try keyedContainer.encodeIfPresent(reasoning, forKey: SdkCodingKey("reasoning"))
+        try keyedContainer.encodeIfPresent(maxOutputTokens, forKey: SdkCodingKey("max_output_tokens"))
+        try keyedContainer.encodeIfPresent(truncation, forKey: SdkCodingKey("truncation"))
+        try keyedContainer.encodeIfPresent(prompt, forKey: SdkCodingKey("prompt"))
     }
 
     init(options: RealtimeMethods.AcceptRealtimeCallOptions) {
-        self.type = options.type
-        self.outputModalities = options.outputModalities
-        self.model = options.model
-        self.instructions = options.instructions
-        self.audio = options.audio
-        self.include = options.include
-        self.tracing = options.tracing
-        self.tools = options.tools
-        self.toolChoice = options.toolChoice
-        self.parallelToolCalls = options.parallelToolCalls
-        self.reasoning = options.reasoning
-        self.maxOutputTokens = options.maxOutputTokens
-        self.truncation = options.truncation
-        self.prompt = options.prompt
+        type = options.type
+        outputModalities = options.outputModalities
+        model = options.model
+        instructions = options.instructions
+        audio = options.audio
+        include = options.include
+        tracing = options.tracing
+        tools = options.tools
+        toolChoice = options.toolChoice
+        parallelToolCalls = options.parallelToolCalls
+        reasoning = options.reasoning
+        maxOutputTokens = options.maxOutputTokens
+        truncation = options.truncation
+        prompt = options.prompt
     }
 }
 
@@ -63,7 +63,7 @@ struct ReferRealtimeCallRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.targetUri, forKey: SdkCodingKey("target_uri"))
+        try keyedContainer.encode(targetUri, forKey: SdkCodingKey("target_uri"))
     }
 }
 
@@ -72,7 +72,7 @@ struct RejectRealtimeCallRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.statusCode, forKey: SdkCodingKey("status_code"))
+        try keyedContainer.encodeIfPresent(statusCode, forKey: SdkCodingKey("status_code"))
     }
 }
 
@@ -82,8 +82,8 @@ struct CreateRealtimeClientSecretRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.expiresAfter, forKey: SdkCodingKey("expires_after"))
-        try keyedContainer.encodeIfPresent(self.session, forKey: SdkCodingKey("session"))
+        try keyedContainer.encodeIfPresent(expiresAfter, forKey: SdkCodingKey("expires_after"))
+        try keyedContainer.encodeIfPresent(session, forKey: SdkCodingKey("session"))
     }
 }
 
@@ -107,41 +107,41 @@ struct CreateRealtimeSessionRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.clientSecret, forKey: SdkCodingKey("client_secret"))
-        try keyedContainer.encodeIfPresent(self.modalities, forKey: SdkCodingKey("modalities"))
-        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(self.voice, forKey: SdkCodingKey("voice"))
-        try keyedContainer.encodeIfPresent(self.inputAudioFormat, forKey: SdkCodingKey("input_audio_format"))
-        try keyedContainer.encodeIfPresent(self.outputAudioFormat, forKey: SdkCodingKey("output_audio_format"))
-        try keyedContainer.encodeIfPresent(self.inputAudioTranscription, forKey: SdkCodingKey("input_audio_transcription"))
-        try keyedContainer.encodeIfPresent(self.speed, forKey: SdkCodingKey("speed"))
-        try keyedContainer.encodeIfPresent(self.tracing, forKey: SdkCodingKey("tracing"))
-        try keyedContainer.encodeIfPresent(self.turnDetection, forKey: SdkCodingKey("turn_detection"))
-        try keyedContainer.encodeIfPresent(self.tools, forKey: SdkCodingKey("tools"))
-        try keyedContainer.encodeIfPresent(self.toolChoice, forKey: SdkCodingKey("tool_choice"))
-        try keyedContainer.encodeIfPresent(self.temperature, forKey: SdkCodingKey("temperature"))
-        try keyedContainer.encodeIfPresent(self.maxResponseOutputTokens, forKey: SdkCodingKey("max_response_output_tokens"))
-        try keyedContainer.encodeIfPresent(self.truncation, forKey: SdkCodingKey("truncation"))
-        try keyedContainer.encodeIfPresent(self.prompt, forKey: SdkCodingKey("prompt"))
+        try keyedContainer.encode(clientSecret, forKey: SdkCodingKey("client_secret"))
+        try keyedContainer.encodeIfPresent(modalities, forKey: SdkCodingKey("modalities"))
+        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(voice, forKey: SdkCodingKey("voice"))
+        try keyedContainer.encodeIfPresent(inputAudioFormat, forKey: SdkCodingKey("input_audio_format"))
+        try keyedContainer.encodeIfPresent(outputAudioFormat, forKey: SdkCodingKey("output_audio_format"))
+        try keyedContainer.encodeIfPresent(inputAudioTranscription, forKey: SdkCodingKey("input_audio_transcription"))
+        try keyedContainer.encodeIfPresent(speed, forKey: SdkCodingKey("speed"))
+        try keyedContainer.encodeIfPresent(tracing, forKey: SdkCodingKey("tracing"))
+        try keyedContainer.encodeIfPresent(turnDetection, forKey: SdkCodingKey("turn_detection"))
+        try keyedContainer.encodeIfPresent(tools, forKey: SdkCodingKey("tools"))
+        try keyedContainer.encodeIfPresent(toolChoice, forKey: SdkCodingKey("tool_choice"))
+        try keyedContainer.encodeIfPresent(temperature, forKey: SdkCodingKey("temperature"))
+        try keyedContainer.encodeIfPresent(maxResponseOutputTokens, forKey: SdkCodingKey("max_response_output_tokens"))
+        try keyedContainer.encodeIfPresent(truncation, forKey: SdkCodingKey("truncation"))
+        try keyedContainer.encodeIfPresent(prompt, forKey: SdkCodingKey("prompt"))
     }
 
     init(options: RealtimeMethods.CreateRealtimeSessionOptions) {
-        self.clientSecret = options.clientSecret
-        self.modalities = options.modalities
-        self.instructions = options.instructions
-        self.voice = options.voice
-        self.inputAudioFormat = options.inputAudioFormat
-        self.outputAudioFormat = options.outputAudioFormat
-        self.inputAudioTranscription = options.inputAudioTranscription
-        self.speed = options.speed
-        self.tracing = options.tracing
-        self.turnDetection = options.turnDetection
-        self.tools = options.tools
-        self.toolChoice = options.toolChoice
-        self.temperature = options.temperature
-        self.maxResponseOutputTokens = options.maxResponseOutputTokens
-        self.truncation = options.truncation
-        self.prompt = options.prompt
+        clientSecret = options.clientSecret
+        modalities = options.modalities
+        instructions = options.instructions
+        voice = options.voice
+        inputAudioFormat = options.inputAudioFormat
+        outputAudioFormat = options.outputAudioFormat
+        inputAudioTranscription = options.inputAudioTranscription
+        speed = options.speed
+        tracing = options.tracing
+        turnDetection = options.turnDetection
+        tools = options.tools
+        toolChoice = options.toolChoice
+        temperature = options.temperature
+        maxResponseOutputTokens = options.maxResponseOutputTokens
+        truncation = options.truncation
+        prompt = options.prompt
     }
 }
 
@@ -154,11 +154,14 @@ struct CreateRealtimeTranscriptionSessionRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.turnDetection, forKey: SdkCodingKey("turn_detection"))
-        try keyedContainer.encodeIfPresent(self.inputAudioNoiseReduction, forKey: SdkCodingKey("input_audio_noise_reduction"))
-        try keyedContainer.encodeIfPresent(self.inputAudioFormat, forKey: SdkCodingKey("input_audio_format"))
-        try keyedContainer.encodeIfPresent(self.inputAudioTranscription, forKey: SdkCodingKey("input_audio_transcription"))
-        try keyedContainer.encodeIfPresent(self.include, forKey: SdkCodingKey("include"))
+        try keyedContainer.encodeIfPresent(turnDetection, forKey: SdkCodingKey("turn_detection"))
+        try keyedContainer.encodeIfPresent(
+            inputAudioNoiseReduction,
+            forKey: SdkCodingKey("input_audio_noise_reduction")
+        )
+        try keyedContainer.encodeIfPresent(inputAudioFormat, forKey: SdkCodingKey("input_audio_format"))
+        try keyedContainer.encodeIfPresent(inputAudioTranscription, forKey: SdkCodingKey("input_audio_transcription"))
+        try keyedContainer.encodeIfPresent(include, forKey: SdkCodingKey("include"))
     }
 }
 
@@ -168,8 +171,8 @@ struct CreateRealtimeTranslationClientSecretRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encode(self.session, forKey: SdkCodingKey("session"))
-        try keyedContainer.encodeIfPresent(self.expiresAfter, forKey: SdkCodingKey("expires_after"))
+        try keyedContainer.encode(session, forKey: SdkCodingKey("session"))
+        try keyedContainer.encodeIfPresent(expiresAfter, forKey: SdkCodingKey("expires_after"))
     }
 }
 
@@ -189,32 +192,32 @@ struct CountResponsesInputTokensRequestBody: Encodable {
 
     func encode(to encoder: Encoder) throws {
         var keyedContainer = encoder.container(keyedBy: SdkCodingKey.self)
-        try keyedContainer.encodeIfPresent(self.model, forKey: SdkCodingKey("model"))
-        try keyedContainer.encodeIfPresent(self.input, forKey: SdkCodingKey("input"))
-        try keyedContainer.encodeIfPresent(self.previousResponseId, forKey: SdkCodingKey("previous_response_id"))
-        try keyedContainer.encodeIfPresent(self.tools, forKey: SdkCodingKey("tools"))
-        try keyedContainer.encodeIfPresent(self.text, forKey: SdkCodingKey("text"))
-        try keyedContainer.encodeIfPresent(self.reasoning, forKey: SdkCodingKey("reasoning"))
-        try keyedContainer.encodeIfPresent(self.truncation, forKey: SdkCodingKey("truncation"))
-        try keyedContainer.encodeIfPresent(self.instructions, forKey: SdkCodingKey("instructions"))
-        try keyedContainer.encodeIfPresent(self.personality, forKey: SdkCodingKey("personality"))
-        try keyedContainer.encodeIfPresent(self.conversation, forKey: SdkCodingKey("conversation"))
-        try keyedContainer.encodeIfPresent(self.toolChoice, forKey: SdkCodingKey("tool_choice"))
-        try keyedContainer.encodeIfPresent(self.parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
+        try keyedContainer.encodeIfPresent(model, forKey: SdkCodingKey("model"))
+        try keyedContainer.encodeIfPresent(input, forKey: SdkCodingKey("input"))
+        try keyedContainer.encodeIfPresent(previousResponseId, forKey: SdkCodingKey("previous_response_id"))
+        try keyedContainer.encodeIfPresent(tools, forKey: SdkCodingKey("tools"))
+        try keyedContainer.encodeIfPresent(text, forKey: SdkCodingKey("text"))
+        try keyedContainer.encodeIfPresent(reasoning, forKey: SdkCodingKey("reasoning"))
+        try keyedContainer.encodeIfPresent(truncation, forKey: SdkCodingKey("truncation"))
+        try keyedContainer.encodeIfPresent(instructions, forKey: SdkCodingKey("instructions"))
+        try keyedContainer.encodeIfPresent(personality, forKey: SdkCodingKey("personality"))
+        try keyedContainer.encodeIfPresent(conversation, forKey: SdkCodingKey("conversation"))
+        try keyedContainer.encodeIfPresent(toolChoice, forKey: SdkCodingKey("tool_choice"))
+        try keyedContainer.encodeIfPresent(parallelToolCalls, forKey: SdkCodingKey("parallel_tool_calls"))
     }
 
     init(options: ResponsesMethods.CountResponsesInputTokensOptions) {
-        self.model = options.model
-        self.input = options.input
-        self.previousResponseId = options.previousResponseId
-        self.tools = options.tools
-        self.text = options.text
-        self.reasoning = options.reasoning
-        self.truncation = options.truncation
-        self.instructions = options.instructions
-        self.personality = options.personality
-        self.conversation = options.conversation
-        self.toolChoice = options.toolChoice
-        self.parallelToolCalls = options.parallelToolCalls
+        model = options.model
+        input = options.input
+        previousResponseId = options.previousResponseId
+        tools = options.tools
+        text = options.text
+        reasoning = options.reasoning
+        truncation = options.truncation
+        instructions = options.instructions
+        personality = options.personality
+        conversation = options.conversation
+        toolChoice = options.toolChoice
+        parallelToolCalls = options.parallelToolCalls
     }
 }

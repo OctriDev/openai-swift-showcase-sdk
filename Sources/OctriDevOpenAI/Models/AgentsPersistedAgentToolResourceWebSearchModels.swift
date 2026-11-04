@@ -3,43 +3,69 @@
 
 import Foundation
 
-// AgentsPersisted domain models
-extension PersistedAgentToolResourceWebSearch {
-    public init(from decoder: Decoder) throws {
+/// AgentsPersisted domain models
+public extension PersistedAgentToolResourceWebSearch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.mode) else {
-            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
+            throw SdkValidationError(
+                field: "mode",
+                code: "required",
+                message: "Validation failed for 'mode': value is required"
+            )
         }
         guard container.contains(.contextSize) else {
-            throw SdkValidationError(field: "context_size", code: "required", message: "Validation failed for 'context_size': value is required")
+            throw SdkValidationError(
+                field: "context_size",
+                code: "required",
+                message: "Validation failed for 'context_size': value is required"
+            )
         }
         guard container.contains(.allowedDomains) else {
-            throw SdkValidationError(field: "allowed_domains", code: "required", message: "Validation failed for 'allowed_domains': value is required")
+            throw SdkValidationError(
+                field: "allowed_domains",
+                code: "required",
+                message: "Validation failed for 'allowed_domains': value is required"
+            )
         }
         guard container.contains(.location) else {
-            throw SdkValidationError(field: "location", code: "required", message: "Validation failed for 'location': value is required")
+            throw SdkValidationError(
+                field: "location",
+                code: "required",
+                message: "Validation failed for 'location': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.mode = try container.sdkDecodeRequired(.mode)
-        self.contextSize = try container.sdkDecodeRequired(.contextSize)
-        self.allowedDomains = try container.sdkDecodeNullable(.allowedDomains)
-        self.location = try container.sdkDecodeNullable(.location)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceWebSearchType.allCases.map(\.rawValue))
-        if let value = self.allowedDomains {
+        type = try container.sdkDecodeRequired(.type)
+        mode = try container.sdkDecodeRequired(.mode)
+        contextSize = try container.sdkDecodeRequired(.contextSize)
+        allowedDomains = try container.sdkDecodeNullable(.allowedDomains)
+        location = try container.sdkDecodeNullable(.location)
+        try sdkValidateRawEnum("type", type, PersistedAgentToolResourceWebSearchType.allCases.map(\.rawValue))
+        if let value = allowedDomains {
             try validateItems("allowed_domains", value, min: 0, max: 2000)
         }
     }
 }
 
-extension PersistedAgentToolResourceWebSearch {
-    public init(type: PersistedAgentToolResourceWebSearchType, mode: WebSearchModeResource, contextSize: WebSearchContextSizeResource, allowedDomains: [String]?, location: WebSearchLocationResource?) throws {
+public extension PersistedAgentToolResourceWebSearch {
+    init(
+        type: PersistedAgentToolResourceWebSearchType,
+        mode: WebSearchModeResource,
+        contextSize: WebSearchContextSizeResource,
+        allowedDomains: [String]?,
+        location: WebSearchLocationResource?
+    ) throws {
         (self.type, self.mode) = (type, mode)
         (self.contextSize, self.allowedDomains) = (contextSize, allowedDomains)
         self.location = location
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceWebSearchType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceWebSearchType.allCases.map(\.rawValue))
         if let value = self.allowedDomains {
             try validateItems("allowed_domains", value, min: 0, max: 2000)
         }
@@ -58,28 +84,46 @@ public struct PersistedAgentToolResourceProgrammaticToolCalling: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension PersistedAgentToolResourceProgrammaticToolCalling {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.enabled) else {
-            throw SdkValidationError(field: "enabled", code: "required", message: "Validation failed for 'enabled': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.enabled = try container.sdkDecodeRequired(.enabled)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceProgrammaticToolCallingType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension PersistedAgentToolResourceProgrammaticToolCalling {
-    public init(type: PersistedAgentToolResourceProgrammaticToolCallingType, enabled: Bool) throws {
+public extension PersistedAgentToolResourceProgrammaticToolCalling {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.enabled) else {
+            throw SdkValidationError(
+                field: "enabled",
+                code: "required",
+                message: "Validation failed for 'enabled': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        enabled = try container.sdkDecodeRequired(.enabled)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            PersistedAgentToolResourceProgrammaticToolCallingType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension PersistedAgentToolResourceProgrammaticToolCalling {
+    init(type: PersistedAgentToolResourceProgrammaticToolCallingType, enabled: Bool) throws {
         (self.type, self.enabled) = (type, enabled)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolResourceProgrammaticToolCallingType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            PersistedAgentToolResourceProgrammaticToolCallingType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -95,25 +139,39 @@ public struct PersistedAgentToolConfigParamProgrammaticToolCalling: Codable {
         case enabled
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension PersistedAgentToolConfigParamProgrammaticToolCalling {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.enabled = try container.sdkDecodeIfPresent(.enabled)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension PersistedAgentToolConfigParamProgrammaticToolCalling {
-    public init(type: PersistedAgentToolConfigParamProgrammaticToolCallingType, enabled: Bool? = nil) throws {
+public extension PersistedAgentToolConfigParamProgrammaticToolCalling {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        enabled = try container.sdkDecodeIfPresent(.enabled)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            PersistedAgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension PersistedAgentToolConfigParamProgrammaticToolCalling {
+    init(type: PersistedAgentToolConfigParamProgrammaticToolCallingType, enabled: Bool? = nil) throws {
         (self.type, self.enabled) = (type, enabled)
-            try sdkValidateRawEnum("type", self.type, PersistedAgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            PersistedAgentToolConfigParamProgrammaticToolCallingType.allCases.map(\.rawValue)
+        )
     }
 }
 

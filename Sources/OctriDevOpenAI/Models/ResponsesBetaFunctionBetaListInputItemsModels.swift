@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaFunction domain models
+/// ResponsesBetaFunction domain models
 /// Typed representation of the `BetaFunctionToolCallResource` API schema.
 public struct BetaFunctionToolCallResource: Codable {
     /// The unique ID of the function tool call.
@@ -44,54 +44,92 @@ public struct BetaFunctionToolCallResource: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaFunctionToolCallResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.arguments) else {
-            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.arguments = try container.sdkDecodeRequired(.arguments)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-        self.namespace = try container.sdkDecodeIfPresent(.namespace)
-        self.async = try container.sdkDecodeIfPresent(.async)
-        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
-            try sdkValidateRawEnum("type", self.type, BetaFunctionToolCallType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaFunctionToolCallResource {
-    public init(id: String, type: BetaFunctionToolCallType, callId: String, name: String, arguments: String, status: BetaFunctionCallStatus, agent: BetaAgentTag? = nil, caller: BetaToolCallCaller? = nil, namespace: String? = nil, async: Bool? = nil, createdBy: String? = nil) throws {
+public extension BetaFunctionToolCallResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.arguments) else {
+            throw SdkValidationError(
+                field: "arguments",
+                code: "required",
+                message: "Validation failed for 'arguments': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        name = try container.sdkDecodeRequired(.name)
+        arguments = try container.sdkDecodeRequired(.arguments)
+        status = try container.sdkDecodeRequired(.status)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        namespace = try container.sdkDecodeIfPresent(.namespace)
+        async = try container.sdkDecodeIfPresent(.async)
+        createdBy = try container.sdkDecodeIfPresent(.createdBy)
+        try sdkValidateRawEnum("type", type, BetaFunctionToolCallType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaFunctionToolCallResource {
+    init(
+        id: String,
+        type: BetaFunctionToolCallType,
+        callId: String,
+        name: String,
+        arguments: String,
+        status: BetaFunctionCallStatus,
+        agent: BetaAgentTag? = nil,
+        caller: BetaToolCallCaller? = nil,
+        namespace: String? = nil,
+        async: Bool? = nil,
+        createdBy: String? = nil
+    ) throws {
         (self.id, self.type) = (id, type)
         (self.callId, self.name) = (callId, name)
         (self.arguments, self.status) = (arguments, status)
         (self.agent, self.caller) = (agent, caller)
         (self.namespace, self.async) = (namespace, async)
         self.createdBy = createdBy
-            try sdkValidateRawEnum("type", self.type, BetaFunctionToolCallType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaFunctionToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -111,26 +149,36 @@ public struct BetaFunctionToolCallResourceVariant1: Codable {
         case createdBy = "created_by"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaFunctionToolCallResourceVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.createdBy = try container.sdkDecodeIfPresent(.createdBy)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaFunctionToolCallResourceVariant1 {
-    public init(id: String, status: BetaFunctionCallStatus, createdBy: String? = nil) {
+public extension BetaFunctionToolCallResourceVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        status = try container.sdkDecodeRequired(.status)
+        createdBy = try container.sdkDecodeIfPresent(.createdBy)
+    }
+}
+
+public extension BetaFunctionToolCallResourceVariant1 {
+    init(id: String, status: BetaFunctionCallStatus, createdBy: String? = nil) {
         (self.id, self.status) = (id, status)
         self.createdBy = createdBy
     }

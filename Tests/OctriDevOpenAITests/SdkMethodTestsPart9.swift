@@ -17,12 +17,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.audio.createTranslation(
-            file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
-            model: decoded("\"whisper-1\""),
-            prompt: decoded("\"prompt\""),
-            responseFormat: decoded("\"json\""),
-            temperature: decoded("0")
-        )
+                file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+                model: decoded("\"whisper-1\""),
+                prompt: decoded("\"prompt\""),
+                responseFormat: decoded("\"json\""),
+                temperature: decoded("0")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -71,12 +71,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.uploads.create(
-            filename: decoded("\"Example Name\""),
-            purpose: decoded("\"assistants\""),
-            bytes: decoded("1"),
-            mimeType: decoded("\"mime_type\""),
-            expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":3600}")
-        )
+                filename: decoded("\"Example Name\""),
+                purpose: decoded("\"assistants\""),
+                bytes: decoded("1"),
+                mimeType: decoded("\"mime_type\""),
+                expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":3600}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -122,9 +122,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vaults.create(
-            name: decoded("\"Example Name\""),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                name: decoded("\"Example Name\""),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -172,11 +172,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vaults.createCredential(
-            vaultId: decoded("\"vault-1\""),
-            name: decoded("\"Example Name\""),
-            auth: decoded(sdkMethodFixture182Value1),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                vaultId: decoded("\"vault-1\""),
+                name: decoded("\"Example Name\""),
+                auth: decoded(sdkMethodFixture182Value1),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -226,13 +226,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.create(
-            fileIds: decoded("[\"file_ids\"]"),
-            name: decoded("\"Example Name\""),
-            description: decoded("\"example text\""),
-            expiresAfter: decoded("{\"anchor\":\"last_active_at\",\"days\":1}"),
-            chunkingStrategy: decoded("{\"type\":\"auto\"}"),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                fileIds: decoded("[\"file_ids\"]"),
+                name: decoded("\"Example Name\""),
+                description: decoded("\"example text\""),
+                expiresAfter: decoded("{\"anchor\":\"last_active_at\",\"days\":1}"),
+                chunkingStrategy: decoded("{\"type\":\"auto\"}"),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -280,11 +280,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.createFile(
-            vectorStoreId: decoded("\"vs_abc123\""),
-            fileId: decoded("\"file-1\""),
-            chunkingStrategy: decoded("{\"type\":\"auto\"}"),
-            attributes: decoded("{\"key\":\"key\"}")
-        )
+                vectorStoreId: decoded("\"vs_abc123\""),
+                fileId: decoded("\"file-1\""),
+                chunkingStrategy: decoded("{\"type\":\"auto\"}"),
+                attributes: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -333,12 +333,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.createFileBatch(
-            vectorStoreId: decoded("\"vs_abc123\""),
-            fileIds: decoded("[\"file_ids\"]"),
-            files: decoded(sdkMethodFixture188Value1),
-            chunkingStrategy: decoded("{\"type\":\"auto\"}"),
-            attributes: decoded("{\"key\":\"key\"}")
-        )
+                vectorStoreId: decoded("\"vs_abc123\""),
+                fileIds: decoded("[\"file_ids\"]"),
+                files: decoded(sdkMethodFixture188Value1),
+                chunkingStrategy: decoded("{\"type\":\"auto\"}"),
+                attributes: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -383,8 +383,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.videos.create(
-            body: .createVideoJsonBody(decoded(sdkMethodFixture190Value1))
-        )
+                body: .createVideoJsonBody(decoded(sdkMethodFixture190Value1))
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -449,9 +449,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.videos.createCharacter(
-            video: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
-            name: decoded("\"Example Name\"")
-        )
+                video: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+                name: decoded("\"Example Name\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -496,8 +496,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.videos.createEdit(
-            body: .createVideoEditJsonBody(decoded("{\"video\":{\"id\":\"video_123\"},\"prompt\":\"x\"}"))
-        )
+                body: .createVideoEditJsonBody(decoded("{\"video\":{\"id\":\"video_123\"},\"prompt\":\"x\"}"))
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -538,7 +538,9 @@ extension SdkMethodTests {
         }
         _ = client
         let actual = try await client.videos.createExtend(
-            body: .createVideoExtendJsonBody(decoded("{\"video\":{\"id\":\"video_123\"},\"prompt\":\"x\",\"seconds\":\"4\"}"))
+            body: .createVideoExtendJsonBody(
+                decoded("{\"video\":{\"id\":\"video_123\"},\"prompt\":\"x\",\"seconds\":\"4\"}")
+            )
         )
         let expected = try JSONSerialization.jsonObject(
             with: Data(sdkMethodFixture197Expected.utf8),
@@ -561,8 +563,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.videos.createExtend(
-            body: .createVideoExtendJsonBody(decoded("{\"video\":{\"id\":\"video_123\"},\"prompt\":\"x\",\"seconds\":\"4\"}"))
-        )
+                body: .createVideoExtendJsonBody(
+                    decoded("{\"video\":{\"id\":\"video_123\"},\"prompt\":\"x\",\"seconds\":\"4\"}")
+                )
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

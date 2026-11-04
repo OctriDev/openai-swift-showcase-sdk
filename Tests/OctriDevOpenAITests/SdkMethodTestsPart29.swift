@@ -36,9 +36,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.conversations.update(
-            conversationId: decoded("\"conv_123\""),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                conversationId: decoded("\"conv_123\""),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -85,10 +85,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.evals.update(
-            evalId: decoded("\"eval-1\""),
-            name: decoded("\"Example Name\""),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                evalId: decoded("\"eval-1\""),
+                name: decoded("\"Example Name\""),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -134,9 +134,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.groups.update(
-            groupId: decoded("\"group-1\""),
-            name: decoded("\"Example Name\"")
-        )
+                groupId: decoded("\"group-1\""),
+                name: decoded("\"Example Name\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -170,7 +170,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testUpdateOrganizationDataRetentionUpdateOrganizationDataRetention400ReachesMockAndDecodesResponse() async throws {
+    func testUpdateOrganizationDataRetentionUpdateOrganizationDataRetention400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -181,8 +182,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.dataRetention.updateOrganization(
-            retentionType: decoded("\"zero_data_retention\"")
-        )
+                retentionType: decoded("\"zero_data_retention\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -231,12 +232,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.spendAlerts.updateOrganization(
-            alertId: decoded("\"alert-1\""),
-            thresholdAmount: decoded("0"),
-            currency: decoded("\"USD\""),
-            interval: decoded("\"month\""),
-            notificationChannel: decoded(sdkMethodFixture652Value1)
-        )
+                alertId: decoded("\"alert-1\""),
+                thresholdAmount: decoded("0"),
+                currency: decoded("\"USD\""),
+                interval: decoded("\"month\""),
+                notificationChannel: decoded(sdkMethodFixture652Value1)
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -284,11 +285,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.updateApiKey(
-            projectId: decoded("\"project-1\""),
-            apiKeyId: decoded("\"api_key-1\""),
-            expiresInSeconds: decoded("null"),
-            scopes: decoded("[\"api.all.read\"]")
-        )
+                projectId: decoded("\"project-1\""),
+                apiKeyId: decoded("\"api_key-1\""),
+                expiresInSeconds: decoded("null"),
+                scopes: decoded("[\"api.all.read\"]")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -334,9 +335,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.dataRetention.update(
-            projectId: decoded("\"project-1\""),
-            retentionType: decoded("\"organization_default\"")
-        )
+                projectId: decoded("\"project-1\""),
+                retentionType: decoded("\"organization_default\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -352,7 +353,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testUpdateProjectHostedToolPermissionsUpdateProjectHostedToolPermissionsReachesMockAndDecodesResponse() async throws {
+    func testUpdateProjectHostedToolPermissionsUpdateProjectHostedToolPermissionsReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -375,7 +377,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testUpdateProjectHostedToolPermissionsUpdateProjectHostedToolPermissions400ReachesMockAndDecodesResponse() async throws {
+    func testUpdateProjectHostedToolPermissionsUpdateProjectHostedToolPermissions400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -386,13 +389,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.hostedTools.updatePermissions(
-            projectId: decoded("\"project-1\""),
-            fileSearch: decoded("{\"enabled\":false}"),
-            webSearch: decoded("{\"enabled\":false}"),
-            imageGeneration: decoded("{\"enabled\":false}"),
-            mcp: decoded("{\"enabled\":false}"),
-            codeInterpreter: decoded("{\"enabled\":false}")
-        )
+                projectId: decoded("\"project-1\""),
+                fileSearch: decoded("{\"enabled\":false}"),
+                webSearch: decoded("{\"enabled\":false}"),
+                imageGeneration: decoded("{\"enabled\":false}"),
+                mcp: decoded("{\"enabled\":false}"),
+                codeInterpreter: decoded("{\"enabled\":false}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -439,10 +442,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.updateModelPermissions(
-            projectId: decoded("\"project-1\""),
-            mode: decoded("\"allow_list\""),
-            modelIds: decoded("[\"model_ids\"]")
-        )
+                projectId: decoded("\"project-1\""),
+                mode: decoded("\"allow_list\""),
+                modelIds: decoded("[\"model_ids\"]")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -463,7 +466,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try ProjectsMethods.UpdateProjectRateLimitsOptions(projectId: decoded("\"project-1\""), rateLimitId: decoded("\"rate_limit-1\""))
+        var options = try ProjectsMethods.UpdateProjectRateLimitsOptions(
+            projectId: decoded("\"project-1\""),
+            rateLimitId: decoded("\"rate_limit-1\"")
+        )
         options.maxRequestsPer1Minute = try decoded("1")
         options.maxTokensPer1Minute = try decoded("1")
         options.maxImagesPer1Minute = try decoded("30")
@@ -488,7 +494,10 @@ extension SdkMethodTests {
             return
         }
         _ = client
-        var options = try ProjectsMethods.UpdateProjectRateLimitsOptions(projectId: decoded("\"project-1\""), rateLimitId: decoded("\"rate_limit-1\""))
+        var options = try ProjectsMethods.UpdateProjectRateLimitsOptions(
+            projectId: decoded("\"project-1\""),
+            rateLimitId: decoded("\"rate_limit-1\"")
+        )
         options.maxRequestsPer1Minute = try decoded("1")
         options.maxTokensPer1Minute = try decoded("1")
         options.maxImagesPer1Minute = try decoded("30")
@@ -501,8 +510,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.updateRateLimits(
-            options: options
-        )
+                options: options
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -550,11 +559,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.updateServiceAccount(
-            projectId: decoded("\"project-1\""),
-            serviceAccountId: decoded("\"service_account-1\""),
-            name: decoded("\"Example Name\""),
-            role: decoded("\"member\"")
-        )
+                projectId: decoded("\"project-1\""),
+                serviceAccountId: decoded("\"service_account-1\""),
+                name: decoded("\"Example Name\""),
+                role: decoded("\"member\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

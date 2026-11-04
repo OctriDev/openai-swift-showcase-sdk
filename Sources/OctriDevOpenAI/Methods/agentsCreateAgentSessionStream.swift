@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AgentsMethods {
-    /// Creates a managed agent session, optionally submits initial input, and returns the session or streams its events when stream is true. See [running sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions).
+public extension AgentsMethods {
+    /// Creates a managed agent session, optionally submits initial input, and returns the session or streams its events
+    /// when stream is true. See [running sessions](https://developers.openai.com/api/docs/guides/agents-api/sessions).
     ///
     /// - Parameters:
     /// - environment: An inline execution environment or a reference to an
@@ -26,9 +27,26 @@ extension AgentsMethods {
     ///   `none`, or when `stream` is `true` for an environment that is not
     ///   `self_hosted`; optional for self-hosted and non-streaming execution
     ///   environments.
-    public static func createAgentSessionStream(config: ClientConfig, environment: EnvironmentParam, spendControl: SdkOptional<SessionSpendControlParam>? = nil, metadata: SdkOptional<[String: String]>? = nil, agent: SessionAgentConfigParam? = nil, agentId: String? = nil, vaultIds: SdkOptional<[String]>? = nil, input: SdkOptional<CreateSessionInputParam>? = nil, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
-        let requestBody = CreateAgentSessionStreamStreamRequestBody(environment: environment, spendControl: spendControl, metadata: metadata, agent: agent, agentId: agentId, vaultIds: vaultIds, input: input)
-
+    static func createAgentSessionStream(
+        config: ClientConfig,
+        environment: EnvironmentParam,
+        spendControl: SdkOptional<SessionSpendControlParam>? = nil,
+        metadata: SdkOptional<[String: String]>? = nil,
+        agent: SessionAgentConfigParam? = nil,
+        agentId: String? = nil,
+        vaultIds: SdkOptional<[String]>? = nil,
+        input: SdkOptional<CreateSessionInputParam>? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
+        let requestBody = CreateAgentSessionStreamStreamRequestBody(
+            environment: environment,
+            spendControl: spendControl,
+            metadata: metadata,
+            agent: agent,
+            agentId: agentId,
+            vaultIds: vaultIds,
+            input: input
+        )
 
         let upstream = try await sdkStream(
             "POST",
@@ -40,7 +58,16 @@ extension AgentsMethods {
             streamMediaType: "text/event-stream",
             chunkDomain: "bytes",
             options: requestOptions,
-            errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "429": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self]
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "429": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
         )
         return AsyncThrowingStream { continuation in
             let streamTask = _Concurrency.Task {
@@ -50,8 +77,11 @@ extension AgentsMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(SessionEvent.self, from: Data(event.data.utf8)) }
-                        
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
+                            SessionEvent.self,
+                            from: Data(event.data.utf8)
+                        ) }
+
                         continuation.yield(payload)
                     }
                     continuation.finish()

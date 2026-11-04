@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Skills domain models
+/// Skills domain models
 /// Uploads a skill either as a directory (multipart `files[]`) or as a single zip file.
 public struct CreateSkillBody: Codable {
     /// Skill files to upload (directory upload) or a single zip file.
@@ -13,23 +13,29 @@ public struct CreateSkillBody: Codable {
         case files
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateSkillBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.files) else {
-            throw SdkValidationError(field: "files", code: "required", message: "Validation failed for 'files': value is required")
-        }
-        self.files = try container.sdkDecodeRequired(.files)
-            try validateItems("files", self.files, min: nil, max: 500)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateSkillBody {
-    public init(files: [Data]) throws {
+public extension CreateSkillBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.files) else {
+            throw SdkValidationError(
+                field: "files",
+                code: "required",
+                message: "Validation failed for 'files': value is required"
+            )
+        }
+        files = try container.sdkDecodeRequired(.files)
+        try validateItems("files", files, min: nil, max: 500)
+    }
+}
+
+public extension CreateSkillBody {
+    init(files: [Data]) throws {
         self.files = files
-            try validateItems("files", self.files, min: nil, max: 500)
+        try validateItems("files", self.files, min: nil, max: 500)
     }
 }

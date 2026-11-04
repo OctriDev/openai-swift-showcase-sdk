@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsWeb domain models
+/// AgentsWeb domain models
 public indirect enum WebSearchActionResource {
     case webSearchActionResourceSearch(WebSearchActionResourceSearch)
     case webSearchActionResourceOpenPage(WebSearchActionResourceOpenPage)
@@ -14,7 +14,6 @@ public indirect enum WebSearchActionResource {
 }
 
 extension WebSearchActionResource: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -22,12 +21,16 @@ extension WebSearchActionResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -38,11 +41,11 @@ extension WebSearchActionResource: Codable {
 extension WebSearchActionResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "search": return .webSearchActionResourceSearch(try WebSearchActionResourceSearch(from: decoder))
-        case "open_page": return .webSearchActionResourceOpenPage(try WebSearchActionResourceOpenPage(from: decoder))
-        case "find_in_page": return .webSearchActionResourceFindInPage(try WebSearchActionResourceFindInPage(from: decoder))
-        case "other": return .webSearchActionResourceOther(try WebSearchActionResourceOther(from: decoder))
-        default: return nil
+        case "search": try .webSearchActionResourceSearch(WebSearchActionResourceSearch(from: decoder))
+        case "open_page": try .webSearchActionResourceOpenPage(WebSearchActionResourceOpenPage(from: decoder))
+        case "find_in_page": try .webSearchActionResourceFindInPage(WebSearchActionResourceFindInPage(from: decoder))
+        case "other": try .webSearchActionResourceOther(WebSearchActionResourceOther(from: decoder))
+        default: nil
         }
     }
 }
@@ -81,46 +84,74 @@ public struct WebSearchCallItemResource: Codable {
         case action
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebSearchCallItemResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.turnId) else {
-            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.action) else {
-            throw SdkValidationError(field: "action", code: "required", message: "Validation failed for 'action': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.turnId = try container.sdkDecodeRequired(.turnId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.action = try container.sdkDecodeNullable(.action)
-            try sdkValidateRawEnum("type", self.type, WebSearchCallItemResourceType.allCases.map(\.rawValue))
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebSearchCallItemResource {
-    public init(type: WebSearchCallItemResourceType, id: String, turnId: String, status: OutputItemStatusResource, action: WebSearchActionResource?) throws {
+public extension WebSearchCallItemResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.turnId) else {
+            throw SdkValidationError(
+                field: "turn_id",
+                code: "required",
+                message: "Validation failed for 'turn_id': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        guard container.contains(.action) else {
+            throw SdkValidationError(
+                field: "action",
+                code: "required",
+                message: "Validation failed for 'action': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        turnId = try container.sdkDecodeRequired(.turnId)
+        status = try container.sdkDecodeRequired(.status)
+        action = try container.sdkDecodeNullable(.action)
+        try sdkValidateRawEnum("type", type, WebSearchCallItemResourceType.allCases.map(\.rawValue))
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("turn_id", turnId, min: 0, max: nil)
+    }
+}
+
+public extension WebSearchCallItemResource {
+    init(
+        type: WebSearchCallItemResourceType,
+        id: String,
+        turnId: String,
+        status: OutputItemStatusResource,
+        action: WebSearchActionResource?
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.turnId, self.status) = (turnId, status)
         self.action = action
-            try sdkValidateRawEnum("type", self.type, WebSearchCallItemResourceType.allCases.map(\.rawValue))
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("turn_id", self.turnId, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, WebSearchCallItemResourceType.allCases.map(\.rawValue))
+        try validateLength("id", self.id, min: 0, max: nil)
+        try validateLength("turn_id", self.turnId, min: 0, max: nil)
     }
 }
 
@@ -143,48 +174,48 @@ public struct WebSearchLocationParam: Codable {
     }
 
     init() {
-        (self.country, self.region, self.city, self.timezone) = (nil, nil, nil, nil)
+        (country, region, city, timezone) = (nil, nil, nil, nil)
     }
 }
 
-extension WebSearchLocationParam {
-    public init(from decoder: Decoder) throws {
+public extension WebSearchLocationParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.country = try container.sdkDecodeIfPresent(.country)
-        self.region = try container.sdkDecodeIfPresent(.region)
-        self.city = try container.sdkDecodeIfPresent(.city)
-        self.timezone = try container.sdkDecodeIfPresent(.timezone)
-        if let value = self.country {
-            try validateLength("country", value, min: 0, max: 1048576)
+        country = try container.sdkDecodeIfPresent(.country)
+        region = try container.sdkDecodeIfPresent(.region)
+        city = try container.sdkDecodeIfPresent(.city)
+        timezone = try container.sdkDecodeIfPresent(.timezone)
+        if let value = country {
+            try validateLength("country", value, min: 0, max: 1_048_576)
         }
-        if let value = self.region {
-            try validateLength("region", value, min: 0, max: 1048576)
+        if let value = region {
+            try validateLength("region", value, min: 0, max: 1_048_576)
         }
-        if let value = self.city {
-            try validateLength("city", value, min: 0, max: 1048576)
+        if let value = city {
+            try validateLength("city", value, min: 0, max: 1_048_576)
         }
-        if let value = self.timezone {
-            try validateLength("timezone", value, min: 0, max: 1048576)
+        if let value = timezone {
+            try validateLength("timezone", value, min: 0, max: 1_048_576)
         }
     }
 }
 
-extension WebSearchLocationParam {
-    public init(country: String? = nil, region: String? = nil, city: String? = nil, timezone: String? = nil) throws {
+public extension WebSearchLocationParam {
+    init(country: String? = nil, region: String? = nil, city: String? = nil, timezone: String? = nil) throws {
         self.init()
         (self.country, self.region) = (country, region)
         (self.city, self.timezone) = (city, timezone)
         if let value = self.country {
-            try validateLength("country", value, min: 0, max: 1048576)
+            try validateLength("country", value, min: 0, max: 1_048_576)
         }
         if let value = self.region {
-            try validateLength("region", value, min: 0, max: 1048576)
+            try validateLength("region", value, min: 0, max: 1_048_576)
         }
         if let value = self.city {
-            try validateLength("city", value, min: 0, max: 1048576)
+            try validateLength("city", value, min: 0, max: 1_048_576)
         }
         if let value = self.timezone {
-            try validateLength("timezone", value, min: 0, max: 1048576)
+            try validateLength("timezone", value, min: 0, max: 1_048_576)
         }
     }
 }
@@ -204,39 +235,53 @@ public struct WebSearchActionResourceFindInPage: Codable {
         case pattern
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension WebSearchActionResourceFindInPage {
-    public init(from decoder: Decoder) throws {
+public extension WebSearchActionResourceFindInPage {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.url) else {
-            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
+            throw SdkValidationError(
+                field: "url",
+                code: "required",
+                message: "Validation failed for 'url': value is required"
+            )
         }
         guard container.contains(.pattern) else {
-            throw SdkValidationError(field: "pattern", code: "required", message: "Validation failed for 'pattern': value is required")
+            throw SdkValidationError(
+                field: "pattern",
+                code: "required",
+                message: "Validation failed for 'pattern': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.url = try container.sdkDecodeNullable(.url)
-        self.pattern = try container.sdkDecodeNullable(.pattern)
-            try sdkValidateRawEnum("type", self.type, WebSearchActionResourceFindInPageType.allCases.map(\.rawValue))
-        if let value = self.url {
+        type = try container.sdkDecodeRequired(.type)
+        url = try container.sdkDecodeNullable(.url)
+        pattern = try container.sdkDecodeNullable(.pattern)
+        try sdkValidateRawEnum("type", type, WebSearchActionResourceFindInPageType.allCases.map(\.rawValue))
+        if let value = url {
             try validateLength("url", value, min: 0, max: nil)
         }
-        if let value = self.pattern {
+        if let value = pattern {
             try validateLength("pattern", value, min: 0, max: nil)
         }
     }
 }
 
-extension WebSearchActionResourceFindInPage {
-    public init(type: WebSearchActionResourceFindInPageType, url: String?, pattern: String?) throws {
+public extension WebSearchActionResourceFindInPage {
+    init(type: WebSearchActionResourceFindInPageType, url: String?, pattern: String?) throws {
         (self.type, self.url) = (type, url)
         self.pattern = pattern
-            try sdkValidateRawEnum("type", self.type, WebSearchActionResourceFindInPageType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, WebSearchActionResourceFindInPageType.allCases.map(\.rawValue))
         if let value = self.url {
             try validateLength("url", value, min: 0, max: nil)
         }
@@ -264,45 +309,63 @@ public struct WebSearchLocationResource: Codable {
         case timezone
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension WebSearchLocationResource {
-    public init(from decoder: Decoder) throws {
+public extension WebSearchLocationResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.country) else {
-            throw SdkValidationError(field: "country", code: "required", message: "Validation failed for 'country': value is required")
+            throw SdkValidationError(
+                field: "country",
+                code: "required",
+                message: "Validation failed for 'country': value is required"
+            )
         }
         guard container.contains(.region) else {
-            throw SdkValidationError(field: "region", code: "required", message: "Validation failed for 'region': value is required")
+            throw SdkValidationError(
+                field: "region",
+                code: "required",
+                message: "Validation failed for 'region': value is required"
+            )
         }
         guard container.contains(.city) else {
-            throw SdkValidationError(field: "city", code: "required", message: "Validation failed for 'city': value is required")
+            throw SdkValidationError(
+                field: "city",
+                code: "required",
+                message: "Validation failed for 'city': value is required"
+            )
         }
         guard container.contains(.timezone) else {
-            throw SdkValidationError(field: "timezone", code: "required", message: "Validation failed for 'timezone': value is required")
+            throw SdkValidationError(
+                field: "timezone",
+                code: "required",
+                message: "Validation failed for 'timezone': value is required"
+            )
         }
-        self.country = try container.sdkDecodeNullable(.country)
-        self.region = try container.sdkDecodeNullable(.region)
-        self.city = try container.sdkDecodeNullable(.city)
-        self.timezone = try container.sdkDecodeNullable(.timezone)
-        if let value = self.country {
+        country = try container.sdkDecodeNullable(.country)
+        region = try container.sdkDecodeNullable(.region)
+        city = try container.sdkDecodeNullable(.city)
+        timezone = try container.sdkDecodeNullable(.timezone)
+        if let value = country {
             try validateLength("country", value, min: 0, max: nil)
         }
-        if let value = self.region {
+        if let value = region {
             try validateLength("region", value, min: 0, max: nil)
         }
-        if let value = self.city {
+        if let value = city {
             try validateLength("city", value, min: 0, max: nil)
         }
-        if let value = self.timezone {
+        if let value = timezone {
             try validateLength("timezone", value, min: 0, max: nil)
         }
     }
 }
 
-extension WebSearchLocationResource {
-    public init(country: String?, region: String?, city: String?, timezone: String?) throws {
+public extension WebSearchLocationResource {
+    init(country: String?, region: String?, city: String?, timezone: String?) throws {
         (self.country, self.region) = (country, region)
         (self.city, self.timezone) = (city, timezone)
         if let value = self.country {
@@ -335,39 +398,53 @@ public struct WebSearchActionResourceSearch: Codable {
         case queries
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension WebSearchActionResourceSearch {
-    public init(from decoder: Decoder) throws {
+public extension WebSearchActionResourceSearch {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.query) else {
-            throw SdkValidationError(field: "query", code: "required", message: "Validation failed for 'query': value is required")
+            throw SdkValidationError(
+                field: "query",
+                code: "required",
+                message: "Validation failed for 'query': value is required"
+            )
         }
         guard container.contains(.queries) else {
-            throw SdkValidationError(field: "queries", code: "required", message: "Validation failed for 'queries': value is required")
+            throw SdkValidationError(
+                field: "queries",
+                code: "required",
+                message: "Validation failed for 'queries': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.query = try container.sdkDecodeNullable(.query)
-        self.queries = try container.sdkDecodeNullable(.queries)
-            try sdkValidateRawEnum("type", self.type, WebSearchActionResourceSearchType.allCases.map(\.rawValue))
-        if let value = self.query {
+        type = try container.sdkDecodeRequired(.type)
+        query = try container.sdkDecodeNullable(.query)
+        queries = try container.sdkDecodeNullable(.queries)
+        try sdkValidateRawEnum("type", type, WebSearchActionResourceSearchType.allCases.map(\.rawValue))
+        if let value = query {
             try validateLength("query", value, min: 0, max: nil)
         }
-        if let value = self.queries {
+        if let value = queries {
             try validateItems("queries", value, min: 0, max: 2000)
         }
     }
 }
 
-extension WebSearchActionResourceSearch {
-    public init(type: WebSearchActionResourceSearchType, query: String?, queries: [String]?) throws {
+public extension WebSearchActionResourceSearch {
+    init(type: WebSearchActionResourceSearchType, query: String?, queries: [String]?) throws {
         (self.type, self.query) = (type, query)
         self.queries = queries
-            try sdkValidateRawEnum("type", self.type, WebSearchActionResourceSearchType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, WebSearchActionResourceSearchType.allCases.map(\.rawValue))
         if let value = self.query {
             try validateLength("query", value, min: 0, max: nil)
         }
@@ -386,24 +463,30 @@ public struct WebSearchActionResourceOther: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebSearchActionResourceOther {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-            try sdkValidateRawEnum("type", self.type, WebSearchActionResourceOtherType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebSearchActionResourceOther {
-    public init(type: WebSearchActionResourceOtherType) throws {
+public extension WebSearchActionResourceOther {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        try sdkValidateRawEnum("type", type, WebSearchActionResourceOtherType.allCases.map(\.rawValue))
+    }
+}
+
+public extension WebSearchActionResourceOther {
+    init(type: WebSearchActionResourceOtherType) throws {
         self.type = type
-            try sdkValidateRawEnum("type", self.type, WebSearchActionResourceOtherType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, WebSearchActionResourceOtherType.allCases.map(\.rawValue))
     }
 }
 
@@ -419,31 +502,41 @@ public struct WebSearchActionResourceOpenPage: Codable {
         case url
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension WebSearchActionResourceOpenPage {
-    public init(from decoder: Decoder) throws {
+public extension WebSearchActionResourceOpenPage {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.url) else {
-            throw SdkValidationError(field: "url", code: "required", message: "Validation failed for 'url': value is required")
+            throw SdkValidationError(
+                field: "url",
+                code: "required",
+                message: "Validation failed for 'url': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.url = try container.sdkDecodeNullable(.url)
-            try sdkValidateRawEnum("type", self.type, WebSearchActionResourceOpenPageType.allCases.map(\.rawValue))
-        if let value = self.url {
+        type = try container.sdkDecodeRequired(.type)
+        url = try container.sdkDecodeNullable(.url)
+        try sdkValidateRawEnum("type", type, WebSearchActionResourceOpenPageType.allCases.map(\.rawValue))
+        if let value = url {
             try validateLength("url", value, min: 0, max: nil)
         }
     }
 }
 
-extension WebSearchActionResourceOpenPage {
-    public init(type: WebSearchActionResourceOpenPageType, url: String?) throws {
+public extension WebSearchActionResourceOpenPage {
+    init(type: WebSearchActionResourceOpenPageType, url: String?) throws {
         (self.type, self.url) = (type, url)
-            try sdkValidateRawEnum("type", self.type, WebSearchActionResourceOpenPageType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, WebSearchActionResourceOpenPageType.allCases.map(\.rawValue))
         if let value = self.url {
             try validateLength("url", value, min: 0, max: nil)
         }
@@ -454,14 +547,17 @@ extension WebSearchActionResourceOpenPage {
 public struct WebSearchContextSizeResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = WebSearchContextSizeResource(rawValue: "low")
     public static let medium = WebSearchContextSizeResource(rawValue: "medium")
     public static let high = WebSearchContextSizeResource(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -474,14 +570,17 @@ public struct WebSearchContextSizeResource: RawRepresentable, Hashable, Codable,
 public struct WebSearchModeParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let disabled = WebSearchModeParam(rawValue: "disabled")
     public static let cached = WebSearchModeParam(rawValue: "cached")
     public static let live = WebSearchModeParam(rawValue: "live")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

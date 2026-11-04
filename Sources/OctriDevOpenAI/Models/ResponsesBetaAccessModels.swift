@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaAccess domain models
+/// ResponsesBetaAccess domain models
 /// Domain-specific access programs to use for this request.
 public struct BetaAccessProgramsParam: Codable {
     /// The Cyber access program to use for this request. Supported values are `standard`, `daybreak_blue`, and
@@ -18,19 +18,19 @@ public struct BetaAccessProgramsParam: Codable {
     }
 
     init() {
-        self.cyber = nil
+        cyber = nil
     }
 }
 
-extension BetaAccessProgramsParam {
-    public init(from decoder: Decoder) throws {
+public extension BetaAccessProgramsParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.cyber = try container.sdkDecodeIfPresent(.cyber)
+        cyber = try container.sdkDecodeIfPresent(.cyber)
     }
 }
 
-extension BetaAccessProgramsParam {
-    public init(cyber: BetaCyberAccessProgramEnum? = nil) {
+public extension BetaAccessProgramsParam {
+    init(cyber: BetaCyberAccessProgramEnum? = nil) {
         self.init()
         self.cyber = cyber
     }
@@ -45,21 +45,27 @@ public struct BetaAccessProgramsBody: Codable {
         case cyber
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaAccessProgramsBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.cyber) else {
-            throw SdkValidationError(field: "cyber", code: "required", message: "Validation failed for 'cyber': value is required")
-        }
-        self.cyber = try container.sdkDecodeRequired(.cyber)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaAccessProgramsBody {
-    public init(cyber: BetaCyberAccessProgramEnum) {
+public extension BetaAccessProgramsBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.cyber) else {
+            throw SdkValidationError(
+                field: "cyber",
+                code: "required",
+                message: "Validation failed for 'cyber': value is required"
+            )
+        }
+        cyber = try container.sdkDecodeRequired(.cyber)
+    }
+}
+
+public extension BetaAccessProgramsBody {
+    init(cyber: BetaCyberAccessProgramEnum) {
         self.cyber = cyber
     }
 }

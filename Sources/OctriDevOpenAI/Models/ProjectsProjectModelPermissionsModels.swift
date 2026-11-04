@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Projects domain models
+/// Projects domain models
 /// Represents the model allowlist or denylist policy for a project.
 public struct ProjectModelPermissions: Codable, SdkResource {
     /// The object type, which is always `project.model_permissions`.
@@ -20,29 +20,43 @@ public struct ProjectModelPermissions: Codable, SdkResource {
         case modelIds = "model_ids"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ProjectModelPermissions {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.object) else {
-            throw SdkValidationError(field: "object", code: "required", message: "Validation failed for 'object': value is required")
-        }
-        guard container.contains(.mode) else {
-            throw SdkValidationError(field: "mode", code: "required", message: "Validation failed for 'mode': value is required")
-        }
-        guard container.contains(.modelIds) else {
-            throw SdkValidationError(field: "model_ids", code: "required", message: "Validation failed for 'model_ids': value is required")
-        }
-        self.object = try container.sdkDecodeRequired(.object)
-        self.mode = try container.sdkDecodeRequired(.mode)
-        self.modelIds = try container.sdkDecodeRequired(.modelIds)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ProjectModelPermissions {
-    public init(object: ProjectModelPermissionsObject, mode: ProjectModelPermissionsMode, modelIds: [String]) {
+public extension ProjectModelPermissions {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.object) else {
+            throw SdkValidationError(
+                field: "object",
+                code: "required",
+                message: "Validation failed for 'object': value is required"
+            )
+        }
+        guard container.contains(.mode) else {
+            throw SdkValidationError(
+                field: "mode",
+                code: "required",
+                message: "Validation failed for 'mode': value is required"
+            )
+        }
+        guard container.contains(.modelIds) else {
+            throw SdkValidationError(
+                field: "model_ids",
+                code: "required",
+                message: "Validation failed for 'model_ids': value is required"
+            )
+        }
+        object = try container.sdkDecodeRequired(.object)
+        mode = try container.sdkDecodeRequired(.mode)
+        modelIds = try container.sdkDecodeRequired(.modelIds)
+    }
+}
+
+public extension ProjectModelPermissions {
+    init(object: ProjectModelPermissionsObject, mode: ProjectModelPermissionsMode, modelIds: [String]) {
         (self.object, self.mode) = (object, mode)
         self.modelIds = modelIds
     }
@@ -52,7 +66,10 @@ extension ProjectModelPermissions {
 public struct PublicProjectResidency: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let global = PublicProjectResidency(rawValue: "GLOBAL")
     public static let usStorageProcessing = PublicProjectResidency(rawValue: "US_STORAGE_PROCESSING")
     public static let euStorageProcessing = PublicProjectResidency(rawValue: "EU_STORAGE_PROCESSING")
@@ -71,7 +88,7 @@ public struct PublicProjectResidency: RawRepresentable, Hashable, Codable, Senda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -84,12 +101,15 @@ public struct PublicProjectResidency: RawRepresentable, Hashable, Codable, Senda
 public struct ProjectUserObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let organizationProjectUser = ProjectUserObject(rawValue: "organization.project.user")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -102,12 +122,15 @@ public struct ProjectUserObject: RawRepresentable, Hashable, Codable, Sendable, 
 public struct ProjectRateLimitObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let projectRateLimit = ProjectRateLimitObject(rawValue: "project.rate_limit")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -120,13 +143,16 @@ public struct ProjectRateLimitObject: RawRepresentable, Hashable, Codable, Senda
 public struct ProjectApiKeyOwnerProjectAccess: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let active = ProjectApiKeyOwnerProjectAccess(rawValue: "active")
     public static let inactive = ProjectApiKeyOwnerProjectAccess(rawValue: "inactive")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -139,13 +165,16 @@ public struct ProjectApiKeyOwnerProjectAccess: RawRepresentable, Hashable, Codab
 public struct ProjectModelPermissionsMode: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let allowList = ProjectModelPermissionsMode(rawValue: "allow_list")
     public static let denyList = ProjectModelPermissionsMode(rawValue: "deny_list")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -158,12 +187,15 @@ public struct ProjectModelPermissionsMode: RawRepresentable, Hashable, Codable, 
 public struct ProjectApiKeyObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let organizationProjectApiKey = ProjectApiKeyObject(rawValue: "organization.project.api_key")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -176,12 +208,16 @@ public struct ProjectApiKeyObject: RawRepresentable, Hashable, Codable, Sendable
 public struct ProjectServiceAccountObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let organizationProjectServiceAccount = ProjectServiceAccountObject(rawValue: "organization.project.service_account")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let organizationProjectServiceAccount =
+        ProjectServiceAccountObject(rawValue: "organization.project.service_account")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -194,12 +230,15 @@ public struct ProjectServiceAccountObject: RawRepresentable, Hashable, Codable, 
 public struct ProjectObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let organizationProject = ProjectObject(rawValue: "organization.project")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -212,14 +251,17 @@ public struct ProjectObject: RawRepresentable, Hashable, Codable, Sendable, SdkW
 public struct ProjectServiceAccountRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let owner = ProjectServiceAccountRole(rawValue: "owner")
     public static let member = ProjectServiceAccountRole(rawValue: "member")
     public static let none = ProjectServiceAccountRole(rawValue: "none")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -232,13 +274,16 @@ public struct ProjectServiceAccountRole: RawRepresentable, Hashable, Codable, Se
 public struct ProjectApiKeyOwnerType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = ProjectApiKeyOwnerType(rawValue: "user")
     public static let serviceAccount = ProjectApiKeyOwnerType(rawValue: "service_account")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -251,12 +296,15 @@ public struct ProjectApiKeyOwnerType: RawRepresentable, Hashable, Codable, Senda
 public struct ProjectModelPermissionsObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let projectModelPermissions = ProjectModelPermissionsObject(rawValue: "project.model_permissions")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

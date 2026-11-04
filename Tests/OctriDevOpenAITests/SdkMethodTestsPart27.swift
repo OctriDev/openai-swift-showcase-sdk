@@ -6,7 +6,8 @@ import Foundation
 import XCTest
 
 extension SdkMethodTests {
-    func testRetrieveSpendLimitsOrganizationRetrieveSpendLimitsOrganization403ReachesMockAndDecodesResponse() async throws {
+    func testRetrieveSpendLimitsOrganizationRetrieveSpendLimitsOrganization403ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/403") else {
             return
         }
@@ -61,8 +62,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.spendLimits.retrieveProject(
-            projectId: decoded("\"proj_123\"")
-        )
+                projectId: decoded("\"proj_123\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -107,8 +108,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.users.retrieve(
-            userId: decoded("\"user-1\"")
-        )
+                userId: decoded("\"user-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 403)
@@ -154,9 +155,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.userOrganizationRoleAssignments.retrieveUserRole(
-            userId: decoded("\"user-1\""),
-            roleId: decoded("\"role-1\"")
-        )
+                userId: decoded("\"user-1\""),
+                roleId: decoded("\"role-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -201,8 +202,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vaults.retrieve(
-            vaultId: decoded("\"vault-1\"")
-        )
+                vaultId: decoded("\"vault-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -248,9 +249,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vaults.retrieveCredential(
-            vaultId: decoded("\"vault-1\""),
-            credentialId: decoded("\"credential-1\"")
-        )
+                vaultId: decoded("\"vault-1\""),
+                credentialId: decoded("\"credential-1\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -285,7 +286,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testRetrieveVectorStoreFileContentRetrieveVectorStoreFileContent400ReachesMockAndDecodesResponse() async throws {
+    func testRetrieveVectorStoreFileContentRetrieveVectorStoreFileContent400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -296,9 +298,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vectorStores.retrieveFileContent(
-            vectorStoreId: decoded("\"vs_abc123\""),
-            fileId: decoded("\"file-abc123\"")
-        )
+                vectorStoreId: decoded("\"vs_abc123\""),
+                fileId: decoded("\"file-abc123\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -337,9 +339,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.videos.retrieveContent(
-            videoId: decoded("\"video_123\""),
-            variant: decoded("\"video\"")
-        )
+                videoId: decoded("\"video_123\""),
+                variant: decoded("\"video\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -384,8 +386,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.webhookEndpoints.retrieve(
-            webhookEndpointId: decoded("\"whe_123\"")
-        )
+                webhookEndpointId: decoded("\"whe_123\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -433,11 +435,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.vaults.rotateCredential(
-            vaultId: decoded("\"vault-1\""),
-            credentialId: decoded("\"credential-1\""),
-            auth: decoded("null"),
-            metadata: decoded("{}")
-        )
+                vaultId: decoded("\"vault-1\""),
+                credentialId: decoded("\"credential-1\""),
+                auth: decoded("null"),
+                metadata: decoded("{}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -453,7 +455,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testRotateWebhookEndpointSigningSecretRotateWebhookEndpointSigningSecretReachesMockAndDecodesResponse() async throws {
+    func testRotateWebhookEndpointSigningSecretRotateWebhookEndpointSigningSecretReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -472,7 +475,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testRotateWebhookEndpointSigningSecretRotateWebhookEndpointSigningSecret400ReachesMockAndDecodesResponse() async throws {
+    func testRotateWebhookEndpointSigningSecretRotateWebhookEndpointSigningSecret400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -483,9 +487,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.webhookEndpoints.rotateSigningSecret(
-            webhookEndpointId: decoded("\"whe_123\""),
-            keepOldSecretActiveFor24Hours: decoded("false")
-        )
+                webhookEndpointId: decoded("\"whe_123\""),
+                keepOldSecretActiveFor24Hours: decoded("false")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -532,10 +536,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.runGrader(
-            grader: decoded(sdkMethodFixture620Value1),
-            modelSample: decoded("\"model_sample\""),
-            item: decoded("{}")
-        )
+                grader: decoded(sdkMethodFixture620Value1),
+                modelSample: decoded("\"model_sample\""),
+                item: decoded("{}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

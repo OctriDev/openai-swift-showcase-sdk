@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedModel domain models
+/// SharedModel domain models
 public typealias ModelIdsShared = String
 
 /// Typed representation of the `ModelResponseProperties` API schema.
@@ -43,27 +43,36 @@ public struct ModelResponseProperties: Codable {
     }
 
     init() {
-        (self.metadata, self.topLogprobs, self.temperature, self.topP, self.user) = (nil, nil, nil, nil, nil)
-        (self.safetyIdentifier, self.promptCacheKey, self.promptCacheRetention) = (nil, nil, nil)
+        (metadata, topLogprobs, temperature, topP, user) = (nil, nil, nil, nil, nil)
+        (safetyIdentifier, promptCacheKey, promptCacheRetention) = (nil, nil, nil)
     }
 }
 
-extension ModelResponseProperties {
-    public init(from decoder: Decoder) throws {
+public extension ModelResponseProperties {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
-        self.temperature = try container.sdkDecodeIfPresent(.temperature)
-        self.topP = try container.sdkDecodeIfPresent(.topP)
-        self.user = try container.sdkDecodeIfPresent(.user)
-        self.safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
-        self.promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
-        self.promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        topLogprobs = try container.sdkDecodeIfPresent(.topLogprobs)
+        temperature = try container.sdkDecodeIfPresent(.temperature)
+        topP = try container.sdkDecodeIfPresent(.topP)
+        user = try container.sdkDecodeIfPresent(.user)
+        safetyIdentifier = try container.sdkDecodeIfPresent(.safetyIdentifier)
+        promptCacheKey = try container.sdkDecodeIfPresent(.promptCacheKey)
+        promptCacheRetention = try container.sdkDecodeIfPresent(.promptCacheRetention)
     }
 }
 
-extension ModelResponseProperties {
-    public init(metadata: Metadata? = nil, topLogprobs: Int? = nil, temperature: Double? = nil, topP: Double? = nil, user: String? = nil, safetyIdentifier: String? = nil, promptCacheKey: String? = nil, promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0? = nil) {
+public extension ModelResponseProperties {
+    init(
+        metadata: Metadata? = nil,
+        topLogprobs: Int? = nil,
+        temperature: Double? = nil,
+        topP: Double? = nil,
+        user: String? = nil,
+        safetyIdentifier: String? = nil,
+        promptCacheKey: String? = nil,
+        promptCacheRetention: ModelResponsePropertiesPromptCacheRetentionVariant0? = nil
+    ) {
         self.init()
         (self.metadata, self.topLogprobs) = (metadata, topLogprobs)
         (self.temperature, self.topP) = (temperature, topP)
@@ -77,16 +86,20 @@ extension ModelResponseProperties {
 /// hours. Learn more. This field expresses a maximum retention policy, while `prompt_cache_options.ttl`
 /// expresses a minimum cache lifetime. The two fields are independent and do not interact. For `gpt-5.5`,
 /// `gpt-5.5-pro`, and future models, only `24h` is supported. For…
-public struct ModelResponsePropertiesPromptCacheRetentionVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ModelResponsePropertiesPromptCacheRetentionVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inMemory = ModelResponsePropertiesPromptCacheRetentionVariant0(rawValue: "in_memory")
     public static let value24h = ModelResponsePropertiesPromptCacheRetentionVariant0(rawValue: "24h")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

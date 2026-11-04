@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaItem domain models
+/// ResponsesBetaItem domain models
 public indirect enum BetaItem {
     case betaInputMessage(BetaInputMessage)
     case betaOutputMessage(BetaOutputMessage)
@@ -41,7 +41,6 @@ public indirect enum BetaItem {
 }
 
 extension BetaItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -49,13 +48,23 @@ extension BetaItem: Codable {
     public init(from decoder: Decoder) throws {
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
-            if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
-            if let value = try Self.decodeGroup2(discriminator, from: decoder) { self = value; return }
+            if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+                self = value; return
+            }
+            if let value = try Self.decodeGroup2(discriminator, from: decoder) {
+                self = value; return
+            }
         }
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeUntaggedGroup1(from: container) { self = value; return }
-        if let value = Self.decodeUntaggedGroup2(from: container) { self = value; return }
-        if let value = Self.decodeUntaggedGroup3(from: container) { self = value; return }
+        if let value = Self.decodeUntaggedGroup1(from: container) {
+            self = value; return
+        }
+        if let value = Self.decodeUntaggedGroup2(from: container) {
+            self = value; return
+        }
+        if let value = Self.decodeUntaggedGroup3(from: container) {
+            self = value; return
+        }
         if let tagged = try? decoder.container(keyedBy: CodingKeys.self),
            let discriminator = try? tagged.decode(String.self, forKey: .discriminator) {
             self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
@@ -65,9 +74,15 @@ extension BetaItem: Codable {
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
-        if try encodeGroup3(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
+        if try encodeGroup3(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -78,28 +93,34 @@ extension BetaItem: Codable {
 extension BetaItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "file_search_call": return .betaFileSearchToolCall(try BetaFileSearchToolCall(from: decoder))
-        case "computer_call": return .betaComputerToolCall(try BetaComputerToolCall(from: decoder))
-        case "computer_call_output": return .betaComputerCallOutputItemParam(try BetaComputerCallOutputItemParam(from: decoder))
-        case "web_search_call": return .betaWebSearchToolCall(try BetaWebSearchToolCall(from: decoder))
-        case "function_call": return .betaFunctionToolCall(try BetaFunctionToolCall(from: decoder))
-        case "function_call_output": return .betaFunctionCallOutputItemParam(try BetaFunctionCallOutputItemParam(from: decoder))
-        case "agent_message": return .betaAgentMessageItemParam(try BetaAgentMessageItemParam(from: decoder))
-        case "multi_agent_call": return .betaMultiAgentCallItemParam(try BetaMultiAgentCallItemParam(from: decoder))
-        case "multi_agent_call_output": return .betaMultiAgentCallOutputItemParam(try BetaMultiAgentCallOutputItemParam(from: decoder))
-        case "tool_search_call": return .betaToolSearchCallItemParam(try BetaToolSearchCallItemParam(from: decoder))
-        case "tool_search_output": return .betaToolSearchOutputItemParam(try BetaToolSearchOutputItemParam(from: decoder))
-        case "additional_tools": return .betaAdditionalToolsItemParam(try BetaAdditionalToolsItemParam(from: decoder))
+        case "file_search_call": try .betaFileSearchToolCall(BetaFileSearchToolCall(from: decoder))
+        case "computer_call": try .betaComputerToolCall(BetaComputerToolCall(from: decoder))
+        case "computer_call_output": try .betaComputerCallOutputItemParam(
+                BetaComputerCallOutputItemParam(from: decoder)
+            )
+        case "web_search_call": try .betaWebSearchToolCall(BetaWebSearchToolCall(from: decoder))
+        case "function_call": try .betaFunctionToolCall(BetaFunctionToolCall(from: decoder))
+        case "function_call_output": try .betaFunctionCallOutputItemParam(
+                BetaFunctionCallOutputItemParam(from: decoder)
+            )
+        case "agent_message": try .betaAgentMessageItemParam(BetaAgentMessageItemParam(from: decoder))
+        case "multi_agent_call": try .betaMultiAgentCallItemParam(BetaMultiAgentCallItemParam(from: decoder))
+        case "multi_agent_call_output": try .betaMultiAgentCallOutputItemParam(
+                BetaMultiAgentCallOutputItemParam(from: decoder)
+            )
+        case "tool_search_call": try .betaToolSearchCallItemParam(BetaToolSearchCallItemParam(from: decoder))
+        case "tool_search_output": try .betaToolSearchOutputItemParam(BetaToolSearchOutputItemParam(from: decoder))
+        case "additional_tools": try .betaAdditionalToolsItemParam(BetaAdditionalToolsItemParam(from: decoder))
         case "configuration_update":
-        return .betaResponseConfigurationUpdateItemParam(try BetaResponseConfigurationUpdateItemParam(from: decoder))
-        case "reasoning": return .betaReasoningItem(try BetaReasoningItem(from: decoder))
-        case "compaction": return .betaCompactionSummaryItemParam(try BetaCompactionSummaryItemParam(from: decoder))
-        case "image_generation_call": return .betaImageGenToolCall(try BetaImageGenToolCall(from: decoder))
-        case "code_interpreter_call": return .betaCodeInterpreterToolCall(try BetaCodeInterpreterToolCall(from: decoder))
-        case "local_shell_call": return .betaLocalShellToolCall(try BetaLocalShellToolCall(from: decoder))
-        case "local_shell_call_output": return .betaLocalShellToolCallOutput(try BetaLocalShellToolCallOutput(from: decoder))
-        case "shell_call": return .betaFunctionShellCallItemParam(try BetaFunctionShellCallItemParam(from: decoder))
-        default: return nil
+            try .betaResponseConfigurationUpdateItemParam(BetaResponseConfigurationUpdateItemParam(from: decoder))
+        case "reasoning": try .betaReasoningItem(BetaReasoningItem(from: decoder))
+        case "compaction": try .betaCompactionSummaryItemParam(BetaCompactionSummaryItemParam(from: decoder))
+        case "image_generation_call": try .betaImageGenToolCall(BetaImageGenToolCall(from: decoder))
+        case "code_interpreter_call": try .betaCodeInterpreterToolCall(BetaCodeInterpreterToolCall(from: decoder))
+        case "local_shell_call": try .betaLocalShellToolCall(BetaLocalShellToolCall(from: decoder))
+        case "local_shell_call_output": try .betaLocalShellToolCallOutput(BetaLocalShellToolCallOutput(from: decoder))
+        case "shell_call": try .betaFunctionShellCallItemParam(BetaFunctionShellCallItemParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -107,61 +128,120 @@ extension BetaItem {
 extension BetaItem {
     static func decodeGroup2(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "shell_call_output": return .betaFunctionShellCallOutputItemParam(try BetaFunctionShellCallOutputItemParam(from: decoder))
-        case "apply_patch_call": return .betaApplyPatchToolCallItemParam(try BetaApplyPatchToolCallItemParam(from: decoder))
+        case "shell_call_output": try .betaFunctionShellCallOutputItemParam(
+                BetaFunctionShellCallOutputItemParam(from: decoder)
+            )
+        case "apply_patch_call": try .betaApplyPatchToolCallItemParam(BetaApplyPatchToolCallItemParam(from: decoder))
         case "apply_patch_call_output":
-        return .betaApplyPatchToolCallOutputItemParam(try BetaApplyPatchToolCallOutputItemParam(from: decoder))
-        case "mcp_list_tools": return .betaMcpListTools(try BetaMCPListTools(from: decoder))
-        case "mcp_approval_request": return .betaMcpApprovalRequest(try BetaMCPApprovalRequest(from: decoder))
-        case "mcp_approval_response": return .betaMcpApprovalResponse(try BetaMCPApprovalResponse(from: decoder))
-        case "mcp_call": return .betaMcpToolCall(try BetaMCPToolCall(from: decoder))
-        case "custom_tool_call_output": return .betaCustomToolCallOutput(try BetaCustomToolCallOutput(from: decoder))
-        case "custom_tool_call": return .betaCustomToolCall(try BetaCustomToolCall(from: decoder))
-        default: return nil
+            try .betaApplyPatchToolCallOutputItemParam(BetaApplyPatchToolCallOutputItemParam(from: decoder))
+        case "mcp_list_tools": try .betaMcpListTools(BetaMCPListTools(from: decoder))
+        case "mcp_approval_request": try .betaMcpApprovalRequest(BetaMCPApprovalRequest(from: decoder))
+        case "mcp_approval_response": try .betaMcpApprovalResponse(BetaMCPApprovalResponse(from: decoder))
+        case "mcp_call": try .betaMcpToolCall(BetaMCPToolCall(from: decoder))
+        case "custom_tool_call_output": try .betaCustomToolCallOutput(BetaCustomToolCallOutput(from: decoder))
+        case "custom_tool_call": try .betaCustomToolCall(BetaCustomToolCall(from: decoder))
+        default: nil
         }
     }
 }
 
 extension BetaItem {
     static func decodeUntaggedGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(BetaInputMessage.self) { return .betaInputMessage(value) }
-        if let value = try? container.decode(BetaOutputMessage.self) { return .betaOutputMessage(value) }
-        if let value = try? container.decode(BetaFileSearchToolCall.self) { return .betaFileSearchToolCall(value) }
-        if let value = try? container.decode(BetaComputerToolCall.self) { return .betaComputerToolCall(value) }
-        if let value = try? container.decode(BetaComputerCallOutputItemParam.self) { return .betaComputerCallOutputItemParam(value) }
-        if let value = try? container.decode(BetaWebSearchToolCall.self) { return .betaWebSearchToolCall(value) }
-        if let value = try? container.decode(BetaFunctionToolCall.self) { return .betaFunctionToolCall(value) }
-        if let value = try? container.decode(BetaFunctionCallOutputItemParam.self) { return .betaFunctionCallOutputItemParam(value) }
-        if let value = try? container.decode(BetaAgentMessageItemParam.self) { return .betaAgentMessageItemParam(value) }
-        if let value = try? container.decode(BetaMultiAgentCallItemParam.self) { return .betaMultiAgentCallItemParam(value) }
-        if let value = try? container.decode(BetaMultiAgentCallOutputItemParam.self) { return .betaMultiAgentCallOutputItemParam(value) }
-        if let value = try? container.decode(BetaToolSearchCallItemParam.self) { return .betaToolSearchCallItemParam(value) }
+        if let value = try? container.decode(BetaInputMessage.self) {
+            return .betaInputMessage(value)
+        }
+        if let value = try? container.decode(BetaOutputMessage.self) {
+            return .betaOutputMessage(value)
+        }
+        if let value = try? container.decode(BetaFileSearchToolCall.self) {
+            return .betaFileSearchToolCall(value)
+        }
+        if let value = try? container.decode(BetaComputerToolCall.self) {
+            return .betaComputerToolCall(value)
+        }
+        if let value = try? container
+            .decode(BetaComputerCallOutputItemParam.self) {
+            return .betaComputerCallOutputItemParam(value)
+        }
+        if let value = try? container.decode(BetaWebSearchToolCall.self) {
+            return .betaWebSearchToolCall(value)
+        }
+        if let value = try? container.decode(BetaFunctionToolCall.self) {
+            return .betaFunctionToolCall(value)
+        }
+        if let value = try? container
+            .decode(BetaFunctionCallOutputItemParam.self) {
+            return .betaFunctionCallOutputItemParam(value)
+        }
+        if let value = try? container
+            .decode(BetaAgentMessageItemParam.self) {
+            return .betaAgentMessageItemParam(value)
+        }
+        if let value = try? container
+            .decode(BetaMultiAgentCallItemParam.self) {
+            return .betaMultiAgentCallItemParam(value)
+        }
+        if let value = try? container
+            .decode(BetaMultiAgentCallOutputItemParam.self) {
+            return .betaMultiAgentCallOutputItemParam(value)
+        }
+        if let value = try? container
+            .decode(BetaToolSearchCallItemParam.self) {
+            return .betaToolSearchCallItemParam(value)
+        }
         return nil
     }
 }
 
 extension BetaItem {
     static func decodeUntaggedGroup2(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(BetaToolSearchOutputItemParam.self) { return .betaToolSearchOutputItemParam(value) }
-        if let value = try? container.decode(BetaAdditionalToolsItemParam.self) { return .betaAdditionalToolsItemParam(value) }
+        if let value = try? container
+            .decode(BetaToolSearchOutputItemParam.self) {
+            return .betaToolSearchOutputItemParam(value)
+        }
+        if let value = try? container
+            .decode(BetaAdditionalToolsItemParam.self) {
+            return .betaAdditionalToolsItemParam(value)
+        }
         if let value = try? container.decode(
             BetaResponseConfigurationUpdateItemParam.self
         ) {
-            return             .betaResponseConfigurationUpdateItemParam(value)
+            return .betaResponseConfigurationUpdateItemParam(value)
         }
-        if let value = try? container.decode(BetaReasoningItem.self) { return .betaReasoningItem(value) }
-        if let value = try? container.decode(BetaCompactionSummaryItemParam.self) { return .betaCompactionSummaryItemParam(value) }
-        if let value = try? container.decode(BetaImageGenToolCall.self) { return .betaImageGenToolCall(value) }
-        if let value = try? container.decode(BetaCodeInterpreterToolCall.self) { return .betaCodeInterpreterToolCall(value) }
-        if let value = try? container.decode(BetaLocalShellToolCall.self) { return .betaLocalShellToolCall(value) }
-        if let value = try? container.decode(BetaLocalShellToolCallOutput.self) { return .betaLocalShellToolCallOutput(value) }
-        if let value = try? container.decode(BetaFunctionShellCallItemParam.self) { return .betaFunctionShellCallItemParam(value) }
+        if let value = try? container.decode(BetaReasoningItem.self) {
+            return .betaReasoningItem(value)
+        }
+        if let value = try? container
+            .decode(BetaCompactionSummaryItemParam.self) {
+            return .betaCompactionSummaryItemParam(value)
+        }
+        if let value = try? container.decode(BetaImageGenToolCall.self) {
+            return .betaImageGenToolCall(value)
+        }
+        if let value = try? container
+            .decode(BetaCodeInterpreterToolCall.self) {
+            return .betaCodeInterpreterToolCall(value)
+        }
+        if let value = try? container.decode(BetaLocalShellToolCall.self) {
+            return .betaLocalShellToolCall(value)
+        }
+        if let value = try? container
+            .decode(BetaLocalShellToolCallOutput.self) {
+            return .betaLocalShellToolCallOutput(value)
+        }
+        if let value = try? container
+            .decode(BetaFunctionShellCallItemParam.self) {
+            return .betaFunctionShellCallItemParam(value)
+        }
         if let value = try? container.decode(
             BetaFunctionShellCallOutputItemParam.self
         ) {
-            return             .betaFunctionShellCallOutputItemParam(value)
+            return .betaFunctionShellCallOutputItemParam(value)
         }
-        if let value = try? container.decode(BetaApplyPatchToolCallItemParam.self) { return .betaApplyPatchToolCallItemParam(value) }
+        if let value = try? container
+            .decode(BetaApplyPatchToolCallItemParam.self) {
+            return .betaApplyPatchToolCallItemParam(value)
+        }
         return nil
     }
 }
@@ -171,14 +251,26 @@ extension BetaItem {
         if let value = try? container.decode(
             BetaApplyPatchToolCallOutputItemParam.self
         ) {
-            return             .betaApplyPatchToolCallOutputItemParam(value)
+            return .betaApplyPatchToolCallOutputItemParam(value)
         }
-        if let value = try? container.decode(BetaMCPListTools.self) { return .betaMcpListTools(value) }
-        if let value = try? container.decode(BetaMCPApprovalRequest.self) { return .betaMcpApprovalRequest(value) }
-        if let value = try? container.decode(BetaMCPApprovalResponse.self) { return .betaMcpApprovalResponse(value) }
-        if let value = try? container.decode(BetaMCPToolCall.self) { return .betaMcpToolCall(value) }
-        if let value = try? container.decode(BetaCustomToolCallOutput.self) { return .betaCustomToolCallOutput(value) }
-        if let value = try? container.decode(BetaCustomToolCall.self) { return .betaCustomToolCall(value) }
+        if let value = try? container.decode(BetaMCPListTools.self) {
+            return .betaMcpListTools(value)
+        }
+        if let value = try? container.decode(BetaMCPApprovalRequest.self) {
+            return .betaMcpApprovalRequest(value)
+        }
+        if let value = try? container.decode(BetaMCPApprovalResponse.self) {
+            return .betaMcpApprovalResponse(value)
+        }
+        if let value = try? container.decode(BetaMCPToolCall.self) {
+            return .betaMcpToolCall(value)
+        }
+        if let value = try? container.decode(BetaCustomToolCallOutput.self) {
+            return .betaCustomToolCallOutput(value)
+        }
+        if let value = try? container.decode(BetaCustomToolCall.self) {
+            return .betaCustomToolCall(value)
+        }
         return nil
     }
 }
@@ -256,23 +348,29 @@ public struct BetaItemReferenceParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaItemReferenceParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.type = try container.sdkDecodeIfPresent(.type)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaItemReferenceParam {
-    public init(id: String, agent: BetaAgentTagParam? = nil, type: BetaItemReferenceParamTypeVariant0? = nil) {
+public extension BetaItemReferenceParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        type = try container.sdkDecodeIfPresent(.type)
+    }
+}
+
+public extension BetaItemReferenceParam {
+    init(id: String, agent: BetaAgentTagParam? = nil, type: BetaItemReferenceParamTypeVariant0? = nil) {
         (self.id, self.agent) = (id, agent)
         self.type = type
     }
@@ -282,12 +380,15 @@ extension BetaItemReferenceParam {
 public struct BetaItemReferenceParamTypeVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let itemReference = BetaItemReferenceParamTypeVariant0(rawValue: "item_reference")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

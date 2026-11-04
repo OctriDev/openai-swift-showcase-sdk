@@ -3,18 +3,22 @@
 
 import Foundation
 
-// RealtimeRealtimeTranslation domain models
+/// RealtimeRealtimeTranslation domain models
 /// The anchor point for the client secret expiration, meaning that `seconds` will be added to the `created_at`
 /// time of the client secret to produce an expiration timestamp. Only `created_at` is currently supported.
-public struct RealtimeTranslationClientSecretCreateRequestExpiresAfterAnchor: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeTranslationClientSecretCreateRequestExpiresAfterAnchor: RawRepresentable, Hashable, Codable,
+    Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let createdAt = RealtimeTranslationClientSecretCreateRequestExpiresAfterAnchor(rawValue: "created_at")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -27,12 +31,15 @@ public struct RealtimeTranslationClientSecretCreateRequestExpiresAfterAnchor: Ra
 public struct RealtimeTranslationSessionType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let translation = RealtimeTranslationSessionType(rawValue: "translation")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

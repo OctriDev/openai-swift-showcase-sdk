@@ -17,9 +17,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.invites.list(
-            limit: decoded("20"),
-            after: decoded("\"after\"")
-        )
+                limit: decoded("20"),
+                after: decoded("\"after\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -132,11 +132,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.spendAlerts.listOrganization(
-            limit: decoded("0"),
-            order: decoded("\"asc\""),
-            after: decoded("\"after\""),
-            before: decoded("\"before\"")
-        )
+                limit: decoded("0"),
+                order: decoded("\"asc\""),
+                after: decoded("\"after\""),
+                before: decoded("\"before\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -184,11 +184,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.listApiKeys(
-            projectId: decoded("\"project-1\""),
-            limit: decoded("20"),
-            after: decoded("\"after\""),
-            ownerProjectAccess: decoded("\"active\"")
-        )
+                projectId: decoded("\"project-1\""),
+                limit: decoded("20"),
+                after: decoded("\"after\""),
+                ownerProjectAccess: decoded("\"active\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -226,7 +226,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testListProjectGroupRoleAssignmentsListProjectGroupRoleAssignments400ReachesMockAndDecodesResponse() async throws {
+    func testListProjectGroupRoleAssignmentsListProjectGroupRoleAssignments400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -237,12 +238,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projectGroupRoleAssignments.list(
-            projectId: decoded("\"project-1\""),
-            groupId: decoded("\"group-1\""),
-            limit: decoded("0"),
-            after: decoded("\"after\""),
-            order: decoded("\"asc\"")
-        )
+                projectId: decoded("\"project-1\""),
+                groupId: decoded("\"group-1\""),
+                limit: decoded("0"),
+                after: decoded("\"after\""),
+                order: decoded("\"asc\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -290,11 +291,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projectGroups.list(
-            projectId: decoded("\"project-1\""),
-            limit: decoded("20"),
-            after: decoded("\"after\""),
-            order: decoded("\"asc\"")
-        )
+                projectId: decoded("\"project-1\""),
+                limit: decoded("20"),
+                after: decoded("\"after\""),
+                order: decoded("\"asc\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -342,11 +343,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.listRateLimits(
-            projectId: decoded("\"project-1\""),
-            limit: decoded("100"),
-            after: decoded("\"after\""),
-            before: decoded("\"before\"")
-        )
+                projectId: decoded("\"project-1\""),
+                limit: decoded("100"),
+                after: decoded("\"after\""),
+                before: decoded("\"before\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -393,10 +394,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.list(
-            limit: decoded("20"),
-            after: decoded("\"after\""),
-            includeArchived: decoded("false")
-        )
+                limit: decoded("20"),
+                after: decoded("\"after\""),
+                includeArchived: decoded("false")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -443,10 +444,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projects.listServiceAccounts(
-            projectId: decoded("\"project-1\""),
-            limit: decoded("20"),
-            after: decoded("\"after\"")
-        )
+                projectId: decoded("\"project-1\""),
+                limit: decoded("20"),
+                after: decoded("\"after\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -495,12 +496,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.spendAlerts.list(
-            projectId: decoded("\"project-1\""),
-            limit: decoded("0"),
-            order: decoded("\"asc\""),
-            after: decoded("\"after\""),
-            before: decoded("\"before\"")
-        )
+                projectId: decoded("\"project-1\""),
+                limit: decoded("0"),
+                order: decoded("\"asc\""),
+                after: decoded("\"after\""),
+                before: decoded("\"before\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -538,7 +539,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testListProjectUserRoleAssignmentsListProjectUserRoleAssignments400ReachesMockAndDecodesResponse() async throws {
+    func testListProjectUserRoleAssignmentsListProjectUserRoleAssignments400ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -549,12 +551,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.projectUserRoleAssignments.list(
-            projectId: decoded("\"project-1\""),
-            userId: decoded("\"user-1\""),
-            limit: decoded("0"),
-            after: decoded("\"after\""),
-            order: decoded("\"asc\"")
-        )
+                projectId: decoded("\"project-1\""),
+                userId: decoded("\"user-1\""),
+                limit: decoded("0"),
+                after: decoded("\"after\""),
+                order: decoded("\"asc\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)

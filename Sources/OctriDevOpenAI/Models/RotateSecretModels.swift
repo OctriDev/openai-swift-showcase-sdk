@@ -3,7 +3,7 @@
 
 import Foundation
 
-// RotateSecret domain models
+/// RotateSecret domain models
 /// Typed representation of the `PublicRotateSecretBody` API schema.
 public struct PublicRotateSecretBody: Codable {
     /// Whether to keep the previous signing secret valid for 24 hours after rotation. Defaults to false, which
@@ -15,19 +15,19 @@ public struct PublicRotateSecretBody: Codable {
     }
 
     init() {
-        self.keepOldSecretActiveFor24Hours = nil
+        keepOldSecretActiveFor24Hours = nil
     }
 }
 
-extension PublicRotateSecretBody {
-    public init(from decoder: Decoder) throws {
+public extension PublicRotateSecretBody {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.keepOldSecretActiveFor24Hours = try container.sdkDecodeIfPresent(.keepOldSecretActiveFor24Hours)
+        keepOldSecretActiveFor24Hours = try container.sdkDecodeIfPresent(.keepOldSecretActiveFor24Hours)
     }
 }
 
-extension PublicRotateSecretBody {
-    public init(keepOldSecretActiveFor24Hours: Bool? = nil) {
+public extension PublicRotateSecretBody {
+    init(keepOldSecretActiveFor24Hours: Bool? = nil) {
         self.init()
         self.keepOldSecretActiveFor24Hours = keepOldSecretActiveFor24Hours
     }

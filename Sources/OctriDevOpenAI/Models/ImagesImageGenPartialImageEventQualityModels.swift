@@ -3,12 +3,15 @@
 
 import Foundation
 
-// Images domain models
+/// Images domain models
 /// The quality setting for the requested image.
 public struct ImageGenPartialImageEventQuality: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = ImageGenPartialImageEventQuality(rawValue: "low")
     public static let medium = ImageGenPartialImageEventQuality(rawValue: "medium")
     public static let high = ImageGenPartialImageEventQuality(rawValue: "high")
@@ -18,7 +21,7 @@ public struct ImageGenPartialImageEventQuality: RawRepresentable, Hashable, Coda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -31,13 +34,16 @@ public struct ImageGenPartialImageEventQuality: RawRepresentable, Hashable, Coda
 public struct CreateImageRequestModerationVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = CreateImageRequestModerationVariant0(rawValue: "low")
     public static let auto = CreateImageRequestModerationVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -50,14 +56,17 @@ public struct CreateImageRequestModerationVariant0: RawRepresentable, Hashable, 
 public struct ImageGenPartialImageEventBackground: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let transparent = ImageGenPartialImageEventBackground(rawValue: "transparent")
     public static let opaque = ImageGenPartialImageEventBackground(rawValue: "opaque")
     public static let auto = ImageGenPartialImageEventBackground(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

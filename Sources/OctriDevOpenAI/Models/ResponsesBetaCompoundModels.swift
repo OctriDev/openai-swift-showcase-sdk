@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaCompound domain models
+/// ResponsesBetaCompound domain models
 public indirect enum BetaCompoundFilterFiltersItem {
     case betaComparisonFilter(BetaComparisonFilter)
     case betaCompoundFilter(BetaCompoundFilter)
@@ -12,7 +12,6 @@ public indirect enum BetaCompoundFilterFiltersItem {
 }
 
 extension BetaCompoundFilterFiltersItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension BetaCompoundFilterFiltersItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,10 @@ extension BetaCompoundFilterFiltersItem: Codable {
 extension BetaCompoundFilterFiltersItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "eq", "ne", "gt", "gte", "lt", "lte", "in", "nin": return .betaComparisonFilter(try BetaComparisonFilter(from: decoder))
-        case "and", "or": return .betaCompoundFilter(try BetaCompoundFilter(from: decoder))
-        default: return nil
+        case "eq", "ne", "gt", "gte", "lt", "lte", "in",
+             "nin": try .betaComparisonFilter(BetaComparisonFilter(from: decoder))
+        case "and", "or": try .betaCompoundFilter(BetaCompoundFilter(from: decoder))
+        default: nil
         }
     }
 }
@@ -66,28 +70,38 @@ public struct BetaCompoundFilter: Codable {
         case filters
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaCompoundFilter {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.filters) else {
-            throw SdkValidationError(field: "filters", code: "required", message: "Validation failed for 'filters': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.filters = try container.sdkDecodeRequired(.filters)
-            try sdkValidateRawEnum("type", self.type, BetaCompoundFilterType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaCompoundFilter {
-    public init(type: BetaCompoundFilterType, filters: [BetaCompoundFilterFiltersItem]) throws {
+public extension BetaCompoundFilter {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.filters) else {
+            throw SdkValidationError(
+                field: "filters",
+                code: "required",
+                message: "Validation failed for 'filters': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        filters = try container.sdkDecodeRequired(.filters)
+        try sdkValidateRawEnum("type", type, BetaCompoundFilterType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaCompoundFilter {
+    init(type: BetaCompoundFilterType, filters: [BetaCompoundFilterFiltersItem]) throws {
         (self.type, self.filters) = (type, filters)
-            try sdkValidateRawEnum("type", self.type, BetaCompoundFilterType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaCompoundFilterType.allCases.map(\.rawValue))
     }
 }
 

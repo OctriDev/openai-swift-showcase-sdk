@@ -6,16 +6,20 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public struct ListCertificatesForOrganizationParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ListCertificatesForOrganizationParameter: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListCertificatesForOrganizationParameter(rawValue: "asc")
     public static let desc = ListCertificatesForOrganizationParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -27,14 +31,17 @@ public struct ListCertificatesForOrganizationParameter: RawRepresentable, Hashab
 public struct UsageAudioTranscriptionsParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let value1m = UsageAudioTranscriptionsParameter(rawValue: "1m")
     public static let value1h = UsageAudioTranscriptionsParameter(rawValue: "1h")
     public static let value1d = UsageAudioTranscriptionsParameter(rawValue: "1d")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -46,14 +53,17 @@ public struct UsageAudioTranscriptionsParameter: RawRepresentable, Hashable, Cod
 public struct UsageAudioSpeechesParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let value1m = UsageAudioSpeechesParameter(rawValue: "1m")
     public static let value1h = UsageAudioSpeechesParameter(rawValue: "1h")
     public static let value1d = UsageAudioSpeechesParameter(rawValue: "1d")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -65,13 +75,16 @@ public struct UsageAudioSpeechesParameter: RawRepresentable, Hashable, Codable, 
 public struct ListEvalsParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListEvalsParameter(rawValue: "asc")
     public static let desc = ListEvalsParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -83,12 +96,15 @@ public struct ListEvalsParameter: RawRepresentable, Hashable, Codable, Sendable,
 public struct BetaCancelResponseParameterItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let responsesMultiAgentV1 = BetaCancelResponseParameterItem(rawValue: "responses_multi_agent=v1")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -100,13 +116,16 @@ public struct BetaCancelResponseParameterItem: RawRepresentable, Hashable, Codab
 public struct ListContainersParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListContainersParameter(rawValue: "asc")
     public static let desc = ListContainersParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -118,13 +137,16 @@ public struct ListContainersParameter: RawRepresentable, Hashable, Codable, Send
 public struct ListMessagesParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListMessagesParameter(rawValue: "asc")
     public static let desc = ListMessagesParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -136,7 +158,10 @@ public struct ListMessagesParameter: RawRepresentable, Hashable, Codable, Sendab
 public struct UsageImagesParameterItemXee5e7384: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let projectId = UsageImagesParameterItemXee5e7384(rawValue: "project_id")
     public static let userId = UsageImagesParameterItemXee5e7384(rawValue: "user_id")
     public static let apiKeyId = UsageImagesParameterItemXee5e7384(rawValue: "api_key_id")
@@ -146,7 +171,7 @@ public struct UsageImagesParameterItemXee5e7384: RawRepresentable, Hashable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -158,13 +183,16 @@ public struct UsageImagesParameterItemXee5e7384: RawRepresentable, Hashable, Cod
 public struct BetaListInputItemsParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = BetaListInputItemsParameter(rawValue: "asc")
     public static let desc = BetaListInputItemsParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -176,13 +204,16 @@ public struct BetaListInputItemsParameter: RawRepresentable, Hashable, Codable, 
 public struct ListGroupsParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListGroupsParameter(rawValue: "asc")
     public static let desc = ListGroupsParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -194,14 +225,17 @@ public struct ListGroupsParameter: RawRepresentable, Hashable, Codable, Sendable
 public struct UsageCompletionsParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let value1m = UsageCompletionsParameter(rawValue: "1m")
     public static let value1h = UsageCompletionsParameter(rawValue: "1h")
     public static let value1d = UsageCompletionsParameter(rawValue: "1d")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

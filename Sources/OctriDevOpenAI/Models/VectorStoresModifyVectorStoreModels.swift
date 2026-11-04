@@ -3,7 +3,7 @@
 
 import Foundation
 
-// VectorStores domain models
+/// VectorStores domain models
 /// Optional API value serialized in the `expires_after` wire field.
 public struct UpdateVectorStoreRequestExpiresAfter: Codable {
     /// Anchor timestamp after which the expiration policy applies. Supported anchors: `last_active_at`.
@@ -16,28 +16,46 @@ public struct UpdateVectorStoreRequestExpiresAfter: Codable {
         case days
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UpdateVectorStoreRequestExpiresAfter {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.anchor) else {
-            throw SdkValidationError(field: "anchor", code: "required", message: "Validation failed for 'anchor': value is required")
-        }
-        guard container.contains(.days) else {
-            throw SdkValidationError(field: "days", code: "required", message: "Validation failed for 'days': value is required")
-        }
-        self.anchor = try container.sdkDecodeRequired(.anchor)
-        self.days = try container.sdkDecodeRequired(.days)
-            try validateRange("days", Double(self.days), min: 1, max: 365, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UpdateVectorStoreRequestExpiresAfter {
-    public init(anchor: VectorStoreExpirationAfterAnchor, days: Int) throws {
+public extension UpdateVectorStoreRequestExpiresAfter {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.anchor) else {
+            throw SdkValidationError(
+                field: "anchor",
+                code: "required",
+                message: "Validation failed for 'anchor': value is required"
+            )
+        }
+        guard container.contains(.days) else {
+            throw SdkValidationError(
+                field: "days",
+                code: "required",
+                message: "Validation failed for 'days': value is required"
+            )
+        }
+        anchor = try container.sdkDecodeRequired(.anchor)
+        days = try container.sdkDecodeRequired(.days)
+        try validateRange("days", Double(days), min: 1, max: 365, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    }
+}
+
+public extension UpdateVectorStoreRequestExpiresAfter {
+    init(anchor: VectorStoreExpirationAfterAnchor, days: Int) throws {
         (self.anchor, self.days) = (anchor, days)
-            try validateRange("days", Double(self.days), min: 1, max: 365, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "days",
+            Double(self.days),
+            min: 1,
+            max: 365,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -60,21 +78,21 @@ public struct UpdateVectorStoreRequest: Codable {
     }
 
     init() {
-        (self.name, self.expiresAfter, self.metadata) = (nil, nil, nil)
+        (name, expiresAfter, metadata) = (nil, nil, nil)
     }
 }
 
-extension UpdateVectorStoreRequest {
-    public init(from decoder: Decoder) throws {
+public extension UpdateVectorStoreRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        self.expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
+        name = try container.sdkDecodeIfPresent(.name)
+        expiresAfter = try container.sdkDecodeIfPresent(.expiresAfter)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
     }
 }
 
-extension UpdateVectorStoreRequest {
-    public init(name: String? = nil, expiresAfter: UpdateVectorStoreRequestExpiresAfter? = nil, metadata: Metadata? = nil) {
+public extension UpdateVectorStoreRequest {
+    init(name: String? = nil, expiresAfter: UpdateVectorStoreRequestExpiresAfter? = nil, metadata: Metadata? = nil) {
         self.init()
         (self.name, self.expiresAfter) = (name, expiresAfter)
         self.metadata = metadata

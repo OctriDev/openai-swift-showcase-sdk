@@ -6,26 +6,58 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AgentsMethods {
-    /// Downloads immutable session artifact bytes after the execution environment expires. See [session artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
+public extension AgentsMethods {
+    /// Downloads immutable session artifact bytes after the execution environment expires. See [session
+    /// artifacts](https://developers.openai.com/api/docs/guides/agents-api/environments/files#openai-hosted-artifacts).
     ///
     /// - Parameters:
     /// - sessionId: The ID of the session that owns the artifact.
     /// - artifactId: The immutable session artifact ID.
-    public static func retrieveAgentSessionArtifactContent(config: ClientConfig, sessionId: String, artifactId: String, requestOptions: RequestOptions? = nil) async throws -> Data {
-        try validateLength("session_id", sessionId, min: 0, max: 1048576)
+    static func retrieveAgentSessionArtifactContent(
+        config: ClientConfig,
+        sessionId: String,
+        artifactId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Data {
+        try validateLength("session_id", sessionId, min: 0, max: 1_048_576)
 
-        try validateLength("artifact_id", artifactId, min: 0, max: 1048576)
+        try validateLength("artifact_id", artifactId, min: 0, max: 1_048_576)
 
-        return try (await sdkRequest("GET", ["/agents/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/artifacts/", sdkEncodePathSegment(sdkWireString(artifactId)), "/content"].joined(), config: config, decoder: .bytes, operationId: "retrieveAgentSessionArtifactContent", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "GET",
+            [
+                "/agents/sessions/",
+                sdkEncodePathSegment(sdkWireString(sessionId)),
+                "/artifacts/",
+                sdkEncodePathSegment(sdkWireString(artifactId)),
+                "/content",
+            ].joined(),
+            config: config,
+            decoder: .bytes,
+            operationId: "retrieveAgentSessionArtifactContent",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 
-    /// Streams live events for an agent session. See [session events](https://developers.openai.com/api/docs/guides/agents-api/sessions/events).
+    /// Streams live events for an agent session. See [session
+    /// events](https://developers.openai.com/api/docs/guides/agents-api/sessions/events).
     ///
     /// - Parameters:
     /// - sessionId: The ID of the session.
-    public static func listAgentSessionEvents(config: ClientConfig, sessionId: String, requestOptions: RequestOptions? = nil) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
-
+    static func listAgentSessionEvents(
+        config: ClientConfig,
+        sessionId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> AsyncThrowingStream<SessionEvent, Swift.Error> {
         let upstream = try await sdkStream(
             "GET",
             ["/agents/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/events"].joined(),
@@ -35,7 +67,15 @@ extension AgentsMethods {
             streamMediaType: "text/event-stream",
             chunkDomain: "bytes",
             options: requestOptions,
-            errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self]
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
         )
         return AsyncThrowingStream { continuation in
             let streamTask = _Concurrency.Task {
@@ -45,8 +85,11 @@ extension AgentsMethods {
                             continuation.finish()
                             return
                         }
-                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(SessionEvent.self, from: Data(event.data.utf8)) }
-                        
+                        let payload = try sdkDecodeBody(Data(event.data.utf8)) { try sdkJsonDecoder().decode(
+                            SessionEvent.self,
+                            from: Data(event.data.utf8)
+                        ) }
+
                         continuation.yield(payload)
                     }
                     continuation.finish()

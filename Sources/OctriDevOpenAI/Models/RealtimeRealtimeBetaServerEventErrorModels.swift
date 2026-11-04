@@ -3,7 +3,7 @@
 
 import Foundation
 
-// RealtimeRealtimeBetaServer domain models
+/// RealtimeRealtimeBetaServer domain models
 /// Returned when an error occurs, which could be a client problem or a server problem. Most errors are recoverable
 /// and the session will stay open, we recommend to implementors to monitor and log error messages by default.
 public struct RealtimeBetaServerEventError: Codable {
@@ -20,29 +20,43 @@ public struct RealtimeBetaServerEventError: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeBetaServerEventError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.error) else {
-            throw SdkValidationError(field: "error", code: "required", message: "Validation failed for 'error': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.error = try container.sdkDecodeRequired(.error)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeBetaServerEventError {
-    public init(eventId: String, type: RealtimeBetaServerEventErrorType, error: RealtimeBetaServerEventErrorError) {
+public extension RealtimeBetaServerEventError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.error) else {
+            throw SdkValidationError(
+                field: "error",
+                code: "required",
+                message: "Validation failed for 'error': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        error = try container.sdkDecodeRequired(.error)
+    }
+}
+
+public extension RealtimeBetaServerEventError {
+    init(eventId: String, type: RealtimeBetaServerEventErrorType, error: RealtimeBetaServerEventErrorError) {
         (self.eventId, self.type) = (eventId, type)
         self.error = error
     }
@@ -75,45 +89,83 @@ public struct RealtimeBetaServerEventResponseAudioDelta: Codable {
         case delta
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeBetaServerEventResponseAudioDelta {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.responseId) else {
-            throw SdkValidationError(field: "response_id", code: "required", message: "Validation failed for 'response_id': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.contentIndex) else {
-            throw SdkValidationError(field: "content_index", code: "required", message: "Validation failed for 'content_index': value is required")
-        }
-        guard container.contains(.delta) else {
-            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.responseId = try container.sdkDecodeRequired(.responseId)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.contentIndex = try container.sdkDecodeRequired(.contentIndex)
-        self.delta = try container.sdkDecodeRequired(.delta)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeBetaServerEventResponseAudioDelta {
-    public init(eventId: String, type: RealtimeBetaServerEventResponseAudioDeltaType, responseId: String, itemId: String, outputIndex: Int, contentIndex: Int, delta: String) {
+public extension RealtimeBetaServerEventResponseAudioDelta {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.responseId) else {
+            throw SdkValidationError(
+                field: "response_id",
+                code: "required",
+                message: "Validation failed for 'response_id': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.contentIndex) else {
+            throw SdkValidationError(
+                field: "content_index",
+                code: "required",
+                message: "Validation failed for 'content_index': value is required"
+            )
+        }
+        guard container.contains(.delta) else {
+            throw SdkValidationError(
+                field: "delta",
+                code: "required",
+                message: "Validation failed for 'delta': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        responseId = try container.sdkDecodeRequired(.responseId)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        contentIndex = try container.sdkDecodeRequired(.contentIndex)
+        delta = try container.sdkDecodeRequired(.delta)
+    }
+}
+
+public extension RealtimeBetaServerEventResponseAudioDelta {
+    init(
+        eventId: String,
+        type: RealtimeBetaServerEventResponseAudioDeltaType,
+        responseId: String,
+        itemId: String,
+        outputIndex: Int,
+        contentIndex: Int,
+        delta: String
+    ) {
         (self.eventId, self.type) = (eventId, type)
         (self.responseId, self.itemId) = (responseId, itemId)
         (self.outputIndex, self.contentIndex) = (outputIndex, contentIndex)
@@ -142,37 +194,65 @@ public struct RealtimeBetaServerEventResponseOutputItemDone: Codable {
         case item
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeBetaServerEventResponseOutputItemDone {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.responseId) else {
-            throw SdkValidationError(field: "response_id", code: "required", message: "Validation failed for 'response_id': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.item) else {
-            throw SdkValidationError(field: "item", code: "required", message: "Validation failed for 'item': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.responseId = try container.sdkDecodeRequired(.responseId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.item = try container.sdkDecodeRequired(.item)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeBetaServerEventResponseOutputItemDone {
-    public init(eventId: String, type: RealtimeBetaServerEventResponseOutputItemDoneType, responseId: String, outputIndex: Int, item: RealtimeConversationItem) {
+public extension RealtimeBetaServerEventResponseOutputItemDone {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.responseId) else {
+            throw SdkValidationError(
+                field: "response_id",
+                code: "required",
+                message: "Validation failed for 'response_id': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.item) else {
+            throw SdkValidationError(
+                field: "item",
+                code: "required",
+                message: "Validation failed for 'item': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        responseId = try container.sdkDecodeRequired(.responseId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        item = try container.sdkDecodeRequired(.item)
+    }
+}
+
+public extension RealtimeBetaServerEventResponseOutputItemDone {
+    init(
+        eventId: String,
+        type: RealtimeBetaServerEventResponseOutputItemDoneType,
+        responseId: String,
+        outputIndex: Int,
+        item: RealtimeConversationItem
+    ) {
         (self.eventId, self.type) = (eventId, type)
         (self.responseId, self.outputIndex) = (responseId, outputIndex)
         self.item = item
@@ -194,29 +274,43 @@ public struct RealtimeBetaServerEventSessionUpdated: Codable {
         case session
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeBetaServerEventSessionUpdated {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.session) else {
-            throw SdkValidationError(field: "session", code: "required", message: "Validation failed for 'session': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.session = try container.sdkDecodeRequired(.session)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeBetaServerEventSessionUpdated {
-    public init(eventId: String, type: RealtimeBetaServerEventSessionUpdatedType, session: RealtimeSession) {
+public extension RealtimeBetaServerEventSessionUpdated {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.session) else {
+            throw SdkValidationError(
+                field: "session",
+                code: "required",
+                message: "Validation failed for 'session': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        session = try container.sdkDecodeRequired(.session)
+    }
+}
+
+public extension RealtimeBetaServerEventSessionUpdated {
+    init(eventId: String, type: RealtimeBetaServerEventSessionUpdatedType, session: RealtimeSession) {
         (self.eventId, self.type) = (eventId, type)
         self.session = session
     }
@@ -241,22 +335,22 @@ public struct RealtimeBetaServerEventConversationItemInputAudioTranscriptioX5d77
     }
 
     init() {
-        (self.type, self.code, self.message, self.param) = (nil, nil, nil, nil)
+        (type, code, message, param) = (nil, nil, nil, nil)
     }
 }
 
-extension RealtimeBetaServerEventConversationItemInputAudioTranscriptioX5d77f79e6e {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeBetaServerEventConversationItemInputAudioTranscriptioX5d77f79e6e {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.code = try container.sdkDecodeIfPresent(.code)
-        self.message = try container.sdkDecodeIfPresent(.message)
-        self.param = try container.sdkDecodeIfPresent(.param)
+        type = try container.sdkDecodeIfPresent(.type)
+        code = try container.sdkDecodeIfPresent(.code)
+        message = try container.sdkDecodeIfPresent(.message)
+        param = try container.sdkDecodeIfPresent(.param)
     }
 }
 
-extension RealtimeBetaServerEventConversationItemInputAudioTranscriptioX5d77f79e6e {
-    public init(type: String? = nil, code: String? = nil, message: String? = nil, param: String? = nil) {
+public extension RealtimeBetaServerEventConversationItemInputAudioTranscriptioX5d77f79e6e {
+    init(type: String? = nil, code: String? = nil, message: String? = nil, param: String? = nil) {
         self.init()
         (self.type, self.code) = (type, code)
         (self.message, self.param) = (message, param)
@@ -282,22 +376,27 @@ public struct RealtimeBetaServerEventResponseContentPartAddedPart: Codable {
     }
 
     init() {
-        (self.type, self.text, self.audio, self.transcript) = (nil, nil, nil, nil)
+        (type, text, audio, transcript) = (nil, nil, nil, nil)
     }
 }
 
-extension RealtimeBetaServerEventResponseContentPartAddedPart {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeBetaServerEventResponseContentPartAddedPart {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeIfPresent(.type)
-        self.text = try container.sdkDecodeIfPresent(.text)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.transcript = try container.sdkDecodeIfPresent(.transcript)
+        type = try container.sdkDecodeIfPresent(.type)
+        text = try container.sdkDecodeIfPresent(.text)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        transcript = try container.sdkDecodeIfPresent(.transcript)
     }
 }
 
-extension RealtimeBetaServerEventResponseContentPartAddedPart {
-    public init(type: RealtimeBetaServerEventResponseContentPartAddedPartType? = nil, text: String? = nil, audio: String? = nil, transcript: String? = nil) {
+public extension RealtimeBetaServerEventResponseContentPartAddedPart {
+    init(
+        type: RealtimeBetaServerEventResponseContentPartAddedPartType? = nil,
+        text: String? = nil,
+        audio: String? = nil,
+        transcript: String? = nil
+    ) {
         self.init()
         (self.type, self.text) = (type, text)
         (self.audio, self.transcript) = (audio, transcript)
@@ -305,15 +404,20 @@ extension RealtimeBetaServerEventResponseContentPartAddedPart {
 }
 
 /// The event type, must be `response.mcp_call.failed`.
-public struct RealtimeBetaServerEventResponseMCPCallFailedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventResponseMCPCallFailedType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let responseMcpCallFailed = RealtimeBetaServerEventResponseMCPCallFailedType(rawValue: "response.mcp_call.failed")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let responseMcpCallFailed =
+        RealtimeBetaServerEventResponseMCPCallFailedType(rawValue: "response.mcp_call.failed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -323,15 +427,19 @@ public struct RealtimeBetaServerEventResponseMCPCallFailedType: RawRepresentable
 }
 
 /// The event type, must be `response.created`.
-public struct RealtimeBetaServerEventResponseCreatedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventResponseCreatedType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let responseCreated = RealtimeBetaServerEventResponseCreatedType(rawValue: "response.created")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -341,15 +449,22 @@ public struct RealtimeBetaServerEventResponseCreatedType: RawRepresentable, Hash
 }
 
 /// The event type, must be `conversation.item.input_audio_transcription.failed`.
-public struct RealtimeBetaServerEventConversationItemInputAudioTranscriptionFailedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventConversationItemInputAudioTranscriptionFailedType: RawRepresentable, Hashable,
+    Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let conversationItemInputAudioTranscriptionFailed = RealtimeBetaServerEventConversationItemInputAudioTranscriptionFailedType(rawValue: "conversation.item.input_audio_transcription.failed")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let conversationItemInputAudioTranscriptionFailed =
+        RealtimeBetaServerEventConversationItemInputAudioTranscriptionFailedType(
+            rawValue: "conversation.item.input_audio_transcription.failed"
+        )
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -359,15 +474,20 @@ public struct RealtimeBetaServerEventConversationItemInputAudioTranscriptionFail
 }
 
 /// The event type, must be `response.mcp_call_arguments.done`.
-public struct RealtimeBetaServerEventResponseMCPCallArgumentsDoneType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventResponseMCPCallArgumentsDoneType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let responseMcpCallArgumentsDone = RealtimeBetaServerEventResponseMCPCallArgumentsDoneType(rawValue: "response.mcp_call_arguments.done")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let responseMcpCallArgumentsDone =
+        RealtimeBetaServerEventResponseMCPCallArgumentsDoneType(rawValue: "response.mcp_call_arguments.done")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -377,15 +497,20 @@ public struct RealtimeBetaServerEventResponseMCPCallArgumentsDoneType: RawRepres
 }
 
 /// The event type, must be `response.mcp_call.in_progress`.
-public struct RealtimeBetaServerEventResponseMCPCallInProgressType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventResponseMCPCallInProgressType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let responseMcpCallInProgress = RealtimeBetaServerEventResponseMCPCallInProgressType(rawValue: "response.mcp_call.in_progress")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let responseMcpCallInProgress =
+        RealtimeBetaServerEventResponseMCPCallInProgressType(rawValue: "response.mcp_call.in_progress")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -395,15 +520,20 @@ public struct RealtimeBetaServerEventResponseMCPCallInProgressType: RawRepresent
 }
 
 /// The event type, must be `response.output_audio.done`.
-public struct RealtimeBetaServerEventResponseAudioDoneType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventResponseAudioDoneType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let responseOutputAudioDone = RealtimeBetaServerEventResponseAudioDoneType(rawValue: "response.output_audio.done")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let responseOutputAudioDone =
+        RealtimeBetaServerEventResponseAudioDoneType(rawValue: "response.output_audio.done")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -413,15 +543,20 @@ public struct RealtimeBetaServerEventResponseAudioDoneType: RawRepresentable, Ha
 }
 
 /// The event type, must be `response.output_item.added`.
-public struct RealtimeBetaServerEventResponseOutputItemAddedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventResponseOutputItemAddedType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let responseOutputItemAdded = RealtimeBetaServerEventResponseOutputItemAddedType(rawValue: "response.output_item.added")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let responseOutputItemAdded =
+        RealtimeBetaServerEventResponseOutputItemAddedType(rawValue: "response.output_item.added")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -431,15 +566,20 @@ public struct RealtimeBetaServerEventResponseOutputItemAddedType: RawRepresentab
 }
 
 /// The event type, must be `transcription_session.created`.
-public struct RealtimeBetaServerEventTranscriptionSessionCreatedType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeBetaServerEventTranscriptionSessionCreatedType: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let transcriptionSessionCreated = RealtimeBetaServerEventTranscriptionSessionCreatedType(rawValue: "transcription_session.created")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let transcriptionSessionCreated =
+        RealtimeBetaServerEventTranscriptionSessionCreatedType(rawValue: "transcription_session.created")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -6,8 +6,9 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension AgentsMethods {
-    /// Lists subagents in a session, including nested and closed subagents. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+public extension AgentsMethods {
+    /// Lists subagents in a session, including nested and closed subagents. See [subagent
+    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
     ///
     /// - Parameters:
     /// - sessionId: The ID of the session.
@@ -15,25 +16,50 @@ extension AgentsMethods {
     ///   Defaults to 20.
     /// - order: The order in which resources are returned. Defaults to `desc`.
     /// - after: Return resources after this resource ID in the selected order.
-    public static func listAgentSessionSubagents(config: ClientConfig, sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> ListAgentSessionSubagentsResponse {
-        try validateLength("session_id", sessionId, min: 0, max: 1048576)
+    static func listAgentSessionSubagents(
+        config: ClientConfig,
+        sessionId: String,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ListAgentSessionSubagentsResponse {
+        try validateLength("session_id", sessionId, min: 0, max: 1_048_576)
 
-        if let limit = limit {
+        if let limit {
             try validateRange("limit", Double(limit), min: 1, max: 100)
         }
 
-        if let after = after {
-            try validateLength("after", after, min: 0, max: 1048576)
+        if let after {
+            try validateLength("after", after, min: 0, max: 1_048_576)
         }
 
-        return try (await sdkRequest("GET", ["/agents/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/subagents"].joined(), config: config, query: [
-            SdkQueryParameter("limit", value: limit),
-            SdkQueryParameter("order", value: order),
-            SdkQueryParameter("after", value: after),
-        ], decoder: .json, operationId: "listAgentSessionSubagents", options: requestOptions, errors: ["400": ErrorResponse2.self, "401": ErrorResponse2.self, "403": ErrorResponse2.self, "404": ErrorResponse2.self, "409": ErrorResponse2.self, "500": ErrorResponse2.self, "503": ErrorResponse2.self])).data
+        return try await (sdkRequest(
+            "GET",
+            ["/agents/sessions/", sdkEncodePathSegment(sdkWireString(sessionId)), "/subagents"].joined(),
+            config: config,
+            query: [
+                SdkQueryParameter("limit", value: limit),
+                SdkQueryParameter("order", value: order),
+                SdkQueryParameter("after", value: after),
+            ],
+            decoder: .json,
+            operationId: "listAgentSessionSubagents",
+            options: requestOptions,
+            errors: [
+                "400": ErrorResponse2.self,
+                "401": ErrorResponse2.self,
+                "403": ErrorResponse2.self,
+                "404": ErrorResponse2.self,
+                "409": ErrorResponse2.self,
+                "500": ErrorResponse2.self,
+                "503": ErrorResponse2.self,
+            ]
+        )).data
     }
 
-    /// Lists subagents in a session, including nested and closed subagents. See [subagent workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
+    /// Lists subagents in a session, including nested and closed subagents. See [subagent
+    /// workflows](https://developers.openai.com/api/docs/guides/agents-api/multi-agent).
     ///
     /// - Parameters:
     /// - sessionId: The ID of the session.
@@ -41,18 +67,43 @@ extension AgentsMethods {
     ///   Defaults to 20.
     /// - order: The order in which resources are returned. Defaults to `desc`.
     /// - after: Return resources after this resource ID in the selected order.
-    public static func listAgentSessionSubagentsPaginated(config: ClientConfig, sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<SubagentResource, Swift.Error> {
-        return AsyncThrowingStream<SubagentResource, Swift.Error> { (continuation: AsyncThrowingStream<SubagentResource, Swift.Error>.Continuation) in
+    static func listAgentSessionSubagentsPaginated(
+        config: ClientConfig,
+        sessionId: String,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<SubagentResource, Swift.Error> {
+        AsyncThrowingStream<SubagentResource, Swift.Error> { (continuation: AsyncThrowingStream<
+            SubagentResource,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAgentSessionSubagents(config: config, sessionId: sessionId, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listAgentSessionSubagents(
+                            config: config,
+                            sessionId: sessionId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
-                        for item in pageItems { continuation.yield(item) }
-                        if !pageResponse.hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
+                        for item in pageItems {
+                            continuation.yield(item)
+                        }
+                        if !pageResponse.hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {
@@ -65,25 +116,52 @@ extension AgentsMethods {
         }
     }
 
-    public struct ListAgentSessionSubagentsPage {
+    struct ListAgentSessionSubagentsPage {
         public let data: ListAgentSessionSubagentsResponse
         public let items: [SubagentResource]
         public let hasMore: Bool
     }
 
-    public static func listAgentSessionSubagentsPages(config: ClientConfig, sessionId: String, limit: Int? = nil, order: ListOrderParam? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ListAgentSessionSubagentsPage, Swift.Error> {
-        return AsyncThrowingStream<ListAgentSessionSubagentsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<ListAgentSessionSubagentsPage, Swift.Error>.Continuation) in
+    static func listAgentSessionSubagentsPages(
+        config: ClientConfig,
+        sessionId: String,
+        limit: Int? = nil,
+        order: ListOrderParam? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ListAgentSessionSubagentsPage, Swift.Error> {
+        AsyncThrowingStream<ListAgentSessionSubagentsPage, Swift.Error> { (pageContinuation: AsyncThrowingStream<
+            ListAgentSessionSubagentsPage,
+            Swift.Error
+        >.Continuation) in
             let task = _Concurrency.Task {
                 do {
                     var pageCursor = after
                     while true {
-                        let pageResponse = try await listAgentSessionSubagents(config: config, sessionId: sessionId, limit: limit, order: order, after: pageCursor, requestOptions: requestOptions)
+                        let pageResponse = try await listAgentSessionSubagents(
+                            config: config,
+                            sessionId: sessionId,
+                            limit: limit,
+                            order: order,
+                            after: pageCursor,
+                            requestOptions: requestOptions
+                        )
                         let pageItems = pageResponse.data
-                        if pageItems.isEmpty { break }
+                        if pageItems.isEmpty {
+                            break
+                        }
                         let hasMore = pageResponse.hasMore && pageResponse.lastId != nil
-                        pageContinuation.yield(ListAgentSessionSubagentsPage(data: pageResponse, items: pageItems, hasMore: hasMore))
-                        if !hasMore { break }
-                        guard let nextCursor = pageResponse.lastId else { break }
+                        pageContinuation.yield(ListAgentSessionSubagentsPage(
+                            data: pageResponse,
+                            items: pageItems,
+                            hasMore: hasMore
+                        ))
+                        if !hasMore {
+                            break
+                        }
+                        guard let nextCursor = pageResponse.lastId else {
+                            break
+                        }
                         pageCursor = nextCursor
                     }
                 } catch {

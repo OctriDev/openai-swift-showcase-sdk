@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaInput domain models
+/// ResponsesBetaInput domain models
 /// Typed representation of the `BetaInputMessageResource` API schema.
 public struct BetaInputMessageResource: Codable {
     /// The type of the message input. Always set to `message`.
@@ -29,40 +29,65 @@ public struct BetaInputMessageResource: Codable {
         case status
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaInputMessageResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.role = try container.sdkDecodeRequired(.role)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.status = try container.sdkDecodeIfPresent(.status)
-            try sdkValidateRawEnum("type", self.type, BetaInputMessageType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaInputMessageResource {
-    public init(type: BetaInputMessageType, role: BetaInputMessageRole, content: BetaInputMessageContentList, id: String, agent: BetaAgentTag? = nil, status: BetaInputMessageStatus? = nil) throws {
+public extension BetaInputMessageResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        role = try container.sdkDecodeRequired(.role)
+        content = try container.sdkDecodeRequired(.content)
+        id = try container.sdkDecodeRequired(.id)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        status = try container.sdkDecodeIfPresent(.status)
+        try sdkValidateRawEnum("type", type, BetaInputMessageType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaInputMessageResource {
+    init(
+        type: BetaInputMessageType,
+        role: BetaInputMessageRole,
+        content: BetaInputMessageContentList,
+        id: String,
+        agent: BetaAgentTag? = nil,
+        status: BetaInputMessageStatus? = nil
+    ) throws {
         (self.type, self.role) = (type, role)
         (self.content, self.id) = (content, id)
         (self.agent, self.status) = (agent, status)
-            try sdkValidateRawEnum("type", self.type, BetaInputMessageType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaInputMessageType.allCases.map(\.rawValue))
     }
 }
 
@@ -75,21 +100,27 @@ public struct BetaInputMessageResourceVariant1: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaInputMessageResourceVariant1 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaInputMessageResourceVariant1 {
-    public init(id: String) {
+public extension BetaInputMessageResourceVariant1 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+    }
+}
+
+public extension BetaInputMessageResourceVariant1 {
+    init(id: String) {
         self.id = id
     }
 }

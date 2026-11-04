@@ -6,15 +6,35 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-extension SkillsMethods {
-    /// Retrieves the ZIP bundle for a specific skill version. Use `skill_id` and `version` to identify the skill and version whose content you need. The response provides the bundle as a downloadable binary file.
+public extension SkillsMethods {
+    /// Retrieves the ZIP bundle for a specific skill version. Use `skill_id` and `version` to identify the skill and
+    /// version whose content you need. The response provides the bundle as a downloadable binary file.
     ///
     /// Download a skill version zip bundle.
     ///
     /// - Parameters:
     /// - skillId: The identifier of the skill.
     /// - version: The skill version number.
-    public static func getSkillVersionContent(config: ClientConfig, skillId: String, version: String, requestOptions: RequestOptions? = nil) async throws -> Data {
-        return try (await sdkRequest("GET", ["/skills/", sdkEncodePathSegment(sdkWireString(skillId)), "/versions/", sdkEncodePathSegment(sdkWireString(version)), "/content"].joined(), config: config, decoder: .bytes, operationId: "GetSkillVersionContent", options: requestOptions, errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self])).data
+    static func getSkillVersionContent(
+        config: ClientConfig,
+        skillId: String,
+        version: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> Data {
+        try await (sdkRequest(
+            "GET",
+            [
+                "/skills/",
+                sdkEncodePathSegment(sdkWireString(skillId)),
+                "/versions/",
+                sdkEncodePathSegment(sdkWireString(version)),
+                "/content",
+            ].joined(),
+            config: config,
+            decoder: .bytes,
+            operationId: "GetSkillVersionContent",
+            options: requestOptions,
+            errors: ["400": ErrorResponse.self, "404": ErrorResponse.self, "429": ErrorResponse.self]
+        )).data
     }
 }

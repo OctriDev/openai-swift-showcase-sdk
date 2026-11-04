@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Vaults domain models
+/// Vaults domain models
 /// Fields to replace on an active vault.
 public struct UpdateVaultParams: Codable {
     /// Replaces all metadata. Omit to leave unchanged, or pass {} to clear it. Up to 16 string key-value pairs,
@@ -19,27 +19,27 @@ public struct UpdateVaultParams: Codable {
     }
 
     init() {
-        (self.metadata, self.name) = (nil, nil)
+        (metadata, name) = (nil, nil)
     }
 }
 
-extension UpdateVaultParams {
-    public init(from decoder: Decoder) throws {
+public extension UpdateVaultParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        if let value = self.name {
-            try validateLength("name", value, min: 1, max: 1048576)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        name = try container.sdkDecodeIfPresent(.name)
+        if let value = name {
+            try validateLength("name", value, min: 1, max: 1_048_576)
         }
     }
 }
 
-extension UpdateVaultParams {
-    public init(metadata: [String: String]? = nil, name: String? = nil) throws {
+public extension UpdateVaultParams {
+    init(metadata: [String: String]? = nil, name: String? = nil) throws {
         self.init()
         (self.metadata, self.name) = (metadata, name)
         if let value = self.name {
-            try validateLength("name", value, min: 1, max: 1048576)
+            try validateLength("name", value, min: 1, max: 1_048_576)
         }
     }
 }

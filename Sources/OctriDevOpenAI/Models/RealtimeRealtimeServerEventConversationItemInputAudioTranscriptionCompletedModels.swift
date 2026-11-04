@@ -3,47 +3,88 @@
 
 import Foundation
 
-// RealtimeRealtimeServerEvent domain models
-extension RealtimeServerEventConversationItemInputAudioTranscriptionCompleted {
-    public init(from decoder: Decoder) throws {
+/// RealtimeRealtimeServerEvent domain models
+public extension RealtimeServerEventConversationItemInputAudioTranscriptionCompleted {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
         }
         guard container.contains(.contentIndex) else {
-            throw SdkValidationError(field: "content_index", code: "required", message: "Validation failed for 'content_index': value is required")
+            throw SdkValidationError(
+                field: "content_index",
+                code: "required",
+                message: "Validation failed for 'content_index': value is required"
+            )
         }
         guard container.contains(.transcript) else {
-            throw SdkValidationError(field: "transcript", code: "required", message: "Validation failed for 'transcript': value is required")
+            throw SdkValidationError(
+                field: "transcript",
+                code: "required",
+                message: "Validation failed for 'transcript': value is required"
+            )
         }
         guard container.contains(.usage) else {
-            throw SdkValidationError(field: "usage", code: "required", message: "Validation failed for 'usage': value is required")
+            throw SdkValidationError(
+                field: "usage",
+                code: "required",
+                message: "Validation failed for 'usage': value is required"
+            )
         }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.contentIndex = try container.sdkDecodeRequired(.contentIndex)
-        self.transcript = try container.sdkDecodeRequired(.transcript)
-        self.usage = try container.sdkDecodeRequired(.usage)
-        self.languages = try container.sdkDecodeIfPresent(.languages)
-        self.logprobs = try container.sdkDecodeIfPresent(.logprobs)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventConversationItemInputAudioTranscriptionCompletedType.allCases.map(\.rawValue))
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        contentIndex = try container.sdkDecodeRequired(.contentIndex)
+        transcript = try container.sdkDecodeRequired(.transcript)
+        usage = try container.sdkDecodeRequired(.usage)
+        languages = try container.sdkDecodeIfPresent(.languages)
+        logprobs = try container.sdkDecodeIfPresent(.logprobs)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            RealtimeServerEventConversationItemInputAudioTranscriptionCompletedType.allCases.map(\.rawValue)
+        )
     }
 }
 
-extension RealtimeServerEventConversationItemInputAudioTranscriptionCompleted {
-    public init(eventId: String, type: RealtimeServerEventConversationItemInputAudioTranscriptionCompletedType, itemId: String, contentIndex: Int, transcript: String, usage: RealtimeServerEventConversationItemInputAudioTranscriptionCompletedUsage, languages: [TranscriptionLanguage]? = nil, logprobs: [LogProbProperties]? = nil) throws {
+public extension RealtimeServerEventConversationItemInputAudioTranscriptionCompleted {
+    init(
+        eventId: String,
+        type: RealtimeServerEventConversationItemInputAudioTranscriptionCompletedType,
+        itemId: String,
+        contentIndex: Int,
+        transcript: String,
+        usage: RealtimeServerEventConversationItemInputAudioTranscriptionCompletedUsage,
+        languages: [TranscriptionLanguage]? = nil,
+        logprobs: [LogProbProperties]? = nil
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.itemId, self.contentIndex) = (itemId, contentIndex)
         (self.transcript, self.usage) = (transcript, usage)
         (self.languages, self.logprobs) = (languages, logprobs)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventConversationItemInputAudioTranscriptionCompletedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeServerEventConversationItemInputAudioTranscriptionCompletedType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -69,34 +110,53 @@ public struct RealtimeServerEventConversationItemAdded: Codable {
         case previousItemId = "previous_item_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventConversationItemAdded {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.item) else {
-            throw SdkValidationError(field: "item", code: "required", message: "Validation failed for 'item': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.item = try container.sdkDecodeRequired(.item)
-        self.previousItemId = try container.sdkDecodeIfPresent(.previousItemId)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventConversationItemAddedType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventConversationItemAdded {
-    public init(eventId: String, type: RealtimeServerEventConversationItemAddedType, item: RealtimeConversationItem, previousItemId: String? = nil) throws {
+public extension RealtimeServerEventConversationItemAdded {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.item) else {
+            throw SdkValidationError(
+                field: "item",
+                code: "required",
+                message: "Validation failed for 'item': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        item = try container.sdkDecodeRequired(.item)
+        previousItemId = try container.sdkDecodeIfPresent(.previousItemId)
+        try sdkValidateRawEnum("type", type, RealtimeServerEventConversationItemAddedType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeServerEventConversationItemAdded {
+    init(
+        eventId: String,
+        type: RealtimeServerEventConversationItemAddedType,
+        item: RealtimeConversationItem,
+        previousItemId: String? = nil
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.item, self.previousItemId) = (item, previousItemId)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventConversationItemAddedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeServerEventConversationItemAddedType.allCases.map(\.rawValue))
     }
 }
 
@@ -115,33 +175,51 @@ public struct RealtimeServerEventConversationCreated: Codable {
         case conversation
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventConversationCreated {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.conversation) else {
-            throw SdkValidationError(field: "conversation", code: "required", message: "Validation failed for 'conversation': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.conversation = try container.sdkDecodeRequired(.conversation)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventConversationCreatedType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventConversationCreated {
-    public init(eventId: String, type: RealtimeServerEventConversationCreatedType, conversation: RealtimeServerEventConversationCreatedConversation) throws {
+public extension RealtimeServerEventConversationCreated {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.conversation) else {
+            throw SdkValidationError(
+                field: "conversation",
+                code: "required",
+                message: "Validation failed for 'conversation': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        conversation = try container.sdkDecodeRequired(.conversation)
+        try sdkValidateRawEnum("type", type, RealtimeServerEventConversationCreatedType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeServerEventConversationCreated {
+    init(
+        eventId: String,
+        type: RealtimeServerEventConversationCreatedType,
+        conversation: RealtimeServerEventConversationCreatedConversation
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         self.conversation = conversation
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventConversationCreatedType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeServerEventConversationCreatedType.allCases.map(\.rawValue))
     }
 }
 
@@ -172,51 +250,89 @@ public struct RealtimeServerEventResponseTextDelta: Codable {
         case delta
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventResponseTextDelta {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.responseId) else {
-            throw SdkValidationError(field: "response_id", code: "required", message: "Validation failed for 'response_id': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
-        }
-        guard container.contains(.contentIndex) else {
-            throw SdkValidationError(field: "content_index", code: "required", message: "Validation failed for 'content_index': value is required")
-        }
-        guard container.contains(.delta) else {
-            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.responseId = try container.sdkDecodeRequired(.responseId)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.contentIndex = try container.sdkDecodeRequired(.contentIndex)
-        self.delta = try container.sdkDecodeRequired(.delta)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventResponseTextDeltaType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventResponseTextDelta {
-    public init(eventId: String, type: RealtimeServerEventResponseTextDeltaType, responseId: String, itemId: String, outputIndex: Int, contentIndex: Int, delta: String) throws {
+public extension RealtimeServerEventResponseTextDelta {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.responseId) else {
+            throw SdkValidationError(
+                field: "response_id",
+                code: "required",
+                message: "Validation failed for 'response_id': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        guard container.contains(.outputIndex) else {
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
+        }
+        guard container.contains(.contentIndex) else {
+            throw SdkValidationError(
+                field: "content_index",
+                code: "required",
+                message: "Validation failed for 'content_index': value is required"
+            )
+        }
+        guard container.contains(.delta) else {
+            throw SdkValidationError(
+                field: "delta",
+                code: "required",
+                message: "Validation failed for 'delta': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        responseId = try container.sdkDecodeRequired(.responseId)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        contentIndex = try container.sdkDecodeRequired(.contentIndex)
+        delta = try container.sdkDecodeRequired(.delta)
+        try sdkValidateRawEnum("type", type, RealtimeServerEventResponseTextDeltaType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeServerEventResponseTextDelta {
+    init(
+        eventId: String,
+        type: RealtimeServerEventResponseTextDeltaType,
+        responseId: String,
+        itemId: String,
+        outputIndex: Int,
+        contentIndex: Int,
+        delta: String
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.responseId, self.itemId) = (responseId, itemId)
         (self.outputIndex, self.contentIndex) = (outputIndex, contentIndex)
         self.delta = delta
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventResponseTextDeltaType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeServerEventResponseTextDeltaType.allCases.map(\.rawValue))
     }
 }
 
@@ -246,42 +362,78 @@ public struct RealtimeServerEventInputAudioBufferTimeoutTriggered: Codable {
         case itemId = "item_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventInputAudioBufferTimeoutTriggered {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.audioStartMs) else {
-            throw SdkValidationError(field: "audio_start_ms", code: "required", message: "Validation failed for 'audio_start_ms': value is required")
-        }
-        guard container.contains(.audioEndMs) else {
-            throw SdkValidationError(field: "audio_end_ms", code: "required", message: "Validation failed for 'audio_end_ms': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.audioStartMs = try container.sdkDecodeRequired(.audioStartMs)
-        self.audioEndMs = try container.sdkDecodeRequired(.audioEndMs)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventInputAudioBufferTimeoutTriggeredType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventInputAudioBufferTimeoutTriggered {
-    public init(eventId: String, type: RealtimeServerEventInputAudioBufferTimeoutTriggeredType, audioStartMs: Int, audioEndMs: Int, itemId: String) throws {
+public extension RealtimeServerEventInputAudioBufferTimeoutTriggered {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.audioStartMs) else {
+            throw SdkValidationError(
+                field: "audio_start_ms",
+                code: "required",
+                message: "Validation failed for 'audio_start_ms': value is required"
+            )
+        }
+        guard container.contains(.audioEndMs) else {
+            throw SdkValidationError(
+                field: "audio_end_ms",
+                code: "required",
+                message: "Validation failed for 'audio_end_ms': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        audioStartMs = try container.sdkDecodeRequired(.audioStartMs)
+        audioEndMs = try container.sdkDecodeRequired(.audioEndMs)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        try sdkValidateRawEnum(
+            "type",
+            type,
+            RealtimeServerEventInputAudioBufferTimeoutTriggeredType.allCases.map(\.rawValue)
+        )
+    }
+}
+
+public extension RealtimeServerEventInputAudioBufferTimeoutTriggered {
+    init(
+        eventId: String,
+        type: RealtimeServerEventInputAudioBufferTimeoutTriggeredType,
+        audioStartMs: Int,
+        audioEndMs: Int,
+        itemId: String
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.audioStartMs, self.audioEndMs) = (audioStartMs, audioEndMs)
         self.itemId = itemId
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventInputAudioBufferTimeoutTriggeredType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum(
+            "type",
+            self.type,
+            RealtimeServerEventInputAudioBufferTimeoutTriggeredType.allCases.map(\.rawValue)
+        )
     }
 }
 
@@ -304,34 +456,53 @@ public struct RealtimeServerEventConversationItemDone: Codable {
         case previousItemId = "previous_item_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeServerEventConversationItemDone {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.item) else {
-            throw SdkValidationError(field: "item", code: "required", message: "Validation failed for 'item': value is required")
-        }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.item = try container.sdkDecodeRequired(.item)
-        self.previousItemId = try container.sdkDecodeIfPresent(.previousItemId)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventConversationItemDoneType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeServerEventConversationItemDone {
-    public init(eventId: String, type: RealtimeServerEventConversationItemDoneType, item: RealtimeConversationItem, previousItemId: String? = nil) throws {
+public extension RealtimeServerEventConversationItemDone {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.eventId) else {
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.item) else {
+            throw SdkValidationError(
+                field: "item",
+                code: "required",
+                message: "Validation failed for 'item': value is required"
+            )
+        }
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        item = try container.sdkDecodeRequired(.item)
+        previousItemId = try container.sdkDecodeIfPresent(.previousItemId)
+        try sdkValidateRawEnum("type", type, RealtimeServerEventConversationItemDoneType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeServerEventConversationItemDone {
+    init(
+        eventId: String,
+        type: RealtimeServerEventConversationItemDoneType,
+        item: RealtimeConversationItem,
+        previousItemId: String? = nil
+    ) throws {
         (self.eventId, self.type) = (eventId, type)
         (self.item, self.previousItemId) = (item, previousItemId)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventConversationItemDoneType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeServerEventConversationItemDoneType.allCases.map(\.rawValue))
     }
 }
 
@@ -362,40 +533,70 @@ public struct RealtimeServerEventResponseAudioDelta: Codable {
         case delta
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension RealtimeServerEventResponseAudioDelta {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeServerEventResponseAudioDelta {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.eventId) else {
-            throw SdkValidationError(field: "event_id", code: "required", message: "Validation failed for 'event_id': value is required")
+            throw SdkValidationError(
+                field: "event_id",
+                code: "required",
+                message: "Validation failed for 'event_id': value is required"
+            )
         }
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.responseId) else {
-            throw SdkValidationError(field: "response_id", code: "required", message: "Validation failed for 'response_id': value is required")
+            throw SdkValidationError(
+                field: "response_id",
+                code: "required",
+                message: "Validation failed for 'response_id': value is required"
+            )
         }
         guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
         }
         guard container.contains(.outputIndex) else {
-            throw SdkValidationError(field: "output_index", code: "required", message: "Validation failed for 'output_index': value is required")
+            throw SdkValidationError(
+                field: "output_index",
+                code: "required",
+                message: "Validation failed for 'output_index': value is required"
+            )
         }
         guard container.contains(.contentIndex) else {
-            throw SdkValidationError(field: "content_index", code: "required", message: "Validation failed for 'content_index': value is required")
+            throw SdkValidationError(
+                field: "content_index",
+                code: "required",
+                message: "Validation failed for 'content_index': value is required"
+            )
         }
         guard container.contains(.delta) else {
-            throw SdkValidationError(field: "delta", code: "required", message: "Validation failed for 'delta': value is required")
+            throw SdkValidationError(
+                field: "delta",
+                code: "required",
+                message: "Validation failed for 'delta': value is required"
+            )
         }
-        self.eventId = try container.sdkDecodeRequired(.eventId)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.responseId = try container.sdkDecodeRequired(.responseId)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.outputIndex = try container.sdkDecodeRequired(.outputIndex)
-        self.contentIndex = try container.sdkDecodeRequired(.contentIndex)
-        self.delta = try container.sdkDecodeRequired(.delta)
-            try sdkValidateRawEnum("type", self.type, RealtimeServerEventResponseAudioDeltaType.allCases.map(\.rawValue))
+        eventId = try container.sdkDecodeRequired(.eventId)
+        type = try container.sdkDecodeRequired(.type)
+        responseId = try container.sdkDecodeRequired(.responseId)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        outputIndex = try container.sdkDecodeRequired(.outputIndex)
+        contentIndex = try container.sdkDecodeRequired(.contentIndex)
+        delta = try container.sdkDecodeRequired(.delta)
+        try sdkValidateRawEnum("type", type, RealtimeServerEventResponseAudioDeltaType.allCases.map(\.rawValue))
     }
 }

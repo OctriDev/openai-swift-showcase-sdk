@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsInput domain models
+/// AgentsInput domain models
 public indirect enum InputContentParam {
     case inputContentParamInputText(InputContentParamInputText)
     case inputContentParamInputImage(InputContentParamInputImage)
@@ -12,7 +12,6 @@ public indirect enum InputContentParam {
 }
 
 extension InputContentParam: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension InputContentParam: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,9 @@ extension InputContentParam: Codable {
 extension InputContentParam {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .inputContentParamInputText(try InputContentParamInputText(from: decoder))
-        case "input_image": return .inputContentParamInputImage(try InputContentParamInputImage(from: decoder))
-        default: return nil
+        case "input_text": try .inputContentParamInputText(InputContentParamInputText(from: decoder))
+        case "input_image": try .inputContentParamInputImage(InputContentParamInputImage(from: decoder))
+        default: nil
         }
     }
 }
@@ -62,7 +65,6 @@ public indirect enum InputContentResource {
 }
 
 extension InputContentResource: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -70,12 +72,16 @@ extension InputContentResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -86,9 +92,9 @@ extension InputContentResource: Codable {
 extension InputContentResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .inputContentResourceInputText(try InputContentResourceInputText(from: decoder))
-        case "input_image": return .inputContentResourceInputImage(try InputContentResourceInputImage(from: decoder))
-        default: return nil
+        case "input_text": try .inputContentResourceInputText(InputContentResourceInputText(from: decoder))
+        case "input_image": try .inputContentResourceInputImage(InputContentResourceInputImage(from: decoder))
+        default: nil
         }
     }
 }
@@ -113,21 +119,27 @@ public struct InputTokensDetailsResource2: Codable {
         case cachedTokens = "cached_tokens"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension InputTokensDetailsResource2 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.cachedTokens) else {
-            throw SdkValidationError(field: "cached_tokens", code: "required", message: "Validation failed for 'cached_tokens': value is required")
-        }
-        self.cachedTokens = try container.sdkDecodeRequired(.cachedTokens)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension InputTokensDetailsResource2 {
-    public init(cachedTokens: Int) {
+public extension InputTokensDetailsResource2 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.cachedTokens) else {
+            throw SdkValidationError(
+                field: "cached_tokens",
+                code: "required",
+                message: "Validation failed for 'cached_tokens': value is required"
+            )
+        }
+        cachedTokens = try container.sdkDecodeRequired(.cachedTokens)
+    }
+}
+
+public extension InputTokensDetailsResource2 {
+    init(cachedTokens: Int) {
         self.cachedTokens = cachedTokens
     }
 }
@@ -144,30 +156,40 @@ public struct InputContentParamInputImage: Codable {
         case imageUrl = "image_url"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension InputContentParamInputImage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.imageUrl) else {
-            throw SdkValidationError(field: "image_url", code: "required", message: "Validation failed for 'image_url': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.imageUrl = try container.sdkDecodeRequired(.imageUrl)
-            try sdkValidateRawEnum("type", self.type, InputContentParamInputImageType.allCases.map(\.rawValue))
-            try validateLength("image_url", self.imageUrl, min: 0, max: 1048576)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension InputContentParamInputImage {
-    public init(type: InputContentParamInputImageType, imageUrl: String) throws {
+public extension InputContentParamInputImage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.imageUrl) else {
+            throw SdkValidationError(
+                field: "image_url",
+                code: "required",
+                message: "Validation failed for 'image_url': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        imageUrl = try container.sdkDecodeRequired(.imageUrl)
+        try sdkValidateRawEnum("type", type, InputContentParamInputImageType.allCases.map(\.rawValue))
+        try validateLength("image_url", imageUrl, min: 0, max: 1_048_576)
+    }
+}
+
+public extension InputContentParamInputImage {
+    init(type: InputContentParamInputImageType, imageUrl: String) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
-            try sdkValidateRawEnum("type", self.type, InputContentParamInputImageType.allCases.map(\.rawValue))
-            try validateLength("image_url", self.imageUrl, min: 0, max: 1048576)
+        try sdkValidateRawEnum("type", self.type, InputContentParamInputImageType.allCases.map(\.rawValue))
+        try validateLength("image_url", self.imageUrl, min: 0, max: 1_048_576)
     }
 }
 
@@ -183,30 +205,40 @@ public struct InputContentResourceInputImage: Codable {
         case imageUrl = "image_url"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension InputContentResourceInputImage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.imageUrl) else {
-            throw SdkValidationError(field: "image_url", code: "required", message: "Validation failed for 'image_url': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.imageUrl = try container.sdkDecodeRequired(.imageUrl)
-            try sdkValidateRawEnum("type", self.type, InputContentResourceInputImageType.allCases.map(\.rawValue))
-            try validateLength("image_url", self.imageUrl, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension InputContentResourceInputImage {
-    public init(type: InputContentResourceInputImageType, imageUrl: String) throws {
+public extension InputContentResourceInputImage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.imageUrl) else {
+            throw SdkValidationError(
+                field: "image_url",
+                code: "required",
+                message: "Validation failed for 'image_url': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        imageUrl = try container.sdkDecodeRequired(.imageUrl)
+        try sdkValidateRawEnum("type", type, InputContentResourceInputImageType.allCases.map(\.rawValue))
+        try validateLength("image_url", imageUrl, min: 0, max: nil)
+    }
+}
+
+public extension InputContentResourceInputImage {
+    init(type: InputContentResourceInputImageType, imageUrl: String) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
-            try sdkValidateRawEnum("type", self.type, InputContentResourceInputImageType.allCases.map(\.rawValue))
-            try validateLength("image_url", self.imageUrl, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, InputContentResourceInputImageType.allCases.map(\.rawValue))
+        try validateLength("image_url", self.imageUrl, min: 0, max: nil)
     }
 }
 
@@ -222,30 +254,40 @@ public struct InputContentResourceInputText: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension InputContentResourceInputText {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, InputContentResourceInputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension InputContentResourceInputText {
-    public init(type: InputContentResourceInputTextType, text: String) throws {
+public extension InputContentResourceInputText {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        try sdkValidateRawEnum("type", type, InputContentResourceInputTextType.allCases.map(\.rawValue))
+        try validateLength("text", text, min: 0, max: nil)
+    }
+}
+
+public extension InputContentResourceInputText {
+    init(type: InputContentResourceInputTextType, text: String) throws {
         (self.type, self.text) = (type, text)
-            try sdkValidateRawEnum("type", self.type, InputContentResourceInputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, InputContentResourceInputTextType.allCases.map(\.rawValue))
+        try validateLength("text", self.text, min: 0, max: nil)
     }
 }
 
@@ -261,30 +303,40 @@ public struct InputContentParamInputText: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension InputContentParamInputText {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, InputContentParamInputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: 1048576)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension InputContentParamInputText {
-    public init(type: InputContentParamInputTextType, text: String) throws {
+public extension InputContentParamInputText {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        try sdkValidateRawEnum("type", type, InputContentParamInputTextType.allCases.map(\.rawValue))
+        try validateLength("text", text, min: 0, max: 1_048_576)
+    }
+}
+
+public extension InputContentParamInputText {
+    init(type: InputContentParamInputTextType, text: String) throws {
         (self.type, self.text) = (type, text)
-            try sdkValidateRawEnum("type", self.type, InputContentParamInputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: 1048576)
+        try sdkValidateRawEnum("type", self.type, InputContentParamInputTextType.allCases.map(\.rawValue))
+        try validateLength("text", self.text, min: 0, max: 1_048_576)
     }
 }
 
@@ -303,30 +355,40 @@ public struct InputMessageParam: Codable {
         case type
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension InputMessageParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        self.role = try container.sdkDecodeRequired(.role)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.type = try container.sdkDecodeIfPresent(.type)
-            try validateItems("content", self.content, min: 0, max: 16384)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension InputMessageParam {
-    public init(role: InputMessageParamRole, content: [InputContentParam], type: InputMessageParamType? = nil) throws {
+public extension InputMessageParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        role = try container.sdkDecodeRequired(.role)
+        content = try container.sdkDecodeRequired(.content)
+        type = try container.sdkDecodeIfPresent(.type)
+        try validateItems("content", content, min: 0, max: 16384)
+    }
+}
+
+public extension InputMessageParam {
+    init(role: InputMessageParamRole, content: [InputContentParam], type: InputMessageParamType? = nil) throws {
         (self.role, self.content) = (role, content)
         self.type = type
-            try validateItems("content", self.content, min: 0, max: 16384)
+        try validateItems("content", self.content, min: 0, max: 16384)
     }
 }
 
@@ -334,12 +396,15 @@ extension InputMessageParam {
 public struct InputMessageParamType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let message = InputMessageParamType(rawValue: "message")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -424,12 +489,15 @@ public enum InputContentResourceInputTextType: String, CaseIterable, Codable {
 public struct InputMessageParamRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let user = InputMessageParamRole(rawValue: "user")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsCreate domain models
+/// AgentsCreate domain models
 /// Parameters for creating a reusable, project-scoped OpenAI-hosted environment template.
 public struct CreateEnvironmentTemplateParams: Codable {
     /// Packages to install in the environment. Defaults to empty package lists.
@@ -42,47 +42,58 @@ public struct CreateEnvironmentTemplateParams: Codable {
     }
 
     init() {
-        (self.packages, self.setupCommands, self.network, self.desktop, self.env) = (nil, nil, nil, nil, nil)
-        (self.capabilityDirectories, self.skills, self.plugins, self.files, self.name) = (nil, nil, nil, nil, nil)
+        (packages, setupCommands, network, desktop, env) = (nil, nil, nil, nil, nil)
+        (capabilityDirectories, skills, plugins, files, name) = (nil, nil, nil, nil, nil)
     }
 }
 
-extension CreateEnvironmentTemplateParams {
-    public init(from decoder: Decoder) throws {
+public extension CreateEnvironmentTemplateParams {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.packages = try container.sdkDecodeIfPresent(.packages)
-        self.setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
-        self.network = try container.sdkDecodeIfPresent(.network)
-        self.desktop = try container.sdkDecodeIfPresent(.desktop)
-        self.env = try container.sdkDecodeIfPresent(.env)
-        self.capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
-        self.skills = try container.sdkDecodeIfPresent(.skills)
-        self.plugins = try container.sdkDecodeIfPresent(.plugins)
-        self.files = try container.sdkDecodeIfPresent(.files)
-        self.name = try container.sdkDecodeIfPresent(.name)
-        if let value = self.setupCommands {
+        packages = try container.sdkDecodeIfPresent(.packages)
+        setupCommands = try container.sdkDecodeIfPresent(.setupCommands)
+        network = try container.sdkDecodeIfPresent(.network)
+        desktop = try container.sdkDecodeIfPresent(.desktop)
+        env = try container.sdkDecodeIfPresent(.env)
+        capabilityDirectories = try container.sdkDecodeIfPresent(.capabilityDirectories)
+        skills = try container.sdkDecodeIfPresent(.skills)
+        plugins = try container.sdkDecodeIfPresent(.plugins)
+        files = try container.sdkDecodeIfPresent(.files)
+        name = try container.sdkDecodeIfPresent(.name)
+        if let value = setupCommands {
             try validateItems("setup_commands", value, min: 0, max: 16)
         }
-        if let value = self.capabilityDirectories {
+        if let value = capabilityDirectories {
             try validateItems("capability_directories", value, min: 0, max: 16384)
         }
-        if let value = self.skills {
+        if let value = skills {
             try validateItems("skills", value, min: 0, max: 200)
         }
-        if let value = self.plugins {
+        if let value = plugins {
             try validateItems("plugins", value, min: 0, max: 32)
         }
-        if let value = self.files {
+        if let value = files {
             try validateItems("files", value, min: 0, max: 50)
         }
-        if let value = self.name {
+        if let value = name {
             try validateLength("name", value, min: 1, max: 256)
         }
     }
 }
 
-extension CreateEnvironmentTemplateParams {
-    public init(packages: EnvironmentPackagesParam? = nil, setupCommands: [SetupCommandParam]? = nil, network: NetworkPolicyParam? = nil, desktop: DesktopParam? = nil, env: [String: String]? = nil, capabilityDirectories: [String]? = nil, skills: [HostedSkillParam]? = nil, plugins: [HostedPluginParam]? = nil, files: [HostedEnvironmentFileParam]? = nil, name: String? = nil) throws {
+public extension CreateEnvironmentTemplateParams {
+    init(
+        packages: EnvironmentPackagesParam? = nil,
+        setupCommands: [SetupCommandParam]? = nil,
+        network: NetworkPolicyParam? = nil,
+        desktop: DesktopParam? = nil,
+        env: [String: String]? = nil,
+        capabilityDirectories: [String]? = nil,
+        skills: [HostedSkillParam]? = nil,
+        plugins: [HostedPluginParam]? = nil,
+        files: [HostedEnvironmentFileParam]? = nil,
+        name: String? = nil
+    ) throws {
         self.init()
         (self.packages, self.setupCommands) = (packages, setupCommands)
         (self.network, self.desktop) = (network, desktop)

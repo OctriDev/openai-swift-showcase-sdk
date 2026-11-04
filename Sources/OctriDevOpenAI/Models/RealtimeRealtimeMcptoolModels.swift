@@ -3,7 +3,7 @@
 
 import Foundation
 
-// RealtimeRealtimeMcptool domain models
+/// RealtimeRealtimeMcptool domain models
 public indirect enum RealtimeMCPToolCallError {
     case realtimeMcpProtocolError(RealtimeMCPProtocolError)
     case realtimeMcpToolExecutionError(RealtimeMCPToolExecutionError)
@@ -13,7 +13,6 @@ public indirect enum RealtimeMCPToolCallError {
 }
 
 extension RealtimeMCPToolCallError: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension RealtimeMCPToolCallError: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension RealtimeMCPToolCallError: Codable {
 extension RealtimeMCPToolCallError {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "protocol_error": return .realtimeMcpProtocolError(try RealtimeMCPProtocolError(from: decoder))
-        case "tool_execution_error": return .realtimeMcpToolExecutionError(try RealtimeMCPToolExecutionError(from: decoder))
-        case "http_error": return .realtimeMcphttpError(try RealtimeMCPHTTPError(from: decoder))
-        default: return nil
+        case "protocol_error": try .realtimeMcpProtocolError(RealtimeMCPProtocolError(from: decoder))
+        case "tool_execution_error": try .realtimeMcpToolExecutionError(RealtimeMCPToolExecutionError(from: decoder))
+        case "http_error": try .realtimeMcphttpError(RealtimeMCPHTTPError(from: decoder))
+        default: nil
         }
     }
 }
@@ -87,46 +90,77 @@ public struct RealtimeMCPToolCall: Codable {
         case error
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeMCPToolCall {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.serverLabel) else {
-            throw SdkValidationError(field: "server_label", code: "required", message: "Validation failed for 'server_label': value is required")
-        }
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        guard container.contains(.arguments) else {
-            throw SdkValidationError(field: "arguments", code: "required", message: "Validation failed for 'arguments': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.serverLabel = try container.sdkDecodeRequired(.serverLabel)
-        self.name = try container.sdkDecodeRequired(.name)
-        self.arguments = try container.sdkDecodeRequired(.arguments)
-        self.approvalRequestId = try container.sdkDecodeIfPresent(.approvalRequestId)
-        self.output = try container.sdkDecodeIfPresent(.output)
-        self.error = try container.sdkDecodeIfPresent(.error)
-            try sdkValidateRawEnum("type", self.type, RealtimeMCPToolCallType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeMCPToolCall {
-    public init(type: RealtimeMCPToolCallType, id: String, serverLabel: String, name: String, arguments: String, approvalRequestId: String? = nil, output: String? = nil, error: RealtimeMCPToolCallError? = nil) throws {
+public extension RealtimeMCPToolCall {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.serverLabel) else {
+            throw SdkValidationError(
+                field: "server_label",
+                code: "required",
+                message: "Validation failed for 'server_label': value is required"
+            )
+        }
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        guard container.contains(.arguments) else {
+            throw SdkValidationError(
+                field: "arguments",
+                code: "required",
+                message: "Validation failed for 'arguments': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        serverLabel = try container.sdkDecodeRequired(.serverLabel)
+        name = try container.sdkDecodeRequired(.name)
+        arguments = try container.sdkDecodeRequired(.arguments)
+        approvalRequestId = try container.sdkDecodeIfPresent(.approvalRequestId)
+        output = try container.sdkDecodeIfPresent(.output)
+        error = try container.sdkDecodeIfPresent(.error)
+        try sdkValidateRawEnum("type", type, RealtimeMCPToolCallType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeMCPToolCall {
+    init(
+        type: RealtimeMCPToolCallType,
+        id: String,
+        serverLabel: String,
+        name: String,
+        arguments: String,
+        approvalRequestId: String? = nil,
+        output: String? = nil,
+        error: RealtimeMCPToolCallError? = nil
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.serverLabel, self.name) = (serverLabel, name)
         (self.arguments, self.approvalRequestId) = (arguments, approvalRequestId)
         (self.output, self.error) = (output, error)
-            try sdkValidateRawEnum("type", self.type, RealtimeMCPToolCallType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeMCPToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -142,28 +176,38 @@ public struct RealtimeMCPToolExecutionError: Codable {
         case message
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension RealtimeMCPToolExecutionError {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.message) else {
-            throw SdkValidationError(field: "message", code: "required", message: "Validation failed for 'message': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.message = try container.sdkDecodeRequired(.message)
-            try sdkValidateRawEnum("type", self.type, RealtimeMCPToolExecutionErrorType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension RealtimeMCPToolExecutionError {
-    public init(type: RealtimeMCPToolExecutionErrorType, message: String) throws {
+public extension RealtimeMCPToolExecutionError {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.message) else {
+            throw SdkValidationError(
+                field: "message",
+                code: "required",
+                message: "Validation failed for 'message': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        message = try container.sdkDecodeRequired(.message)
+        try sdkValidateRawEnum("type", type, RealtimeMCPToolExecutionErrorType.allCases.map(\.rawValue))
+    }
+}
+
+public extension RealtimeMCPToolExecutionError {
+    init(type: RealtimeMCPToolExecutionErrorType, message: String) throws {
         (self.type, self.message) = (type, message)
-            try sdkValidateRawEnum("type", self.type, RealtimeMCPToolExecutionErrorType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, RealtimeMCPToolExecutionErrorType.allCases.map(\.rawValue))
     }
 }
 

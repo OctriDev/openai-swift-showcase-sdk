@@ -9,16 +9,17 @@ public class SafetyNamespace {
         self.config = config
     }
 
-/// Retrieves a safety case by its identifier. Use `id` to specify the safety case you want to inspect; it can contain at most 128 characters.
+    /// Retrieves a safety case by its identifier. Use `id` to specify the safety case you want to inspect; it can
+    /// contain at most 128 characters.
     ///
     /// Get a safety case by ID.
     public func retrieveCase(id: String, requestOptions: RequestOptions? = nil) async throws -> SafetyCaseResource {
-        return try await SafetyMethods.retrieveSafetyCase(config: config, id: id, requestOptions: requestOptions)
+        try await SafetyMethods.retrieveSafetyCase(config: config, id: id, requestOptions: requestOptions)
     }
 
-/// Get a safety alert belonging to the authenticated API project.
+    /// Get a safety alert belonging to the authenticated API project.
     public func retrieveAlert(id: String, requestOptions: RequestOptions? = nil) async throws -> SafetyAlertResource {
-        return try await SafetyMethods.retrieveSafetyAlert(config: config, id: id, requestOptions: requestOptions)
+        try await SafetyMethods.retrieveSafetyAlert(config: config, id: id, requestOptions: requestOptions)
     }
 }
 
@@ -28,46 +29,112 @@ public class ExternalStorageNamespace {
         self.config = config
     }
 
-/// Lists the organization's customer-managed external storage configurations. Use `project_id` to scope the results to a project, and `after` and `limit` to navigate the list. Set `order` to control the sort direction.
+    /// Lists the organization's customer-managed external storage configurations. Use `project_id` to scope the results
+    /// to a project, and `after` and `limit` to navigate the list. Set `order` to control the sort direction.
     ///
     /// List the organization's customer-managed external storage configurations.
-    public func list(projectId: String? = nil, after: String? = nil, order: ExternalStorageOrder? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) async throws -> ExternalStorageListResource {
-        return try await ExternalStorageMethods.listExternalStorage(config: config, projectId: projectId, after: after, order: order, limit: limit, requestOptions: requestOptions)
+    public func list(
+        projectId: String? = nil,
+        after: String? = nil,
+        order: ExternalStorageOrder? = nil,
+        limit: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ExternalStorageListResource {
+        try await ExternalStorageMethods.listExternalStorage(
+            config: config,
+            projectId: projectId,
+            after: after,
+            order: order,
+            limit: limit,
+            requestOptions: requestOptions
+        )
     }
 
-/// Lists the organization's customer-managed external storage configurations. Use `project_id` to scope the results to a project, and `after` and `limit` to navigate the list. Set `order` to control the sort direction.
+    /// Lists the organization's customer-managed external storage configurations. Use `project_id` to scope the results
+    /// to a project, and `after` and `limit` to navigate the list. Set `order` to control the sort direction.
     ///
     /// List the organization's customer-managed external storage configurations.
-    public func listPaginated(projectId: String? = nil, after: String? = nil, order: ExternalStorageOrder? = nil, limit: Int? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<ExternalStorageResponse, Swift.Error> {
-        return ExternalStorageMethods.listExternalStoragePaginated(config: config, projectId: projectId, after: after, order: order, limit: limit, requestOptions: requestOptions)
+    public func listPaginated(
+        projectId: String? = nil,
+        after: String? = nil,
+        order: ExternalStorageOrder? = nil,
+        limit: Int? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<ExternalStorageResponse, Swift.Error> {
+        ExternalStorageMethods.listExternalStoragePaginated(
+            config: config,
+            projectId: projectId,
+            after: after,
+            order: order,
+            limit: limit,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates a customer-managed external storage configuration for a project. Supply `project_id` and a `provider` object containing the configuration fields required by the selected storage provider. The response includes the configuration's identifier, geography, and status.
+    /// Creates a customer-managed external storage configuration for a project. Supply `project_id` and a `provider`
+    /// object containing the configuration fields required by the selected storage provider. The response includes the
+    /// configuration's identifier, geography, and status.
     ///
     /// Register one customer-managed external storage configuration.
-    public func create(projectId: String, provider: CreateExternalStorageBodyProvider, requestOptions: RequestOptions? = nil) async throws -> ExternalStorageResponse {
-        return try await ExternalStorageMethods.createExternalStorage(config: config, projectId: projectId, provider: provider, requestOptions: requestOptions)
+    public func create(
+        projectId: String,
+        provider: CreateExternalStorageBodyProvider,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ExternalStorageResponse {
+        try await ExternalStorageMethods.createExternalStorage(
+            config: config,
+            projectId: projectId,
+            provider: provider,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves one customer-managed external storage configuration. Use `external_storage_id` to identify the configuration you want to inspect.
+    /// Retrieves one customer-managed external storage configuration. Use `external_storage_id` to identify the
+    /// configuration you want to inspect.
     ///
     /// Get one customer-managed external storage configuration.
-    public func retrieve(externalStorageId: String, requestOptions: RequestOptions? = nil) async throws -> ExternalStorageResponse {
-        return try await ExternalStorageMethods.retrieveExternalStorage(config: config, externalStorageId: externalStorageId, requestOptions: requestOptions)
+    public func retrieve(
+        externalStorageId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ExternalStorageResponse {
+        try await ExternalStorageMethods.retrieveExternalStorage(
+            config: config,
+            externalStorageId: externalStorageId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes a customer-managed external storage configuration. Use `external_storage_id` to identify the configuration to disconnect. Deleting a project's last configuration restores organization-default retention if customer-managed retention was active; cloud storage is unchanged.
+    /// Deletes a customer-managed external storage configuration. Use `external_storage_id` to identify the
+    /// configuration to disconnect. Deleting a project's last configuration restores organization-default retention if
+    /// customer-managed retention was active; cloud storage is unchanged.
     ///
-    /// Disconnect a customer-managed external storage configuration. Removing the project's last configuration restores organization-default retention if customer-managed retention was active. Repeating a deletion also completes any interrupted retention update. Cloud storage is unchanged.
-    public func delete(externalStorageId: String, requestOptions: RequestOptions? = nil) async throws -> ExternalStorageDeletedResource {
-        return try await ExternalStorageMethods.deleteExternalStorage(config: config, externalStorageId: externalStorageId, requestOptions: requestOptions)
+    /// Disconnect a customer-managed external storage configuration. Removing the project's last configuration restores
+    /// organization-default retention if customer-managed retention was active. Repeating a deletion also completes any
+    /// interrupted retention update. Cloud storage is unchanged.
+    public func delete(
+        externalStorageId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ExternalStorageDeletedResource {
+        try await ExternalStorageMethods.deleteExternalStorage(
+            config: config,
+            externalStorageId: externalStorageId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Validates a customer-managed external storage configuration. Use `external_storage_id` to select the configuration whose provider setup you want to validate. The response returns the configuration and its status.
+    /// Validates a customer-managed external storage configuration. Use `external_storage_id` to select the
+    /// configuration whose provider setup you want to validate. The response returns the configuration and its status.
     ///
     /// Validate one customer-managed external storage configuration.
-    public func validate(externalStorageId: String, requestOptions: RequestOptions? = nil) async throws -> ExternalStorageResponse {
-        return try await ExternalStorageMethods.validateExternalStorage(config: config, externalStorageId: externalStorageId, requestOptions: requestOptions)
+    public func validate(
+        externalStorageId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ExternalStorageResponse {
+        try await ExternalStorageMethods.validateExternalStorage(
+            config: config,
+            externalStorageId: externalStorageId,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -77,44 +144,90 @@ public class SpendLimitsNamespace {
         self.config = config
     }
 
-/// Retrieves the hard spend limit configured for the organization. Use this operation to check the limit amount, currency, evaluation interval, and enforcement state.
+    /// Retrieves the hard spend limit configured for the organization. Use this operation to check the limit amount,
+    /// currency, evaluation interval, and enforcement state.
     ///
     /// Get the organization's hard spend limit.
-    public func retrieveOrganization(requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendLimitResource {
-        return try await SpendLimitsMethods.retrieveSpendLimitsOrganization(config: config, requestOptions: requestOptions)
+    public func retrieveOrganization(requestOptions: RequestOptions? = nil) async throws
+        -> OrganizationSpendLimitResource {
+        try await SpendLimitsMethods.retrieveSpendLimitsOrganization(config: config, requestOptions: requestOptions)
     }
 
-/// Create or replace the organization's hard spend limit.
-    public func updateOrganization(thresholdAmount: Int, currency: UpdateOrganizationSpendLimitBodyCurrency, interval: UpdateOrganizationSpendLimitBodyInterval, requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendLimitResource {
-        return try await SpendLimitsMethods.updateSpendLimitsOrganization(config: config, thresholdAmount: thresholdAmount, currency: currency, interval: interval, requestOptions: requestOptions)
+    /// Create or replace the organization's hard spend limit.
+    public func updateOrganization(
+        thresholdAmount: Int,
+        currency: UpdateOrganizationSpendLimitBodyCurrency,
+        interval: UpdateOrganizationSpendLimitBodyInterval,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> OrganizationSpendLimitResource {
+        try await SpendLimitsMethods.updateSpendLimitsOrganization(
+            config: config,
+            thresholdAmount: thresholdAmount,
+            currency: currency,
+            interval: interval,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes the hard spend limit configured for the organization. Use this operation when the organization should no longer enforce its configured spending threshold. The response confirms whether the limit was deleted.
+    /// Deletes the hard spend limit configured for the organization. Use this operation when the organization should no
+    /// longer enforce its configured spending threshold. The response confirms whether the limit was deleted.
     ///
     /// Delete the organization's hard spend limit.
-    public func deleteOrganization(requestOptions: RequestOptions? = nil) async throws -> OrganizationSpendLimitDeletedResource {
-        return try await SpendLimitsMethods.deleteSpendLimitsOrganization(config: config, requestOptions: requestOptions)
+    public func deleteOrganization(requestOptions: RequestOptions? = nil) async throws
+        -> OrganizationSpendLimitDeletedResource {
+        try await SpendLimitsMethods.deleteSpendLimitsOrganization(config: config, requestOptions: requestOptions)
     }
 
-/// Retrieves the hard spend limit configured for a project. Use `project_id` to identify the project whose limit and enforcement state you want to inspect.
+    /// Retrieves the hard spend limit configured for a project. Use `project_id` to identify the project whose limit
+    /// and enforcement state you want to inspect.
     ///
     /// Get a project's hard spend limit.
-    public func retrieveProject(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendLimitResource {
-        return try await SpendLimitsMethods.retrieveSpendLimitsProject(config: config, projectId: projectId, requestOptions: requestOptions)
+    public func retrieveProject(
+        projectId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectSpendLimitResource {
+        try await SpendLimitsMethods.retrieveSpendLimitsProject(
+            config: config,
+            projectId: projectId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Deletes a project's hard spend limit. Use `project_id` to identify the project whose configured spending threshold you want to remove. The response confirms whether the limit was deleted.
+    /// Deletes a project's hard spend limit. Use `project_id` to identify the project whose configured spending
+    /// threshold you want to remove. The response confirms whether the limit was deleted.
     ///
     /// Delete a project's hard spend limit.
-    public func deleteProject(projectId: String, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendLimitDeletedResource {
-        return try await SpendLimitsMethods.deleteSpendLimitsProject(config: config, projectId: projectId, requestOptions: requestOptions)
+    public func deleteProject(
+        projectId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectSpendLimitDeletedResource {
+        try await SpendLimitsMethods.deleteSpendLimitsProject(
+            config: config,
+            projectId: projectId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates or replaces a project's hard spend limit. Supply `threshold_amount`, `currency`, and `interval` to set the spending threshold and the period used to evaluate it. The response includes the resulting limit and its enforcement state.
+    /// Creates or replaces a project's hard spend limit. Supply `threshold_amount`, `currency`, and `interval` to set
+    /// the spending threshold and the period used to evaluate it. The response includes the resulting limit and its
+    /// enforcement state.
     ///
     /// Create or replace a project's hard spend limit.
-    public func update(projectId: String, thresholdAmount: Int, currency: UpdateProjectSpendLimitBodyCurrency, interval: UpdateProjectSpendLimitBodyInterval, requestOptions: RequestOptions? = nil) async throws -> ProjectSpendLimitResource {
-        return try await SpendLimitsMethods.updateProjectSpendLimit(config: config, projectId: projectId, thresholdAmount: thresholdAmount, currency: currency, interval: interval, requestOptions: requestOptions)
+    public func update(
+        projectId: String,
+        thresholdAmount: Int,
+        currency: UpdateProjectSpendLimitBodyCurrency,
+        interval: UpdateProjectSpendLimitBodyInterval,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> ProjectSpendLimitResource {
+        try await SpendLimitsMethods.updateProjectSpendLimit(
+            config: config,
+            projectId: projectId,
+            thresholdAmount: thresholdAmount,
+            currency: currency,
+            interval: interval,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -124,9 +237,18 @@ public class ContentProvenanceChecksNamespace {
         self.config = config
     }
 
-/// Check whether an image or audio file contains known OpenAI provenance signals. [Learn more about content provenance](https://developers.openai.com/api/docs/guides/content-provenance). If `not_detected`, it means the tool did not find supported signals in the uploaded file. The content could still have been generated by OpenAI if the metadata was stripped or has evidence of tampering, the watermark was degraded, it comes from a legacy generation model, or it was created before provenance signals were available. Content could also still be AI-generated by another company's model, which the tool currently does not detect.
+    /// Check whether an image or audio file contains known OpenAI provenance signals. [Learn more about content
+    /// provenance](https://developers.openai.com/api/docs/guides/content-provenance). If `not_detected`, it means the
+    /// tool did not find supported signals in the uploaded file. The content could still have been generated by OpenAI
+    /// if the metadata was stripped or has evidence of tampering, the watermark was degraded, it comes from a legacy
+    /// generation model, or it was created before provenance signals were available. Content could also still be
+    /// AI-generated by another company's model, which the tool currently does not detect.
     public func create(file: SdkUploadFile, requestOptions: RequestOptions? = nil) async throws -> ProvenanceResource {
-        return try await ContentProvenanceChecksMethods.createContentProvenanceChecks(config: config, file: file, requestOptions: requestOptions)
+        try await ContentProvenanceChecksMethods.createContentProvenanceChecks(
+            config: config,
+            file: file,
+            requestOptions: requestOptions
+        )
     }
 }
 
@@ -136,67 +258,137 @@ public class VideosNamespace {
         self.config = config
     }
 
-/// Create a new video generation job from a prompt and optional reference assets.
+    /// Create a new video generation job from a prompt and optional reference assets.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func create(body: CreateVideoBody? = nil, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> VideoResource {
-        return try await VideosMethods.createVideo(config: config, body: body, contentType: contentType, requestOptions: requestOptions)
+    public func create(
+        body: CreateVideoBody? = nil,
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VideoResource {
+        try await VideosMethods.createVideo(
+            config: config,
+            body: body,
+            contentType: contentType,
+            requestOptions: requestOptions
+        )
     }
 
-/// List recently generated videos for the current project.
+    /// List recently generated videos for the current project.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func list(limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) async throws -> VideoListResource {
-        return try await VideosMethods.listVideos(config: config, limit: limit, order: order, after: after, requestOptions: requestOptions)
+    public func list(
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VideoListResource {
+        try await VideosMethods.listVideos(
+            config: config,
+            limit: limit,
+            order: order,
+            after: after,
+            requestOptions: requestOptions
+        )
     }
 
-/// List recently generated videos for the current project.
+    /// List recently generated videos for the current project.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func listPaginated(limit: Int? = nil, order: OrderEnum? = nil, after: String? = nil, requestOptions: RequestOptions? = nil) -> AsyncThrowingStream<VideoResource, Swift.Error> {
-        return VideosMethods.listVideosPaginated(config: config, limit: limit, order: order, after: after, requestOptions: requestOptions)
+    public func listPaginated(
+        limit: Int? = nil,
+        order: OrderEnum? = nil,
+        after: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) -> AsyncThrowingStream<VideoResource, Swift.Error> {
+        VideosMethods.listVideosPaginated(
+            config: config,
+            limit: limit,
+            order: order,
+            after: after,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates a character from an uploaded video. Send the video in `video` and provide a `name` of 1 to 80 characters. This operation is closing down and will be removed on a date not specified in the API definition.
+    /// Creates a character from an uploaded video. Send the video in `video` and provide a `name` of 1 to 80
+    /// characters. This operation is closing down and will be removed on a date not specified in the API definition.
     ///
     /// Create a character from an uploaded video.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func createCharacter(video: SdkUploadFile, name: String, requestOptions: RequestOptions? = nil) async throws -> VideoCharacterResource {
-        return try await VideosMethods.createVideoCharacter(config: config, video: video, name: name, requestOptions: requestOptions)
+    public func createCharacter(
+        video: SdkUploadFile,
+        name: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VideoCharacterResource {
+        try await VideosMethods.createVideoCharacter(
+            config: config,
+            video: video,
+            name: name,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves metadata for a video character. Use `character_id` to identify the character whose details you need. This operation is closing down and will be removed on a date not specified in the API definition.
+    /// Retrieves metadata for a video character. Use `character_id` to identify the character whose details you need.
+    /// This operation is closing down and will be removed on a date not specified in the API definition.
     ///
     /// Fetch a character.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func getCharacter(characterId: String, requestOptions: RequestOptions? = nil) async throws -> VideoCharacterResource {
-        return try await VideosMethods.getVideoCharacter(config: config, characterId: characterId, requestOptions: requestOptions)
+    public func getCharacter(
+        characterId: String,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VideoCharacterResource {
+        try await VideosMethods.getVideoCharacter(
+            config: config,
+            characterId: characterId,
+            requestOptions: requestOptions
+        )
     }
 
-/// Create a new video generation job by editing a source video or existing generated video.
+    /// Create a new video generation job by editing a source video or existing generated video.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func createEdit(body: CreateVideoEditBody? = nil, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> VideoResource {
-        return try await VideosMethods.createVideoEdit(config: config, body: body, contentType: contentType, requestOptions: requestOptions)
+    public func createEdit(
+        body: CreateVideoEditBody? = nil,
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VideoResource {
+        try await VideosMethods.createVideoEdit(
+            config: config,
+            body: body,
+            contentType: contentType,
+            requestOptions: requestOptions
+        )
     }
 
-/// Creates an extension of a completed video and returns a video generation job. Provide the source video, an updated `prompt`, and `seconds` set to an accepted duration. This operation is closing down and will be removed on a date not specified in the API definition.
+    /// Creates an extension of a completed video and returns a video generation job. Provide the source video, an
+    /// updated `prompt`, and `seconds` set to an accepted duration. This operation is closing down and will be removed
+    /// on a date not specified in the API definition.
     ///
     /// Create an extension of a completed video.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
-    public func createExtend(body: CreateVideoExtendBody? = nil, contentType: String? = nil, requestOptions: RequestOptions? = nil) async throws -> VideoResource {
-        return try await VideosMethods.createVideoExtend(config: config, body: body, contentType: contentType, requestOptions: requestOptions)
+    public func createExtend(
+        body: CreateVideoExtendBody? = nil,
+        contentType: String? = nil,
+        requestOptions: RequestOptions? = nil
+    ) async throws -> VideoResource {
+        try await VideosMethods.createVideoExtend(
+            config: config,
+            body: body,
+            contentType: contentType,
+            requestOptions: requestOptions
+        )
     }
 
-/// Retrieves the latest metadata for a generated video. Use `video_id` to identify the video job and check its current status, progress, and other job details.
+    /// Retrieves the latest metadata for a generated video. Use `video_id` to identify the video job and check its
+    /// current status, progress, and other job details.
     ///
     /// Fetch the latest metadata for a generated video.
     ///
     /// - Warning: This operation is deprecated and may be removed in a future release.
     public func get(videoId: String, requestOptions: RequestOptions? = nil) async throws -> VideoResource {
-        return try await VideosMethods.getVideo(config: config, videoId: videoId, requestOptions: requestOptions)
+        try await VideosMethods.getVideo(config: config, videoId: videoId, requestOptions: requestOptions)
     }
 }

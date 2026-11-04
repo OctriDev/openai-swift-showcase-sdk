@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesAccess domain models
+/// ResponsesAccess domain models
 /// Domain-specific access programs to use for this request.
 public struct AccessProgramsParam: Codable {
     /// The Cyber access program to use for this request. Supported values are `standard`, `daybreak_blue`, and
@@ -18,19 +18,19 @@ public struct AccessProgramsParam: Codable {
     }
 
     init() {
-        self.cyber = nil
+        cyber = nil
     }
 }
 
-extension AccessProgramsParam {
-    public init(from decoder: Decoder) throws {
+public extension AccessProgramsParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.cyber = try container.sdkDecodeIfPresent(.cyber)
+        cyber = try container.sdkDecodeIfPresent(.cyber)
     }
 }
 
-extension AccessProgramsParam {
-    public init(cyber: CyberAccessProgramEnum? = nil) {
+public extension AccessProgramsParam {
+    init(cyber: CyberAccessProgramEnum? = nil) {
         self.init()
         self.cyber = cyber
     }
@@ -45,21 +45,27 @@ public struct AccessProgramsBody: Codable {
         case cyber
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AccessProgramsBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.cyber) else {
-            throw SdkValidationError(field: "cyber", code: "required", message: "Validation failed for 'cyber': value is required")
-        }
-        self.cyber = try container.sdkDecodeRequired(.cyber)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AccessProgramsBody {
-    public init(cyber: CyberAccessProgramEnum) {
+public extension AccessProgramsBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.cyber) else {
+            throw SdkValidationError(
+                field: "cyber",
+                code: "required",
+                message: "Validation failed for 'cyber': value is required"
+            )
+        }
+        cyber = try container.sdkDecodeRequired(.cyber)
+    }
+}
+
+public extension AccessProgramsBody {
+    init(cyber: CyberAccessProgramEnum) {
         self.cyber = cyber
     }
 }

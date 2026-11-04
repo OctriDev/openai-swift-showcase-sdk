@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaFile domain models
+/// ResponsesBetaFile domain models
 /// A citation to a file.
 public struct BetaFileCitationBody: Codable {
     /// The type of the file citation. Always `file_citation`.
@@ -22,37 +22,55 @@ public struct BetaFileCitationBody: Codable {
         case filename
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaFileCitationBody {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.fileId) else {
-            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
-        }
-        guard container.contains(.index) else {
-            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
-        }
-        guard container.contains(.filename) else {
-            throw SdkValidationError(field: "filename", code: "required", message: "Validation failed for 'filename': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.fileId = try container.sdkDecodeRequired(.fileId)
-        self.index = try container.sdkDecodeRequired(.index)
-        self.filename = try container.sdkDecodeRequired(.filename)
-            try sdkValidateRawEnum("type", self.type, BetaFileCitationBodyType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaFileCitationBody {
-    public init(type: BetaFileCitationBodyType, fileId: String, index: Int, filename: String) throws {
+public extension BetaFileCitationBody {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.fileId) else {
+            throw SdkValidationError(
+                field: "file_id",
+                code: "required",
+                message: "Validation failed for 'file_id': value is required"
+            )
+        }
+        guard container.contains(.index) else {
+            throw SdkValidationError(
+                field: "index",
+                code: "required",
+                message: "Validation failed for 'index': value is required"
+            )
+        }
+        guard container.contains(.filename) else {
+            throw SdkValidationError(
+                field: "filename",
+                code: "required",
+                message: "Validation failed for 'filename': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        fileId = try container.sdkDecodeRequired(.fileId)
+        index = try container.sdkDecodeRequired(.index)
+        filename = try container.sdkDecodeRequired(.filename)
+        try sdkValidateRawEnum("type", type, BetaFileCitationBodyType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaFileCitationBody {
+    init(type: BetaFileCitationBodyType, fileId: String, index: Int, filename: String) throws {
         (self.type, self.fileId) = (type, fileId)
         (self.index, self.filename) = (index, filename)
-            try sdkValidateRawEnum("type", self.type, BetaFileCitationBodyType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaFileCitationBodyType.allCases.map(\.rawValue))
     }
 }
 
@@ -81,23 +99,29 @@ public struct BetaFileSearchToolCallResultsItem: Codable {
     }
 
     init() {
-        (self.fileId, self.text, self.filename, self.attributes, self.score) = (nil, nil, nil, nil, nil)
+        (fileId, text, filename, attributes, score) = (nil, nil, nil, nil, nil)
     }
 }
 
-extension BetaFileSearchToolCallResultsItem {
-    public init(from decoder: Decoder) throws {
+public extension BetaFileSearchToolCallResultsItem {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.fileId = try container.sdkDecodeIfPresent(.fileId)
-        self.text = try container.sdkDecodeIfPresent(.text)
-        self.filename = try container.sdkDecodeIfPresent(.filename)
-        self.attributes = try container.sdkDecodeIfPresent(.attributes)
-        self.score = try container.sdkDecodeIfPresent(.score)
+        fileId = try container.sdkDecodeIfPresent(.fileId)
+        text = try container.sdkDecodeIfPresent(.text)
+        filename = try container.sdkDecodeIfPresent(.filename)
+        attributes = try container.sdkDecodeIfPresent(.attributes)
+        score = try container.sdkDecodeIfPresent(.score)
     }
 }
 
-extension BetaFileSearchToolCallResultsItem {
-    public init(fileId: String? = nil, text: String? = nil, filename: String? = nil, attributes: BetaVectorStoreFileAttributes? = nil, score: Double? = nil) {
+public extension BetaFileSearchToolCallResultsItem {
+    init(
+        fileId: String? = nil,
+        text: String? = nil,
+        filename: String? = nil,
+        attributes: BetaVectorStoreFileAttributes? = nil,
+        score: Double? = nil
+    ) {
         self.init()
         (self.fileId, self.text) = (fileId, text)
         (self.filename, self.attributes) = (filename, attributes)
@@ -129,40 +153,65 @@ public struct BetaFileSearchToolCall: Codable {
         case results
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaFileSearchToolCall {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.queries) else {
-            throw SdkValidationError(field: "queries", code: "required", message: "Validation failed for 'queries': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.queries = try container.sdkDecodeRequired(.queries)
-        self.agent = try container.sdkDecodeIfPresent(.agent)
-        self.results = try container.sdkDecodeIfPresent(.results)
-            try sdkValidateRawEnum("type", self.type, BetaFileSearchToolCallType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaFileSearchToolCall {
-    public init(id: String, type: BetaFileSearchToolCallType, status: BetaFileSearchToolCallStatus, queries: [String], agent: BetaAgentTag? = nil, results: [BetaFileSearchToolCallResultsItem]? = nil) throws {
+public extension BetaFileSearchToolCall {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        guard container.contains(.queries) else {
+            throw SdkValidationError(
+                field: "queries",
+                code: "required",
+                message: "Validation failed for 'queries': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+        type = try container.sdkDecodeRequired(.type)
+        status = try container.sdkDecodeRequired(.status)
+        queries = try container.sdkDecodeRequired(.queries)
+        agent = try container.sdkDecodeIfPresent(.agent)
+        results = try container.sdkDecodeIfPresent(.results)
+        try sdkValidateRawEnum("type", type, BetaFileSearchToolCallType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaFileSearchToolCall {
+    init(
+        id: String,
+        type: BetaFileSearchToolCallType,
+        status: BetaFileSearchToolCallStatus,
+        queries: [String],
+        agent: BetaAgentTag? = nil,
+        results: [BetaFileSearchToolCallResultsItem]? = nil
+    ) throws {
         (self.id, self.type) = (id, type)
         (self.status, self.queries) = (status, queries)
         (self.agent, self.results) = (agent, results)
-            try sdkValidateRawEnum("type", self.type, BetaFileSearchToolCallType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaFileSearchToolCallType.allCases.map(\.rawValue))
     }
 }
 
@@ -185,39 +234,73 @@ public struct BetaFileCitationParam: Codable {
         case filename
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaFileCitationParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.index) else {
-            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
-        }
-        guard container.contains(.fileId) else {
-            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
-        }
-        guard container.contains(.filename) else {
-            throw SdkValidationError(field: "filename", code: "required", message: "Validation failed for 'filename': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.index = try container.sdkDecodeRequired(.index)
-        self.fileId = try container.sdkDecodeRequired(.fileId)
-        self.filename = try container.sdkDecodeRequired(.filename)
-            try sdkValidateRawEnum("type", self.type, BetaFileCitationParamType.allCases.map(\.rawValue))
-            try validateRange("index", Double(self.index), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaFileCitationParam {
-    public init(type: BetaFileCitationParamType, index: Int, fileId: String, filename: String) throws {
+public extension BetaFileCitationParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.index) else {
+            throw SdkValidationError(
+                field: "index",
+                code: "required",
+                message: "Validation failed for 'index': value is required"
+            )
+        }
+        guard container.contains(.fileId) else {
+            throw SdkValidationError(
+                field: "file_id",
+                code: "required",
+                message: "Validation failed for 'file_id': value is required"
+            )
+        }
+        guard container.contains(.filename) else {
+            throw SdkValidationError(
+                field: "filename",
+                code: "required",
+                message: "Validation failed for 'filename': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        index = try container.sdkDecodeRequired(.index)
+        fileId = try container.sdkDecodeRequired(.fileId)
+        filename = try container.sdkDecodeRequired(.filename)
+        try sdkValidateRawEnum("type", type, BetaFileCitationParamType.allCases.map(\.rawValue))
+        try validateRange(
+            "index",
+            Double(index),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension BetaFileCitationParam {
+    init(type: BetaFileCitationParamType, index: Int, fileId: String, filename: String) throws {
         (self.type, self.index) = (type, index)
         (self.fileId, self.filename) = (fileId, filename)
-            try sdkValidateRawEnum("type", self.type, BetaFileCitationParamType.allCases.map(\.rawValue))
-            try validateRange("index", Double(self.index), min: 0, max: nil, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try sdkValidateRawEnum("type", self.type, BetaFileCitationParamType.allCases.map(\.rawValue))
+        try validateRange(
+            "index",
+            Double(self.index),
+            min: 0,
+            max: nil,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -236,33 +319,47 @@ public struct BetaFilePath: Codable {
         case index
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaFilePath {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.fileId) else {
-            throw SdkValidationError(field: "file_id", code: "required", message: "Validation failed for 'file_id': value is required")
-        }
-        guard container.contains(.index) else {
-            throw SdkValidationError(field: "index", code: "required", message: "Validation failed for 'index': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.fileId = try container.sdkDecodeRequired(.fileId)
-        self.index = try container.sdkDecodeRequired(.index)
-            try sdkValidateRawEnum("type", self.type, BetaFilePathType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaFilePath {
-    public init(type: BetaFilePathType, fileId: String, index: Int) throws {
+public extension BetaFilePath {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.fileId) else {
+            throw SdkValidationError(
+                field: "file_id",
+                code: "required",
+                message: "Validation failed for 'file_id': value is required"
+            )
+        }
+        guard container.contains(.index) else {
+            throw SdkValidationError(
+                field: "index",
+                code: "required",
+                message: "Validation failed for 'index': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        fileId = try container.sdkDecodeRequired(.fileId)
+        index = try container.sdkDecodeRequired(.index)
+        try sdkValidateRawEnum("type", type, BetaFilePathType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaFilePath {
+    init(type: BetaFilePathType, fileId: String, index: Int) throws {
         (self.type, self.fileId) = (type, fileId)
         self.index = index
-            try sdkValidateRawEnum("type", self.type, BetaFilePathType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaFilePathType.allCases.map(\.rawValue))
     }
 }
 
@@ -287,33 +384,49 @@ public struct BetaFileSearchTool: Codable {
         case filters
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BetaFileSearchTool {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.vectorStoreIds) else {
-            throw SdkValidationError(field: "vector_store_ids", code: "required", message: "Validation failed for 'vector_store_ids': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.vectorStoreIds = try container.sdkDecodeRequired(.vectorStoreIds)
-        self.maxNumResults = try container.sdkDecodeIfPresent(.maxNumResults)
-        self.rankingOptions = try container.sdkDecodeIfPresent(.rankingOptions)
-        self.filters = try container.sdkDecodeIfPresent(.filters)
-            try sdkValidateRawEnum("type", self.type, BetaFileSearchToolType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BetaFileSearchTool {
-    public init(type: BetaFileSearchToolType, vectorStoreIds: [String], maxNumResults: Int? = nil, rankingOptions: BetaRankingOptions? = nil, filters: BetaFilters? = nil) throws {
+public extension BetaFileSearchTool {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.vectorStoreIds) else {
+            throw SdkValidationError(
+                field: "vector_store_ids",
+                code: "required",
+                message: "Validation failed for 'vector_store_ids': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        vectorStoreIds = try container.sdkDecodeRequired(.vectorStoreIds)
+        maxNumResults = try container.sdkDecodeIfPresent(.maxNumResults)
+        rankingOptions = try container.sdkDecodeIfPresent(.rankingOptions)
+        filters = try container.sdkDecodeIfPresent(.filters)
+        try sdkValidateRawEnum("type", type, BetaFileSearchToolType.allCases.map(\.rawValue))
+    }
+}
+
+public extension BetaFileSearchTool {
+    init(
+        type: BetaFileSearchToolType,
+        vectorStoreIds: [String],
+        maxNumResults: Int? = nil,
+        rankingOptions: BetaRankingOptions? = nil,
+        filters: BetaFilters? = nil
+    ) throws {
         (self.type, self.vectorStoreIds) = (type, vectorStoreIds)
         (self.maxNumResults, self.rankingOptions) = (maxNumResults, rankingOptions)
         self.filters = filters
-            try sdkValidateRawEnum("type", self.type, BetaFileSearchToolType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, BetaFileSearchToolType.allCases.map(\.rawValue))
     }
 }
 
@@ -339,14 +452,17 @@ public enum BetaFileCitationParamType: String, CaseIterable, Codable {
 public struct BetaFileInputDetail: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = BetaFileInputDetail(rawValue: "auto")
     public static let low = BetaFileInputDetail(rawValue: "low")
     public static let high = BetaFileInputDetail(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -377,7 +493,10 @@ public enum BetaFilePathType: String, CaseIterable, Codable {
 public struct BetaFileSearchToolCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = BetaFileSearchToolCallStatus(rawValue: "in_progress")
     public static let searching = BetaFileSearchToolCallStatus(rawValue: "searching")
     public static let completed = BetaFileSearchToolCallStatus(rawValue: "completed")
@@ -386,7 +505,7 @@ public struct BetaFileSearchToolCallStatus: RawRepresentable, Hashable, Codable,
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -453,14 +572,17 @@ public enum BetaFileSearchToolCallType: String, CaseIterable, Codable {
 public struct BetaFileDetailEnum: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = BetaFileDetailEnum(rawValue: "auto")
     public static let low = BetaFileDetailEnum(rawValue: "low")
     public static let high = BetaFileDetailEnum(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

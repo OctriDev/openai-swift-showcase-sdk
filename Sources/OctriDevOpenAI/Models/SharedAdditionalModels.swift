@@ -3,7 +3,7 @@
 
 import Foundation
 
-// SharedAdditional domain models
+/// SharedAdditional domain models
 /// Typed representation of the `AdditionalToolsItemParam` API schema.
 public struct AdditionalToolsItemParam: Codable {
     /// The item type. Always `additional_tools`.
@@ -22,34 +22,53 @@ public struct AdditionalToolsItemParam: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AdditionalToolsItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        guard container.contains(.tools) else {
-            throw SdkValidationError(field: "tools", code: "required", message: "Validation failed for 'tools': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.role = try container.sdkDecodeRequired(.role)
-        self.tools = try container.sdkDecodeRequired(.tools)
-        self.id = try container.sdkDecodeIfPresent(.id)
-            try sdkValidateRawEnum("type", self.type, AdditionalToolsItemParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AdditionalToolsItemParam {
-    public init(type: AdditionalToolsItemParamType, role: AdditionalToolsItemParamRole, tools: [Tool], id: String? = nil) throws {
+public extension AdditionalToolsItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        guard container.contains(.tools) else {
+            throw SdkValidationError(
+                field: "tools",
+                code: "required",
+                message: "Validation failed for 'tools': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        role = try container.sdkDecodeRequired(.role)
+        tools = try container.sdkDecodeRequired(.tools)
+        id = try container.sdkDecodeIfPresent(.id)
+        try sdkValidateRawEnum("type", type, AdditionalToolsItemParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AdditionalToolsItemParam {
+    init(
+        type: AdditionalToolsItemParamType,
+        role: AdditionalToolsItemParamRole,
+        tools: [Tool],
+        id: String? = nil
+    ) throws {
         (self.type, self.role) = (type, role)
         (self.tools, self.id) = (tools, id)
-            try sdkValidateRawEnum("type", self.type, AdditionalToolsItemParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, AdditionalToolsItemParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -71,37 +90,55 @@ public struct AdditionalTools: Codable {
         case tools
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension AdditionalTools {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        guard container.contains(.tools) else {
-            throw SdkValidationError(field: "tools", code: "required", message: "Validation failed for 'tools': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.role = try container.sdkDecodeRequired(.role)
-        self.tools = try container.sdkDecodeRequired(.tools)
-            try sdkValidateRawEnum("type", self.type, AdditionalToolsType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension AdditionalTools {
-    public init(type: AdditionalToolsType, id: String, role: MessageRole, tools: [Tool]) throws {
+public extension AdditionalTools {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        guard container.contains(.tools) else {
+            throw SdkValidationError(
+                field: "tools",
+                code: "required",
+                message: "Validation failed for 'tools': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        role = try container.sdkDecodeRequired(.role)
+        tools = try container.sdkDecodeRequired(.tools)
+        try sdkValidateRawEnum("type", type, AdditionalToolsType.allCases.map(\.rawValue))
+    }
+}
+
+public extension AdditionalTools {
+    init(type: AdditionalToolsType, id: String, role: MessageRole, tools: [Tool]) throws {
         (self.type, self.id) = (type, id)
         (self.role, self.tools) = (role, tools)
-            try sdkValidateRawEnum("type", self.type, AdditionalToolsType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, AdditionalToolsType.allCases.map(\.rawValue))
     }
 }
 
@@ -145,12 +182,15 @@ public enum AdditionalToolsItemParamType: String, CaseIterable, Codable {
 public struct AdditionalToolsItemParamRole: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let developer = AdditionalToolsItemParamRole(rawValue: "developer")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

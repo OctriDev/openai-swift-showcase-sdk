@@ -3,7 +3,7 @@
 
 import Foundation
 
-// RealtimeRealtimeServerEvent domain models
+/// RealtimeRealtimeServerEvent domain models
 public indirect enum RealtimeServerEvent {
     case realtimeServerEventConversationCreated(RealtimeServerEventConversationCreated)
     case realtimeServerEventConversationItemCreated(RealtimeServerEventConversationItemCreated)
@@ -11,8 +11,12 @@ public indirect enum RealtimeServerEvent {
     case realtimeServerEventConversationItemInputAudioTranscriptionCompleted(
         RealtimeServerEventConversationItemInputAudioTranscriptionCompleted
     )
-    case realtimeServerEventConversationItemInputAudioTranscriptionDelta(RealtimeServerEventConversationItemInputAudioTranscriptionDelta)
-    case realtimeServerEventConversationItemInputAudioTranscriptionFailed(RealtimeServerEventConversationItemInputAudioTranscriptionFailed)
+    case realtimeServerEventConversationItemInputAudioTranscriptionDelta(
+        RealtimeServerEventConversationItemInputAudioTranscriptionDelta
+    )
+    case realtimeServerEventConversationItemInputAudioTranscriptionFailed(
+        RealtimeServerEventConversationItemInputAudioTranscriptionFailed
+    )
     case realtimeServerEventConversationItemRetrieved(RealtimeServerEventConversationItemRetrieved)
     case realtimeServerEventConversationItemTruncated(RealtimeServerEventConversationItemTruncated)
     case realtimeServerEventError(RealtimeServerEventError)
@@ -60,7 +64,6 @@ public indirect enum RealtimeServerEvent {
 }
 
 extension RealtimeServerEvent: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -68,17 +71,31 @@ extension RealtimeServerEvent: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
-        if let value = try Self.decodeGroup2(discriminator, from: decoder) { self = value; return }
-        if let value = try Self.decodeGroup3(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
+        if let value = try Self.decodeGroup2(discriminator, from: decoder) {
+            self = value; return
+        }
+        if let value = try Self.decodeGroup3(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
-        if try encodeGroup2(to: encoder) { return }
-        if try encodeGroup3(to: encoder) { return }
-        if try encodeGroup4(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
+        if try encodeGroup2(to: encoder) {
+            return
+        }
+        if try encodeGroup3(to: encoder) {
+            return
+        }
+        if try encodeGroup4(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -90,52 +107,68 @@ extension RealtimeServerEvent {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "conversation.created":
-        return .realtimeServerEventConversationCreated(try RealtimeServerEventConversationCreated(from: decoder))
+            try .realtimeServerEventConversationCreated(RealtimeServerEventConversationCreated(from: decoder))
         case "conversation.item.created":
-        return .realtimeServerEventConversationItemCreated(try RealtimeServerEventConversationItemCreated(from: decoder))
+            try .realtimeServerEventConversationItemCreated(RealtimeServerEventConversationItemCreated(from: decoder))
         case "conversation.item.deleted":
-        return .realtimeServerEventConversationItemDeleted(try RealtimeServerEventConversationItemDeleted(from: decoder))
+            try .realtimeServerEventConversationItemDeleted(RealtimeServerEventConversationItemDeleted(from: decoder))
         case "conversation.item.input_audio_transcription.completed":
-        return .realtimeServerEventConversationItemInputAudioTranscriptionCompleted(
-            try RealtimeServerEventConversationItemInputAudioTranscriptionCompleted(from: decoder)
-        )
+            try .realtimeServerEventConversationItemInputAudioTranscriptionCompleted(
+                RealtimeServerEventConversationItemInputAudioTranscriptionCompleted(from: decoder)
+            )
         case "conversation.item.input_audio_transcription.delta":
-        return .realtimeServerEventConversationItemInputAudioTranscriptionDelta(
-            try RealtimeServerEventConversationItemInputAudioTranscriptionDelta(from: decoder)
-        )
+            try .realtimeServerEventConversationItemInputAudioTranscriptionDelta(
+                RealtimeServerEventConversationItemInputAudioTranscriptionDelta(from: decoder)
+            )
         case "conversation.item.input_audio_transcription.failed":
-        return .realtimeServerEventConversationItemInputAudioTranscriptionFailed(
-            try RealtimeServerEventConversationItemInputAudioTranscriptionFailed(from: decoder)
-        )
+            try .realtimeServerEventConversationItemInputAudioTranscriptionFailed(
+                RealtimeServerEventConversationItemInputAudioTranscriptionFailed(from: decoder)
+            )
         case "conversation.item.retrieved":
-        return .realtimeServerEventConversationItemRetrieved(try RealtimeServerEventConversationItemRetrieved(from: decoder))
+            try .realtimeServerEventConversationItemRetrieved(
+                RealtimeServerEventConversationItemRetrieved(from: decoder)
+            )
         case "conversation.item.truncated":
-        return .realtimeServerEventConversationItemTruncated(try RealtimeServerEventConversationItemTruncated(from: decoder))
-        case "error": return .realtimeServerEventError(try RealtimeServerEventError(from: decoder))
+            try .realtimeServerEventConversationItemTruncated(
+                RealtimeServerEventConversationItemTruncated(from: decoder)
+            )
+        case "error": try .realtimeServerEventError(RealtimeServerEventError(from: decoder))
         case "input_audio_buffer.cleared":
-        return .realtimeServerEventInputAudioBufferCleared(try RealtimeServerEventInputAudioBufferCleared(from: decoder))
+            try .realtimeServerEventInputAudioBufferCleared(RealtimeServerEventInputAudioBufferCleared(from: decoder))
         case "input_audio_buffer.committed":
-        return .realtimeServerEventInputAudioBufferCommitted(try RealtimeServerEventInputAudioBufferCommitted(from: decoder))
+            try .realtimeServerEventInputAudioBufferCommitted(
+                RealtimeServerEventInputAudioBufferCommitted(from: decoder)
+            )
         case "input_audio_buffer.dtmf_event_received":
-        return .realtimeServerEventInputAudioBufferDtmfEventReceived(
-            try RealtimeServerEventInputAudioBufferDtmfEventReceived(from: decoder)
-        )
+            try .realtimeServerEventInputAudioBufferDtmfEventReceived(
+                RealtimeServerEventInputAudioBufferDtmfEventReceived(from: decoder)
+            )
         case "input_audio_buffer.speech_started":
-        return .realtimeServerEventInputAudioBufferSpeechStarted(try RealtimeServerEventInputAudioBufferSpeechStarted(from: decoder))
+            try .realtimeServerEventInputAudioBufferSpeechStarted(
+                RealtimeServerEventInputAudioBufferSpeechStarted(from: decoder)
+            )
         case "input_audio_buffer.speech_stopped":
-        return .realtimeServerEventInputAudioBufferSpeechStopped(try RealtimeServerEventInputAudioBufferSpeechStopped(from: decoder))
-        case "rate_limits.updated": return .realtimeServerEventRateLimitsUpdated(try RealtimeServerEventRateLimitsUpdated(from: decoder))
+            try .realtimeServerEventInputAudioBufferSpeechStopped(
+                RealtimeServerEventInputAudioBufferSpeechStopped(from: decoder)
+            )
+        case "rate_limits.updated": try .realtimeServerEventRateLimitsUpdated(
+                RealtimeServerEventRateLimitsUpdated(from: decoder)
+            )
         case "response.output_audio.delta":
-        return .realtimeServerEventResponseAudioDelta(try RealtimeServerEventResponseAudioDelta(from: decoder))
+            try .realtimeServerEventResponseAudioDelta(RealtimeServerEventResponseAudioDelta(from: decoder))
         case "response.output_audio.done":
-        return .realtimeServerEventResponseAudioDone(try RealtimeServerEventResponseAudioDone(from: decoder))
+            try .realtimeServerEventResponseAudioDone(RealtimeServerEventResponseAudioDone(from: decoder))
         case "response.output_audio_transcript.delta":
-        return .realtimeServerEventResponseAudioTranscriptDelta(try RealtimeServerEventResponseAudioTranscriptDelta(from: decoder))
+            try .realtimeServerEventResponseAudioTranscriptDelta(
+                RealtimeServerEventResponseAudioTranscriptDelta(from: decoder)
+            )
         case "response.output_audio_transcript.done":
-        return .realtimeServerEventResponseAudioTranscriptDone(try RealtimeServerEventResponseAudioTranscriptDone(from: decoder))
+            try .realtimeServerEventResponseAudioTranscriptDone(
+                RealtimeServerEventResponseAudioTranscriptDone(from: decoder)
+            )
         case "response.content_part.added":
-        return .realtimeServerEventResponseContentPartAdded(try RealtimeServerEventResponseContentPartAdded(from: decoder))
-        default: return nil
+            try .realtimeServerEventResponseContentPartAdded(RealtimeServerEventResponseContentPartAdded(from: decoder))
+        default: nil
         }
     }
 }
@@ -144,48 +177,52 @@ extension RealtimeServerEvent {
     static func decodeGroup2(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "response.content_part.done":
-        return .realtimeServerEventResponseContentPartDone(try RealtimeServerEventResponseContentPartDone(from: decoder))
-        case "response.created": return .realtimeServerEventResponseCreated(try RealtimeServerEventResponseCreated(from: decoder))
-        case "response.done": return .realtimeServerEventResponseDone(try RealtimeServerEventResponseDone(from: decoder))
+            try .realtimeServerEventResponseContentPartDone(RealtimeServerEventResponseContentPartDone(from: decoder))
+        case "response.created": try .realtimeServerEventResponseCreated(
+                RealtimeServerEventResponseCreated(from: decoder)
+            )
+        case "response.done": try .realtimeServerEventResponseDone(RealtimeServerEventResponseDone(from: decoder))
         case "response.function_call_arguments.delta":
-        return .realtimeServerEventResponseFunctionCallArgumentsDelta(
-            try RealtimeServerEventResponseFunctionCallArgumentsDelta(from: decoder)
-        )
+            try .realtimeServerEventResponseFunctionCallArgumentsDelta(
+                RealtimeServerEventResponseFunctionCallArgumentsDelta(from: decoder)
+            )
         case "response.function_call_arguments.done":
-        return .realtimeServerEventResponseFunctionCallArgumentsDone(
-            try RealtimeServerEventResponseFunctionCallArgumentsDone(from: decoder)
-        )
+            try .realtimeServerEventResponseFunctionCallArgumentsDone(
+                RealtimeServerEventResponseFunctionCallArgumentsDone(from: decoder)
+            )
         case "response.output_item.added":
-        return .realtimeServerEventResponseOutputItemAdded(try RealtimeServerEventResponseOutputItemAdded(from: decoder))
+            try .realtimeServerEventResponseOutputItemAdded(RealtimeServerEventResponseOutputItemAdded(from: decoder))
         case "response.output_item.done":
-        return .realtimeServerEventResponseOutputItemDone(try RealtimeServerEventResponseOutputItemDone(from: decoder))
+            try .realtimeServerEventResponseOutputItemDone(RealtimeServerEventResponseOutputItemDone(from: decoder))
         case "response.output_text.delta":
-        return .realtimeServerEventResponseTextDelta(try RealtimeServerEventResponseTextDelta(from: decoder))
+            try .realtimeServerEventResponseTextDelta(RealtimeServerEventResponseTextDelta(from: decoder))
         case "response.output_text.done":
-        return .realtimeServerEventResponseTextDone(try RealtimeServerEventResponseTextDone(from: decoder))
-        case "session.created": return .realtimeServerEventSessionCreated(try RealtimeServerEventSessionCreated(from: decoder))
-        case "session.updated": return .realtimeServerEventSessionUpdated(try RealtimeServerEventSessionUpdated(from: decoder))
+            try .realtimeServerEventResponseTextDone(RealtimeServerEventResponseTextDone(from: decoder))
+        case "session.created": try .realtimeServerEventSessionCreated(RealtimeServerEventSessionCreated(from: decoder))
+        case "session.updated": try .realtimeServerEventSessionUpdated(RealtimeServerEventSessionUpdated(from: decoder))
         case "output_audio_buffer.started":
-        return .realtimeServerEventOutputAudioBufferStarted(try RealtimeServerEventOutputAudioBufferStarted(from: decoder))
+            try .realtimeServerEventOutputAudioBufferStarted(RealtimeServerEventOutputAudioBufferStarted(from: decoder))
         case "output_audio_buffer.stopped":
-        return .realtimeServerEventOutputAudioBufferStopped(try RealtimeServerEventOutputAudioBufferStopped(from: decoder))
+            try .realtimeServerEventOutputAudioBufferStopped(RealtimeServerEventOutputAudioBufferStopped(from: decoder))
         case "output_audio_buffer.cleared":
-        return .realtimeServerEventOutputAudioBufferCleared(try RealtimeServerEventOutputAudioBufferCleared(from: decoder))
+            try .realtimeServerEventOutputAudioBufferCleared(RealtimeServerEventOutputAudioBufferCleared(from: decoder))
         case "conversation.item.added":
-        return .realtimeServerEventConversationItemAdded(try RealtimeServerEventConversationItemAdded(from: decoder))
+            try .realtimeServerEventConversationItemAdded(RealtimeServerEventConversationItemAdded(from: decoder))
         case "conversation.item.done":
-        return .realtimeServerEventConversationItemDone(try RealtimeServerEventConversationItemDone(from: decoder))
+            try .realtimeServerEventConversationItemDone(RealtimeServerEventConversationItemDone(from: decoder))
         case "input_audio_buffer.timeout_triggered":
-        return .realtimeServerEventInputAudioBufferTimeoutTriggered(try RealtimeServerEventInputAudioBufferTimeoutTriggered(from: decoder))
+            try .realtimeServerEventInputAudioBufferTimeoutTriggered(
+                RealtimeServerEventInputAudioBufferTimeoutTriggered(from: decoder)
+            )
         case "conversation.item.input_audio_transcription.segment":
-        return .realtimeServerEventConversationItemInputAudioTranscriptionSegment(
-            try RealtimeServerEventConversationItemInputAudioTranscriptionSegment(from: decoder)
-        )
+            try .realtimeServerEventConversationItemInputAudioTranscriptionSegment(
+                RealtimeServerEventConversationItemInputAudioTranscriptionSegment(from: decoder)
+            )
         case "mcp_list_tools.in_progress":
-        return .realtimeServerEventMcpListToolsInProgress(try RealtimeServerEventMCPListToolsInProgress(from: decoder))
+            try .realtimeServerEventMcpListToolsInProgress(RealtimeServerEventMCPListToolsInProgress(from: decoder))
         case "mcp_list_tools.completed":
-        return .realtimeServerEventMcpListToolsCompleted(try RealtimeServerEventMCPListToolsCompleted(from: decoder))
-        default: return nil
+            try .realtimeServerEventMcpListToolsCompleted(RealtimeServerEventMCPListToolsCompleted(from: decoder))
+        default: nil
         }
     }
 }
@@ -194,18 +231,24 @@ extension RealtimeServerEvent {
     static func decodeGroup3(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
         case "mcp_list_tools.failed":
-        return .realtimeServerEventMcpListToolsFailed(try RealtimeServerEventMCPListToolsFailed(from: decoder))
+            try .realtimeServerEventMcpListToolsFailed(RealtimeServerEventMCPListToolsFailed(from: decoder))
         case "response.mcp_call_arguments.delta":
-        return .realtimeServerEventResponseMcpCallArgumentsDelta(try RealtimeServerEventResponseMCPCallArgumentsDelta(from: decoder))
+            try .realtimeServerEventResponseMcpCallArgumentsDelta(
+                RealtimeServerEventResponseMCPCallArgumentsDelta(from: decoder)
+            )
         case "response.mcp_call_arguments.done":
-        return .realtimeServerEventResponseMcpCallArgumentsDone(try RealtimeServerEventResponseMCPCallArgumentsDone(from: decoder))
+            try .realtimeServerEventResponseMcpCallArgumentsDone(
+                RealtimeServerEventResponseMCPCallArgumentsDone(from: decoder)
+            )
         case "response.mcp_call.in_progress":
-        return .realtimeServerEventResponseMcpCallInProgress(try RealtimeServerEventResponseMCPCallInProgress(from: decoder))
+            try .realtimeServerEventResponseMcpCallInProgress(
+                RealtimeServerEventResponseMCPCallInProgress(from: decoder)
+            )
         case "response.mcp_call.completed":
-        return .realtimeServerEventResponseMcpCallCompleted(try RealtimeServerEventResponseMCPCallCompleted(from: decoder))
+            try .realtimeServerEventResponseMcpCallCompleted(RealtimeServerEventResponseMCPCallCompleted(from: decoder))
         case "response.mcp_call.failed":
-        return .realtimeServerEventResponseMcpCallFailed(try RealtimeServerEventResponseMCPCallFailed(from: decoder))
-        default: return nil
+            try .realtimeServerEventResponseMcpCallFailed(RealtimeServerEventResponseMCPCallFailed(from: decoder))
+        default: nil
         }
     }
 }
@@ -217,9 +260,12 @@ extension RealtimeServerEvent {
         case let .realtimeServerEventConversationCreated(value): try container.encode(value); return true
         case let .realtimeServerEventConversationItemCreated(value): try container.encode(value); return true
         case let .realtimeServerEventConversationItemDeleted(value): try container.encode(value); return true
-        case let .realtimeServerEventConversationItemInputAudioTranscriptionCompleted(value): try container.encode(value); return true
-        case let .realtimeServerEventConversationItemInputAudioTranscriptionDelta(value): try container.encode(value); return true
-        case let .realtimeServerEventConversationItemInputAudioTranscriptionFailed(value): try container.encode(value); return true
+        case let .realtimeServerEventConversationItemInputAudioTranscriptionCompleted(value): try container
+            .encode(value); return true
+        case let .realtimeServerEventConversationItemInputAudioTranscriptionDelta(value): try container
+            .encode(value); return true
+        case let .realtimeServerEventConversationItemInputAudioTranscriptionFailed(value): try container
+            .encode(value); return true
         case let .realtimeServerEventConversationItemRetrieved(value): try container.encode(value); return true
         case let .realtimeServerEventConversationItemTruncated(value): try container.encode(value); return true
         case let .realtimeServerEventError(value): try container.encode(value); return true
@@ -278,7 +324,8 @@ extension RealtimeServerEvent {
         var container = encoder.singleValueContainer()
         switch self {
         case let .realtimeServerEventInputAudioBufferTimeoutTriggered(value): try container.encode(value); return true
-        case let .realtimeServerEventConversationItemInputAudioTranscriptionSegment(value): try container.encode(value); return true
+        case let .realtimeServerEventConversationItemInputAudioTranscriptionSegment(value): try container
+            .encode(value); return true
         case let .realtimeServerEventMcpListToolsInProgress(value): try container.encode(value); return true
         case let .realtimeServerEventMcpListToolsCompleted(value): try container.encode(value); return true
         case let .realtimeServerEventMcpListToolsFailed(value): try container.encode(value); return true
@@ -300,7 +347,6 @@ public indirect enum RealtimeServerEventConversationItemInputAudioTranscriptionC
 }
 
 extension RealtimeServerEventConversationItemInputAudioTranscriptionCompletedUsage: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -308,12 +354,16 @@ extension RealtimeServerEventConversationItemInputAudioTranscriptionCompletedUsa
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -324,9 +374,9 @@ extension RealtimeServerEventConversationItemInputAudioTranscriptionCompletedUsa
 extension RealtimeServerEventConversationItemInputAudioTranscriptionCompletedUsage {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "tokens": return .transcriptTextUsageTokens(try TranscriptTextUsageTokens(from: decoder))
-        case "duration": return .transcriptTextUsageDuration(try TranscriptTextUsageDuration(from: decoder))
-        default: return nil
+        case "tokens": try .transcriptTextUsageTokens(TranscriptTextUsageTokens(from: decoder))
+        case "duration": try .transcriptTextUsageDuration(TranscriptTextUsageDuration(from: decoder))
+        default: nil
         }
     }
 }
@@ -350,7 +400,6 @@ public indirect enum RealtimeServerEventSessionCreatedSession {
 }
 
 extension RealtimeServerEventSessionCreatedSession: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -358,12 +407,16 @@ extension RealtimeServerEventSessionCreatedSession: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -374,10 +427,12 @@ extension RealtimeServerEventSessionCreatedSession: Codable {
 extension RealtimeServerEventSessionCreatedSession {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "realtime": return .realtimeSessionCreateResponseGa(try RealtimeSessionCreateResponseGA(from: decoder))
+        case "realtime": try .realtimeSessionCreateResponseGa(RealtimeSessionCreateResponseGA(from: decoder))
         case "transcription":
-        return .realtimeTranscriptionSessionCreateResponseGa(try RealtimeTranscriptionSessionCreateResponseGA(from: decoder))
-        default: return nil
+            try .realtimeTranscriptionSessionCreateResponseGa(
+                RealtimeTranscriptionSessionCreateResponseGA(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -401,7 +456,6 @@ public indirect enum RealtimeServerEventSessionUpdatedSession {
 }
 
 extension RealtimeServerEventSessionUpdatedSession: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -409,12 +463,16 @@ extension RealtimeServerEventSessionUpdatedSession: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -425,10 +483,12 @@ extension RealtimeServerEventSessionUpdatedSession: Codable {
 extension RealtimeServerEventSessionUpdatedSession {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "realtime": return .realtimeSessionCreateResponseGa(try RealtimeSessionCreateResponseGA(from: decoder))
+        case "realtime": try .realtimeSessionCreateResponseGa(RealtimeSessionCreateResponseGA(from: decoder))
         case "transcription":
-        return .realtimeTranscriptionSessionCreateResponseGa(try RealtimeTranscriptionSessionCreateResponseGA(from: decoder))
-        default: return nil
+            try .realtimeTranscriptionSessionCreateResponseGa(
+                RealtimeTranscriptionSessionCreateResponseGA(from: decoder)
+            )
+        default: nil
         }
     }
 }
@@ -466,5 +526,7 @@ public struct RealtimeServerEventConversationItemCreated: Codable {
         case previousItemId = "previous_item_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

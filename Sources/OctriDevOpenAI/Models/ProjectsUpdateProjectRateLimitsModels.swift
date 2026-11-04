@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Projects domain models
+/// Projects domain models
 /// Typed representation of the `ProjectRateLimitUpdateRequest` API schema.
 public struct ProjectRateLimitUpdateRequest: Codable {
     /// The maximum requests per minute.
@@ -29,25 +29,38 @@ public struct ProjectRateLimitUpdateRequest: Codable {
     }
 
     init() {
-        (self.maxRequestsPer1Minute, self.maxTokensPer1Minute, self.maxImagesPer1Minute, self.maxAudioMegabytesPer1Minute, self.maxRequestsPer1Day) = (nil, nil, nil, nil, nil)
-        self.batch1DayMaxInputTokens = nil
+        (
+            maxRequestsPer1Minute,
+            maxTokensPer1Minute,
+            maxImagesPer1Minute,
+            maxAudioMegabytesPer1Minute,
+            maxRequestsPer1Day
+        ) = (nil, nil, nil, nil, nil)
+        batch1DayMaxInputTokens = nil
     }
 }
 
-extension ProjectRateLimitUpdateRequest {
-    public init(from decoder: Decoder) throws {
+public extension ProjectRateLimitUpdateRequest {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.maxRequestsPer1Minute = try container.sdkDecodeIfPresent(.maxRequestsPer1Minute)
-        self.maxTokensPer1Minute = try container.sdkDecodeIfPresent(.maxTokensPer1Minute)
-        self.maxImagesPer1Minute = try container.sdkDecodeIfPresent(.maxImagesPer1Minute)
-        self.maxAudioMegabytesPer1Minute = try container.sdkDecodeIfPresent(.maxAudioMegabytesPer1Minute)
-        self.maxRequestsPer1Day = try container.sdkDecodeIfPresent(.maxRequestsPer1Day)
-        self.batch1DayMaxInputTokens = try container.sdkDecodeIfPresent(.batch1DayMaxInputTokens)
+        maxRequestsPer1Minute = try container.sdkDecodeIfPresent(.maxRequestsPer1Minute)
+        maxTokensPer1Minute = try container.sdkDecodeIfPresent(.maxTokensPer1Minute)
+        maxImagesPer1Minute = try container.sdkDecodeIfPresent(.maxImagesPer1Minute)
+        maxAudioMegabytesPer1Minute = try container.sdkDecodeIfPresent(.maxAudioMegabytesPer1Minute)
+        maxRequestsPer1Day = try container.sdkDecodeIfPresent(.maxRequestsPer1Day)
+        batch1DayMaxInputTokens = try container.sdkDecodeIfPresent(.batch1DayMaxInputTokens)
     }
 }
 
-extension ProjectRateLimitUpdateRequest {
-    public init(maxRequestsPer1Minute: Int? = nil, maxTokensPer1Minute: Int? = nil, maxImagesPer1Minute: Int? = nil, maxAudioMegabytesPer1Minute: Int? = nil, maxRequestsPer1Day: Int? = nil, batch1DayMaxInputTokens: Int? = nil) {
+public extension ProjectRateLimitUpdateRequest {
+    init(
+        maxRequestsPer1Minute: Int? = nil,
+        maxTokensPer1Minute: Int? = nil,
+        maxImagesPer1Minute: Int? = nil,
+        maxAudioMegabytesPer1Minute: Int? = nil,
+        maxRequestsPer1Day: Int? = nil,
+        batch1DayMaxInputTokens: Int? = nil
+    ) {
         self.init()
         self.maxRequestsPer1Minute = maxRequestsPer1Minute
         (self.maxTokensPer1Minute, self.maxImagesPer1Minute) = (maxTokensPer1Minute, maxImagesPer1Minute)

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// LiveLiveDecision domain models
+/// LiveLiveDecision domain models
 public indirect enum LiveDecisionInputItemParamContentItem {
     case liveDecisionInputTextParam(LiveDecisionInputTextParam)
     case liveDecisionInputImageParam(LiveDecisionInputImageParam)
@@ -12,7 +12,6 @@ public indirect enum LiveDecisionInputItemParamContentItem {
 }
 
 extension LiveDecisionInputItemParamContentItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -20,12 +19,16 @@ extension LiveDecisionInputItemParamContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -36,9 +39,9 @@ extension LiveDecisionInputItemParamContentItem: Codable {
 extension LiveDecisionInputItemParamContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .liveDecisionInputTextParam(try LiveDecisionInputTextParam(from: decoder))
-        case "input_image": return .liveDecisionInputImageParam(try LiveDecisionInputImageParam(from: decoder))
-        default: return nil
+        case "input_text": try .liveDecisionInputTextParam(LiveDecisionInputTextParam(from: decoder))
+        case "input_image": try .liveDecisionInputImageParam(LiveDecisionInputImageParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -63,7 +66,6 @@ public indirect enum LiveDecisionQuestion {
 }
 
 extension LiveDecisionQuestion: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -71,12 +73,16 @@ extension LiveDecisionQuestion: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -87,10 +93,10 @@ extension LiveDecisionQuestion: Codable {
 extension LiveDecisionQuestion {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "choice": return .liveDecisionChoiceQuestionParam(try LiveDecisionChoiceQuestionParam(from: decoder))
-        case "predicate": return .liveDecisionPredicateQuestionParam(try LiveDecisionPredicateQuestionParam(from: decoder))
-        case "score": return .liveDecisionScoreQuestionParam(try LiveDecisionScoreQuestionParam(from: decoder))
-        default: return nil
+        case "choice": try .liveDecisionChoiceQuestionParam(LiveDecisionChoiceQuestionParam(from: decoder))
+        case "predicate": try .liveDecisionPredicateQuestionParam(LiveDecisionPredicateQuestionParam(from: decoder))
+        case "score": try .liveDecisionScoreQuestionParam(LiveDecisionScoreQuestionParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -115,7 +121,6 @@ public indirect enum LiveDecisionStoredInputItemParamContentItem {
 }
 
 extension LiveDecisionStoredInputItemParamContentItem: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -123,12 +128,16 @@ extension LiveDecisionStoredInputItemParamContentItem: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -139,9 +148,9 @@ extension LiveDecisionStoredInputItemParamContentItem: Codable {
 extension LiveDecisionStoredInputItemParamContentItem {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .liveDecisionInputTextParam(try LiveDecisionInputTextParam(from: decoder))
-        case "input_image": return .liveDecisionInputImageParam(try LiveDecisionInputImageParam(from: decoder))
-        default: return nil
+        case "input_text": try .liveDecisionInputTextParam(LiveDecisionInputTextParam(from: decoder))
+        case "input_image": try .liveDecisionInputImageParam(LiveDecisionInputImageParam(from: decoder))
+        default: nil
         }
     }
 }
@@ -172,30 +181,40 @@ public struct LiveDecisionItemCreateParam: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDecisionItemCreateParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.item) else {
-            throw SdkValidationError(field: "item", code: "required", message: "Validation failed for 'item': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.item = try container.sdkDecodeRequired(.item)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-            try sdkValidateRawEnum("type", self.type, LiveDecisionItemCreateParamType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDecisionItemCreateParam {
-    public init(type: LiveDecisionItemCreateParamType, item: LiveDecisionInputItemParam, eventId: String? = nil) throws {
+public extension LiveDecisionItemCreateParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.item) else {
+            throw SdkValidationError(
+                field: "item",
+                code: "required",
+                message: "Validation failed for 'item': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        item = try container.sdkDecodeRequired(.item)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        try sdkValidateRawEnum("type", type, LiveDecisionItemCreateParamType.allCases.map(\.rawValue))
+    }
+}
+
+public extension LiveDecisionItemCreateParam {
+    init(type: LiveDecisionItemCreateParamType, item: LiveDecisionInputItemParam, eventId: String? = nil) throws {
         (self.type, self.item) = (type, item)
         self.eventId = eventId
-            try sdkValidateRawEnum("type", self.type, LiveDecisionItemCreateParamType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, LiveDecisionItemCreateParamType.allCases.map(\.rawValue))
     }
 }
 
@@ -214,29 +233,47 @@ public struct LiveDecisionTriggerInputParam2: Codable {
         case decisions
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDecisionTriggerInputParam2 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.eventType) else {
-            throw SdkValidationError(field: "event_type", code: "required", message: "Validation failed for 'event_type': value is required")
-        }
-        guard container.contains(.decisions) else {
-            throw SdkValidationError(field: "decisions", code: "required", message: "Validation failed for 'decisions': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.eventType = try container.sdkDecodeRequired(.eventType)
-        self.decisions = try container.sdkDecodeRequired(.decisions)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDecisionTriggerInputParam2 {
-    public init(type: LiveDecisionTriggerInputParam2Type, eventType: LiveDecisionTriggerInputParam2EventType, decisions: LiveDecisionQuestionsInputParam2) {
+public extension LiveDecisionTriggerInputParam2 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.eventType) else {
+            throw SdkValidationError(
+                field: "event_type",
+                code: "required",
+                message: "Validation failed for 'event_type': value is required"
+            )
+        }
+        guard container.contains(.decisions) else {
+            throw SdkValidationError(
+                field: "decisions",
+                code: "required",
+                message: "Validation failed for 'decisions': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        eventType = try container.sdkDecodeRequired(.eventType)
+        decisions = try container.sdkDecodeRequired(.decisions)
+    }
+}
+
+public extension LiveDecisionTriggerInputParam2 {
+    init(
+        type: LiveDecisionTriggerInputParam2Type,
+        eventType: LiveDecisionTriggerInputParam2EventType,
+        decisions: LiveDecisionQuestionsInputParam2
+    ) {
         (self.type, self.eventType) = (type, eventType)
         self.decisions = decisions
     }
@@ -257,32 +294,42 @@ public struct LiveDecisionItemDeleteParam: Codable {
         case eventId = "event_id"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDecisionItemDeleteParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.itemId) else {
-            throw SdkValidationError(field: "item_id", code: "required", message: "Validation failed for 'item_id': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.itemId = try container.sdkDecodeRequired(.itemId)
-        self.eventId = try container.sdkDecodeIfPresent(.eventId)
-            try sdkValidateRawEnum("type", self.type, LiveDecisionItemDeleteParamType.allCases.map(\.rawValue))
-            try validateLength("item_id", self.itemId, min: 1, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDecisionItemDeleteParam {
-    public init(type: LiveDecisionItemDeleteParamType, itemId: String, eventId: String? = nil) throws {
+public extension LiveDecisionItemDeleteParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.itemId) else {
+            throw SdkValidationError(
+                field: "item_id",
+                code: "required",
+                message: "Validation failed for 'item_id': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        itemId = try container.sdkDecodeRequired(.itemId)
+        eventId = try container.sdkDecodeIfPresent(.eventId)
+        try sdkValidateRawEnum("type", type, LiveDecisionItemDeleteParamType.allCases.map(\.rawValue))
+        try validateLength("item_id", itemId, min: 1, max: nil)
+    }
+}
+
+public extension LiveDecisionItemDeleteParam {
+    init(type: LiveDecisionItemDeleteParamType, itemId: String, eventId: String? = nil) throws {
         (self.type, self.itemId) = (type, itemId)
         self.eventId = eventId
-            try sdkValidateRawEnum("type", self.type, LiveDecisionItemDeleteParamType.allCases.map(\.rawValue))
-            try validateLength("item_id", self.itemId, min: 1, max: nil)
+        try sdkValidateRawEnum("type", self.type, LiveDecisionItemDeleteParamType.allCases.map(\.rawValue))
+        try validateLength("item_id", self.itemId, min: 1, max: nil)
     }
 }
 
@@ -292,25 +339,33 @@ public indirect enum LiveDecisionInputItemParamContent {
 }
 
 extension LiveDecisionInputItemParamContent: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for LiveDecisionInputItemParamContent")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for LiveDecisionInputItemParamContent"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension LiveDecisionInputItemParamContent {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
         if let value = try? container.decode(
             [LiveDecisionInputItemParamContentItem].self
         ) {
-            return             .liveDecisionInputItemParamContentItemList(value)
+            return .liveDecisionInputItemParamContentItemList(value)
         }
         return nil
     }
@@ -332,22 +387,32 @@ public indirect enum LiveDecisionEventSourceEventType {
 }
 
 extension LiveDecisionEventSourceEventType: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for LiveDecisionEventSourceEventType")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for LiveDecisionEventSourceEventType"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension LiveDecisionEventSourceEventType {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(String.self) { return .stringValue1(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue1(value)
+        }
         return nil
     }
 }
@@ -368,22 +433,32 @@ public indirect enum LiveDecisionChoiceParamValue {
 }
 
 extension LiveDecisionChoiceParamValue: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for LiveDecisionChoiceParamValue")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for LiveDecisionChoiceParamValue"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension LiveDecisionChoiceParamValue {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(Bool.self) { return .boolValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(Bool.self) {
+            return .boolValue(value)
+        }
         return nil
     }
 }
@@ -410,30 +485,40 @@ public struct LiveDecisionInputTextParam: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDecisionInputTextParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, LiveDecisionInputTextParamType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: nil, max: 10485760)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDecisionInputTextParam {
-    public init(type: LiveDecisionInputTextParamType, text: String) throws {
+public extension LiveDecisionInputTextParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        try sdkValidateRawEnum("type", type, LiveDecisionInputTextParamType.allCases.map(\.rawValue))
+        try validateLength("text", text, min: nil, max: 10_485_760)
+    }
+}
+
+public extension LiveDecisionInputTextParam {
+    init(type: LiveDecisionInputTextParamType, text: String) throws {
         (self.type, self.text) = (type, text)
-            try sdkValidateRawEnum("type", self.type, LiveDecisionInputTextParamType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: nil, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, LiveDecisionInputTextParamType.allCases.map(\.rawValue))
+        try validateLength("text", self.text, min: nil, max: 10_485_760)
     }
 }
 
@@ -446,24 +531,30 @@ public struct LiveDecisionQuestionsInputParam2: Codable {
         case questions
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDecisionQuestionsInputParam2 {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.questions) else {
-            throw SdkValidationError(field: "questions", code: "required", message: "Validation failed for 'questions': value is required")
-        }
-        self.questions = try container.sdkDecodeRequired(.questions)
-            try validateItems("questions", self.questions, min: 1, max: 64)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDecisionQuestionsInputParam2 {
-    public init(questions: [QuestionParam]) throws {
+public extension LiveDecisionQuestionsInputParam2 {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.questions) else {
+            throw SdkValidationError(
+                field: "questions",
+                code: "required",
+                message: "Validation failed for 'questions': value is required"
+            )
+        }
+        questions = try container.sdkDecodeRequired(.questions)
+        try validateItems("questions", questions, min: 1, max: 64)
+    }
+}
+
+public extension LiveDecisionQuestionsInputParam2 {
+    init(questions: [QuestionParam]) throws {
         self.questions = questions
-            try validateItems("questions", self.questions, min: 1, max: 64)
+        try validateItems("questions", self.questions, min: 1, max: 64)
     }
 }
 
@@ -479,25 +570,35 @@ public struct LiveDecisionCompleted: Codable {
         case decision
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension LiveDecisionCompleted {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.decision) else {
-            throw SdkValidationError(field: "decision", code: "required", message: "Validation failed for 'decision': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.decision = try container.sdkDecodeRequired(.decision)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension LiveDecisionCompleted {
-    public init(type: LiveDecisionCompletedType, decision: DecisionResponse) {
+public extension LiveDecisionCompleted {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.decision) else {
+            throw SdkValidationError(
+                field: "decision",
+                code: "required",
+                message: "Validation failed for 'decision': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        decision = try container.sdkDecodeRequired(.decision)
+    }
+}
+
+public extension LiveDecisionCompleted {
+    init(type: LiveDecisionCompletedType, decision: DecisionResponse) {
         (self.type, self.decision) = (type, decision)
     }
 }
@@ -517,5 +618,7 @@ public struct LiveDecisionInputImageParam: Codable {
         case detail
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }

@@ -6,16 +6,20 @@ import Foundation
 #if canImport(FoundationNetworking)
     import FoundationNetworking
 #endif
-public struct ListProjectUserRoleAssignmentsParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ListProjectUserRoleAssignmentsParameter: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListProjectUserRoleAssignmentsParameter(rawValue: "asc")
     public static let desc = ListProjectUserRoleAssignmentsParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -27,13 +31,16 @@ public struct ListProjectUserRoleAssignmentsParameter: RawRepresentable, Hashabl
 public struct ListProjectSpendAlertsParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListProjectSpendAlertsParameter(rawValue: "asc")
     public static let desc = ListProjectSpendAlertsParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -45,14 +52,17 @@ public struct ListProjectSpendAlertsParameter: RawRepresentable, Hashable, Codab
 public struct UsageFileSearchCallsParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let value1m = UsageFileSearchCallsParameter(rawValue: "1m")
     public static let value1h = UsageFileSearchCallsParameter(rawValue: "1h")
     public static let value1d = UsageFileSearchCallsParameter(rawValue: "1d")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -61,16 +71,20 @@ public struct UsageFileSearchCallsParameter: RawRepresentable, Hashable, Codable
     }
 }
 
-public struct ListProjectGroupRoleAssignmentsParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct ListProjectGroupRoleAssignmentsParameter: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListProjectGroupRoleAssignmentsParameter(rawValue: "asc")
     public static let desc = ListProjectGroupRoleAssignmentsParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -82,14 +96,17 @@ public struct ListProjectGroupRoleAssignmentsParameter: RawRepresentable, Hashab
 public struct UsageWebSearchCallsParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let value1m = UsageWebSearchCallsParameter(rawValue: "1m")
     public static let value1h = UsageWebSearchCallsParameter(rawValue: "1h")
     public static let value1d = UsageWebSearchCallsParameter(rawValue: "1d")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -101,12 +118,15 @@ public struct UsageWebSearchCallsParameter: RawRepresentable, Hashable, Codable,
 public struct UsageVectorStoresParameterItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let projectId = UsageVectorStoresParameterItem(rawValue: "project_id")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -118,7 +138,10 @@ public struct UsageVectorStoresParameterItem: RawRepresentable, Hashable, Codabl
 public struct UsageImagesParameterItemX42ec7ae7: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let value256x256 = UsageImagesParameterItemX42ec7ae7(rawValue: "256x256")
     public static let value512x512 = UsageImagesParameterItemX42ec7ae7(rawValue: "512x512")
     public static let value1024x1024 = UsageImagesParameterItemX42ec7ae7(rawValue: "1024x1024")
@@ -127,7 +150,7 @@ public struct UsageImagesParameterItemX42ec7ae7: RawRepresentable, Hashable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -139,12 +162,16 @@ public struct UsageImagesParameterItemX42ec7ae7: RawRepresentable, Hashable, Cod
 public struct GetRunStepParameterItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
-    public static let stepDetailsToolCallsFileSearchResultsContent = GetRunStepParameterItem(rawValue: "step_details.tool_calls[*].file_search.results[*].content")
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
+    public static let stepDetailsToolCallsFileSearchResultsContent =
+        GetRunStepParameterItem(rawValue: "step_details.tool_calls[*].file_search.results[*].content")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -156,13 +183,16 @@ public struct GetRunStepParameterItem: RawRepresentable, Hashable, Codable, Send
 public struct ListContainerFilesParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListContainerFilesParameter(rawValue: "asc")
     public static let desc = ListContainerFilesParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -174,13 +204,16 @@ public struct ListContainerFilesParameter: RawRepresentable, Hashable, Codable, 
 public struct ListUserRoleAssignmentsParameter: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let asc = ListUserRoleAssignmentsParameter(rawValue: "asc")
     public static let desc = ListUserRoleAssignmentsParameter(rawValue: "desc")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -192,12 +225,15 @@ public struct ListUserRoleAssignmentsParameter: RawRepresentable, Hashable, Coda
 public struct BetaDeleteResponseResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let responseDeleted = BetaDeleteResponseResponseObject(rawValue: "response.deleted")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

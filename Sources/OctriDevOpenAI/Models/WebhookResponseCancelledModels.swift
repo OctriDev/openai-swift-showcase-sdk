@@ -3,7 +3,7 @@
 
 import Foundation
 
-// WebhookResponseCancelled domain models
+/// WebhookResponseCancelled domain models
 /// Sent when a background response has been cancelled.
 public struct WebhookResponseCancelled: Codable {
     /// The Unix timestamp (in seconds) of when the model response was cancelled.
@@ -25,34 +25,58 @@ public struct WebhookResponseCancelled: Codable {
         case object
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebhookResponseCancelled {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.createdAt) else {
-            throw SdkValidationError(field: "created_at", code: "required", message: "Validation failed for 'created_at': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.data) else {
-            throw SdkValidationError(field: "data", code: "required", message: "Validation failed for 'data': value is required")
-        }
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        self.createdAt = try container.sdkDecodeRequired(.createdAt)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.data = try container.sdkDecodeRequired(.data)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.object = try container.sdkDecodeIfPresent(.object)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebhookResponseCancelled {
-    public init(createdAt: Int, id: String, data: WebhookResponseCancelledData, type: WebhookResponseCancelledType, object: WebhookResponseCancelledObject? = nil) {
+public extension WebhookResponseCancelled {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.createdAt) else {
+            throw SdkValidationError(
+                field: "created_at",
+                code: "required",
+                message: "Validation failed for 'created_at': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.data) else {
+            throw SdkValidationError(
+                field: "data",
+                code: "required",
+                message: "Validation failed for 'data': value is required"
+            )
+        }
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        createdAt = try container.sdkDecodeRequired(.createdAt)
+        id = try container.sdkDecodeRequired(.id)
+        data = try container.sdkDecodeRequired(.data)
+        type = try container.sdkDecodeRequired(.type)
+        object = try container.sdkDecodeIfPresent(.object)
+    }
+}
+
+public extension WebhookResponseCancelled {
+    init(
+        createdAt: Int,
+        id: String,
+        data: WebhookResponseCancelledData,
+        type: WebhookResponseCancelledType,
+        object: WebhookResponseCancelledObject? = nil
+    ) {
         (self.createdAt, self.id) = (createdAt, id)
         (self.data, self.type) = (data, type)
         self.object = object
@@ -68,21 +92,27 @@ public struct WebhookResponseCancelledData: Codable {
         case id
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension WebhookResponseCancelledData {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        self.id = try container.sdkDecodeRequired(.id)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension WebhookResponseCancelledData {
-    public init(id: String) {
+public extension WebhookResponseCancelledData {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        id = try container.sdkDecodeRequired(.id)
+    }
+}
+
+public extension WebhookResponseCancelledData {
+    init(id: String) {
         self.id = id
     }
 }
@@ -91,12 +121,15 @@ extension WebhookResponseCancelledData {
 public struct WebhookResponseCancelledObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let event = WebhookResponseCancelledObject(rawValue: "event")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -109,12 +142,15 @@ public struct WebhookResponseCancelledObject: RawRepresentable, Hashable, Codabl
 public struct WebhookResponseCancelledType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let responseCancelled = WebhookResponseCancelledType(rawValue: "response.cancelled")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

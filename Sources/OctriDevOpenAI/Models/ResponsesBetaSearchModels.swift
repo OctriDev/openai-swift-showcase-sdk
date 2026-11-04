@@ -3,18 +3,21 @@
 
 import Foundation
 
-// ResponsesBetaSearch domain models
+/// ResponsesBetaSearch domain models
 /// Typed representation of the `BetaSearchContentType` API schema.
 public struct BetaSearchContentType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let text = BetaSearchContentType(rawValue: "text")
     public static let image = BetaSearchContentType(rawValue: "image")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -27,14 +30,17 @@ public struct BetaSearchContentType: RawRepresentable, Hashable, Codable, Sendab
 public struct BetaSearchContextSize: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let low = BetaSearchContextSize(rawValue: "low")
     public static let medium = BetaSearchContextSize(rawValue: "medium")
     public static let high = BetaSearchContextSize(rawValue: "high")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

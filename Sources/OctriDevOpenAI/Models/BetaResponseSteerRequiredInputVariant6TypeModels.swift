@@ -3,7 +3,7 @@
 
 import Foundation
 
-// BetaResponse domain models
+/// BetaResponse domain models
 /// Required enumerated value serialized in the `type` wire field.
 public enum BetaResponseSteerRequiredInputVariant6Type: String, CaseIterable, Codable {
     case mcpApprovalResponse = "mcp_approval_response"

@@ -3,39 +3,70 @@
 
 import Foundation
 
-// Audio domain models
-extension TranscriptionDiarizedSegment {
-    public init(from decoder: Decoder) throws {
+/// Audio domain models
+public extension TranscriptionDiarizedSegment {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
         }
         guard container.contains(.start) else {
-            throw SdkValidationError(field: "start", code: "required", message: "Validation failed for 'start': value is required")
+            throw SdkValidationError(
+                field: "start",
+                code: "required",
+                message: "Validation failed for 'start': value is required"
+            )
         }
         guard container.contains(.end) else {
-            throw SdkValidationError(field: "end", code: "required", message: "Validation failed for 'end': value is required")
+            throw SdkValidationError(
+                field: "end",
+                code: "required",
+                message: "Validation failed for 'end': value is required"
+            )
         }
         guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
         }
         guard container.contains(.speaker) else {
-            throw SdkValidationError(field: "speaker", code: "required", message: "Validation failed for 'speaker': value is required")
+            throw SdkValidationError(
+                field: "speaker",
+                code: "required",
+                message: "Validation failed for 'speaker': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.start = try container.sdkDecodeRequired(.start)
-        self.end = try container.sdkDecodeRequired(.end)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.speaker = try container.sdkDecodeRequired(.speaker)
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        start = try container.sdkDecodeRequired(.start)
+        end = try container.sdkDecodeRequired(.end)
+        text = try container.sdkDecodeRequired(.text)
+        speaker = try container.sdkDecodeRequired(.speaker)
     }
 }
 
-extension TranscriptionDiarizedSegment {
-    public init(type: TranscriptionDiarizedSegmentType, id: String, start: Double, end: Double, text: String, speaker: String) {
+public extension TranscriptionDiarizedSegment {
+    init(
+        type: TranscriptionDiarizedSegmentType,
+        id: String,
+        start: Double,
+        end: Double,
+        text: String,
+        speaker: String
+    ) {
         (self.type, self.id) = (type, id)
         (self.start, self.end) = (start, end)
         (self.text, self.speaker) = (text, speaker)
@@ -62,24 +93,35 @@ public struct CreateTranscriptionResponseJson: Codable {
         case usage
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateTranscriptionResponseJson {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.text = try container.sdkDecodeRequired(.text)
-        self.languages = try container.sdkDecodeIfPresent(.languages)
-        self.logprobs = try container.sdkDecodeIfPresent(.logprobs)
-        self.usage = try container.sdkDecodeIfPresent(.usage)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateTranscriptionResponseJson {
-    public init(text: String, languages: [TranscriptionLanguage]? = nil, logprobs: [CreateTranscriptionResponseJsonLogprobsItem]? = nil, usage: CreateTranscriptionResponseJsonUsage? = nil) {
+public extension CreateTranscriptionResponseJson {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        text = try container.sdkDecodeRequired(.text)
+        languages = try container.sdkDecodeIfPresent(.languages)
+        logprobs = try container.sdkDecodeIfPresent(.logprobs)
+        usage = try container.sdkDecodeIfPresent(.usage)
+    }
+}
+
+public extension CreateTranscriptionResponseJson {
+    init(
+        text: String,
+        languages: [TranscriptionLanguage]? = nil,
+        logprobs: [CreateTranscriptionResponseJsonLogprobsItem]? = nil,
+        usage: CreateTranscriptionResponseJsonUsage? = nil
+    ) {
         (self.text, self.languages) = (text, languages)
         (self.logprobs, self.usage) = (logprobs, usage)
     }
@@ -107,34 +149,58 @@ public struct CreateTranscriptionResponseDiarizedJson: Codable {
         case usage
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateTranscriptionResponseDiarizedJson {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.task) else {
-            throw SdkValidationError(field: "task", code: "required", message: "Validation failed for 'task': value is required")
-        }
-        guard container.contains(.duration) else {
-            throw SdkValidationError(field: "duration", code: "required", message: "Validation failed for 'duration': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        guard container.contains(.segments) else {
-            throw SdkValidationError(field: "segments", code: "required", message: "Validation failed for 'segments': value is required")
-        }
-        self.task = try container.sdkDecodeRequired(.task)
-        self.duration = try container.sdkDecodeRequired(.duration)
-        self.text = try container.sdkDecodeRequired(.text)
-        self.segments = try container.sdkDecodeRequired(.segments)
-        self.usage = try container.sdkDecodeIfPresent(.usage)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateTranscriptionResponseDiarizedJson {
-    public init(task: CreateTranscriptionResponseDiarizedJsonTask, duration: Double, text: String, segments: [TranscriptionDiarizedSegment], usage: CreateTranscriptionResponseDiarizedJsonUsage? = nil) {
+public extension CreateTranscriptionResponseDiarizedJson {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.task) else {
+            throw SdkValidationError(
+                field: "task",
+                code: "required",
+                message: "Validation failed for 'task': value is required"
+            )
+        }
+        guard container.contains(.duration) else {
+            throw SdkValidationError(
+                field: "duration",
+                code: "required",
+                message: "Validation failed for 'duration': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        guard container.contains(.segments) else {
+            throw SdkValidationError(
+                field: "segments",
+                code: "required",
+                message: "Validation failed for 'segments': value is required"
+            )
+        }
+        task = try container.sdkDecodeRequired(.task)
+        duration = try container.sdkDecodeRequired(.duration)
+        text = try container.sdkDecodeRequired(.text)
+        segments = try container.sdkDecodeRequired(.segments)
+        usage = try container.sdkDecodeIfPresent(.usage)
+    }
+}
+
+public extension CreateTranscriptionResponseDiarizedJson {
+    init(
+        task: CreateTranscriptionResponseDiarizedJsonTask,
+        duration: Double,
+        text: String,
+        segments: [TranscriptionDiarizedSegment],
+        usage: CreateTranscriptionResponseDiarizedJsonUsage? = nil
+    ) {
         (self.task, self.duration) = (task, duration)
         (self.text, self.segments) = (text, segments)
         self.usage = usage
@@ -145,12 +211,15 @@ extension CreateTranscriptionResponseDiarizedJson {
 public struct TranscriptionInclude: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let logprobs = TranscriptionInclude(rawValue: "logprobs")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -184,7 +253,10 @@ public enum TranscriptTextSegmentEventType: String, CaseIterable, Codable {
 public struct AudioResponseFormat: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let json = AudioResponseFormat(rawValue: "json")
     public static let text = AudioResponseFormat(rawValue: "text")
     public static let srt = AudioResponseFormat(rawValue: "srt")
@@ -194,7 +266,7 @@ public struct AudioResponseFormat: RawRepresentable, Hashable, Codable, Sendable
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -222,15 +294,19 @@ public enum TranscriptTextDoneEventType: String, CaseIterable, Codable {
 }
 
 /// The type of task that was run. Always `transcribe`.
-public struct CreateTranscriptionResponseDiarizedJsonTask: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateTranscriptionResponseDiarizedJsonTask: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let transcribe = CreateTranscriptionResponseDiarizedJsonTask(rawValue: "transcribe")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -261,12 +337,15 @@ public enum TranscriptTextDeltaEventType: String, CaseIterable, Codable {
 public struct VadConfigType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let serverVad = VadConfigType(rawValue: "server_vad")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -276,15 +355,19 @@ public struct VadConfigType: RawRepresentable, Hashable, Codable, Sendable, SdkW
 }
 
 /// Automatically set chunking parameters based on the audio. Must be set to `"auto"`.
-public struct CreateTranscriptionRequestChunkingStrategyVariant0: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateTranscriptionRequestChunkingStrategyVariant0: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = CreateTranscriptionRequestChunkingStrategyVariant0(rawValue: "auto")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -294,16 +377,20 @@ public struct CreateTranscriptionRequestChunkingStrategyVariant0: RawRepresentab
 }
 
 /// Required enumerated value serialized in the `timestamp_granularities[]` wire field.
-public struct CreateTranscriptionRequestTimestampGranularitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct CreateTranscriptionRequestTimestampGranularitiesItem: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let word = CreateTranscriptionRequestTimestampGranularitiesItem(rawValue: "word")
     public static let segment = CreateTranscriptionRequestTimestampGranularitiesItem(rawValue: "segment")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -334,12 +421,15 @@ public enum TranscriptTextUsageTokensType: String, CaseIterable, Codable {
 public struct TranscriptionDiarizedSegmentType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let transcriptTextSegment = TranscriptionDiarizedSegmentType(rawValue: "transcript.text.segment")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

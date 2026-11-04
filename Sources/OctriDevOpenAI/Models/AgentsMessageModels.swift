@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsMessage domain models
+/// AgentsMessage domain models
 public indirect enum MessageContentResource {
     case messageContentResourceInputText(MessageContentResourceInputText)
     case messageContentResourceInputImage(MessageContentResourceInputImage)
@@ -13,7 +13,6 @@ public indirect enum MessageContentResource {
 }
 
 extension MessageContentResource: Codable {
-
     private enum CodingKeys: String, CodingKey {
         case discriminator = "type"
     }
@@ -21,12 +20,16 @@ extension MessageContentResource: Codable {
     public init(from decoder: Decoder) throws {
         let tagged = try decoder.container(keyedBy: CodingKeys.self)
         let discriminator = try tagged.decode(String.self, forKey: .discriminator)
-        if let value = try Self.decodeGroup1(discriminator, from: decoder) { self = value; return }
+        if let value = try Self.decodeGroup1(discriminator, from: decoder) {
+            self = value; return
+        }
         self = try .unknown(tag: discriminator, raw: JSONValue(from: decoder))
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
         if case let .unknown(_, raw) = self {
             var container = encoder.singleValueContainer()
             try container.encode(raw)
@@ -37,10 +40,10 @@ extension MessageContentResource: Codable {
 extension MessageContentResource {
     static func decodeGroup1(_ discriminator: String, from decoder: Decoder) throws -> Self? {
         switch discriminator {
-        case "input_text": return .messageContentResourceInputText(try MessageContentResourceInputText(from: decoder))
-        case "input_image": return .messageContentResourceInputImage(try MessageContentResourceInputImage(from: decoder))
-        case "output_text": return .messageContentResourceOutputText(try MessageContentResourceOutputText(from: decoder))
-        default: return nil
+        case "input_text": try .messageContentResourceInputText(MessageContentResourceInputText(from: decoder))
+        case "input_image": try .messageContentResourceInputImage(MessageContentResourceInputImage(from: decoder))
+        case "output_text": try .messageContentResourceOutputText(MessageContentResourceOutputText(from: decoder))
+        default: nil
         }
     }
 }
@@ -69,30 +72,40 @@ public struct MessageContentResourceInputText: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension MessageContentResourceInputText {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, MessageContentResourceInputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension MessageContentResourceInputText {
-    public init(type: MessageContentResourceInputTextType, text: String) throws {
+public extension MessageContentResourceInputText {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        try sdkValidateRawEnum("type", type, MessageContentResourceInputTextType.allCases.map(\.rawValue))
+        try validateLength("text", text, min: 0, max: nil)
+    }
+}
+
+public extension MessageContentResourceInputText {
+    init(type: MessageContentResourceInputTextType, text: String) throws {
         (self.type, self.text) = (type, text)
-            try sdkValidateRawEnum("type", self.type, MessageContentResourceInputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, MessageContentResourceInputTextType.allCases.map(\.rawValue))
+        try validateLength("text", self.text, min: 0, max: nil)
     }
 }
 
@@ -108,30 +121,40 @@ public struct MessageContentResourceInputImage: Codable {
         case imageUrl = "image_url"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension MessageContentResourceInputImage {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.imageUrl) else {
-            throw SdkValidationError(field: "image_url", code: "required", message: "Validation failed for 'image_url': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.imageUrl = try container.sdkDecodeRequired(.imageUrl)
-            try sdkValidateRawEnum("type", self.type, MessageContentResourceInputImageType.allCases.map(\.rawValue))
-            try validateLength("image_url", self.imageUrl, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension MessageContentResourceInputImage {
-    public init(type: MessageContentResourceInputImageType, imageUrl: String) throws {
+public extension MessageContentResourceInputImage {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.imageUrl) else {
+            throw SdkValidationError(
+                field: "image_url",
+                code: "required",
+                message: "Validation failed for 'image_url': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        imageUrl = try container.sdkDecodeRequired(.imageUrl)
+        try sdkValidateRawEnum("type", type, MessageContentResourceInputImageType.allCases.map(\.rawValue))
+        try validateLength("image_url", imageUrl, min: 0, max: nil)
+    }
+}
+
+public extension MessageContentResourceInputImage {
+    init(type: MessageContentResourceInputImageType, imageUrl: String) throws {
         (self.type, self.imageUrl) = (type, imageUrl)
-            try sdkValidateRawEnum("type", self.type, MessageContentResourceInputImageType.allCases.map(\.rawValue))
-            try validateLength("image_url", self.imageUrl, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, MessageContentResourceInputImageType.allCases.map(\.rawValue))
+        try validateLength("image_url", self.imageUrl, min: 0, max: nil)
     }
 }
 
@@ -147,30 +170,40 @@ public struct MessageContentResourceOutputText: Codable {
         case text
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension MessageContentResourceOutputText {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.text) else {
-            throw SdkValidationError(field: "text", code: "required", message: "Validation failed for 'text': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.text = try container.sdkDecodeRequired(.text)
-            try sdkValidateRawEnum("type", self.type, MessageContentResourceOutputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension MessageContentResourceOutputText {
-    public init(type: MessageContentResourceOutputTextType, text: String) throws {
+public extension MessageContentResourceOutputText {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.text) else {
+            throw SdkValidationError(
+                field: "text",
+                code: "required",
+                message: "Validation failed for 'text': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        text = try container.sdkDecodeRequired(.text)
+        try sdkValidateRawEnum("type", type, MessageContentResourceOutputTextType.allCases.map(\.rawValue))
+        try validateLength("text", text, min: 0, max: nil)
+    }
+}
+
+public extension MessageContentResourceOutputText {
+    init(type: MessageContentResourceOutputTextType, text: String) throws {
         (self.type, self.text) = (type, text)
-            try sdkValidateRawEnum("type", self.type, MessageContentResourceOutputTextType.allCases.map(\.rawValue))
-            try validateLength("text", self.text, min: 0, max: nil)
+        try sdkValidateRawEnum("type", self.type, MessageContentResourceOutputTextType.allCases.map(\.rawValue))
+        try validateLength("text", self.text, min: 0, max: nil)
     }
 }
 
@@ -202,61 +235,99 @@ public struct MessageItemResource: Codable {
         case phase
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension MessageItemResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.id) else {
-            throw SdkValidationError(field: "id", code: "required", message: "Validation failed for 'id': value is required")
-        }
-        guard container.contains(.turnId) else {
-            throw SdkValidationError(field: "turn_id", code: "required", message: "Validation failed for 'turn_id': value is required")
-        }
-        guard container.contains(.role) else {
-            throw SdkValidationError(field: "role", code: "required", message: "Validation failed for 'role': value is required")
-        }
-        guard container.contains(.content) else {
-            throw SdkValidationError(field: "content", code: "required", message: "Validation failed for 'content': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.phase) else {
-            throw SdkValidationError(field: "phase", code: "required", message: "Validation failed for 'phase': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeNullable(.id)
-        self.turnId = try container.sdkDecodeRequired(.turnId)
-        self.role = try container.sdkDecodeRequired(.role)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.phase = try container.sdkDecodeNullable(.phase)
-            try sdkValidateRawEnum("type", self.type, MessageItemResourceType.allCases.map(\.rawValue))
-        if let value = self.id {
-            try validateLength("id", value, min: 0, max: nil)
-        }
-            try validateLength("turn_id", self.turnId, min: 0, max: nil)
-            try validateItems("content", self.content, min: 0, max: 2000)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension MessageItemResource {
-    public init(type: MessageItemResourceType, id: String?, turnId: String, role: SessionMessageRoleResource, content: [MessageContentResource], status: OutputItemStatusResource, phase: MessagePhaseResource?) throws {
+public extension MessageItemResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.id) else {
+            throw SdkValidationError(
+                field: "id",
+                code: "required",
+                message: "Validation failed for 'id': value is required"
+            )
+        }
+        guard container.contains(.turnId) else {
+            throw SdkValidationError(
+                field: "turn_id",
+                code: "required",
+                message: "Validation failed for 'turn_id': value is required"
+            )
+        }
+        guard container.contains(.role) else {
+            throw SdkValidationError(
+                field: "role",
+                code: "required",
+                message: "Validation failed for 'role': value is required"
+            )
+        }
+        guard container.contains(.content) else {
+            throw SdkValidationError(
+                field: "content",
+                code: "required",
+                message: "Validation failed for 'content': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        guard container.contains(.phase) else {
+            throw SdkValidationError(
+                field: "phase",
+                code: "required",
+                message: "Validation failed for 'phase': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeNullable(.id)
+        turnId = try container.sdkDecodeRequired(.turnId)
+        role = try container.sdkDecodeRequired(.role)
+        content = try container.sdkDecodeRequired(.content)
+        status = try container.sdkDecodeRequired(.status)
+        phase = try container.sdkDecodeNullable(.phase)
+        try sdkValidateRawEnum("type", type, MessageItemResourceType.allCases.map(\.rawValue))
+        if let value = id {
+            try validateLength("id", value, min: 0, max: nil)
+        }
+        try validateLength("turn_id", turnId, min: 0, max: nil)
+        try validateItems("content", content, min: 0, max: 2000)
+    }
+}
+
+public extension MessageItemResource {
+    init(
+        type: MessageItemResourceType,
+        id: String?,
+        turnId: String,
+        role: SessionMessageRoleResource,
+        content: [MessageContentResource],
+        status: OutputItemStatusResource,
+        phase: MessagePhaseResource?
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.turnId, self.role) = (turnId, role)
         (self.content, self.status) = (content, status)
         self.phase = phase
-            try sdkValidateRawEnum("type", self.type, MessageItemResourceType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, MessageItemResourceType.allCases.map(\.rawValue))
         if let value = self.id {
             try validateLength("id", value, min: 0, max: nil)
         }
-            try validateLength("turn_id", self.turnId, min: 0, max: nil)
-            try validateItems("content", self.content, min: 0, max: 2000)
+        try validateLength("turn_id", self.turnId, min: 0, max: nil)
+        try validateItems("content", self.content, min: 0, max: 2000)
     }
 }
 
@@ -300,13 +371,16 @@ public enum MessageContentResourceInputTextType: String, CaseIterable, Codable {
 public struct MessagePhaseResource: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let commentary = MessagePhaseResource(rawValue: "commentary")
     public static let finalAnswer = MessagePhaseResource(rawValue: "final_answer")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// AgentsCreate domain models
+/// AgentsCreate domain models
 /// A request to spawn a subagent.
 public struct CreateSubagentCallItemResource: Codable {
     /// The item type. Always `create_subagent_call`.
@@ -34,26 +34,37 @@ public struct CreateSubagentCallItemResource: Codable {
         case reasoningEffort = "reasoning_effort"
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension CreateSubagentCallItemResource {
-    public init(from decoder: Decoder) throws {
+public extension CreateSubagentCallItemResource {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.type = try container.sdkDecodeRequired(.type)
-        self.id = try container.sdkDecodeRequired(.id)
-        self.turnId = try container.sdkDecodeRequired(.turnId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.agentId = try container.sdkDecodeRequired(.agentId)
-        self.content = try container.sdkDecodeRequired(.content)
-        self.model = try container.sdkDecodeNullable(.model)
-        self.reasoningEffort = try container.sdkDecodeNullable(.reasoningEffort)
+        type = try container.sdkDecodeRequired(.type)
+        id = try container.sdkDecodeRequired(.id)
+        turnId = try container.sdkDecodeRequired(.turnId)
+        status = try container.sdkDecodeRequired(.status)
+        agentId = try container.sdkDecodeRequired(.agentId)
+        content = try container.sdkDecodeRequired(.content)
+        model = try container.sdkDecodeNullable(.model)
+        reasoningEffort = try container.sdkDecodeNullable(.reasoningEffort)
         try sdkValidateConstraints()
     }
 }
 
-extension CreateSubagentCallItemResource {
-    public init(type: CreateSubagentCallItemResourceType, id: String, turnId: String, status: FunctionCallStatusResource, agentId: String, content: [AgentContentResource], model: String?, reasoningEffort: String?) throws {
+public extension CreateSubagentCallItemResource {
+    init(
+        type: CreateSubagentCallItemResourceType,
+        id: String,
+        turnId: String,
+        status: FunctionCallStatusResource,
+        agentId: String,
+        content: [AgentContentResource],
+        model: String?,
+        reasoningEffort: String?
+    ) throws {
         (self.type, self.id) = (type, id)
         (self.turnId, self.status) = (turnId, status)
         (self.agentId, self.content) = (agentId, content)
@@ -64,15 +75,15 @@ extension CreateSubagentCallItemResource {
 
 extension CreateSubagentCallItemResource {
     func sdkValidateConstraints() throws {
-            try sdkValidateRawEnum("type", self.type, CreateSubagentCallItemResourceType.allCases.map(\.rawValue))
-            try validateLength("id", self.id, min: 0, max: nil)
-            try validateLength("turn_id", self.turnId, min: 0, max: nil)
-            try validateLength("agent_id", self.agentId, min: 0, max: nil)
-            try validateItems("content", self.content, min: 0, max: 2000)
-        if let value = self.model {
+        try sdkValidateRawEnum("type", type, CreateSubagentCallItemResourceType.allCases.map(\.rawValue))
+        try validateLength("id", id, min: 0, max: nil)
+        try validateLength("turn_id", turnId, min: 0, max: nil)
+        try validateLength("agent_id", agentId, min: 0, max: nil)
+        try validateItems("content", content, min: 0, max: 2000)
+        if let value = model {
             try validateLength("model", value, min: 0, max: nil)
         }
-        if let value = self.reasoningEffort {
+        if let value = reasoningEffort {
             try validateLength("reasoning_effort", value, min: 0, max: nil)
         }
     }

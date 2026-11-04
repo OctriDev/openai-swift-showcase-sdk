@@ -3,35 +3,47 @@
 
 import Foundation
 
-// SharedApply domain models
-extension ApplyPatchUpdateFileOperationParam {
-    public init(from decoder: Decoder) throws {
+/// SharedApply domain models
+public extension ApplyPatchUpdateFileOperationParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
         }
         guard container.contains(.path) else {
-            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
+            throw SdkValidationError(
+                field: "path",
+                code: "required",
+                message: "Validation failed for 'path': value is required"
+            )
         }
         guard container.contains(.diff) else {
-            throw SdkValidationError(field: "diff", code: "required", message: "Validation failed for 'diff': value is required")
+            throw SdkValidationError(
+                field: "diff",
+                code: "required",
+                message: "Validation failed for 'diff': value is required"
+            )
         }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.path = try container.sdkDecodeRequired(.path)
-        self.diff = try container.sdkDecodeRequired(.diff)
-            try sdkValidateRawEnum("type", self.type, ApplyPatchUpdateFileOperationParamType.allCases.map(\.rawValue))
-            try validateLength("path", self.path, min: 1, max: nil)
-            try validateLength("diff", self.diff, min: nil, max: 10485760)
+        type = try container.sdkDecodeRequired(.type)
+        path = try container.sdkDecodeRequired(.path)
+        diff = try container.sdkDecodeRequired(.diff)
+        try sdkValidateRawEnum("type", type, ApplyPatchUpdateFileOperationParamType.allCases.map(\.rawValue))
+        try validateLength("path", path, min: 1, max: nil)
+        try validateLength("diff", diff, min: nil, max: 10_485_760)
     }
 }
 
-extension ApplyPatchUpdateFileOperationParam {
-    public init(type: ApplyPatchUpdateFileOperationParamType, path: String, diff: String) throws {
+public extension ApplyPatchUpdateFileOperationParam {
+    init(type: ApplyPatchUpdateFileOperationParamType, path: String, diff: String) throws {
         (self.type, self.path) = (type, path)
         self.diff = diff
-            try sdkValidateRawEnum("type", self.type, ApplyPatchUpdateFileOperationParamType.allCases.map(\.rawValue))
-            try validateLength("path", self.path, min: 1, max: nil)
-            try validateLength("diff", self.diff, min: nil, max: 10485760)
+        try sdkValidateRawEnum("type", self.type, ApplyPatchUpdateFileOperationParamType.allCases.map(\.rawValue))
+        try validateLength("path", self.path, min: 1, max: nil)
+        try validateLength("diff", self.diff, min: nil, max: 10_485_760)
     }
 }
 
@@ -59,39 +71,60 @@ public struct ApplyPatchToolCallOutputItemParam: Codable {
         case output
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ApplyPatchToolCallOutputItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-        self.output = try container.sdkDecodeIfPresent(.output)
-            try sdkValidateRawEnum("type", self.type, ApplyPatchToolCallOutputItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ApplyPatchToolCallOutputItemParam {
-    public init(type: ApplyPatchToolCallOutputItemParamType, callId: String, status: ApplyPatchCallOutputStatusParam, id: String? = nil, caller: ToolCallCallerParam? = nil, output: String? = nil) throws {
+public extension ApplyPatchToolCallOutputItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        status = try container.sdkDecodeRequired(.status)
+        id = try container.sdkDecodeIfPresent(.id)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        output = try container.sdkDecodeIfPresent(.output)
+        try sdkValidateRawEnum("type", type, ApplyPatchToolCallOutputItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", callId, min: 1, max: 64)
+    }
+}
+
+public extension ApplyPatchToolCallOutputItemParam {
+    init(
+        type: ApplyPatchToolCallOutputItemParamType,
+        callId: String,
+        status: ApplyPatchCallOutputStatusParam,
+        id: String? = nil,
+        caller: ToolCallCallerParam? = nil,
+        output: String? = nil
+    ) throws {
         (self.type, self.callId) = (type, callId)
         (self.status, self.id) = (status, id)
         (self.caller, self.output) = (caller, output)
-            try sdkValidateRawEnum("type", self.type, ApplyPatchToolCallOutputItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, ApplyPatchToolCallOutputItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
     }
 }
 
@@ -107,28 +140,38 @@ public struct ApplyPatchDeleteFileOperation: Codable {
         case path
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ApplyPatchDeleteFileOperation {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.path) else {
-            throw SdkValidationError(field: "path", code: "required", message: "Validation failed for 'path': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.path = try container.sdkDecodeRequired(.path)
-            try sdkValidateRawEnum("type", self.type, ApplyPatchDeleteFileOperationType.allCases.map(\.rawValue))
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ApplyPatchDeleteFileOperation {
-    public init(type: ApplyPatchDeleteFileOperationType, path: String) throws {
+public extension ApplyPatchDeleteFileOperation {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.path) else {
+            throw SdkValidationError(
+                field: "path",
+                code: "required",
+                message: "Validation failed for 'path': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        path = try container.sdkDecodeRequired(.path)
+        try sdkValidateRawEnum("type", type, ApplyPatchDeleteFileOperationType.allCases.map(\.rawValue))
+    }
+}
+
+public extension ApplyPatchDeleteFileOperation {
+    init(type: ApplyPatchDeleteFileOperationType, path: String) throws {
         (self.type, self.path) = (type, path)
-            try sdkValidateRawEnum("type", self.type, ApplyPatchDeleteFileOperationType.allCases.map(\.rawValue))
+        try sdkValidateRawEnum("type", self.type, ApplyPatchDeleteFileOperationType.allCases.map(\.rawValue))
     }
 }
 
@@ -156,42 +199,67 @@ public struct ApplyPatchToolCallItemParam: Codable {
         case caller
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ApplyPatchToolCallItemParam {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.type) else {
-            throw SdkValidationError(field: "type", code: "required", message: "Validation failed for 'type': value is required")
-        }
-        guard container.contains(.callId) else {
-            throw SdkValidationError(field: "call_id", code: "required", message: "Validation failed for 'call_id': value is required")
-        }
-        guard container.contains(.status) else {
-            throw SdkValidationError(field: "status", code: "required", message: "Validation failed for 'status': value is required")
-        }
-        guard container.contains(.operation) else {
-            throw SdkValidationError(field: "operation", code: "required", message: "Validation failed for 'operation': value is required")
-        }
-        self.type = try container.sdkDecodeRequired(.type)
-        self.callId = try container.sdkDecodeRequired(.callId)
-        self.status = try container.sdkDecodeRequired(.status)
-        self.operation = try container.sdkDecodeRequired(.operation)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.caller = try container.sdkDecodeIfPresent(.caller)
-            try sdkValidateRawEnum("type", self.type, ApplyPatchToolCallItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ApplyPatchToolCallItemParam {
-    public init(type: ApplyPatchToolCallItemParamType, callId: String, status: ApplyPatchCallStatusParam, operation: ApplyPatchOperationParam, id: String? = nil, caller: ToolCallCallerParam? = nil) throws {
+public extension ApplyPatchToolCallItemParam {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.type) else {
+            throw SdkValidationError(
+                field: "type",
+                code: "required",
+                message: "Validation failed for 'type': value is required"
+            )
+        }
+        guard container.contains(.callId) else {
+            throw SdkValidationError(
+                field: "call_id",
+                code: "required",
+                message: "Validation failed for 'call_id': value is required"
+            )
+        }
+        guard container.contains(.status) else {
+            throw SdkValidationError(
+                field: "status",
+                code: "required",
+                message: "Validation failed for 'status': value is required"
+            )
+        }
+        guard container.contains(.operation) else {
+            throw SdkValidationError(
+                field: "operation",
+                code: "required",
+                message: "Validation failed for 'operation': value is required"
+            )
+        }
+        type = try container.sdkDecodeRequired(.type)
+        callId = try container.sdkDecodeRequired(.callId)
+        status = try container.sdkDecodeRequired(.status)
+        operation = try container.sdkDecodeRequired(.operation)
+        id = try container.sdkDecodeIfPresent(.id)
+        caller = try container.sdkDecodeIfPresent(.caller)
+        try sdkValidateRawEnum("type", type, ApplyPatchToolCallItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", callId, min: 1, max: 64)
+    }
+}
+
+public extension ApplyPatchToolCallItemParam {
+    init(
+        type: ApplyPatchToolCallItemParamType,
+        callId: String,
+        status: ApplyPatchCallStatusParam,
+        operation: ApplyPatchOperationParam,
+        id: String? = nil,
+        caller: ToolCallCallerParam? = nil
+    ) throws {
         (self.type, self.callId) = (type, callId)
         (self.status, self.operation) = (status, operation)
         (self.id, self.caller) = (id, caller)
-            try sdkValidateRawEnum("type", self.type, ApplyPatchToolCallItemParamType.allCases.map(\.rawValue))
-            try validateLength("call_id", self.callId, min: 1, max: 64)
+        try sdkValidateRawEnum("type", self.type, ApplyPatchToolCallItemParamType.allCases.map(\.rawValue))
+        try validateLength("call_id", self.callId, min: 1, max: 64)
     }
 }
 
@@ -307,13 +375,16 @@ public enum ApplyPatchUpdateFileOperationParamType: String, CaseIterable, Codabl
 public struct ApplyPatchCallOutputStatusParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = ApplyPatchCallOutputStatusParam(rawValue: "completed")
     public static let failed = ApplyPatchCallOutputStatusParam(rawValue: "failed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -398,13 +469,16 @@ public enum ApplyPatchToolCallType: String, CaseIterable, Codable {
 public struct ApplyPatchCallStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = ApplyPatchCallStatus(rawValue: "in_progress")
     public static let completed = ApplyPatchCallStatus(rawValue: "completed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -417,13 +491,16 @@ public struct ApplyPatchCallStatus: RawRepresentable, Hashable, Codable, Sendabl
 public struct ApplyPatchCallStatusParam: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inProgress = ApplyPatchCallStatusParam(rawValue: "in_progress")
     public static let completed = ApplyPatchCallStatusParam(rawValue: "completed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -454,13 +531,16 @@ public enum ApplyPatchCreateFileOperationType: String, CaseIterable, Codable {
 public struct ApplyPatchCallOutputStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = ApplyPatchCallOutputStatus(rawValue: "completed")
     public static let failed = ApplyPatchCallOutputStatus(rawValue: "failed")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

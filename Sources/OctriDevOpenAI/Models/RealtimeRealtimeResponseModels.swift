@@ -3,26 +3,38 @@
 
 import Foundation
 
-// RealtimeRealtimeResponse domain models
-extension RealtimeResponse {
-    public init(from decoder: Decoder) throws {
+/// RealtimeRealtimeResponse domain models
+public extension RealtimeResponse {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.id = try container.sdkDecodeIfPresent(.id)
-        self.object = try container.sdkDecodeIfPresent(.object)
-        self.status = try container.sdkDecodeIfPresent(.status)
-        self.statusDetails = try container.sdkDecodeIfPresent(.statusDetails)
-        self.output = try container.sdkDecodeIfPresent(.output)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.audio = try container.sdkDecodeIfPresent(.audio)
-        self.usage = try container.sdkDecodeIfPresent(.usage)
-        self.conversationId = try container.sdkDecodeIfPresent(.conversationId)
-        self.outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
-        self.maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
+        id = try container.sdkDecodeIfPresent(.id)
+        object = try container.sdkDecodeIfPresent(.object)
+        status = try container.sdkDecodeIfPresent(.status)
+        statusDetails = try container.sdkDecodeIfPresent(.statusDetails)
+        output = try container.sdkDecodeIfPresent(.output)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        audio = try container.sdkDecodeIfPresent(.audio)
+        usage = try container.sdkDecodeIfPresent(.usage)
+        conversationId = try container.sdkDecodeIfPresent(.conversationId)
+        outputModalities = try container.sdkDecodeIfPresent(.outputModalities)
+        maxOutputTokens = try container.sdkDecodeIfPresent(.maxOutputTokens)
     }
 }
 
-extension RealtimeResponse {
-    public init(id: String? = nil, object: RealtimeResponseObject? = nil, status: RealtimeResponseStatus? = nil, statusDetails: RealtimeResponseStatusDetails? = nil, output: [RealtimeConversationItem]? = nil, metadata: Metadata? = nil, audio: RealtimeResponseAudio? = nil, usage: RealtimeResponseUsage? = nil, conversationId: String? = nil, outputModalities: [RealtimeResponseOutputModalitiesItem]? = nil, maxOutputTokens: RealtimeResponseMaxOutputTokens? = nil) {
+public extension RealtimeResponse {
+    init(
+        id: String? = nil,
+        object: RealtimeResponseObject? = nil,
+        status: RealtimeResponseStatus? = nil,
+        statusDetails: RealtimeResponseStatusDetails? = nil,
+        output: [RealtimeConversationItem]? = nil,
+        metadata: Metadata? = nil,
+        audio: RealtimeResponseAudio? = nil,
+        usage: RealtimeResponseUsage? = nil,
+        conversationId: String? = nil,
+        outputModalities: [RealtimeResponseOutputModalitiesItem]? = nil,
+        maxOutputTokens: RealtimeResponseMaxOutputTokens? = nil
+    ) {
         self.init()
         (self.id, self.object) = (id, object)
         (self.status, self.statusDetails) = (status, statusDetails)
@@ -43,19 +55,19 @@ public struct RealtimeResponseCreateParamsAudio: Codable {
     }
 
     init() {
-        self.output = nil
+        output = nil
     }
 }
 
-extension RealtimeResponseCreateParamsAudio {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponseCreateParamsAudio {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.output = try container.sdkDecodeIfPresent(.output)
+        output = try container.sdkDecodeIfPresent(.output)
     }
 }
 
-extension RealtimeResponseCreateParamsAudio {
-    public init(output: RealtimeResponseCreateParamsAudioOutput? = nil) {
+public extension RealtimeResponseCreateParamsAudio {
+    init(output: RealtimeResponseCreateParamsAudioOutput? = nil) {
         self.init()
         self.output = output
     }
@@ -67,22 +79,32 @@ public indirect enum RealtimeResponseCreateParamsConversation {
 }
 
 extension RealtimeResponseCreateParamsConversation: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for RealtimeResponseCreateParamsConversation")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for RealtimeResponseCreateParamsConversation"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension RealtimeResponseCreateParamsConversation {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(String.self) { return .stringValue1(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(String.self) {
+            return .stringValue1(value)
+        }
         return nil
     }
 }
@@ -123,23 +145,29 @@ public struct RealtimeResponseUsage: Codable {
     }
 
     init() {
-        (self.totalTokens, self.inputTokens, self.outputTokens, self.inputTokenDetails, self.outputTokenDetails) = (nil, nil, nil, nil, nil)
+        (totalTokens, inputTokens, outputTokens, inputTokenDetails, outputTokenDetails) = (nil, nil, nil, nil, nil)
     }
 }
 
-extension RealtimeResponseUsage {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponseUsage {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.totalTokens = try container.sdkDecodeIfPresent(.totalTokens)
-        self.inputTokens = try container.sdkDecodeIfPresent(.inputTokens)
-        self.outputTokens = try container.sdkDecodeIfPresent(.outputTokens)
-        self.inputTokenDetails = try container.sdkDecodeIfPresent(.inputTokenDetails)
-        self.outputTokenDetails = try container.sdkDecodeIfPresent(.outputTokenDetails)
+        totalTokens = try container.sdkDecodeIfPresent(.totalTokens)
+        inputTokens = try container.sdkDecodeIfPresent(.inputTokens)
+        outputTokens = try container.sdkDecodeIfPresent(.outputTokens)
+        inputTokenDetails = try container.sdkDecodeIfPresent(.inputTokenDetails)
+        outputTokenDetails = try container.sdkDecodeIfPresent(.outputTokenDetails)
     }
 }
 
-extension RealtimeResponseUsage {
-    public init(totalTokens: Int? = nil, inputTokens: Int? = nil, outputTokens: Int? = nil, inputTokenDetails: RealtimeResponseUsageInputTokenDetails? = nil, outputTokenDetails: RealtimeResponseUsageOutputTokenDetails? = nil) {
+public extension RealtimeResponseUsage {
+    init(
+        totalTokens: Int? = nil,
+        inputTokens: Int? = nil,
+        outputTokens: Int? = nil,
+        inputTokenDetails: RealtimeResponseUsageInputTokenDetails? = nil,
+        outputTokenDetails: RealtimeResponseUsageOutputTokenDetails? = nil
+    ) {
         self.init()
         (self.totalTokens, self.inputTokens) = (totalTokens, inputTokens)
         (self.outputTokens, self.inputTokenDetails) = (outputTokens, inputTokenDetails)
@@ -160,20 +188,20 @@ public struct RealtimeResponseUsageOutputTokenDetails: Codable {
     }
 
     init() {
-        (self.textTokens, self.audioTokens) = (nil, nil)
+        (textTokens, audioTokens) = (nil, nil)
     }
 }
 
-extension RealtimeResponseUsageOutputTokenDetails {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponseUsageOutputTokenDetails {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.textTokens = try container.sdkDecodeIfPresent(.textTokens)
-        self.audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
+        textTokens = try container.sdkDecodeIfPresent(.textTokens)
+        audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
     }
 }
 
-extension RealtimeResponseUsageOutputTokenDetails {
-    public init(textTokens: Int? = nil, audioTokens: Int? = nil) {
+public extension RealtimeResponseUsageOutputTokenDetails {
+    init(textTokens: Int? = nil, audioTokens: Int? = nil) {
         self.init()
         (self.textTokens, self.audioTokens) = (textTokens, audioTokens)
     }
@@ -203,23 +231,29 @@ public struct RealtimeResponseUsageInputTokenDetails: Codable {
     }
 
     init() {
-        (self.cachedTokens, self.textTokens, self.imageTokens, self.audioTokens, self.cachedTokensDetails) = (nil, nil, nil, nil, nil)
+        (cachedTokens, textTokens, imageTokens, audioTokens, cachedTokensDetails) = (nil, nil, nil, nil, nil)
     }
 }
 
-extension RealtimeResponseUsageInputTokenDetails {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponseUsageInputTokenDetails {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.cachedTokens = try container.sdkDecodeIfPresent(.cachedTokens)
-        self.textTokens = try container.sdkDecodeIfPresent(.textTokens)
-        self.imageTokens = try container.sdkDecodeIfPresent(.imageTokens)
-        self.audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
-        self.cachedTokensDetails = try container.sdkDecodeIfPresent(.cachedTokensDetails)
+        cachedTokens = try container.sdkDecodeIfPresent(.cachedTokens)
+        textTokens = try container.sdkDecodeIfPresent(.textTokens)
+        imageTokens = try container.sdkDecodeIfPresent(.imageTokens)
+        audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
+        cachedTokensDetails = try container.sdkDecodeIfPresent(.cachedTokensDetails)
     }
 }
 
-extension RealtimeResponseUsageInputTokenDetails {
-    public init(cachedTokens: Int? = nil, textTokens: Int? = nil, imageTokens: Int? = nil, audioTokens: Int? = nil, cachedTokensDetails: RealtimeResponseUsageInputTokenDetailsCachedTokensDetails? = nil) {
+public extension RealtimeResponseUsageInputTokenDetails {
+    init(
+        cachedTokens: Int? = nil,
+        textTokens: Int? = nil,
+        imageTokens: Int? = nil,
+        audioTokens: Int? = nil,
+        cachedTokensDetails: RealtimeResponseUsageInputTokenDetailsCachedTokensDetails? = nil
+    ) {
         self.init()
         (self.cachedTokens, self.textTokens) = (cachedTokens, textTokens)
         (self.imageTokens, self.audioTokens) = (imageTokens, audioTokens)
@@ -243,21 +277,21 @@ public struct RealtimeResponseUsageInputTokenDetailsCachedTokensDetails: Codable
     }
 
     init() {
-        (self.textTokens, self.imageTokens, self.audioTokens) = (nil, nil, nil)
+        (textTokens, imageTokens, audioTokens) = (nil, nil, nil)
     }
 }
 
-extension RealtimeResponseUsageInputTokenDetailsCachedTokensDetails {
-    public init(from decoder: Decoder) throws {
+public extension RealtimeResponseUsageInputTokenDetailsCachedTokensDetails {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
-        self.textTokens = try container.sdkDecodeIfPresent(.textTokens)
-        self.imageTokens = try container.sdkDecodeIfPresent(.imageTokens)
-        self.audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
+        textTokens = try container.sdkDecodeIfPresent(.textTokens)
+        imageTokens = try container.sdkDecodeIfPresent(.imageTokens)
+        audioTokens = try container.sdkDecodeIfPresent(.audioTokens)
     }
 }
 
-extension RealtimeResponseUsageInputTokenDetailsCachedTokensDetails {
-    public init(textTokens: Int? = nil, imageTokens: Int? = nil, audioTokens: Int? = nil) {
+public extension RealtimeResponseUsageInputTokenDetailsCachedTokensDetails {
+    init(textTokens: Int? = nil, imageTokens: Int? = nil, audioTokens: Int? = nil) {
         self.init()
         (self.textTokens, self.imageTokens) = (textTokens, imageTokens)
         self.audioTokens = audioTokens
@@ -269,7 +303,10 @@ extension RealtimeResponseUsageInputTokenDetailsCachedTokensDetails {
 public struct RealtimeResponseStatusDetailsType: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = RealtimeResponseStatusDetailsType(rawValue: "completed")
     public static let cancelled = RealtimeResponseStatusDetailsType(rawValue: "cancelled")
     public static let failed = RealtimeResponseStatusDetailsType(rawValue: "failed")
@@ -277,7 +314,7 @@ public struct RealtimeResponseStatusDetailsType: RawRepresentable, Hashable, Cod
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -290,12 +327,15 @@ public struct RealtimeResponseStatusDetailsType: RawRepresentable, Hashable, Cod
 public struct RealtimeResponseObject: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let realtimeResponse = RealtimeResponseObject(rawValue: "realtime.response")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -308,13 +348,16 @@ public struct RealtimeResponseObject: RawRepresentable, Hashable, Codable, Senda
 public struct RealtimeResponseOutputModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let text = RealtimeResponseOutputModalitiesItem(rawValue: "text")
     public static let audio = RealtimeResponseOutputModalitiesItem(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -324,16 +367,20 @@ public struct RealtimeResponseOutputModalitiesItem: RawRepresentable, Hashable, 
 }
 
 /// Optional enumerated value serialized in the `conversation` wire field.
-public struct RealtimeResponseCreateParamsConversationVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeResponseCreateParamsConversationVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let auto = RealtimeResponseCreateParamsConversationVariant1(rawValue: "auto")
     public static let none = RealtimeResponseCreateParamsConversationVariant1(rawValue: "none")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -343,15 +390,19 @@ public struct RealtimeResponseCreateParamsConversationVariant1: RawRepresentable
 }
 
 /// Optional enumerated value serialized in the `max_output_tokens` wire field.
-public struct RealtimeResponseCreateParamsMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeResponseCreateParamsMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inf = RealtimeResponseCreateParamsMaxOutputTokensVariant1(rawValue: "inf")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -361,16 +412,20 @@ public struct RealtimeResponseCreateParamsMaxOutputTokensVariant1: RawRepresenta
 }
 
 /// Required enumerated value serialized in the `output_modalities[]` wire field.
-public struct RealtimeResponseCreateParamsOutputModalitiesItem: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeResponseCreateParamsOutputModalitiesItem: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let text = RealtimeResponseCreateParamsOutputModalitiesItem(rawValue: "text")
     public static let audio = RealtimeResponseCreateParamsOutputModalitiesItem(rawValue: "audio")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -383,7 +438,10 @@ public struct RealtimeResponseCreateParamsOutputModalitiesItem: RawRepresentable
 public struct RealtimeResponseStatus: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let completed = RealtimeResponseStatus(rawValue: "completed")
     public static let cancelled = RealtimeResponseStatus(rawValue: "cancelled")
     public static let failed = RealtimeResponseStatus(rawValue: "failed")
@@ -392,7 +450,7 @@ public struct RealtimeResponseStatus: RawRepresentable, Hashable, Codable, Senda
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -402,15 +460,19 @@ public struct RealtimeResponseStatus: RawRepresentable, Hashable, Codable, Senda
 }
 
 /// Optional enumerated value serialized in the `max_output_tokens` wire field.
-public struct RealtimeResponseMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
+public struct RealtimeResponseMaxOutputTokensVariant1: RawRepresentable, Hashable, Codable, Sendable,
+    SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let inf = RealtimeResponseMaxOutputTokensVariant1(rawValue: "inf")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -426,7 +488,10 @@ public struct RealtimeResponseMaxOutputTokensVariant1: RawRepresentable, Hashabl
 public struct RealtimeResponseStatusDetailsReason: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let turnDetected = RealtimeResponseStatusDetailsReason(rawValue: "turn_detected")
     public static let clientCancelled = RealtimeResponseStatusDetailsReason(rawValue: "client_cancelled")
     public static let maxOutputTokens = RealtimeResponseStatusDetailsReason(rawValue: "max_output_tokens")
@@ -434,7 +499,7 @@ public struct RealtimeResponseStatusDetailsReason: RawRepresentable, Hashable, C
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

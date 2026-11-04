@@ -3,29 +3,39 @@
 
 import Foundation
 
-// DecisionsChoice domain models
+/// DecisionsChoice domain models
 public indirect enum ChoiceValueParam {
     case stringValue(String)
     case boolValue(Bool)
 }
 
 extension ChoiceValueParam: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ChoiceValueParam")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for ChoiceValueParam"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension ChoiceValueParam {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(Bool.self) { return .boolValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(Bool.self) {
+            return .boolValue(value)
+        }
         return nil
     }
 }
@@ -46,22 +56,32 @@ public indirect enum ChoiceValueResource {
 }
 
 extension ChoiceValueResource: Codable {
-
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        if let value = Self.decodeGroup1(from: container) { self = value; return }
-        throw DecodingError.dataCorruptedError(in: container, debugDescription: "No variant matched for ChoiceValueResource")
+        if let value = Self.decodeGroup1(from: container) {
+            self = value; return
+        }
+        throw DecodingError.dataCorruptedError(
+            in: container,
+            debugDescription: "No variant matched for ChoiceValueResource"
+        )
     }
 
     public func encode(to encoder: Encoder) throws {
-        if try encodeGroup1(to: encoder) { return }
+        if try encodeGroup1(to: encoder) {
+            return
+        }
     }
 }
 
 extension ChoiceValueResource {
     static func decodeGroup1(from container: SingleValueDecodingContainer) -> Self? {
-        if let value = try? container.decode(String.self) { return .stringValue(value) }
-        if let value = try? container.decode(Bool.self) { return .boolValue(value) }
+        if let value = try? container.decode(String.self) {
+            return .stringValue(value)
+        }
+        if let value = try? container.decode(Bool.self) {
+            return .boolValue(value)
+        }
         return nil
     }
 }
@@ -88,28 +108,34 @@ public struct ChoiceOptionParam: Codable {
         case description
     }
 
-    private init(sdkCopy value: Self) { self = value }
+    private init(sdkCopy value: Self) {
+        self = value
+    }
 }
 
-extension ChoiceOptionParam {
-    public init(from decoder: Decoder) throws {
+public extension ChoiceOptionParam {
+    init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         guard container.contains(.value) else {
-            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
+            throw SdkValidationError(
+                field: "value",
+                code: "required",
+                message: "Validation failed for 'value': value is required"
+            )
         }
-        self.value = try container.sdkDecodeRequired(.value)
-        self.description = try container.sdkDecodeIfPresent(.description)
-        if let value = self.description {
-            try validateLength("description", value, min: 0, max: 1048576)
+        value = try container.sdkDecodeRequired(.value)
+        description = try container.sdkDecodeIfPresent(.description)
+        if let value = description {
+            try validateLength("description", value, min: 0, max: 1_048_576)
         }
     }
 }
 
-extension ChoiceOptionParam {
-    public init(value: ChoiceValueParam, description: String? = nil) throws {
+public extension ChoiceOptionParam {
+    init(value: ChoiceValueParam, description: String? = nil) throws {
         (self.value, self.description) = (value, description)
         if let value = self.description {
-            try validateLength("description", value, min: 0, max: 1048576)
+            try validateLength("description", value, min: 0, max: 1_048_576)
         }
     }
 }
@@ -126,25 +152,35 @@ public struct ChoiceProbabilityResource: Codable {
         case probability
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension ChoiceProbabilityResource {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.value) else {
-            throw SdkValidationError(field: "value", code: "required", message: "Validation failed for 'value': value is required")
-        }
-        guard container.contains(.probability) else {
-            throw SdkValidationError(field: "probability", code: "required", message: "Validation failed for 'probability': value is required")
-        }
-        self.value = try container.sdkDecodeRequired(.value)
-        self.probability = try container.sdkDecodeRequired(.probability)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension ChoiceProbabilityResource {
-    public init(value: ChoiceValueResource, probability: Double) {
+public extension ChoiceProbabilityResource {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.value) else {
+            throw SdkValidationError(
+                field: "value",
+                code: "required",
+                message: "Validation failed for 'value': value is required"
+            )
+        }
+        guard container.contains(.probability) else {
+            throw SdkValidationError(
+                field: "probability",
+                code: "required",
+                message: "Validation failed for 'probability': value is required"
+            )
+        }
+        value = try container.sdkDecodeRequired(.value)
+        probability = try container.sdkDecodeRequired(.probability)
+    }
+}
+
+public extension ChoiceProbabilityResource {
+    init(value: ChoiceValueResource, probability: Double) {
         (self.value, self.probability) = (value, probability)
     }
 }

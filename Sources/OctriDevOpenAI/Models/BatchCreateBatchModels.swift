@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Batch domain models
+/// Batch domain models
 /// The expiration policy for the output and/or error file that are generated for a batch.
 public struct BatchFileExpirationAfter: Codable {
     /// Anchor timestamp after which the expiration policy applies. Supported anchors: `created_at`. Note that the
@@ -18,28 +18,54 @@ public struct BatchFileExpirationAfter: Codable {
         case seconds
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension BatchFileExpirationAfter {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.anchor) else {
-            throw SdkValidationError(field: "anchor", code: "required", message: "Validation failed for 'anchor': value is required")
-        }
-        guard container.contains(.seconds) else {
-            throw SdkValidationError(field: "seconds", code: "required", message: "Validation failed for 'seconds': value is required")
-        }
-        self.anchor = try container.sdkDecodeRequired(.anchor)
-        self.seconds = try container.sdkDecodeRequired(.seconds)
-            try validateRange("seconds", Double(self.seconds), min: 3600, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension BatchFileExpirationAfter {
-    public init(anchor: BatchFileExpirationAfterAnchor, seconds: Int) throws {
+public extension BatchFileExpirationAfter {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.anchor) else {
+            throw SdkValidationError(
+                field: "anchor",
+                code: "required",
+                message: "Validation failed for 'anchor': value is required"
+            )
+        }
+        guard container.contains(.seconds) else {
+            throw SdkValidationError(
+                field: "seconds",
+                code: "required",
+                message: "Validation failed for 'seconds': value is required"
+            )
+        }
+        anchor = try container.sdkDecodeRequired(.anchor)
+        seconds = try container.sdkDecodeRequired(.seconds)
+        try validateRange(
+            "seconds",
+            Double(seconds),
+            min: 3600,
+            max: 2_592_000,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
+    }
+}
+
+public extension BatchFileExpirationAfter {
+    init(anchor: BatchFileExpirationAfterAnchor, seconds: Int) throws {
         (self.anchor, self.seconds) = (anchor, seconds)
-            try validateRange("seconds", Double(self.seconds), min: 3600, max: 2592000, exclusiveMin: nil, exclusiveMax: nil, multipleOf: nil)
+        try validateRange(
+            "seconds",
+            Double(self.seconds),
+            min: 3600,
+            max: 2_592_000,
+            exclusiveMin: nil,
+            exclusiveMax: nil,
+            multipleOf: nil
+        )
     }
 }
 
@@ -72,31 +98,51 @@ public struct CreateBatchRequest: Codable {
         case outputExpiresAfter = "output_expires_after"
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension CreateBatchRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.inputFileId) else {
-            throw SdkValidationError(field: "input_file_id", code: "required", message: "Validation failed for 'input_file_id': value is required")
-        }
-        guard container.contains(.endpoint) else {
-            throw SdkValidationError(field: "endpoint", code: "required", message: "Validation failed for 'endpoint': value is required")
-        }
-        guard container.contains(.completionWindow) else {
-            throw SdkValidationError(field: "completion_window", code: "required", message: "Validation failed for 'completion_window': value is required")
-        }
-        self.inputFileId = try container.sdkDecodeRequired(.inputFileId)
-        self.endpoint = try container.sdkDecodeRequired(.endpoint)
-        self.completionWindow = try container.sdkDecodeRequired(.completionWindow)
-        self.metadata = try container.sdkDecodeIfPresent(.metadata)
-        self.outputExpiresAfter = try container.sdkDecodeIfPresent(.outputExpiresAfter)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension CreateBatchRequest {
-    public init(inputFileId: String, endpoint: CreateBatchRequestEndpoint, completionWindow: CreateBatchRequestCompletionWindow, metadata: Metadata? = nil, outputExpiresAfter: BatchFileExpirationAfter? = nil) {
+public extension CreateBatchRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.inputFileId) else {
+            throw SdkValidationError(
+                field: "input_file_id",
+                code: "required",
+                message: "Validation failed for 'input_file_id': value is required"
+            )
+        }
+        guard container.contains(.endpoint) else {
+            throw SdkValidationError(
+                field: "endpoint",
+                code: "required",
+                message: "Validation failed for 'endpoint': value is required"
+            )
+        }
+        guard container.contains(.completionWindow) else {
+            throw SdkValidationError(
+                field: "completion_window",
+                code: "required",
+                message: "Validation failed for 'completion_window': value is required"
+            )
+        }
+        inputFileId = try container.sdkDecodeRequired(.inputFileId)
+        endpoint = try container.sdkDecodeRequired(.endpoint)
+        completionWindow = try container.sdkDecodeRequired(.completionWindow)
+        metadata = try container.sdkDecodeIfPresent(.metadata)
+        outputExpiresAfter = try container.sdkDecodeIfPresent(.outputExpiresAfter)
+    }
+}
+
+public extension CreateBatchRequest {
+    init(
+        inputFileId: String,
+        endpoint: CreateBatchRequestEndpoint,
+        completionWindow: CreateBatchRequestCompletionWindow,
+        metadata: Metadata? = nil,
+        outputExpiresAfter: BatchFileExpirationAfter? = nil
+    ) {
         (self.inputFileId, self.endpoint) = (inputFileId, endpoint)
         (self.completionWindow, self.metadata) = (completionWindow, metadata)
         self.outputExpiresAfter = outputExpiresAfter
@@ -110,7 +156,10 @@ extension CreateBatchRequest {
 public struct CreateBatchRequestEndpoint: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let v1Responses = CreateBatchRequestEndpoint(rawValue: "/v1/responses")
     public static let v1ChatCompletions = CreateBatchRequestEndpoint(rawValue: "/v1/chat/completions")
     public static let v1Embeddings = CreateBatchRequestEndpoint(rawValue: "/v1/embeddings")
@@ -122,7 +171,7 @@ public struct CreateBatchRequestEndpoint: RawRepresentable, Hashable, Codable, S
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -135,12 +184,15 @@ public struct CreateBatchRequestEndpoint: RawRepresentable, Hashable, Codable, S
 public struct CreateBatchRequestCompletionWindow: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let value24h = CreateBatchRequestCompletionWindow(rawValue: "24h")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {
@@ -154,12 +206,15 @@ public struct CreateBatchRequestCompletionWindow: RawRepresentable, Hashable, Co
 public struct BatchFileExpirationAfterAnchor: RawRepresentable, Hashable, Codable, Sendable, SdkWireConvertible {
     public let rawValue: String
 
-    public init(rawValue: String) { self.rawValue = rawValue }
+    public init(rawValue: String) {
+        self.rawValue = rawValue
+    }
+
     public static let createdAt = BatchFileExpirationAfterAnchor(rawValue: "created_at")
 
     public init(from decoder: Decoder) throws {
         let container = try decoder.singleValueContainer()
-        self.init(rawValue: try container.decode(String.self))
+        try self.init(rawValue: container.decode(String.self))
     }
 
     public func encode(to encoder: Encoder) throws {

@@ -3,7 +3,7 @@
 
 import Foundation
 
-// ResponsesBetaWeb domain models
+/// ResponsesBetaWeb domain models
 /// The type of the web search tool. One of `web_search` or `web_search_2025_08_26`.
 public enum BetaWebSearchToolType: String, CaseIterable, Codable {
     case webSearch = "web_search"

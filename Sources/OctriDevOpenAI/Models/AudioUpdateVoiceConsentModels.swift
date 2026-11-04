@@ -3,7 +3,7 @@
 
 import Foundation
 
-// Audio domain models
+/// Audio domain models
 /// Typed representation of the `UpdateVoiceConsentRequest` API schema.
 public struct UpdateVoiceConsentRequest: Codable {
     /// The updated label for this consent recording.
@@ -13,21 +13,27 @@ public struct UpdateVoiceConsentRequest: Codable {
         case name
     }
 
-    private init(sdkCopy value: Self) { self = value }
-}
-
-extension UpdateVoiceConsentRequest {
-    public init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        guard container.contains(.name) else {
-            throw SdkValidationError(field: "name", code: "required", message: "Validation failed for 'name': value is required")
-        }
-        self.name = try container.sdkDecodeRequired(.name)
+    private init(sdkCopy value: Self) {
+        self = value
     }
 }
 
-extension UpdateVoiceConsentRequest {
-    public init(name: String) {
+public extension UpdateVoiceConsentRequest {
+    init(from decoder: Decoder) throws {
+        let container = try decoder.container(keyedBy: CodingKeys.self)
+        guard container.contains(.name) else {
+            throw SdkValidationError(
+                field: "name",
+                code: "required",
+                message: "Validation failed for 'name': value is required"
+            )
+        }
+        name = try container.sdkDecodeRequired(.name)
+    }
+}
+
+public extension UpdateVoiceConsentRequest {
+    init(name: String) {
         self.name = name
     }
 }

@@ -17,13 +17,13 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.containers.create(
-            name: decoded("\"Example Name\""),
-            fileIds: decoded("[\"file_ids\"]"),
-            expiresAfter: decoded("{\"anchor\":\"last_active_at\",\"minutes\":1}"),
-            skills: decoded(sdkMethodFixture88Value1),
-            memoryLimit: decoded("\"1g\""),
-            networkPolicy: decoded("{\"type\":\"disabled\"}")
-        )
+                name: decoded("\"Example Name\""),
+                fileIds: decoded("[\"file_ids\"]"),
+                expiresAfter: decoded("{\"anchor\":\"last_active_at\",\"minutes\":1}"),
+                skills: decoded(sdkMethodFixture88Value1),
+                memoryLimit: decoded("\"1g\""),
+                networkPolicy: decoded("{\"type\":\"disabled\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -47,7 +47,7 @@ extension SdkMethodTests {
         let actual = try await client.containers.createFile(
             containerId: decoded("\"container-1\""),
             fileId: decoded("\"file-1\""),
-            file: Data(base64Encoded: "ZXhhbXBsZQ==")!
+            file: XCTUnwrap(Data(base64Encoded: "ZXhhbXBsZQ=="))
         )
         let expected = try JSONSerialization.jsonObject(
             with: Data(sdkMethodFixture89Expected.utf8),
@@ -70,10 +70,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.containers.createFile(
-            containerId: decoded("\"container-1\""),
-            fileId: decoded("\"file-1\""),
-            file: Data(base64Encoded: "ZXhhbXBsZQ==")!
-        )
+                containerId: decoded("\"container-1\""),
+                fileId: decoded("\"file-1\""),
+                file: XCTUnwrap(Data(base64Encoded: "ZXhhbXBsZQ=="))
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -97,7 +97,7 @@ extension SdkMethodTests {
         let actual = try await client.containers.createFile(
             containerId: decoded("\"container-1\""),
             fileId: decoded("\"file-1\""),
-            file: Data(base64Encoded: "ZXhhbXBsZQ==")!,
+            file: XCTUnwrap(Data(base64Encoded: "ZXhhbXBsZQ==")),
             contentType: decoded("\"multipart/form-data\"")
         )
         let expected = try JSONSerialization.jsonObject(
@@ -139,8 +139,8 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.contentProvenanceChecks.create(
-            file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin")
-        )
+                file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -186,9 +186,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.conversations.create(
-            metadata: decoded("{\"key\":\"key\"}"),
-            items: decoded(sdkMethodFixture95Value1)
-        )
+                metadata: decoded("{\"key\":\"key\"}"),
+                items: decoded(sdkMethodFixture95Value1)
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -235,10 +235,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.conversations.createItems(
-            conversationId: decoded("\"conv_123\""),
-            items: decoded(sdkMethodFixture97Value1),
-            include: decoded("[\"file_search_call.results\"]")
-        )
+                conversationId: decoded("\"conv_123\""),
+                items: decoded(sdkMethodFixture97Value1),
+                include: decoded("[\"file_search_call.results\"]")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -310,12 +310,12 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.embeddings.create(
-            input: decoded("\"The quick brown fox jumped over the lazy dog\""),
-            model: decoded("\"text-embedding-3-small\""),
-            encodingFormat: decoded("\"float\""),
-            dimensions: decoded("1"),
-            user: decoded("\"user-1234\"")
-        )
+                input: decoded("\"The quick brown fox jumped over the lazy dog\""),
+                model: decoded("\"text-embedding-3-small\""),
+                encodingFormat: decoded("\"float\""),
+                dimensions: decoded("1"),
+                user: decoded("\"user-1234\"")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -363,11 +363,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.evals.create(
-            dataSourceConfig: decoded(sdkMethodFixture102Value1),
-            testingCriteria: decoded(sdkMethodFixture102Value2),
-            name: decoded("\"Example Name\""),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                dataSourceConfig: decoded(sdkMethodFixture102Value1),
+                testingCriteria: decoded(sdkMethodFixture102Value2),
+                name: decoded("\"Example Name\""),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -415,11 +415,11 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.evals.createRun(
-            evalId: decoded("\"eval-1\""),
-            dataSource: decoded(sdkMethodFixture104Value1),
-            name: decoded("\"Example Name\""),
-            metadata: decoded("{\"key\":\"key\"}")
-        )
+                evalId: decoded("\"eval-1\""),
+                dataSource: decoded(sdkMethodFixture104Value1),
+                name: decoded("\"Example Name\""),
+                metadata: decoded("{\"key\":\"key\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -465,9 +465,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.externalStorage.create(
-            projectId: decoded("\"proj_123\""),
-            provider: decoded("{\"type\":\"aws\",\"bucket\":\"bucket\",\"role_arn\":\"role_arn\"}")
-        )
+                projectId: decoded("\"proj_123\""),
+                provider: decoded("{\"type\":\"aws\",\"bucket\":\"bucket\",\"role_arn\":\"role_arn\"}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -514,10 +514,10 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.files.create(
-            file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
-            purpose: decoded("\"assistants\""),
-            expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":3600}")
-        )
+                file: SdkUploadFile(data: Data("sample".utf8), filename: "sample.bin"),
+                purpose: decoded("\"assistants\""),
+                expiresAfter: decoded("{\"anchor\":\"created_at\",\"seconds\":3600}")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
@@ -533,7 +533,8 @@ extension SdkMethodTests {
         XCTAssertTrue(true)
     }
 
-    func testCreateFineTuningCheckpointPermissionCreateFineTuningCheckpointPermissionReachesMockAndDecodesResponse() async throws {
+    func testCreateFineTuningCheckpointPermissionCreateFineTuningCheckpointPermissionReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient() else {
             return
         }
@@ -552,7 +553,8 @@ extension SdkMethodTests {
         )
     }
 
-    func testCreateFineTuningCheckpointPermissionCreateFineTuningCheckpoinX369f6e9725ReachesMockAndDecodesResponse() async throws {
+    func testCreateFineTuningCheckpointPermissionCreateFineTuningCheckpoinX369f6e9725ReachesMockAndDecodesResponse(
+    ) async throws {
         guard let client = configuredClient(statusPrefix: "/__mockStatus/400") else {
             return
         }
@@ -563,9 +565,9 @@ extension SdkMethodTests {
         )
         do {
             _ = try await client.fineTuning.createCheckpointPermission(
-            fineTunedModelCheckpoint: decoded("\"ft:gpt-4o-mini-2024-07-18:org:weather:B7R9VjQd\""),
-            projectIds: decoded("[\"project_ids\"]")
-        )
+                fineTunedModelCheckpoint: decoded("\"ft:gpt-4o-mini-2024-07-18:org:weather:B7R9VjQd\""),
+                projectIds: decoded("[\"project_ids\"]")
+            )
             XCTFail("did not raise its declared error")
         } catch let error as SdkHttpError {
             XCTAssertEqual(error.statusCode, 400)
